@@ -30,7 +30,7 @@ for each strProperty in {"Language"}
   dicPreferences.set("str"+strProperty,strPropertyValue)
 end  
 
-for each strProperty in {"Epanet", "Sabcmd", "Xslt", "SnappingRadius"}
+for each strProperty in {"Epanet", "Sabcmd", "Xslt", "SnappingRadius", "BackdropResolution"}
   txlProperty = dlgSetup.findByName("txl"+strProperty)
   strPropertyValue = txlProperty.getText
   dicPreferences.set("str"+strProperty,strPropertyValue)

@@ -86,6 +86,7 @@ dicGerman.add("Choose the length field. The field will be overwritten", "Wählen 
 dicGerman.add("Create Zones from Controls", "Zonen über Schiebersteuerung erstellen")
 dicGerman.add("Create Missing Junctions", "Fehlende Knoten erzeugen")
 dicGerman.add("Create Missing Fields", "Fehlende Felder erzeugen")
+dicGerman.add("Backdrop Resolution", "Hintergrund Auflösung")
 
 _dcwDicDictionaries.add("de",dicGerman)
 

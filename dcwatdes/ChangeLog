@@ -1,3 +1,13 @@
+2001-08-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: fix for bug #436003: field power_kw
+	is now exported properly; backdrop map resolution is now customizable in
+	the setup dialog
+	* dcwatdes.dialog.setup.initialize:
+	* dcwatdes.i18n.createdictionaries:
+	* dcwatdes.dialog.setup.btnok.click: epanet backdrop map resolution is now 
+	customizable in the setup dialog
+
 2001-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.dialog.setup.btnok.click : Added check for spaces in pathes

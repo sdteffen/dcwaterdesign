@@ -95,3 +95,14 @@ if(dicPreferences <> nil)then
 end
 txlSnappingRadius = dlgSetup.findByName("txlSnappingRadius")
 txlSnappingRadius.setText(strSnappingRadius)
+
+'setup the backdrop resolution
+strBackdropResolution="96"
+if(dicPreferences <> nil)then
+  strBackdropResolution = dicPreferences.get("strBackdropResolution")
+  if(strBackdropResolution = nil)then
+    strBackdropResolution = "96"
+  end
+end
+txlBackdropResolution = dlgSetup.findByName("txlBackdropResolution")
+txlBackdropResolution.setText(strBackdropResolution)

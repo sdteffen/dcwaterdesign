@@ -210,9 +210,20 @@ for each lstSection in lstSections
           pntSecondNode = pllFirstSection.along(50)
         end
         strAttributes=""
+        fldPower = ftbSection.findField("power_kw")
+        if(fldPower <> nil)then
+          strPower = ftbSection.returnValue(fldPower, rec).asString
+          if(strPower.isNumber.not)then
+            fldPower=nil
+          end
+        end  
         for each fld in lstFields
           strAttribute = ftbSection.returnValue(fld, rec).asString
-          strAttributes = strAttributes++fld.getAlias.lcase+"="+strAttribute.quote
+          if((fld.getName="properties")and(fldPower<>nil))then
+            strAttributes = strAttributes++fld.getAlias.lcase+"="+(strAttribute+" POWER "+strPower).quote
+          else
+            strAttributes = strAttributes++fld.getAlias.lcase+"="+strAttribute.quote
+          end
         end
         strAttributes = strAttributes++"node1="+strFirstNodeID.quote
         strAttributes = strAttributes++"node2="+strSecondNodeID.quote
@@ -486,7 +497,15 @@ if(viewActive.getVisibleThemes.count > dicThemes.count)then
     av.processAllInvals
   
     strUnits = ""
-    numResolution = 96
+    strResolution = dicPreferences.get("strBackdropResolution")
+    if(strResolution.isNumber.not)then
+      numResolution = 96
+    else
+      numResolution = strResolution.asNumber
+      if(numResolution < 1)then
+        numResolution = 96
+      end
+    end
   
     ' Set UNITS for the Background
     if (viewActive.getUnits = #UNITS_LINEAR_FEET) then
