@@ -1,10 +1,6 @@
 ' DCSewerDesignExtension.make
 
-' (c) 2004 DORSCH Consult
-
-' Create the DC Sewer Design Extension
-
-strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.4")
+strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.4+cvs")
 if (strVersion=nil)then
   exit
 end

@@ -1,3 +1,12 @@
+2004-09-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcserwerdesign.xml: added missing Line.ID line
+	* dcsewerdesign.complexprofile.create.ave:
+	* dcsewerdesign.profile.cumulativelinedatabox.create.ave:
+	* dcsewerdesign.profile.linedatabox.create.ave: allowing to specify
+	data box height for CumulativeLineData and LineData
+	* dcsewerdesignextension.make.ave: version number is 2.04+cvs now
+	
 2004-09-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 	
 	* doc/en/version.xml:

@@ -2,15 +2,15 @@
 
 ' arguments: Profile FTab, Line FTab, active View, X-Coordinate, 
 '            Y-Coordinate, Data Fieldname, Label String, Line Record List,
-'            Int Precision
+'            Int Precision, Int Height
 
 ' returns the new Y-Coordinate
 
 ' (c) 2000 DORSCH Consult
 
 ' Parameter
-if(self.count <> 9)then
-  System.echo("DCSewerDesign.Profile.LineDataBox.create: ERROR: Expected 9 arguments, got "+self.count.asString)
+if(self.count <> 10)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: ERROR: Expected 10 arguments, got "+self.count.asString)
   exit
 end
 ftbProfile = self.get(0)
@@ -58,6 +58,10 @@ if(numPrecision.is(Number).not)then
   System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 8 is not a Number")
   exit
 end
+numHeight = self.get(9)
+if(numHeight.is(Number).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 9 is not a Number")
+end
 
 strFormat = "dd"
 if(numPrecision > 0)then
@@ -75,7 +79,7 @@ fldProfileStyle = ftbProfile.findField("style")
 
 gtxLabel = GraphicText.make(strLabel,Point.make(0,0))
 viewActive.getGraphics.add(gtxLabel)
-numHeight = gtxLabel.getExtent.getY+1
+'numHeight = gtxLabel.getExtent.getY+1
 tpsLabel = TextPositioner.make(Point)
 tpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)
 tpsLabel.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)

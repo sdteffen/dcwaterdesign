@@ -2,15 +2,15 @@
 
 ' arguments: Profile FTab, Line FTab, active View, X-Coordinate, 
 '            Y-Coordinate, Data Fieldname, Label String, Line Record List,
-'            Int Precision
+'            Int Precision, Int Height
 
 ' returns the new Y-Coordinate
 
 ' (c) 2000 - 2004 DORSCH Consult
 
 ' Parameter
-if(self.count <> 9)then
-  System.echo("DCSewerDesign.Profile.CumulativeLineDataBox.create: ERROR: Expected 9 arguments")
+if(self.count <> 10)then
+  System.echo("DCSewerDesign.Profile.CumulativeLineDataBox.create: ERROR: Expected 10 arguments")
   exit
 end
 ftbProfile = self.get(0)
@@ -22,6 +22,7 @@ fldData = self.get(5)
 strLabel = self.get(6)
 lstLineRecords = self.get(7)
 numPrecision = self.get(8)
+numHeight = self.get(9)
 
 numI = 0
 for each objArgument in self
@@ -47,7 +48,7 @@ fldProfileStyle = ftbProfile.findField("style")
 
 gtxLabel = GraphicText.make(strLabel,Point.make(0,0))
 viewActive.getGraphics.add(gtxLabel)
-numHeight = gtxLabel.getExtent.getY+1
+'numHeight = gtxLabel.getExtent.getY+1
 tpsLabel = TextPositioner.make(Point)
 tpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)
 tpsLabel.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)

@@ -506,7 +506,7 @@ end
 for each lstFreeField in lstFreeLineFields
   fldFree = ftbLine.findField(lstFreeField.get(0))
   if(fldFree <> nil)then
-    numY = av.run("DCSewerDesign.Profile.LineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1)})
+    numY = av.run("DCSewerDesign.Profile.LineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3)})
   else
     System.echo("Could not find field "+lstFreeField.get(0)+" in line table.")
   end
@@ -515,7 +515,7 @@ end
 for each lstFreeField in lstFreeCumulativeLineFields
   fldFree = ftbLine.findField(lstFreeField.get(0))
   if(fldFree <> nil)then
-    numY = av.run("DCSewerDesign.Profile.CumulativeLineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1)})
+    numY = av.run("DCSewerDesign.Profile.CumulativeLineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3)ö})
   else
     System.echo("Could not find field "+lstFreeField.get(0)+" in line table.")
   end
