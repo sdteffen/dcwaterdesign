@@ -3,14 +3,14 @@
 
 ; (c) 2000, 2001 DORSCH Consult
 
-Name "DC Water Design Extension 2.03"
+Name "DC Water Design Extension 2.04pre2"
 LicenseText "Please read and agree to this license before continuing."
 LicenseData dcwatdes\license-dcwaterdesignextension.txt
-ComponentText "This will install the DC Water Design Extension V 2.03 for ArcView on your system. Select which options you want set up."
+ComponentText "This will install the DC Water Design Extension V 2.04pre2 for ArcView on your system. Select which options you want set up."
 DirText "Select a directory to install the Extension in. (The ArcView Extension directory.)"
-UninstallText "This will uninstall the DC Water Design Extension V 2.03. Hit Next to uninstall, or Cancel to cancel."
+UninstallText "This will uninstall the DC Water Design Extension V 2.04pre2. Hit Next to uninstall, or Cancel to cancel."
 UninstallExeName uninstall-dcwatdes.exe
-OutFile dcwatdes-2.03-setup.exe
+OutFile dcwatdes-2.04pre2-setup.exe
 Icon dc.ico
 EnabledBitmap dcbitmap1.bmp
 DisabledBitmap dcbitmap2.bmp
@@ -20,7 +20,7 @@ InstallDir "c:\esri\av_gis30\arcview\ext32"
 InstallDirRegKey HKEY_LOCAL_MACHINE "Software\DCWaterDesignExtension" "instpath"
 SetOverwrite on
 
-Section "DC Water Design Extension V 2.03"
+Section "DC Water Design Extension V 2.04pre2"
 SetOutPath $INSTDIR\dcwatdes
 File dcwatdes\epanet_options.dbf
 File dcwatdes\epanet_report.dbf
@@ -30,11 +30,12 @@ File ..\doc\dcwatdes_manual.pdf
 File dcwatdes\license-dcwaterdesignextension.txt
 File dcwatdes\av_epanet_data_model.pdf
 File dcwatdes\xml2net.xsl
+File dcwatdes\systemcall.dll
 
 SetOutPath $INSTDIR
 File c:\esri\av_gis30\arcview\ext32\dcwatdes2.avx
 
-WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension" "DisplayName" "DC Water Design Extension V 2.03 (remove only)"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension" "DisplayName" "DC Water Design Extension V 2.04pre2 (remove only)"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension" "UninstallString" '"$INSTDIR\uninstall-dcwatdes.EXE"'
 WriteRegStr HKEY_LOCAL_MACHINE "Software\DCWaterDesignExtension" "instpath" $INSTDIR
 SectionEnd
@@ -48,7 +49,7 @@ SectionEnd
 Section "XSLT Processor"
 SectionIn 1
 SetOutPath $INSTDIR\dcwatdes\xslt
-;File dcwatdes\xslt\*.*
+File dcwatdes\xslt\*.*
 SectionEnd
 
 ;Section "sed"
@@ -84,9 +85,3 @@ DeleteRegValue HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uni
 DeleteRegValue HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension" "DisplayName"
 DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension"
 SectionEnd
-
-
-
-
-
-
