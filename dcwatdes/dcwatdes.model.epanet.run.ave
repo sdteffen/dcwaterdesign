@@ -50,7 +50,8 @@ end
 	
 ' run Epanet
 
-System.execute(strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"txt").quote++(strBasePath+"bin").quote) 
+' System.execute(strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"txt").quote++(strBasePath+"bin").quote) 
+av.run("DCWatDes.System.call", strEpanet.quote++(strBasePath+"inp")++(strBasePath+"txt")++(strBasePath+"bin"))
 
 ' wait for the result file appearing
 
