@@ -1,0 +1,99 @@
+' DCSewerDesign.calculateMaximumManholeElevations
+' (c) 2000 DORSCH Consult
+
+' requires Spatial Analyst
+
+' calculates the maximum Manhole levels, based on the Elevations from
+' a digital elevation model (DEM), according to the miminum cover
+' provided
+' NOTE: This presumes that the lines are flipped to the Flow Direction
+' (use the function provided by DC Sewer Design)
+
+'check for Spatial Analyst
+ extSpatial = Extension.find("Spatial Analyst")
+ if(extSpatial = nil)then
+   MsgBox.error("This Function requires the Spatial Analyst Extension.","DC Sewer Design")
+   exit 
+ end
+
+' get the table
+ viewActive = av.GetActiveDoc
+ themeList = viewActive.GetThemes
+ LineTheme = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme") 
+ if (LineTheme.asString = "nil") then
+    exit
+ end
+ thmLine = viewActive.FindTheme(LineTheme.AsString)
+ ftbLine = thmLine.GetFTab
+
+' get the grid
+ thmGrid = Msgbox.Choice (themeList, "Select a Grid Theme containing the DEM.", "Select a Theme") 
+ if (thmGrid.asString = "nil") then
+    exit
+ end
+ grdTerrain = thmGrid.getGrid
+
+ fldShape = ftbLine.findField("Shape")
+
+ 'get the fields
+ lstFields = thmLine.getFTab.getFields
+ fldMaxDownstreamElevation = Msgbox.choice(lstFields, "Select the Downstream Elevation Field.","Select a Field")
+ if(fldMaxDownstreamElevation.asString = "nil")then
+  exit
+ end
+ fldMaxUpstreamElevation = Msgbox.choice(lstFields, "Select the Upstream Elevation Field.","Select a Field")
+ if(fldMaxUpstreamElevation.asString = "nil")then
+  exit
+ end
+ fldGradient = Msgbox.choice(lstFields, "Select the Gradient Field.","Select a Field")
+ if(fldGradient.asString = "nil")then
+  exit
+ end
+
+
+ ' 1 m grid should be fine
+ numStepWidth = 1
+
+ 'TODO: let the user input the minimum cover or get it from a field
+ numMinimumCover = 1.2
+
+ 'data for status display
+ numCounter = 0 
+ numTotal = ftbLine.GetNumRecords
+ 
+ 'give the user a chance to kill script
+
+ ftbLine.setEditable(true)
+ av.showStopButton 
+ 
+ for each recLine in ftbLine
+  numGradient = ftbLine.returnValue(fldGradient, recLine)
+  pllLine = ftbLine.returnValue(fldShape, recLine)
+  numLength = pllLine.returnLength
+  numMaxUpstreamElevation = 0
+  numSteps = (numLength/numStepWidth).ceiling
+  for each i in 0..numSteps
+    pntAlongLine = pllLine.along(100*i/numSteps)
+    numGroundElevation = grdTerrain.pointValue(pntAlongLine, Prj.makeNull)
+    'distance from upstream manhole...
+    numX = numLength*i/numSteps
+    numUpstreamElevation = numGroundElevation +(numGradient*numX)
+    numMaxUpstreamElevation = numMaxUpstreamElevation.max(numUpstreamElevation)
+  end
+  numMaxUpstreamElevation = numMaxUpstreamElevation - numMinimumCover
+  numMaxDownstreamElevation = numMaxUpstreamElevation - (numGradient * numLength)
+  ftbLine.setValue(fldMaxDownstreamElevation, recLine, numMaxDownstreamElevation)
+  ftbLine.setValue(fldMaxUpstreamElevation, recLine, numMaxUpstreamElevation)
+
+   'update status display
+   numCounter = numCounter + 1 
+   if(av.setStatus((numCounter/numTotal)*100).not)then
+    'user hit the stop button
+     exit
+   end
+  
+ end
+
+'clean up
+ ftbLine.setEditable(false)
+ av.clearStatus

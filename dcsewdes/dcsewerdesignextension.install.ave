@@ -1,0 +1,42 @@
+'DCSewerDesignExtension.install
+'Make sure there is a project
+if (av.GetProject = nil) then
+  return nil
+end
+
+' The self object for this script is the extension
+
+'Add the menu after the view's Theme menu 
+theMenuBar = av.GetProject.FindGUI("View").GetMenuBar
+m = theMenuBar.FindByLabel("Theme")
+if (m <> nil) then
+  'DC Sewer Design menu
+  theMenuBar.Add(self.Get(0), theMenuBar.getControls.find(m))
+    
+else
+'DC Sewer Design menu
+  theMenuBar.Add(self.get(0), 999)
+end
+
+' add the buttons at the end of the button bar
+theViewButtonBar = av.GetProject.FindGUI("View").getButtonBar
+
+' profile creation button
+theViewButtonBar.add(self.get(1), 999)
+
+'connection type classification
+'theViewButtonBar.add(self.get(5), 999)
+
+'classify House Connection Button
+'theTableButtonBar = av.GetProject.FindGUI("Table").getButtonBar
+'theTableButtonBar.add(self.get(6), 999)
+
+'add the popups
+'pu = av.GetProject.FindGUI("View").GetPopups
+'if (pu <> nil) then
+'  pu.Add(self.Get(3), -1)
+'  pu.add(self.get(4), -1)
+'  pu.setUpdate("View.PopupUpdate")
+'end
+
+av.getProject.findGUI("View").setModified(true)

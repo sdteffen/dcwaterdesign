@@ -1,0 +1,95 @@
+' DCSewerDesign.Manholes.takeoverLineData
+
+' lets the Manholes take over data from the upstream and downstream
+' fields of the lines
+' REQUIRES that the lines are flipped to flow direction
+
+' (c) 2000 DORSCH Consult
+
+  Msgbox.info("Make sure that the lines are flipped to flow direction.", "DC Sewer Design")
+
+'get the line table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
+  thmLine = Msgbox.Choice (lstLineThemes, "Select the Line Theme.", "DC Sewer Design")   
+  if (thmLine.asString = "nil") then
+    exit
+  end
+  ftbLine = thmLine.GetFTab 
+
+'get the manhole table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  lstManholeThemes = av.run("DCSewerDesign.ThemeList.returnPointThemes", themeList)
+  thmManhole = Msgbox.Choice (lstManholeThemes, "Select the Manhole Theme.", "DC Sewer Design")   
+  if (thmManhole.asString = "nil") then
+    exit
+  end
+  ftbManhole = thmManhole.GetFTab 
+
+ ' get the manhole data field
+ lstManholeFields = ftbManhole.getFields.clone
+ lstManholeFields.remove(0)
+ fldManholeData = Msgbox.choice(lstManholeFields, "Select the Manhole Data Field.","Select a Field")
+ if(fldManholeData.asString = "nil")then
+  exit
+ end
+
+ ' get the upstream and downstream data field
+ lstLineFields = ftbLine.getFields.clone
+ lstLineFields.remove(0)
+ fldUpstreamData = Msgbox.choice(lstLineFields, "Select the Upstream Data Field.","Select a Field")
+ if(fldUpstreamData.asString = "nil")then
+  exit
+ end
+
+ if(fldUpstreamData.getType <> fldManholeData.getType)then
+   Msgbox.info("Upstream Data Type doesn't match Manhole Data Type", "DC Sewer Design")
+   exit
+ end
+
+ fldDownstreamData = Msgbox.choice(lstLineFields, "Select the Downstream Data Field.","Select a Field")
+ if(fldDownstreamData.asString = "nil")then
+  exit
+ end
+
+ if(fldDownstreamData.getType <> fldManholeData.getType)then
+   Msgbox.info("Downstream Data Type doesn't match Manhole Data Type", "DC Sewer Design")
+   exit
+ end
+
+ fldLineShape = ftbLine.findField("Shape") 
+ fldManholeShape = ftbManhole.findField("Shape")
+ ftbManhole.setEditable(true)
+ numTotal = ftbManhole.getNumRecords
+ numComplete = 0
+ av.showStopButton
+  
+ for each recManhole in ftbManhole
+   pntManhole = ftbManhole.returnValue(fldManholeShape, recManhole)
+   ftbLine.selectByPoint(pntManhole, 0.1, #VTAB_SELTYPE_NEW)
+   objValue = nil
+   for each recLine in ftbLine.getSelection
+     pllLine = ftbLine.returnValue(fldLineShape, recLine)
+
+     if(pntManhole.distance(pllLine.asList.get(0).get(0)) < 0.1)then
+       objValue = ftbLine.returnValue(fldUpstreamData, recLine)
+     else
+       objValue = ftbLine.returnValue(fldDownstreamData, recLine)
+     end
+
+     break
+   end
+   ftbManhole.setValue(fldManholeData, recManhole, objValue)
+   
+   ' update status display   
+   numComplete = numComplete + 1
+   if(av.setStatus((numComplete/numTotal)*100).not)then
+     'user hit the stop button
+     exit
+   end
+ end   
+ 
+ ftbManhole.setEditable(false)
+ av.clearStatus

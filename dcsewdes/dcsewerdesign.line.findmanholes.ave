@@ -1,0 +1,25 @@
+' DCSewerDesign.Line.findManholes
+' Arguments: The Line FTab, the Manhole FTab and a record in the line ftab
+' Returns the records of all Manholes that are connected to the Line
+
+' (c) 2000 DORSCH Consult
+
+ftb_Lines = self.get(0)
+ftbManholes = self.get(1)
+rec_Line = self.get(2)
+
+fna_LineShape = ftb_Lines.findField("Shape")
+
+pll_Line = ftb_Lines.returnValue(fna_LineShape, rec_Line)
+
+lstManholes = List.make
+
+for each i in {0,100}
+  pntManhole = pll_Line.along(i)
+  ftbManholes.selectByPoint(pntManhole, 0.1, #VTAB_SELTYPE_NEW)
+  bmpManholes = ftbManholes.getSelection
+  for each recManhole in bmpManholes
+    lstManholes.add(recManhole.clone)
+  end
+end
+return lstManholes.deepclone

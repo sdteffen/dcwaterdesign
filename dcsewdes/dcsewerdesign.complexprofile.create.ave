@@ -1,0 +1,517 @@
+' DCSewerDesign.ComplexProfile.create
+
+' creates a longitudinal section for the selected lines
+
+' called from the DC Sewer menu
+
+' (c) 2000 - 2004 DORSCH Consult
+
+' TODO: remove dc_id dependency
+
+' adjustment to control elevation of profile above data boxes
+numAdjustment = 15
+
+extSewer = Extension.find("DC Sewer Design")
+dicPreferences = extSewer.getPreferences
+strConfigurationFile = dicPreferences.get("strComplexProfileConfigurationFile")
+while(strConfigurationFile = nil)
+  av.run("DCSewerDesign.ComplexProfile.selectConfigurationFile", nil)
+  strConfigurationFile = dicPreferences.get("strComplexProfileConfigurationFile")
+end
+
+' open the configuration file
+
+lnfConfiguration = LineFile.make(strConfigurationFile.asFilename, #FILE_PERM_READ)
+
+fldManholeID=nil
+fldManholeDiameter=nil
+fldManholeInvertLevel=nil
+fldManholeElevation=nil
+fldLineID = nil
+fldLineDiameter = nil
+fldLineUpstreamInvert = nil
+fldLineDownstreamInvert = nil
+strLineTheme = nil
+strManholeTheme = nil
+
+' first configuration file run to locate theme names
+
+strLine=lnfConfiguration.readElt
+'process the configuration file 
+while (not (strLine=nil ))
+  lstConfTokens = strLine.asTokens("=")
+  if(lstConfTokens.count=2)then
+    strScriptFieldName = lstConfTokens.get(0).trim.lcase
+    strTableFieldName = lstConfTokens.get(1).trim.lcase
+    if(strScriptFieldName = "line.theme")then
+      strLineTheme = strTableFieldName
+    end
+    if(strScriptFieldName = "manhole.theme")then
+      strManholeTheme = strTableFieldName
+    end
+  end
+  strLine = lnfConfiguration.readElt
+end
+ 
+' close the configuration file
+lnfConfiguration.close
+ 
+' get the line table
+
+thmLine = nil
+viewActive = av.getActiveDoc
+themeList = viewActive.getThemes
+lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
+for each thmTheme in lstLineThemes
+  if((strLineTheme <> nil)and(strLineTheme = thmTheme.getName))then
+    thmLine = thmTheme
+    break
+  end
+  if(thmTheme.getName.left(6) <> "Profil")then
+    lstLineThemes.shuffle(thmTheme, 0)
+    break
+  end
+end
+if(thmLine.asString = "nil")then
+  thmLine = Msgbox.Choice (lstLineThemes, "Select the Sewer Line Theme.", "DC Sewer - Complex Profile")   
+end
+if(thmLine.asString = "nil") then
+  exit
+end
+ftbLine = thmLine.GetFTab 
+
+' get the manhole table
+thmManhole = nil
+lstManholeThemes = av.run("DCSewerDesign.ThemeList.returnPointThemes", themeList)
+for each thmTheme in lstManholeThemes
+  if((strManholeTheme <> nil)and(strManholeTheme = thmTheme.getName))then
+    thmManhole = thmTheme
+    break
+  end
+end
+if(thmManhole.asString = "nil")then
+  thmManhole = Msgbox.Choice (lstManholeThemes, "Select the Manhole Theme.", "DC Sewer - Complex Profile")
+end
+if (thmManhole.asString = "nil") then
+  exit
+end
+ftbManhole = thmManhole.GetFTab 
+
+' get one selected line
+bmpSelectedLines = ftbLine.getSelection.clone
+if(bmpSelectedLines.count < 2)then
+  MsgBox.info("Please select the Lines for which the Profile should be created","DC Sewer - Complex Profile")
+  exit
+end
+recTrace = bmpSelectedLines.getNextSet(-1)
+lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+lstConnectedSelected = List.make
+for each recConnected in lstConnectedLines
+  if(bmpSelectedLines.get(recConnected))then
+    lstConnectedSelected.add(recConnected)
+  end
+end
+
+av.showStopButton
+numSelected = bmpSelectedLines.count
+
+' trace to end section (of selection)
+numFreezePrevent = 0
+lstTried = List.make
+while(lstConnectedSelected.count = 2)
+    if((recTrace = lstConnectedSelected.get(0))or(lstTried.findByValue(recTrace)<>(-1)))then
+    recTrace = lstConnectedSelected.get(1)
+  else
+    recTrace = lstConnectedSelected.get(0)
+  end
+  if(lstConnectedSelected.findByValue(recTrace) = -1)then
+    lstConnectedSelected.add(recTrace)
+  end
+  lstConnectedSelected = List.make
+  strControl = ""
+  lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+  for each recConnected in lstConnectedLines
+    if((bmpSelectedLines.get(recConnected)and(lstConnectedSelected.find(recConnected) = -1)))then
+      lstConnectedSelected.add(recConnected)
+      lstTried.add(recConnected)
+      strControl = strControl ++ftbLine.returnValue(ftbLine.findField("dc_id"), recConnected).asString
+    end
+  end
+  numFreezePrevent = numFreezePrevent+1
+  if(numFreezePrevent = 1000)then
+    MsgBox.info("Went into endless loop. Check the Topology.", "DC Sewer Design")
+    exit
+  end
+  if(av.setStatus(0).not)then
+    exit
+  end
+end
+if(lstConnectedSelected.count>2)then
+  MsgBox.info("Can't draw Profile for forks. Please check the selection.","DC Sewer Design")
+  exit
+end
+
+' bounce: start the real trace to other end of selection
+
+lstProfileLines = List.make
+lstProfileLines.add(recTrace)
+
+recTrace = lstConnectedSelected.get(0)
+lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+lstConnectedSelected = List.make
+for each recConnected in lstConnectedLines
+  if(bmpSelectedLines.get(recConnected))then
+    lstConnectedSelected.add(recConnected)
+  end
+end
+lstProfileLines.add(recTrace)
+
+while(lstConnectedSelected.count = 2)
+  if(lstProfileLines.findByValue(lstConnectedSelected.get(0)) <> -1)then
+    recTrace = lstConnectedSelected.get(1)
+  else
+    recTrace = lstConnectedSelected.get(0)
+  end
+  lstProfileLines.add(recTrace)
+  lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+  lstConnectedSelected = List.make
+  for each recConnected in lstConnectedLines
+    if(bmpSelectedLines.get(recConnected))then
+      lstConnectedSelected.add(recConnected)
+    end
+  end
+  if(av.setStatus(lstProfileLines.count/numSelected*100).not)then
+    exit
+  end
+end
+if(lstConnectedSelected.count>2)then
+  MsgBox.info("Can't draw profile for forks. Please check the selection.","DC Sewer - Complex Profile")
+  exit
+end
+if(lstProfileLines.count <> bmpSelectedLines.count)then
+  MsgBox.info("Selected lines are not fully connected. Please check.","DC Sewer - Complex Profile")
+  exit
+end
+
+ftbLine.setSelection(bmpSelectedLines)
+
+' build Manhole list
+
+lstProfileManholes = List.make
+
+lstPreviousManholes = av.run("DCSewerDesign.Line.findManholes",{ftbLine,ftbManhole,lstProfileLines.get(0)}).clone
+lstManholes = av.run("DCSewerDesign.Line.findManholes",{ftbLine,ftbManhole,lstProfileLines.get(1)}).clone
+for each recManhole in lstPreviousManholes
+  if(lstManholes.findByValue(recManhole) = -1)then
+    lstProfileManholes.add(recManhole)
+  end
+end
+
+for each recLine in lstProfileLines
+  lstManholes = av.run("DCSewerDesign.Line.findManholes",{ftbLine,ftbManhole,recLine})
+  for each recManhole in lstManholes
+    if(lstProfileManholes.findByValue(recManhole) = -1)then
+      lstProfileManholes.add(recManhole)
+    end
+  end
+end
+
+' check if there are enough manholes
+if(lstProfileManholes.count <> (lstProfileLines.count + 1))then
+  MsgBox.info("Only found"++lstProfileManholes.count.asString++"manholes. Should find"++(lstProfileLines.count+1).asString++"."+NL+
+              "See the selection for details.","DC Sewer - Complex Profile")
+  bmpManholes = ftbManhole.getSelection
+  bmpManholes.clearAll
+  for each recManhole in lstProfileManholes
+    bmpManholes.set(recManhole.clone)
+  end
+  ftbManhole.setSelection(bmpManholes)
+  ftbManhole.updateSelection
+  exit
+end
+
+lstFreeLineFields = List.make
+lstFreeManholeFields = List.make
+lstFreeCumulativeLineFields = List.make
+
+lstFreeFields = {{"linedata",lstFreeLineFields},
+  {"manholedata",lstFreeManholeFields},
+  {"cumulativelinedata",lstFreeCumulativeLineFields}}
+
+' second configuration file run
+lnfConfiguration = LineFile.make(strConfigurationFile.asFilename, #FILE_PERM_READ)
+strLine=lnfConfiguration.readElt
+while (not (strLine=nil ))
+  lstConfTokens = strLine.asTokens("=")
+  if(lstConfTokens.count=2)then
+    strScriptFieldName = lstConfTokens.get(0).trim.lcase
+    strTableFieldName = lstConfTokens.get(1).trim.lcase
+    if(strScriptFieldName = "manhole.id")then
+      fldManholeID=ftbManhole.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "manhole.diameter")then
+      fldManholeDiameter=ftbManhole.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "manhole.invertlevel")then
+      fldManholeInvertLevel=ftbManhole.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "manhole.elevation")then
+      fldManholeElevation=ftbManhole.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "line.diameter")then
+      fldLineDiameter = ftbLine.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "line.id")then
+      fldLineID = ftbLine.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "line.upstreaminvert")then
+      fldLineUpstreamInvert = ftbLine.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "line.downstreaminvert")then
+      fldLineDownstreamInvert = ftbLine.findField(strTableFieldName)
+    end
+    for each lstFreeField in lstFreeFields
+      if(strScriptFieldName = lstFreeField.get(0))then
+        lstFieldTokens = strTableFieldName.asTokens("@")
+        if(lstFieldTokens.count = 4)then
+          lstFree = {lstFieldTokens.get(0),lstFieldTokens.get(1).asNumber,
+            lstConfTokens.get(1).asTokens("@").get(2), lstFieldTokens.get(3).asNumber}
+          lstFreeField.get(1).add(lstFree)      
+        end
+      end 
+    end
+  end
+  strLine = lnfConfiguration.readElt
+end
+lnfConfiguration.close
+  
+fldManholeShape = ftbManhole.findField("Shape")
+fldLineShape = ftbLine.findField("Shape")
+
+flnProfile = av.getProject.getWorkDir.makeTmp("profile","shp")
+ftbProfile = FTab.makeNew(flnProfile,PolyLine)
+
+ftbProfile.setEditable(true)
+fldProfileShape = ftbProfile.findField("Shape")
+ftbProfile.addFields({Field.make("id", #FIELD_DECIMAL, 4, 0),Field.make("style",#FIELD_CHAR,16,0)})
+fldProfileStyle = ftbProfile.findField("style")
+
+pntManhole = ftbManhole.returnValue(fldManholeShape, lstProfileManholes.get(0))
+pllLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(0))
+if(pntManhole.distance(pllLine.along(0)) > 0.1)then
+   lstProfileManholes = av.run("DCSewerDesign.List.flip", lstProfileManholes)
+   lstProfileLines = av.run("DCSewerDesign.List.flip", lstProfileLines)
+end
+
+' create the profile view
+strFirstManhole = ftbManhole.returnValue(fldManholeID, lstProfileManholes.get(0)).asString
+strLastManhole = ftbManhole.returnValue(fldManholeID, lstProfileManholes.get(lstProfileManholes.count-1)).asString
+strViewName = "Profile"++strFirstManhole++"-"++strLastManhole
+lstViews = av.getProject.getDocsWithGUI(av.findGUI("View"))
+for each viewCheck in lstViews
+  if(viewCheck.getName = strViewName)then
+    blnOverwrite = MsgBox.yesNo("A view named'"+strViewName+"' already exists."+NL+"Overwrite it?", "DC Sewer Design", true)
+    if(blnOverwrite)then
+      av.getProject.removeDoc(av.getProject.findDoc(strViewName))      
+    else
+      exit
+    end
+  end
+end
+viewProfile = View.make
+viewProfile.setName(strViewName)
+viewProfile.getWin.activate
+
+viewProfile.setUnits(#UNITS_LINEAR_METERS)
+viewProfile.getDisplay.setDistanceUnits(#UNITS_LINEAR_METERS)
+viewProfile.getDisplay.zoomToScale(1000)
+
+' draw manholes
+
+numX = 1000.0
+numY = 1000.0
+for each i in 0..(lstProfileManholes.count-1)
+  recProfile = ftbProfile.addRecord
+  recManhole = lstProfileManholes.get(i)
+  numDiameter = ftbManhole.returnValue(fldManholeDiameter, recManhole)
+  numInvertLevel = ftbManhole.returnValue(fldManholeInvertLevel, recManhole)
+  numElevation = ftbManhole.returnValue(fldManholeElevation, recManhole)
+  pntLowerLeft = Point.make(numX-(numDiameter/2000), numY+(numInvertLevel*10))
+  pntUpperLeft = Point.make(numX-(numDiameter/2000), numY+(numElevation*10))
+  pntUpperRight = Point.make(numX+(numDiameter/2000), numY+(numElevation*10))
+  pntLowerRight = Point.make(numX+(numDiameter/2000), numY+(numInvertLevel*10))
+  pllManhole = Polyline.make({{pntLowerLeft,pntUpperLeft,pntUpperRight, pntLowerRight, pntLowerLeft}})
+  ftbProfile.setValue(fldProfileShape, recProfile, pllManhole)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "bold")
+  
+  recProfile = ftbProfile.addRecord
+  pntCenterlineStart = Point.make(numX, numY+(numElevation*10))
+  pntCenterlineEnd = Point.make(numX, numY+(ftbManhole.returnValue(fldManholeInvertLevel, lstProfileManholes.get(lstProfileManholes.count-1))*10)-12-numAdjustment)
+  pllManholeCenterline = Polyline.make({{pntCenterlineStart, pntCenterlineEnd}})
+  ftbProfile.setValue(fldProfileShape, recProfile, pllManholeCenterline)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "normal") 
+    
+  ' connecting lines
+  if((i <> 0)and(i<>(lstProfileManholes.count-1)))then
+    pntManhole = ftbManhole.returnValue(fldManholeShape, recManhole)
+    ftbLine.selectByPoint(pntManhole, 0.001, #VTAB_SELTYPE_NEW)
+    lstConnected = List.make
+    for each recLine in ftbLine.getSelection
+      if(lstProfileLines.findByValue(recLine) = (-1))then
+        numLineInvert = ftbLine.returnValue(fldLineDownstreamInvert, recLine)
+        numLineDiameter = ftbLine.returnValue(fldLineDiameter, recLine)
+        blnAdded = false
+        for each lstConnection in lstConnected
+          if((numLineDiameter = lstConnection.get(1) and (numLineInvert = lstConnection.get(2))))then
+            lstConnection.set(0, lstConnection.get(0)+1)
+            blnAdded = true
+          end
+        end
+        if(blnAdded = false)then
+          lstConnected.add({1,numLineDiameter,numLineInvert})
+        end
+        shpCircle = Circle.make(Point.make(numX, numY+(numLineInvert*10)+(numLineDiameter/200)), numLineDiameter/200)
+        plgnCircle = shpCircle.asPolygon
+        pllCircle = plgnCircle.asPolyline
+        recCircle = ftbProfile.addRecord
+        ftbProfile.setValue(fldProfileShape, recCircle, pllCircle)
+        ftbProfile.setValue(fldProfileStyle, recCircle, "normal")
+      end
+    end
+    numHeight = 0
+    for each lstConnection in lstConnected
+      numConnections = lstConnection.get(0)
+      numLineDiameter = lstConnection.get(1)
+      numLineInvert = lstConnection.get(2)
+      pntConnection = Point.make(numX, numY+(numLineInvert*10)+(numLineDiameter/100))
+      pllMark = Line.make(pntConnection, pntConnection.clone.move(0, 35)).asPolyLine
+      pllMark = pllMark.returnUnion(Line.make(pntConnection, pntConnection.clone.move(-3, 4)).asPolyLine)
+      pllMark = pllMark.returnUnion(Line.make(pntConnection, pntConnection.clone.move(3, 4)).asPolyLine)
+      recProfile = ftbProfile.addRecord
+      ftbProfile.setValue(fldProfileShape, recProfile, pllMark)
+      ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+      pntIDLocation = Point.make(numX, numY+10+(numElevation*10)+numHeight)
+      numPosition = numX
+      strConnectionText = "DN "+numLineDiameter.asString+NL+numLineInvert.asString
+      if(numConnections <> 1)then
+        strConnectionText = numConnections.asString++strConnectionText
+      end
+      gtxIDLabel = GraphicText.make(strConnectionText, pntIDLocation)
+      gtxIDLabel.setAngle(90)
+      viewProfile.getGraphics.add(gtxIDLabel)
+      tpsID = TextPositioner.make(Point)
+      tpsID.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+      tpsID.SetVAlign(#TEXTPOSITIONER_VALIGN_TOP)
+      tpsID.Calculate(pntIDLocation, gtxIDLabel.GetExtent, 1, nil)
+      numHeight = numHeight + gtxIDLabel.getExtent.getY + 3
+      gtxIDLabel.SetOrigin(tpsID.GetOrigin)
+      for each symText in gtxIDLabel.returnSymbols
+        viewProfile.getDisplay.hookupSymbol(symText)
+      end
+    end
+  end
+  
+  if(i < lstProfileLines.count)then
+    numX = numX + ftbLine.returnValue(fldLineShape,lstProfileLines.get(i)).returnLength
+  end
+end
+
+' draw lines
+
+numX = 1000.0
+for each i in 0..(lstProfileLines.count-1)
+  recProfile = ftbProfile.addRecord
+  recLine = lstProfileLines.get(i)
+  recUpstreamManhole = lstProfileManholes.get(i)
+  recDownstreamManhole = lstProfileManholes.get(i+1)
+  numLineDiameter = ftbLine.returnValue(fldLineDiameter, recLine)
+  numUpstreamManholeDiameter = ftbManhole.returnValue(fldManholeDiameter, recUpstreamManhole)
+  numDownstreamManholeDiameter = ftbManhole.returnValue(fldManholeDiameter, recDownstreamManhole)
+  numUpstreamInvertLevel = ftbLine.returnValue(fldLineUpstreamInvert, recLine)
+  numDownstreamInvertLevel = ftbLine.returnValue(fldLineDownstreamInvert, recLine)
+  pllLine = ftbLine.returnValue(fldLineShape, recLine)
+  numLineLength = pllLine.returnLength
+  pntUpstreamInvert = Point.make(numX+(numUpstreamManholeDiameter/2000), numY+(numUpstreamInvertLevel*10))
+  pntDownstreamInvert=Point.make(numX+numLineLength-(numDownstreamManholeDiameter/2000), numY+(numDownstreamInvertLevel*10))
+  pllInvert = Polyline.make({{pntUpstreamInvert, pntDownstreamInvert}})
+  ftbProfile.setValue(fldProfileShape, recProfile, pllInvert)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "bold")
+
+  recProfile = ftbProfile.addRecord
+  pntUpstreamUpperLevel = pntUpstreamInvert+Point.make(0,numLineDiameter/100)
+  pntDownstreamUpperLevel = pntDownstreamInvert+Point.make(0,numLineDiameter/100)
+  pllUpper = Polyline.make({{pntUpstreamUpperLevel, pntDownstreamUpperLevel}})
+  ftbProfile.setValue(fldProfileShape, recProfile, pllUpper)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "bold")
+
+  recProfile = ftbProfile.addRecord
+  numUpstreamElevation = ftbManhole.returnValue(fldManholeElevation, recUpstreamManhole)
+  numDownstreamElevation = ftbManhole.returnValue(fldManholeElevation, recDownstreamManhole)
+  pntUpstreamElevation = Point.make(numX+(numUpstreamManholeDiameter/2000), numY+(numUpstreamElevation*10))
+  pntDownstreamElevation = Point.make(numX+numLineLength-(numDownstreamManholeDiameter/2000), numY+(numDownstreamElevation*10))
+  pllElevation = Polyline.make({{pntUpstreamElevation, pntDownstreamElevation}})
+  ftbProfile.setValue(fldProfileShape, recProfile, pllElevation)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "bold")
+  
+  numX = numX + numLineLength
+end
+
+numTotalLength = numX - 1000.0
+numX = 1000.0
+numY = numY + (ftbManhole.returnValue(fldManholeInvertLevel, lstProfileManholes.get(lstProfileManholes.count-1))*10)-12-numAdjustment
+
+for each lstFreeField in lstFreeManholeFields
+  fldFree = ftbManhole.findField(lstFreeField.get(0))
+  if(fldFree <> nil)then
+    numY = av.run("DCSewerDesign.Profile.ManholeDataBox.create", {ftbProfile, ftbLine, ftbManhole, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileManholes, lstProfileLines, lstFreeField.get(1), true, lstFreeField.get(3)})
+  else
+    System.echo("Could not find field "+lstFreeField.get(0)+" in manhole table.")
+  end
+end
+
+for each lstFreeField in lstFreeLineFields
+  fldFree = ftbLine.findField(lstFreeField.get(0))
+  if(fldFree <> nil)then
+    numY = av.run("DCSewerDesign.Profile.LineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1)})
+  else
+    System.echo("Could not find field "+lstFreeField.get(0)+" in line table.")
+  end
+end
+
+for each lstFreeField in lstFreeCumulativeLineFields
+  fldFree = ftbLine.findField(lstFreeField.get(0))
+  if(fldFree <> nil)then
+    numY = av.run("DCSewerDesign.Profile.CumulativeLineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1)})
+  else
+    System.echo("Could not find field "+lstFreeField.get(0)+" in line table.")
+  end
+end
+ 
+' draw bounding box
+
+numBoundingBoxTop = 1000 + (ftbManhole.returnValue(fldManholeInvertLevel, lstProfileManholes.get(lstProfileManholes.count-1))*10)-8-numAdjustment  
+pntBoundingBoxOrigin = Point.make(1000-60, numY)
+pntBoundingBoxSize = Point.make(numTotalLength+60+20, numBoundingBoxTop-numY-4)
+pllBoundingBox = Rect.make(pntBoundingBoxOrigin, pntBoundingBoxSize).asPolygon.asPolyline
+recProfile = ftbProfile.addRecord
+ftbProfile.setValue(fldProfileShape, recProfile, pllBoundingBox)
+ftbProfile.setValue(fldProfileStyle, recProfile, "bold")
+
+ftbProfile.setEditable(false)
+thmProfile = FTheme.make(ftbProfile)
+viewProfile.addTheme(thmProfile)
+lgdProfile = thmProfile.getLegend
+lgdProfile.setLegendType(#LEGEND_TYPE_UNIQUE)
+lgdProfile.unique(thmProfile, "style")
+for each symUnique in lgdProfile.getSymbols
+  symUnique.setColor(Color.getBlack)
+end
+lgdProfile.getSymbols.get(0).setSize(1)
+thmProfile.updateLegend
+
+av.clearStatus
+thmProfile.setVisible(true) 
+rctExtent = viewProfile.returnExtent
+viewProfile.getDisplay.setExtent(rctExtent.Scale(1.1))
+
+av.getProject.setModified(true)  

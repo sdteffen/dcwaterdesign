@@ -1,0 +1,25 @@
+' DCSewerDesign.Manhole.findDownstreamLine
+' Arguments: The Line FTab and a Point (at the location of the manhole)
+' Returns the record of the line downstream of the manhole
+
+' 0.1 map units snap tolerance
+
+' (c) 2000, 2002 DORSCH Consult
+
+ftbLines = self.get(0)
+pntManhole = self.get(1)
+
+'increases the speed, because it uses ArcView's spatial index
+ftbLines.selectByPoint(pntManhole, 1.0, #VTAB_SELTYPE_NEW)
+bmpLines = ftbLines.getSelection
+lstLines = List.make
+fldLineShape = ftbLines
+for each recConnectedLine in bmpLines
+  pllConnectedLine = ftbLines.returnValue(ftbLines.findField("Shape"),recConnectedLine)
+  nLastVertex = pllConnectedLine.asList.get(0).count-1
+  if(pllConnectedLine.asList.get(0).get(0).distance(pntManhole) <= 0.1)then
+    return recConnectedLine
+  end
+end
+
+return nil

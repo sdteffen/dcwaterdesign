@@ -1,0 +1,90 @@
+2004-03-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* ChangeLog: preparing initial SourceForge release
+	
+31-10-2002 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.18
+	
+	* fixed the "Accumulate Population" function (field selection)
+	* changed the snapping radius to 0.1 m
+	* added the "Accumulate Branch Length" function
+
+28-08-2002 Steffen Macke <Steffen_Macke@dorsch.com.jo>       Version 1.17
+
+	* added "Enforce Maximum Line Length" function                                               
+
+13-11-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>        Version 1.16
+
+	* corrections to the Profile creation
+
+09-06-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.15
+
+	* added preliminary Create Profile (L-Section) function
+	* added Manhole data -> Line data function
+	* added Line data -> Manhole function
+	* added 'intelligent' theme and field selection code
+	* added Create DbfSewerCalculation ( results are joined to the original 
+	table )
+	* important bugfix for the peak factor formulas: division by 1000 was 
+	missing
+
+27-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.14
+
+	* bugfix for the constant peak factor
+
+23-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.13
+
+	* Major Reorganization that addresses the inconsistencies in the
+	Extension:
+	* changed CalculateFlows to AccumulatePopulation, the 
+	AccumulatedPopulation is checked
+	  against the sum of the Population
+	* introduced Babitt and Baumann Peak Factor Formulas
+	* dropped PercentConnected
+	* added menu item "Validate Lines"
+			
+15-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.12
+
+	* added simple Export function to Barthauer
+
+04-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.11
+
+	* bugfix for Drop Manholes in flipLinesToFlowDirection
+	* flipLinesToFlowDirection is checking for proper snapping now more 
+	carefully
+	* changed the code for calculateFlows: it uses the flipped lines now  to 
+	determine the flow direction
+	
+02-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.10
+
+	* bugfixes for "Calculate Maximum Manhole Elevations"
+	
+02-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.09
+	
+	* added av.clearStatus at the end of DCSewerDesign.calculateFlows
+	* DCSewerLines.flipLinesToFlowDirection now reports the number of 
+	flipped lines and selects them
+	* added menu item for calculateMaximumManholeElevations
+	
+29-02-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.08
+	
+	* fixed the bug that prevented extension unloading
+	* added an Messagebox to calculateMinimumElevationDifferences
+			
+27-02-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.07s
+
+	* bugfix in Line.returnConnectedLines: the line itself is not returned 
+	anymore
+	* added DCSewerDesign.flipLinesToFlowDirection
+	* added DCSewerDesign.calculateMaximumManholeElevations (depending on
+	  Spatial Analyst) NOT TESTED
+	  
+27-02-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.06
+
+	* bugfix, update and performance fix in DCSewerDesign.calculateFlows
+	
+26-02-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.05
+	
+	* code cleanup: deadlock 3d analyst, spatial analyst removed
+	* added "calculate Minimum Elevation Differences"
+	* bugfix for Line.findConnectedLines: Now the Trace is running from 
+	start and end point

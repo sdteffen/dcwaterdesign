@@ -1,0 +1,133 @@
+' DCSewerDesign.accumulatePopulation
+
+' accumulates the Population in a simple Sewer Network
+' This will overwrite the AccumulatedPopulation field.
+' The Population figures (Handover from upstream network)
+' will be accumulated in the AccumulatedPopulation field.
+' Note: The lines have to be flipped to the AccumulatedPopulation direction!
+
+' (c) 2000, 2002 DORSCH Consult
+ 
+'information about the configuration file
+  MsgBox.info("The Lines have to be flipped to the Flow direction!","DC Sewer Design")
+
+'get the table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
+  LineTheme = Msgbox.Choice (lstLineThemes, "Select a Polyline Theme.", "Select a Theme")   
+  if (LineTheme.asString = "nil") then
+    exit
+  end
+  thmLine = viewActive.FindTheme(LineTheme.AsString)   
+  ftbLine = thmLine.GetFTab 
+
+  ' get the fields
+  
+  lstFields = ftbLine.getFields.deepclone
+  lstNumberFields = av.run("DCSewerDesign.Fields.returnNumberFields",lstFields)
+  fldAccumulatedPopulation = MsgBox.choice(lstNumberFields, "Select the Accumulated Population field."+NL+
+                              "This field will be overwritten.","DC Sewer Design")
+  if(fldAccumulatedPopulation = nil)then
+    exit
+  end
+  fldAccumulatedPopulation = ftbLine.findField(fldAccumulatedPopulation.getName)
+  fldPopulation = MsgBox.choice(lstNumberFields, "Select the Population field.","DC Sewer Design")
+  if(fldPopulation = nil)then
+    exit
+  end
+ 
+ fldShape = ftbLine.findField("Shape")
+   
+'data for status display
+  numCounter = 0 
+  numTotal = ftbLine.GetNumRecords 
+  
+ 'give the user a chance to kill script
+ av.showStopButton 
+  
+ ftbLine.setEditable(true)
+
+for each recLine in ftbLine
+  ftbLine.setValue(fldAccumulatedPopulation,recLine, 0)
+end  
+
+  numCounter = 0 
+  numTotal = ftbLine.GetNumRecords 
+
+  
+bmpCalculate = Bitmap.make(ftbLine.getNumRecords)
+bmpCalculate.setAll
+bmpCompleted = Bitmap.make(ftbLine.getNumRecords)
+bmpCompleted.setAll
+  
+  
+' loop until all lines are calculated  
+while(bmpCalculate.count > 0)
+numPreventEndlessLoop = bmpCalculate.count
+  
+' run over all records in the table
+  for each recLine in bmpCalculate
+
+   ' get the Upstream Manhole
+    pllLine = ftbLine.returnValue(fldShape, recLine)
+    pntUpstreamManhole = pllLine.asList.get(0).get(0)
+    lstUpstreamLines = av.run("DCSewerDesign.Manhole.findUpstreamLines",{ftbLine, pntUpstreamManhole})
+      
+'    numAccumulatedPopulation = ftbLine.returnValue(fldAccumulatedPopulation, recLine)
+    numAccumulatedPopulation = 0
+      
+    'check if all the upstream pipes have been calculated
+    blnReady = true
+    for each recConnectedLine in lstUpstreamLines
+'      if(bmpCalculate.get(recConnectedLine))then
+      if(ftbLine.returnValue(fldAccumulatedPopulation,recConnectedLine) <= 0)then
+        blnReady = false
+       ' break
+      else
+       'add the Handover AccumulatedPopulations
+        numPopulation = ftbLine.returnValue(fldAccumulatedPopulation, recConnectedLine)
+        if(numPopulation.isNull)then
+          numPopulation = 0
+        end
+        numAccumulatedPopulation = numAccumulatedPopulation + numPopulation
+      end
+    end
+      
+    if(blnReady)then    
+      'calculate the AccumulatedPopulation
+      numPopulation = ftbLine.returnValue(fldPopulation, recLine)
+      numAccumulatedPopulation = numAccumulatedPopulation + numPopulation
+      numAccumulatedPopulation = numAccumulatedPopulation.max(0.001)
+      ftbLine.setValue(fldAccumulatedPopulation, recLine, numAccumulatedPopulation)             
+      bmpCompleted.clear(recLine)      
+      'update status display
+      if(av.setStatus((numCounter/numTotal)*100).not)then
+        'user hit the stop button
+        exit
+      end
+      numCounter = numCounter+1
+    end
+  end
+  
+  bmpCalculate.and(bmpCompleted)  
+  
+  if(numPreventEndlessLoop = bmpCalculate.count)then
+    MsgBox.info("System leads to endless loop. Aborting.","DC Sewer Design")
+    exit
+  end
+end
+
+' check if script run was successful
+ numSumPopulation = 0
+ for each recLine in ftbLine
+   numSumPopulation = numSumPopulation + ftbLine.returnValue(fldPopulation, recLine)
+ end  
+ 
+ if(numSumPopulation <> numAccumulatedPopulation)then
+   Msgbox.info("Accumulated Population doesn't match the Sum of Population."+NL+
+   "Script run might have failed. Check the System","DC Sewer Design")
+ end
+ 
+ ftbLine.setEditable(false)
+ av.clearStatus

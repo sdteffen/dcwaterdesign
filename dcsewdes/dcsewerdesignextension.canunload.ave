@@ -1,0 +1,3 @@
+'DCSewerDesignExtension.canUnload
+'return(System.canUnloadLibrary(self.getDependencies.get(0)))
+return(true)

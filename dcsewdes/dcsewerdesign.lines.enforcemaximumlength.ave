@@ -1,0 +1,62 @@
+' DCSewerDesign.Lines.enforceMaximumLength
+
+' cuts lines exceeding a specified length, inserting
+' new manholes at the cutting points.
+
+' (c) 2000,2002 DORSCH Consult
+
+
+'get the line table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  thmLine = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme")   
+  if (thmLine.asString = "nil") then
+    exit
+  end
+  ftbLine = thmLine.GetFTab 
+
+strMaximumLength = MsgBox.input("Enter the maximum segment length", "Enforce Maximum Line Length", "50.0")
+if(strMaximumLength.isNumber.not)then
+  MsgBox.error("Please enter a number","Enforce Maximum Line Length")
+  exit
+end
+numMaximumLength = strMaximumLength.asNumber
+
+ fldLineShape = ftbLine.findField("Shape") 
+ ftbLine.setEditable(true)
+ numTotal = ftbLine.getNumRecords
+ numComplete = 0
+ av.showStopButton
+ lstNewLines = List.make
+ 
+ for each recLine in ftbLine
+   pllLine = ftbLine.returnValue(fldLineShape, recLine)
+   if(pllLine.returnLength > numMaximumLength)then
+     numSegments = pllLine.returnLength/numMaximumLength
+     for each i in 1..(numSegments.truncate+1)
+       pntFirst = pllLine.along(100*(numMaximumLength*i)/pllLine.returnLength)
+       pntSecond = pllLine.along(100*(numMaximumLength*(i+1))/pllLine.returnLength)
+       if(pntFirst.intersects(pntSecond).not)then
+         pllNew = Polyline.make({{pntFirst, pntSecond}})
+         lstNewLines.add(pllNew)
+       end
+     end
+     pntFirst = pllLine.along(0)
+     pntSecond = pllLine.along(100*numMaximumLength/pllLine.returnLength)
+     pllNew = Polyline.make({{pntFirst, pntSecond}})
+     ftbLine.setValue(fldLineShape, recLine, pllNew)
+   end   ' update status display   
+   numComplete = numComplete + 1
+   if(av.setStatus((numComplete/numTotal)*100).not)then
+     'user hit the stop button
+     exit
+   end
+ end   
+ 
+ for each pllLine in lstNewLines
+   recLine = ftbLine.addRecord
+   ftbLine.setValue(fldLineShape, recLine, pllLine)   
+ end
+ 
+ ftbLine.setEditable(false)
+ av.clearStatus

@@ -1,0 +1,112 @@
+' DCSewerDesign.flipLinesToFlowDirection
+' (c) 2000 DORSCH Consult
+
+' runs over all the lines of a Sewer Theme and makes sure that they're all
+' running from the upstream point to the downstream point
+
+
+' get the table
+ viewActive = av.GetActiveDoc
+ themeList = viewActive.GetThemes
+ LineTheme = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme") 
+ if (LineTheme.asString = "nil") then
+    exit
+ end
+ thmLine = viewActive.FindTheme(LineTheme.AsString)
+ ftbLine = thmLine.GetFTab
+ 
+ 'get the elevation fields
+ lstFields = thmLine.getFTab.getFields
+ fldDownstreamElevation = Msgbox.choice(lstFields, "Select the Downstream Elevation Field.","Select a Field")
+ if(fldDownstreamElevation.asString = "nil")then
+  exit
+ end
+' fldUpstreamElevation = Msgbox.choice(lstFields, "Select the Upstream Elevation Field.","Select a Field")
+ 'if(fldUpstreamElevation.asString = "nil")then
+ ' exit
+ 'end
+
+ fldShape = ftbLine.findField("Shape")
+  
+ 'data for status display
+ numCounter = 0 
+ numTotal = ftbLine.GetNumRecords
+ numFlipCount = 0
+ bmpFlipped = Bitmap.make(numTotal)
+ bmpFlipped.clearAll
+ 
+'give the user a chance to kill script
+ av.showStopButton 
+ ftbLine.setEditable(true)
+  
+'run over all lines
+  for each recLine in ftbLine
+   lstConnectedLines = av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine, recLine})
+   numDownstreamElevation = ftbLine.returnValue(fldDownstreamElevation, recLine)
+   pllLine = ftbLine.returnValue(fldShape, recLine)
+   pntStart = pllLine.asList.get(0).get(0)
+   
+   blnPntIsUpstream = true
+   if(lstConnectedLines.count = 0)then
+     Msgbox.info("No connected Lines","DC Sewer Design")
+   end
+   for each recConnectedLine in lstConnectedLines
+     pllConnectedLine = ftbLine.returnValue(fldShape, recConnectedLine)
+     if(ftbLine.returnValue(fldDownstreamElevation,recConnectedLine) < numDownstreamElevation )then   
+       blnPntIsUpstream = false
+       break
+     end
+   end
+ 
+   if(blnPntIsUpstream)then
+     'connected line is upstream of recLine, Connection Point is upstream manhole
+     
+    'check for correct snapping
+     if(pllLine.PointIntersection(pllConnectedLine).asList.count=0)then
+       msgbox.info("No Intersection.","DC Sewer Design")
+       av.clearStatus
+       bmpFlipped.clearAll
+       bmpFlipped.set(recLine)
+       ftbLine.setSelection(bmpFlipped)
+     end
+     
+     pntUpstreamManhole = pllLine.PointIntersection(pllConnectedLine).asList.get(0)
+     if(pntStart.intersects(pntUpstreamManhole).not)then
+       ftbLine.setValue(fldShape, recLine, pllLine.clone.flip)
+       numFlipCount = numFlipCount+1
+       bmpFlipped.set(recLine)
+     end
+   else
+    'connected Line downstream, Connection Point downstream manhole
+
+     'check for correct snapping
+     if(pllLine.PointIntersection(pllConnectedLine).asList.count=0)then
+       msgbox.info("No Intersection","DC Sewer Design")
+       av.clearStatus
+       bmpFlipped.clearAll
+       bmpFlipped.set(recLine)
+       ftbLine.setSelection(bmpFlipped)
+     end
+     
+     pntDownstreamManhole = pllLine.PointIntersection(pllConnectedLine).asList.get(0)
+     
+     if(pntStart.intersects(pntDownstreamManhole))then
+       ftbLine.setValue(fldShape, recLine, pllLine.clone.flip)
+       numFlipCount = numFlipCount+1
+       bmpFlipped.set(recLine)
+     end
+   end
+   
+   'update status display
+   numCounter = NumCounter+1
+   if(av.setStatus((numCounter/numTotal)*100).not)then
+    'user hit the stop button
+     exit
+   end
+
+  end 
+
+ftbLine.setEditable(false)
+av.clearStatus
+MsgBox.info("Flipped "+numFlipCount.asString+" Lines.","DC Sewer Design")
+ftbLine.setSelection(bmpFlipped)
