@@ -5,19 +5,28 @@
   <!-- configuration -->
   
   <!-- Custom DC Sewer Design stylesheets -->
-  <property name="dcsewerdesign_version" value="2.0.5" />
+  <property name="dcsewerdesign_version" value="2.0.6" />
   
   <target name="DCSewDesDistribution" id="DC Sewer DesignDistribution">
-    <zip destfile="dcsewerdesign-${dcsewerdesign_version}.zip">
-      <zipfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+    <tar destfile="dcsewerdesign-src-${dcsewerdesign_version}.tar">
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
         "**/*.ave,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />
-      <zipfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
         "INSTALL,NEWS" />
-      <zipfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
         "doc/*.xsl,doc/project.dtd" />
-      <zipfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
         "doc/version.xml,**/dcsewerdesign.xml,**/figure/*.png" />
-    </zip>
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "sample/manhole.shp,sample/manhole.shx,sample/manhole.dbf" />
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "sample/line.shp,sample/line.shx,sample/line.dbf" />
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "sample/profileconfiguration.txt,sample/profilemanhole.avl" />	
+    </tar>
+    <bzip2 zipfile="dcwsewerdesign-src-${dcsewerdesign_version}.tar.bz2" 
+      src="dcsewerdesign-src-${dcsewerdesign_version}.tar"/>
+    <delete file="dcsewerdesign-src-${dcsewerdesign_version}.tar" />  
   </target>
   
   <target name="clean">

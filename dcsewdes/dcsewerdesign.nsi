@@ -6,7 +6,7 @@
 ; compile
 
 !define MUI_PRODUCT "DC Sewer Design Extension"
-!define MUI_VERSION "2.0.5"
+!define MUI_VERSION "2.0.6"
 !define MUI_PACKAGING "1"
 
 !include "MUI.nsh"

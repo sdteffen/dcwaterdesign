@@ -4,7 +4,7 @@
 
 ' called from the DC Sewer menu
 
-' (c) 2000 - 2004 DORSCH Consult
+' (c) 2000 - 2005 DORSCH Consult
 
 ' TODO: remove dc_id dependency
 
@@ -35,6 +35,7 @@ strLineTheme = nil
 strManholeTheme = nil
 intDatumInterval = nil
 fldLineDcId = nil
+strManholeLegend = nil
 
 ' first configuration file run to locate theme names
 
@@ -47,9 +48,10 @@ while (not (strLine=nil ))
     strTableFieldName = lstConfTokens.get(1).trim.lcase
     if(strScriptFieldName = "line.theme")then
       strLineTheme = strTableFieldName
-    end
-    if(strScriptFieldName = "manhole.theme")then
+    elseif(strScriptFieldName = "manhole.theme")then
       strManholeTheme = strTableFieldName
+    elseif(strScriptFieldName = "manhole.legend")then
+      strManholeLegend = strTableFieldName  
     end
   end
   strLine = lnfConfiguration.readElt
@@ -404,7 +406,7 @@ for each i in 0..(lstProfileManholes.count-1)
   ftbProfile.setValue(fldProfileShape, recProfile, pllManholeCenterline)
   ftbProfile.setValue(fldProfileStyle, recProfile, "normal") 
     
-  ' connecting lines
+  ' Draw connecting lines
   if((i <> 0)and(i<>(lstProfileManholes.count-1)))then
     pntManhole = ftbManhole.returnValue(fldManholeShape, recManhole)
     ftbLine.selectByPoint(pntManhole, 0.001, #VTAB_SELTYPE_NEW)
@@ -604,6 +606,11 @@ for each symUnique in lgdProfile.getSymbols
 end
 lgdProfile.getSymbols.get(0).setSize(1)
 thmProfile.updateLegend
+
+' Add manholes with given legend if "Manhole.Legend" was given in configuration file
+if(strManholeLegend <> nil)then
+  av.run("DCSewerDesign.ComplexProfile.addManholeLegend", {viewProfile, ftbManhole, strManholeLegend, lstProfileManholes, fldManholeInvertLevel, ftbLine, lstProfileLines})
+end
 
 av.clearStatus
 thmProfile.setVisible(true) 

@@ -11,8 +11,7 @@ theMenuBar = av.GetProject.FindGUI("View").GetMenuBar
 m = theMenuBar.FindByLabel("Theme")
 if (m <> nil) then
   'DC Sewer Design menu
-  theMenuBar.Add(self.Get(0), theMenuBar.getControls.find(m))
-    
+  theMenuBar.Add(self.Get(0), theMenuBar.getControls.find(m))    
 else
 'DC Sewer Design menu
   theMenuBar.Add(self.get(0), 999)
@@ -24,19 +23,14 @@ theViewButtonBar = av.GetProject.FindGUI("View").getButtonBar
 ' profile creation button
 theViewButtonBar.add(self.get(1), 999)
 
-'connection type classification
-'theViewButtonBar.add(self.get(5), 999)
+mbTable = av.getProject.findGUI("Table").getMenuBar
 
-'classify House Connection Button
-'theTableButtonBar = av.GetProject.FindGUI("Table").getButtonBar
-'theTableButtonBar.add(self.get(6), 999)
-
-'add the popups
-'pu = av.GetProject.FindGUI("View").GetPopups
-'if (pu <> nil) then
-'  pu.Add(self.Get(3), -1)
-'  pu.add(self.get(4), -1)
-'  pu.setUpdate("View.PopupUpdate")
-'end
+menuTable = mbTable.findByLabel("Table")
+if(menuTable <> nil)then
+  mbTable.add(self.get(2), mbTable.getControls.find(menuTable))
+else
+  mbTable.add(self.get(2), 999)
+end
 
 av.getProject.findGUI("View").setModified(true)
+av.getProject.findGUI("Table").setModified(true)

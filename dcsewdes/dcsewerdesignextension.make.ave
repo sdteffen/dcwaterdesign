@@ -1,6 +1,6 @@
 ' DCSewerDesignExtension.make
 
-strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.5")
+strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.6")
 if (strVersion=nil)then
   exit
 end
@@ -19,6 +19,9 @@ myExt.Add( av.GetProject.FindGUI("View").GetMenuBar.findByLabel("DC Sewer"))
 
 '1
 myExt.Add( av.GetProject.FindGUI("View").GetButtonBar.findByScript("DCSewerDesign.ComplexProfile.create"))
+
+'2
+myExt.add(av.getProject.findGUI("Table").getMenuBar.findByLabel("DC Sewer"))
 
 ' Add to the extension the scripts that are attached to the menu items
 ' The following line shows how this would work for one such scripts.

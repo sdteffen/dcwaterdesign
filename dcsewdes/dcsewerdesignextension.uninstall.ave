@@ -21,4 +21,6 @@ theMenuBar.remove(self.Get(0))
 theViewButtonBar = av.GetProject.FindGUI("View").getButtonBar
 theViewButtonBar.remove(self.get(1))
 
+mbTable = av.getProject.findGUI("Table").getMenuBar
+mbTable.remove(self.get(2))
 

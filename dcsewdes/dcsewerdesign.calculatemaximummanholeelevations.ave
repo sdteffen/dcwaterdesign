@@ -1,107 +1,133 @@
 ' DCSewerDesign.calculateMaximumManholeElevations
-' (c) 2000,2004 DORSCH Consult
+' (c) 2000, 2004, 2005 DORSCH Consult
 
-' requires Spatial Analyst
-
-' calculates the maximum Manhole levels, based on the Elevations from
-' a digital elevation model (DEM), according to the miminum cover
-' provided
+' Calculates the maximum Manhole levels, based on the elevations from
+' a point theme, according to the miminum cover provided
 ' NOTE: This presumes that the lines are flipped to the Flow Direction
 ' (use the function provided by DC Sewer Design)
 
-'check for Spatial Analyst
- extSpatial = Extension.find("Spatial Analyst")
- if(extSpatial = nil)then
-   MsgBox.error("This Function requires the Spatial Analyst Extension.","DC Sewer Design")
-   exit 
- end
 
 ' get the table
  viewActive = av.GetActiveDoc
- themeList = viewActive.GetThemes
- LineTheme = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme") 
- if (LineTheme.asString = "nil") then
-    exit
- end
- thmLine = viewActive.FindTheme(LineTheme.AsString)
- ftbLine = thmLine.GetFTab
-
-' get the grid
- thmGrid = Msgbox.Choice (themeList, "Select a Grid Theme containing the DEM.", "Select a Theme") 
- if (thmGrid.asString = "nil") then
-    exit
- end
- grdTerrain = thmGrid.getGrid
-
- fldShape = ftbLine.findField("Shape")
-
- 'get the fields
- lstFields = thmLine.getFTab.getFields
- fldMaxDownstreamElevation = Msgbox.choice(lstFields, "Select the Downstream Elevation Field.","Select a Field")
- if(fldMaxDownstreamElevation.asString = "nil")then
-  exit
- end
- fldMaxUpstreamElevation = Msgbox.choice(lstFields, "Select the Upstream Elevation Field.","Select a Field")
- if(fldMaxUpstreamElevation.asString = "nil")then
-  exit
- end
- fldGradient = Msgbox.choice(lstFields, "Select the Gradient Field.","Select a Field")
- if(fldGradient.asString = "nil")then
-  exit
- end
-
-  strDemFactor = msgbox.input("Enter the DEM factor","DC Sewer Design","0.1")
-  if(strDemFactor = nil)then
-    exit
-  end
-  numDemFactor = strDemFactor.asNumber
-  if(numDemFactor.isNull)then
-    exit
-  end
-
- ' 1 m grid should be fine
- numStepWidth = 1
-
- 'TODO: let the user input the minimum cover or get it from a field
- numMinimumCover = 1.2
-
- 'data for status display
- numCounter = 0 
- numTotal = ftbLine.GetNumRecords
  
- 'give the user a chance to kill script
-
- ftbLine.setEditable(true)
- av.showStopButton 
  
- for each recLine in ftbLine
+lstThemes = viewActive.getActiveThemes
+thmLine = 0
+thmElevation = 0
+if(lstThemes.count = 2)then
+  for each thmTheme in lstThemes
+    if((thmTheme.getFTab.getShapeClass.getClassName = "Polyline")and
+      (thmTheme.getFTab.isEditable))then
+      thmLine = thmTheme
+    else 
+      if(thmTheme.getFTab.getShapeClass.getClassName = "Point")then
+        thmElevation = thmTheme
+      end
+    end
+  end
+end
+
+ftbLine = thmLine.getFTab
+fldLineShape = ftbLine.findField("Shape")
+
+ftbElevation = thmElevation.getFTab
+fldElevationShape = ftbElevation.findField("Shape")
+
+' Get the line fields
+lstLineFields = ftbLine.getFields
+lstNumberFields = av.run("DCSewerDesign.Fields.returnNumberFields",lstLineFields)
+fldMaxDownstreamElevation = Msgbox.choice(lstNumberFields, "Select the downstream elevation field.","DC Sewer Design")
+if(fldMaxDownstreamElevation.asString = "nil")then
+  exit
+end
+fldMaxUpstreamElevation = Msgbox.choice(lstNumberFields, "Select the upstream elevation field.","DC Sewer Design")
+if(fldMaxUpstreamElevation.asString = "nil")then
+  exit
+end
+fldGradient = Msgbox.choice(lstNumberFields, "Select the gradient field.","DC Sewer Design")
+if(fldGradient.asString = "nil")then
+  exit
+end
+fldMinimumCover = Msgbox.choice(lstNumberFields, "Select the minimum cover field.", "DC Sewer Design")
+if(fldMinimumCover.asString = "nil")then
+  exit
+end
+
+' Get the elevation field
+lstElevationFields = ftbElevation.getFields
+lstNumberFields = av.run("DCSewerDesign.Fields.returnNumberFields", lstElevationFields)
+fldElevation = MsgBox.choice(lstNumberFields, "Select the elevation field.", "DC Sewer Design")
+if(fldElevation.asString = "nil")then
+  exit
+end
+
+' Ask for snapping radius
+strSnappingRadius = MsgBox.input("Enter the snapping radius.","DC Sewer Design","5.0")
+if(strSnappingRadius = nil)then
+  exit
+end
+numSnappingRadius = strSnappingRadius.asNumber
+if(numSnappingRadius.isNull)then
+  exit
+end
+
+' 1 m should be fine for densification
+numStepWidth = 1.0
+
+' Data for status display
+numCounter = 0 
+numTotal = ftbLine.getNumRecords
+
+'give the user a chance to kill script
+
+av.showStopButton 
+
+for each recLine in ftbLine
   numGradient = ftbLine.returnValue(fldGradient, recLine)
-  pllLine = ftbLine.returnValue(fldShape, recLine)
+  pllLine = ftbLine.returnValue(fldLineShape, recLine)
+  lstLine = pllLine.asList
   numLength = pllLine.returnLength
-  numMaxUpstreamElevation = 1000000
-  numSteps = (numLength/numStepWidth).ceiling
-  for each i in 0..numSteps
-    pntAlongLine = pllLine.along(100*i/numSteps)
-    numGroundElevation = grdTerrain.pointValue(pntAlongLine, viewActive.getProjection)*numDemFactor
-    ' distance from upstream manhole...
-    numX = numLength*i/numSteps
-    numUpstreamElevation = numGroundElevation +(numGradient*numX)
-    numMaxUpstreamElevation = numMaxUpstreamElevation.min(numUpstreamElevation)
+  numMaxDownstreamElevation = Number.makeNull
+  numMaxUpstreamElevation = Number.makeNull
+  if((lstLine.count = 1)and(lstLine.get(0).count = 2))then
+    numMinimumCover = ftbLine.returnValue(fldMinimumCover, recLine)
+    numMaxUpstreamElevation = 1000000.0
+    pntUpstream = pllLine.along(0.0)
+    
+    ' Densify the polyline
+    pllDense = pllLine.returnDensified(numStepWidth)
+    
+    ' Select elevation points within snapping radius
+    plgnBuffer = pllLine.returnBuffered(numSnappingRadius)
+    
+    ftbElevation.selectByPolygon(plgnBuffer, #VTAB_SELTYPE_NEW)
+    bmpSelection = ftbElevation.getSelection
+    for each recElevation in bmpSelection
+      pntElevation = ftbElevation.returnValue(fldElevationShape, recElevation)
+      numElevation = ftbElevation.returnValue(fldElevation, recElevation)
+      if(pntElevation.snap(pllDense, numSnappingRadius))then
+        numDistance = pntUpstream.distance(pntElevation)
+        numUpstreamElevation = numElevation +  (numGradient * numDistance)
+        numMaxUpstreamElevation = numMaxUpstreamElevation.min(numUpstreamElevation)
+      end
+    end
+    if(numMaxUpstreamElevation = 1000000.0)then
+      numMaxUpstreamElevation = Number.makeNull
+    else
+      numMaxUpstreamElevation = numMaxUpstreamElevation - numMinimumCover
+      numMaxDownstreamElevation = numMaxUpstreamElevation - (numGradient * numLength)
+    end
   end
-  numMaxUpstreamElevation = numMaxUpstreamElevation - numMinimumCover
-  numMaxDownstreamElevation = numMaxUpstreamElevation - (numGradient * numLength)
   ftbLine.setValue(fldMaxDownstreamElevation, recLine, numMaxDownstreamElevation)
   ftbLine.setValue(fldMaxUpstreamElevation, recLine, numMaxUpstreamElevation)
 
-   ' update status display
-   numCounter = numCounter + 1 
-   if(av.setStatus((numCounter/numTotal)*100).not)then
-    ' user hit the stop button
-     exit
-   end
-  
- end
+  ' Update status display
+  numCounter = numCounter + 1 
+  if(av.setStatus((numCounter/numTotal)*100).not)then
+   ' User hit the stop button
+    exit
+  end
+end
 
-'clean up
- ftbLine.setEditable(false)
- av.clearStatus
+' Clean up
+av.clearStatus

@@ -7,11 +7,9 @@
 >
 <article lang="en">
 <articleinfo>
- <title>DC Sewer Design Extension</title>
-     <pubdate>2004</pubdate>
-     <edition>Version &version;</edition>
+ <title>DC Sewer Design Extension Manual</title>
     <copyright>
-      <year>2004</year>
+      <year>2004, 2005</year>
       <holder>DORSCH Consult</holder>
     </copyright>
     <author>
@@ -30,11 +28,26 @@
     </author>
     <author>
       <personname>
+        <firstname>Martin</firstname>
+	<surname>Schaber</surname>
+      </personname>
+      <email>Martin.Schaber@dorsch.de</email>
+    </author>  
+    <author>
+      <personname>
 	<firstname>Steffen</firstname>
 	<surname>Macke</surname>
       </personname>
       <email>Steffen_Macke@dorsch.com.jo</email>
     </author>
+    <legalnotice>
+      <para>Permission is granted to copy, distribute and/or modify this 
+        document under the terms of the GNU Free Documentation License, 
+	Version 1.2 or any later version published by the Free Software 
+	Foundation; with no Invariant Sections, no Front-Cover Texts, and no 
+	Back-Cover Texts. A copy of the license is available from the
+	Free Software Foundation (<ulink url="http://www.gnu.org" />).
+	</para></legalnotice>
     <pubdate>$Date$</pubdate>
  </articleinfo>
 <sect1 id="introduction">
@@ -54,6 +67,19 @@
     <title>What's New?</title>
     <para>A summary of changes in different versions of the DC Sewer Design
       Extension.</para>
+    <sect3 id="version_2_0_6">
+      <title>Version 2.0.6</title>
+      <para><itemizedlist>
+        <listitem><para>&quot;Calculate Maximum Manhole Elevations&quot; does
+	  not depend on <citetitle>Spatial Analyst</citetitle> any more.
+	  </para></listitem>
+        <listitem><para>New &quot;Manhole.Legend&quot; configuration option
+	  for profiles allows to show manholes with different symbols in the
+	  profile.</para></listitem>
+	<listitem><para>New &quot;Network Calculator&quot; function
+	  (<xref linkend="network_calculator" />).</para></listitem>  
+	</itemizedlist></para>
+    </sect3>
     <sect3 id="version_2_0_5">
       <title>Version 2.0.5</title>
       <para><itemizedlist>
@@ -100,7 +126,10 @@
       Fullboard Velocity. (According to ATV Working Paper A 110)
       ((QT/QV)^0.305-0.0024*QT/QV)*QV is used as an approximation formula for 
       the Free Surface Velocity. (As found in the Diagram in Schneider 
-      Bautabellen)The formulas are included in the Excel Sheet.</para></sect2>
+      Bautabellen). The formulas are included in the Excel Sheet. If you
+      are using the DBF calculation, please have a look at the source code.
+      </para></sect2>
+      
   <sect2>
     <title>Peak Factors</title>
     <para>The Extension offers several possibilities for the peak factors:
@@ -108,9 +137,10 @@
       ratio of peak to average daily flow and P the population figure in thousands.
       Suited for cities &gt; 80,000 population.</para>
     <para>The Babitt formula. Suited for 
-      cities (80,000 population: Pdom = min(4.5, 5/P^1/6). You can also specify a 
-      constant peak factor).</para>
+      cities (80,000 population: Pdom = min(4.5, 5/P^(1/6)). You can also 
+      specify a constant peak factor).</para>
   </sect2>
+  
   <sect2>
     <title>How the Sewer Network is Modeled</title>
     <para>The Extension models the Sewer Network in a very simplistic way. 
@@ -137,41 +167,66 @@
       </para></caution>
   </sect2>
 </sect1>
+
 <sect1 id="installation">
   <title>Installation</title>
-  <orderedlist>
-    <listitem><para>Install the extension using the setup program. Alternatively,
-      detach the Extension File (DCSewDes.avx) in the ArcView 
-      Extensions directory. 
-      (<filename>c:\esri\av_gis30\arcview\ext32</filename>). You only have to do
-      this once.</para></listitem>
-    <listitem><para>Open an ArcView project.</para></listitem>
-    <listitem><para>Load the Extension by choosing 
-      <guimenuitem>Extensions...</guimenuitem> from the <guimenu>File</guimenu>
-      menu. Next, select the <citetitle>DC Sewer Design Extension</citetitle>
-      from the list. You have to do this once for every project you want to use
-      the <citetitle>DC Sewer Design Extension</citetitle> with.
-      </para></listitem>
-  </orderedlist>
-  <para>For more information on Extensions, see your ArcView 
+  <para>Install the extension using the setup program. Alternatively,
+    detach the extension file (<filename>dcsewdes.avx</filename>) in the 
+    ArcView extensions folder. The extension folder is usually 
+    <filename>c:\esri\av_gis30\arcview\ext32</filename>.</para> 
+  <para>You only have to do this once.</para>
+  <para>For more information on extensions, see your ArcView 
     documentation.</para>
 </sect1>
+
 <sect1 id="usage">
   <title>Usage</title>
   <para>How to use the DC Sewer Design Extension functions.</para>
-  <sect2 id="menu_functions">
-  <title>Menu Functions</title>
+  
+  <sect2 id="extension_loading">
+    <title>Extension Loading</title>
+    <para>Before an extension can be used in ArcView, it needs to be 
+      loaded.</para>
+    <para>Please follow the steps below:
+      <orderedlist>
+        <listitem><para>Open an ArcView project (Unless you already have
+	  an open project).</para></listitem>
+        <listitem><para>Load the Extension by choosing 
+          <guimenuitem>Extensions...</guimenuitem> from the 
+	  <guimenu>File</guimenu> menu. Next, select the <citetitle>DC Sewer 
+	  Design Extension</citetitle> from the list. You have to do this once 
+	  for every project you want to use the <citetitle>DC Sewer Design 
+	  Extension</citetitle> with.</para></listitem>
+	<listitem><para>Click on the <guibutton>OK</guibutton> button.
+	  </para></listitem>  
+       </orderedlist></para>
+     <para>Once the extension is loaded the functionality described below will
+       be available.</para>
+  </sect2>
+  
+  <sect2 id="view_menu_functions">
+  <title>View Menu Functions</title>
   <para>The following functions are available from the <guimenu>DC 
     Sewer</guimenu> in the View GUI.</para>
   <sect3 id="flip_lines_to_flow_direction">
     <title>Flip Lines to Flow Direction</title>
-    <para>This is the first thing you should do before you start the calculations. Just select "Flip Lines to Flow Direction" from the menu and input the
-      Polyline theme which contains the sewer network and the field within the theme that contains the Downstream Invert Level.
-      The lines which have been flipped are returned as a selection from the Function. Also the Number of flipped lines is reported. Lines flipped to
-      the flow direction might be used for speedier Network traces.
-      Also useful to check if the Flow direction from 'real' Elevations is the same as the one created by "Calculate Minimum Elevation Differences":
-      Run "Flip Lines to Flow Direction" with one field first and then with the other one - if everything is ok with your network, the Script should report
-      zero flips after the second run.</para>
+    <para>This is the first thing you should do before you start the 
+      calculations. Just select "Flip Lines to Flow Direction" from the menu 
+      and input the
+      Polyline theme which contains the sewer network and the field within the 
+      theme that contains the Downstream Invert Level.</para>
+    <para>The lines which have been flipped are returned as a selection from 
+      the Function. Also the Number of flipped lines is reported.</para>
+    <para>Lines flipped to
+      the flow direction might be used for speedier Network traces.</para>
+    <caution><para>Be sure to check to check the flow direction visually using
+      an appropriate ArcView legend for the lines (using arrows).</para></caution>
+    <tip><para>It is useful to check if the Flow direction from &quot;real&quot; 
+      elevations is the same as the one created by &quot;Calculate Minimum 
+      Elevation Differences&quot;:
+      Run &quot;Flip Lines to Flow Direction&quot; with one field first and 
+      then with the other one - if everything is ok with your network, the 
+      script should report zero flips after the second run.</para></tip>
   </sect3>
   <sect3 id="accumulate_population"><title>Accumulate Population</title>
     <para>Note: This will recalculate the Accumulated Population field!
@@ -236,14 +291,81 @@
   </sect3>
   <sect3 id="calculate_maximum_manhole_elevations">
     <title>Calculate the Maximum Manhole Elevations</title>
-    <para>The Spatial Analyst Extension is needed for this Function. This will 
-      calculate the maximum upstream and downstream elevations for each line 
-      based on a DEM and a given gradient. A minimum cover of 1.20 m will be 
-      provided. It queries the elevation from the DEM every meter of the
-      network.</para>
-    <para>It it possible to enter a factor that multiplies the elevations
-      read from the DEM.</para>
-    <note><para>Note that this function is rather slow.</para></note>
+    <para>Calculates the maximum manhole elevations taking the minimum cover
+      along the section into consideration.</para>
+    <para>Requires the following themes:
+      <itemizedlist>
+	<listitem><para>Lines (polyline) with fields containing the information
+	  below:
+	  <itemizedlist>
+	    <listitem><para>Maximum upstream manhole elevation (number); will
+	      be overwritten</para></listitem>
+	    <listitem><para>Maximum downsteam manhole elevation (number);
+	      be overwritten</para></listitem>
+	    <listitem><para>Gradient (number)</para></listitem>
+	    <listitem><para>Minimum cover (number)</para></listitem>
+	    </itemizedlist></para></listitem>
+	<listitem><para>Elevations (point) with a numeric field containing
+	  the elevation</para></listitem>
+      </itemizedlist></para>
+    <caution><para>Make sure that your lines are flipped to the flow 
+      direction. You will end up with misleading results otherwise. See
+      <xref linkend="flip_lines_to_flow_direction" /> for details.
+      </para></caution>  
+    <para>Use the function like this:
+      <orderedlist>
+        <listitem><para>Start editing the line theme</para></listitem>
+	<listitem><para>Activate the two required themes</para></listitem>
+	<listitem><para>Select <guimenuitem>Calculate Maximum Manhole 
+	  Elevations</guimenuitem> from the <guimenu>DC Sewer</guimenu> menu
+	  </para></listitem>
+	<listitem><para>Select the fields to be used</para></listitem>
+	<listitem><para>Enter the snapping radius</para></listitem>
+	<listitem><para>Review and correct those values where the calculation
+	  failed (NULL values in the calculated fields)</para></listitem>
+	<listitem><para>Stop editing the line theme</para></listitem> 
+	<listitem><para>Quality control and plausibility checks</para></listitem>
+      </orderedlist></para>
+    <para>The function will perform the following steps:
+      <itemizedlist>
+        <listitem><para>Loop over all lines</para></listitem>
+	<listitem><para>Densify the line (1m step size)</para></listitem>
+	<listitem><para>Select all elevation points in the snapping distance
+	  </para></listitem>
+	<listitem><para>Snap the point to the line</para></listitem>
+	<listitem><para>Calculate the maximum and minimum manhole
+	  elevations taking the point elevations, minimum cover and
+	  gradient into consideration</para></listitem>
+      </itemizedlist></para>
+    <para>NULL values will be written to the maximum and minimum manhole 
+      elevation fields for those lines where no elevations could be found
+      within snapping distance. NULL values will also be written for those
+      lines which are not simple lines with exactly two vertices.</para>  
+    <tip><para>If your elevation source is a DTM (Digital Terrain Model), try the 
+      following:
+      <orderedlist>
+        <listitem><para>Segmentize your line theme to make it
+	  sufficiently dense. This can be done using the <citetitle>DC
+	  Processing Extension</citetitle>.</para></listitem>
+	<listitem><para>Create nodes for the densified line theme.
+	  You can use the <citetitle>DC Water Design Extension</citetitle> to do
+	  so.</para></listitem>
+	<listitem><para>Assign elevations from your DTM to the generated node 
+	  theme. You can use the <citetitle>DC Processing Extension</citetitle>
+	  together with the <citetitle>Spatial Analyst</citetitle> to do 
+	  this.</para></listitem>
+      </orderedlist></para>
+      <para>In this case, you may use a very small snapping radius.</para></tip>
+    <tip><para>In order to select the NULL values in the minimum manhole
+      elevation fields, use a query statement like this: 
+      <programlisting>[upmaninv].isnull</programlisting>
+      Where &quot;[upmaninv]&quot; is the calculated maximum upstream manhole 
+      elevation field.</para></tip>
+    <caution><para>Make sure that elevation points are available around your
+      upstream manholes. In a case where the terrain is flat but an elevation
+      is only available around the downstream manhole, the function will
+      calculate values, but will fail to provide the minimum cover at
+      the upstream manhole.</para></caution>  
   </sect3>
   <sect3 id="enforce_drainage">
     <title>Enforce Drainage</title>
@@ -266,16 +388,21 @@ Diameter=Diameter</programlisting></para>
   </sect3>
   <sect3 id="validate_lines">
     <title>Validate Lines</title>
-    <para>The "Validate Lines" function from the menu checks if all the lines only contain two vertexes. Also it checks if the length is
-      greater or equal one map unit. All invalid features are returned in the selection. The number of invalid features is reported.
+    <para>The &quot;Validate Lines&quot; function from the menu checks if all 
+      the lines only contain two vertexes. Also it checks if the length is
+      greater or equal one map unit. All invalid features are returned in the 
+      selection. The number of invalid features is reported.
   </para>
   </sect3>
   <sect3 id="create_profile">
     <title>Create Profile (L-Section)</title>
-    <para>The &quot;Create ComplexProfile&quot; function from the menu creates a 
-      longitudinal section for the lines selected in a theme. The matching
-      manhole theme is also required. The user is asked for the themes and a 
-      configuration file which should contain the following field definitions:
+    <para>The <guimenuitem>Create Profile</guimenuitem> function from the 
+      <guimenu>DC Sewer</guimenu> menu creates a 
+      longitudinal section for the lines selected in a theme.</para>
+    <para>To use the function, a line theme and a node theme sharing the proper
+      line-node topology are required.</para>
+    <para>The user is asked for a configuration file which should contain the 
+      at least the following configuration options:
       <programlisting>
 Manhole.ID=???
 Manhole.Diameter=???
@@ -283,14 +410,19 @@ Manhole.InvertLevel=???
 Manhole.Elevation=???
 Line.ID=???
 Line.Diameter=???
-Line.Gradient=???
-Line.MaximumFlow=???
 Line.UpstreamInvert=???
 Line.DownstreamInvert=???
      </programlisting></para>
-    <para>Definitions starting with 'Manhole' refer to fields in the manhole 
-      table, definitions starting with 'Line' refer to the line table. The 
-      Profile consists of a new shapefile and text labels.</para>
+    <para>Definitions starting with &quot;Manhole&quot; refer to fields in the 
+      manhole table, definitions starting with &quot;Line&quot; refer to the 
+      line table. The &quot;???&quot; part has to be replaced with the actual
+      field names of the different items.</para>
+    <para>The configuration file is a simple ASCII file that can be edited with
+      any text editor (e.g. Notepad, Wordpad or jEdit).</para>
+    <para>In addition to the minimum configuration options, optional 
+      configuration options can be added to create more comple profiles.
+      These options are explained below.</para>
+    <para>The created profile consists of a new shapefile and text labels.</para>
     <para>A new view is created named &quot;Profile UpstreamID - 
       DownstreamID&quot; where UpstreamID and DownstreamID are the ID of the
       upstream and downstream manholes, respectively.</para>
@@ -311,8 +443,8 @@ Line.Theme=???</programlisting></para>
       </itemizedlist></para>
     <para>The following is an example of the data box configuration syntax:
       <programlisting>
-CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting>
-      Where CumulativeLineData is the data box type, diameter is the field
+CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting></para>
+    <para>Where CumulativeLineData is the data box type, diameter is the field
       name in the line table, 0 is the number of decimal digits, 
       &quot;Diameter Nominal in mm&quot; is the data box label and 30 is the
       height of the data box.</para>
@@ -320,11 +452,43 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting>
       output.</para>
     <para>Adding the following line will add datum lines at a 5m interval:
       <programlisting>DatumInterval=5</programlisting></para>
-    <para>The field dc_id of the ground elevation lines will contain the
-      dc_id of the line. This allows to link back information from the
+    <para>To display the manholes using different symbols, the
+      following configuration option can be used:
+      <programlisting>Manhole.Legend=???</programlisting></para>
+    <para>Where &quot;???&quot; is the placeholder for path to an ArcView legend
+      (<filename>*.avl</filename>) that can be applied to the manhole theme.
+      </para> 
+    <para>Using this option will add an 
+      additional manhole theme to the profile view.</para>
+    <para>All manhole attributes from the layout view are copied to the profile
+      view, allowing to create the legend file in the layout.</para>
+    <para>The field &quot;dc_id&quot; of the ground elevation lines will contain 
+      the dc_id of the line. This allows to link back information from the
       profile to the original line theme using <xref linkend=
       "link_profile_to_layout" /></para>
+    <para>Unrecognized configuration options will simply be ignored.</para>  
+    <tip><para>This function can also be used to generate profiles for water
+      networks.</para></tip>
+    <tip><para>If you would like to choose a different configuration file,
+      after the initial selection, use the menu function <guimenuitem>Select
+      Profile Configuration</guimenuitem> (<xref linkend=
+      "select_profile_configuration" />).</para></tip>
+    <tip><para>It is possible to show upstream and downstream invert elevations
+      for a pipe at drop manholes. If the upstream invert elevation is
+      stored in the field &quot;upstream&quot; and the dowstream invert
+      elevation in the field &quot;downstream&quot; of the manhole table, use 
+      the following calculator formula to fill a field that will show both 
+      elevations when used in a &quot;ManholeData&quot; box:<programlisting>
+      [upstream]+NL+[downstream]</programlisting></para>
+      <para>Note that the combined field with the newlines will not be displayed
+        properly in the ArcView table.</para></tip>  
+    <caution><para>This function requires a field &quot;dc_id&quot; with unique
+      values in the manhole and line themes. It is recommended to use
+      this field for the &quot;Manhole.ID&quot; and &quot;Line.ID&quot;
+      configurations.</para></caution>  
+    <!-- TODO: integrate sample data in installer -->
   </sect3>
+  
     <sect3 id="select_profile_configuration">
       <title>Select Profile Configuration</title>
       <para>Select the configuration file to be used by <xref linkend=
@@ -389,6 +553,42 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting>
         to use this function. See <xref linkend="flip_lines_to_flow_direction" 
 	/> to see how lines can be flipped to the flow direction.</para>
 	</important>
+    </sect3>
+  </sect2>
+  <sect2 id="table_menu_functions">
+    <title>Table Menu Functions</title>
+    <para>The following functions are available from the <guimenu>DC 
+    Sewer</guimenu> in the Table GUI.</para>
+    <sect3 id="network_calculator">
+      <title>Network Calculator</title>
+      <para>The network calculator allows to perform calculations like the
+        standard ArcView field calculator that also use values of upstream
+	and downstream lines.</para>
+      <para>The network calculator extends ArcView's formulas with the following
+        constructs:
+	<itemizedlist>
+	  <listitem><para><programlisting>Upstream.[field1]</programlisting>
+	    </para>
+            <para>Where &quot;Upstream.[field1]&quot; will be replaced by the value 
+              of field1 for the upstream record.</para></listitem>
+          <listitem><para><programlisting>Downstream.[field1]</programlisting>
+	    </para>
+            <para>Where &quot;Downstream.[field1]&quot; will be replaced by the value 
+              of field1 for the downstream record.</para></listitem>
+	</itemizedlist></para>
+	<para>Thus a formula like
+	  <informalexample><programlisting
+	  >Downstream.[invert] + [gradient]*[length]</programlisting>
+	  </informalexample></para>
+	<para>would be converted to &quot;333 + [gradient]*[length]&quot; before
+	  it's passed to the standard ArcView calculator - assuming that
+	  the invert level of the downstream line is 333.</para>
+	<para>You have to choose if the calculation should start at the upstream
+	  end of the selection (downstream direction) or at the downstream
+	  end (upstream direction).</para>
+	<caution><para>Note that &quot;Upstream.[field]&quot; will randomly 
+	  select one of the upstream values if there is more than one upstream 
+	  line.</para></caution>
     </sect3>
   </sect2>
   <sect2 id="gravity_sewer">
