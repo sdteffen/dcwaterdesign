@@ -1,0 +1,1 @@
+compile epanet2mysql.c with any ANSI-compliant C-compiler (e.g. gcc)
