@@ -1,6 +1,11 @@
 2001-06-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 	
 	* dcwatdes.extension.uninstall: fixed startup script restauration when unloading
+	* dcwatdes.dialog.epanettables.initialize:
+	* dcwatdes.dialog.epanetthemes.initialize: fixed table/theme activation after
+	project save/load
+	* dcwatdesextension.make: updated for Version 2.02
+	* dcwates.model.epanet.writeinpfile: fixed backdrop map writing
 	
 2001-06-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 

@@ -78,7 +78,7 @@ end
 
 fln_Xml = FileDialog.put("hydraulic_model.xml".asFilename,"*.xml","Save Epanet Model")
 if(fln_Xml = nil ) then
-' User selected cancel
+  ' User selected cancel
   exit
 end
 
@@ -474,10 +474,13 @@ if(viewActive.getVisibleThemes.count > dicThemes.count)then
     end
   
     ' redraw view
+    rectOldExtent = viewActive.getDisplay.returnVisExtent
+    viewActive.getDisplay.setExtent(viewActive.returnExtent)
     viewActive.invalidate
+    av.processAllInvals
   
     strUnits = ""
-    numResolution = 400
+    numResolution = 96
   
     ' Set UNITS for the Background
     if (viewActive.getUnits = #UNITS_LINEAR_FEET) then
@@ -503,9 +506,14 @@ if(viewActive.getVisibleThemes.count > dicThemes.count)then
     lnf_Xml.writeElt("<units>"+strUnits+"</units>")
     strScreenDump = fln_Xml.asString
     ' remove File Extension
-    strScreenDump = strScreenDump.left(strScreenDump.count - 4).asFileName 
-    flnScreenDump = viewActive.exportToFile(strScreenDump,"Placeable WMF",{numResolution})
-    lnf_Xml.writeElt("<file>"+flnScreenDump.asString.quote+"</file>")
+    flnScreenDump = strScreenDump.left(strScreenDump.count - 4).asFileName 
+    flnCheck = flnScreenDump.clone
+    flnCheck.setExtension("bmp")
+    if(File.exists(flnCheck))then
+      File.delete(flnCheck)
+    end
+    flnScreenDump = viewActive.exportToFile(flnScreenDump,"Windows Bitmap",{numResolution, true})
+    lnf_Xml.writeElt("<file>"+flnCheck.asString+"</file>")
     lnf_Xml.writeElt("</backdrop>")
     end
     
@@ -515,6 +523,7 @@ if(viewActive.getVisibleThemes.count > dicThemes.count)then
     end
   
     'redraw view
+    viewActive.getDisplay.setExtent(rectOldExtent)
     viewActive.invalidate
         
   end

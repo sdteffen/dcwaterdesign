@@ -78,6 +78,11 @@ for each strCombobox in {"Options", "Times","Report", "Controls", "Curves"}
     for each avTable in lstTables
       if(avTable.getName = strSelected)then
         theCombobox.findByValue(avTable)
+        chbTable = dlgEpanetTables.findByName("chb"+strCombobox)
+        if(chbTable <> nil)then
+          chbTable.setSelected(true)
+          chbTable.click
+        end
       end
     end
   end

@@ -79,7 +79,7 @@ for each strCombobox in {"Junctions", "Tanks","Pumps", "Valves", "Reservoirs"}
 
   theCombobox = dlgEpanetThemes.findByName("cbx"+strCombobox)
   theCombobox.defineFromList(lstThemesToShow)
-  theCheckbox = dlgEpanetThemes.findByName("chx"+strCombobox)
+  theCheckbox = dlgEpanetThemes.findByName("chb"+strCombobox)
   if(theCheckbox <> nil)then
     theCheckbox.setSelected(false)
   end
@@ -88,6 +88,11 @@ for each strCombobox in {"Junctions", "Tanks","Pumps", "Valves", "Reservoirs"}
      for each thmCheck in theCombobox.getList
        if(strSelected = thmCheck.getName)then
          theCombobox.findByValue(thmCheck)
+         if(theCheckbox <> nil)then
+           theCheckbox.setSelected(true)
+           theCheckbox.click
+         end
+
        end
      end
   else
@@ -96,9 +101,6 @@ for each strCombobox in {"Junctions", "Tanks","Pumps", "Valves", "Reservoirs"}
       if((avTheme.getName.lcase.contains(strComboTranslated.lcase)) or
          (avTheme.getName.lcase.contains(strCombobox.lcase)))then
         theCombobox.findByValue(avTheme)
-        if(theCheckbox <> nil)then
-          theCheckbox.setSelected(true)
-        end
       end
     end
   end
@@ -118,10 +120,6 @@ for each strCombobox in {"Pipes"}
 
   theCombobox = dlgEpanetThemes.findByName("cbx"+strCombobox)
   theCombobox.defineFromList(lstThemesToShow)
-  theCheckbox = dlgEpanetThemes.findByName("chx"+strCombobox)
-  if(theCheckbox <> nil)then
-    theCheckbox.setSelected(false)
-  end
   strSelected = dicPreferences.get("str"+strCombobox)
   if(strSelected <> nil)then
      for each thmCheck in theCombobox.getList
@@ -135,9 +133,6 @@ for each strCombobox in {"Pipes"}
       if((avTheme.getName.lcase.contains(strComboTranslated.lcase)) or
          (avTheme.getName.lcase.contains(strCombobox.lcase)))then
         theCombobox.findByValue(avTheme)
-        if(theCheckbox <> nil)then
-          theCheckbox.setSelected(true)
-        end
       end
     end
   end
