@@ -1,3 +1,7 @@
+2001-09-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes2.apr: removed extension dependencies
+	
 2001-09-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.loadresultsforstep:
