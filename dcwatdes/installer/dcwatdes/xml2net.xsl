@@ -181,8 +181,8 @@ TRIALS   <xsl:value-of select="options/trials/text()"/>
 ACCURACY   <xsl:value-of select="options/accuracy/text()"/>
 UNBALANCED   <xsl:value-of select="options/unbalanced/text()"/>
 PATTERN   <xsl:value-of select="options/pattern/text()"/>
-DEMAND MULTIPLIER<xsl:value-of select="options/demandmultiplier/text()"/>
-EMITTER EXPONENT<xsl:value-of select="options/emitterexponent/text()"/>
+DEMAND MULTIPLIER <xsl:value-of select="options/demandmultiplier/text()"/>
+EMITTER EXPONENT <xsl:value-of select="options/emitterexponent/text()"/>
 TOLERANCE   <xsl:value-of select="options/tolerance/text()"/>
 <!-- Note MAP removed due to Epanet GUI loading problems -->
 

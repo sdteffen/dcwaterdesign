@@ -1,3 +1,7 @@
+2003-07-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/av_epanet_data_model.dia: updated for 2.08 release
+
 2003-07-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.returnfieldlists: added emittercoefficient to
@@ -6,6 +10,9 @@
 	is created when missing
 	* dcwatdes.model.epanet.writeinpfile: writing emitters to the inp file
 	* dcwatdesextension.make: updated for 2.08 release
+	* doc/dcwatdes_manual.lyx: updated for 2.08, additional questions and
+	answers
+	* installer/dc_water_design_extension.nsi: updated for 2.08 release
 	
 2003-07-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
