@@ -52,7 +52,7 @@ for each ftbFeature in lstFTabs
       end
       bmpCheck = ftbCheck.getSelection.clone
       bmpCheck.clearAll
-      ftbCheck.query("([dc_id]="+strID.asString.quote+")or([dc_id]="+strID.asString+")", bmpCheck, #VTAB_SELTYPE_NEW)
+      ftbCheck.query("([dc_id].asString="+strID.asString.quote+")or([dc_id].asString="+strID.asString+")", bmpCheck, #VTAB_SELTYPE_NEW)
       numCount = bmpCheck.count 
       if(numCount > numExpectedCount)then
         numDoubleIDs = numDoubleIDs+numCount-numExpectedCount

@@ -68,7 +68,7 @@ dicPreferences.set("strLinkResults", flnLinkResults.getFullName)
 flnNodeResults = (strBasePath+"-node-results.txt").asFilename
 dicPreferences.set("strNodeResults", flnNodeResults.getFullName)
 
-for each flnResult in {flnLinkResults, flnNodeResults}
+for each flnResult in {flnNodeResults, flnLinkResults}
   strResultFiles = strResultFiles++flnResult.getFullName
   strResultFileName = flnResult.getFullName
   lstTables = av.getProject.getDocsWithGUI(av.findGUI("Table"))

@@ -1,3 +1,14 @@
+2001-09-06  Steffem Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: fixed check for duplicate IDs if
+	one of the IDs is not a string. Bug reported by Philipp Magiera
+	* installer/dc_water_design_extension.nsi: Added link to homepage
+	in the start menu
+	* dcwatdes.file.waitfor: fixed error message if waiting times out
+	* dcwatdes.model.epanet.loadresultsforstep: 
+	* dcwatdes.model.epanet.results.loadarcview: more work on arcview
+	backend
+	
 2001-08-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.file.waitfor:

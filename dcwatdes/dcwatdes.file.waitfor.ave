@@ -36,7 +36,7 @@ end
 timeStart=Date.now
 while(File.exists(flnFile).not)
   if((Date.now-timeStart).asSeconds>numSecondsToWait)then
-    MsgBox.info("Waited"++numSecondsToWait++"seconds for file"++
+    MsgBox.info("Waited"++numSecondsToWait.asString++"seconds for file"++
       flnFile.getFullName.quote+". File did not appear.","DC Water Design")
     return false
   end
@@ -48,7 +48,7 @@ end
 timeStart=Date.now
 while(File.isWritable(flnFile).not)
   if((Date.now-timeStart).asSeconds>numSecondsToWait)then
-      MsgBox.info("Waited"++numSecondsToWait++"seconds for file"++
+      MsgBox.info("Waited"++numSecondsToWait.asString++"seconds for file"++
       flnFile.getFullName.quote++"to become readable. Did not succeed.","DC Water Design")
     return false
   end
