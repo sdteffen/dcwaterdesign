@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.Junctions.createMissing
 	
-' (c) 2001 DORSCH Consult
+' (c) 2001,2002 DORSCH Consult
 
 ' create the junctions that are missing in the
 ' alters the junctions theme
@@ -90,12 +90,14 @@ for each recPipe in ftbPipes
   lstNodesPoints.add(lstPipeNodes.get(lstPipeNodes.count-1))
   for each i in 0..1
     numNodes = 0
+    blnNodeMissing = true
     for each j in 0..(lstNodeFTabs.count-1)
       ftbNodes = lstNodeFTabs.get(j)
       ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
       bmpNodes = ftbNodes.getSelection
       recConnectedNode = bmpNodes.getNextSet(-1)
       if(recConnectedNode <> -1)then
+        blnNodeMissing = false
         if(numNodes=0)then
           bmpNodes.clear(recConnectedNode)
         end
@@ -117,12 +119,12 @@ for each recPipe in ftbPipes
         
       end
     end
-    if(recConnectedNode = -1)then
+    if(blnNodeMissing)then
       ' check if junction has been added to the list before
       pntMissingJunction = lstNodesPoints.get(i)
       blnReallyMissing = true
       for each pntJunction in lstMissingPoints
-        if(pntJunction.intersects(pntMissingJunction))then      
+        if(pntJunction.distance(pntMissingJunction) < numSnappingRadius)then      
           blnReallyMissing = false
           break
         end

@@ -1,3 +1,9 @@
+2002-11-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.junctions.createmissing: fix for
+	bug #633812, extra junctions were created on top of other
+	nodes
+	
 2002-09-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 	
 	* inp2shp/inp2shp.c: writing attributes for pipes, nodes
