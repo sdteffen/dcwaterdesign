@@ -1,6 +1,7 @@
 ' DCWatDes.Model.Epanet.ensureAliases
 
-' (c) 2000 DORSCH Consult
+' (c) 2000, 2001 DORSCH Consult
+
 ' ensures that all the necessary aliases
 ' for the Epanet Model are set up
 ' allows to set the aliases as well as to add new fields
@@ -19,6 +20,9 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+' no arguments
+' nothing is returned
+
 extDCWatDes = Extension.find("DC Water Design")
 if(extDCWatDes <> nil)then
   dicPreferences = extDCWatDes.getPreferences
@@ -34,6 +38,8 @@ end
 lstThemesInView = activeView.getThemes
 
 lstAllFields = av.run("DCWatDes.Model.Epanet.returnFieldLists", nil)
+
+blnCreateMissingFieldsInfo = false
 
 for each lstTheme in lstAllFields
 
@@ -71,6 +77,14 @@ for each lstTheme in lstAllFields
                break
              end
            end
+         end
+       end
+       if(blnCreateMissingFieldsInfo.not)then
+         blnCreateMissingFieldsInfo = true
+         blnCreateMissing = MsgBox.yesNo("Your data is missing some fields. Do you want to automatically add all missing fields? Selecting No will allow you to manually match your fields.", "DC Water Design", true)
+         if(blnCreateMissing)then
+           av.run("DCWaterDesign.Model.Epanet.Fields.createMissing",nil)
+           return nil
          end
        end
        fldAliased = MsgBox.choice(lstAvailableFields,"Select the "+strRequiredAlias+" Field of the "+strTheme+" Table.","DC Water Design Extension")

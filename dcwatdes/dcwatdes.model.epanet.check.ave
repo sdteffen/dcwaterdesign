@@ -30,54 +30,110 @@ lstFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
 numToGo = lstFTabs.count
 numCompleted = 0
 numDoubleIDs = 0
-numIDsTooLong = 0
+'numIDsTooLong = 0
 
-blnErrorOccured = false
+blnErrorOccurred = false
 
 lstThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
 
-for each thmFeature in lstThemes
-  thmFeature.clearSelection
-end 
+' check for NULL shapes
 
 for each ftbFeature in lstFTabs
-  numFeature = 0
-  fldID = ftbFeature.findField("dc_id")
-  for each recFeature in ftbFeature
-    strID = ftbFeature.returnValue(fldID, recFeature)
-    if(strID.count > 14)then
-      numIDsTooLong = numIDsTooLong + 1
-      bmpTooLong = ftbFeature.getSelection.clone
-      bmpTooLong.set(recFeature)
-      ftbFeature.setSelection(bmpTooLong)
-      ftbFeature.updateSelection
-    end
-    for each ftbCheck in lstFTabs
-      if(ftbCheck = ftbFeature)then
-        numExpectedCount = 1
-      else
-        numExpectedCount = 0
-      end
-      bmpCheck = ftbCheck.getSelection.clone
-      bmpCheck.clearAll
-      ftbCheck.query("([dc_id].asString="+strID.asString.quote+")or([dc_id].asString="+strID.asString+")", bmpCheck, #VTAB_SELTYPE_NEW)
-      numCount = bmpCheck.count 
-      if(numCount > numExpectedCount)then
-        numDoubleIDs = numDoubleIDs+numCount-numExpectedCount
-        bmpOld = ftbCheck.getSelection.clone
-        bmpCheck.or(bmpOld)
-        ftbCheck.setSelection(bmpCheck)
-        ftbCheck.updateSelection
-      end
-    end
-    numFeature = numFeature+1
+  strQuery = "[Shape].isNull"
+  bmpSelection = ftbFeature.getSelection
+  if(bmpSelection = nil)then
+    MsgBox.error("Empty Selection","DC Water Design")
+    exit
   end
-  numCompleted = numCompleted+1
+  ftbFeature.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+  if(bmpSelection.count > 0)then
+    blnDelete = MsgBox.yesNo("Found"++bmpSelection.count.asString++"records with NULL shapes. Should these records be deleted?","DC Water Design", true)
+    if(blnDelete)then
+      ftbFeature.setEditable(true)
+      ftbFeature.removeRecords(bmpSelection)
+      ftbFeature.setEditable(false)
+    end
+  end
 end
 
-numDoubleIDs = numDoubleIDs/2
+for each thmFeature in lstThemes
+  thmFeature.clearSelection  
+end 
+
+' merge into one table
+flnTemp = Filename.getTmpDir.makeTmp("dc_id_summary","dbf")
+vtbTemp = VTab.makeNew(flnTemp, dBase)
+fldTemp = Field.make("dc_id", #FIELD_CHAR, 16, 0)
+if(vtbTemp.isEditable.not)then
+  vtbTemp.setEditable(true)
+end
+vtbTemp.addFields({fldTemp})
+
+for each ftbFeature in lstFTabs
+  fldID = ftbFeature.findField("dc_id")
+  if(fldID = nil)then
+    MsgBox.error("Field 'dc_id' is missing","DC Water Design")
+    vtbTemp.setEditable(false)
+    exit
+  end
+  for each recFeature in ftbFeature
+    strID = ftbFeature.returnValue(fldID, recFeature).asString
+    recNew = vtbTemp.addRecord
+    vtbTemp.setValue(fldTemp, recNew, strID)
+  end
+end
+
+'summarize
+flnTemp2 = Filename.getTmpDir.makeTmp("dc_id_summary","dbf")
+vtbSummary = vtbTemp.summarize(flnTemp2, dBase, fldTemp, {},{})
+
+' check for duplicate IDs
+
+strProblematicQuery = "([dc_id].asString.count=(-1))"
+
+
+strQuery = "[count] > 1"
+bmpSelection = vtbSummary.getSelection
+vtbSummary.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+numDoubleIDs = bmpSelection.count
+fldSummaryID = vtbSummary.findField("dc_id")
+
+for each recProblematic in bmpSelection
+  strID = vtbSummary.returnValue(fldSummaryID, recProblematic)
+  strProblematicQuery = strProblematicQuery+"or([dc_id].asString.trim="+strID.quote+")"
+end
+
+
+' check for IDs that are too long
+strQuery = "[dc_id].count > 13"
+bmpSelection = vtbSummary.getSelection
+vtbSummary.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+numIDsTooLong = bmpSelection.count
+fldSummaryID = vtbSummary.findField("dc_id")
+
+for each recProblematic in bmpSelection
+  strID = vtbSummary.returnValue(fldSummaryID, recProblematic)
+  strProblematicQuery = strProblematicQuery+"or([dc_id].asString.trim="+strID.quote+")"
+end
+
+' select problematic records
+
+for each ftbFeature in lstFTabs
+  bmpSelection = ftbFeature.getSelection
+  ftbFeature.query(strProblematicQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+  ftbFeature.setSelection(bmpSelection.clone)
+  ftbFeature.updateSelection
+end
+
+vtbSummary.setEditable(false)
+vtbSummary.deactivate
+vtbTemp.setEditable(false)
+vtbTemp.deactivate
+File.delete(flnTemp)
+File.delete(flnTemp2)
+
 if(numDoubleIDs>0)then
-  blnErrorOccured = true
+  blnErrorOccurred = true
   MsgBox.warning("The model has"++numDoubleIDs.asString++" duplicate ID(s)."+NL+"Check the Selection.", "DC Water Design")
 else
   MsgBox.info("The model ID's are unique", "DC Water Design")
@@ -85,15 +141,14 @@ end
 
 if(numIDsTooLong > 0)then
   blnErrorOccurred = true
-  MsgBox.warning("Some ID's in the model are too long. They should not exceed 14 characters."+NL+"Check the Selection.","DC Water Design")
+  MsgBox.warning("Some ID's in the model are too long. They should not exceed 13 characters."+NL+"Check the Selection.","DC Water Design")
 end
-if(blnErrorOccured.not)then
+
+if(blnErrorOccurred.not)then
   for each ftbTheme in lstFTabs
     ftbTheme.getSelection.clearAll
+    ftbTheme.updateSelection
   end
-end
-for each ftbTheme in lstFtabs
-  ftbTheme.updateSelection
 end
 
 av.getActiveDoc.getDisplay.invalidate(true)

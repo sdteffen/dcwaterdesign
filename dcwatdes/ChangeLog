@@ -1,3 +1,27 @@
+2001-09-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* installer/dc_water_design_extension.nsi: 
+	* installer/report a bug.url: added link to bug
+	tracking system; fixed xml2net.xsl inclusion
+	* dcwatdes.model.epanet.check: more work on performance increase
+	* doc/dcwatdes_manual.lyx: updated documentation
+	* dcwatdes.model.epanet.loadresultsforstep: fixed result import,
+	increased performance
+	* dcwatdes.model.epanet.returnfieldlists: status field of the pipes
+	theme was missing; valve and pump results are like pipe results now,
+	abandoned the node results
+	* dcwatdes.model.epanet.run: make sure that the aliases are in place
+	* dcwatdes.model.epanet.ensurealiases: offer to run createmissing 
+	fields
+	
+2001-09-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: yesterdays addition was not complete;
+	checking for null shapes now; tremendous performance increase for
+	duplicate id checking: using temporary table now.
+	* installer/dc_water_design_extension.nsi: fixed start menu entry for
+	data model; removed cygwin sed and sh
+	
 2001-09-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.check: added check to complain if the
