@@ -1,3 +1,12 @@
+2004-01-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: fixed error message for pattern
+	table
+	* dcwatdes.model.epanet.returnfieldlists:
+	* dcwatdes.model.epanet.ensurealiases:
+	* dcwatdes.model.epanet.fields.createmissing: create missing fields
+	for patterns, curves
+
 2003-07-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/av_epanet_data_model.dia: updated for 2.08 release
