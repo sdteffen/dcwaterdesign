@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "doc/project.dtd" []>
+<!-- build the DC Sewer Design source distribution -->
+<project name="DC Sewer Design" basedir="." default="DCSewDesDistribution">
+  <!-- configuration -->
+  
+  <!-- Custom DC Sewer Design stylesheets -->
+  <property name="dcsewerdesign_version" value="2.0.2" />
+  
+  <target name="DCSewDesDistribution" id="DC Sewer DesignDistribution">
+    <zip destfile="dcsewerdesign-${dcsewerdesign_version}.zip">
+      <zipfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "**/*.ave,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />
+      <zipfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "INSTALL,NEWS" />
+      <zipfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "doc/*.xsl,doc/project.dtd" />
+      <zipfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "doc/version.xml,**/dcsewerdesign.xml,**/figure/*.png" />
+    </zip>
+  </target>
+  
+  <target name="clean">
+    <delete defaultexcludes="no" dir="." includes=
+      "**/*~,**/htmlhelp.chm,tmp/*.png,tmp/*.pdf,**/.#*,**/*.hhc,**/*.html,**/*.hhk,**/*.fo,**/*.hhp" 
+      excludes="**/index.html"/>
+  </target>
+</project>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE article 
+  PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
+  [ ]
+>
+<article lang="en">
+<articleinfo>
+ <title>DC Sewer Design Extension</title>
+     <pubdate>2004</pubdate>
+     <edition>version 1.0</edition>
+    <copyright>
+      <year>2004</year>
+      <holder>DORSCH Consult</holder>
+    </copyright>
+    <author>
+      <personname>
+	<firstname>Amani</firstname>
+	<surname>Bataineh</surname>
+      </personname>
+      <email>Amani_Bataineh@dorsch.com.jo</email>
+    </author>
+    <author>
+      <personname>
+	<firstname>Steffen</firstname>
+	<surname>Macke</surname>
+      </personname>
+      <email>Steffen_Macke@dorsch.com.jo</email>
+    </author>
+    <pubdate>$Date$</pubdate>
+ </articleinfo>
+<sect1 id="introduction">
+  <title>Introduction</title>
+  <para>The extension can be used to do simple sewer hydraulics.</para>
+  <para>The final calculation can be an Excel Sheet.</para>
+  <para>The <citetitle>DC Sewer Design Extension</citetitle> is free software
+    available from <ulink url="http://dcwaterdesign.sourceforge.net/"
+    >http://dcwaterdesign.sourceforge.net</ulink>.</para>
+  <sect2 id="requirements">
+    <title>Requirements</title>
+    <para>ArcView version 3.* is required to use the DC Sewer Design 
+      Extension.</para>
+  </sect2>
+  <sect2 id="license">
+    <title>License</title>
+    <para>The <citetitle>DC Sewer Design Extension</citetitle> is
+      released under the the terms of the GNU Lesser General Public License 
+      (<citetitle>LGPL</citetitle>).</para>
+  </sect2>
+  </sect1>
+<sect1 id="concepts">
+  <title>Concepts</title>
+  <para>Important Concepts used in the extension.</para>
+  <sect2 id="equations">
+    <title>Equations</title>
+    <para>The calculation uses the Prandtl/Colebrook Equation to calculate the 
+      Fullboard Velocity. (According to ATV Working Paper A 110)
+      ((QT/QV)^0.305-0.0024*QT/QV)*QV is used as an approximation formula for 
+      the Free Surface Velocity. (As found in the Diagram in Schneider 
+      Bautabellen)The formulas are included in the Excel Sheet.</para></sect2>
+  <sect2>
+    <title>Peak Factors</title>
+    <para>The Extension offers several possibilities for the peak factors:
+      The Baumann formula: Pdom = min(2.5, 1+14/(4+SQRT(P)) ) with Pdom as the 
+      ratio of peak to average daily flow and P the population figure in thousands.
+      Suited for cities &gt; 80,000 population.</para>
+    <para>The Babitt formula. Suited for 
+      cities (80,000 population: Pdom = min(4.5, 5/P1/6). You can also specify a 
+      constant peak factor).</para>
+  </sect2>
+  <sect2>
+    <title>How the Sewer Network is Modeled</title>
+    <para>The Extension models the Sewer Network in a very simplistic way. 
+      Therefore it has to be carefully evaluated if the calculation
+      fulfills the given needs. All the necessary information will be kept along 
+      with a Polyline shapefile that contains the sewer network. </para>
+    <para>As sewer lines 
+      are normally straight from manhole to manhole, the extension expects that 
+      all the lines in the network have only two vertexes: One at the upstream 
+      manhole and one at the downstream manhole. </para>
+    <para>The extension expects the 
+      lines to be properly snapped: If the distance between the endpoints is 
+      bigger than 0.1m the extension will treat these lines as not connected. 
+      This means also, that all lines where the distance between the endpoints is 
+      less thant 0.1 m will be treated as connected lines.</para> 
+    <para>Before you can start the calculations, the extension has to set up a 
+      simple topology: The lines have to be flipped to the flow direction. The 
+      corresponding function is included in the <guimenu>DC Sewer</guimenu> 
+      menu. The reason for this is that the calculation
+      functions use the first vertex of a line as the upstream manhole and the 
+      second vertex as the downstream manhole.</para>
+    <caution><para>Keep this in mind when working 
+      with the extension - you'll end up with incorrect results otherwise.
+      </para></caution>
+  </sect2>
+</sect1>
+<sect1>
+  <title>Installation</title>
+  <orderedlist>
+    <listitem><para>Install the extension using the setup program. Alternatively,
+      detach the Extension File (DCSewDes.avx) in the ArcView 
+      Extensions directory. 
+      (<filename>c:\esri\av_gis30\arcview\ext32</filename>). You only have to do
+      this once.</para></listitem>
+    <listitem><para>Open an ArcView project.</para></listitem>
+    <listitem><para>Load the Extension by choosing 
+      <guimenuitem>Extensions...</guimenuitem> from the <guimenu>File</guimenu>
+      menu. Next, select the <citetitle>DC Sewer Design Extension</citetitle>
+      from the list. You have to do this once for every project you want to use
+      the <citetitle>DC Sewer Design Extension</citetitle> with.
+      </para></listitem>
+  </orderedlist>
+  <para>For more information on Extensions, see your ArcView 
+    documentation.</para>
+</sect1>
+<sect1 id="usage">
+  <title>Usage</title>
+  <para>How to use the DC Sewer Design Extension functions.</para>
+  <sect2 id="menu_functions">
+  <title>Menu Functions</title>
+  <para>The following functions are available from the <guimenu>DC 
+    Sewer</guimenu> in the View GUI.</para>
+  <sect3><title>Flip Lines to Flow Direction</title>
+  <para>This is the first thing you should do before you start the calculations. Just select "Flip Lines to Flow Direction" from the menu and input the
+  Polyline theme which contains the sewer network and the field within the theme that contains the Downstream Invert Level.
+  The lines which have been flipped are returned as a selection from the Function. Also the Number of flipped lines is reported. Lines flipped to
+  the flow direction might be used for speedier Network traces.
+  Also useful to check if the Flow direction from 'real' Elevations is the same as the one created by "Calculate Minimum Elevation Differences":
+  Run "Flip Lines to Flow Direction" with one field first and then with the other one - if everything is ok with your network, the Script should report
+  zero flips after the second run.
+  </para>
+  </sect3>
+  <sect3><title>Accumulate Population</title>
+  <para>Note: This will recalculate the Accumulated Population field!
+  You will be asked for a theme to work on and the fields "Accumulated Population" and "Population"
+  The accumulated Population will be calculated as the sum of the population that the script finds in the population field 
+  and the summed up upstream accumulated population. The accumulated population values are 
+  set to zero on a first run over all records.
+  Make sure that there are no network meshes in the theme. The lines have to be flipped to the flow direction before you 
+  can use this function.The Accumulated Population field can furtheron be used for the sewer calculation. It contains the 
+  population that is connected to the sewer section. At the end of the script, the accumulated population is checked
+  against the sum of the population. The values should be equal. If not, a warning message is issued.
+  </para>
+  </sect3>
+  <sect3><title>Accumulate Branch Length</title>
+  <para>Note: This will recalculate the Accumulated Branch Length field!
+  You will be asked for a theme to work on and the fields "Accumulated Branch Length" and "Branch Length"
+  For each line, the AccumulatedBranchLength will be the maxium upstream branch length plus the branch length 
+  of the line. The accumulated population values are 
+  set to zero on a first run over all records.
+  Make sure that there are no network meshes in the theme. The lines have to be flipped to the flow direction before you 
+  can use this function.The AccumulatedBranchLength field can furtheron be used for the sewer calculation. It contains the 
+  population that is connected to the sewer section. At the end of the script, the accumulated population is checked
+  against the sum of the population. The values should be equal. If not, a warning message is issued.
+  This function is useful when designing vacuum sewer according to ATV A 116.
+  </para>
+  </sect3>
+  <sect3><title>Create a Sewer Calculation</title>
+  <para>To use the Menu item "Create Sewer Calculation", you'll need a configuration file, that tells the extension which fields it should use.
+  Create a plain Text file on any of your drives. Use the following as a template, substitute the question marks with your field names.
+  <programlisting>
+  PipeID=????
+  Roughness=?????
+  Gradient=????
+  AccumulatedPopulation=????
+  Diameter=????
+  PeakFactor=????
+  </programlisting>
+  The Peak Factor should either be a constant ( a number), "Baumann" or "Babitt" (without "). After you select 
+  "Create Sewer Calculation" from the menu, you'll be asked for the configuration file.
+  Also you'll be asked for a Sewage flow per person and day and the theme that you want to run the Sewage
+  calculation on. The Excel file that is created contains all the formulas used. If no peak factor is given, the calculation
+  will be carried out with a constant peak factor of 1.
+  </para>
+  </sect3>
+  <sect3><title>Calculate the Minimum Elevation Differences</title>
+  <para>Have a numerical field for the Elevations available. Set the unknown Elevations to zero. You need at least one
+  known Elevation. ( You might set it to 1 if you want to run the Analysis without any given Elevation.)
+   Choose "calculate Minimum Elevation differences" from the "DC Sewer" menu. 
+  You'll be asked for a Theme to run the analysis on, the Field which contains the Elevation and the minimum gradient.  
+  The analysis will trace upstream from the known elevations - all unknown elevations are considered to be upstream.
+  The missing Elevations are calculated with the minimum gradient.
+  Make sure that there are no network meshes in the theme.
+  </para>
+  </sect3>
+  <sect3><title>Calculate the Maximum Manhole Elevations</title>
+  <para>The Spatial Analyst Extension is needed for this Function. This will calculate the maximum upstream and downstream elevations for each line 
+  based on a DEM and a given gradient. A minimum cover of 1.20 m will be provided. It queries the elevation from the DEM. Note that this function
+  is rather slow.</para>
+  </sect3>
+  <sect3><title>Validate Lines</title>
+  <para>The "Validate Lines" function from the menu checks if all the lines only contain two vertexes. Also it checks if the length is
+  greater or equal one map unit. All invalid features are returned in the selection. The number of invalid features is reported.
+  </para>
+  </sect3>
+  <sect3><title>Create Profile (L-Section)</title>
+  <para>The "Create Profile" function from the menu creates a longitudinal section for the lines selected in a theme. The matching
+  manhole theme is also required. The user is asked for the themes and a configuration file which should contain the
+  following field definitions:
+  <programlisting>
+  Manhole.ID=???
+  Manhole.Diameter=???
+  Manhole.InvertLevel=???
+  Manhole.Elevation=???
+  Line.Diameter=???
+  Line.Gradient=???
+  Line.MaximumFlow=???
+  </programlisting>
+  Line.Gradient and Line.MaximumFlow are optional. Definitions starting with 'Manhole' refer to fields in the manhole table,
+  definitions starting with 'Line' refer to the line table. The Profile consists of a new shapefile and text labels. They get added to the
+  active view. Currently all the labels are in German. A new View for the L-Section is created.
+  </para>
+  </sect3>
+  <sect3><title>Enforce Maximum Line Length</title>
+  <para>The "Enforce Maximum Line Length" function can be used to cut a complete line theme in such a way that a
+  maximum line length is never exceeded. The user is prompted to select a theme from the view to work on. The
+  maximum line length has to be entered. The function ignores attributes.
+  </para>
+  </sect3>
+  <sect3><title>Minimalistic Gravity Sewer Design Process</title>
+  <para>Building Sewer Network for Al Qaida, Yemen from Scratch:
+  Received "Routes" as Autocad Files. Cleanup, Snapping in ArcInfo, ArcView
+  To purge all the Vertexes from the Polylines use "[Shape].asLine.asPolyline" with the ArcView Calculator
+  Check Network Layout and Connectivity ( e.g. Water Design Extension), remove all network meshes.
+  Manholes can be generated with "Make EPANET Model" from the DC Water Design Extension
+  "Calculate Minimum Elevation Differences" could be used to create upstream/downstream topology
+  "Flip lines to Flow Direction": Flow Direction could be visualized using standard arrows from ArcView
+  "calculate Flows": useful to roughly determine the required diameter, use Spatial Analysts "Assign Proximity" function to calculate 
+  the Population for each line from population density
+  Creation of DEM from contours and/or survey points.
+  Create 3D shapefile of pipe network with 3D Analyst and DEM
+  Terrain Elevations for each line can be calculated with ArcViews Calculator: "[Shape].asList.get(0).get(0).getZ"
+  Calculate Terrain Gradient from the Terrain Elevations
+  Design Gradient: take Terrain Gradient if suitable for expected Diameter, otherwise take minimum/ maximum gradient suitable for 
+  diameter - this is minimizing the excavation
+  "calculate Maximum Manhole Elevations" based on DEM and design gradient
+  check if flow direction can be maintained with calculated maximum manhole elevations - otherwise adjust downstream elevations: 
+  trace downstream until flow direction can be maintained with adjusted elevations
+  </para>
+  </sect3>
+  </sect2>
+  
+  <sect2>
+    <title>Vacuum Sewers</title>
+    <para>Simple design process for vacuum sewers according to ATV A 116.</para>
+    <itemizedlist>
+      <listitem><para>Obtain population distribution, create polygon shapefile 
+	with densities.</para></listitem>
+      <listitem><para>Create network with DC Water Design 
+        Extension.</para></listitem>
+      <listitem><para>Flip lines to flow direction.</para></listitem>
+      <listitem><para>Enforce maximum line length (50m).</para></listitem>
+      <listitem><para>Create unique manhole names.</para></listitem>
+      <listitem><para>Make EPANET model</para></listitem>
+      <listitem><para>Proximity for junctions.</para></listitem>
+      <listitem><para>Clip Proximity file</para></listitem>
+      <listitem><para>Calculate area</para></listitem>
+      <listitem><para>Spatial join (area -> junctions)</para></listitem>
+      <listitem><para>Join junctions -> lines (dc_id = node1)</para></listitem>
+      <listitem><para>Calculate line length</para></listitem>
+      <listitem><para>Calculate population</para></listitem>
+      <listitem><para>Accumulate population</para></listitem>
+      <listitem><para>Accumulate branch length</para></listitem>
+      <listitem><para>Calculate population density</para></listitem>
+      <listitem><para>Choose diameters according to table in ATV A 
+	116</para></listitem>
+    </itemizedlist>
+  </sect2>
+</sect1>
+</article>

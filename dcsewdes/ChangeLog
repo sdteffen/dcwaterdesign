@@ -1,5 +1,18 @@
 2004-03-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 	
+	* COPYING: corrected license
+	* AUTHORS: added Amani
+	* build.xml:
+	* doc/build.xml:
+	* doc/docbook.css:
+	* doc/docbook.xsl:
+	* doc/docbook_html.xsl:
+	* doc/docbook_pdf.xsl:
+	* doc/project.dtd:
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.help.openchm.ave:
+	* dcsewerdesignextension.make.ave:
+	* script.saveallscripts.ave: prepared 2.0.2 release, added documentation
 	* ChangeLog: preparing initial SourceForge release
 	
 31-10-2002 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.18

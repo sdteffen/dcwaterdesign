@@ -1,13 +1,13 @@
-'DCSewerDesignExtension.make
+' DCSewerDesignExtension.make
 
-strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.1")
+strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.2")
 if (strVersion=nil)then
   exit
 end
 numVersion=strVersion.asTokens(".").get(1).asNumber
 strFileNameVersion = strVersion.asTokens(".").get(0)+"_"+strVersion.asTokens(".").get(1)
 
-myExt = Extension.Make(("$AVEXT\DCSewDes"+strFileNameVersion+".avx").AsFileName,
+myExt = Extension.Make(("$AVEXT\dcsewdes.avx").AsFileName,
               "DC Sewer Design",
               av.GetProject.FindScript("DCSewerDesignExtension.install"),
               av.GetProject.FindScript("DCSewerDesignExtension.uninstall"),
@@ -36,8 +36,8 @@ myExt.setUnloadScript(av.findScript("DCSewerDesignExtension.unload"))
 myExt.setCanUnloadScript(av.findScript("DCSewerDesignExtension.canUnload"))
 myExt.Commit
 
-RFileName = FileName.make("$AVEXT/DCSewDes"+strFileNameVersion+".avx")
-WFileName = FileName.make("$AVEXT/DCSewDes.tmp")
+RFileName = FileName.make("$AVEXT/dcsewdes.avx")
+WFileName = FileName.make("$AVEXT/dcsewdes.tmp")
 RFile = LineFile.make(RFileName, #FILE_PERM_READ)
 WFile = LineFile.make(WFileName, #FILE_PERM_WRITE)
 WFile.setScratch(TRUE)
