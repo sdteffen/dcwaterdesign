@@ -1,5 +1,6 @@
-#LyX 1.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 218
+#This file was created by <sdteffen> Sat Apr  6 16:07:01 2002
+#LyX 0.12 (C) 1995-1998 Matthias Ettrich and the LyX Team
+\lyxformat 2.15
 \textclass article
 \begin_preamble
 
@@ -60,7 +61,7 @@ thispagestyle {empty}
 \layout Standard
 \pagebreak_top 
 
-\begin_inset LatexCommand \tableofcontents{}
+\begin_inset LatexCommand \tableofcontents
 
 \end_inset 
 
@@ -75,7 +76,7 @@ thispagestyle {empty}
 DC Water Design Extension Manual
 \layout Standard
 
-This Manual describes the DC Water Design Extension Version 2.04.
+This Manual describes the DC Water Design Extension Version 2.06.
 \layout Standard
 
 This Document uses Terminology from ArcView and EPANET.
@@ -96,6 +97,22 @@ The DC Water Design Extension is an Extension to ESRI's ArcView GIS software.
 \layout Subsection
 
 What's new?
+\layout Paragraph
+
+Version 2.06
+\layout Itemize
+
+Fixed several problems when the view contained raster themes.
+\layout Itemize
+
+EPANET INP import: Fixed junction import, improved performance.
+ Import function still incomplete.
+\layout Paragraph
+
+Version 2.05
+\layout Itemize
+
+Fixed problems for non-NT versions of Windows
 \layout Paragraph
 
 Version 2.04
@@ -876,7 +893,7 @@ To allow result file loading without having an RDBMS installed, the dialog
  only.
 \layout Paragraph
 
-About\SpecialChar ~
+About\SpecialChar 
 DC Water Design Extension
 \layout Standard
 
@@ -2908,8 +2925,8 @@ emitterexponent:
  Specifies the power to which the pressure at a junction is raised when
  computing the flow issuing from an emitter.
  The default is 0.5.
- \SpecialChar ~
-\SpecialChar ~
+ \SpecialChar 
+\SpecialChar 
 
 \layout Itemize
 
@@ -2919,7 +2936,7 @@ tolerance:
 \emph default 
  The difference in water quality level below which parcels of water are
  considered of equal value.
- The default is 0.01.\SpecialChar ~
+ The default is 0.01.\SpecialChar 
 
 \layout Itemize
 
@@ -3276,19 +3293,19 @@ GNU Lesser General Public License
 
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 Version 2.1, February 1999
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
 Copyright (C) 1991, 1999 Free Software Foundation, Inc.
 \layout Standard
 
-59 Temple Place, Suite 330, Boston, MA\SpecialChar ~
- 02111-1307\SpecialChar ~
+59 Temple Place, Suite 330, Boston, MA\SpecialChar 
+ 02111-1307\SpecialChar 
  USA
 \layout Standard
 
@@ -3298,26 +3315,26 @@ Everyone is permitted to copy and distribute verbatim copies
 of this license document, but changing it is not allowed.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
-[This is the first released version of the Lesser GPL.\SpecialChar ~
+[This is the first released version of the Lesser GPL.\SpecialChar 
  It also counts
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 as the successor of the GNU Library Public License, version 2, hence
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 the version number 2.1.]
 \layout Standard
 
 Preamble
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3328,7 +3345,7 @@ The licenses for most software are designed to take away your freedom to
  is free for all its users.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3340,7 +3357,7 @@ This license, the Lesser General Public License, applies to some specially
  to use in any particular case, based on the explanations below.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3353,7 +3370,7 @@ When we speak of free software, we are referring to freedom of use, not
  and that you are informed that you can do these things.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3363,7 +3380,7 @@ To protect your rights, we need to make restrictions that forbid distributors
  distribute copies of the library or if you modify it.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3376,7 +3393,7 @@ For example, if you distribute copies of the library, whether gratis or
  And you must show them these terms so they know their rights.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3385,7 +3402,7 @@ We protect your rights with a two-step method: (1) we copyright the library,
  copy, distribute and/or modify the library.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3397,7 +3414,7 @@ To protect each distributor, we want to make it very clear that there is
  be introduced by others.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3410,7 +3427,7 @@ Finally, software patents pose a constant threat to the existence of any
  this license.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3423,7 +3440,7 @@ Most GNU software, including some libraries, is covered by the ordinary
  libraries into non-free programs.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3436,7 +3453,7 @@ When a program is linked with a library, whether statically or using a shared
  other code with the library.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3450,7 +3467,7 @@ We call this license the "Lesser" General Public License because it does
 s.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3464,7 +3481,7 @@ For example, on rare occasions, there may be a special need to encourage
  software only, so we use the Lesser General Public License.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3475,7 +3492,7 @@ In other cases, permission to use a particular library in non-free programs
  variant, the GNU/Linux operating system.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3485,7 +3502,7 @@ Although the Lesser General Public License is Less protective of the users'
  a modified version of the Library.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3497,14 +3514,14 @@ The precise terms and conditions for copying, distribution and modification
  be combined with the library in order to run.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
 TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3516,7 +3533,7 @@ TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
  Each licensee is addressed as "you".
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3525,7 +3542,7 @@ A "library" means a collection of software functions and/or data prepared
  of those functions and data) to form executables.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3539,7 +3556,7 @@ The "Library", below, refers to any such software library or work which
 ion".)
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3550,7 +3567,7 @@ ion".)
  used to control compilation and installation of the library.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3564,7 +3581,7 @@ Activities other than copying, distribution and modification are not covered
  that uses the Library does.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3577,7 +3594,7 @@ Activities other than copying, distribution and modification are not covered
  License along with the Library.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3585,7 +3602,7 @@ You may charge a fee for the physical act of transferring a copy, and you
  may at your option offer warranty protection in exchange for a fee.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3596,33 +3613,33 @@ You may charge a fee for the physical act of transferring a copy, and you
  you also meet all of these conditions:
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * a) The modified work must itself be a software library.
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * b) You must cause the files modified to carry prominent notices stating
  that you changed the files and the date of any change.
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * c) You must cause the whole of the work to be licensed at no charge to
  all third parties under the terms of this License.
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * d) If a facility in the modified Library refers to a function or a table
  of data to be supplied by an application program that uses the facility,
  other than as an argument passed when the facility is invoked, then you
@@ -3631,15 +3648,15 @@ You may charge a fee for the physical act of transferring a copy, and you
  performs whatever part of its purpose remains meaningful.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  (For example, a function in a library to compute square roots has a purpose
  that is entirely well-defined independent of the application.
  Therefore, Subsection 2d requires that any application-supplied function
@@ -3647,15 +3664,15 @@ You may charge a fee for the physical act of transferring a copy, and you
  not supply it, the square root function must still compute square roots.)
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  These requirements apply to the modified work as a whole.
  If identifiable sections of that work are not derived from the Library,
  and can be reasonably considered independent and separate works in themselves,
@@ -3668,37 +3685,37 @@ You may charge a fee for the physical act of transferring a copy, and you
  it.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  Thus, it is not the intent of this section to claim rights or contest your
  rights to work written entirely by you; rather, the intent is to exercise
  the right to control the distribution of derivative or collective works
  based on the Library.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  In addition, mere aggregation of another work not based on the Library
  with the Library (or with a work based on the Library) on a volume of a
  storage or distribution medium does not bring the other work under the
  scope of this License.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3713,7 +3730,7 @@ You may charge a fee for the physical act of transferring a copy, and you
  not make any other change in these notices.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3722,7 +3739,7 @@ Once this change is made in a given copy, it is irreversible for that copy,
  and derivative works made from that copy.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3730,7 +3747,7 @@ This option is useful when you wish to copy part of the code of the Library
  into a program that is not a library.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3743,7 +3760,7 @@ This option is useful when you wish to copy part of the code of the Library
  interchange.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3754,7 +3771,7 @@ If distribution of object code is made by offering access to copy from a
  with the object code.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3766,7 +3783,7 @@ If distribution of object code is made by offering access to copy from a
  therefore falls outside the scope of this License.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3777,7 +3794,7 @@ However, linking a "work that uses the Library" with the Library creates
  Section 6 states terms for distribution of such executables.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3789,7 +3806,7 @@ When a "work that uses the Library" uses material from a header file that
  The threshold for this to be true is not precisely defined by law.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3801,7 +3818,7 @@ If such an object file uses only numerical parameters, data structure layouts
  still fall under Section 6.)
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3811,7 +3828,7 @@ Otherwise, if the work is a derivative of the Library, you may distribute
  or not they are linked directly with the Library itself.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3823,7 +3840,7 @@ Otherwise, if the work is a derivative of the Library, you may distribute
  and reverse engineering for debugging such modifications.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3836,13 +3853,13 @@ You must give prominent notice with each copy of the work that the Library
  Also, you must do one of these things:
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * a) Accompany the work with the complete corresponding machine-readable
  source code for the Library including whatever changes were used in the
  work (which must be distributed under Sections 1 and 2 above); and, if
@@ -3855,9 +3872,9 @@ adable "work that uses the Library", as object code and/or source code,
  to use the modified definitions.)
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * b) Use a suitable shared library mechanism for linking with the Library.
  A suitable mechanism is one that (1) uses at run time a copy of the library
  already present on the user's computer system, rather than copying library
@@ -3867,30 +3884,30 @@ adable "work that uses the Library", as object code and/or source code,
  with.
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * c) Accompany the work with a written offer, valid for at least three
  years, to give the same user the materials specified in Subsection 6a,
  above, for a charge no more than the cost of performing this distribution.
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * d) If distribution of the work is made by offering access to copy from
  a designated place, offer equivalent access to copy the above specified
  materials from the same place.
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * e) Verify that the user has already received a copy of these materials
  or that you have already sent this user a copy.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3904,7 +3921,7 @@ e from it.
  the executable.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3915,7 +3932,7 @@ It may happen that this requirement contradicts the license restrictions
  in an executable that you distribute.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3928,27 +3945,27 @@ ide in a single library together with other library facilities not covered
  two things:
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * a) Accompany the combined library with a copy of the same work based
  on the Library, uncombined with any other library facilities.
  This must be distributed under the terms of the Sections above.
 \layout Standard
 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
+\SpecialChar 
+\SpecialChar 
+\SpecialChar 
  * b) Give prominent notice with the combined library of the fact that part
  of it is a work based on the Library, and explaining where to find the
  accompanying uncombined form of the same work.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3963,7 +3980,7 @@ ide in a single library together with other library facilities not covered
  remain in full compliance.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3979,7 +3996,7 @@ ide in a single library together with other library facilities not covered
  the Library or works based on it.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -3994,7 +4011,7 @@ ide in a single library together with other library facilities not covered
  this License.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4013,7 +4030,7 @@ ide in a single library together with other library facilities not covered
  be to refrain entirely from distribution of the Library.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4022,7 +4039,7 @@ If any portion of this section is held invalid or unenforceable under any
  and the section as a whole is intended to apply in other circumstances.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4037,7 +4054,7 @@ It is not the purpose of this section to induce you to infringe any patents
  that choice.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4045,7 +4062,7 @@ This section is intended to make thoroughly clear what is believed to be
  a consequence of the rest of this License.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4059,7 +4076,7 @@ This section is intended to make thoroughly clear what is believed to be
  the body of this License.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4070,7 +4087,7 @@ This section is intended to make thoroughly clear what is believed to be
  may differ in detail to address new problems or concerns.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4083,7 +4100,7 @@ Each version is given a distinguishing version number.
  any version ever published by the Free Software Foundation.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4098,14 +4115,14 @@ Each version is given a distinguishing version number.
  reuse of software generally.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
 NO WARRANTY
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4122,7 +4139,7 @@ NO WARRANTY
  SERVICING, REPAIR OR CORRECTION.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4138,7 +4155,7 @@ NO WARRANTY
  OF SUCH DAMAGES.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4148,7 +4165,7 @@ END OF TERMS AND CONDITIONS
 How to Apply These Terms to Your New Libraries
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4159,7 +4176,7 @@ If you develop a new library, and you want it to be of the greatest possible
 , under the terms of the ordinary General Public License).
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4169,7 +4186,7 @@ y convey the exclusion of warranty; and each file should have at least the
  "copyright" line and a pointer to where the full notice is found.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4179,7 +4196,7 @@ one line to give the library's name and an idea of what it does.
 Copyright (C) year name of author
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4195,7 +4212,7 @@ License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4205,14 +4222,14 @@ This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 \layout Standard
 
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\SpecialChar ~
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\SpecialChar 
  See the GNU
 \layout Standard
 
 Lesser General Public License for more details.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4222,19 +4239,19 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 \layout Standard
 
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA\SpecialChar ~
- 02111-1307\SpecialChar ~
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA\SpecialChar 
+ 02111-1307\SpecialChar 
  USA
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
 Also add information on how to contact you by electronic and paper mail.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4243,7 +4260,7 @@ You should also get your employer (if you work as a programmer) or your
  Here is a sample; alter the names:
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4256,7 +4273,7 @@ the library `Frob' (a library for tweaking knobs) written
 by James Random Hacker.
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4266,7 +4283,7 @@ signature of Ty Coon, 1 April 1990
 Ty Coon, President of Vice
 \layout Standard
 
-\SpecialChar ~
+\SpecialChar 
 
 \layout Standard
 
@@ -4284,7 +4301,7 @@ Index
 \layout Standard
 
 
-\begin_inset LatexCommand \printindex{}
+\begin_inset LatexCommand \printindex
 
 \end_inset 
 
