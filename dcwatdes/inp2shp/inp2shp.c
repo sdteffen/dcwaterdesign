@@ -369,6 +369,7 @@ int write_junction(int index) {
   double x, y;
   char string[MAXLINE];
   SHPObject   *shape;
+  float f;
    
   x = atof(Tok[1]);
   y = atof(Tok[2]);
@@ -380,6 +381,13 @@ int write_junction(int index) {
   SHPWriteObject(hJunctionSHP, -1, shape);
   SHPDestroyObject(shape);
   DBFWriteStringAttribute(hJunctionDBF, num_junctions, 0, string);
+  ENgetnodevalue(index, EN_ELEVATION, &f);
+  DBFWriteDoubleAttribute(hJunctionDBF, num_junctions, 5,  (double) f);
+  ENgetnodevalue(index, EN_BASEDEMAND, &f);
+  DBFWriteDoubleAttribute(hJunctionDBF, num_junctions, 9, (double) f);
+  ENgetnodevalue(index, EN_PATTERN, &f);
+  ENgetpatternid((int)f, string);
+  DBFWriteStringAttribute(hJunctionDBF, num_junctions, 10, string);
   num_junctions++;
   return 0;
 }
@@ -388,6 +396,7 @@ int write_tank(int index) {
   double x, y;
   char string[MAXLINE];
   SHPObject   *shape;
+  float f;
    
   x = atof(Tok[1]);
   y = atof(Tok[2]);
@@ -399,6 +408,20 @@ int write_tank(int index) {
   SHPWriteObject(hTankSHP, -1, shape);
   SHPDestroyObject(shape);
   DBFWriteStringAttribute(hTankDBF, num_tanks, 0, string);
+  ENgetnodevalue(index, EN_ELEVATION, &f);
+  DBFWriteDoubleAttribute(hTankDBF, num_tanks, 5, (double) f);
+  DBFAddField(hTankDBF, "result_dem", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "result_hea", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "result_pre", FTDouble, 16, 8);
+  ENgetnodevalue(index, EN_TANKLEVEL, &f);
+  DBFWriteDoubleAttribute(hTankDBF, num_tanks, 9, (double)f);
+  ENgetnodevalue(index, EN_PATTERN, &f);
+  printf("tank %s %f\n", string, f);
+ /* DBFAddField(hTankDBF, "minimumlev", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "maximumlev", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "diameter", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "minimumvol", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "volumecurv", FTString, 16, 0);*/
   num_tanks++;
   return 0;
 }
@@ -426,9 +449,35 @@ int write_null_pipe() {
   SHPObject   *shape;
   int index;
   double x[2], y[2];
+  float d;
+  int to_node, from_node;
+  char string[16];
+  int type;
     
   ENgetlinkindex(Tok[0], &index);
   DBFWriteStringAttribute(hPipeDBF, num_pipes, 0, Tok[0]);
+  ENgetlinkvalue(index, EN_DIAMETER, &d);
+  DBFWriteIntegerAttribute(hPipeDBF, num_pipes, 5, (int)d);
+  ENgetlinknodes(index, &from_node, &to_node);
+  ENgetnodeid(from_node, string);
+  DBFWriteStringAttribute(hPipeDBF, num_pipes, 6, string);
+  ENgetnodeid(to_node, string);
+  DBFWriteStringAttribute(hPipeDBF, num_pipes, 7, string);
+  ENgetlinkvalue(index, EN_ROUGHNESS, &d);
+  DBFWriteDoubleAttribute(hPipeDBF, num_pipes, 8, (double)d);
+  ENgetlinkvalue(index, EN_MINORLOSS, &d);
+  DBFWriteDoubleAttribute(hPipeDBF, num_pipes, 9, (double)d);
+  ENgetlinktype(index, &type);
+  if(type == EN_CVPIPE) {
+    DBFWriteStringAttribute(hPipeDBF, num_pipes, 10, "CV");
+  } else {
+    ENgetlinkvalue(index, EN_INITSTATUS, &d);
+    if(d == 1) {
+      DBFWriteStringAttribute(hPipeDBF, num_pipes, 10, "OPEN");
+    } else {
+      DBFWriteStringAttribute(hPipeDBF, num_pipes, 10, "CLOSED");
+    }
+  }
   x[0] = 0;
   y[0] = 0;
   x[1] = 1;
@@ -603,6 +652,14 @@ int create_pipe_shapefile(char *filename) {
   DBFAddField(hPipeDBF, "dcsubtype", FTInteger, 16, 0);
   DBFAddField(hPipeDBF, "bitcodezon", FTInteger, 20, 0);
   DBFAddField(hPipeDBF, "diameter", FTInteger, 16, 0);
+  DBFAddField(hPipeDBF, "node1", FTString, 16, 0);
+  DBFAddField(hPipeDBF, "node2", FTString, 16, 0);
+  DBFAddField(hPipeDBF, "roughness", FTDouble, 16, 8);
+  DBFAddField(hPipeDBF, "minorloss", FTDouble, 16, 8);
+  DBFAddField(hPipeDBF, "status", FTString, 128, 0);
+  DBFAddField(hPipeDBF, "result_flow", FTDouble, 16, 8);
+  DBFAddField(hPipeDBF, "result_velo", FTDouble, 16, 8);
+  DBFAddField(hPipeDBF, "result_hea", FTDouble, 16, 8);
   num_pipes = 0;
   return 0;
 }
