@@ -1,3 +1,8 @@
+2001-09-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.ensurealiases: fixed call to script that
+	creates the missing fields
+	
 2001-09-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes2.apr: removed extension dependencies

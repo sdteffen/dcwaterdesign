@@ -83,7 +83,7 @@ for each lstTheme in lstAllFields
          blnCreateMissingFieldsInfo = true
          blnCreateMissing = MsgBox.yesNo("Your data is missing some fields. Do you want to automatically add all missing fields? Selecting No will allow you to manually match your fields.", "DC Water Design", true)
          if(blnCreateMissing)then
-           av.run("DCWaterDesign.Model.Epanet.Fields.createMissing",nil)
+           av.run("DCWatDes.Model.Epanet.Fields.createMissing",nil)
            return nil
          end
        end
