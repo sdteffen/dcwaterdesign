@@ -1,3 +1,12 @@
+2004-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.accumulatepopulation.ave: Use 0 instead of NULL if
+	a NULL value is encountered in the population field (fixes 
+	 bug #982798)
+	* dcsewerdesign.fields.returnnumberfields.ave: using field aliases
+	instead of names now (RFE #1011957)
+	* dcsewerdesignextension.make.ave: version number is 2.0.3+cvs now
+	
 2004-07-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* build.xml:
