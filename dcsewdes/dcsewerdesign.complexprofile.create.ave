@@ -33,6 +33,8 @@ fldLineUpstreamInvert = nil
 fldLineDownstreamInvert = nil
 strLineTheme = nil
 strManholeTheme = nil
+intDatumInterval = nil
+fldLineDcId = nil
 
 ' first configuration file run to locate theme names
 
@@ -63,7 +65,7 @@ viewActive = av.getActiveDoc
 themeList = viewActive.getThemes
 lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
 for each thmTheme in lstLineThemes
-  if((strLineTheme <> nil)and(strLineTheme = thmTheme.getName))then
+  if((strLineTheme <> nil)and(strLineTheme.lcase = thmTheme.getName.lcase))then
     thmLine = thmTheme
     break
   end
@@ -79,12 +81,17 @@ if(thmLine.asString = "nil") then
   exit
 end
 ftbLine = thmLine.GetFTab 
+fldLineDcId = ftbLine.findField("dc_id")
+if(fldLineDcId.asString = "nil")then
+  MsgBox.error("Error: Field Line.DC_ID was not found.","DC Sewer Design")
+  exit
+end
 
 ' get the manhole table
 thmManhole = nil
 lstManholeThemes = av.run("DCSewerDesign.ThemeList.returnPointThemes", themeList)
 for each thmTheme in lstManholeThemes
-  if((strManholeTheme <> nil)and(strManholeTheme = thmTheme.getName))then
+  if((strManholeTheme <> nil)and(strManholeTheme.lcase = thmTheme.getName.lcase))then
     thmManhole = thmTheme
     break
   end
@@ -139,7 +146,7 @@ while(lstConnectedSelected.count = 2)
     if((bmpSelectedLines.get(recConnected)and(lstConnectedSelected.find(recConnected) = -1)))then
       lstConnectedSelected.add(recConnected)
       lstTried.add(recConnected)
-      strControl = strControl ++ftbLine.returnValue(ftbLine.findField("dc_id"), recConnected).asString
+      strControl = strControl ++ftbLine.returnValue(fldLineDcId, recConnected).asString
     end
   end
   numFreezePrevent = numFreezePrevent+1
@@ -276,6 +283,9 @@ while (not (strLine=nil ))
     if(strScriptFieldName = "line.downstreaminvert")then
       fldLineDownstreamInvert = ftbLine.findField(strTableFieldName)
     end
+    if((strScriptFieldName = "datuminterval")and(strTableFieldName.isnumber))then
+      intDatumInterval = strTableFieldName.asNumber.truncate
+    end
     for each lstFreeField in lstFreeFields
       if(strScriptFieldName = lstFreeField.get(0))then
         lstFieldTokens = strTableFieldName.asTokens("@")
@@ -333,8 +343,11 @@ ftbProfile = FTab.makeNew(flnProfile,PolyLine)
 
 ftbProfile.setEditable(true)
 fldProfileShape = ftbProfile.findField("Shape")
-ftbProfile.addFields({Field.make("id", #FIELD_DECIMAL, 4, 0),Field.make("style",#FIELD_CHAR,16,0)})
+ftbProfile.addFields({Field.make("id", #FIELD_DECIMAL, 4, 0),
+  Field.make("style",#FIELD_CHAR,16,0),
+  Field.make("dc_id", #FIELD_CHAR, 16, 0)})
 fldProfileStyle = ftbProfile.findField("style")
+fldProfileDcId = ftbProfile.findField("dc_id")
 
 pntManhole = ftbManhole.returnValue(fldManholeShape, lstProfileManholes.get(0))
 pllLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(0))
@@ -458,6 +471,9 @@ end
 
 ' draw lines
 
+numMinInvertElevation = 9999
+numMaxGroundElevation = -9999
+
 numX = 1000.0
 for each i in 0..(lstProfileLines.count-1)
   recProfile = ftbProfile.addRecord
@@ -469,6 +485,7 @@ for each i in 0..(lstProfileLines.count-1)
   numDownstreamManholeDiameter = ftbManhole.returnValue(fldManholeDiameter, recDownstreamManhole)
   numUpstreamInvertLevel = ftbLine.returnValue(fldLineUpstreamInvert, recLine)
   numDownstreamInvertLevel = ftbLine.returnValue(fldLineDownstreamInvert, recLine)
+  numMinInvertElevation = numMinInvertElevation.min(numUpstreamInvertLevel.min(numDownstreamInvertLevel)).clone
   pllLine = ftbLine.returnValue(fldLineShape, recLine)
   numLineLength = pllLine.returnLength
   pntUpstreamInvert = Point.make(numX+(numUpstreamManholeDiameter/2000), numY+(numUpstreamInvertLevel*10))
@@ -487,11 +504,14 @@ for each i in 0..(lstProfileLines.count-1)
   recProfile = ftbProfile.addRecord
   numUpstreamElevation = ftbManhole.returnValue(fldManholeElevation, recUpstreamManhole)
   numDownstreamElevation = ftbManhole.returnValue(fldManholeElevation, recDownstreamManhole)
+  numMaxGroundElevation = numMaxGroundElevation.max(numUpstreamElevation.max(numDownstreamElevation)).clone
   pntUpstreamElevation = Point.make(numX+(numUpstreamManholeDiameter/2000), numY+(numUpstreamElevation*10))
   pntDownstreamElevation = Point.make(numX+numLineLength-(numDownstreamManholeDiameter/2000), numY+(numDownstreamElevation*10))
   pllElevation = Polyline.make({{pntUpstreamElevation, pntDownstreamElevation}})
   ftbProfile.setValue(fldProfileShape, recProfile, pllElevation)
   ftbProfile.setValue(fldProfileStyle, recProfile, "bold")
+  strDcId = ftbLine.returnValue(fldLineDcId, recLine)
+  ftbProfile.setValue(fldProfileDcId, recProfile, strDcId)
   
   numX = numX + numLineLength
 end
@@ -536,6 +556,42 @@ pllBoundingBox = Rect.make(pntBoundingBoxOrigin, pntBoundingBoxSize).asPolygon.a
 recProfile = ftbProfile.addRecord
 ftbProfile.setValue(fldProfileShape, recProfile, pllBoundingBox)
 ftbProfile.setValue(fldProfileStyle, recProfile, "bold")
+
+' draw datum lines if necessary
+if((intDatumInterval.asString <> "nil")and(numMinInvertElevation < numMaxGroundElevation))then
+  numFirstDatumLine = ((numMinInvertElevation/intDatumInterval).truncate)*intDatumInterval
+  numLastDatumLine = (((numMaxGroundElevation/intDatumInterval).truncate)*intDatumInterval)+intDatumInterval
+  for each numDatumLine in numFirstDatumLine..numLastDatumLine by intDatumInterval
+    ' The next line should use numY instead of 1000
+    pllDatum = Polyline.make({{1000@((numDatumLine*10)+1000), (1000+numTotalLength)@((numDatumLine*10)+1000)}})
+    recDatum = ftbProfile.addRecord
+    ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)
+    ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+  
+    ' Datum Label
+    pntIDLocation = Point.make(999, (numDatumLine*10)+1000)
+    gtxIDLabel = GraphicText.make(numDatumLine.asString, pntIDLocation)
+'      gtxIDLabel.setAngle(90)
+      viewProfile.getGraphics.add(gtxIDLabel)
+      tpsID = TextPositioner.make(Point)
+      tpsID.SetHAlign(#TEXTPOSITIONER_HALIGN_LEFT)
+      tpsID.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
+      tpsID.Calculate(pntIDLocation, gtxIDLabel.GetExtent, 1, nil)
+      gtxIDLabel.SetOrigin(tpsID.GetOrigin)
+      for each symText in gtxIDLabel.returnSymbols
+        viewProfile.getDisplay.hookupSymbol(symText)
+      end
+  end 
+  ' draw side lines
+  pllDatum = Polyline.make({{1000@((numFirstDatumLine*10)+1000), (1000)@((numLastDatumLine*10)+1000)}})
+  recDatum = ftbProfile.addRecord
+  ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+  pllDatum = Polyline.make({{(1000+numTotalLength)@((numFirstDatumLine*10)+1000), (1000+numTotalLength)@((numLastDatumLine*10)+1000)}})
+  recDatum = ftbProfile.addRecord
+  ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+end
 
 ftbProfile.setEditable(false)
 thmProfile = FTheme.make(ftbProfile)

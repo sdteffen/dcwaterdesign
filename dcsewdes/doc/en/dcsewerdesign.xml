@@ -23,6 +23,13 @@
     </author>
     <author>
       <personname>
+	<firstname>Stephan</firstname>
+	<surname>Kugler</surname>
+      </personname>
+      <email>Stephan_Kugler@dorsch.com.jo</email>
+    </author>
+    <author>
+      <personname>
 	<firstname>Steffen</firstname>
 	<surname>Macke</surname>
       </personname>
@@ -38,6 +45,40 @@
   <para>The <citetitle>DC Sewer Design Extension</citetitle> is free software
     available from <ulink url="http://dcwaterdesign.sourceforge.net/"
     >http://dcwaterdesign.sourceforge.net</ulink>.</para>
+  <para>You should also read the documentation of the <citetitle>DC Water 
+    Design Extension</citetitle> and the <citetitle>DC Processing 
+    Extension</citetitle> as these two extension contain related 
+    functionality. In many cases all three extensions have to be used in
+    a combination.</para>
+  <sect2 id="news">
+    <title>What's New?</title>
+    <para>A summary of changes in different versions of the DC Sewer Design
+      Extension.</para>
+    <sect3 id="version_2_0_5">
+      <title>Version 2.0.5</title>
+      <para><itemizedlist>
+        <listitem><para>Bug fix for profile creation (Endless loop error).
+	  </para></listitem>
+	<listitem><para>Improved documentation.</para></listitem>
+	<listitem><para>Removed the &quot;Enforce Maxiuml Line Length&quot;
+	  function. Please use the more powerful &quot;Segmentize 
+	  PolyLines&quot; function of the DC Processing Extension now.</para>
+	  </listitem>
+	<listitem><para>Added documentation on water network profiles.</para>
+	  </listitem>
+	<listitem><para>When creating profile, the data box height for 
+	  CumulativeLineData and LineData can be specified now.</para></listitem>
+	<listitem><para>Documentation on the creation of water
+	  network profiles.</para></listitem>
+	<listitem><para>New function to link designed profile back to layout.
+	  </para></listitem>
+	<listitem><para>Optional datum lines when creating profiles.
+	  </para></listitem>
+	<listitem><para>Excavation calculation example in documentation.
+	  </para></listitem>
+        </itemizedlist></para>
+    </sect3>
+  </sect2>
   <sect2 id="requirements">
     <title>Requirements</title>
     <para>ArcView version 3.* is required to use the DC Sewer Design 
@@ -257,6 +298,8 @@ Line.DownstreamInvert=???
       the following configuration file options can be used:<programlisting>
 Manhole.Theme=???
 Line.Theme=???</programlisting></para>
+   <note><para>The theme names is the name as spelled in the theme properties,
+     thus duplicate theme names in a view can cause problems.</para></note>
     <para>Three different types of data boxes can be added below the profile:
       <itemizedlist>
         <listitem><para>ManholeData - One data box for each manhole</para>
@@ -275,20 +318,55 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting>
       height of the data box.</para>
     <para>Different data boxes should be combined to obtain the desired 
       output.</para>
+    <para>Adding the following line will add datum lines at a 5m interval:
+      <programlisting>DatumInterval=5</programlisting></para>
+    <para>The field dc_id of the ground elevation lines will contain the
+      dc_id of the line. This allows to link back information from the
+      profile to the original line theme using <xref linkend=
+      "link_profile_to_layout" /></para>
   </sect3>
-  <sect3 id="select_profile_configuration">
-    <title>Select Profile Configuration</title>
-    <para>Select the configuration file to be used by <xref linkend=
-      "create_profile" /></para>
-  </sect3>
-  <sect3 id="enforce_maximum_line_length">
-    <title>Enforce Maximum Line Length</title>
-    <para>The "Enforce Maximum Line Length" function can be used to cut a 
-      complete line theme in such a way that a maximum line length is never 
-      exceeded. The user is prompted to select a theme from the view to work on. The
-      maximum line length has to be entered. The function ignores attributes.
-    </para>
-  </sect3>
+    <sect3 id="select_profile_configuration">
+      <title>Select Profile Configuration</title>
+      <para>Select the configuration file to be used by <xref linkend=
+	"create_profile" /></para>
+    </sect3>
+    <sect3 id="link_profile_to_layout">
+      <title>Link Profile to Layout</title>
+      <para>Create a link between a profile drawn in a profile view created
+        by <xref linkend="create_profile" /> and the lines in the layout.</para>
+      <para>The link is established via the &quot;dc_id&quot; field.</para>
+      <para>First, create an initial (ground) profile. Use the minimum cover to 
+        calculate preliminary invert levels (optional).</para>
+      <para>Add a new line theme to the profile view and design the profile 
+        (line profile).
+        Either draw line segments between the manholes or use the 
+	<guimenuitem>Split Polylines by Polylines</guimenuitem> function from the 
+	<citetitle>DC Processing Extension</citetitle> to create the
+	respective line segments.</para>
+      <para>Make the line profile editable.</para>
+      <para>Activate line profile and ground profile theme.</para>
+      <para>Select <guimenuitem>Link Profile to Layout</guimenuitem> from the
+        <guimenu>DC Sewer</guimenu> menu.</para>
+      <para>The function will add the following fields to the line profile if
+        they don't exist yet:
+        <itemizedlist>
+	  <listitem><para>dc_id</para></listitem>
+	  <listitem><para>upstream</para></listitem>
+	  <listitem><para>downstream</para></listitem>
+	</itemizedlist>
+	</para>
+      <para>The field dc_id will be filled for those lines where the
+        difference (error) is less than 20% between the X values in the ground
+	profile and the line profile.</para>
+      <para>For all lines, the fields &quot;upstream&quot; and 
+        &quot;downstream&quot; will be filled with the upstream and downstream
+	elevations.</para>	
+      <note><para>The search radius limits the trench depth to 20m.</para></note>
+      <para>Use the field &quot;dc_id&quot; to link the lines in the profile 
+        back to the layout.</para>
+      <important><para>The field &quot;dc_id&quot; has to contain unique values.
+        </para></important>
+    </sect3>
     <sect3 id="manhole_data_to_line">
       <title>Manhole Data to Line</title>
       <para>Transfers data from manholes to line. A source field has to be
@@ -354,7 +432,8 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting>
       <listitem><para>Create network with DC Water Design 
         Extension.</para></listitem>
       <listitem><para>Flip lines to flow direction.</para></listitem>
-      <listitem><para>Enforce maximum line length (50m).</para></listitem>
+      <listitem><para>Segmentize Polylines function of the DC Processing 
+        Extension to enforce the maximum line length (50m).</para></listitem>
       <listitem><para>Create unique manhole names.</para></listitem>
       <listitem><para>Make EPANET model</para></listitem>
       <listitem><para>Proximity for junctions.</para></listitem>
@@ -370,6 +449,98 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting>
       <listitem><para>Choose diameters according to table in ATV A 
 	116</para></listitem>
     </itemizedlist>
+  </sect2>
+  <sect2 id="water_network_profiles">
+    <title>Water Network Profiles</title>
+    <para>How to generate profile drawings for the water network.</para>
+    <important><para>Create a copy of the themes you used for hydraulic
+      modeling as these files will be modified.</para></important> 
+    <para>The themes must contain the following fields:</para>
+    <para>Node Theme - create this by merging the themes like reservoirs, 
+      junctions, valves, etc.
+      <itemizedlist>
+        <listitem><para>node (contains final junction number to be used).
+          </para></listitem>
+	<listitem><para>conn_det (number - contains connection detail #)
+	  </para></listitem>
+	<listitem><para>diameter (number)</para></listitem>
+	<listitem><para>invert (number,2 decimal places)</para></listitem>
+	<listitem><para>elevation (number, 2 decimal places)</para></listitem>
+      </itemizedlist></para>
+      <para>Line Theme
+        <itemizedlist>
+	  <listitem><para>Material (string)</para></listitem>
+	  <listitem><para>dn_mat (string) Combination of DN and material
+	    </para></listitem>
+	  <listitem><para>gradient (number, 3 decimal places)</para></listitem>
+         <listitem><para>desupstrea (number, 2 decimal places)</para></listitem>
+         <listitem><para>desdownstr (number, 2 decimal places)</para></listitem>
+	 <listitem><para>ground (string) - will contain surface material
+	   </para></listitem>
+	 <listitem><para>prof_no (number) - will contain profile number
+	   </para></listitem>
+	 <listitem><para>inv_down (number, 2 decimal places)</para></listitem>
+	 <listitem><para>inv_up (number, 2 decimal places)</para></listitem>
+	 <listitem><para>gradient (number, 3 decimal places)</para></listitem>
+	</itemizedlist></para>	
+	<para>Segmentize polyline theme (e.g 20m) using the /
+	  <citetitle>DC Processing Extension</citetitle>.</para>
+	<para>Load files as EPANET themes (<citetitle>DC Water Design 
+ 	  Extension</citetitle>).</para>
+	<para>Create missing junctions (<citetitle>DC Water Design 
+	  Extension</citetitle>.</para>
+        <para>Recalculate pipe length and check for very short sections 
+	  (if required - mannual clean-up).</para>
+	<para>Add elevation to all points (<citetitle>DC Processing 
+	  Extension</citetitle>, <citetitle>Spatial Analyst 
+	  Extension</citetitle>).</para>
+	<para>Populate fields (e.g. surface &quot;Select by Theme&quot; or 
+	  &quot;Spatial Join&quot;)</para> 
+	<para>Select profile sections and add profile number (E.g A1 scale 
+	  1:1000 &lt; 600m)</para>
+	<note><para>Ensure that each profile ends at a junction with permanent 
+	  junction number.</para></note>
+	<para>Create configuration file according to requirements.</para> 
+	<para>Select configuration file</para>
+	<para>Calculate temporary invert level (e.g elevation-1m)</para>
+	<para>Create profile</para>
+	<para>Rename view  - use profile number</para>
+	<para>Draw water network in profile (use DC water - point and line 
+	  themes).</para>
+	<para>Add x and y field to point theme and calculate x and y by 
+	([shape].getx ?)</para>
+	<para>Calculate the elevation of points as follows using the following 
+	  formula:
+	  <programlisting>([Shape].getY/10) - 100</programlisting></para>
+	<para>Transfer point elevation to line theme fields (inv_down; inv_up).
+	  </para>
+	<para>Calculate length of pipes and gradient ((inv_up-inv_down)/length).
+	  </para>
+	<para>Label line (gradient/length) and point (elevation=invert level) 
+	  themes (Hint: use scale 1:1000 to get same label size as table)</para>
+	<para>Create the layout. The layout can include more than one view.</para> 
+  </sect2>
+  <sect2 id="excavation_calculation">
+    <title>Excavation Calculation</title>
+    <para>How to calculate the necessary excavation volumes.</para>
+    <para>This example assumes that your line theme contains the following
+      fields:
+      <itemizedlist>
+        <listitem><para>elevationu - The upstream ground elevation in m.
+	  </para></listitem>
+	<listitem><para>elevationd - The downstream ground elevation in m.
+	  </para></listitem>
+	<listitem><para>upstream - The upstream invert elevation in m.
+	  </para></listitem>
+	<listitem><para>downstream - The downstream invert elevation in m.
+	  </para></listitem>
+	<listitem><para>length - The line length in m.</para></listitem>
+	<listitem><para>trenchwidt - The trench width in m.</para></listitem>
+      </itemizedlist></para>
+    <para>Use the field calculator with the following formula to calculate
+      the excavation in cubic meters:<programlisting>
+([elevationu]-[upstream]+[elevationd]-[downstream])*[length]*[trenchwidt]/2
+      </programlisting></para>
   </sect2>
 </sect1>
 </article>

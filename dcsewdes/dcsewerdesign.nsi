@@ -6,7 +6,7 @@
 ; compile
 
 !define MUI_PRODUCT "DC Sewer Design Extension"
-!define MUI_VERSION "2.0.4"
+!define MUI_VERSION "2.0.5"
 !define MUI_PACKAGING "1"
 
 !include "MUI.nsh"
@@ -96,7 +96,6 @@ Section "Uninstall"
 SectionEnd
 
 Function .onInit
-  
   ReadRegStr $1 HKEY_LOCAL_MACHINE "Software\ESRI\ArcView GIS Version 3.0\CurrentVersion" "Path"
   IfErrors arcview_not_found arcview_found
   arcview_not_found:

@@ -1,3 +1,37 @@
+2004-11-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/version.xml:
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.nsi:
+	* build.xml:
+	* dcsewerdesignextension.make.ave: updated for 2.0.5 release
+
+2004-11-17  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: Added "Link Profile to Layout" documentation
+	and excavation calculation example.
+	* dcsewerdesign.complexprofile.create.ave: Completed DatumInterval 
+	implementation (RFE #1057203)
+	* dcsewerdesign.profile.linktolayout.ave:
+	* dcsewerdesign.profile.linktolayout.update.ave: Added function to
+	link a designed profile back to the view (RFE #1057200).
+	
+2004-11-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: 
+	* dcsewerdesign.complexprofile.create.ave: started with DatumInterval
+	implementation
+	
+2004-11-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: Added information on water network profiles
+	as applied by Stephan
+
+2004-10-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.lines.enforcemaximumlinelength.ave: removed - use
+	"Segmentize Pipes" of the DC Processing Extension instead.
+
 2004-09-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.complexprofile.create.ave: Involve random in looking for
