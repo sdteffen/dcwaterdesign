@@ -1,6 +1,6 @@
 ' DCWatDes.View.changeNodeClass
 
-' (c) 2000, 2001 DORSCH Consult
+' (c) 2000 - 2002 DORSCH Consult
 ' change the Class for a given node
 
 ' This library is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ else
     if(strNode <> "Pipes")then
       ftbNodes = dicFTabs.get(strNode)
       for each thmInView in theView.getThemes
-        if(ftbNodes = thmInView.getFTab)then
+        if((thmInView.is(FTheme))and(ftbNodes = thmInView.getFTab))then
           lstNodeThemes.add(thmInView)
         end
       end

@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.writeInpFile
 
-' (c) 2000, 2001 DORSCH Consult
+' (c) 2000 - 2002 DORSCH Consult
 ' saves an Epanet Input file
 
 ' This library is free software; you can redistribute it and/or
@@ -108,7 +108,7 @@ for each strTheme in {"Pipes", "Junctions", "Pumps", "Reservoirs", "Tanks", "Val
   if(strThemeName <> nil)then
     lstThemes = viewActive.getThemes
     for each thmSearch in lstThemes
-      if(thmSearch.getName.lcase = strThemeName.lcase)then
+      if((thmSearch.is(FTheme))and(thmSearch.getName.lcase = strThemeName.lcase))then
         dicThemes.add(strTheme, thmSearch)
       end
     end

@@ -1,6 +1,6 @@
 ' DCWatDes.Tables.loadEpanetTables
 
-' (c) 2000 DORSCH Consult
+' (c) 2000-2002 DORSCH Consult
 ' loads the Epanet tables, if they're not
 ' already loaded and available
 
@@ -47,7 +47,7 @@ for each strTable in  dicTables.returnKeys
 ' check if table is already loaded  
   boolTableFound = false
     for each avTable in av.getProject.getDocsWithGUI(av.findGUI("Table"))
-      if(avTable.getVTab.getBaseTableFilename.getFullName = flnTable.getFullname)then
+      if((avTable.getVTab.getBaseTableFilename<>nil)and(flnTable<>nil)and(avTable.getVTab.getBaseTableFilename.getFullName = flnTable.getFullname))then
         boolTableFound=true
         if(avTable.getName<>strTableTranslated)then
           avTable.setName(strTableTranslated)

@@ -1,6 +1,6 @@
 ' DCWatDes.View.moveNode
 
-' (c) 2000, 2001 DORSCH Consult
+' (c) 2000 - 2002 DORSCH Consult
 ' move a network node (including rubber banding)
 
 ' This library is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ else
     if(strNode <> "Pipes")then
       ftbNodes = dicFTabs.get(strNode)
       for each thmInView in theView.getThemes
-        if(ftbNodes = thmInView.getFTab)then
+        if((thmInView.is(FTheme))and(ftbNodes = thmInView.getFTab))then
           lstNodeThemes.add(thmInView)
         end
       end

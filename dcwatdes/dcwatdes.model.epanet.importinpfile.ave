@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.importInpFile
 
-' (c) 2001 DORSCH Consult
+' (c) 2001,2002 DORSCH Consult
 ' imports an Epanet Input file (*.inp)
 
 ' This library is free software; you can redistribute it and/or
@@ -126,6 +126,7 @@ while (strLine <> nil)
    end
    strSection = strLine.asTokens(" []").get(0).lcase
    System.echo("section "+strSection)
+   numRecord = -1
    if(vtbCurrentEditable <> nil)then
      vtbCurrentEditable.setEditable(false)
      fldShapeEditable = nil
@@ -155,7 +156,7 @@ while (strLine <> nil)
  if(strSection="junctions")then
    lstTokens = strLine.asTokens(" ")
    numRecord = vtbCurrentEditable.addRecord
-   lstFieldNames = {"dc_id", "demand", "elevation", "pattern"}
+   lstFieldNames = {"dc_id", "elevation", "demand", "pattern"}
    for each numI in 0 ..  (lstTokens.count.min(lstFieldNames.count)-1)
      strFieldName = lstFieldNames.get(numI)
      strAttribute = lstTokens.get(numI)
@@ -163,17 +164,33 @@ while (strLine <> nil)
      av.run("DCWatDes.ExpandedAliasVTab.setValueString", {vtbCurrentEditable, strFieldName, numRecord,strAttribute})
    end
  elseif(strSection="coordinates")then
+   fldID = vtbCurrentEditable.findField("dc_id")
    lstTokens = strLine.asTokens(" ")
    if(lstTokens.count = 3)then
      strID = lstTokens.get(0)
      numX = lstTokens.get(1).asNumber
      numY = lstTokens.get(2).asNumber
      pntNode = Point.make(numX, numY)
-     strQuery = "[dc_id]="+strID.quote
-     bmpQuery = vtbCurrentEditable.getSelection
-     vtbCurrentEditable.query(strQuery, bmpQuery, #VTAB_SELTYPE_NEW)
-     if(bmpQuery.count = 1)then
-       vtbCurrentEditable.setValue(fldShapeEditable, bmpQuery.getNextSet(-1), pntNode)
+     if(numRecord <> (-1)and(numRecord < (vtbCurrentEditable.getNumRecords-2)))then
+       numRecord = numRecord+1
+       if(vtbCurrentEditable.returnValue(fldID, numRecord) <> strID)then
+         numRecord = -1
+       end
+     else
+       numRecord = -1
+     end  
+     if(numRecord = -1)then
+       strQuery = "[dc_id]="+strID.quote
+       bmpQuery = vtbCurrentEditable.getSelection
+       vtbCurrentEditable.query(strQuery, bmpQuery, #VTAB_SELTYPE_NEW)
+       if(bmpQuery.count = 1)then
+         numRecord = bmpQuery.getNextSet(-1)
+       else
+         numRecord = -1
+       end       
+     end  
+     if(numRecord <> (-1))then
+       vtbCurrentEditable.setValue(fldShapeEditable, numRecord, pntNode)
      end
    end
  ' import pipes
@@ -189,16 +206,34 @@ while (strLine <> nil)
    end
  elseif(strSection="vertices")then
    lstTokens = strLine.asTokens(" ")
+   fldID = vtbCurrentEditable.findField("dc_id")
    if(lstTokens.count = 3)then
      strID = lstTokens.get(0)
      numX = lstTokens.get(1).asNumber
      numY = lstTokens.get(2).asNumber
      pntNode = Point.make(numX, numY)
-     strQuery = "[dc_id]="+strID.quote
-     bmpQuery = vtbCurrentEditable.getSelection
-     vtbCurrentEditable.query(strQuery, bmpQuery, #VTAB_SELTYPE_NEW)
-     if(bmpQuery.count = 1)then
-       numRecord = bmpQuery.getNextSet(-1)
+     if(numRecord <> (-1))then
+       if(vtbCurrentEditable.returnValue(fldID, numRecord) <> strID)then
+         if(numRecord < (vtbCurrentEditable.getNumRecords-2))then
+           numRecord = numRecord+1
+           if(vtbCurrentEditable.returnValue(fldID, numRecord) <> strID)then
+             numRecord = -1
+           end
+         else
+           numRecord= -1
+         end
+       end
+     end  
+     if(numRecord = -1)then
+       strQuery = "[dc_id]="+strID.quote
+       bmpQuery = vtbCurrentEditable.getSelection
+       vtbCurrentEditable.query(strQuery, bmpQuery, #VTAB_SELTYPE_NEW)
+       if(bmpQuery.count = 1)then
+         numRecord = bmpQuery.getNextSet(-1)
+       else(numRecord = -1)
+       end       
+     end  
+     if(numRecord <> (-1))then
        pllPipe = vtbCurrentEditable.returnValue(fldShapeEditable, numRecord)
        lstPipe = pllPipe.asList.get(0)
        pntEnd = lstPipe.get(lstPipe.count-1)

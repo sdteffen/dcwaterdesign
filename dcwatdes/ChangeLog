@@ -1,3 +1,36 @@
+2002-04-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* installer/dc_water_design_extension.nsi:
+	* doc/dcwatdes_manual.lyx:
+	* dcwatdesextension.make: updated for 2.06 release
+	
+	* dcwatdes.model.epanet.importinpfile: fixed bug #476258, improved
+	performance
+	
+	* dcwatdes.model.epanet.ensurealiases:
+	* dcwatdes.model.epanet.fields.createmissing:
+	* dcwatdes.model.epanet.returnftabdictionary:
+	* dcwatdes.model.epanet.returnthemedictionary:
+	* dcwatdes.model.epanet.writeinpfile:
+	* dcwatdes.tables.loadepanettables:
+	* dcwatdes.view.changenodeclass:
+	* dcwatdes.view.digitizenode:
+	* dcwatdes.view.digitizepipe:
+	* dcwatdes.view.movenode:
+	* dcwatdes.view.splitpipe: fixed error when view contained raster
+	themes
+		
+2002-03-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdesextension.make:
+	* script.saveallscripts: interim 2.05 release for Thomas
+	* installer/dc_water_design_extension.nsi: updated for NSIS version
+	1.92
+	
+2002-02-17  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.tables.loadepanettables: added some checks for nil values
+	
 2001-11-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.file.waitfor: fixed kernel32.dll problem for non-nt win32

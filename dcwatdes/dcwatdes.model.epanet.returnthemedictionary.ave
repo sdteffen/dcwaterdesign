@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.returnThemeDictionary
 
-' (c) 2000 DORSCH Consult
+' (c) 2000 - 2002 DORSCH Consult
 ' returns a Dictionary of the Themes used in the Epanet hydraulic model
 
 ' This library is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ for each strTheme in {"Junctions","Valves", "Tanks","Pipes", "Pumps","Reservoirs
  strThemeName = dicPreferences.get("str"+strTheme) 
  if(strThemeName <> nil)then
    for each thmInView in activeView.getThemes
-     if(thmInView.getName.lcase = strThemeName.lcase)then
+     if((thmInView.is(FTheme))and(thmInView.getName.lcase = strThemeName.lcase))then
        dicThemes.add(strTheme, thmInView)
      end
    end

@@ -1,6 +1,6 @@
 ' DCWatDes.View.splitPipe
 
-' (c) 2000 DORSCH Consult
+' (c) 2000 - 2002 DORSCH Consult
 ' tool that splits a Pipe and adds a new Junction at the splitting point
 
 ' This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ pntUser = viewActive.getDisplay.returnUserPoint
 
 thmPipes = nil
 for each thmInView in viewActive.getThemes
-  if(thmInView.getFTab = ftbPipes)then
+  if((thmInView.is(FTheme))and(thmInView.getFTab = ftbPipes))then
     thmPipes = thmInView
     break 
   end

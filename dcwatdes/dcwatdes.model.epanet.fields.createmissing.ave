@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.Fields.createMissing
 
-' (c) 2001 DORSCH Consult
+' (c) 2001,2002 DORSCH Consult
 
 ' creates all the required fields that are missing
 
@@ -48,7 +48,7 @@ for each lstTheme in lstAllFields
  if(strThemeName <> nil)then
    thmAliased = nil
    for each thmInView in lstThemesInView
-     if(thmInView.getName = strThemeName)then
+     if((thmInView.is(FTheme))and(thmInView.getName = strThemeName))then
        thmAliased = thmInView
        break
      end

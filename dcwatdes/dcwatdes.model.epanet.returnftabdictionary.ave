@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.returnFTabDictionary
 
-' (c) 2001 DORSCH Consult
+' (c) 2001,2002 DORSCH Consult
 ' return a dictionary of the FTabs used in the Epanet hydraulic model
 
 ' This library is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ for each strTheme in {"Junctions","Valves", "Tanks","Pipes", "Pumps","Reservoirs
  strThemeName = dicPreferences.get("str"+strTheme) 
  if(strThemeName <> nil)then
    for each thmInView in activeView.getThemes
-     if(thmInView.getName.lcase = strThemeName.lcase)then
+     if((thmInView.is(FTheme))and(thmInView.getName.lcase = strThemeName.lcase))then
        ftbTheme = thmInView.getFTab
        ftbTheme.setName(strTheme)
        dicFTabs.add(strTheme, ftbTheme)

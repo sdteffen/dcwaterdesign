@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.ensureAliases
 
-' (c) 2000, 2001 DORSCH Consult
+' (c) 2000 - 2002 DORSCH Consult
 
 ' ensures that all the necessary aliases
 ' for the Epanet Model are set up
@@ -49,7 +49,7 @@ for each lstTheme in lstAllFields
  if(strThemeName <> nil)then
    thmAliased = nil
    for each thmInView in lstThemesInView
-     if(thmInView.getName = strThemeName)then
+     if((thmInView.is(FTheme))and(thmInView.getName = strThemeName))then
        thmAliased = thmInView
        break
      end
