@@ -75,11 +75,32 @@ else
   numDeltaYOrtho = numSlopeOrtho * numDeltaXOrtho
   pntSplitLineEnd = Point.make(pntUser.getX-numDeltaXOrtho, pntUser.getY - numDeltaYOrtho)
   pllSplit = Line.make(pntUser, pntSplitLineEnd).asPolyline
-  if(pllPipe.intersects(pllSplit).not)then
+  if((pllPipe.intersects(pllSplit).not)or(pllPipe.PointIntersection(pllSplit).asList.count=0))then
     pntSplitLineEnd = Point.make(pntUser.getX+numDeltaXOrtho, pntUser.getY + numDeltaYOrtho)
     pllSplit = Line.make(pntUser, pntSplitLineEnd).asPolyline
   end
-  pntSplit = pllPipe.PointIntersection(pllSplit).asList.get(0)
+  lstPointIntersection = pllPipe.PointIntersection(pllSplit).asList
+  if(lstPointIntersection.count=0)then
+    ' not so accurate fallback
+    pllNearestPart = lineNearestPart.asPolyline
+    minDistance = numSmallestDistance*1000
+    bestI = 1
+    for each i in 1..999
+      if(pllNearestPart.along(i/10).distance(pntUser) < minDistance)then
+        minDistance=pllNearestPart.along(i/10).distance(pntUser)
+        bestI= i
+      end
+    end
+    pntNearest = pllNearestPart.along(bestI/10)
+    pllSplit = Line.make(pntUser, pntUser+((pntNearest-pntUser)*Point.make(2,2)))
+    lstPointIntersection = pllPipe.PointIntersection(pllSplit).asList
+    if(lstPointIntersection.count=0)then 
+      ftbPipes.setEditable(false)
+      MsgBox.info("Can't split pipe","DC Water Design Extension")
+      exit
+    end
+  end
+  pntSplit = lstPointIntersection.get(0)
 end
 if(pllPipe.contains(pntSplit))then
  ftbPipes.setEditable(true)

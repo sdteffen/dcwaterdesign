@@ -35,11 +35,11 @@ if(dicPreferences <> nil)then
   end
 end
 
-numSnappingRadius = dicPreferences.get("numSnappingRadius")
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
 if(numSnappingRadius = nil)then
   numSnappingRadius = 0.1
 end
-
+av.showMsg("Creating missing Junctions with "+numSnappingRadius.asString+" snapping radius")
 av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
 
 activeView = av.getActiveDoc
@@ -198,3 +198,4 @@ for each pntJunction in lstMissingPoints
   ftbJunctions.setValue(fldID, recJunction, strID) 			
 end		
 ftbJunctions.setEditable(false)					
+av.showMsg("")
