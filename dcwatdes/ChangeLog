@@ -1,3 +1,14 @@
+2001-05-31  Steffen Macke <sdteffen@yahoo.com>
+
+	* dcscript.compileallscripts:
+	* dcscript.loadscriptsfromdir:
+	* dcwatdes.model.createzonesfromcontrols:
+	* dcwatdes.model.epanet.junctions.createmissing: added for 2.01 release
+	* dcwatdes.model.epanet.writeinpfile: support for backdrop maps (thanks
+	  to Roland Salgado), fixed bug for coordinate systems using decimal
+	  feet (bug reported by Arnold Strasser)
+	* script.saveallscripts: added support for cvs
+	
 2001-05-19  Steffen Macke <sdteffen@yahoo.com>
 
 	* doc/dcwatdes_manual.lyx

@@ -21,7 +21,7 @@ myExt = Extension.Make("$AVEXT\dcwatdes2.avx".AsFileName,
               "DC Water Design",
               av.GetProject.FindScript("DCWatDesExtension.install"),
               av.GetProject.FindScript("DCWatDesExtension.uninstall"),
-              {"$AVBIN/avdlog.dll".asFilename})
+              {"$AVBIN/avdlog.dll".asFilename, "$AVEXT/XmlParser1_00.avx".asFileName})
 
 'add the dialog to the extension
 dlg_Files = av.findDialog("DCWatDes.ThemesDialog")
@@ -92,7 +92,7 @@ for each d in av.getProject.getDocs
   end
 end
 
-myExt.SetAbout("Water Design Extension 2.00"+NL+"(c) 1998 - 2001 DORSCH Consult."+NL+
+myExt.SetAbout("Water Design Extension 2.01"+NL+"(c) 1998 - 2001 DORSCH Consult."+NL+
 "This extension integrates EPANET with ArcView"+NL+Date.now.asString)
 myExt.SetExtVersion(200)
 myExt.setUnloadScript(av.findScript("DCWatDesExtension.unload"))

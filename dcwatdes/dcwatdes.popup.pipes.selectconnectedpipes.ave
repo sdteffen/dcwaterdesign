@@ -132,4 +132,3 @@ ftbPipes.setSelection(bmpSelection)
 ftbPipes.updateSelection
 av.clearStatus
 
-

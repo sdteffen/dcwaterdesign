@@ -637,4 +637,3 @@ while(File.isWritable(flnInp).not)
 end
 
 return fln_Xml
-

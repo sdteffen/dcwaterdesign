@@ -86,4 +86,3 @@ theViewButtonBar.remove(self.get(15))
 theTableButtonBar = av.getProject.findGUI("Table").getButtonBar
 theTableButtonBar.remove(self.get(16))
 
-

@@ -113,4 +113,3 @@ theViewButtonBar.add(self.get(15), 999)
 
 ' 16 Bitcode Calculator Button
 theTableButtonBar.add(self.get(16), 999)
-

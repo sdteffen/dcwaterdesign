@@ -165,4 +165,3 @@ for each t in theView.GetActiveThemes
   theView.GetWin.Activate
 end
 
-

@@ -133,4 +133,3 @@ if(tableControls <> nil)then
 else
   MsgBox.warning("Please choose a Controls Table in the Epanet Tables setup dialog.", "DC Water Design")
 end
-

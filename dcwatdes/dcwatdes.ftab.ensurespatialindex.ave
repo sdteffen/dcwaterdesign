@@ -27,4 +27,3 @@ if(ftbToCheck.isFieldIndexed(fldShape).not) then
   ftbToCheck.createIndex(fldShape)
   av.showMsg("")
 end
-

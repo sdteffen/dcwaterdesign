@@ -43,4 +43,3 @@ if (lstSet <> NIL) then
   theVTab.EndTransaction
   theTable.GetWin.Invalidate
 end
-

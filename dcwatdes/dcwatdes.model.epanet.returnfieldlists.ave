@@ -25,4 +25,3 @@ return { {"Junctions",{"dc_id", "elevation", "demand", "pattern", "result_head",
       {"Reservoirs",{"dc_id", "head","pattern", "result_head", "result_pressure", "result_demand"}}, 
       {"Valves", {"dc_id","elevation","diameter","type","setting","minorloss","result_head", "result_pressure", "result_demand", "result_flow", "result_velocity", "result_headloss"}},
       {"Pumps",{"dc_id","elevation","properties","result_flow", "result_head", "result_pressure", "result_demand","result_velocity", "result_headloss"}}}
-

@@ -22,9 +22,6 @@ end
 ' Loop over all scripts, write to files
 
 blnOverwrite = nil
-numWritten = 0
-	
-lstScriptsToWrite = List.make
 
 for each sedScript in lstScripts
 
@@ -32,7 +29,6 @@ for each sedScript in lstScripts
   strScriptName = sedScript.asString ' .substitute(".",",")
    
   flnScript = FileName.merge(strSaveDir2, strScriptName)
-  System.echo(flnScript.getFullName)
   flnScript.setName(strScriptName+".ave")
   if (flnScript.isFile) then
     if(blnOverwrite = nil)then
@@ -40,33 +36,34 @@ for each sedScript in lstScripts
       if(blnOverwrite.not)then
         continue 
       end
-    end
-      
     ' check if file has been changed
-    txfScript = TextFile.make(flnScript, #FILE_PERM_READ)
-    strFileSource = txfScript.read(txfScript.getSize)
+    lnfScript = LineFile.make(flnScript, #FILE_PERM_READ).setEolType(#FILE_UNIX_EOL)
+    strFileLine = lnfScript.readElt
     blnChanged = false
-    if(strFileSource <> sedScript.getSource)then
-      blnChanged = true
+    while(strFileLine <> nil)
+'TODO
+      if(strFileLine <> strScriptLine)then
+        blnChanged=true
+        break
+      end
+      strFileLine = lnfScript.readElt
     end
-    txfScript.close
+    lnfScript.close
     if(blnChanged)then
-    '  File.delete(flnScript)
+      File.delete(flnScript)
     else
      continue
     end
   end 
   
-  txfScript = TextFile.make(flnScript, #FILE_PERM_WRITE)
-  if (txfScript <> nil) then
-    txfScript.write(sedScript.getSource, sedScript.getSource.count)
-    txfScript.close
-    numWritten = numWritten+1
+  lnfScript = LineFile.make(flnScript, #FILE_PERM_WRITE).setEolType(#FILE_UNIX_EOL)
+  if (lnfScript <> nil) then
+    lnfScript.writeElt(sedScript.getSource)
+    lnfScript.close
   else
-    MsgBox.warning("Unable to open file for writing:"++flnScript.getFullName,"Saving Scripts")
+    MsgBox.warning("Unable to open file for writing:"++outFile.GetFullName,"Saving Scripts")
   end
 end
-MsgBox.info(numWritten.asString++"Scripts were written.", "Saving Scripts")
 
 
 

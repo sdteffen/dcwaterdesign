@@ -168,4 +168,3 @@ end
 dicPreferences.set("lstSteps", lstSteps.deepclone)
 
 av.run("DCWatDes.Model.Epanet.loadResultsForStep", nil)
-

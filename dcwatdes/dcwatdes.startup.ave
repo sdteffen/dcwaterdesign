@@ -24,4 +24,3 @@ _DCWatDesActiveNodeTheme = nil
 _DCWatDesActiveView = nil
 av.getProject.findDialog("DCWatDes.ThemesDialog").open
 
-

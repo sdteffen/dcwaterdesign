@@ -45,4 +45,3 @@ if(pntMouse.is(Point))then
   theTable = av.getActiveDoc
   theTable.PromoteSelection 
 end
-

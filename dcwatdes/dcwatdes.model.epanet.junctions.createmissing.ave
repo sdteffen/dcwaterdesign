@@ -90,7 +90,7 @@ for each recPipe in ftbPipes
       end      
     end
     if(recConnectedNode = -1)then
-      lstMissingPoints.add(lstNodesPoints.get(i)
+      lstMissingPoints.add(lstNodesPoints.get(i))
       numMissingJunctions = numMissingJunctions+1	 	
     end     
   end
@@ -124,7 +124,7 @@ fldShape = ftbJunctions.findField("Shape")
 fldID = ftbJunctions.findField("dc_id")
 
 ftbJunctions.setEditable(true)
-for each pntJunction in lstMissingJunctions
+for each pntJunction in lstMissingPoints
   recJunction = ftbJunctions.addRecord
   ftbJunctions.setValue(fldShape, recJunction, pntJunction)
   strID = (ftbJunctions.getNumRecords+1).asString	

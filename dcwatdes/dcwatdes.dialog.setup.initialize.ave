@@ -84,4 +84,3 @@ if (strLanguage <> nil)then
   cbxLanguage.findByValue(strLanguage)
   cbxLanguage.selectCurrent
 end
-

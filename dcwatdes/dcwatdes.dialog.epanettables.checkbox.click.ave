@@ -27,4 +27,3 @@ dlgEpanetTables = av.findDialog("DCWatDes.Dialog.EpanetTables")
 cbxSelf = dlgEpanetTables.findByName(strCbxName)
 cbxSelf.setEnabled(chbSelf.isSelected)
 
-

@@ -34,4 +34,3 @@ if ((thmEditable <> nil)or(strThemeName = nil)) then
 else
   self.setEnabled(true)
 end
-

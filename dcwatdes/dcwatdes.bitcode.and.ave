@@ -46,4 +46,3 @@ for each i in 0 .. 19
 end
 
 return numResult
-

@@ -53,4 +53,3 @@ if(pntMouse.is(Point))then
     end
   end
 end
-

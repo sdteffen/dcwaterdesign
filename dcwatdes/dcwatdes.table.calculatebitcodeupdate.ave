@@ -26,4 +26,3 @@ if((theField<>nil)and(theField.isTypeNumber))then
 else
   self.setEnabled(false)
 end
-

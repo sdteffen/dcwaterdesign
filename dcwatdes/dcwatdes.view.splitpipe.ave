@@ -113,4 +113,3 @@ if(pllPipe.contains(pntSplit))then
  av.run("DCWatDes.Model.Epanet.Pipe.updateNodeFields", recPipe)
  ftbPipes.setEditable(false)
 end
-

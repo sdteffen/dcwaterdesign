@@ -95,4 +95,3 @@ for each strCombobox in {"Junctions", "Tanks","Pumps", "Valves", "Reservoirs", "
   end
   theCombobox.selectCurrent
 end
-

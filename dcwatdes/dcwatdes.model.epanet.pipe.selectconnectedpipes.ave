@@ -124,4 +124,3 @@ end
 ftb_Pipes.setSelection(bmp_Selection)
 ftb_Pipes.updateSelection
 av.clearStatus
-
