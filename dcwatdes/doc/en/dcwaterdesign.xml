@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE article 
   PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
-  [ ]
+  [ 
+  <!ENTITY version SYSTEM "../version.xml">
+  ]
 >
 <article lang="en">
   <articleinfo>
     <title>DC Water Design Extension</title> 
     <pubdate>2004</pubdate>
-    <edition>Version 2.10</edition>
+    <edition>Version &version;</edition>
     <copyright>
       <year>2001-2004</year>
       <holder>DORSCH Consult</holder>
@@ -23,7 +25,7 @@
   <sect1 id="introduction">
     <title>Introduction</title>
     <para>This Manual describes the DC Water Design Extension 
-      Version 2.10.</para>
+      Version &version;.</para>
 
     <para>This Document uses Terminology from ArcView and EPANET. 
     Refer to the respective documentation for in-depth explanations.</para>
@@ -43,6 +45,14 @@
     
     <sect2>
       <title>What's New?</title>
+        <sect3>
+	  <title>Version 2.11</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>Updated documentation</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
         <sect3>
 	  <title>Version 2.10</title>
 	  <para>
@@ -1280,7 +1290,7 @@
       <programlisting>LINK link_id status AT TIME hours_since_simulation_start</programlisting></para>
     </sect2>
   </sect1>
-  <sect1>
+  <sect1 id="faq">
     <title>Frequently Asked Questions</title>
     
     <sect2>
@@ -1370,8 +1380,33 @@
     </sect2>
     <sect2>
       <title>I found a bug in the Extension. What should I do?</title>
-    
       <para>Please send your bug reports to Steffen_Macke@dorsch.com.jo</para>
+    </sect2>
+    <sect2 id="maximum_field_length">
+      <title>How Can I Select All Rows where DC_ID is Longer than
+        13 Characters?</title>
+      <para>
+        <itemizedlist>
+          <listitem><para>Click on the <guibutton>Query</guibutton> button.
+	    </para></listitem>
+	  <listitem><para>Enter the following query text:
+	    <programlisting>[dc_id].count > 13</programlisting></para></listitem>
+	  <listitem><para>Click the <guibutton>New Set</guibutton> button.
+	    </para></listitem>
+	</itemizedlist>
+      </para>
+    </sect2>
+    <sect2 id="find_spaces">
+      <title>How Can I Select All Rows where DC_ID Contains Spaces?</title>
+      <itemizedlist>
+          <listitem><para>Click on the <guibutton>Query</guibutton> button.
+	    </para></listitem>
+	  <listitem><para>Enter the following query text:
+	    <programlisting>[dc_id].contains(" ") ></programlisting></para>
+	    </listitem>
+	  <listitem><para>Click the <guibutton>New Set</guibutton> button.
+	    </para></listitem>
+	</itemizedlist>
     </sect2>
   </sect1>  
   <sect1 id="dcwatdes_license">
