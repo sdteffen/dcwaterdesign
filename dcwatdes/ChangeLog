@@ -1,3 +1,9 @@
+2004-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.returnfieldlists: correctly returning
+	fields for patterns (fixes bug #1010840)
+	* dcwatdesextension.make: version number is 2.10+cvs
+	
 2004-07-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* build.xml: added build file for source zip
