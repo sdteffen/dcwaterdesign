@@ -157,11 +157,8 @@
                   <TD>
 
                     <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#333333">
-
-
-
             <B><A HREF="http://www.dorsch.de">DORSCH Consult</A></B>
-
+	    <p><b><a href="dcsewerdesign.php">DC Sewer Design Extension</a></b>
                         <P>
 
 
