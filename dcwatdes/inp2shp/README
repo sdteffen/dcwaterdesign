@@ -1,0 +1,9 @@
+To build inp2shp.exe, you
+need the EPANET toolkit and
+shapelib.
+
+shapelib is available from:
+http://gdal.velocet.ca/projects/shapelib/index.html
+
+The EPANET toolkit is available from:
+http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html

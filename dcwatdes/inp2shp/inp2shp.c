@@ -1,5 +1,25 @@
-/*
-  parse nodes  - necessary ?
+/* inp2shp.c convert EPANET INP files to Shapefiles
+  
+  (c) 2002 DORSCH Consult 
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+  
+  */
+
+  /*
+  parse nodes  - necessary?
   parse pipes - done
     fill with null shapes -done
   parse coordinates
@@ -20,23 +40,50 @@
 #define   MAXTOKS   40       /* Max. items per line of input           */
 #define UCHAR(x) (((x) >= 'a' && (x) <= 'z') ? ((x)&~32) : (x))
 
+/* the following sections have to be parsed in addition
+   to the toolkit parsing */
+   
 char *SectTxt[]         = {"[COORDINATES]", "[VERTICES]", "[END]",
   			   "[PIPES]",
                            NULL};
-
+/* INP file */
 FILE *InFile;
-SHPHandle   hSHP;
-DBFHandle   hDBF;
 
+/* junction shapefile */
+SHPHandle   hJunctionSHP;
+DBFHandle   hJunctionDBF;
+
+/* pipe shapefile */
 SHPHandle hPipeSHP;
 DBFHandle hPipeDBF;  
+
+/* tank shapefile */
+SHPHandle hTankSHP;
+DBFHandle hTankDBF;
+
+/* reservoir shapefile */
+SHPHandle hReservoirSHP;
+DBFHandle hReservoirDBF;
+
+/* valve shapefile */
+SHPHandle hValveSHP;
+DBFHandle hValveDBF;
+
+/* pump shapefile */
+SHPHandle hPumpSHP;
+DBFHandle hPumpDBF;
 
 char   *Tok[MAXTOKS];
 
 int num_junctions;
 int num_pipes;
+int num_tanks;
+int num_reservoirs;
+int num_pumps;
+int num_valves;
 
 char vertex_line_name[16];
+int vertex_line_index;
 int num_vertices;
 double vertex_x[5000];
 double vertex_y[5000];
@@ -70,6 +117,10 @@ int main( int argc, char ** argv ) {
   
  create_junction_shapefile("junctions.shp");
  create_pipe_shapefile("pipes.shp");
+ create_tank_shapefile("tanks.shp");
+ create_reservoir_shapefile("reservoirs.shp");
+ create_pump_shapefile("pumps.shp");
+ create_valve_shapefile("valves.shp");
   
    InFile = fopen(argv[1], "r");
    while (fgets(line, MAXLINE, InFile) != NULL)
@@ -90,7 +141,8 @@ int main( int argc, char ** argv ) {
    /* Check if line begins with a new section heading */
       if (*Tok[0] == '[')
       {
-	
+	 if(sect == 1) write_pipe_shape();
+	 sect = (-1);
          newsect = findmatch(Tok[0], SectTxt);
          if (newsect >= 0)
          {
@@ -116,12 +168,25 @@ int main( int argc, char ** argv ) {
    }
   
   write_remaining_pipe_shapes();
+  write_pumps();
   
-  DBFClose(hDBF);
-  SHPClose(hSHP);
+  DBFClose(hJunctionDBF);
+  SHPClose(hJunctionSHP);
   
   SHPClose(hPipeSHP);
   DBFClose(hPipeDBF);
+  
+  SHPClose(hTankSHP);
+  DBFClose(hTankDBF);
+  
+  SHPClose(hReservoirSHP);
+  DBFClose(hReservoirDBF);
+  
+  SHPClose(hPumpSHP);
+  DBFClose(hPumpDBF);
+  
+  SHPClose(hValveSHP);
+  DBFClose(hValveDBF);
   
   ENclose(); 
 }
@@ -136,7 +201,7 @@ int write_remaining_pipe_shapes() {
   int from_node, to_node;
       
  for(i=0; i<num_pipes; i++) {
-   /* TODO: performance increae with SHPGetInfo */
+   /* TODO: performance increase with SHPGetInfo */
    shape = SHPReadObject(hPipeSHP, i);
    x[0] = 0;
    y[0] = 0;
@@ -145,11 +210,12 @@ int write_remaining_pipe_shapes() {
    if(shape->nSHPType == SHPT_NULL) {
      SHPDestroyObject(shape);
      printf("pipe shape null at %d\n",i);
-     pipe_id = DBFReadStringAttribute(hPipeDBF, i, 0);
+     pipe_id = (char *) DBFReadStringAttribute(hPipeDBF, i, 0);
      printf("pipe id %s\n",pipe_id);
      ENgetlinkindex(pipe_id, &pipe_index);
      ENgetlinknodes(pipe_index, &from_node, &to_node);
-     printf("node %d to  %d #### x %f y %f - x %f y %f\n",from_node, to_node,node_x[from_node], node_y[from_node],
+     printf("node %d to  %d #### x %f y %f - x %f y %f\n",from_node, 
+     	    to_node, node_x[from_node], node_y[from_node],
      node_x[to_node], node_y[to_node]);
      x[0] = node_x[from_node];
      y[0] = node_y[from_node];
@@ -162,7 +228,49 @@ int write_remaining_pipe_shapes() {
    } else {
      SHPDestroyObject(shape);
    }
-  
+ }
+}
+
+int write_pumps() {
+  /* TODO: improve performance with some kind of cache */
+  /* TODO: remove superfluous nodes */
+  /* TODO: implement this */
+  int i;
+  SHPObject *shape;
+  int *panParts;
+  double x[2], y[2];
+  char *pipe_id;
+  int pipe_index;
+  int from_node, to_node;
+      
+ for(i=0; i<num_pipes; i++) {
+   /* TODO: performance increase with SHPGetInfo */
+   shape = SHPReadObject(hPipeSHP, i);
+   x[0] = 0;
+   y[0] = 0;
+   x[1] = 0;
+   y[1] = 0;
+   if(shape->nSHPType == SHPT_NULL) {
+     SHPDestroyObject(shape);
+     printf("pipe shape null at %d\n",i);
+     pipe_id = (char *) DBFReadStringAttribute(hPipeDBF, i, 0);
+     printf("pipe id %s\n",pipe_id);
+     ENgetlinkindex(pipe_id, &pipe_index);
+     ENgetlinknodes(pipe_index, &from_node, &to_node);
+     printf("node %d to  %d #### x %f y %f - x %f y %f\n",from_node, 
+     	    to_node, node_x[from_node], node_y[from_node],
+     node_x[to_node], node_y[to_node]);
+     x[0] = node_x[from_node];
+     y[0] = node_y[from_node];
+     x[1] = node_x[to_node];
+     y[1] = node_y[to_node];
+     shape = SHPCreateSimpleObject( SHPT_ARC, 2, 
+			   x, y, NULL );
+    SHPWriteObject(hPipeSHP, i, shape);
+    SHPDestroyObject(shape);
+   } else {
+     SHPDestroyObject(shape);
+   }
  }
 }
 
@@ -184,36 +292,38 @@ int write_node() {
   switch(nodetype) {
     case EN_JUNCTION: write_junction(index);
     break;
+    case EN_TANK: write_tank(index);
+    break;
+    case EN_RESERVOIR: write_reservoir(index);
+    break;
   } 
-  printf("leaving write_node()\n");
   return 0;
 }
 
 int write_vertex() {
-  int index, linktype;
+  int linktype;
       
-  if(strcmp(vertex_line_name, Tok[0])) {
-    if(strcmp(vertex_line_name,"")) {
-      ENgetlinkindex(Tok[0], &index);
-      if(index == (int) NULL) {
+  if(strcmp(vertex_line_name, Tok[0]) != 0) {
+      ENgetlinkindex(Tok[0], &vertex_line_index);
+      if(vertex_line_index == 0) {
 	printf("[COORDINATES]: link '%s' was not found\n",Tok[0]);
 	return 0;
       }
-      
-      ENgetlinktype(index, &linktype);
-      
-      /*switch(linktype) {
-	case EN_PIPE: write_pipe(index);
-	break;
-      } */
-    }
-    num_vertices = 0;
+      if(strcmp(vertex_line_name, "")!=0) {
+	ENgetlinktype(vertex_line_index, &linktype);
+	switch(linktype) {
+	  case EN_PIPE: write_pipe_shape();
+	  break;
+	} 
+      }
+    num_vertices = 1;
     strcpy(vertex_line_name, Tok[0]);
   } else {
     num_vertices++;
   }
   vertex_x[num_vertices] = atof(Tok[1]);
   vertex_y[num_vertices] = atof(Tok[2]);
+  printf("write_vertex() vertex_line_index: %d line name '%s'\n",vertex_line_index, vertex_line_name);
   return 0;
 }
 
@@ -232,10 +342,48 @@ int write_junction(int index) {
   
     shape = SHPCreateSimpleObject( SHPT_POINT, 1, 
                              &x, &y, NULL );
-    SHPWriteObject(hSHP, -1, shape);
+    SHPWriteObject(hJunctionSHP, -1, shape);
     SHPDestroyObject(shape);
-    DBFWriteStringAttribute(hDBF, num_junctions, 0, string);
+    DBFWriteStringAttribute(hJunctionDBF, num_junctions, 0, string);
     num_junctions++;
+}
+
+int write_tank(int index) {
+    double x, y;
+    char string[MAXLINE];
+    SHPObject   *shape;
+    int *panParts;
+     
+   x = atof(Tok[1]);
+   y = atof(Tok[2]);
+    
+    ENgetnodeid(index, string);
+  
+    shape = SHPCreateSimpleObject( SHPT_POINT, 1, 
+                             &x, &y, NULL );
+    SHPWriteObject(hTankSHP, -1, shape);
+    SHPDestroyObject(shape);
+    DBFWriteStringAttribute(hTankDBF, num_tanks, 0, string);
+    num_tanks++;
+}
+
+int write_reservoir(int index) {
+    double x, y;
+    char string[MAXLINE];
+    SHPObject   *shape;
+    int *panParts;
+     
+   x = atof(Tok[1]);
+   y = atof(Tok[2]);
+    
+   ENgetnodeid(index, string);
+  
+   shape = SHPCreateSimpleObject( SHPT_POINT, 1, 
+                             &x, &y, NULL );
+   SHPWriteObject(hReservoirSHP, -1, shape);
+   SHPDestroyObject(shape);
+   DBFWriteStringAttribute(hReservoirDBF, num_reservoirs, 0, string);
+   num_reservoirs++;
 }
 
 int write_null_pipe() {
@@ -258,43 +406,158 @@ int write_null_pipe() {
     num_pipes++;
 }
 
-int write_pipe(int index) {
+int write_pipe_shape() {
     double x, y;
-    char string[MAXLINE];
+    char *string;
     SHPObject   *shape;
     int *panParts;
+    int to_node, from_node;
+    int index = vertex_line_index;
+    
+    ENgetlinknodes(index, &from_node, &to_node);
+    vertex_x[0] = node_x[from_node];
+    vertex_y[0] = node_y[from_node];
+    vertex_x[num_vertices+1] = node_x[to_node];
+    vertex_y[num_vertices+1] = node_y[to_node];
+    
+    do {
+      string = (char *) DBFReadStringAttribute(hPipeDBF, index, 0);
+      index--;
+    } while((strcmp(string, vertex_line_name)!=0)&&(index > 0));
+    if(index != 0) {
+      printf("write_pipe_shape(): linkid '%s' line_index %d\n",
+      string, vertex_line_index);
+      printf("num_vertices %d\n", num_vertices);
       
-    ENgetlinkid(index, string);
-    printf("linkid %s\n",string);
-    DBFWriteStringAttribute(hPipeDBF, num_pipes, 0, string);
-    shape = SHPCreateSimpleObject( SHPT_ARC, num_vertices, 
-                             vertex_x, vertex_y, NULL );
-    SHPWriteObject(hPipeSHP, num_pipes, shape);
-    SHPDestroyObject(shape);
-    num_pipes++;
+      shape = SHPCreateSimpleObject( SHPT_ARC, num_vertices+2, 
+			       vertex_x, vertex_y, NULL );
+      SHPWriteObject(hPipeSHP, index+1, shape);
+      SHPDestroyObject(shape);
+    }
 }
 
 
 int create_junction_shapefile(char *filename) {
 
-  hSHP = SHPCreate(filename, SHPT_POINT);
-  hDBF = DBFCreate(filename);
-  if(hSHP == NULL || hDBF == NULL) {
+  hJunctionSHP = SHPCreate(filename, SHPT_POINT);
+  hJunctionDBF = DBFCreate(filename);
+  if(hJunctionSHP == NULL || hJunctionDBF == NULL) {
     printf("unable to create '%s'\n", filename);
     exit(1);
   }
-  DBFAddField(hDBF, "dc_id", FTString, 16, 0);
-  DBFAddField(hDBF, "installati", FTString, 16, 0);
-  DBFAddField(hDBF, "abandon_da", FTString, 16, 0);
-  DBFAddField(hDBF, "dcsubtype", FTInteger, 16, 0);
-  DBFAddField(hDBF, "bitcodezon", FTInteger, 20, 0);
-  DBFAddField(hDBF, "elevation", FTDouble, 16, 3);
-  DBFAddField(hDBF, "result_dem", FTDouble, 16, 8);
-  DBFAddField(hDBF, "result_hea", FTDouble, 16, 8);
-  DBFAddField(hDBF, "result_pre", FTDouble, 16, 8);
-  DBFAddField(hDBF, "demand", FTDouble, 16, 8);
-  DBFAddField(hDBF, "pattern", FTString, 16, 0);
+  DBFAddField(hJunctionDBF, "dc_id", FTString, 16, 0);
+  DBFAddField(hJunctionDBF, "installati", FTString, 16, 0);
+  DBFAddField(hJunctionDBF, "abandon_da", FTString, 16, 0);
+  DBFAddField(hJunctionDBF, "dcsubtype", FTInteger, 16, 0);
+  DBFAddField(hJunctionDBF, "bitcodezon", FTInteger, 20, 0);
+  DBFAddField(hJunctionDBF, "elevation", FTDouble, 16, 3);
+  DBFAddField(hJunctionDBF, "result_dem", FTDouble, 16, 8);
+  DBFAddField(hJunctionDBF, "result_hea", FTDouble, 16, 8);
+  DBFAddField(hJunctionDBF, "result_pre", FTDouble, 16, 8);
+  DBFAddField(hJunctionDBF, "demand", FTDouble, 16, 8);
+  DBFAddField(hJunctionDBF, "pattern", FTString, 16, 0);
   num_junctions = 0;
+}
+
+int create_tank_shapefile(char *filename) {
+
+  hTankSHP = SHPCreate(filename, SHPT_POINT);
+  hTankDBF = DBFCreate(filename);
+  if(hTankSHP == NULL || hTankDBF == NULL) {
+    printf("unable to create '%s'\n", filename);
+    exit(1);
+  }
+  DBFAddField(hTankDBF, "dc_id", FTString, 16, 0);
+  DBFAddField(hTankDBF, "installati", FTString, 16, 0);
+  DBFAddField(hTankDBF, "abandon_da", FTString, 16, 0);
+  DBFAddField(hTankDBF, "dcsubtype", FTInteger, 16, 0);
+  DBFAddField(hTankDBF, "bitcodezon", FTInteger, 20, 0);
+  DBFAddField(hTankDBF, "elevation", FTDouble, 16, 3);
+  DBFAddField(hTankDBF, "result_dem", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "result_hea", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "result_pre", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "initiallev", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "minimumlev", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "maximumlev", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "diameter", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "minimumvol", FTDouble, 16, 8);
+  DBFAddField(hTankDBF, "volumecurv", FTString, 16, 0);
+  num_tanks = 0;
+}
+
+int create_reservoir_shapefile(char *filename) {
+
+  hReservoirSHP = SHPCreate(filename, SHPT_POINT);
+  hReservoirDBF = DBFCreate(filename);
+  if(hReservoirSHP == NULL || hReservoirDBF == NULL) {
+    /* TODO: close other shapefiles */
+    printf("unable to create '%s'\n", filename);
+    exit(1);
+  }
+  DBFAddField(hReservoirDBF, "dc_id", FTString, 16, 0);
+  DBFAddField(hReservoirDBF, "installati", FTString, 16, 0);
+  DBFAddField(hReservoirDBF, "abandon_da", FTString, 16, 0);
+  DBFAddField(hReservoirDBF, "dcsubtype", FTInteger, 16, 0);
+  DBFAddField(hReservoirDBF, "bitcodezon", FTInteger, 20, 0);
+  DBFAddField(hReservoirDBF, "elevation", FTDouble, 16, 3);
+  DBFAddField(hReservoirDBF, "result_dem", FTDouble, 16, 8);
+  DBFAddField(hReservoirDBF, "result_hea", FTDouble, 16, 8);
+  DBFAddField(hReservoirDBF, "result_pre", FTDouble, 16, 8);
+  DBFAddField(hReservoirDBF, "head", FTDouble, 16, 8);
+  DBFAddField(hReservoirDBF, "pattern", FTString, 16, 0);
+  num_reservoirs = 0;
+}
+
+int create_pump_shapefile(char *filename) {
+
+  hPumpSHP = SHPCreate(filename, SHPT_POINT);
+  hPumpDBF = DBFCreate(filename);
+  if(hPumpSHP == NULL || hPumpDBF == NULL) {
+    printf("unable to create '%s'\n", filename);
+    exit(1);
+  }
+  DBFAddField(hPumpDBF, "dc_id", FTString, 16, 0);
+  DBFAddField(hPumpDBF, "installati", FTString, 16, 0);
+  DBFAddField(hPumpDBF, "abandon_da", FTString, 16, 0);
+  DBFAddField(hPumpDBF, "dcsubtype", FTInteger, 16, 0);
+  DBFAddField(hPumpDBF, "bitcodezon", FTInteger, 20, 0);
+  DBFAddField(hPumpDBF, "elevation", FTDouble, 16, 3);
+  DBFAddField(hPumpDBF, "result_dem", FTDouble, 16, 8);
+  DBFAddField(hPumpDBF, "result_hea", FTDouble, 16, 8);
+  DBFAddField(hPumpDBF, "result_pre", FTDouble, 16, 8);
+  DBFAddField(hPumpDBF, "result_flo", FTDouble, 16, 8);
+  DBFAddField(hPumpDBF, "result_vel", FTDouble, 16, 8);
+  /* DBFAddField(hPumpDBF, "result_hea", FTDouble, 16, 8); */
+  DBFAddField(hPumpDBF, "properties", FTString, 200, 0);
+  DBFAddField(hPumpDBF, "power_kw", FTInteger, 16,0);
+  num_pumps = 0;
+}
+
+int create_valve_shapefile(char *filename) {
+
+  hValveSHP = SHPCreate(filename, SHPT_POINT);
+  hValveDBF = DBFCreate(filename);
+  if(hValveSHP == NULL || hValveDBF == NULL) {
+    printf("unable to create '%s'\n", filename);
+    exit(1);
+  }
+  DBFAddField(hValveDBF, "dc_id", FTString, 16, 0);
+  DBFAddField(hValveDBF, "installati", FTString, 16, 0);
+  DBFAddField(hValveDBF, "abandon_da", FTString, 16, 0);
+  DBFAddField(hValveDBF, "dcsubtype", FTInteger, 16, 0);
+  DBFAddField(hValveDBF, "bitcodezon", FTInteger, 20, 0);
+  DBFAddField(hValveDBF, "elevation", FTDouble, 16, 3);
+  DBFAddField(hValveDBF, "result_dem", FTDouble, 16, 8);
+  DBFAddField(hValveDBF, "result_hea", FTDouble, 16, 8);
+  DBFAddField(hValveDBF, "result_pre", FTDouble, 16, 8);
+  DBFAddField(hValveDBF, "result_flo", FTDouble, 16, 8);
+  DBFAddField(hValveDBF, "result_vel", FTDouble, 16, 8);
+  /* DBFAddField(hValveDBF, "result_hea", FTDouble, 16, 8); */
+  DBFAddField(hValveDBF, "diameter", FTInteger, 20, 0);
+  DBFAddField(hValveDBF, "type", FTString, 16,0);
+  DBFAddField(hValveDBF, "setting", FTString, 16, 0);
+  DBFAddField(hValveDBF, "minorloss", FTDouble, 16, 8);
+  num_valves = 0;
 }
 
 int create_pipe_shapefile(char *filename) {
@@ -387,7 +650,7 @@ int  gettokens(char *s)
    n = 0;
 
 /* Truncate s at start of comment */
-   c = strchr(s,';');
+   c = (char *) strchr(s,';');
    if (c) *c = '\0';
    len = strlen(s);
 

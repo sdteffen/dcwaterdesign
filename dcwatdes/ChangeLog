@@ -1,4 +1,16 @@
-2002-09-07  Steffem Macke <Steffen_Macke@dorsch.com.jo>
+2002-09-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp/inp2shp.c: pipe vertices are imported now
+	
+2002-09-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* inp2shp/inp2shp.c:
+	* inp2shp/README: 
+	* inp2shp/Makefile: working on new INP import based
+	on the EPANET toolkit and shapelib
+	* dcwatdes/license-dcwaterdesignextension.txt: updated copyright
+	
+2002-09-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.view.splitpipe: fixed splitting in some cases with a
 	approximate split
