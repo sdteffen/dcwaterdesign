@@ -1,0 +1,62 @@
+' Script.saveAllScripts
+
+' If the scripts are to be saved elsewhere, change the following lines... 
+'
+s_saveDir = "f:\sandbox\dcwatdes\src"
+
+if (File.Exists(s_saveDir.asFilename).Not) then
+  MsgBox.Error("Working directory:"++s_saveDir.asSTring++"does not exist", "")
+  exit 
+end
+
+theScriptList = List.Make
+
+for each d in av.GetProject.GetDocs
+  if (d.Is(SEd)) then
+    theScriptList.Add(d)
+  end
+end
+
+' Loop through write each script to a system file...
+'
+enforce = MsgBox.YesNoCancel("Create 8.3 unique file names?", 
+  "Save Scripts", true)
+if (enforce = Nil) then
+  exit
+end
+
+for each scriptName in theScriptList
+  '
+  ' Substitute blanks and make lower case.
+  ' Optionally use MakeTmp to enforce 8.3 compliance and uniqueness.
+  '
+  s_fileSaveDir = s_saveDir.clone
+theFile = scriptName.AsString ' .substitute(".",",")
+   
+  if (enforce) then
+    outFile = FN.Make(s_FilesaveDir).MakeTmp(theFile, "ave")
+  else
+    outFile = FileName.Merge(s_FilesaveDir, theFile)
+    outFile.SetName(theFile+".ave")
+    if (outFile.IsFile) then
+      ok = MsgBox.YesNoCancel("Overwrite"++outFile.GetFullName+"?", 
+        "Save Scripts", true)
+      if (ok = Nil) then
+        exit
+      elseif (Not ok) then
+
+        continue 
+      end
+    end
+  end 
+  
+  lf = LineFile.Make(outFile, #FILE_PERM_WRITE)
+  if (lf <> nil) then
+    lf.WriteElt(scriptName.GetScript.AsString)
+    lf.Close
+  else
+    MsgBox.Warning("Unable to write:"++outFile.GetFullName,"")
+  end
+end
+
+

@@ -1,0 +1,147 @@
+'DCWatDes.Model.Epanet.createZonesFromControls
+
+' (c) 2001 DORSCH Consult
+
+' creates a string of 0 and 1 for each pipe
+' for each timestep 1 is set, if the pipe is
+' reached by a trace from water sources (reservoirs)
+' 0 is set otherwise
+' the traces stop at closed shut-off valves
+
+' needs epanet model set up correctly (incl. valves, controls)
+
+' no arguments
+' no return value
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+numSnappingRadius = 0.1
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else 
+  return nil
+end
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+ftbPipes = dicFTabs.get("Pipes")
+ftbReservoirs = dicFTabs.get("Reservoirs")
+ftbValves = dicFTabs.get("Valves")
+if(ftbValves = nil)then
+  MsgBox.warning("Please select a Valve Theme in the Epanet Themes Dialog. This will change values in the settings field of the Valves Theme.", "DC Water Design")
+  exit
+end
+if(ftbReservoirs = nil)then
+  MsgBox.warning("Please select a Reservoir Theme in the Epanet Themes Dialog.", "DC Water Design")
+  exit
+end
+if(ftbPipes = nil)then
+  MsgBox.warning("Please select a Pipes Theme in the Epanet Themes Dialog.", "DC Water Design")
+  exit
+end
+
+'input timesteps
+
+strSteps = MsgBox.input("Number of hours to include in the ZoneID traces:","DC Water Design", "3")
+if(strSteps = nil)then
+  exit
+end
+if((strSteps.isNumber.not)and(strSteps.asNumber > 0))then
+  MsgBox.warning("Input was not a positive number.", "DC Water Design")
+  exit
+end
+
+numSteps = strSteps.asNumber.truncate
+
+' select ZoneID field in pipes table
+' TODO: enhance
+fldZone = MsgBox.choice(ftbPipes.getFields, "Select the text field to store the ZoneID", "DC Water Design")
+if(fldZone = nil)then
+  exit
+end
+
+' set ZoneID = 0000* for all pipes
+ftbPipes.setEditable(true)
+strZone = String.makeBuffer(numSteps+1).substitute(" ","0")
+for each recPipe in ftbPipes
+  ftbPipes.setValue(fldZone, recPipe, strZone)
+end
+
+' loop over timesteps
+av.showStopButton
+numDone = 0
+fldPipeShape=ftbPipes.findField("Shape")
+fldValveSetting = ftbValves.findField("setting")
+for each i in 0..(numSteps)
+
+  ' apply controls
+  av.run("DCWatDes.Model.Epanet.Valves.controlByTime",i)
+  
+  ' select pipes at reservoirs
+  ftbPipes.selectByFTab(ftbReservoirs, #FTAB_RELTYPE_ISWITHINDISTANCEOF, numSnappingRadius, #VTAB_SELTYPE_NEW)
+  
+  ' trace
+  numPipes = ftbPipes.getNumRecords
+  bmpSelection = Bitmap.make(numPipes)
+
+  stkPipes = Stack.make
+
+  'initialize Stack
+  for each recPipe in ftbPipes.getSelection
+    stkPipes.push(recPipe)
+    bmpSelection.set(recPipe)
+  end
+  
+  while(stkPipes.isEmpty.not)
+  
+  recPipe = stkPipes.pop
+  pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
+  lstPipeNodes = pllPipe.asList.get(0)
+  for each pntNode in {lstPipeNodes.get(0), lstPipeNodes.get(lstPipeNodes.count -1)}
+    recNode = nil
+
+    ftbValves.selectByPoint(pntNode, numSnappingRadius, #VTAB_SELTYPE_NEW)
+      if((ftbValves.getSelection.getNextSet(-1)=(-1))or(ftbValves.returnValue(fldValveSetting, ftbValves.getSelection.getNextSet(-1))<>"closed"))then
+        lstConnectedPipes = av.run("DCWatDes.PolylineFTab.findPllsByEndPoint", {ftbPipes, pntNode, numSnappingRadius})
+        for each recConnectedPipe in lstConnectedPipes
+          if(bmpSelection.get(recConnectedPipe).not)then
+            ' connected pipe which is not already on the stack
+            bmpSelection.set(recConnectedPipe)
+            stkPipes.push(recConnectedPipe)
+          end
+        end
+      end
+    end
+  end
+
+  
+  ' alter ZoneID for selected pipes
+
+  for each recPipe in bmpSelection
+    strSupply = ftbPipes.returnValue(fldZone, recPipe)
+    strSupply = strSupply.left(i)+"1"+String.makeBuffer(numSteps-i)
+    ftbPipes.setValue(fldZone, recPipe, strSupply)
+  end 
+  
+  ' give the user a chance to cancel the operation
+  if(av.setStatus(numDone/numSteps * 100).not)then
+    av.clearStatus
+    ftbPipes.setEditable(false)
+    return nil
+  end
+end
+ftbPipes.setEditable(false)
+av.clearStatus
