@@ -17,5 +17,48 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-' no arguments
+' first argument is the filename of the link results text file (class filename)
+' second argument is the filename of the node results text file (class filename)
 ' no return value
+
+flnLinkResults = self.get(0)
+flnNodeResults = self.get(1)
+
+vtbLinkResults = VTab.make(flnLinkResults, false, false)
+tableLinkResults = Table.make(vtbLinkResults)
+tableLinkResults.setName(av.getActiveDoc.getName+" - Link Results")
+av.getProject.addDoc(tableLinkResults)
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  exit
+end
+
+lstSteps = List.make
+numMax = 0
+fldStep = vtbLinkResults.findField("timestep")
+for each recResult in vtbLinkResults
+  numStep = vtbLinkResults.returnValue(fldStep, recResult)
+  if(numStep > numMax)then
+    numMax = numStep
+    strStep = numStep.asString
+    strStep.setName(strStep)
+    lstSteps.add(strStep)
+  end
+end 
+
+vtbNodeResults = VTab.make(flnLinkResults, false, false)
+tableNodeResults = Table.make(vtbLinkResults)
+tableNodeResults.setName(av.getActiveDoc.getName+" - Node Results")
+av.getProject.addDoc(tableNodeResults)
+
+'MsgBox.ListAsString(lstSteps, "Select the timestep to load", "DC Water Design") 
+  
+' load results
+  
+dicPreferences.set("lstSteps", lstSteps.deepclone)
+  
+av.run("DCWatDes.Model.Epanet.loadResultsForStep", {vtbLinkResults, vtbNodeResults})
+

@@ -1,5 +1,15 @@
 2001-08-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
+	* dcwatdes.file.waitfor:
+	* dcwatdes.model.epanet.results.loadarcview:
+	* dcwatdes.model.epanet.results.loadmysql:
+	* dcwatdes.model.epanet.loadresultsforstep:
+	* dcwatdes.model.epanet.run: more work on arcview backend for
+	epanet; this breaks the mysql loader; arcview loader used as
+	fallback backend
+	
+2001-08-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
 	* doc/dcwatdes.manual.lyx: updated documentation
 	* script.saveallscripts: fixed bug (path corruption)
 	* installer/dc_water_design_extension.nsi: added epanet2mysql

@@ -20,44 +20,52 @@
 ' no arguments
 ' no return value
 
-extDCWatDes = Extension.find("DC Water Design")
-if(extDCWatDes <> nil)then
-  dicPreferences = extDCWatDes.getPreferences
-else
-  exit
-end
+MsgBox.info("The MySQL result loader is not supported in this Version of the Extension","DC Water Design")
+exit
 
+for each flnResult in {self.get(0), self.get(1)}
 
-' find the SQL Connection
-strSqlConnection = dicPreferences.get("strSqlConnection")
-if(strSqlConnection = nil)then
-  MsgBox.warning("You've got to setup a SQL Connection in order to load Results.", "DCWater Design")
-  return nil
-end
-
-sqlConnection = SqlCon.find(strSqlConnection)
-
-if(sqlConnection.isLogin.not)then
-  av.run("DCWatDes.SqlConnection.login",sqlConnection)
-end
-
-sqlConnection.executeSql("delete from dc_"+strResult+";")
-    sqlConnection.executeSql("load data infile '"+flnResult.getFullName.substitute("\","\\")+"'"+NL+" into table dc_"+strResult+NL+" fields terminated by ' ' lines terminated by '\r\n';")
+  'todo
+  strResult = ""
+  
+  extDCWatDes = Extension.find("DC Water Design")
+  if(extDCWatDes <> nil)then
+    dicPreferences = extDCWatDes.getPreferences
+  else
+    exit
   end
+  
+  
+  ' find the SQL Connection
+  strSqlConnection = dicPreferences.get("strSqlConnection")
+  if(strSqlConnection = nil)then
+    MsgBox.warning("You've got to setup a SQL Connection in order to load Results.", "DCWater Design")
+    return nil
+  end
+  
+  sqlConnection = SqlCon.find(strSqlConnection)
+  
+  if(sqlConnection.isLogin.not)then
+    av.run("DCWatDes.SqlConnection.login",sqlConnection)
+  end
+  
+  sqlConnection.executeSql("delete from dc_"+strResult+";")
+  sqlConnection.executeSql("load data infile '"+flnResult.getFullName.substitute("\","\\")+"'"+NL+" into table dc_"+strResult+NL+" fields terminated by ' ' lines terminated by '\r\n';")
+   
 end
-twinReport.open
-vtbSteps = VTab.makeSql(sqlConnection, "select distinct time from dc_nodes")
-fldTime = vtbSteps.getFields.get(0)
-lstSteps = List.make
-for each rec in vtbSteps
-  strStep = vtbSteps.returnValue(fldTime, rec)
-  strStep.setName(strStep)
-  lstSteps.add(strStep)
-end
-
-' load results
-
-dicPreferences.set("lstSteps", lstSteps.deepclone)
-
-av.run("DCWatDes.Model.Epanet.loadResultsForStep", nil)
-
+  
+  'twinReport.open
+  vtbSteps = VTab.makeSql(sqlConnection, "select distinct time from dc_nodes")
+  fldTime = vtbSteps.getFields.get(0)
+  lstSteps = List.make
+  for each rec in vtbSteps
+    strStep = vtbSteps.returnValue(fldTime, rec)
+    strStep.setName(strStep)
+    lstSteps.add(strStep)
+  end
+  
+  ' load results
+  
+  dicPreferences.set("lstSteps", lstSteps.deepclone)
+  
+  av.run("DCWatDes.Model.Epanet.loadResultsForStep", nil)

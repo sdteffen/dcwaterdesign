@@ -50,112 +50,65 @@ end
 
 System.execute(strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"txt").quote++(strBasePath+"bin").quote) 
 
-' show Epanet Report
-
 ' wait for the result file appearing
-if(File.exists("c:\WINNT\system32\kernel32.dll".AsFileName))then
-  MsgBox.error("The dynamic link library kernel32.dll was not found.","DC Water Design")
-end
-kernel32 = DLL.Make("c:\WINNT\system32\kernel32.dll".AsFileName)
-sleep = DLLProc.Make(kernel32, "Sleep", #DLLPROC_TYPE_VOID, {#DLLPROC_TYPE_INT32})
-if(sleep = nil)then
-  MsgBox.warning("The dynamic link library 'kernel32.dll' could not be found. This might cause problems.","DC Water Design")
-end	
 
-timeStart=Date.now
-while(File.exists(flnBin).not)
-  if((Date.now-timeStart).asSeconds>20)then
-    MsgBox.info("No Report file found. Check your settings.","DC Water Design Extension")
-    exit
-  end
-  if(sleep <>nil)then
-    sleep.call({1000})
-  end
+if(av.run("DCWatDes.File.waitFor", {flnOut, 30}).not)then
+  exit
 end
 
-timeStart=Date.now
-while(File.isWritable(flnBin).not)
-  if((Date.now-timeStart).asSeconds>20)then
-    MsgBox.info("Couldn't open Report file. Check your settings.","DC Water Design Extension")
-    exit
-  end
-  if(sleep <>nil)then
-    sleep.call({1000})
-  end
+twinReport = TextWin.make(flnOut, "DC Water Design")
+
+if(av.run("DCWatDes.File.waitFor", {flnBin, 30}).not)then
+  exit
 end
 
-File.delete((flnOut.getFullName+".report.xml").asFilename)
-for each strResult in {"links", "nodes"}
- flnResult = (flnOut.getFullName+"."+strResult+".txt").asFilename
- File.delete(flnResult)
+strResultFiles = "" 
+flnLinkResults = (strBasePath+"-link-results.txt").asFilename
+dicPreferences.set("strLinkResults", flnLinkResults.getFullName)
+flnNodeResults = (strBasePath+"-node-results.txt").asFilename
+dicPreferences.set("strNodeResults", flnNodeResults.getFullName)
+
+for each flnResult in {flnLinkResults, flnNodeResults}
+  strResultFiles = strResultFiles++flnResult.getFullName
+  strResultFileName = flnResult.getFullName
+  lstTables = av.getProject.getDocsWithGUI(av.findGUI("Table"))
+  for each tableRemove in lstTables
+    vtbRemove = tableRemove.getVTab
+    if(vtbRemove <> nil)then
+      if(vtbRemove.getBaseTableFilename.getFullName = strResultFileName)then
+        vtbRemove.deActivate
+        av.getProject.removeDoc(tableRemove)
+        break
+      end
+    end
+  end
+  av.processAllInvals
+  av.purgeObjects
+  File.delete(flnResult)
 end
-strCmd = "c:\winnt\system32\cmd.exe /c "+("$AVEXT\dcwatdes\cygwin\sh.exe".asFilename.getFullname)++("$AVEXT\dcwatdes\epanetreport2xml.sh".asFilename.getFullname)++(flnOut.getFullName)++(flnOut.getFullName)+".report.xml"
+
+strCmd = ("$AVEXT\dcwatdes\epanet2mysql.exe".asFilename.getFullname)++
+         flnBin.getFullName+strResultFiles
 System.execute(strCmd)
 
-flnReport = (flnOut.getFullName+".report.xml").asFilename
-
-timeStart=Date.now
-while(File.exists(flnReport).not)
-  if((Date.now-timeStart).asSeconds>60)then
-    MsgBox.info("No Report file found. Check your settings.","DC Water Design Extension")
+' wait for tables
+for each flnResult in {flnLinkResults, flnNodeResults}
+  if(av.run("DCWatDes.File.waitFor", {flnResult, 30}).not)then
     exit
   end
-  if(sleep <>nil)then
-    sleep.call({1000})
-  end
 end
 
-timeStart=Date.now
-while(File.isWritable(flnReport).not)
-  if((Date.now-timeStart).asSeconds>60)then
-    MsgBox.info("Couldn't open Report file. Check your settings.","DC Water Design Extension")
-    exit
-  end
-  if(sleep <>nil)then
-    sleep.call({1000})
+' choose processing backend
+
+strLoader = dicPreferences.get("strResultLoader")
+if(strLoader = nil)then
+  strLoader = "ArcView"
+end
+if(strLoader="MySql")then
+  av.run("DCWatDes.Model.Epanet.Results.loadMySql", {flnLinkResults, flnNodeResults})
+else if(strLoader="ArcView")then
+  av.run("DCWatDes.Model.Epanet.Results.loadArcView", {flnLinkResults, flnNodeResults})
+  else
+    MsgBox.error("Couldn't find Result Loader"++strLoader.asString.quote+".","DC Water Design")
   end
 end
-
-strReport=""
-
-twinReport = TextWin.make(flnReport, "DC Water Design")
-
-if(strReport.contains("Error").not)then
-  'load results
-  for each strResult in {"links", "nodes"}
-    flnResult = (flnOut.getFullName+"."+strResult+".txt").asFilename
-    timeStart=Date.now
-    while(File.exists(flnResult).not)
-      if((Date.now-timeStart).asSeconds>60)then
-        MsgBox.info("No Result file found. Check your settings.","DC Water Design Extension")
-        exit
-      end
-      if(sleep <>nil)then
-        sleep.call({1000})
-      end
-    end
-    
-    timeStart=Date.now
-    while(File.isWritable(flnResult).not)
-      if((Date.now-timeStart).asSeconds>60)then
-        MsgBox.info("Couldn't open Result file. Check your settings.","DC Water Design Extension")
-        exit
-      end
-      if(sleep <>nil)then
-        sleep.call({1000})
-      end
-    end  
-    if(sleep <> nil)then
-      sleep.call({3000})
-    end
-  end
-end
-
-
-
-
-
-
-
-
-

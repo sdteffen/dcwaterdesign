@@ -30,9 +30,8 @@ for each sedScript in lstScripts
 
   strSaveDir2 = strSaveDir.clone
   strScriptName = sedScript.asString ' .substitute(".",",")
-  
-  flnScript = strSaveDir.asFilename 
-  flnScript.mergeFile(strScriptName)
+   
+  flnScript = FileName.merge(strSaveDir2, strScriptName)
   ' System.echo(flnScript.getFullName)
   flnScript.setName(strScriptName+".ave")
   if (flnScript.isFile) then

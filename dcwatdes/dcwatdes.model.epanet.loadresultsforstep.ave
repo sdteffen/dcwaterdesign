@@ -17,6 +17,9 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+' no arguments
+' nothing is returned
+
 extDCWatDes = Extension.find("DC Water Design")
 if(extDCWatDes <> nil)then
   dicPreferences = extDCWatDes.getPreferences
@@ -34,77 +37,159 @@ if(strStep = nil)then
   return nil
 end
 
-' find the SQL Connection
-strSqlConnection = dicPreferences.get("strSqlConnection")
-if(strSqlConnection = nil)then
-  MsgBox.warning("You've got to setup a SQL Connection in order to load results.", "DC Water Design")
+strResultLoader = dicPreferences.get("strResultLoader")
+if((strResultLoader="ArcView")or(strResultLoader = nil))then
+  lstTables = av.getProject.getDocsWithGUI(av.findGUI("Table"))
+  strNodeResults = dicPreferences.get("strNodeResults")
+  System.echo(strNodeResults.asString)
+  strLinkResults = dicPreferences.get("strLinkResults") 
+  for each tableFeature in lstTables
+    vtbFeature = tableFeature.getVTab
+    if(vtbFeature <> nil)then
+      if(vtbFeature.getBaseTableFilename.getFullName = strLinkResults)then
+        vtbLinkResults = vtbFeature
+      else
+        if(vtbFeature.getBaseTableFilename.getFullName = strNodeResults)then
+          vtbNodeResults = vtbFeature
+        end
+      end
+    end
+  end
+
+  vtbNodeResults.setDefinition("[timestep]="+strStep)
+  vtbLinkResults.setDefinition("[timestep]="+strStep)  
+    
+  dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
+      
+  fldResultID = vtbNodeResults.findField("dc_id")
+  fldResultPressure = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbNodeResults, "result_pressure"})
+  fldResultHead = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbNodeResults, "result_head"})
+  fldResultDemand = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbNodeResults, "result_demand"})
+  bmpResult = vtbNodeResults.getSelection
+  
+  for each strFeature in {"Junctions", "Tanks", "Reservoirs", "Pumps", "Valves"}
+    ftbFeature = dicFTabs.get(strFeature)
+    fldFeatureID = ftbFeature.findField("dc_id")
+    fldFeaturePressure = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbFeature, "result_pressure"})
+    fldFeatureHead = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_head"})
+    fldFeatureDemand = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_demand"})
+    for each recFeature in ftbFeature
+      strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString
+      vtbNodeResults.query("[dc_id]='"+strID+"'", bmpResult, #VTAB_SELTYPE_NEW)
+      recResult = bmpResult.getNextSet(-1)
+      if(recResult<> -1)then
+        objPressure = vtbNodeResults.returnValue(fldResultPressure, recResult)
+        ftbFeature.setValue(fldFeaturePressure, recFeature, objPressure)
+        objHead = vtbNodeResults.returnValue(fldResultHead, recResult)
+        ftbFeature.setValue(fldFeatureHead, recFeature, objHead)
+        objDemand = vtbNodeResults.returnValue(fldResultDemand, recResult)
+        ftbFeature.setValue(fldFeatureDemand, recFeature, objDemand)
+      end
+    end
+  end
+  
+  ' link results
+  fldResultID = vtbLinkResults.findField("dc_id")
+  fldResultVelocity = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_velocity"})
+  fldResultFlow = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_flow"})
+  fldResultHeadloss = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_headloss"})
+  bmpResult = vtbLinkResults.getSelection
+  
+  for each strFeature in {"Pumps", "Valves", "Pipes"}
+    ftbFeature = dicFTabs.get(strFeature)
+    fldFeatureID = ftbFeature.findField("dc_id")
+    fldFeatureVelocity = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbFeature, "result_velocity"})
+    fldFeatureFlow = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_flow"})
+    fldFeatureHeadloss = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_headloss"})
+    for each recFeature in ftbFeature
+      strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString
+      vtbLinkResults.query("[dc_id]='"+strID+"'", bmpResult, #VTAB_SELTYPE_NEW)
+      recResult = bmpResult.getNextSet(-1)
+      if(recResult<> -1)then
+        objVelocity = vtbLinkResults.returnValue(fldResultVelocity, recResult)
+        ftbFeature.setValue(fldFeatureVelocity, recFeature, objVelocity)
+        objFlow = vtbLinkResults.returnValue(fldResultFlow, recResult)
+        ftbFeature.setValue(fldFeatureFlow, recFeature, objFlow)
+        objHeadloss = vtbLinkResults.returnValue(fldResultHeadloss, recResult)
+        ftbFeature.setValue(fldFeatureHeadloss, recFeature, objHeadloss)
+      end
+    end
+  end                        
   return nil
-end
-
-sqlConnection = SqlCon.find(strSqlConnection)
-
-if(sqlConnection.isLogin.not)then
-  av.run("DCMMS.SqlConnection.login",sqlConnection)
-end
-
-dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
-
-' node results
-vtbNodeResults = VTab.makeSql(sqlConnection, "select * from dc_nodes where time='"+strStep+"';")
-
-fldResultID = vtbNodeResults.findField("dc_id")
-fldResultPressure = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbNodeResults, "result_pressure"})
-fldResultHead = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbNodeResults, "result_head"})
-fldResultDemand = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbNodeResults, "result_demand"})
-bmpResult = vtbNodeResults.getSelection
-
-for each strFeature in {"Junctions", "Tanks", "Reservoirs", "Pumps", "Valves"}
-  ftbFeature = dicFTabs.get(strFeature)
-  fldFeatureID = ftbFeature.findField("dc_id")
-  fldFeaturePressure = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbFeature, "result_pressure"})
-  fldFeatureHead = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_head"})
-  fldFeatureDemand = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_demand"})
-  for each recFeature in ftbFeature
-    strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString
-    vtbNodeResults.query("[dc_id]='"+strID+"'", bmpResult, #VTAB_SELTYPE_NEW)
-    recResult = bmpResult.getNextSet(-1)
-    if(recResult<> -1)then
-      objPressure = vtbNodeResults.returnValue(fldResultPressure, recResult)
-      ftbFeature.setValue(fldFeaturePressure, recFeature, objPressure)
-      objHead = vtbNodeResults.returnValue(fldResultHead, recResult)
-      ftbFeature.setValue(fldFeatureHead, recFeature, objHead)
-      objDemand = vtbNodeResults.returnValue(fldResultDemand, recResult)
-      ftbFeature.setValue(fldFeatureDemand, recFeature, objDemand)
+else 
+  if(strResultLoader = "MySql")then
+    ' find the SQL Connection
+    strSqlConnection = dicPreferences.get("strSqlConnection")
+    if(strSqlConnection = nil)then
+      MsgBox.warning("You've got to setup a SQL Connection in order to load results.", "DC Water Design")
+      return nil
     end
-  end
-end
-
-' link results
-vtbLinkResults = VTab.makeSql(sqlConnection, "select * from dc_links where time='"+strStep+"';")
-fldResultID = vtbLinkResults.findField("dc_id")
-fldResultVelocity = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_velocity"})
-fldResultFlow = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_flow"})
-fldResultHeadloss = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_headloss"})
-bmpResult = vtbLinkResults.getSelection
-
-for each strFeature in {"Pumps", "Valves", "Pipes"}
-  ftbFeature = dicFTabs.get(strFeature)
-  fldFeatureID = ftbFeature.findField("dc_id")
-  fldFeatureVelocity = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbFeature, "result_velocity"})
-  fldFeatureFlow = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_flow"})
-  fldFeatureHeadloss = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_headloss"})
-  for each recFeature in ftbFeature
-    strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString
-    vtbLinkResults.query("[dc_id]='"+strID+"'", bmpResult, #VTAB_SELTYPE_NEW)
-    recResult = bmpResult.getNextSet(-1)
-    if(recResult<> -1)then
-      objVelocity = vtbLinkResults.returnValue(fldResultVelocity, recResult)
-      ftbFeature.setValue(fldFeatureVelocity, recFeature, objVelocity)
-      objFlow = vtbLinkResults.returnValue(fldResultFlow, recResult)
-      ftbFeature.setValue(fldFeatureFlow, recFeature, objFlow)
-      objHeadloss = vtbLinkResults.returnValue(fldResultHeadloss, recResult)
-      ftbFeature.setValue(fldFeatureHeadloss, recFeature, objHeadloss)
+    
+    sqlConnection = SqlCon.find(strSqlConnection)
+    
+    if(sqlConnection.isLogin.not)then
+      av.run("DCMMS.SqlConnection.login",sqlConnection)
     end
-  end
-end
-
+    
+    dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
+    
+    ' node results
+    vtbNodeResults = VTab.makeSql(sqlConnection, "select * from dc_nodes where time='"+strStep+"';")
+    
+    fldResultID = vtbNodeResults.findField("dc_id")
+    fldResultPressure = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbNodeResults, "result_pressure"})
+    fldResultHead = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbNodeResults, "result_head"})
+    fldResultDemand = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbNodeResults, "result_demand"})
+    bmpResult = vtbNodeResults.getSelection
+    
+    for each strFeature in {"Junctions", "Tanks", "Reservoirs", "Pumps", "Valves"}
+      ftbFeature = dicFTabs.get(strFeature)
+      fldFeatureID = ftbFeature.findField("dc_id")
+      fldFeaturePressure = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbFeature, "result_pressure"})
+      fldFeatureHead = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_head"})
+      fldFeatureDemand = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_demand"})
+      for each recFeature in ftbFeature
+        strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString
+        vtbNodeResults.query("[dc_id]='"+strID+"'", bmpResult, #VTAB_SELTYPE_NEW)
+        recResult = bmpResult.getNextSet(-1)
+        if(recResult<> -1)then
+          objPressure = vtbNodeResults.returnValue(fldResultPressure, recResult)
+          ftbFeature.setValue(fldFeaturePressure, recFeature, objPressure)
+          objHead = vtbNodeResults.returnValue(fldResultHead, recResult)
+          ftbFeature.setValue(fldFeatureHead, recFeature, objHead)
+          objDemand = vtbNodeResults.returnValue(fldResultDemand, recResult)
+          ftbFeature.setValue(fldFeatureDemand, recFeature, objDemand)
+        end
+      end
+    end
+    
+    ' link results
+    vtbLinkResults = VTab.makeSql(sqlConnection, "select * from dc_links where time='"+strStep+"';")
+    fldResultID = vtbLinkResults.findField("dc_id")
+    fldResultVelocity = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_velocity"})
+    fldResultFlow = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_flow"})
+    fldResultHeadloss = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_headloss"})
+    bmpResult = vtbLinkResults.getSelection
+    
+    for each strFeature in {"Pumps", "Valves", "Pipes"}
+      ftbFeature = dicFTabs.get(strFeature)
+      fldFeatureID = ftbFeature.findField("dc_id")
+      fldFeatureVelocity = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbFeature, "result_velocity"})
+      fldFeatureFlow = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_flow"})
+      fldFeatureHeadloss = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeature, "result_headloss"})
+      for each recFeature in ftbFeature
+        strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString
+        vtbLinkResults.query("[dc_id]='"+strID+"'", bmpResult, #VTAB_SELTYPE_NEW)
+        recResult = bmpResult.getNextSet(-1)
+        if(recResult<> -1)then
+          objVelocity = vtbLinkResults.returnValue(fldResultVelocity, recResult)
+          ftbFeature.setValue(fldFeatureVelocity, recFeature, objVelocity)
+          objFlow = vtbLinkResults.returnValue(fldResultFlow, recResult)
+          ftbFeature.setValue(fldFeatureFlow, recFeature, objFlow)
+          objHeadloss = vtbLinkResults.returnValue(fldResultHeadloss, recResult)
+          ftbFeature.setValue(fldFeatureHeadloss, recFeature, objHeadloss)
+        end
+      end
+    end
+  end  
+end    
