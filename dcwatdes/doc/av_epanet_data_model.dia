@@ -10,22 +10,22 @@
           <dia:string>#A4#</dia:string>
         </dia:attribute>
         <dia:attribute name="tmargin">
-          <dia:real val="2.82"/>
+          <dia:real val="2.8222"/>
         </dia:attribute>
         <dia:attribute name="bmargin">
-          <dia:real val="2.82"/>
+          <dia:real val="2.8222"/>
         </dia:attribute>
         <dia:attribute name="lmargin">
-          <dia:real val="2.82"/>
+          <dia:real val="2.8222"/>
         </dia:attribute>
         <dia:attribute name="rmargin">
-          <dia:real val="2.82"/>
+          <dia:real val="2.8222"/>
         </dia:attribute>
         <dia:attribute name="is_portrait">
           <dia:boolean val="false"/>
         </dia:attribute>
         <dia:attribute name="scaling">
-          <dia:real val="0.246572"/>
+          <dia:real val="0.246527"/>
         </dia:attribute>
         <dia:attribute name="fitto">
           <dia:boolean val="true"/>
@@ -3184,12 +3184,12 @@ TODO:
         <dia:point val="19.7453,55.2728"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-5.12495,54.0728;44.6155,55.5728"/>
+        <dia:rectangle val="0.1927,54.0728;39.2979,55.5728"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#UML Static State Analysis Diagram of the Epanet/ArcView Data Model #</dia:string>
+            <dia:string>#UML Class Diagram of the Epanet/ArcView Data Model #</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Helvetica-Bold"/>
@@ -3214,12 +3214,12 @@ TODO:
         <dia:point val="19.6531,57.2728"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="7.13007,56.4728;32.1761,57.4728"/>
+        <dia:rectangle val="7.7361,56.4728;31.5701,57.4728"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#Revision 2.01, created 28th February 2001 with dia v0.86#</dia:string>
+            <dia:string>#Revision 2.00, created 12th March 2001 with dia v0.86#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font name="Helvetica"/>
