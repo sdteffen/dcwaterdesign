@@ -10,9 +10,7 @@ lstFields = self
 lstNumberFields = List.make
 for each fldCheck in lstFields
   if(fldCheck.isTypeNumber)then
-     strField = fldCheck.getAlias
-     strField.setName(strField)
-    lstNumberFields.add(strField)
+    lstNumberFields.add(fldCheck)
   end
 end   
 

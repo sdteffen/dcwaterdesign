@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE article 
   PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
-  [ ]
+  [  
+    <!ENTITY version SYSTEM "version.xml">
+  ]
 >
 <article lang="en">
 <articleinfo>
  <title>DC Sewer Design Extension</title>
      <pubdate>2004</pubdate>
-     <edition>version 2.0.2+cvs.</edition>
+     <edition>Version &version;</edition>
     <copyright>
       <year>2004</year>
       <holder>DORSCH Consult</holder>
@@ -31,9 +33,8 @@
 <sect1 id="introduction">
   <title>Introduction</title>
   <para>This document describes the design process for simple sewer networks
-    using version 2.0.3 of the DC Sewer Design extension for ArcView 3.*.
+    using version &version; of the DC Sewer Design extension for ArcView 3.*.
     </para>
-  <para>The final calculation can be an Excel Sheet.</para>
   <para>The <citetitle>DC Sewer Design Extension</citetitle> is free software
     available from <ulink url="http://dcwaterdesign.sourceforge.net/"
     >http://dcwaterdesign.sourceforge.net</ulink>.</para>
@@ -287,6 +288,29 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting>
       maximum line length has to be entered. The function ignores attributes.
     </para>
   </sect3>
+    <sect3 id="manhole_data_to_line">
+      <title>Manhole Data to Line</title>
+      <para>Transfers data from manholes to line. A source field has to be
+        specified in the manhole table. In the line table, an upstream and
+	a downstream field have to be specified.</para>
+      <important><para>The lines must be flipped to the flow direction in order
+        to use this function. See <xref linkend="flip_lines_to_flow_direction" 
+	/> to see how lines can be flipped to the flow direction.</para>
+	</important>
+    </sect3>
+    <sect3 id="line_data_to_manholes">
+      <title>Line Data to Manholes</title>
+       <para>Transfers data from a line to the upstream and downstream. The
+         downstream and upstream source field have to be specified in the
+	 line table together with the target field in the manhole table. Where
+	 a manhole is an upstream and downstream manhole at the same time,
+	 random decides whether the upstream or downstream value is taken over.
+	 </para>
+      <important><para>The lines must be flipped to the flow direction in order
+        to use this function. See <xref linkend="flip_lines_to_flow_direction" 
+	/> to see how lines can be flipped to the flow direction.</para>
+	</important>
+    </sect3>
   </sect2>
   <sect2 id="gravity_sewer">
     <title>Gravity Sewers</title>

@@ -4,7 +4,7 @@
 ' manholes
 ' REQUIRES that the lines are flipped to flow direction
 
-' (c) 2000 DORSCH Consult
+' (c) 2000,2004 DORSCH Consult
 
   Msgbox.info("Make sure that the lines are flipped to flow direction.", "DC Sewer Design")
 
@@ -66,24 +66,29 @@
  for each recLine in ftbLine
    pllLine = ftbLine.returnValue(fldLineShape, recLine)
    pntUpstream = pllLine.asList.get(0).get(0)
-   pntDownstream = pllLine.asList.get(0).get(1)
-  
-   ftbManhole.selectByPoint(pntUpstream, 0.1, #VTAB_SELTYPE_NEW) 
-   bmpManholes = ftbManhole.getSelection
-   for each recManhole in bmpManholes
-     recUpstream = recManhole
+   lstLine = pllLine.asList
+   if(lstLine.count > 1)then
+     System.echo("Error: Multipart polylines are not allowed.")
+   else
+     lstLine = lstLine.get(0)
+     pntDownstream = lstLine.get(lstLine.count-1)
+    
+     ftbManhole.selectByPoint(pntUpstream, 0.1, #VTAB_SELTYPE_NEW) 
+     bmpManholes = ftbManhole.getSelection
+     for each recManhole in bmpManholes
+       recUpstream = recManhole
+     end
+     objUpstream = ftbManhole.returnValue(fldManholeData, recUpstream)
+     ftbLine.setValue(fldUpstreamData, recLine, objUpstream)
+     
+     ftbManhole.selectByPoint(pntDownstream, 0.1, #VTAB_SELTYPE_NEW) 
+     bmpManholes = ftbManhole.getSelection
+     for each recManhole in bmpManholes
+       recDownstream = recManhole
+     end
+     objDownstream = ftbManhole.returnValue(fldManholeData, recDownstream)
+     ftbLine.setValue(fldDownstreamData, recLine, objDownstream)
    end
-   objUpstream = ftbManhole.returnValue(fldManholeData, recUpstream)
-   ftbLine.setValue(fldUpstreamData, recLine, objUpstream)
-   
-   ftbManhole.selectByPoint(pntDownstream, 0.1, #VTAB_SELTYPE_NEW) 
-   bmpManholes = ftbManhole.getSelection
-   for each recManhole in bmpManholes
-     recDownstream = recManhole
-   end
-   objDownstream = ftbManhole.returnValue(fldManholeData, recDownstream)
-   ftbLine.setValue(fldDownstreamData, recLine, objDownstream)
-
    ' update status display   
    numComplete = numComplete + 1
    if(av.setStatus((numComplete/numTotal)*100).not)then

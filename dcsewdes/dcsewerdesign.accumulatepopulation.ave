@@ -102,9 +102,6 @@ numPreventEndlessLoop = bmpCalculate.count
     if(blnReady)then    
       'calculate the AccumulatedPopulation
       numPopulation = ftbLine.returnValue(fldPopulation, recLine)
-      if(numPopulation.isNull)then
-        numPopulation = 0
-      end
       numAccumulatedPopulation = numAccumulatedPopulation + numPopulation
       numAccumulatedPopulation = numAccumulatedPopulation.max(0.001)
       ftbLine.setValue(fldAccumulatedPopulation, recLine, numAccumulatedPopulation)             

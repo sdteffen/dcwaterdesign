@@ -72,11 +72,19 @@
    objValue = nil
    for each recLine in ftbLine.getSelection
      pllLine = ftbLine.returnValue(fldLineShape, recLine)
-
      if(pntManhole.distance(pllLine.asList.get(0).get(0)) < 0.1)then
        objValue = ftbLine.returnValue(fldUpstreamData, recLine)
      else
-       objValue = ftbLine.returnValue(fldDownstreamData, recLine)
+       lstLine = pllLine.asList
+       if(lstLine.count > 1)then
+         System.echo("Error: Multipart polylines are not allowed.")
+       else
+         lstLine = lstLine.get(0)
+         pntDownstream = lstLine.get(lstLine.count-1)
+         if(pntDownstream.distance(pntManhole) < 0.1)then
+           objValue = ftbLine.returnValue(fldDownstreamData, recLine)
+         end
+       end
      end
 
      break
