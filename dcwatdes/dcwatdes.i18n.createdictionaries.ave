@@ -85,6 +85,7 @@ dicGerman.add("Please select the Pipes Theme in the Epanet Themes Dialog", "Bitt
 dicGerman.add("Choose the length field. The field will be overwritten", "Wählen Sie das Längen-Feld. Das Feld wird überschrieben")
 dicGerman.add("Create Zones from Controls", "Zonen über Schiebersteuerung erstellen")
 dicGerman.add("Create Missing Junctions", "Fehlende Knoten erzeugen")
+dicGerman.add("Create Missing Fields", "Fehlende Felder erzeugen")
 
 _dcwDicDictionaries.add("de",dicGerman)
 

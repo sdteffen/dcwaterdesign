@@ -2,7 +2,7 @@
 
 ' If the scripts are to be saved elsewhere, change the following line... 
 
-strSaveDir = "e:\sandbox\dcwatdes"
+strSaveDir = "c:\sandbox\dcwatdes"
 
 if (File.exists(strSaveDir.asFilename).Not) then
   MsgBox.Error("Working directory:"++strSaveDir++"does not exist", "")
