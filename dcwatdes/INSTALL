@@ -3,11 +3,6 @@ the NullSoft Super Installation System (available from
 http://www.nullsoft.com), add the following binaries to 
 the tree:
 
-installer/dcwatdes/cygwin:
-			cygwin1.dll
-			sed.exe
-			sh.exe
-
 installer/dcwatdes/xslt:
 			DOMSupport.dll
 			PlatformSupport.dll
@@ -19,10 +14,6 @@ installer/dcwatdes/xslt:
 			XPath.dll
 			XSLT.dll
 			
-The cygwin binaries are available from:
-
-http://sources.redhat.com/cygwin/
-
 The xalan binaries are available from:
 
 http://xml.apache.org/xalan-c/index.html
