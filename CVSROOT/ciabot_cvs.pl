@@ -42,7 +42,7 @@ use vars qw ($project $from_email $dest_email $rpc_uri $sendmail $sync_delay
 ### Configuration
 
 # Project name (as known to CIA).
-$project = 'DC Water Design Extension';
+$project = 'dcwaterdesign';
 
 # The from address in generated mails.
 $from_email = 'Steffen_Macke@dorsch.com.jo';
