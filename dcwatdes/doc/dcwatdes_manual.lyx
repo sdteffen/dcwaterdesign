@@ -2,6 +2,7 @@
 \lyxformat 218
 \textclass article
 \begin_preamble
+
 \usepackage{graphics}
 \usepackage{multicol}
 \newcommand\NrCol{3}
@@ -73,7 +74,7 @@ thispagestyle {empty}
 DC Water Design Extension Manual
 \layout Standard
 
-This Manual describes the DC Water Design Extension Version 2.01.
+This Manual describes the DC Water Design Extension Version 2.03.
 \layout Standard
 
 This Document uses Terminology from ArcView and EPANET.
@@ -84,7 +85,7 @@ What is the DC Water Design Extension?
 \layout Standard
 
 The DC Water Design Extension is an Extension to ESRI's ArcView GIS software.
- Version 2.01 integrates the EPANET 2.00 hydraulic modeling software with
+ Version 2.03 integrates the EPANET 2.00 hydraulic modeling software with
  ArcView.
  It allows to store, edit and retrieve EPANET hydraulic models including
  all options in ArcView.
@@ -94,6 +95,48 @@ The DC Water Design Extension is an Extension to ESRI's ArcView GIS software.
 \layout Subsection
 
 What's new?
+\layout Paragraph
+
+Version 2.03
+\layout Itemize
+
+Added function to automatically add the theme fields required by the data
+ model.
+\layout Itemize
+
+EPANET result import works now without mySQL.
+\layout Itemize
+
+Check EPANET Model provides more checks now and is much faster.
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+Create Missing Junctions
+\begin_inset Quotes erd
+\end_inset 
+
+: Add additional junctions to make sure that the network topology is sane.
+\layout Itemize
+
+Updated Documentation.
+\layout Itemize
+
+Checking for spaces in path names which are not allowed.
+\layout Itemize
+
+Customizable backdrop map resolution.
+\layout Itemize
+
+Support for patterns.
+\layout Itemize
+
+More checks while writing EPANET files.
+\layout Itemize
+
+Various bugfixes (see CVS ChangeLog for the details).
 \layout Paragraph
 
 Version 2.02
@@ -217,7 +260,7 @@ Both connected pipes must be oriented in the same way: One pipe has to start
 
 \begin_inset Figure size 337 64
 file virtual-line-validity.eps
-flags 9
+flags 10
 
 \end_inset 
 
@@ -418,12 +461,13 @@ Note that the bit numbering starts at 0.
 
 \begin_inset Figure size 24 20
 file images/attention-sign.eps
-flags 9
+flags 11
 
 \end_inset 
 
 
 \end_float 
+
 \layout Subsubsection
 
 Snapping
@@ -496,7 +540,7 @@ Requirements
 
 \layout Itemize
 
-ArcView 3.0 or higher
+ArcView 3.1 or higher
 \layout Itemize
 
 Windows 95, 98, ME, NT or 2000 in order to export EPANET files 
@@ -505,8 +549,8 @@ Windows 95, 98, ME, NT or 2000 in order to export EPANET files
 EPANET 2.0 or higher is needed in order to run a hydraulic analysis
 \layout Itemize
 
-An (ANSI SQL compliant) ODBC connection is needed in order to import hydraulic
- analysis results
+An (ANSI SQL compliant) ODBC connection can improve the performance when
+ importing hydraulic analysis results
 \layout Subsubsection
 
 Setup
@@ -653,6 +697,11 @@ Fire up EPANET and open the created file (*.inp).
 \layout Subsubsection
 
 Project GUI
+\begin_inset LatexCommand \label{sec:project-gui}
+
+\end_inset 
+
+
 \layout Standard
 
 The DC Water Design Extension extends the Project GUI by adding a new Menu,
@@ -676,8 +725,8 @@ English
 German
 \layout Standard
 
-Note that the Localization is not completed yet.It is therefore recommended
- that you set the language to English.
+Note that the Localization is not completed yet.
+ It is therefore recommended that you set the language to English.
 \begin_float margin 
 \layout Standard
 \align center 
@@ -690,6 +739,12 @@ flags 9
 
 
 \end_float 
+
+\layout Standard
+
+The snapping radius used for network traces and model building is also customiza
+ble in this dialog.
+ Usually the default setting should be kept.
 \layout Paragraph
 
 EPANET Tables 
@@ -719,6 +774,11 @@ The Result Tables are used to store the results of a hydraulic analysis.
  There are two tables, one for node results and one for link results.
  For performance reasons it is recommended that you use a RDBMS such as
  mySQL for storing the data.
+\layout Standard
+
+To allow result file loading without having an RDBMS installed, the dialog
+ provides the opportunity to switch to an result loader that relies on ArcView
+ only.
 \layout Paragraph
 
 About\SpecialChar ~
@@ -807,6 +867,15 @@ Optionally, a Backdrop
  is exported together with the EPANET model.
  This requires additional themes in the View e.g.
  pressure zones or a street layer.
+ The resolution of the backdrop map can be specified in the setup dialog
+ (see section 
+\begin_inset LatexCommand \ref{sec:project-gui}
+
+\end_inset 
+
+).
+ A backdrop will only be written, if the view contains visible themes in
+ addition to the EPANET themes.
 \layout Standard
 
 The resulting EPANET input file has the extension *.inp.
@@ -823,6 +892,7 @@ flags 9
 
 
 \end_float 
+
 \layout Paragraph
 
 Run EPANET Calculation 
@@ -858,7 +928,34 @@ After the analysis has been completed, the report created by EPANET is displayed
  
 \layout Paragraph
 
+Check EPANET Model
+\begin_inset LatexCommand \index{check}
+
+\end_inset 
+
+
+\layout Standard
+
+Performs a number of checks on the hydraulic model.
+\layout Standard
+
+The checks include the following:
+\layout Itemize
+
+Check for NULL shapes
+\layout Itemize
+
+Check for duplicate IDs
+\layout Itemize
+
+Check for IDs that are too long
+\layout Paragraph
+
 Load Results for step ...
+\begin_inset LatexCommand \index{results}
+
+\end_inset 
+
  
 \layout Standard
 
@@ -1151,6 +1248,25 @@ Currently the function only supports networks that contain only shut off
  valves.
 \layout Paragraph
 
+Create Missing Fields
+\layout Standard
+
+Creates fields required by the data model if they are missing in the EPANET
+ themes.
+ 
+\layout Standard
+
+This allows to quickly create data sets that conform with the EPANET data
+ model.
+\layout Paragraph
+
+Create Missing Junctions
+\layout Standard
+
+Creates all the Junctions that are necessary to have an EPANET Model with
+ the correct topology (a node at every end of a pipe).
+\layout Paragraph
+
 About DC Water Design Extension
 \layout Standard
 
@@ -1188,6 +1304,7 @@ flags 9
 
 
 \end_float 
+
 \layout Paragraph
 
 Move Nodes 
@@ -1735,7 +1852,7 @@ The Extension depends on several software packages.
  
 \layout Paragraph
 
-Why is Version 2.01 not working with Pipe 2000 anymore?
+Why is Version 2.** not working with Pipe 2000 anymore?
 \layout Standard
 
 The Pipe 2000 data model, API and documentation are inferior to EPANET.
@@ -1842,7 +1959,7 @@ Copyright
 
 \layout Standard
 
-DC Water Design Extension 2.01.
+DC Water Design Extension 2.03.
  This ArcView Extension integrates EPANET with ArcView.
  
 \layout Standard
@@ -1879,26 +1996,13 @@ Section
 
 \begin_inset Figure size 24 20
 file images/question-sign.eps
-flags 9
+flags 11
 
 \end_inset 
 
 
 \end_float 
-\layout Subsubsection
 
-GNU Software
-\layout Standard
-
-GNU sed Copyright (C) 1998 Free Software Foundation, Inc.
- All rights reserved.
-\layout Standard
-
-GNU sh Copyright (C) 1999 Free Software Foundation, Inc.
- All rights reserved.
-\layout Standard
-
-Visit http://www.gnu.org for the details and/or sources.
 \layout Subsubsection
 
 Apache Software
@@ -1951,7 +2055,7 @@ dc_ID:
 string
 \emph default 
  Unique ID throughout the whole database.
- Should not contains spaces.
+ Should not contain spaces.
 \layout Subsection
 
 Node
