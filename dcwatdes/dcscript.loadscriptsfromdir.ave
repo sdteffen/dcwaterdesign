@@ -109,4 +109,4 @@ end
 ' compile all scripts
 av.run("DCScript.compileAllScripts",nil)
 
-MsgBox.info("Loaded"++numLoaded++"scripts.","DC Script")
+MsgBox.info("Loaded"++numLoaded.asString++"scripts.","DC Script")
