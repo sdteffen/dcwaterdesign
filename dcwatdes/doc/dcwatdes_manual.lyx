@@ -3,6 +3,7 @@
 \textclass article
 \begin_preamble
 
+
 \usepackage{graphics}
 \usepackage{multicol}
 \newcommand\NrCol{3}
@@ -74,7 +75,7 @@ thispagestyle {empty}
 DC Water Design Extension Manual
 \layout Standard
 
-This Manual describes the DC Water Design Extension Version 2.03.
+This Manual describes the DC Water Design Extension Version 2.04.
 \layout Standard
 
 This Document uses Terminology from ArcView and EPANET.
@@ -85,13 +86,13 @@ What is the DC Water Design Extension?
 \layout Standard
 
 The DC Water Design Extension is an Extension to ESRI's ArcView GIS software.
- Version 2.03 integrates the EPANET 2.00 hydraulic modeling software with
- ArcView.
+ Starting with Versions 2.00 the DC Water Design Extension integrates the
+ EPANET 2.00 hydraulic modeling software with ArcView.
  It allows to store, edit and retrieve EPANET hydraulic models including
  all options in ArcView.
  Also it's possible to run the EPANET hydraulic analysis from ArcView and
  load the results into the GIS.
- Loading of EPANET models to ArcView is not yet implemented.
+ 
 \layout Subsection
 
 What's new?
@@ -100,8 +101,23 @@ What's new?
 Version 2.04
 \layout Itemize
 
-Customizable timeout (Thanks to Melissa Henderson of Lockwood, Andrews &
- Newnam, Inc.)
+Customizable timeout and other improvements for external command calls (Thanks
+ to 
+\noun on 
+Melissa Henderson
+\noun default 
+ of Lockwood, Andrews & Newnam, Inc.).
+\layout Itemize
+
+Check EPANET model checks now for pipes that are shorter than the snapping
+ radius.
+\layout Itemize
+
+Import of EPANET binary result files.
+\layout Itemize
+
+Preliminary support for importing EPANET INP files: Importing pipes and
+ junctions.
 \layout Paragraph
 
 Version 2.03
@@ -321,6 +337,46 @@ flags 9
 
 Virtual Line Creation
 \end_float 
+\layout Standard
+
+Figure 
+\begin_inset LatexCommand \ref{fig:virtual-line-creation}
+
+\end_inset 
+
+ depicts the conversion process of virtual lines: 
+\layout Enumerate
+
+Number and orientation of the pipes connected to the virtual line are checked
+ for validity
+\layout Enumerate
+
+The virtual node is replaced with a junction (PJ1).
+\layout Enumerate
+
+An additional junction is added (PJ2).
+\layout Enumerate
+
+The pipe from the virtual line to the next node starts at the additional
+ junction.
+ ( PJ2 -> J2).
+\layout Enumerate
+
+The pump or valve is created.
+ It connects the two new Junctions (PJ1->PJ2).
+\layout Standard
+
+The DC Water Design Extension follows this conversion process when it is
+ creating EPANET models.
+ Additional considerations used in the process are:
+\layout Itemize
+
+The length of the virtual line is one metre.
+ 
+\backslash 
+-line-creation}Virtual Line Creation
+\layout dummy
+
 \layout Standard
 
 Figure 
@@ -933,7 +989,12 @@ flags 9
 \end_float 
 \layout Paragraph
 
-Run EPANET Calculation 
+Run EPANET Calculation
+\begin_inset LatexCommand \index{Calculation}
+
+\end_inset 
+
+ 
 \layout Standard
 
 Exports the hydraulic model to an EPANET input file, runs the analysis and
@@ -966,6 +1027,59 @@ After the analysis has been completed, the report created by EPANET is displayed
  
 \layout Paragraph
 
+Import Binary Result File
+\begin_inset LatexCommand \index{Binary}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{Import}
+
+\end_inset 
+
+
+\layout Standard
+
+Loads binary results of an EPANET calculation into ArcView.
+\layout Standard
+
+The binary results need to result of from an analysis of the EPANET model
+ currently loaded into ArcView.
+\layout Standard
+
+The user will be prompted to select a time step for which the results will
+ be loaded.
+\layout Paragraph
+
+Import EPANET Inp File
+\begin_inset LatexCommand \index{Import}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{Inp}
+
+\end_inset 
+
+
+\layout Standard
+
+Imports an EPANET model from an EPANET INP file.
+\layout Standard
+
+The EPANET INP format is an ASCII format (it can be easily edited by any
+ text editor) that is documented in the EPANET toolkit.
+ The windows version of EPANET can export models to this format.
+ 
+\layout Standard
+
+Currently the function will only import junctions and pipes.
+ These two themes have two be registered with the extension (Simply create
+ an empty point and line theme and select them in the EPANET Themes dialog).
+ The functions offers to delete all the existing features before importing.
+ 
+\layout Paragraph
+
 Check EPANET Model
 \begin_inset LatexCommand \index{check}
 
@@ -981,6 +1095,9 @@ The checks include the following:
 \layout Itemize
 
 Check for NULL shapes
+\layout Itemize
+
+Check for pipes shorter than the snapping radius
 \layout Itemize
 
 Check for duplicate IDs
