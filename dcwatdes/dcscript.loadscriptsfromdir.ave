@@ -6,71 +6,79 @@
 
 ' select one script
 
-FileDialog.returnFiles({"*.ave"},{"AVENUE Source (*.ave)"}, "Select one script.", "Load Scripts from Directory")
+lstFiles = FileDialog.returnFiles({"*.ave"},{"AVENUE Source (*.ave)"}, "Select one script.", "Load Scripts from Directory")
 
-strSaveDir = "f:\sandbox\dcwatdes\src"
-
-if (File.exists(strSaveDir.asFilename).Not) then
-  MsgBox.Error("Working directory:"++strSaveDir++"does not exist", "")
-  exit 
+if((lstFiles = nil)or(lstFiles.count = 0))then
+  ' user selected Cancel
+  exit
 end
 
-lstScripts = List.make
+' find all scripts in the directory
 
-' find all scripts
+flnDirectory = lstFiles.get(0).returnDir
+lstScriptFiles = flnDirectory.readFiles("*.ave")
 
-for each docObj in av.getProject.getDocs
-  if (docObj.is(SEd)) then
-    lstScripts.Add(docObj)
-  end
-end
+' loop over all scripts
 
-' Loop over all scripts, write to files
-
+numLoaded = 0
 blnOverwrite = nil
-
-for each sedScript in lstScripts
-
-  strSaveDir2 = strSaveDir.clone
-  strScriptName = sedScript.asString ' .substitute(".",",")
-   
-  flnScript = FileName.merge(strSaveDir2, strScriptName)
-  flnScript.setName(strScriptName+".ave")
-  if (flnScript.isFile) then
-    if(blnOverwrite = nil)then
-      blnOverwrite = MsgBox.YesNo("Overwrite files?", "Saving Scripts", false)
-      if(blnOverwrite.not)then
-        continue 
-      end
-    ' check if file has been changed
-    lnfScript = LineFile.make(flnScript, #FILE_PERM_READ).setEolType(#FILE_UNIX_EOL)
-    strFileLine = lnfScript.readElt
-    blnChanged = false
-    while(strFileLine <> nil)
+				
+for each flnScript in lstScriptFiles
+  lnfScript = Linefile.make(flnScript, #FILE_PERM_READ).setEolType(#FILE_UNIX_EOL)
+  if(lnfScript = nil)then
+    MsgBox.warning("Could not open file'"+flnScript.asString+"'.","Loading Scripts from Directory")
+  else
+' search script in project
+  sedScript = nil
+  strScriptName = flnScript.getBaseName.left(flnScript.getBasename.count-4)			
+  for each docObj in av.getProject.getDocs
+    if (docObj.is(SEd)) then
+      if(docObj.getName.lcase = strScript.lcase)then
+        sedScript = docObj
+        break	
+      end	
+    end
+  end
+' create new script if necessary
+  if(sedScript = nil)then
+    sedScript = Sed.make
+    av.getProject.addDoc(sedScript)	
+  end  	
+  strScriptSource = ""
+  		
+' try to set scriptname from first comment
+  strScriptSource = lnfScript.readElt
+  if(strScriptSource <> nil)then	
+    if(strScriptSource.asTokens(" ").get(1).left(1)="'")then
+	'' script starts with comment
+      strFirstComment=strScriptSource.asTokens(" '"+NL).get(0)
+      if(strFirstComment.lcase = sedScript.lcase)then
+        sedScript.setName(strFirstComment)
+      end		 
+    end
+  end		
+' check if script has changed, loadScript
+  strFileLine = lnfScript.readElt
+  blnChanged = false
+  while(strFileLine <> nil)
 'TODO
-      if(strFileLine <> strScriptLine)then
-        blnChanged=true
-        break
+    if(strFileLine <> strScriptLine)then
+      blnChanged=true
+      strScriptSource=strFileLine 
       end
       strFileLine = lnfScript.readElt
     end
     lnfScript.close
-    if(blnChanged)then
-      File.delete(flnScript)
-    else
-     continue
+' ask for permission to overwrite
+    if(blnOverwrite = nil)then
+      blnOverwrite = MsgBox.yesNo("Overwrite Scripts in Project?", "Loading Scripts from Directory", false)
     end
-  end 
-  
-  lnfScript = LineFile.make(flnScript, #FILE_PERM_WRITE).setEolType(#FILE_UNIX_EOL)
-  if (lnfScript <> nil) then
-    lnfScript.writeElt(sedScript.getSource)
-    lnfScript.close
-  else
-    MsgBox.warning("Unable to open file for writing:"++outFile.GetFullName,"Saving Scripts")
+' update script 
   end
 end
 
+' compile all scripts
+av.run("DCScript.compileAllScripts",nil)
 
 
 

@@ -22,7 +22,8 @@ end
 ' Loop over all scripts, write to files
 
 blnOverwrite = nil
-
+numWritten = 0
+	
 for each sedScript in lstScripts
 
   strSaveDir2 = strSaveDir.clone
@@ -60,10 +61,12 @@ for each sedScript in lstScripts
   if (lnfScript <> nil) then
     lnfScript.writeElt(sedScript.getSource)
     lnfScript.close
+    numWritten = numWritten+1
   else
     MsgBox.warning("Unable to open file for writing:"++outFile.GetFullName,"Saving Scripts")
   end
 end
+MsgBox.info(numWritten.asString++"Scripts were written.", "Saving Scripts")
 
 
 
