@@ -1,3 +1,13 @@
+2001-06-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: removed yesterdays fix as it was broken
+	* dcwatdes.dialog.epanetthemes.initialize: made sure that the right shape types
+	are offered in the theme selection
+	* dcwatdes.model.epanet.check:
+	* dcwatdes.model.epanet.make:
+	* dcwatdes.model.epanet.writeinpfile: no selection should be returned if
+	everything goes well
+
 2001-06-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.writeinpfile: fixed xslt processing for paths
@@ -35,3 +45,17 @@
 
 	* doc/dcwatdes_manual.lyx
 	* doc/*.eps: updated documentation for 2.01 release
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

@@ -204,6 +204,11 @@ if(blnSuccess)then
   for each strFeature in dicFTabs.returnKeys
     strReport = strReport+"* "+dicFTabs.get(strFeature).getNumRecords.asString++strFeature+NL
   end
+  ' clear all selections in order to avoid confusion
+  for each ftbToClear in dicFTabs
+    ftbToClear.getSelection.clearAll
+    ftbToClear.updateSelection
+  end
   strReport = strReport+NL+"Epanet Model sucessfully build."+NL+"You may now write an Epanet Input file or run a Epanet Calculation."
 else
   strReport=strReport+"Building the Epanet Model failed."

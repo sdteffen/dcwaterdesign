@@ -66,10 +66,58 @@ for each ctlLabelControl in lstControls
   cplEpanetThemes.add(ctlLabelControl, rctBox)
 end
 
-for each strCombobox in {"Junctions", "Tanks","Pumps", "Valves", "Reservoirs", "Pipes"}
+for each strCombobox in {"Junctions", "Tanks","Pumps", "Valves", "Reservoirs"}
   lstThemes = activeView.getThemes
+  lstThemesToShow = List.make
+  for each thmToCheck in lstThemes
+    if(thmToCheck.is(FTheme))then
+      if(thmToCheck.getFTab.findField("Shape").getType = #FIELD_SHAPEPOINT)then         
+        lstThemesToShow.add(thmToCheck)
+      end
+    end
+  end
+
   theCombobox = dlgEpanetThemes.findByName("cbx"+strCombobox)
-  theCombobox.defineFromList(lstThemes)
+  theCombobox.defineFromList(lstThemesToShow)
+  theCheckbox = dlgEpanetThemes.findByName("chx"+strCombobox)
+  if(theCheckbox <> nil)then
+    theCheckbox.setSelected(false)
+  end
+  strSelected = dicPreferences.get("str"+strCombobox)
+  if(strSelected <> nil)then
+     for each thmCheck in theCombobox.getList
+       if(strSelected = thmCheck.getName)then
+         theCombobox.findByValue(thmCheck)
+       end
+     end
+  else
+    strComboTranslated = av.run("DCWatDes.i18n.returnTranslation", strCombobox)
+    for each avTheme in lstThemes
+      if((avTheme.getName.lcase.contains(strComboTranslated.lcase)) or
+         (avTheme.getName.lcase.contains(strCombobox.lcase)))then
+        theCombobox.findByValue(avTheme)
+        if(theCheckbox <> nil)then
+          theCheckbox.setSelected(true)
+        end
+      end
+    end
+  end
+  theCombobox.selectCurrent
+end
+
+for each strCombobox in {"Pipes"}
+  lstThemes = activeView.getThemes
+  lstThemesToShow = List.make
+  for each thmToCheck in lstThemes
+    if(thmToCheck.is(FTheme))then
+      if(thmToCheck.getFTab.findField("Shape").getType = #FIELD_SHAPELINE)then         
+        lstThemesToShow.add(thmToCheck)
+      end
+    end
+  end
+
+  theCombobox = dlgEpanetThemes.findByName("cbx"+strCombobox)
+  theCombobox.defineFromList(lstThemesToShow)
   theCheckbox = dlgEpanetThemes.findByName("chx"+strCombobox)
   if(theCheckbox <> nil)then
     theCheckbox.setSelected(false)

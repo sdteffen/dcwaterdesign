@@ -21,6 +21,8 @@
 
 blnExportSpatial = true
 
+blnErrorOccured = false
+
 if(self<>nil)then
   if(self=false)then
     blnExportSpatial = false
@@ -245,6 +247,7 @@ for each lstSection in lstSections
     ftbSection.setSelection(bmpMischiefFeatures)
     ftbSection.updateSelection
     if(bmpMischiefFeatures.getNextSet(-1) <> -1)then
+      blnErrorOccured = true
       MsgBox.warning("Some "+strSection+" are not properly connected. Check the selection.", "DC Water Design Extension")
     end
   end
@@ -607,7 +610,7 @@ flnInp = (strBasePath+"inp").asFilename
 'clean up
 File.delete(flnInp)
 
-system.execute(strSabCmd+" -text -xsl "+strXslt.quote+" -in "+strXml.quote+" -out "+((strBasePath+"inp").quote))
+system.execute(strSabCmd+" -text -xsl "+strXslt+" -in "+strXml+" -out "+strBasePath+"inp")
 
 ' wait for the input file appearing
 flnKernel32 = "c:\WINNT\system32\kernel32.dll".AsFileName
@@ -639,5 +642,9 @@ while(File.isWritable(flnInp).not)
     sleep.call({1000})
   end
 end
-
+if(blnErrorOccured.not)then
+  for each thmToClear in dicThemes
+    thmToClear.clearSelection 
+  end
+end
 return fln_Xml

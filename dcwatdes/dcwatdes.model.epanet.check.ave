@@ -31,6 +31,8 @@ numToGo = lstFTabs.count
 numCompleted = 0
 numDoubleIDs = 0
 
+blnErrorOccured = false
+
 lstThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
 
 for each thmFeature in lstThemes
@@ -67,11 +69,17 @@ end
 
 numDoubleIDs = numDoubleIDs/2
 if(numDoubleIDs>0)then
+  blnErrorOccured = true
   MsgBox.warning("The model has"++numDoubleIDs.asString++" duplicate ID(s)."+NL+"Check the Selection.", "DC Water Design")
 else
   MsgBox.info("The model ID's are unique", "DC Water Design")
 end
 
+if(blnErrorOccured.not)then
+  for each ftbTheme in lstFTabs
+    ftbTheme.getSelection.clearAll
+  end
+end
 for each ftbTheme in lstFtabs
   ftbTheme.updateSelection
 end
