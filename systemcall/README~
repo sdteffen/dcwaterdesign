@@ -1,0 +1,8 @@
+compile with pure mingw, use makeit.bat
+
+example usage in AVENUE:
+
+strDllName  = FileName.make("e:\development\dllhelpers-0.2.5\callsystem\systemcall.dll")
+dllCallSystem = DLL.make(strDllName)
+procCallSystem = DLLProc.make(dllCallSystem, "dll_call_system",#DLLPROC_TYPE_STR,{#DLLPROC_TYPE_STR})
+System.echo(procCallSystem.call({"""c:\program files\epanet2\epanet2d.exe"" c:\temp\net3.inp c:\temp\test.txt c:\temp\test.bin"}))

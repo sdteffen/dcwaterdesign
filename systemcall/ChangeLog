@@ -1,0 +1,7 @@
+2001-10-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dllinit.c:
+	* makeit.bat:
+	* README:
+	* systemcall.c:
+	* systemcall.h: initial version
