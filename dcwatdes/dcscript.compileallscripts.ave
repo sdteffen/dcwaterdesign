@@ -1,0 +1,15 @@
+' DCScript.compileAllScripts
+
+' compile all scripts in the project
+
+' no arguments
+' no return value
+
+for each docObj in av.getProject.getDocs
+  if (docObj.is(SEd)) then
+    if(docObj.isCompiled.not)then
+      docObj.compile
+    end
+  end
+end
+
