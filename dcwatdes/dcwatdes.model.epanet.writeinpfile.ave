@@ -82,6 +82,11 @@ if(fln_Xml = nil ) then
   exit
 end
 
+if(fln_Xml.getFullName.contains(" "))then
+  MsgBox.error("The path"+NL+"'"+fln_Xml.getFullName+"'"+NL+"contains spaces. This is not allowed.","DC Water Design")
+  exit
+end
+
 lnf_Xml = LineFile.make(fln_Xml, #FILE_PERM_WRITE)
 
 'locate the themes
@@ -463,8 +468,9 @@ if(blnExportSpatial)then
 
 ' write backdrop file?
 if(viewActive.getVisibleThemes.count > dicThemes.count)then
+  rectOldExtent = nil
   if(MsgBox.yesNo("Write Backdrop Map?", "DC Water Design",true))then
-  
+    
   ' turn off model themes so that they don't show up the in the backdrop
   
     for each thmModel in dicThemes
@@ -523,9 +529,10 @@ if(viewActive.getVisibleThemes.count > dicThemes.count)then
     end
   
     'redraw view
-    viewActive.getDisplay.setExtent(rectOldExtent)
-    viewActive.invalidate
-        
+    if(rectOldExtent <> nil)then
+      viewActive.getDisplay.setExtent(rectOldExtent)
+      viewActive.invalidate
+    end    
   end
 end
 

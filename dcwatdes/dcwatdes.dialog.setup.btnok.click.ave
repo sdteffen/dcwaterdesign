@@ -34,6 +34,9 @@ for each strProperty in {"Epanet", "Sabcmd", "Xslt", "SnappingRadius"}
   txlProperty = dlgSetup.findByName("txl"+strProperty)
   strPropertyValue = txlProperty.getText
   dicPreferences.set("str"+strProperty,strPropertyValue)
+  if((strProperty <> "SnappingRadius")and(strProperty<>"Epanet")and(strPropertyValue.contains(" ")))then
+    MsgBox.warning("The path for '"+txlProperty.getLabel+"' contains spaces, this will cause problems.","DC Water Design")
+  end
 end
 
 av.run("DCWatDes.i18n.translateExtensionMenus", nil)

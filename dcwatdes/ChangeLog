@@ -1,3 +1,11 @@
+2001-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.dialog.setup.btnok.click : Added check for spaces in pathes
+	* dcwatdes.model.epanet.writeinpfile: Fixed bug #440432, writing an
+	epanet input file and answering 'no' in the write backdrop dialog; added check
+	for spaces in the path of the epanet file
+	* script.saveallscripts: commented out System.echo
+
 2001-08-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.fields.createmissing: added function to create 

@@ -32,7 +32,7 @@ for each sedScript in lstScripts
   strScriptName = sedScript.asString ' .substitute(".",",")
    
   flnScript = FileName.merge(strSaveDir2, strScriptName)
-  System.echo(flnScript.getFullName)
+  ' System.echo(flnScript.getFullName)
   flnScript.setName(strScriptName+".ave")
   if (flnScript.isFile) then
     if(blnOverwrite = nil)then
