@@ -15,10 +15,11 @@
     <author>
       <personname>
         <firstname>Steffen</firstname>
-	<surname>Make</surname>
+	<surname>Macke</surname>
       </personname>
       <email>Steffen_Macke@dorsch.com.jo</email>
     </author>
+  </articleinfo>
   <sect1 id="introduction">
     <title>Introduction</title>
     <para>This Manual describes the DC Water Design Extension 
@@ -94,7 +95,7 @@
       
       * Customizable timeout and other improvements for 
 	external command calls (Thanks to Melissa Henderson 
-	of Lockwood, Andrews & Newnam, Inc.).
+	of Lockwood, Andrews &amp; Newnam, Inc.).
       
       * Check EPANET model checks now for pipes that are 
 	shorter than the snapping radius.
@@ -140,17 +141,17 @@
       * Support for Backdrop Maps (Thanks to Roland Salgado, 
 	page [sec:backdrop-map]).
       
-      * Create Zones From SOV Controls (page [sec:create_zones_from_controls]).
+      * Create Zones From SOV Controls (<xref linkend=
+        "create_zones_from_controls" />).
       
       * Bugfix for coordinate systems using decimal feet (Bug 
 	reported by Arnold Strasser).</para>
       </sect2>
   </sect1>  
   <sect1 id="concepts">
-      <title>Concepts</title>
-    
+    <title>Concepts</title>
     <para>This section introduces some concepts which are 
-    fundamental in order to understand how the extension works.</para>
+      fundamental in order to understand how the extension works.</para>
     
     <sect2 id="traces">
       <title>Network Traces</title>
@@ -160,11 +161,10 @@
 	model. Through specifying network features at which the 
 	trace should stop, it's possible to isolate supply 
 	zones.</para>
-     </sect2> 
-     <sect2 id="virtual_lines">
-       <title>Virtual Lines</title>
-    
-	<para>In the EPANET hydraulic model, pumps and valves are 
+    </sect2> 
+    <sect2 id="virtual_lines">
+      <title>Virtual Lines</title>
+      <para>In the EPANET hydraulic model, pumps and valves are 
 	represented as lines. From the hydraulic modeling point 
 	of view this makes sense, as the orientation of the 
 	valves and pumps is important information. In GIS data, 
@@ -195,65 +195,67 @@
 	  way: One pipe has to start at the virtual line and 
 	  the other pipe has to end at the virtual line</para>
     
-    <para>
-      <figure id="fig_virtual_line_validity">
-      <graphic fileref="virtual-line-validity.eps" />
-      <title>Virtual Line Validity</title></figure>
-    
-    <xref linkend="fig_virtual_line_validity" /> shows examples of different pipe orientations 
-    at a virtual line. The case a shows a pump with two 
-    pipes connected that are oriented in the same way. This 
-    allows the creation of the hydraulic model and is 
-    therefore considered valid. Case b shows pumps with 
-    pipes connected that are not oriented in the same way. 
-    This is invalid as is does not allow the creation of 
-    the hydraulic model. Case c is invalid because the pump 
-    has more than 3 pipes connected to it. Note that the 
-    orientation information of the pump symbol is not 
-    necessarily contained in the GIS data.</para>
-    
-    <para>
-      <figure id="fig_virtual_line_creation">
-      <graphic fileref="virtual-line-creation.eps" />
-      <title>Virtual Line Creation</title></figure>
-    
-    <xref linkend="fig_virtual_line_creation" /> 
-    depicts the conversion process of virtual 
-    lines: 
-    
-    1. Number and orientation of the pipes connected to the 
-      virtual line are checked for validity
-    
-    2. The virtual node is replaced with a junction (PJ1).
-    
-    3. An additional junction is added (PJ2).
-    
-    4. The pipe from the virtual line to the next node 
-      starts at the additional junction. ( PJ2 -> J2).
-    
-    5. The pump or valve is created. It connects the two 
-      new Junctions (PJ1->PJ2).
-    
-    The DC Water Design Extension follows this conversion 
-    process when it is creating EPANET models. Additional 
-    considerations used in the process are:
-    
-    * The length of the virtual line is one metre. 
-      \-line-creation}Virtual Line Creation
-    
-    * If the pipe starting at the virtual line is shorter 
-      than one metre, the virtual line length is set to 
-      half of the pipe length.</para> 
-    
-    <para>Virtual Lines provide a concept to convert GIS point 
-    data (pumps or valves) into the lines used by the 
-    hydraulic analysis software. The conversion is done 
-    automatically when the GIS data is exported to the 
-    hydraulic model. Virtual Lines require exactly two 
-    pipes connected to each pump or valve. In Addition, the 
-    two pipes have to have the same digitizing direction 
-    (which will be the flow direction in the hydraulic model).</para>
-    
+      <para>
+	<figure id="fig_virtual_line_validity">
+	  <title>Virtual Line Validity</title>
+	  <graphic fileref="../virtual-line-validity.eps" />
+	</figure>
+      
+      <xref linkend="fig_virtual_line_validity" /> shows examples of different pipe orientations 
+      at a virtual line. The case a shows a pump with two 
+      pipes connected that are oriented in the same way. This 
+      allows the creation of the hydraulic model and is 
+      therefore considered valid. Case b shows pumps with 
+      pipes connected that are not oriented in the same way. 
+      This is invalid as is does not allow the creation of 
+      the hydraulic model. Case c is invalid because the pump 
+      has more than 3 pipes connected to it. Note that the 
+      orientation information of the pump symbol is not 
+      necessarily contained in the GIS data.</para>
+      
+      <para>
+	<figure id="fig_virtual_line_creation">
+	  <title>Virtual Line Creation</title>
+	  <graphic fileref="../virtual-line-creation.eps" />
+	</figure>
+      
+      <xref linkend="fig_virtual_line_creation" /> 
+      depicts the conversion process of virtual 
+      lines: 
+      
+      1. Number and orientation of the pipes connected to the 
+	virtual line are checked for validity
+      
+      2. The virtual node is replaced with a junction (PJ1).
+      
+      3. An additional junction is added (PJ2).
+      
+      4. The pipe from the virtual line to the next node 
+	starts at the additional junction. ( PJ2 -> J2).
+      
+      5. The pump or valve is created. It connects the two 
+	new Junctions (PJ1->PJ2).
+      
+      The DC Water Design Extension follows this conversion 
+      process when it is creating EPANET models. Additional 
+      considerations used in the process are:
+      
+      * The length of the virtual line is one metre. 
+	\-line-creation}Virtual Line Creation
+      
+      * If the pipe starting at the virtual line is shorter 
+	than one metre, the virtual line length is set to 
+	half of the pipe length.</para> 
+      
+      <para>Virtual Lines provide a concept to convert GIS point 
+      data (pumps or valves) into the lines used by the 
+      hydraulic analysis software. The conversion is done 
+      automatically when the GIS data is exported to the 
+      hydraulic model. Virtual Lines require exactly two 
+      pipes connected to each pump or valve. In Addition, the 
+      two pipes have to have the same digitizing direction 
+      (which will be the flow direction in the hydraulic model).</para>
+    </sect2>  
     <sect2 id="bit_codes">
       <title>Bit Codes</title>
     
@@ -276,14 +278,17 @@
       different hydraulic models:</para>
       
       <para>
-      <figure id="bitcoding_zones">
-	<graphics fileref="bitcoding-zones.eps" />
-	<title>Bit-coding Supply Zones</title></figure></para>
+	<figure id="fig_bitcoding_zones">
+	  <title>Bit-coding Supply Zones</title>
+	  <graphic fileref="../bitcoding-zones.eps" />
+	</figure>
+      </para>
       
-      <para>In figure [fig:bitcoding-zones] the nodes of three hydraulic models are 
-      bit-coded for storage in the GIS. Each zone has its own 
-      bit in the bit code, indicating if the node is used in 
-      the model or not.</para> 
+      <para>In <xref linkend="fig_bitcoding_zones" /> the nodes of three 
+	hydraulic models are 
+	bit-coded for storage in the GIS. Each zone has its own 
+	bit in the bit code, indicating if the node is used in 
+	the model or not.</para> 
       
       <para>Bit codes are stored as integer numbers in GIS data. 
       They provide a powerful method to store hydraulic 
@@ -306,10 +311,9 @@
     
     
     <sect2 id="snapping">
-      <title>Snapping</title>
-      
+      <title>Snapping</title>  
       <para>The editing tools of the DC Water Design Extension use 
-      a snapping tolerance equal to 3 screen pixels.</para>
+        a snapping tolerance equal to 3 screen pixels.</para>
     </sect2>
   </sect1>  
   <sect1>
@@ -356,24 +360,23 @@
       the performance when importing hydraulic analysis results</para>
     </sect2>
     <sect2>
-      <title>Setup</title>
-    
-    <para>To install the DC Water Design Extension, you've got to 
-    run the installer executable. After accepting the 
-    license (s. [sec:dcwatdes-license]), you'll be prompted to select the 
-    installation path. The installation path should be the 
-    path to ArcView's EXT32 folder. Usually this should be 
-    the default path (c:\ESRI\av_gis30\arcview\EXT32). It 
-    might differ for custom ArcView installations. The only 
-    thing left to do now is to select which components of 
-    the extension should be installed. In general, you 
-    should install all the components of the extension.</para> 
-    
-    <note><para>If you want to use e.g. a newer version of the XSLT 
-      parser and you've installed that version already,    
-       you might decide not to install the XSLT parser that 
-      comes with the extension. Don't do this unless you know 
-      what you're doing!</para></note>
+      <title>Setup</title>    
+      <para>To install the DC Water Design Extension, you've got to 
+      run the installer executable. After accepting the 
+      license (s. [sec:dcwatdes-license]), you'll be prompted to select the 
+      installation path. The installation path should be the 
+      path to ArcView's EXT32 folder. Usually this should be 
+      the default path (c:\ESRI\av_gis30\arcview\EXT32). It 
+      might differ for custom ArcView installations. The only 
+      thing left to do now is to select which components of 
+      the extension should be installed. In general, you 
+      should install all the components of the extension.</para> 
+      
+      <note><para>If you want to use e.g. a newer version of the XSLT 
+	parser and you've installed that version already,    
+	 you might decide not to install the XSLT parser that 
+	comes with the extension. Don't do this unless you know 
+	what you're doing!</para></note>
     </sect2>
   </sect1>
   
@@ -529,22 +532,23 @@
     and "Check EPANET Model" is advisable especially for the 
     novice user before exporting the EPANET input file.</para>
     
-    <para>Optionally, a Backdrop Map<xref linked="backdrop-map"> is exported together with 
+    <para id="backdrop-map">Optionally, a Backdrop Map is exported together with 
     the EPANET model. This requires additional themes in 
     the View e.g. pressure zones or a street layer. The 
     resolution of the backdrop map can be specified in the 
     setup dialog (see section [sec:project-gui]). A backdrop will only be 
     written, if the view contains visible themes in 
-    addition to the EPANET themes.
+    addition to the EPANET themes.</para>
     
-    The resulting EPANET input file has the extension 
+    <note><para>The resulting EPANET input file has the extension 
     *.inp. The *.xml-file is just an intermediate format 
-    (temporary file).<Graphics file: images/information-sign.eps>
+    (temporary file).</para></note></sect3>
     
     
-      Run EPANET Calculation 
+      <sect3>
+        <title>Run EPANET Calculation</title> 
     
-    Exports the hydraulic model to an EPANET input file, 
+    <para>Exports the hydraulic model to an EPANET input file, 
     runs the analysis and loads the results into ArcView.
     
     The model has to be complete, running "Make EPANET Model" 
@@ -623,19 +627,20 @@
     
     In case there are reports about inconsistent flow 
     direction at pumps or valves, you can use the "Flip Polylines"
-     tool of the extension to correct the errors.
+     tool of the extension to correct the errors.</para>
+      </sect3>
+      <sect3 id="epanet_themes_dialog">
+        <title>EPANET Themes</title> 
     
-      EPANET Themes<xref linked="epanet-themes-dialog"> 
-    
-    Opens the EPANET Themes Dialog.
+    <para>Opens the EPANET Themes Dialog.
     
     Use the Dialog to select the themes you want to use in 
     your hydraulic model. The line and node theme are 
     required, other themes are optional and can be switched 
     off with the check boxes on the right side.
     
-    Most of the extension functions require that the EPANET 
-    Themes are properly set up in this dialog.<Graphics file: images/attention-sign.eps>
+    <important><para>Most of the extension functions require that the EPANET 
+    Themes are properly set up in this dialog.</para></important>
     
      Setting up the themes should be the first step when 
     using the extension. The settings are also used to 
@@ -675,13 +680,13 @@
     the tanks attribute table that contains the dc_id of 
     the junction the tank should connect to. Such fields 
     can be established e.g. by using the spatial join 
-    function of the Geoprocessing Wizard.
+    function of the Geoprocessing Wizard.</para>
     
-    Note that this functionality has been included mainly 
+    <note><para>Note that this functionality has been included mainly 
     for the purpose of modeling intermittent supply with 
-    household storage tanks.<Graphics file: images/information-sign.eps>
+    household storage tanks.</para></note>
     
-     It might be taken out or completely rewritten in 
+     <para>It might be taken out or completely rewritten in 
     future versions of the DC Water Design Extension.
     
       Create Supply Strings 
@@ -697,13 +702,13 @@
     yield a "0" in the supply string. For each node, the 
     supply strings are written to a user-selectable text 
     field. The field has to been long enough to contain as 
-    many characters as there are time steps in the EPANET results.
+    many characters as there are time steps in the EPANET results.</para>
     
-    Note that this functionality has been included mainly 
+    <note><para>Note that this functionality has been included mainly 
     for the purpose of modeling intermittent supply with 
-    household storage tanks.<Graphics file: images/information-sign.eps>
+    household storage tanks.</para></note>
     
-     It might be taken out or completely rewritten in 
+    <para>It might be taken out or completely rewritten in 
     future versions of the DC Water Design Extension.
     
       Calculate Pipe Length For Junctions 
@@ -731,11 +736,12 @@
     throughout all the active themes.) The user can select 
     the filename and location for each clipped theme. He 
     can also choose whether the new themes should be added 
-    to the view.
+    to the view.</para></sect3>
     
-      Create Zones from Controls<xref linked="create_zones_from_controls">
+      <sect3 id="create_zones_from_controls">
+        <title>Create Zones from Controls</title>
     
-    Creates a sequence (string) of 0 and 1 for describing 
+    <para>Creates a sequence (string) of 0 and 1 for describing 
     if the pipe is connected to a reservoir at over a 
     sequence of hours. 
     
@@ -770,11 +776,12 @@
     missing in the EPANET themes. 
     
     This allows to quickly create data sets that conform 
-    with the EPANET data model.
+    with the EPANET data model.</para></sect3>
     
-      Create Missing Junctions
+      <sect3>
+        <title>Create Missing Junctions</title>
     
-    Creates all the Junctions that are necessary to have an 
+    <para>Creates all the Junctions that are necessary to have an 
     EPANET Model with the correct topology (a node at every 
     end of a pipe).
     
@@ -795,13 +802,13 @@
     
     The theme containing the lines to be flipped has to be 
     set up as the pipe theme in the EPANET themes dialog. 
-    Simple clicking on the line will switch the digitizing direction.
+    Simple clicking on the line will switch the digitizing direction.</para>
     
-    Tip: ArcView's symbology can be used to display the 
-    digitizing direction with arrowheads.<Graphics file: images/question-sign.eps>
+    <tip><para>ArcView's symbology can be used to display the 
+      digitizing direction with arrowheads.</para></tip>
     
     
-      Move Nodes 
+      <para>Move Nodes 
     
     A tool to move network nodes including rubber-banding.
     
@@ -837,11 +844,12 @@
     disconnect a pipe from a node with this tool.
     
     The pipe theme has to be set up in the EPANET themes 
-    dialog in order to use this tool.
+    dialog in order to use this tool.</para>
     
-    Note that the pipe length is not recalculated.<Graphics file: images/attention-sign.eps>
+    <important><para>Note that the pipe length is not recalculated.
+      </para></important>
     
-     Recalculate the pipe length manually in the pipe theme 
+     <para>Recalculate the pipe length manually in the pipe theme 
     attribute table. See the Questions and Answers section 
     of this manual if you have problems calculating the 
     pipe length.
@@ -988,31 +996,34 @@
     Adds the current node to the selection in the node theme.
     
     The appropriate node themes has to be selected in the 
-    EPANET themes dialog.
+    EPANET themes dialog.</para></sect3>
+    </sect2>
+    <sect2>
+      <title>Table GUI</title>
     
-    1.5.5 Table GUI
+      <para>Bitcode Calculator
+	
+	The Bitcode Calculator is accessible from the button 
+	bar of the table GUI. It is disabled unless the table 
+	is editable and a numerical field is selected. 
+	
+	* Upon clicking on the Bitcode Calculator button, the 
+	  user is prompted to select the bits he wants to set. 
+	
+	* After choosing OK, the bit code will be calculated 
+	  and written to all the selected records. 
+	
+	* If no records are selected the bit code is written to 
+	  all the records in the table. 
+	
+	The field used to store the bit codes should have no 
+	decimal places.</para>
+    </sect2>
+  </sect1>
+  <sect1 id="api">
+    <title>API Documentation</title>
     
-      Bitcode Calculator
-    
-    The Bitcode Calculator is accessible from the button 
-    bar of the table GUI. It is disabled unless the table 
-    is editable and a numerical field is selected. 
-    
-    * Upon clicking on the Bitcode Calculator button, the 
-      user is prompted to select the bits he wants to set. 
-    
-    * After choosing OK, the bit code will be calculated 
-      and written to all the selected records. 
-    
-    * If no records are selected the bit code is written to 
-      all the records in the table. 
-    
-    The field used to store the bit codes should have no 
-    decimal places.
-    
-    1.5.6 <xref linked="dcwatdes-api-docs">API Documentation
-    
-    This section documents extension scripts that could be 
+    <para>This section documents extension scripts that could be 
     used from the field calculator or in queries. In 
     Addition, the script responsible for the extension 
     dictionaries is documented. In general, the API 
@@ -1119,11 +1130,12 @@
     Works only for SOV valves. The supported controls 
     syntax is:
     
-    LINK link_id status AT TIME hours_since_simulation_start
+    <programlisting>LINK link_id status AT TIME hours_since_simulation_start</programlisting></para>
+    </sect1>
+    <sect1>
+      <title>Frequently Asked Questions</title>
     
-    1.6 Questions and Answers
-    
-      Why is there no graphical user interface to the 
+      <para>Why is there no graphical user interface to the 
       DCWatDes.Bitcode.* functions?
     
     The provided AVENUE functions are more flexible this 
@@ -1166,23 +1178,24 @@
     * Have a close look at the erroneous features: Often 
       accidentally duplicates features cause trouble.
     
-      I made a mistake. Why is undo not working?
+      I made a mistake. Why is undo not working?</para>
     
-    Undo support had to be taken out for the sake of 
-    editing multiple themes at the same time. Make frequent backups.<Graphics file: images/attention-sign.eps>
+    <important><para>Undo support had to be taken out for the sake of 
+      editing multiple themes at the same time. Make frequent backups.
+      </para></important>
     
-     You've been warned.
+     <para>You've been warned.
     
       How do I add rule-based controls?
     
     If you have a text file for simple controls, add lines 
     like the following to it:
     
-    [RULES]
+    <programlisting>[RULES]
     
     RULE 1 IF TANK LEVEL 1 ABOVE 19.1
     
-    THEN PUMP 355 STATUS IS CLOSED
+    THEN PUMP 355 STATUS IS CLOSED</programlisting>
     
       How do I add the initial status of a pump?
     
@@ -1193,11 +1206,12 @@
     
       I found a bug in the Extension. What should I do?
     
-    Please send your bug reports to Steffen_Macke@dorsch.com.jo
+    Please send your bug reports to Steffen_Macke@dorsch.com.jo</para>
+  </sect1>  
+  <sect1 id="dcwatdes_license">
+    <title>Copyright</title>
     
-    1.7 Copyright<xref linked="dcwatdes-license">
-    
-    DC Water Design Extension 2.03. This ArcView Extension 
+    <para>DC Water Design Extension 2.10. This ArcView Extension 
     integrates EPANET with ArcView. 
     
     Copyright (C) 1998-2001 DORSCH Consult
@@ -1219,20 +1233,18 @@
     write to the Free Software Foundation, Inc., 59 Temple 
     Place, Suite 330, Boston, MA 02111-1307 USA
     
-    Section [sec:gnu-lesser-gpl] contains a copy of the GNU Lesser General 
-    Public License.<Graphics file: images/question-sign.eps>
-    
-    
     1.7.1 Apache Software
     
     testXSLT (Xalan C++) Copyright (C) 2000 Apache Software 
     Foundation. All rights reserved.
     
-    Visit http://xml.apache.org for the details and/or sources.
+    Visit http://xml.apache.org for the details and/or sources.</para>
+  </sect1>
     
-    2 <xref linked="av-epanet-data-model">ArcView/EPANET Data Model
+  <sect1 id="av_epanet_data_model">
+    <title>ArcView/EPANET Data Model</title>
     
-    This document describes version 2.00 of the 
+    <para>This section describes the 
     ArcView/EPANET Data Model. Note that the units will 
     change if EPANET is not set to use liters per second 
     (LPS) as units. Refer to the EPANET documentation 
@@ -1691,6 +1703,6 @@
     
     * dc_x: float X value.
     
-    * dc_y: float Y value.
-    
+    * dc_y: float Y value.</para>
+  </sect1>  
 </article>

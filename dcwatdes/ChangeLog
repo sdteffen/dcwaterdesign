@@ -1,3 +1,12 @@
+2004-07-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/build.xml:
+	* doc/docbook.css:
+	* doc/docbook_html.xsl:
+	* doc/docbook_htmlhelp.xsl:
+	* doc/docbook_pdf.xsl:
+	* doc/en/dcwaterdesign.xml: more work on DocBook documentation
+
 2004-07-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml: started shifting documentation to DocBook

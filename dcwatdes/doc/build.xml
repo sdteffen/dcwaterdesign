@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "project.dtd" []>
+<!-- compile the docbook documentation using ant, saxon, fop and hhc -->
+<project name="DC Water Design Documentation" basedir="." default="DC_Water_Documentation">
+  <!-- configuration -->
+  
+  <!-- Custom DCWater stylesheets -->
+  <property name="stylesheetdir" value="${basedir}" />
+  
+  <!-- Where docbook-xsl is installed -->
+  <property name="docbookdir" value="c:/program files/docbook-xsl" />
+  <!-- location of the saxon.jar -->
+  <property name="saxon" value="${basedir}/../lib/saxon.jar" />
+  
+  <!-- Where the HTML Help Workshop is installed -->
+  <property name="hhc" value="c:/program files/HTML Help Workshop/hhc.exe" />
+  
+  <target name="init" id="init">
+    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+      <classpath>
+        <fileset dir="${basedir}/../../../lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </taskdef>
+  </target>
+  
+  <target name="saxon" id="saxon">
+    <java classname="com.icl.saxon.StyleSheet" fork="true" failonerror="true" maxmemory="256m" dir="${dir}">
+      <arg line="-o ${output} ${input} &quot;${stylesheetdir}/${stylesheet}&quot;" />
+      <classpath>
+        <!-- include the permissive ASCIICharacterSet class before the  real one -->
+        <dirset dir="${basedir}/../../../lib" />
+	<filelist dir="${basedir}" files="../../../lib/saxon.jar"/>
+      </classpath>
+    </java>
+  </target>
+  
+  <target name="clean" id="clean">
+    <delete>
+      <fileset dir="${dir}" includes="*.fo" />
+      <fileset dir="${dir}" includes="*.html" />
+      <fileset dir="${dir}" includes="*.hhp" />
+      <fileset dir="${dir}" includes="*.hhk" />
+      <fileset dir="${dir}" includes="*.pdf" />
+      <fileset dir="${dir}" includes="*.css" />
+    </delete>
+  </target>
+  
+  <target name="images" id="images">
+    <copy todir="${dir}/images">
+      <fileset dir="${docbookdir}/images">
+        <include name="*.PNG"/>
+        <include name="*.png"/>
+      </fileset>
+    </copy>
+    <copy todir="${dir}/images/callouts">
+      <fileset dir="${docbookdir}/images/callouts">
+        <include name="*.PNG"/>
+        <include name="*.png"/>
+      </fileset>
+    </copy>
+    <copy file="${basedir}/docbook.css" tofile="${dir}/docbook.css" />
+  </target>
+  
+  <target name="font" id="font">
+    <java classname="org.apache.fop.fonts.apps.TTFReader" fork="true" 
+      failonerror="true" maxmemory="256m" dir="${basedir}">
+      <arg line="c:\windows\fonts\${font}.ttf &quot;${basedir}\${font}.xml.in&quot;" />
+      <classpath>
+        <fileset dir="../lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </java>
+    <antcall target="saxon">
+      <param name="dir" value="${basedir}" />
+      <param name="input" value="${font}.xml.in" />
+      <param name="output" value="user/ar/${font}.xml" />
+      <param name="stylesheet" value="${font}.xsl" />
+    </antcall>
+  </target>
+  
+  <target name="fonts" id="fonts">
+    <antcall target="font">
+      <param name="font" value="times"/>
+    </antcall>
+    <antcall target="font">
+      <param name="font" value="cour"/>
+    </antcall>
+    <antcall target="font">
+      <param name="font" value="arial"/>
+    </antcall>
+  </target>
+  
+  <target name="docbook" id="docbook" depends="init">
+    <antcall target="clean">
+      <param name="dir" value="${dir}" />
+    </antcall>
+    <antcall target="images">
+      <param name="dir" value="${dir}" />
+    </antcall>
+    <!-- PDF  -->
+    <antcall target="saxon">
+      <param name="dir" value="${dir}" />
+      <param name="input" value="${basename}.xml" />
+      <param name="output" value="${basename}.fo" />
+      <param name="stylesheet" value="docbook_pdf.xsl" />
+    </antcall>
+    <fop format="application/pdf" outdir="${dir}" 
+      messagelevel="warn" basedir="${dir}">
+      <fileset dir="${dir}">
+        <include name="*.fo"/>
+      </fileset>
+    </fop>
+    <!-- HTML Help -->
+    <antcall target="saxon">
+      <param name="dir" value="${dir}" />
+      <param name="input" value="${basename}.xml" />
+      <param name="output" value="${basename}.html" />
+      <param name="stylesheet" value="docbook_htmlhelp.xsl" />
+    </antcall>
+    <exec dir="${dir}" executable="${hhc}">
+      <arg line="htmlhelp.hhp"/>
+    </exec>
+    <copy tofile="${dir}/${basename}.chm" 
+      file="${dir}/htmlhelp.chm" />
+    <!-- HTML -->
+    <antcall target="saxon">
+      <param name="dir" value="${dir}" />
+      <param name="input" value="${basename}.xml" />
+      <param name="output" value="index.html" />
+      <param name="stylesheet" value="docbook_html.xsl" />
+    </antcall>
+  </target>
+  
+  <target name="DCWater_documentation" id="DCWater_guide">
+    <antcall target="docbook">
+      <param name="dir" value="${basedir}/en" />
+      <param name="basename" value="dcWaterdesign" />
+    </antcall>
+  </target>
+  
+  </project>
