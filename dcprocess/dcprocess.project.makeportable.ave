@@ -1,0 +1,249 @@
+'DCProcess.Project.makePortable
+
+' Original name: apr2laptoporcd.ave
+' Copyright (c) 2005 Juergen Evert
+' Any Comments to JurgenEvert@aol.com
+
+'This script 
+' - reads a projectfile
+' - copies all theme files (Shapes, images, images of catalogs, tables
+'   to a separate folder
+' - creates a new project file with relative paths
+
+'Notes:
+' - remove Extensions before, the extension file will be copied too, 
+'   but may be they don't work correctly, best: reset to system defaults
+' - check for image catalogs, they may have a size of some GB
+' - Check the layouts which aren't connected with the view.
+' - So you can use the project on any Computer, copy the new projectfile
+'   to a laptop or burn it on CD
+' - if you save this project in Arcview it gets absolute paths
+
+
+'get the project
+Altaprdatei=filedialog.show("*.apr","project files","copy project")
+if(altaprdatei=nil) then return nil end
+Altapr=linefile.make(altaprdatei,#FILE_PERM_READ )
+neuaprdatei=altaprdatei.getbasename.asstring
+neuaprdatei=(neuaprdatei.left(neuaprdatei.count-4)+"-1.apr").asfilename
+neuapr=filedialog.put(neuaprdatei,"*.apr","new project file")
+if(neuapr=nil) then 
+  msgbox.error("Can't write!","")
+return nil 
+end
+'create the folder for the files
+bn=neuapr.getbasename.asstring
+neuverz="/"+bn.left(bn.count-4)+"-files/"
+pfad=neuapr.returndir.asstring+"\"+bn.left(bn.count-4)+"-files"
+
+
+theDLL=dll.make(filename.FindInSystemSearchPath("kernel32.dll"))
+Prozedur=dllproc.make(TheDLL,"CreateDirectoryA",#DLLPROC_TYPE_INT32,{#DLLPROC_TYPE_STR ,#DLLPROC_TYPE_POINTER  })
+g=Prozedur.call({pfad,nil})
+
+neuProjekt=linefile.make(neuapr,#FILE_PERM_write )
+if(neuprojekt=nil) then return nil end 
+zeilen=altapr.getsize
+APRZEILEN={}
+  Altapr.read(APRZEILEN,zeilen)
+l2={}
+imgcatlist={}
+n=0
+issql=false
+imgcatalog=false
+av.ShowMsg ("Creating new project file...")
+
+'reading the original project file
+for each f in APRZEILEN
+
+    progress = (n/zeilen) * 100
+    av.setstatus(progress)
+    n=n+1
+    if(f.contains(9.aschar+"path:"+9.aschar)) then
+      altquelle=f.astokens("""").get(1)
+      altdir=altquelle.asfilename.getbasename.asstring
+      altf=altquelle.asfilename.getbasename.asstring
+      neueintrag=9.aschar+"path:"+9.aschar+(".."+neuverz+altf).quote
+      if(f.contains("$HOME".quote)) then neueintrag=f end
+      neuprojekt.writeelt(neueintrag) 
+      l2.add(f)
+    else
+      neuprojekt.writeelt(f)
+    
+   end
+   if((f.contains(9.aschar+"Connect:"+9.aschar)) and (issql=false))then
+     msgbox.info("there is a SQL-Connection in the project, this will not work on other computers!","")
+     issql=true
+   end
+   if(f.contains("OwnerClass:"+9.aschar+("imgcat".quote))) then
+     w=msgbox.yesno("There is an image catalog in the project, all images must be copied, may be some GigaByte. Continue creating new project?","Image catalog",false)
+     if(f=false) then
+       neuprojekt.close
+       file.delete(neuprojekt)
+        av.clearstatus 
+       return nil
+     end
+   end
+end
+neuprojekt.close
+l3={}
+n=0
+vh=false
+av.ShowMsg ("Creating file list..")
+Catdateien={}
+
+'creating the list of files to be copied
+
+for each  g in APRZEILEN
+  progress = (n/zeilen) * 100
+  av.setstatus(progress)
+  n=n+1
+  
+  if(g.contains("$HOME".quote)) then continue end
+  if(g.contains("OwnerClass:"+9.aschar+"imgcat".quote)) then imgcatalog=true end
+
+  if(g.contains(9.aschar+"path:"+9.aschar)) then
+      J=g.astokens("""").get(1) 
+      for each m in imgcatlist
+        if(m=j) then vh=true end
+      end
+      if(vh=true) then vh=false continue end
+      if(imgcatalog=true)then
+        imgcatlist.add(j)
+        'creating new image catalog
+        df=(filename.gettmpdir.asstring+"\"+j.asfilename.getbasename.asstring).asfilename
+        file.copy(j.asfilename,df)
+        z=vtab.make(df,true,false)
+        z.seteditable(true)
+        feld=z.findfield("image")
+        for each ds in z
+          pic=z.returnvalue(feld,ds)
+          Catdateien.add(pic)
+          if(pic.right(4)=".tif") then
+            k=pic.substitute(".tif",".tfw")
+            if(k.asfilename.isfile) then
+              Catdateien.add(k)
+            end
+          end
+          if(pic.right(5)=".tiff") then
+            k=pic.substitute(".tiff",".tfw")
+            if(k.asfilename.isfile) then
+              Catdateien.add(k)
+            end
+
+          end
+          if(pic.right(4)=".jpg") then
+            k=pic.substitute(".jpg",".jpgw")
+            if(k.asfilename.isfile) then
+              Catdateien.add(k)
+            end
+
+          end
+
+          np=neuverz.right(neuverz.count-1)+"imgcat/"+pic.asfilename.getbasename.asstring
+          z.setvalue(feld,ds,np) 
+        end
+        z.flush
+        z.seteditable(false)
+        imgcatalog=false
+        l3.add(df.asstring)
+        continue
+      else
+        l3.add(j) 
+      end
+      if(j.right(4)=".shp") then
+        k=j.substitute(".shp",".shx")
+        l3.add(k)
+      end
+
+      if(j.right(4)=".tif") then
+        k=j.substitute(".tif",".tfw")
+        if(k.asfilename.isfile) then
+              l3.add(k)
+        end
+      end
+      
+      if(j.right(5)=".tiff") then
+        k=j.substitute(".tiff",".tfw")
+        if(k.asfilename.isfile) then
+              l3.add(k)
+        end
+      end
+      
+      if(j.right(4)=".jpg") then
+        k=j.substitute(".jpg",".jpgw")
+        if(k.asfilename.isfile) then
+              l3.add(k)
+        end
+      end
+      'here you can add some other formats of worl files
+      'if(j.right(4)=".xxx") then
+        'k=j.substitute(".xxx",".yyy")
+        'if(k.asfilename.isfile) then
+              'l3.add(k)
+        'end
+      'end
+
+  end
+end
+
+l3.removeduplicates
+l4={}
+for each ding in l3
+  i="/"+ding.asfilename.getbasename
+  l4.add(i)
+end
+n=0
+av.ShowMsg ("copy files...")
+lc=l3.count
+'copy the project files
+for each ding in l3
+  progress = (n/lc) * 100
+  av.setstatus(progress)
+  n=n+1
+  nf=(neuapr.returndir.asstring+neuverz+ding.asfilename.getbasename.asstring).asfilename
+  if(ding.asfilename.isfile.not) then
+    msgbox.error("file "+ding+" not found","")
+    a=msgbox.yesno("Continue?","copy files",false)
+    if(a=false) then return nil av.clearstatus end
+  end
+  file.copy(ding.asfilename,nf)
+  
+    
+end
+'copy image catalog files
+c=catdateien.count
+if(catdateien.count>0) then
+av.ShowMsg ("copy image catalog files...")
+  pfadcat=pfad+"/imgcat"
+  theDLL=dll.make(filename.FindInSystemSearchPath("kernel32.dll"))
+  Prozedur=dllproc.make(TheDLL,"CreateDirectoryA",#DLLPROC_TYPE_INT32,{#DLLPROC_TYPE_STR ,#DLLPROC_TYPE_POINTER  })
+  q=Prozedur.call({pfadcat,nil})
+  a=0
+  for each r in catdateien
+    progress = (a/c) * 100
+    av.setstatus(progress)
+    a=a+1
+    ncf=(pfadcat.asstring+"/"+r.asfilename.getbasename.asstring).asfilename
+    file.copy(r.asfilename,ncf)
+  end
+end  
+ av.clearstatus 
+msgbox.info("The new project is ready","success")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

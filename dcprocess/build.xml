@@ -19,6 +19,8 @@
         "**/dcprocessing.xml,**/figure/*.png" />
       <tarfileset dir="." prefix="dcprocessing-${dcprocessing_version}" includes=
         "**/*.sql" />
+      <tarfileset dir="." prefix="dcprocessing-${dcprocessing_version}" includes=
+        "sample/*.shp,sample/*.shx,sample/*.dbf" />
     </tar>
     <bzip2 zipfile="dcprocessing-${dcprocessing_version}.tar.bz2" 
       src="dcprocessing-${dcprocessing_version}.tar"/>

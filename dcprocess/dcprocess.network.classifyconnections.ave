@@ -8,6 +8,9 @@
 ' No arguments
 ' Returns nothing
 
+' Set this to true for debugging purposes
+blnDebug = false
+
 ' Set up Themes
 viewActive = av.getActiveDoc
 lstThemes = viewActive.getActiveThemes
@@ -99,7 +102,11 @@ for each rec_Node in bmpSelection
   lst_PipeFeatures = av.run("DCProcess.Node.findConnectedLines", {ftb_Pipes, pnt_Node})
   lstPolylines = List.make
   for each recPipe in lst_PipeFeatures
-    lstPolylines.add(ftb_Pipes.returnValue(fna_Polyline, recPipe))
+    pllLine = ftb_Pipes.returnValue(fna_Polyline, recPipe)
+    if(pllLine.along(0).distance(pnt_Node) > pllLine.along(100).distance(pnt_Node))then
+      pllLine = pllLine.flip
+    end
+    lstPolylines.add(pllLine.clone)
   end
   if(lst_PipeFeatures.count = 0)then
     System.echo("DCProcess.Network.classifyConnections(): Unconnected Node:"++rec_Node.asString)
@@ -150,21 +157,31 @@ for each rec_Node in bmpSelection
             numClass = 60 + av.run("DCProcess.Network.Connection.returnDetail6", {pnt_Node, ftbValve, lstPolylines})
         else
           pllLine0 = ftb_Pipes.returnValue(fna_Polyline, lst_PipeFeatures.get(0))
+          if(pllLine0.along(0).distance(pnt_Node) > pllLine0.along(100).distance(pnt_Node))then
+            pllLine0 = pllLine0.flip
+          end
           pllLine1 = ftb_Pipes.returnValue(fna_Polyline, lst_PipeFeatures.get(1))
+          if(pllLine1.along(0).distance(pnt_Node) > pllLine1.along(100).distance(pnt_Node))then
+            pllLine1 = pllLine1.flip
+          end
           pllLine2 = ftb_Pipes.returnValue(fna_Polyline, lst_PipeFeatures.get(2))
+          if(pllLine2.along(0).distance(pnt_Node) > pllLine2.along(100).distance(pnt_Node))then
+            pllLine2 = pllLine2.flip
+          end
           num_Direction1 = av.run("DCProcess.Point.returnPolyLineAngle",{pnt_Node, pllLine0})
           num_Direction2 = av.run("DCProcess.Point.returnPolyLineAngle",{pnt_Node, pllLine1})
           num_Direction3 = av.run("DCProcess.Point.returnPolyLineAngle", {pnt_Node, pllLine2})
           num_Angle1 = num_Direction1.max(num_Direction2) - num_Direction1.min(num_Direction2)
           num_Angle2 = num_Direction2.max(num_Direction3) - num_Direction2.min(num_Direction3)
           num_Angle3 = num_Direction3.max(num_Direction1) - num_Direction3.min(num_Direction1)
-          if(num_Angle1 > 90 ) then
+
+          if(num_Angle1 >= 90 ) then
            num_Angle1 = num_Angle1-180
           end
-          if(num_Angle2 > 90 ) then
+          if(num_Angle2 >= 90 ) then
            num_Angle2 = num_Angle2-180
           end
-          if(num_Angle3 > 90 ) then
+          if(num_Angle3 >= 90 ) then
            num_Angle3 = num_Angle3-180
           end
           
@@ -174,8 +191,17 @@ for each rec_Node in bmpSelection
           num_Angle1 = num_Angle1.abs
           num_Angle2 = num_Angle2.abs              
           num_Angle3 = num_Angle3.abs
+             
+          if(blnDebug)then
+            System.echo("Direction1 = "+num_Direction1.asString)
+            System.echo("Direction2 = "+num_Direction2.asString)
+            System.echo("Direction3 = "+num_Direction3.asString)
+            System.echo("Angle1 = "+num_Angle1.asString)
+            System.echo("Angle2 = "+num_Angle2.asString)
+            System.echo("Angle3 = "+num_Angle3.asString)
+          end
                         
-          if ( num_Angle1 < num_Angle2 ) then
+         if ( num_Angle1 < num_Angle2 ) then
             if(num_Angle1 < num_Angle3) then
               rec_Bone = lst_PipeFeatures.get(2)
               lst_RecArms.add(lst_PipeFeatures.get(0))
@@ -196,7 +222,6 @@ for each rec_Node in bmpSelection
               lst_RecArms.add(lst_PipeFeatures.get(2))                    
             end
           end
-
 
           '*** 2 pipes of the same diameter, one different
           if((num_Diameter1 = num_Diameter2) or (num_Diameter1 = num_Diameter3) or (num_Diameter2 = num_Diameter3)) then
@@ -259,7 +284,14 @@ for each rec_Node in bmpSelection
     'count <> 2
     end
   'count <> 1
-  end  
+  end
+  if(blnDebug)then
+    System.echo("Connection Detail = "+numClass.asString)
+    fldConnProof = ftb_Nodes.findField("ConnProof")
+    if(fldConnProof <> nil)then
+      System.echo("Connection Detail Proof = "+ftb_Nodes.returnValue(fldConnProof, rec_Node).asString)
+    end
+  end
   ftb_Nodes.setValue(fna_Class, rec_Node, numClass)
   numI = 0
   lstDiameters.removeDuplicates

@@ -16,9 +16,9 @@ numDetail = Number.makeNull
 numSnappingRadius = 0.01
 
 ' Merge Polylines
-pllLine = lstLines.get(0).returnMerged(lstLines.get(1))
-pllLine = pllLine.returnMerged(lstLines.get(2))
-mpntLine = MultiPoint.make({pllLine.along(0.0), pllLine.along(100.0)})
+mpntLine = MultiPoint.make({lstLines.get(0).along(0.0), lstLines.get(0).along(100.0)})
+mpntLine = mpntLine.returnMerged(MultiPoint.make({lstLines.get(1).along(0.0), lstLines.get(1).along(100.0)}))
+mpntLine = mpntLine.returnMerged(MultiPoint.make({lstLines.get(2).along(0.0), lstLines.get(2).along(100.0)}))
 ftbValve.selectByPolygon(mpntLine.returnbuffered(numSnappingRadius), #VTAB_SELTYPE_NEW)
 bmpSelection = ftbValve.getSelection
 

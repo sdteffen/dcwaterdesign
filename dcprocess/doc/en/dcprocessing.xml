@@ -6,10 +6,8 @@
 <article lang="en">
 <articleinfo>
  <title>DC Processing Extension Manual</title>
-     <pubdate>2004</pubdate>
-     <edition>Version 1.2.6</edition>
     <copyright>
-      <year>2004</year>
+      <year>2004, 2005</year>
       <holder>DORSCH Consult</holder>
     </copyright>
     <author>
@@ -20,6 +18,14 @@
       <email>Steffen_Macke@dorsch.com.jo</email>
     </author>
     <pubdate>$Date$</pubdate>
+    <legalnotice>
+      <para>Permission is granted to copy, distribute and/or modify this 
+        document under the terms of the GNU Free Documentation License, 
+	Version 1.2 or any later version published by the Free Software 
+	Foundation; with no Invariant Sections, no Front-Cover Texts, and no 
+	Back-Cover Texts. A copy of the license is available from the
+	Free Software Foundation (<ulink url="http://www.gnu.org" />).
+	</para></legalnotice>
  </articleinfo>
 <sect1 id="introduction">
   <title>Introduction</title>
@@ -32,12 +38,27 @@
     released under the
     terms of the GNU Lesser General License (LGPL) - the full source code
     is available (Open Source).</para>
-  <para>This manual describes version 1.2.6 of the <citetitle>DC Processing 
+  <para>This manual describes version 1.2.7 of the <citetitle>DC Processing 
     Extension</citetitle>.</para>
   <sect2 id="news">
     <title>What's New?</title>
     <para>A summary of changes in the different versions of the DC Processing
       Extension.</para>
+    <sect3 id="version_1_2_7">
+      <title>Version 1.2.7</title>
+      <para><itemizedlist>
+        <listitem><para>New function &quot;Create Portable Project&quot;
+	  using a script by Juergen Evert (<email>JurgenEvert@aol.com</email>).
+	  See <xref linkend="create_portable_project" />.
+	  </para></listitem>
+	<listitem><para>Bug fixes for connection classification.</para>
+	  </listitem>
+	<listitem><para>Updated documentation</para></listitem>
+	<listitem><para>Sample dataset to test connection detail classification
+	  in the <filename>sample</filename> folder of the source tarball.
+	  (Thanks to Ratiba Makansi)</para></listitem>
+	</itemizedlist></para>
+    </sect3>
     <sect3 id="version_1_2_6">
       <title>Version 1.2.6</title>
       <para><itemizedlist>
@@ -324,14 +345,30 @@
       <para>Classifies the connection types of different water supply network 
         nodes in order to allow
         the automatic creation of a BoQ (Bill of Quantities).</para>
+      <para>The following set of themes is required to use this function:
+        <itemizedlist>
+	  <listitem><para>Line theme (polyline)</para></listitem>
+	  <listitem><para>Junction theme (point) with the following fields
+	    that will be overwritten:
+	    <itemizedlist>
+	      <listitem><para>Connection (integer)</para></listitem>
+	      <listitem><para>DN1 (integer)</para></listitem>
+	      <listitem><para>DN2 (integer)</para></listitem>
+	      <listitem><para>DN3 (integer)</para></listitem>
+	    </itemizedlist></para></listitem>
+	  <listitem><para>Valve theme (point)</para></listitem>
+	</itemizedlist></para>
+      <para>The three themes have to be properly snapped (line-node topology).
+        </para>	
       <para>To use this function, add your network's line, node and valve 
         themes to the view.</para>
       <para>Start editing the node theme.</para>
       <para>Activate the three themes.</para>
       <para>Select <guimenuitem>Classify Node Connections</guimenuitem> from the
         <guimenu>DC Processing</guimenu> menu.</para>
-      <para>You will be asked to provide select a string field from the node 
-        theme to store the classification.</para>
+      <para>You will be asked to provide select a number field from the node 
+        theme to store the classification. Please select the 
+	&quot;Connection&quot; field.</para>
 	<!-- TODO: add information about the classification -->
       <para>To create a BoQ, you'll have to load the classified shapefile to
         a relational database and execute the SQL scripts 
@@ -340,6 +377,20 @@
 	<filename>scripts</filename> folder of the DC Processing Extension
 	source distribution.</para>
       <para>The view &quot;PositionView&quot; will contain the BoQ.</para>
+      <para>A junction with two pipes connected that have the same diameter
+        is not considered a special connection.</para>
+      <caution><para>The function considers every valve that is linked by one
+        pipe to a junction by only one pipe to be part of the connection
+	at the junction. The length of the pipe is not considered. To prevent
+	valves from being accounted two times, you may have to introduce 
+	additional junctions to correctly assign the valve to a connection.
+	</para><para>Valves that are surrounded by junctions that are no
+	  special connections are not accounted for.</para>
+	<para>The function assumes that your network only consists of 
+	  &quot;valid&quot; connections. If your network contains invalid
+	  connection types this will most probably lead to classification
+	  errors.</para></caution>
+      <note><para>The function uses a snapping radius of 0.01.</para></note>
     </sect3>
   </sect2>
   <sect2 id="table_gui">
@@ -361,7 +412,6 @@
         rows of a table which is editable. If there's no selection, the function
 	will work on all records of the table.</para>
     </sect3>
-    
     <sect3 id="calculate_network_tree_names">
       <title>Calculate Network Tree Names</title>
       <para><guimenuitem>Calculate Network Tree Names</guimenuitem> creates
@@ -369,7 +419,7 @@
 	of the lines in the network tree.</para>
       <para>Sequential lines will be numbered in sequential order (1,2,3...).
         Branch lines will be indicated by &quot;.&quot; and a new
-	numbering starting from one: 4.1, 4,2, 4.2.1...</para>
+	numbering starting from one: 4.1, 4,2, 4.2.1...</para>	
       <para>In case of loops, it is unpredictable at which point the loop will
         be closed. The IDs may look strange in these areas.</para>
       <para>To use the function, have a string field of appropriate length
@@ -377,17 +427,38 @@
       <para>Use the calculator to assign the value &quot;&quot; to all
 	records.</para>
       <para>Select your starting line and assign the value 
-	&quot;1&quot;</para>
-´     <para>Make sure that the table is still editable and your field is 
+	&quot;1&quot;.</para>
+      <para>Make sure that the table is still editable and your field is 
         selected.</para>
       <para>From the <guimenu>DC Processing</guimenu> menu, select 
         <guimenuitem>Calculate Network Tree Names</guimenuitem>.</para>
+      <para></para>
     </sect3>
-    
   </sect2>
   <sect2 id="project_gui">
     <title>Project GUI</title>
     <para>Functions added to the project GUI by the extension.</para>
+    
+    <sect3 id="create_portable_project">
+      <title>Create Portable Project</title>
+      <para>Read a projectfile and copy all theme files 
+        (Shapefiles, images, images of catalogs, tables, etc.) to a separate 
+	folder.</para>
+      <para>Creates a new project file with relative paths.</para>
+      <para>If you save the new project in Arcview it gets absolute paths and
+        will not be portable any more.</para>
+      <para>You can use the project on any Computer, copy the new projectfile
+        to a laptop or burn it on CD.</para>
+      <para>Remove Extensions before, the extension file will be copied too, 
+        but may not work correctly.</para>
+      <tip><para>Reset the extensions to the system defaults.</para></tip>
+      <caution><para>Check for image catalogs, they may have a size
+        of several Gigabytes.</para></caution>
+      <para>Check the layouts which aren't connected to views.</para>
+      <note><para>Please provide feedback regarding this function to
+        Juergen Evert <email>JurgenEvert@aol.com</email>.</para></note>
+    </sect3>
+    
     <sect3 id="recursive_copy_projection_files">
       <title>Recursive Copy of Projection Files</title>
       <para>Projection files are a feature introduced by ArcView 3.2 and 
@@ -409,5 +480,9 @@
     </sect3>
   </sect2>
 </sect1>
-
+<sect1>
+  <title>Sample Data</title>
+  <para>Sample data to test the connection detail classification is available 
+    in the <filename>sample</filename> folder of the source tarball.</para>
+</sect1>
 </article>

@@ -1,3 +1,36 @@
+2005-01-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* sample/fitting.shp:
+	* sample/pressurizedmain.shp:
+	* sample/systemvalve.shp: added test case for connection classification
+	* dcprocess.network.classifyconnections.ave: Fixes for connection
+	classification (bug #1108891); All test cases show correct results
+	* AUTHORS: Added Ratiba Makansi
+	* doc/en/dcprocessing.xml: Added information where sample dataset is
+	available
+	* build.xml: Including sample dataset in source distribution
+
+2005-01-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.connection.returndetail*.ave: fixed connection
+	classification problem (bug #1108891)
+
+2005-01-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcprocessing.xml:
+	* dcprocess.project.makeportable.ave: Added script from
+	Juergen Evert to create portable projects with relative paths
+
+2005-01-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* script/fitting_boq.sql: Synchronized with drawing (several small 
+	changes)
+
+2005-01-15  Steffen Macke <Steffen_Macke@gmail.com>
+
+	* AUTHORS: added Juergen Evert (Export project and data to folder 
+	script)
+	
 2004-11-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* build.xml:
