@@ -1,4 +1,9 @@
 2004-09-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* doc/en/version.xml:
+	* build.xml: version is 2.0.4+cvs now
+
+2004-09-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.takeovermanholedata.ave:
 	* dcsewerdesign.lines.takeovermanholedata.ave: fix the takeover 
