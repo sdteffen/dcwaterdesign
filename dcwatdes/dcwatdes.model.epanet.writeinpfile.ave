@@ -27,10 +27,6 @@ if(self<>nil)then
   end
 end
 
-' snapping
-
-numSnappingRadius = 0.1
-
 ' set up
 
 extDCWatDes = Extension.find("DC Water Design")
@@ -46,6 +42,14 @@ if(dicPreferences <> nil)then
     exit
   end
 end
+
+' snapping
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if( numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+
 
 av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
 
@@ -603,7 +607,7 @@ flnInp = (strBasePath+"inp").asFilename
 'clean up
 File.delete(flnInp)
 
-system.execute(strSabCmd+" -text -xsl "+strXslt+" -in "+strXml+" -out "+strBasePath+"inp")
+system.execute(strSabCmd+" -text -xsl "+strXslt.quote+" -in "+strXml.quote+" -out "+((strBasePath+"inp").quote))
 
 ' wait for the input file appearing
 flnKernel32 = "c:\WINNT\system32\kernel32.dll".AsFileName

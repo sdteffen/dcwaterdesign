@@ -1,3 +1,8 @@
+2001-06-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: fixed xslt processing for paths
+	containing spaces
+	
 2001-06-19  Steffen Macke <sdteffen@yahoo.com>
 
 	* dcwatdes.dialog.setup.initialize: 

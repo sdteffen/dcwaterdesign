@@ -25,7 +25,7 @@
 
 ' select one script
 
-lstFiles = FileDialog.returnFiles({"*.ave"},{"AVENUE Source (*.ave)"}, "Select one script.", "Load Scripts from Directory")
+lstFiles = FileDialog.returnFiles({"*.ave"},{"AVENUE Source (*.ave)"}, "Select one script.", 0)
 
 if((lstFiles = nil)or(lstFiles.count = 0))then
   ' user selected Cancel
@@ -43,8 +43,8 @@ numLoaded = 0
 blnOverwrite = nil
 				
 for each flnScript in lstScriptFiles
-  lnfScript = Linefile.make(flnScript, #FILE_PERM_READ).setEolType(#FILE_UNIX_EOL)
-  if(lnfScript = nil)then
+  txfScript = Textfile.make(flnScript, #FILE_PERM_READ)
+  if(txfScript = nil)then
     MsgBox.warning("Could not open file'"+flnScript.asString+"'.","Loading Scripts from Directory")
   else
   
@@ -68,53 +68,38 @@ for each flnScript in lstScriptFiles
       av.getProject.addDoc(sedScript)	
       blnUpdate = true
     end  	
-    strScriptSource = ""
+    strScriptSource = txfScript.read(txfScript.getSize)
+    txfScript.close
     		
     ' try to set scriptname from first comment
-    strScriptSource = lnfScript.readElt
-    if(strScriptSource <> nil)then	
-      if(strScriptSource.asTokens(" ").get(1).left(1)="'")then
+    if(strScriptSource.asTokens(" ").get(1).left(1)="'")then
         
-        ' script starts with comment
-        strFirstComment=strScriptSource.asTokens(" '"+NL).get(0)
-        if(strFirstComment.lcase = sedScript.lcase)then
-          sedScript.setName(strFirstComment)
-        end		 
+      ' script starts with comment
+      strFirstComment=strScriptSource.asTokens(" '"+NL).get(0)
+      if(strFirstComment.lcase = sedScript.lcase)then
+        blnUpdate = true
       end
     end		
     
-    ' check if script has changed, loadScript
-    strFileLine = lnfScript.readElt
-    blnChanged = false
-    numI = 1
-    lstLines = sedScript.getSource.asTokens(NL)
-    while(strFileLine <> nil)
-
-      numI=numI+1
-      if(numI >= lstLines.count)then
-        blnChanged = true
-      else
-        strScriptLine = lstLines.get(numI)
-        if(strFileLine <> strScriptLine)then
-          blnChanged = true
-        end
-      end  
-      strScriptSource = strScriptSource+strFileLine 
-      strFileLine = lnfScript.readElt
+    if(blnUpdate)then
+      sedScript.setName(strFirstComment)      
     end
-    lnfScript.close
-  
+    
+    ' check if script has changed, loadScript
+    if(sedScript.getSource <> strScriptSource)then
+      blnChanged = true
+    else
+      blnChanged = false
+    end
+
     ' ask for permission to overwrite
     if(blnOverwrite = nil)then
       blnOverwrite = MsgBox.yesNo("Overwrite Scripts in Project?", "Loading Scripts from Directory", false)
     end
      
-    if(blnOverwrite)then
-     blnUpdate = true
-    end
+    'update script 
      
-     ' update script 
-     if(blnUpdate)then
+    if(blnOverwrite and blnChanged)then
        sedScript.setSource(strScriptSource)
        numLoaded = numLoaded+1  
      end

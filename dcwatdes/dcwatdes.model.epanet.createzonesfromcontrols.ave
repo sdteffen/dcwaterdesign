@@ -27,13 +27,18 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-numSnappingRadius = 0.1
+
 
 extDCWatDes = Extension.find("DC Water Design")
 if(extDCWatDes <> nil)then
   dicPreferences = extDCWatDes.getPreferences
 else 
   return nil
+end
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if( numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
 end
 
 dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)

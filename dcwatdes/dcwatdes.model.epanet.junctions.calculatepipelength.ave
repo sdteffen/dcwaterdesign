@@ -22,7 +22,14 @@
 ' no argument
 ' nothing returned
 
-numSnappingRadius = 0.1
+extWatDes = Extension.find("DC Water Design")
+dicPreferences = extWatDes.getPreferences
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if( numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+
 
 dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
 

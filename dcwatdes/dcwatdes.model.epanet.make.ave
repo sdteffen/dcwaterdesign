@@ -31,7 +31,7 @@ if(dicPreferences <> nil)then
   end
 end
 
-numSnappingRadius = dicPreferences.get("numSnappingRadius")
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
 if(numSnappingRadius = nil)then
   numSnappingRadius = 0.1
 end

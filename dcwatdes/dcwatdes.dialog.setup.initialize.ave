@@ -84,3 +84,14 @@ if (strLanguage <> nil)then
   cbxLanguage.findByValue(strLanguage)
   cbxLanguage.selectCurrent
 end
+
+'setup the snapping radius text line
+strSnappingRadius="0.1"
+if(dicPreferences <> nil)then
+  strSnappingRadius = dicPreferences.get("strSnappingRadius")
+  if(strSnappingRadius = nil)then
+    strSnappingRadius = "0.1"
+  end
+end
+txlSnappingRadius = dlgSetup.findByName("txlSnappingRadius")
+txlSnappingRadius.setText(strSnappingRadius)

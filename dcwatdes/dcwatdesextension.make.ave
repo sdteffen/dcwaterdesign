@@ -24,9 +24,9 @@ myExt = Extension.Make("$AVEXT\dcwatdes2.avx".AsFileName,
               {"$AVBIN/avdlog.dll".asFilename, "$AVEXT/XmlParser1_00.avx".asFileName})
 
 'add the dialog to the extension
-dlg_Files = av.findDialog("DCWatDes.ThemesDialog")
-dlg_Files.setServer(nil)
-myExt.add( dlg_Files )
+'dlg_Files = av.findDialog("DCWatDes.ThemesDialog")
+'dlg_Files.setServer(nil)
+myExt.add( "dlg_Files" )
 
 '1
 myExt.Add( av.GetProject.FindGUI("View").GetMenuBar.findByLabel("DC Water Design"))

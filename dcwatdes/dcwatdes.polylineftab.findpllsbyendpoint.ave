@@ -1,6 +1,6 @@
 ' DCWatDes.PolylineFTab.findPllsByEndPoint
 
-' (c) 2000 DORSCH Consult
+' (c) 2000, 2001 DORSCH Consult
 ' returns all the Pipes that are starting or ending at the given point
 
 ' This library is free software; you can redistribute it and/or
