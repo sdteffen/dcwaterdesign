@@ -1,3 +1,13 @@
+2004-10-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* installer/installer-header.bmp:
+	* installer/dc_water_design_extension.nsi: Moved installer to Modern
+	User Interface (MUI)
+	* dcwatdes.model.epanet.junctions.createmissing: fixed robustness 
+	problem (bug #)
+	that prevented the function from working correctly for short pipes
+	* dcwatdesextension.make: version number is 2.10+cvs-2 now
+
 2004-09-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/version.xml:

@@ -39,6 +39,7 @@ numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
 if(numSnappingRadius = nil)then
   numSnappingRadius = 0.1
 end
+
 av.showMsg("Creating missing Junctions with "+numSnappingRadius.asString+" snapping radius")
 av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
 
@@ -84,7 +85,8 @@ end
 
 for each recPipe in ftbPipes
   pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
-  lstPipeNodes = pllPipe.connect.asList.get(0)
+  pllPipe = pllPipe.clean
+  lstPipeNodes = pllPipe.asList.get(0)
   lstNodesPoints = List.make
   lstNodesPoints.add(lstPipeNodes.get(0))
   lstNodesPoints.add(lstPipeNodes.get(lstPipeNodes.count-1))
@@ -99,7 +101,7 @@ for each recPipe in ftbPipes
           blnNodeMissing = false
         end
       else
-        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
+        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius*10, #VTAB_SELTYPE_NEW) 
         bmpNodes = ftbNodes.getSelection
         recConnectedNode = bmpNodes.getNextSet(-1)
         if(recConnectedNode <> -1)then
@@ -117,7 +119,7 @@ for each recPipe in ftbPipes
       'System.echo("WARNING: Found"++numNodes.asString++"Nodes on top of each other. Removing"++(numNodes-1).asString)
       for each j in 0..(lstNodeFTabs.count-1)
         ftbNodes = lstNodeFTabs.get(j)
-        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
+        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius*10, #VTAB_SELTYPE_NEW) 
          bmpNodes = ftbNodes.getSelection
       recConnectedNode = bmpNodes.getNextSet(-1)
       if(recConnectedNode <> -1)then
@@ -207,4 +209,4 @@ for each pntJunction in lstMissingPoints
   ftbJunctions.setValue(fldID, recJunction, strID) 			
 end		
 ftbJunctions.setEditable(false)					
-av.showMsg("")
+av.clearStatus

@@ -49,6 +49,8 @@
 	  <title>Version 2.11</title>
 	  <para>
 	    <itemizedlist>
+	      <listitem><para>More robust &quot;Create Missing Junctions&quot;
+	        function.</para></listitem>
 	      <listitem><para>Updated documentation</para></listitem>
 	    </itemizedlist>
 	  </para>
