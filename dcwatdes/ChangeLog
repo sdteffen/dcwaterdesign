@@ -1,3 +1,8 @@
+2001-08-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: checking for & and < in the
+	controls table
+	
 2001-08-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* xml2net.xsl:

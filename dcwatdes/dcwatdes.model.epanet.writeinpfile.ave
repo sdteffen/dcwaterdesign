@@ -587,10 +587,15 @@ end
 if(tableControls <> nil)then
   vtbControls = tableControls.getVTab
   fldFirst=vtbControls.getFields.get(0)
-  for each recControl in vtbControls 
-    strControl = "<control whattodoif="
-    strControl = strControl+vtbControls.returnValue(fldFirst, recControl).asString.quote
-    strControl = strControl+"/>"
+  for each recControl in vtbControls
+    strControl = vtbControls.returnValue(fldFirst, recControl).asString.quote
+    for each strBreaksXML in  {"&","<"}
+      if(strControl.contains(strBreaksXML))then
+        System.echo("ERROR: "+strBreaksXML+" not allowed in controls table, it will be dropped.")
+        strControl = strControl.substitute(strBreaksXML,"")
+      end
+    end
+    strControl = "<control whattodoif="+strControl+"/>"
     lnf_Xml.writeElt(strControl)
   end
 end
