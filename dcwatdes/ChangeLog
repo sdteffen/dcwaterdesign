@@ -1,3 +1,7 @@
+2003-07-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/av_epanet_data_model.dia: added EmitterCoefficient to Junction
+
 2003-06-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.junctions.createmissing: fix for special case 
