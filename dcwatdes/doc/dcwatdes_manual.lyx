@@ -1,0 +1,4210 @@
+#LyX 1.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 218
+\textclass article
+\begin_preamble
+\usepackage{graphics}
+\usepackage{multicol}
+\newcommand\NrCol{3}
+\renewenvironment{theindex}
+               {\columnseprule \z@
+                \columnsep 35\p@
+                \section*{\indexname}%
+                \@mkboth{\MakeUppercase\indexname}%
+                        {\MakeUppercase\indexname}%
+                \begin{multicols}{\NrCol}\thispagestyle{plain}\parindent\z@
+                \parskip\z@ \@plus .3\p@\relax
+                \let\item\@idxitem}
+               {\clearpage %
+                \end{multicols}}
+\end_preamble
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+DC Water Design Extension
+\layout Date
+
+
+\latex latex 
+
+\backslash 
+today
+\layout Standard
+
+
+\latex latex 
+
+\backslash 
+thispagestyle {empty}
+\layout Standard
+\pagebreak_top 
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
+\layout Standard
+
+\layout Section
+\pagebreak_top 
+
+\begin_inset LatexCommand \label{sec:dc-water-design-extension-manual}
+
+\end_inset 
+
+DC Water Design Extension Manual
+\layout Standard
+
+by 
+\noun on 
+Steffen Macke
+\layout Standard
+
+This Manual describes the DC Water Design Extension Version 2.00.
+\layout Standard
+
+This Document uses Terminology from ArcView and EPANET.
+ Refer to the respective documentation for in-depth explanations.
+\layout Subsection
+
+What is the DC Water Design Extension?
+\layout Standard
+
+The DC Water Design Extension is an Extension to ESRI's ArcView GIS software.
+ Version 2.00 integrates the EPANET 2.00 hydraulic modeling software with
+ ArcView.
+ It allows to store, edit and retrieve EPANET hydraulic models including
+ all options in ArcView.
+ Also it's possible to run the EPANET hydraulic analysis from ArcView and
+ load the results into the GIS.
+ Loading of EPANET models to ArcView is not yet implemented.
+\layout Subsubsection
+
+Concepts
+\layout Paragraph
+
+Network Traces
+\layout Standard
+
+Network Traces can be useful to solve problems related to the network geometry.
+ For example, it's possible to check the connectivity of the network features
+ in a model.
+ Through specifying network features at which the trace should stop, it's
+ possible to isolate supply zones.
+ 
+\layout Paragraph
+
+Bit codes
+\begin_inset LatexCommand \index{Bitcode}
+
+\end_inset 
+
+
+\layout Standard
+
+Bit codes are stored as integer numbers in GIS data.
+ They provide a powerful method to store hydraulic models in GIS data.
+ The underlying principle is very simple:
+\layout Itemize
+
+The models are numbered
+\layout Itemize
+
+Each bit represents one supply zone
+\layout Itemize
+
+If the bit is set (1) than the network feature is used in the respective
+ model.
+ Otherwise (0), the feature is not used in the model.
+\layout Itemize
+
+The different values are assembled by arithmetic addition.
+\layout Standard
+
+Note that the bit numbering starts at 0.
+ You should use a temporary field in order to perform the addition of two
+ bit codes correctly.
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/attention-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+\layout Paragraph
+
+Virtual Lines
+\begin_inset LatexCommand \index{Virtual Lines}
+
+\end_inset 
+
+
+\layout Standard
+
+Virtual Lines provide a concept to convert GIS point data (pumps or valves)
+ into the lines used by the hydraulic analysis software.
+ The conversion is done automatically when the GIS data is exported to the
+ hydraulic model.
+ Virtual Lines require exactly two pipes connected to each pump or valve.
+ In Addition, the two pipes have to have the same digitizing direction (which
+ will be the flow direction in the hydraulic model).
+\layout Subsection
+
+Installation
+\layout Subsubsection
+
+How to obtain the DC Water Design Extension
+\layout Standard
+
+For DORSCH Consult staff, the DC Water Design Extension is available from
+ the DC GIS Database (Lotus Notes).
+\layout Standard
+
+todo
+\layout Subsubsection
+
+Requirements
+\layout Itemize
+
+ArcView 3.0 or higher
+\layout Itemize
+
+Windows 95, 98, ME, NT or 2000 in order to export EPANET files 
+\layout Itemize
+
+EPANET 2.0 or higher is needed in order to run a hydraulic analysis
+\layout Itemize
+
+An (ANSI SQL compliant) ODBC connection is needed in order to import hydraulic
+ analysis results
+\layout Subsubsection
+
+Setup
+\layout Standard
+
+To install the DC Water Design Extension, you've got to run the installer
+ executable.
+ After accepting the license (s.
+ 
+\begin_inset LatexCommand \ref{sec:dcwatdes-license}
+
+\end_inset 
+
+), you'll be prompted to select the installation path.
+ The installation path should be the path to ArcView's EXT32 folder.
+ Usually this should be the default path (c:
+\backslash 
+ESRI
+\backslash 
+av_gis30
+\backslash 
+arcview
+\backslash 
+EXT32).
+ It might differ for custom ArcView installations.
+ The only thing left to do now is to select which components of the extension
+ should be installed.
+ In general, you should install all the components of the extension.
+ 
+\layout Standard
+
+If you want to use e.g.
+ a newer version of the XSLT parser and you've installed that version already,
+\begin_float margin 
+\layout Standard
+
+
+\begin_inset Figure size 24 20
+file images/attention-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+ you might decide not to install the XSLT parser that comes with the extension.
+ Don't do this unless you know what you're doing!
+\layout Subsection
+
+Usage
+\layout Subsubsection
+
+General Usage
+\layout Paragraph
+
+Extension loading
+\layout Enumerate
+
+Start ArcView
+\layout Enumerate
+
+Open the Extensions Dialog (File->Extensions ...)
+\layout Enumerate
+
+Select the DC Water Design Extension (Put a checkmark in the box on the
+ left side).
+\layout Enumerate
+
+After the Extension is loaded, the Setup Dialog informs you about several
+ settings.
+ You shouldn't change them without knowing what you're doing.
+ 
+\layout Subsubsection
+
+Quick Start Guide
+\layout Enumerate
+
+Load the Extension
+\layout Enumerate
+
+Open a View
+\layout Enumerate
+
+Add Themes to the View.
+ The Themes should describe your water supply network.
+ Junctions, pipes and reservoirs would comprise a simple network.
+ The attributes of the themes must adhere to the ArcView/EPANET Data Model
+ (s.
+ Appendices 
+\begin_inset LatexCommand \ref{sec:av-epanet-data-model}
+
+\end_inset 
+
+,
+\begin_inset LatexCommand \ref{sec:av-epanet-uml-static-state}
+
+\end_inset 
+
+).
+ You can use ArcView field aliases to map the fields correctly.
+\layout Enumerate
+
+Click on the EPANET Themes button.
+ Select the appropriate Themes.
+\layout Enumerate
+
+Choose 
+\begin_inset Quotes eld
+\end_inset 
+
+Make EPANET Model
+\begin_inset Quotes erd
+\end_inset 
+
+ from the DC Water Design menu
+\layout Enumerate
+
+If the last step didn't yield any errors, you can create an EPANET input
+ file now.
+ Choose 
+\begin_inset Quotes eld
+\end_inset 
+
+Write EPANET File
+\begin_inset Quotes erd
+\end_inset 
+
+ from the DC Water Design menu.
+ Choose filename and location.
+ 
+\layout Enumerate
+
+Fire up EPANET and open the created file (*.inp).
+\layout Subsubsection
+
+Project GUI
+\layout Standard
+
+The DC Water Design Extension extends the Project GUI by adding a new Menu,
+ called DC Water Design Extension.
+ The Menu contains the following choices:
+\layout Paragraph
+
+Setup 
+\layout Standard
+
+Shows the Setup Dialog.
+\layout Standard
+
+The Setup Dialog includes an option to choose the language of the Extension.
+ Currently supported are the following localizations:
+\layout Itemize
+
+English
+\layout Itemize
+
+German
+\layout Standard
+
+Note that the Localization is not completed yet.It is therefore recommended
+ that you set the language to English.
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/information-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+\layout Paragraph
+
+EPANET Tables 
+\layout Standard
+
+Displays the EPANET Tables Dialog.
+ 
+\layout Standard
+
+The Tables in the dialog are used to to store non-spatial EPANET data with
+ ArcView.
+ Typical examples of such data are pump curves or hydraulic analysis options.
+ Before you can choose a table to use with the DC Water Design Extension,
+ it has to be loaded into ArcView.
+ Refer to the ArcView documentation for information on how to load tables
+ into ArcView.
+\layout Paragraph
+
+Result Tables 
+\layout Standard
+
+Opens the Result Tables Dialog.
+ 
+\layout Standard
+
+The Result Tables are used to store the results of a hydraulic analysis.
+ There are two tables, one for node results and one for link results.
+ For performance reasons it is recommended that you use a RDBMS such as
+ mySQL for storing the data.
+\layout Paragraph
+
+About\SpecialChar ~
+DC Water Design Extension
+\layout Standard
+
+Displays information about the DC Water Design Extension License.
+ See section
+\begin_inset LatexCommand \ref{sec:dcwatdes-license}
+
+\end_inset 
+
+ for the license details.
+\layout Subsubsection
+
+View GUI
+\layout Standard
+
+The DC Water Design Extension extends the ArcView View GUI with the following
+ elements:
+\layout Itemize
+
+A new Menu called 
+\begin_inset Quotes eld
+\end_inset 
+
+DC Water Design
+\begin_inset Quotes erd
+\end_inset 
+
+
+\layout Itemize
+
+Buttons
+\layout Itemize
+
+Tools
+\layout Itemize
+
+Three pop-up menus 
+\layout Standard
+
+The pop-up menus are available through clicking the right mouse button over
+ a network feature.
+\layout Standard
+
+The additional functionality is explained below.
+\layout Paragraph
+
+Write EPANET file 
+\layout Standard
+
+Exports the hydraulic model to an EPANET input file.
+\layout Standard
+
+The model has to be complete, running 
+\begin_inset Quotes eld
+\end_inset 
+
+Make EPANET Model
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+Check EPANET Model
+\begin_inset Quotes erd
+\end_inset 
+
+ is advisable especially for the novice user before exporting the EPANET
+ input file.
+\layout Standard
+
+The resulting EPANET input file has the extension *.inp.
+ The *.xml-file is just an intermediate format (temporary file).
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/information-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+\layout Paragraph
+
+Run EPANET Calculation 
+\layout Standard
+
+Exports the hydraulic model to an EPANET input file, runs the analysis and
+ loads the results into ArcView.
+\layout Standard
+
+The model has to be complete, running 
+\begin_inset Quotes eld
+\end_inset 
+
+Make EPANET Model
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+Check EPANET Model
+\begin_inset Quotes erd
+\end_inset 
+
+ is advisable especially for the novice user before exporting the EPANET
+ input file.
+\layout Standard
+
+After the analysis has been completed, the report created by EPANET is displayed
+ in a window and the user is prompted to select a time step for which the
+ results will be loaded.
+ 
+\layout Paragraph
+
+Load Results for step ...
+ 
+\layout Standard
+
+Loads the results of an EPANET hydraulic analysis to ArcView.
+\layout Standard
+
+The hydraulic analysis has to be run from ArcView in order to to enable
+ this feature.
+ The user is prompted to select the time step for which the results should
+ be loaded.
+\layout Paragraph
+
+Make EPANET Model 
+\layout Standard
+
+Creates the line-node structure required by EPANET.
+\layout Standard
+
+This function fills the fields node1 and node2 in the links table with the
+ dc_ids of the connected nodes.
+ The fields will be overwritten by this function, therefore the user has
+ to confirm the action before the script run.
+ 
+\layout Standard
+
+After completion, a report gives a overview of the created model.
+ Model creation errors are also reported.
+ If there were errors, the features in question are selected after the run.
+\layout Standard
+
+In case there are reports about inconsistent flow direction at pumps or
+ valves, you can use the 
+\begin_inset Quotes eld
+\end_inset 
+
+Flip Polylines
+\begin_inset Quotes erd
+\end_inset 
+
+ tool of the extension to correct the errors.
+\layout Paragraph
+
+EPANET Themes
+\begin_inset LatexCommand \label{sec:epanet-themes-dialog}
+
+\end_inset 
+
+ 
+\layout Standard
+
+Opens the EPANET Themes Dialog.
+\layout Standard
+
+Use the Dialog to select the themes you want to use in your hydraulic model.
+ The line and node theme are required, other themes are optional and can
+ be switched off with the check boxes on the right side.
+\layout Standard
+
+Most of the extension functions require that the EPANET Themes are properly
+ set up in this dialog.
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/attention-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+ Setting up the themes should be the first step when using the extension.
+ The settings are also used to determine which themes should be edited.
+\layout Paragraph
+
+EPANET Tables 
+\layout Standard
+
+Displays the EPANET Tables Dialog.
+ 
+\layout Standard
+
+The Tables in the dialog are used to to store non-spatial EPANET data with
+ ArcView.
+ Typical examples of such data are pump curves or hydraulic analysis options.
+ Before you can choose a table to use with the DC Water Design Extension,
+ it has to be loaded into ArcView.
+ Refer to the ArcView documentation for information on how to load tables
+ into ArcView.
+\layout Paragraph
+
+Valve Control
+\layout Standard
+
+Allows to set valve states according to EPANET Controls.
+\layout Standard
+
+If a controls table is registered with the Extension (s.
+ EPANET Tables Dialog), the user is offered to select the controls he would
+ like to apply.
+ All chosen controls are applied.
+ This is very useful in combination with Network Traces as the extension
+ allows to stop traces at closed valves.
+\layout Paragraph
+
+Make House Connections 
+\layout Standard
+
+Creates a straight pipe between tanks and junctions which share an id.
+\layout Standard
+
+This function requires some preparatory work: Each tank of the tanks theme
+ needs to know to which junction he should be connected.
+ This is expressed with a field in the tanks attribute table that contains
+ the dc_id of the junction the tank should connect to.
+ Such fields can be established e.g.
+ by using the spatial join function of the Geoprocessing Wizard.
+\layout Standard
+
+Note that this functionality has been included mainly for the purpose of
+ modeling intermittent supply with household storage tanks.
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/information-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+ It might be taken out or completely rewritten in future versions of the
+ DC Water Design Extension.
+\layout Paragraph
+
+Create Supply Strings 
+\layout Standard
+
+Calculates a coded text that shows when a node is supplied with water.
+\layout Standard
+
+This might only be used after successfully running an EPANET hydraulic analysis
+ from ArcView.
+ The function will query the the nodes results table for pressures above
+ zero.
+ Each pressure above zero will yield a 
+\begin_inset Quotes eld
+\end_inset 
+
+1
+\begin_inset Quotes erd
+\end_inset 
+
+ in the supply string, a pressure below or equal zero will yield a 
+\begin_inset Quotes eld
+\end_inset 
+
+0
+\begin_inset Quotes erd
+\end_inset 
+
+ in the supply string.
+ For each node, the supply strings are written to a user-selectable text
+ field.
+ The field has to been long enough to contain as many characters as there
+ are time steps in the EPANET results.
+\layout Standard
+
+Note that this functionality has been included mainly for the purpose of
+ modeling intermittent supply with household storage tanks.
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/information-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+ It might be taken out or completely rewritten in future versions of the
+ DC Water Design Extension.
+\layout Paragraph
+
+Calculate Pipe Length For Junctions 
+\layout Standard
+
+This function calculates the length of the pipes connected to a junction.
+\layout Standard
+
+A user selectable number field in the junctions attribute table is filled
+ with the length of the pipes connected to each junction.
+ In order not to double the overall pipe length, each pipe length is divided
+ by two.
+ Thus every part of a pipe is assigned to the nearest node.
+\layout Paragraph
+
+Clip Themes by Bitcode 
+\layout Standard
+
+Creates new themes with features which have the same bit set in a bit code.
+\layout Standard
+
+The functions works with all active themes in the view.
+ First, the user is prompted to select the bit which has to be set for the
+ clipped themes.
+ Then the field containing the bit code has to be chosen.
+ (The script assumes that the bit code field names are the same throughout
+ all the active themes.) The user can select the filename and location for
+ each clipped theme.
+ He can also choose whether the new themes should be added to the view.
+\layout Paragraph
+
+About DC Water Design Extension
+\layout Standard
+
+Displays information about the DC Water Design Extension License.
+ See section
+\begin_inset LatexCommand \ref{sec:dcwatdes-license}
+
+\end_inset 
+
+ for the license details.
+\layout Paragraph
+
+Flip Polylines 
+\layout Standard
+
+This tool allows to flip the digitizing direction of lines.
+\layout Standard
+
+The theme containing the lines to be flipped has to be set up as the pipe
+ theme in the EPANET themes dialog.
+ Simple clicking on the line will switch the digitizing direction.
+\layout Standard
+
+Tip: ArcView's symbology can be used to display the digitizing direction
+ with arrowheads.
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/question-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+\layout Paragraph
+
+Move Nodes 
+\layout Standard
+
+A tool to move network nodes including rubber-banding.
+\layout Standard
+
+With this tool it's possible to move network nodes (junctions, tanks, reservoirs
+, pumps, valves) along with the connected pipes.
+ The network stays intact and fully connected (rubber-banding).
+ 
+\layout Standard
+
+The respective themes have to be registered with the extension in the EPANET
+ themes dialog.
+\layout Paragraph
+
+Split Pipe (Add Junction) 
+\layout Standard
+
+Tool that allows to split a pipe into two pipes.
+ Adds a new junction at the split point.
+\layout Standard
+
+The two new pipes inherit the attributes from the original pipe.
+ However, the length gets recalculated based on the shapes.
+\layout Standard
+
+Pipe and junction themes have to be chosen in the EPANET themes dialog.
+\layout Paragraph
+
+Edit Pipe Vertices 
+\layout Standard
+
+Allows to re-shape pipes.
+\layout Standard
+
+Vertices determine the route of a pipe.
+ The tool makes it possible to move all the vertices of a pipe.
+ Additional, it's possible to add vertices to the pipe.
+ Unlike the ArcView tool 
+\begin_inset Quotes eld
+\end_inset 
+
+Vertex Edit
+\begin_inset Quotes erd
+\end_inset 
+
+, 
+\begin_inset Quotes eld
+\end_inset 
+
+Edit Pipe Vertices
+\begin_inset Quotes erd
+\end_inset 
+
+ ensures network connectivity - it is impossible to disconnect a pipe from
+ a node with this tool.
+\layout Standard
+
+The pipe theme has to be set up in the EPANET themes dialog in order to
+ use this tool.
+\layout Standard
+
+Note that the pipe length is not recalculated.
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/attention-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+ Recalculate the pipe length manually in the pipe theme attribute table.
+ See the Questions and Answers section of this manual if you have problems
+ calculating the pipe length.
+\layout Paragraph
+
+Change Node Class 
+\layout Standard
+
+Tool to convert nodes from one class to another.
+\layout Standard
+
+The Change Node Class tool allows to convert e.g.
+ a junction into pump.
+ Attributes shared between the two classes are copied.
+ After selecting an existing node, the user is prompted to select the class
+ to which the node should be moved.
+ The old node is deleted.
+\layout Standard
+
+Obviously, the respective themes have to be registered with the extension
+ in the EPANET themes dialog.
+\layout Paragraph
+
+Delete Feature
+\layout Standard
+
+A tool to delete network features.
+\layout Standard
+
+Allows one-click deletion of network features.
+ The user is prompted to confirm the deletion.
+ Remember that there's no undo support with the DC Water Design Extension.
+\layout Standard
+
+The themes containing features that should be deleted have to be selected
+ in the EPANET Themes dialog.
+\layout Paragraph
+
+Digitize Junction 
+\layout Standard
+
+The Digitize Junction tool is used to digitize junctions.
+ 
+\layout Standard
+
+The junctions are added to the junction theme selected in the EPANET themes
+ dialog.
+\layout Paragraph
+
+Digitize Pipe 
+\layout Standard
+
+The Digitize Pipe tool is used to digitize pipes.
+ 
+\layout Standard
+
+The pipes are added to the pipe theme selected in the EPANET themes dialog.
+ In order to maintain the network integrity, the tool automatically adds
+ junctions at the pipe end if the pipe end doesn't snap onto an existing
+ node.
+\layout Paragraph
+
+Digitize Tank 
+\layout Standard
+
+The Digitize Tank tool is used to digitize tanks.
+ 
+\layout Standard
+
+The tanks are added to the tank theme selected in the EPANET themes dialog.
+\layout Paragraph
+
+Digitize Valve 
+\layout Standard
+
+The Digitize Valve tool is used to digitize valves.
+ 
+\layout Standard
+
+The valves are added to the valve theme selected in the EPANET themes dialog.
+ The tool is disabled if the valve theme is not enabled in the EPANET themes
+ dialog.
+\layout Paragraph
+
+Digitize Reservoir 
+\layout Standard
+
+The Digitize Reservoir tool is used to digitize reservoirs.
+ 
+\layout Standard
+
+The reservoirs are added to the reservoir theme selected in the EPANET themes
+ dialog.
+ The tool is disabled if the reservoir theme is not enabled in the EPANET
+ themes dialog.
+\layout Paragraph
+
+Digitize Pump
+\layout Standard
+
+The Digitize Pump tool is used to digitize pumps.
+ 
+\layout Standard
+
+The pumps are added to the pump theme selected in the EPANET themes dialog.
+ The tool is disabled if the pump theme is not enabled in the EPANET themes
+ dialog.
+\layout Paragraph
+
+Show Pipe Table Entry
+\layout Standard
+
+Pop-up menu item that allows to show the attributes of a pipe.
+\layout Standard
+
+Right-clicking on a pipe and selecting this menu item opens the pipe attribute
+ table, selects and promotes the pipe.
+\layout Standard
+
+The appropriate pipe theme has to be selected in the EPANET themes dialog.
+\layout Paragraph
+
+Edit Pipe Table Entry
+\layout Standard
+
+Pop-up menu item allowing to edit the attributes of a pipe.
+\layout Standard
+
+Right-clicking on a pipe and selecting this menu item opens the pipe attribute
+ table, makes it editable, selects and promotes the pipe record.
+ After that, the attributes of the pipe can be edited.
+ Keep in mind that there's no undo.
+\layout Paragraph
+
+Select Connected Pipes
+\layout Standard
+
+Pop-up menu item that allows to trace the pipes connected to the selected
+ pipe.
+\layout Standard
+
+Right-clicking on a pipe and selecting this menu item opens a dialog that
+ offers node types at which the trace should stop.
+ Multiple types can be selected.
+ During the trace, the
+\layout Standard
+
+status bar informs what percentage of the network has been covered by the
+ trace so far.
+ Note that the progress bar won't make it to 100% unless the network is
+ fully connected and no stopper has been selected.
+ The connected pipes up to all stop points are returned as the selection.
+\layout Paragraph
+
+Show Node Table Entry
+\layout Standard
+
+Pop-up menu item that shows the attributes of a node.
+\layout Standard
+
+Right-clicking on a node and selecting this menu item opens the node attribute
+ table, selects and promotes the pipe.
+\layout Standard
+
+The appropriate node theme has to be selected in the EPANET themes dialog.
+\layout Paragraph
+
+Edit Node Table Entry
+\layout Standard
+
+Pop-up menu item that allows to edit the attributes of a node.
+\layout Standard
+
+Right-clicking on a node and selecting this menu item opens the node attribute
+ table, makes it editable, selects and promotes the node record.
+ After that the attributes of the node can be edited.
+ Keep in mind that there's no undo.
+\layout Paragraph
+
+Select Node
+\layout Standard
+
+Selects the current node.
+\layout Standard
+
+Adds the current node to the selection in the node theme.
+\layout Standard
+
+The appropriate node themes has to be selected in the EPANET themes dialog.
+\layout Subsubsection
+
+Table GUI
+\layout Paragraph
+
+Bitcode Calculator
+\layout Standard
+
+The Bitcode Calculator is accessible from the button bar of the table GUI.
+ It is disabled unless the table is editable and a numerical field is selected.
+ 
+\layout Itemize
+
+Upon clicking on the Bitcode Calculator button, the user is prompted to
+ select the bits he wants to set.
+ 
+\layout Itemize
+
+After choosing OK, the bit code will be calculated and written to all the
+ selected records.
+ 
+\layout Itemize
+
+If no records are selected the bit code is written to all the records in
+ the table.
+ 
+\layout Standard
+
+The field used to store the bit codes should have no decimal places.
+\layout Subsubsection
+
+
+\begin_inset LatexCommand \label{sec:dcwatdes-api-docs}
+
+\end_inset 
+
+API Documentation
+\layout Standard
+
+This section documents extension scripts that could be used from the field
+ calculator or in queries.
+ In Addition, the script responsible for the extension dictionaries is documente
+d.
+ In general, the API documentation should only be of concern for programmers.
+\layout Paragraph
+
+DCWatDes.Bitcode.or 
+\layout Standard
+
+performs a bitwise or operation on integer numbers
+\layout Standard
+
+integer DCWatDes.Bitcode.or(integer a, integer b)
+\layout Description
+
+a bit-coded integer
+\layout Description
+
+b bit-coded integer
+\layout Description
+
+Returns: the result of the bitwise a or b as an integer
+\layout Standard
+
+The following AVENUE code can be used in the field calculator to perform
+ of a bitwise or-operation on the fields a and b: 
+\layout Standard
+
+
+\family typewriter 
+av.run("DCWatDes.Bitcode.or", {[a], [b]})
+\layout Paragraph
+
+DCWatDes.Bitcode.and
+\layout Standard
+
+performs a bitwise and operation on integer numbers
+\layout Standard
+
+integer DCWatDes.Bitcode.and(integer a, integer b)
+\layout Description
+
+a bit-coded integer
+\layout Description
+
+b bit-coded integer
+\layout Description
+
+Returns: the result of the bitwise a and b as an integer
+\layout Standard
+
+The following AVENUE code can be used in the field calculator to perform
+ of a bitwise and-operation on the fields a and b: 
+\layout Standard
+
+
+\family typewriter 
+av.run("DCWatDes.Bitcode.and", {[a], [b]})
+\layout Paragraph
+
+DCWatDes.Bitcode.isSetAsNumber
+\layout Standard
+
+return whether the n-th bit of an integer is set or not
+\layout Standard
+
+integer DCWatDes.Bitcode.isSetAsNumber(integer a, integer n)
+\layout Description
+
+a bit-coded integer
+\layout Description
+
+n number of the bit to check
+\layout Description
+
+Returns: an integer of value 1 in case the n-th bit is set, 0 otherwise
+\layout Standard
+
+The following AVENUE query can be used to select all the records which have
+ set the 4th bit in the example field (usable with the query tools of view
+ and table GUI):
+\layout Standard
+
+
+\family typewriter 
+av.run("DCWatDes.Bitcode.isSetAsNumber",{[example], 3}) = 1
+\layout Standard
+
+Note that the bit numbering starts at 0.
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+= 1
+\begin_inset Quotes erd
+\end_inset 
+
+ is used to convert the numbers 0 and 1 to the boolean values to true or
+ false, respective.
+\layout Paragraph
+
+DCWatDes.i18n.createDictionaries
+\layout Standard
+
+Creates the Localization dictionaries of the Extension
+\layout Standard
+
+In order to add another Dictionary, you'll first have to create one:
+\layout Standard
+
+dicNew
+\family typewriter 
+ = Dictionary.make(100)
+\layout Standard
+
+Then you can start adding dictionary entries:
+\layout Standard
+
+
+\family typewriter 
+dicNew.add(
+\begin_inset Quotes eld
+\end_inset 
+
+English Term
+\begin_inset Quotes erd
+\end_inset 
+
+, 
+\begin_inset Quotes eld
+\end_inset 
+
+New translated term
+\begin_inset Quotes erd
+\end_inset 
+
+)
+\layout Standard
+
+Look at the German dictionary for the terms that have to be translated.
+ After you've added all the terms to the new Dictionary, you have to add
+ the Dictionary to the Dictionary of Dictionaries:
+\layout Standard
+
+todo
+\layout Subsection
+
+Questions and Answers
+\layout Paragraph
+
+Why is there no graphical user interface to the DCWatDes.Bitcode.* functions?
+\layout Standard
+
+The provided AVENUE functions are more flexible this way.
+ Bit codes can be useful for quite a number of operations.
+ Try using the functions with the field calculator and the query.
+ Examples are given in 
+\begin_inset LatexCommand \ref{sec:dcwatdes-api-docs}
+
+\end_inset 
+
+.
+\layout Paragraph
+
+What is the Setup Dialog for?
+\layout Standard
+
+The Extension depends on several software packages.
+ The Setup Dialog allows you to use other versions of these software packages
+ than the ones supplied with the Extension itself.
+ 
+\layout Paragraph
+
+Why is Version 2.00 not working with Pipe 2000 anymore?
+\layout Standard
+
+The Pipe 2000 data model, API and documentation are inferior to EPANET.
+ Full integration of Pipe 2000 into ArcView was impossible.
+ With EPANET it's possible to store the complete model, including all hydraulic
+ analysis options in the GIS.
+\layout Paragraph
+
+How do I recalculate the pipe length for all the pipes?
+\layout Enumerate
+
+Open the attribute table of the pipe theme.
+\layout Enumerate
+
+Make sure that the pipe theme is editable.
+\layout Enumerate
+
+Make sure that no records are selected.
+\layout Enumerate
+
+Click on the heading for the length field.
+\layout Enumerate
+
+Click on the field calculator button.
+\layout Enumerate
+
+Enter the following line into the value field:
+\newline 
+
+\family typewriter 
+[Shape].returnLength
+\layout Enumerate
+
+Click OK.
+\layout Paragraph
+
+I get strange errors when I try to create the EPANET model.
+ What can I do?
+\layout Standard
+
+Try the following:
+\layout Itemize
+
+Try 
+\begin_inset Quotes eld
+\end_inset 
+
+Check EPANET model
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ This should help you to resolve duplicate IDs.
+\layout Itemize
+
+Have a close look at the erroneous features: Often accidentally duplicates
+ features cause trouble.
+\layout Paragraph
+
+I made a mistake.
+ Why is undo not working?
+\layout Standard
+
+Undo support had to be taken out for the sake of editing multiple themes
+ at the same time.
+ Make frequent backups.
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/attention-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+ You've been warned.
+\layout Paragraph
+
+I found a bug in the Extension.
+ What should I do?
+\layout Standard
+
+Please send your bug reports to Steffen_Macke@dorsch.com.jo
+\layout Subsection
+
+Copyright
+\begin_inset LatexCommand \label{sec:dcwatdes-license}
+
+\end_inset 
+
+
+\layout Standard
+
+DC Water Design Extension 2.00.
+ This ArcView Extension integrates EPANET with ArcView.
+ 
+\layout Standard
+
+Copyright (C) 1998-2001 DORSCH Consult
+\layout Standard
+
+This library is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Lesser General Public License as published by
+ the Free Software Foundation; either version 2.1 of the License, or (at
+ your option) any later version.
+\layout Standard
+
+This library is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.
+ See the GNU Lesser General Public License for more details.
+\layout Standard
+
+You should have received a copy of the GNU Lesser General Public License
+ along with this library; if not, write to the Free Software Foundation,
+ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+\layout Standard
+
+Appendix 
+\begin_inset LatexCommand \ref{sec:gnu-lesser-gpl}
+
+\end_inset 
+
+ contains a copy of the GNU Lesser General Public License.
+\begin_float margin 
+\layout Standard
+\align center 
+
+\begin_inset Figure size 24 20
+file images/question-sign.eps
+flags 9
+
+\end_inset 
+
+
+\end_float 
+\layout Standard
+\pagebreak_top 
+
+\latex latex 
+
+\backslash 
+addcontentsline{toc}{section}{Index}
+\latex default 
+
+\begin_inset LatexCommand \printindex{}
+
+\end_inset 
+
+
+\layout Section
+\pagebreak_top 
+
+\begin_inset LatexCommand \label{sec:av-epanet-data-model}
+
+\end_inset 
+
+ArcView/EPANET Data Model
+\layout Standard
+
+
+\lang american
+This document describes version 2.00 of the ArcView/EPANET Data Model.
+ Note that the units will change if EPANET is not set to use liters per
+ second (LPS) as units.
+ Refer to the EPANET documentation (especially the toolkit help) for further
+ information.
+\layout Subsection
+
+
+\lang american
+Identity
+\layout Standard
+
+
+\lang american
+Inherited by Feature
+\newline 
+Inherited by Pattern 
+\newline 
+Inherited by Curve 
+\layout Itemize
+
+
+\lang american
+dc_ID: 
+\emph on 
+string
+\emph default 
+ Unique ID throughout the whole database.
+ Should not contains spaces.
+ 
+\layout Subsection
+
+
+\lang american
+Node
+\layout Standard
+
+
+\lang american
+Inherits from Feature
+\newline 
+Inherited by Junction
+\newline 
+Inherited by Tank 
+\newline 
+Inherited by Reservoir
+\newline 
+Inherited by VirtualLine 
+\layout Itemize
+
+
+\lang american
+Shape: 
+\emph on 
+Point
+\emph default 
+ Spatial data.
+ 
+\layout Itemize
+
+
+\lang american
+Elevation: 
+\emph on 
+float
+\emph default 
+ Elevation above Sea Level in m.
+ 
+\layout Itemize
+
+
+\lang american
+result_demand: 
+\emph on 
+float
+\emph default 
+ EPANET analysis result: Demand in liters per second.
+ 
+\layout Itemize
+
+
+\lang american
+result_head: 
+\emph on 
+float
+\emph default 
+ EPANET analysis result: Total Head in m.
+ 
+\layout Itemize
+
+
+\lang american
+result_pressure: 
+\emph on 
+float
+\emph default 
+ EPANET analysis result: Pressure in m.
+ 
+\layout Itemize
+
+
+\lang american
+ElevationSource: 
+\emph on 
+CodedValue
+\emph default 
+ Integer field containing a coded value that describes the origin of the
+ elevation information for this node.
+ The following values have been used in the Al Koura project:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+0: Unknown Source 
+\layout Itemize
+
+
+\lang american
+1: 100 m Contours DEM 
+\layout Itemize
+
+
+\lang american
+2: SOGREAH Procedure models 
+\layout Itemize
+
+
+\lang american
+3: Altimeter Survey 
+\layout Itemize
+
+
+\lang american
+4: Paper maps 
+\layout Itemize
+
+
+\lang american
+5: estimated 
+\layout Itemize
+
+
+\lang american
+6: 25 m Contours DEM
+\end_deeper 
+\layout Subsection
+
+
+\lang american
+Junction
+\layout Standard
+
+
+\lang american
+Inherits from Node
+\layout Itemize
+
+
+\lang american
+Demand: 
+\emph on 
+float
+\emph default 
+ Base demand flow in liters per second.
+ 
+\layout Itemize
+
+
+\lang american
+Pattern: 
+\emph on 
+string
+\emph default 
+ Demand Pattern ID.
+ If no demand pattern is supplied then the junction follows the Default
+ Demand Pattern provided in the Options Table, or Pattern 1 if no Default
+ Pattern is specified.
+ If none of the patterns exist, the demand will remain constant.
+\layout Subsection
+
+
+\lang american
+Tank
+\layout Standard
+
+
+\lang american
+Inherits from Node 
+\layout Itemize
+
+
+\lang american
+Initiallevel: 
+\emph on 
+float
+\emph default 
+ Initial water level above the tank bottom level (the elevation field) in
+ m.
+ 
+\layout Itemize
+
+
+\lang american
+Minimumlevel: 
+\emph on 
+float
+\emph default 
+ Minimum water level above the tank bottom level in m.
+ 
+\layout Itemize
+
+
+\lang american
+Maximumlevel: 
+\emph on 
+float
+\emph default 
+ Maximum water level above the tank bottom level in m.
+ 
+\layout Itemize
+
+
+\lang american
+Diameter: 
+\emph on 
+float
+\emph default 
+ Nominal Diameter of the tank in m.
+ If a volume curve is supplied this can be any non-zero number.
+ 
+\layout Itemize
+
+
+\lang american
+Minimumvolume: 
+\emph on 
+float
+\emph default 
+ The minimum volume of the tank in cubic meters.
+ Can be zero.
+ 
+\layout Itemize
+
+
+\lang american
+Volumecurve: 
+\emph on 
+string
+\emph default 
+ The id of the volumecurve - for non-cylindrical tanks.
+ 
+\layout Subsection
+
+
+\lang american
+Pump
+\layout Standard
+
+
+\lang american
+Inherits from VirtualLine
+\layout Itemize
+
+
+\lang american
+Properties: 
+\emph on 
+string
+\emph default 
+ EPANET properties of the pump.
+ Keyword(s) followed by value(s).
+ Keywords consist of:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+POWER pump power in kW 
+\layout Itemize
+
+
+\lang american
+HEAD id of the head curve describing this pump 
+\layout Itemize
+
+
+\lang american
+SPEED relative speed of the pump: 1.0 is normal, 0 means that the pump is
+ off.
+ 
+\layout Itemize
+
+
+\lang american
+PATTERN id of the time pattern describing pump operation.
+\newline 
+
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+power_kw: 
+\emph on 
+integer
+\emph default 
+ The power of the pump in kW.
+ 
+\layout Subsection
+
+
+\lang american
+Valve
+\layout Standard
+
+
+\lang american
+Inherits from VirtualLine
+\layout Itemize
+
+
+\lang american
+Diameter: 
+\emph on 
+integer
+\emph default 
+ Diameter of the valve in mm.
+ 
+\layout Itemize
+
+
+\lang american
+Type: 
+\emph on 
+string
+\emph default 
+ Type of the valve.
+ The following EPANET valve types are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+PRV pressure reducing valve 
+\layout Itemize
+
+
+\lang american
+PSV pressure sustaining valve 
+\layout Itemize
+
+
+\lang american
+PBV pressure breaker valve 
+\layout Itemize
+
+
+\lang american
+FCV flow control valve 
+\layout Itemize
+
+
+\lang american
+TCV throttle control valve 
+\layout Itemize
+
+
+\lang american
+GPV general purpose valve 
+\layout Standard
+
+
+\lang american
+Additional valve types supported by the DC Water Design Extension:
+\newline 
+
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+CV check valve 
+\begin_deeper 
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+SOV shutoff valve 
+\end_deeper 
+\layout Standard
+
+
+\lang american
+EPANET models these as pipes.
+ The extension will create them on the fly.
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+Setting: 
+\emph on 
+string
+\emph default 
+ Valve type dependent setting.
+ The setting field takes the following values for the different valve types:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+PRV the pressure in m 
+\layout Itemize
+
+
+\lang american
+PSV the pressure in m 
+\layout Itemize
+
+
+\lang american
+PBV the pressure in m 
+\layout Itemize
+
+
+\lang american
+FCV the flow in liters per second 
+\layout Itemize
+
+
+\lang american
+TCV the loss coefficient 
+\layout Itemize
+
+
+\lang american
+GPV the id of the head loss curve 
+\layout Itemize
+
+
+\lang american
+CV the setting value will be mapped to the status field of the pipe 
+\layout Itemize
+
+
+\lang american
+SOV the setting value will be mapped to the status field of the pipe
+\newline 
+
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+Minorloss: 
+\emph on 
+float
+\emph default 
+ Minor loss coefficient of the valve.
+ 
+\layout Subsection
+
+
+\lang american
+Pipe
+\layout Standard
+
+
+\lang american
+Inherits from Feature
+\layout Itemize
+
+
+\lang american
+Shape: 
+\emph on 
+Polyline
+\emph default 
+ Spatial data.
+ 
+\layout Itemize
+
+
+\lang american
+node1: 
+\emph on 
+string
+\emph default 
+ Start node dc_id.
+ 
+\layout Itemize
+
+
+\lang american
+node2: 
+\emph on 
+string
+\emph default 
+ End node dc_id.
+ 
+\layout Itemize
+
+
+\lang american
+length: 
+\emph on 
+float
+\emph default 
+ The length of the pipe in m.
+ 
+\layout Itemize
+
+
+\lang american
+diameter: 
+\emph on 
+integer
+\emph default 
+ Nominal pipe diameter in mm.
+ 
+\layout Itemize
+
+
+\lang american
+roughness: 
+\emph on 
+float
+\emph default 
+ Pipe roughness coefficient in mm.
+ 
+\layout Itemize
+
+
+\lang american
+minorloss: 
+\emph on 
+float
+\emph default 
+ Minor loss coefficient.
+ 
+\layout Itemize
+
+
+\lang american
+status: 
+\emph on 
+string
+\emph default 
+ Status of the pipe.
+ The following values are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+OPEN 
+\layout Itemize
+
+
+\lang american
+CLOSED 
+\layout Itemize
+
+
+\lang american
+CV (check valve) 
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+Material: 
+\emph on 
+CodedValue
+\emph default 
+ Integer field containing a coded value describing the material of the pipe.
+ The following values have been used in the Al Koura project:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+0: steel 
+\layout Itemize
+
+
+\lang american
+1: galvanized iron 
+\layout Itemize
+
+
+\lang american
+2: PVC 
+\layout Itemize
+
+
+\lang american
+3: PE 
+\layout Itemize
+
+
+\lang american
+4: Ductile Cast Iron 
+\layout Itemize
+
+
+\lang american
+9: unknown
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+result_flow: 
+\emph on 
+float
+\emph default 
+ EPANET analysis result: The flow in liters per second.
+ 
+\layout Itemize
+
+
+\lang american
+result_velocity: 
+\emph on 
+float
+\emph default 
+ EPANET analysis result: Flow velocity in meters per second.
+ 
+\layout Itemize
+
+
+\lang american
+result_headloss: 
+\emph on 
+float
+\emph default 
+ Headloss over the pipe in m.
+ 
+\layout Subsection
+
+
+\lang american
+Reservoir
+\layout Standard
+
+
+\lang american
+Inherits from Node
+\layout Itemize
+
+
+\lang american
+Head: 
+\emph on 
+float
+\emph default 
+ The hydraulic head of the reservoir.
+ Elevation + pressure head.
+ 
+\layout Itemize
+
+
+\lang american
+Pattern: 
+\emph on 
+string
+\emph default 
+ Optional head pattern id.
+ 
+\layout Subsection
+
+
+\lang american
+Feature
+\layout Standard
+
+
+\lang american
+Inherited by Node
+\layout Standard
+
+
+\lang american
+Inherited by Pipe
+\layout Standard
+
+
+\lang american
+Inherits from Identity
+\layout Itemize
+
+
+\lang american
+Installation_date: 
+\emph on 
+date
+\emph default 
+ The date of installation.
+ If this is a date in the future, the feature is planned.
+ 
+\layout Itemize
+
+
+\lang american
+Abandon_date: 
+\emph on 
+date
+\emph default 
+ The date when the feature was abandoned.
+ 
+\layout Itemize
+
+
+\lang american
+dcSubtype: 
+\emph on 
+CodedValue
+\emph default 
+ Integer field containing coded values describing the feature.
+ Different Domains are applied to the Feature classes.
+ 
+\layout Itemize
+
+
+\lang american
+BitcodeZone: 
+\emph on 
+integer
+\emph default 
+ Integer containing a bit-coded that describes the zones in which the Feature
+ is used.
+ The following bitcodes were used in the Al Koura project:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+Bit 0: Judayta village
+\end_deeper 
+\layout Subsection
+
+
+\lang american
+Pattern
+\layout Standard
+
+
+\lang american
+Inherits from Identity
+\layout Itemize
+
+
+\lang american
+multiplier: 
+\emph on 
+float
+\emph default 
+ The multiplier that describes how to adjust the base quantity.
+ 
+\layout Subsection
+
+
+\lang american
+Options
+\layout Itemize
+
+
+\lang american
+Units: 
+\emph on 
+string
+\emph default 
+ LPS (liters per second) should be used.
+ See the EPANET documentation for other flow units.
+ Using other flow units will render the units specified in this document
+ invalid.
+ 
+\layout Itemize
+
+
+\lang american
+Headloss: 
+\emph on 
+string
+\emph default 
+ Headloss equation.
+ D-W (Darcy-Weissbach) should be used.
+ 
+\layout Itemize
+
+
+\lang american
+Hydraulics: 
+\emph on 
+string
+\emph default 
+ Allows to specify a filename for the hydraulic solution.
+ Leave empty.
+ 
+\layout Itemize
+
+
+\lang american
+Viscosity: 
+\emph on 
+float
+\emph default 
+ The kinematic viscosity of the fluid being modeled relative to that of
+ water at 20°C.
+ The default value is 1.0.
+ 
+\layout Itemize
+
+
+\lang american
+Diffusity: 
+\emph on 
+float
+\emph default 
+ The molecular diffusity of the chemical being analyzed relative to that
+ of chlorine in water.
+ The default value is 1.0.
+ 
+\layout Itemize
+
+
+\lang american
+Specificgravity: 
+\emph on 
+float
+\emph default 
+ The ratio of the density of the fluid being modeled to that of water at
+ 4°C.
+ 
+\layout Itemize
+
+
+\lang american
+Trials: 
+\emph on 
+integer
+\emph default 
+ The maximum number of trials used to solve the network hydraulics for each
+ time step.
+ The default is 40.
+ 
+\layout Itemize
+
+
+\lang american
+Accuracy: 
+\emph on 
+float
+\emph default 
+ Convergence criterion that describes when a hydraulic solution is found.
+ The default is 0.001.
+ 
+\layout Itemize
+
+
+\lang american
+Unbalanced: 
+\emph on 
+string
+\emph default 
+ Determines what happens if no hydraulic solution can be found within the
+ prescribed number of time steps.
+ The following values are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+STOP 
+\layout Itemize
+
+
+\lang american
+CONTINUE 
+\layout Itemize
+
+
+\lang american
+CONTINUE n 
+\layout Standard
+
+
+\lang american
+The default is STOP
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+pattern: 
+\emph on 
+string
+\emph default 
+ The default demand pattern id that is applied to all junctions that don't
+ have a pattern specified.
+ If this is empty, the default 
+\family typewriter 
+"
+\family default 
+1
+\family typewriter 
+"
+\family default 
+ is used.
+ 
+\layout Itemize
+
+
+\lang american
+Demandmultiplier: 
+\emph on 
+float
+\emph default 
+ Global Demand multiplier.
+ Applied to all base demands of junctions.
+ The default value is 1.0.
+ 
+\layout Itemize
+
+
+\lang american
+emitterexponent: 
+\emph on 
+float
+\emph default 
+ Specifies the power to which the pressure at a junction is raised when
+ computing the flow issuing from an emitter.
+ The default is 0.5.
+ \SpecialChar ~
+\SpecialChar ~
+
+\layout Itemize
+
+
+\lang american
+tolerance: 
+\emph on 
+float
+\emph default 
+ The difference in water quality level below which parcels of water are
+ considered of equal value.
+ The default is 0.01.\SpecialChar ~
+
+\layout Itemize
+
+
+\lang american
+map: 
+\emph on 
+string
+\emph default 
+ The name of a file containing junction coordinates.
+ 
+\layout Subsection
+
+
+\lang american
+Report
+\layout Itemize
+
+
+\lang american
+Pagesize: 
+\emph on 
+integer
+\emph default 
+ The number of lines on one page of the output report.
+ The default is 0 meaning that no limit of lines per page is in effect.
+ 
+\layout Itemize
+
+
+\lang american
+File: 
+\emph on 
+string
+\emph default 
+ The name of the report file.
+ Leave empty if you use the DC Water Design Extension.
+ 
+\layout Itemize
+
+
+\lang american
+Status: 
+\emph on 
+string
+\emph default 
+ Determines whether hydraulic status messages should be written to the report
+ file.
+ The following values are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+YES 
+\layout Itemize
+
+
+\lang american
+NO 
+\layout Itemize
+
+
+\lang american
+FULL 
+\layout Standard
+
+
+\lang american
+The default is NO.
+ 
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+Summary: 
+\emph on 
+string
+\emph default 
+ Determines whether a Summary is generated.
+ The following values are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+YES 
+\layout Itemize
+
+
+\lang american
+NO 
+\layout Standard
+
+
+\lang american
+Default is YES.
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+Messages: 
+\emph on 
+string
+\emph default 
+ Determines whether warning and error messages are written to the report.
+ The following values are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+YES 
+\layout Itemize
+
+
+\lang american
+NO 
+\layout Standard
+
+
+\lang american
+The default is YES.
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+Energy: 
+\emph on 
+string
+\emph default 
+ Determines whether energy and energy cost reports for pumps should be written
+ to the report file.
+ The following values are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+YES 
+\layout Itemize
+
+
+\lang american
+NO 
+\layout Standard
+
+
+\lang american
+The default is NO.
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+Nodes: 
+\emph on 
+string
+\emph default 
+ Determines which nodes will be reported on.
+ The following values are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+NONE 
+\layout Itemize
+
+
+\lang american
+ALL 
+\layout Itemize
+
+
+\lang american
+dc_id1 dc_id2 dc_id3 ...
+ 
+\layout Standard
+
+
+\lang american
+The default is NONE.
+\end_deeper 
+\layout Itemize
+
+
+\lang american
+Links: 
+\emph on 
+string
+\emph default 
+ Determines which links will be reported on.
+ The following values are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+NONE 
+\layout Itemize
+
+
+\lang american
+ALL 
+\layout Itemize
+
+
+\lang american
+dc_id1 dc_id2 dc_id3 ...
+ 
+\layout Standard
+
+
+\lang american
+The default is NONE.
+ 
+\end_deeper 
+\layout Subsection
+
+
+\lang american
+Times
+\layout Standard
+
+
+\lang american
+Times can be specified in SECONDS(SEC), MINUTES (MIN), HOURS or DAYS.
+ Just enter the unit name after the value.
+ The default time unit is hours.
+ 
+\layout Itemize
+
+
+\lang american
+Duration: 
+\emph on 
+string
+\emph default 
+ The duration of the simulation.
+ 
+\layout Itemize
+
+
+\lang american
+Hydraulictimestep: 
+\emph on 
+string
+\emph default 
+ Determines how often a new hydraulic solution is computed.
+ The default is 1 hours.
+ 
+\layout Itemize
+
+
+\lang american
+Qualitytimestep: 
+\emph on 
+string
+\emph default 
+ Determines how often the water quality is computed.
+ The default is 1/10 of the hydraulic time step.
+ 
+\layout Itemize
+
+
+\lang american
+Ruletimestep: 
+\emph on 
+string
+\emph default 
+ Used with rule-based controls.
+ Defaults to 1/10 of the hydraulic time step.
+ 
+\layout Itemize
+
+
+\lang american
+Patterntimestep: 
+\emph on 
+string
+\emph default 
+ The interval between time periods in all time patterns.
+ The default is 1 hour.
+ 
+\layout Itemize
+
+
+\lang american
+Patternstart: 
+\emph on 
+string
+\emph default 
+ Describes when the pattern cycle will be started.
+ Defaults to 0.
+ 
+\layout Itemize
+
+
+\lang american
+Reporttimestep: 
+\emph on 
+string
+\emph default 
+ The interval in which results will be reported.
+ The default is 1 hour.
+ 
+\layout Itemize
+
+
+\lang american
+Reportstart: 
+\emph on 
+string
+\emph default 
+ Determines the time when reporting starts.
+ The default is 0.
+ 
+\layout Itemize
+
+
+\lang american
+Startclocktime: 
+\emph on 
+string
+\emph default 
+ The time of the day at which the simulation starts.
+ The default is 12 AM (midnight).
+ 
+\layout Itemize
+
+
+\lang american
+Statistic: 
+\emph on 
+string
+\emph default 
+ Determines the type of statistical post-processing.
+ The following values are valid:
+\begin_deeper 
+\layout Itemize
+
+
+\lang american
+NONE 
+\layout Itemize
+
+
+\lang american
+AVERAGED 
+\layout Itemize
+
+
+\lang american
+MINIMUM 
+\layout Itemize
+
+
+\lang american
+MAXIMUM 
+\layout Itemize
+
+
+\lang american
+RANGE
+\end_deeper 
+\layout Subsection
+
+
+\lang american
+VirtualLine
+\layout Standard
+
+
+\lang american
+Inherited by Pump
+\layout Standard
+
+
+\lang american
+Inherited by Valve
+\layout Standard
+
+
+\lang american
+Inherits from Node
+\layout Itemize
+
+
+\lang american
+result_flow: 
+\emph on 
+float
+\emph default 
+ EPANET analysis result: The flow in liters per second.
+ 
+\layout Itemize
+
+
+\lang american
+result_velocity: 
+\emph on 
+float
+\emph default 
+ EPANET analysis result: Flow velocity in meters per second.
+ result_headloss: 
+\emph on 
+float
+\emph default 
+ Headloss over the pipe in m.
+ 
+\layout Subsection
+
+
+\lang american
+Curve
+\layout Standard
+
+
+\lang american
+Inherits from Identity
+\layout Itemize
+
+
+\lang american
+dc_x: 
+\emph on 
+float
+\emph default 
+ X value.
+ 
+\layout Itemize
+
+
+\lang american
+dc_y: 
+\emph on 
+float
+\emph default 
+ Y value.
+ 
+\layout Standard
+
+
+\latex latex 
+
+\backslash 
+appendix
+\layout Section
+\pagebreak_top 
+
+\lang american
+
+\begin_inset LatexCommand \label{sec:av-epanet-uml-static-state}
+
+\end_inset 
+
+ArcView/EPANET UML Static State Analysis Diagram
+\layout Comment
+
+
+\lang american
+Insert as A3
+\layout Section
+\pagebreak_top 
+
+\lang american
+
+\begin_inset LatexCommand \label{sec:gnu-lesser-gpl}
+
+\end_inset 
+
+GNU Lesser General Public License
+\layout Standard
+
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+Version 2.1, February 1999
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Copyright (C) 1991, 1999 Free Software Foundation, Inc.
+\layout Standard
+
+
+\lang american
+59 Temple Place, Suite 330, Boston, MA\SpecialChar ~
+ 02111-1307\SpecialChar ~
+ USA
+\layout Standard
+
+
+\lang american
+Everyone is permitted to copy and distribute verbatim copies
+\layout Standard
+
+
+\lang american
+of this license document, but changing it is not allowed.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+[This is the first released version of the Lesser GPL.\SpecialChar ~
+ It also counts
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+as the successor of the GNU Library Public License, version 2, hence
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+the version number 2.1.]
+\layout Standard
+
+
+\lang american
+Preamble
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+The licenses for most software are designed to take away your freedom to
+ share and change it.
+ By contrast, the GNU General Public Licenses are intended to guarantee
+ your freedom to share and change free software--to make sure the software
+ is free for all its users.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+This license, the Lesser General Public License, applies to some specially
+ designated software packages--typically libraries--of the Free Software
+ Foundation and other authors who decide to use it.
+ You can use it too, but we suggest you first think carefully about whether
+ this license or the ordinary General Public License is the better strategy
+ to use in any particular case, based on the explanations below.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+When we speak of free software, we are referring to freedom of use, not
+ price.
+ Our General Public Licenses are designed to make sure that you have the
+ freedom to distribute copies of free software (and charge for this service
+ if you wish); that you receive source code or can get it if you want it;
+ that you can change the software and use pieces of it in new free programs;
+ and that you are informed that you can do these things.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+To protect your rights, we need to make restrictions that forbid distributors
+ to deny you these rights or to ask you to surrender these rights.
+ These restrictions translate to certain responsibilities for you if you
+ distribute copies of the library or if you modify it.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+For example, if you distribute copies of the library, whether gratis or
+ for a fee, you must give the recipients all the rights that we gave you.
+ You must make sure that they, too, receive or can get the source code.
+ If you link other code with the library, you must provide complete object
+ files to the recipients, so that they can relink them with the library
+ after making changes to the library and recompiling it.
+ And you must show them these terms so they know their rights.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+We protect your rights with a two-step method: (1) we copyright the library,
+ and (2) we offer you this license, which gives you legal permission to
+ copy, distribute and/or modify the library.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+To protect each distributor, we want to make it very clear that there is
+ no warranty for the free library.
+ Also, if the library is modified by someone else and passed on, the recipients
+ should know that what they have is not the original version, so that the
+ original author's reputation will not be affected by problems that might
+ be introduced by others.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Finally, software patents pose a constant threat to the existence of any
+ free program.
+ We wish to make sure that a company cannot effectively restrict the users
+ of a free program by obtaining a restrictive license from a patent holder.
+ Therefore, we insist that any patent license obtained for a version of
+ the library must be consistent with the full freedom of use specified in
+ this license.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Most GNU software, including some libraries, is covered by the ordinary
+ GNU General Public License.
+ This license, the GNU Lesser General Public License, applies to certain
+ designated libraries, and is quite different from the ordinary General
+ Public License.
+ We use this license for certain libraries in order to permit linking those
+ libraries into non-free programs.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+When a program is linked with a library, whether statically or using a shared
+ library, the combination of the two is legally speaking a combined work,
+ a derivative of the original library.
+ The ordinary General Public License therefore permits such linking only
+ if the entire combination fits its criteria of freedom.
+ The Lesser General Public License permits more lax criteria for linking
+ other code with the library.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+We call this license the "Lesser" General Public License because it does
+ Less to protect the user's freedom than the ordinary General Public License.
+ It also provides other free software developers Less of an advantage over
+ competing non-free programs.
+ These disadvantages are the reason we use the ordinary General Public License
+ for many libraries.
+ However, the Lesser license provides advantages in certain special circumstance
+s.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+For example, on rare occasions, there may be a special need to encourage
+ the widest possible use of a certain library, so that it becomes a de-facto
+ standard.
+ To achieve this, non-free programs must be allowed to use the library.
+ A more frequent case is that a free library does the same job as widely
+ used non-free libraries.
+ In this case, there is little to gain by limiting the free library to free
+ software only, so we use the Lesser General Public License.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+In other cases, permission to use a particular library in non-free programs
+ enables a greater number of people to use a large body of free software.
+ For example, permission to use the GNU C Library in non-free programs enables
+ many more people to use the whole GNU operating system, as well as its
+ variant, the GNU/Linux operating system.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Although the Lesser General Public License is Less protective of the users'
+ freedom, it does ensure that the user of a program that is linked with
+ the Library has the freedom and the wherewithal to run that program using
+ a modified version of the Library.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+The precise terms and conditions for copying, distribution and modification
+ follow.
+ Pay close attention to the difference between a "work based on the library"
+ and a "work that uses the library".
+ The former contains code derived from the library, whereas the latter must
+ be combined with the library in order to run.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+0.
+ This License Agreement applies to any software library or other program
+ which contains a notice placed by the copyright holder or other authorized
+ party saying it may be distributed under the terms of this Lesser General
+ Public License (also called "this License").
+ Each licensee is addressed as "you".
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+A "library" means a collection of software functions and/or data prepared
+ so as to be conveniently linked with application programs (which use some
+ of those functions and data) to form executables.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+The "Library", below, refers to any such software library or work which
+ has been distributed under these terms.
+ A "work based on the Library" means either the Library or any derivative
+ work under copyright law: that is to say, a work containing the Library
+ or a portion of it, either verbatim or with modifications and/or translated
+ straightforwardly into another language.
+ (Hereinafter, translation is included without limitation in the term "modificat
+ion".)
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+"Source code" for a work means the preferred form of the work for making
+ modifications to it.
+ For a library, complete source code means all the source code for all modules
+ it contains, plus any associated interface definition files, plus the scripts
+ used to control compilation and installation of the library.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Activities other than copying, distribution and modification are not covered
+ by this License; they are outside its scope.
+ The act of running a program using the Library is not restricted, and output
+ from such a program is covered only if its contents constitute a work based
+ on the Library (independent of the use of the Library in a tool for writing
+ it).
+ Whether that is true depends on what the Library does and what the program
+ that uses the Library does.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+1.
+ You may copy and distribute verbatim copies of the Library's complete source
+ code as you receive it, in any medium, provided that you conspicuously
+ and appropriately publish on each copy an appropriate copyright notice
+ and disclaimer of warranty; keep intact all the notices that refer to this
+ License and to the absence of any warranty; and distribute a copy of this
+ License along with the Library.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+You may charge a fee for the physical act of transferring a copy, and you
+ may at your option offer warranty protection in exchange for a fee.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+2.
+ You may modify your copy or copies of the Library or any portion of it,
+ thus forming a work based on the Library, and copy and distribute such
+ modifications or work under the terms of Section 1 above, provided that
+ you also meet all of these conditions:
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * a) The modified work must itself be a software library.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * b) You must cause the files modified to carry prominent notices stating
+ that you changed the files and the date of any change.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * c) You must cause the whole of the work to be licensed at no charge to
+ all third parties under the terms of this License.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * d) If a facility in the modified Library refers to a function or a table
+ of data to be supplied by an application program that uses the facility,
+ other than as an argument passed when the facility is invoked, then you
+ must make a good faith effort to ensure that, in the event an application
+ does not supply such function or table, the facility still operates, and
+ performs whatever part of its purpose remains meaningful.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ (For example, a function in a library to compute square roots has a purpose
+ that is entirely well-defined independent of the application.
+ Therefore, Subsection 2d requires that any application-supplied function
+ or table used by this function must be optional: if the application does
+ not supply it, the square root function must still compute square roots.)
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ These requirements apply to the modified work as a whole.
+ If identifiable sections of that work are not derived from the Library,
+ and can be reasonably considered independent and separate works in themselves,
+ then this License, and its terms, do not apply to those sections when you
+ distribute them as separate works.
+ But when you distribute the same sections as part of a whole which is a
+ work based on the Library, the distribution of the whole must be on the
+ terms of this License, whose permissions for other licensees extend to
+ the entire whole, and thus to each and every part regardless of who wrote
+ it.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ Thus, it is not the intent of this section to claim rights or contest your
+ rights to work written entirely by you; rather, the intent is to exercise
+ the right to control the distribution of derivative or collective works
+ based on the Library.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ In addition, mere aggregation of another work not based on the Library
+ with the Library (or with a work based on the Library) on a volume of a
+ storage or distribution medium does not bring the other work under the
+ scope of this License.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+3.
+ You may opt to apply the terms of the ordinary GNU General Public License
+ instead of this License to a given copy of the Library.
+ To do this, you must alter all the notices that refer to this License,
+ so that they refer to the ordinary GNU General Public License, version
+ 2, instead of to this License.
+ (If a newer version than version 2 of the ordinary GNU General Public License
+ has appeared, then you can specify that version instead if you wish.) Do
+ not make any other change in these notices.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Once this change is made in a given copy, it is irreversible for that copy,
+ so the ordinary GNU General Public License applies to all subsequent copies
+ and derivative works made from that copy.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+This option is useful when you wish to copy part of the code of the Library
+ into a program that is not a library.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+4.
+ You may copy and distribute the Library (or a portion or derivative of
+ it, under Section 2) in object code or executable form under the terms
+ of Sections 1 and 2 above provided that you accompany it with the complete
+ corresponding machine-readable source code, which must be distributed under
+ the terms of Sections 1 and 2 above on a medium customarily used for software
+ interchange.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+If distribution of object code is made by offering access to copy from a
+ designated place, then offering equivalent access to copy the source code
+ from the same place satisfies the requirement to distribute the source
+ code, even though third parties are not compelled to copy the source along
+ with the object code.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+5.
+ A program that contains no derivative of any portion of the Library, but
+ is designed to work with the Library by being compiled or linked with it,
+ is called a "work that uses the Library".
+ Such a work, in isolation, is not a derivative work of the Library, and
+ therefore falls outside the scope of this License.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+However, linking a "work that uses the Library" with the Library creates
+ an executable that is a derivative of the Library (because it contains
+ portions of the Library), rather than a "work that uses the library".
+ The executable is therefore covered by this License.
+ Section 6 states terms for distribution of such executables.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+When a "work that uses the Library" uses material from a header file that
+ is part of the Library, the object code for the work may be a derivative
+ work of the Library even though the source code is not.
+ Whether this is true is especially significant if the work can be linked
+ without the Library, or if the work is itself a library.
+ The threshold for this to be true is not precisely defined by law.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+If such an object file uses only numerical parameters, data structure layouts
+ and accessors, and small macros and small inline functions (ten lines or
+ less in length), then the use of the object file is unrestricted, regardless
+ of whether it is legally a derivative work.
+ (Executables containing this object code plus portions of the Library will
+ still fall under Section 6.)
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Otherwise, if the work is a derivative of the Library, you may distribute
+ the object code for the work under the terms of Section 6.
+ Any executables containing that work also fall under Section 6, whether
+ or not they are linked directly with the Library itself.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+6.
+ As an exception to the Sections above, you may also combine or link a "work
+ that uses the Library" with the Library to produce a work containing portions
+ of the Library, and distribute that work under terms of your choice, provided
+ that the terms permit modification of the work for the customer's own use
+ and reverse engineering for debugging such modifications.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+You must give prominent notice with each copy of the work that the Library
+ is used in it and that the Library and its use are covered by this License.
+ You must supply a copy of this License.
+ If the work during execution displays copyright notices, you must include
+ the copyright notice for the Library among them, as well as a reference
+ directing the user to the copy of this License.
+ Also, you must do one of these things:
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * a) Accompany the work with the complete corresponding machine-readable
+ source code for the Library including whatever changes were used in the
+ work (which must be distributed under Sections 1 and 2 above); and, if
+ the work is an executable linked with the Library, with the complete machine-re
+adable "work that uses the Library", as object code and/or source code,
+ so that the user can modify the Library and then relink to produce a modified
+ executable containing the modified Library.
+ (It is understood that the user who changes the contents of definitions
+ files in the Library will not necessarily be able to recompile the application
+ to use the modified definitions.)
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * b) Use a suitable shared library mechanism for linking with the Library.
+ A suitable mechanism is one that (1) uses at run time a copy of the library
+ already present on the user's computer system, rather than copying library
+ functions into the executable, and (2) will operate properly with a modified
+ version of the library, if the user installs one, as long as the modified
+ version is interface-compatible with the version that the work was made
+ with.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * c) Accompany the work with a written offer, valid for at least three
+ years, to give the same user the materials specified in Subsection 6a,
+ above, for a charge no more than the cost of performing this distribution.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * d) If distribution of the work is made by offering access to copy from
+ a designated place, offer equivalent access to copy the above specified
+ materials from the same place.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * e) Verify that the user has already received a copy of these materials
+ or that you have already sent this user a copy.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+For an executable, the required form of the "work that uses the Library"
+ must include any data and utility programs needed for reproducing the executabl
+e from it.
+ However, as a special exception, the materials to be distributed need not
+ include anything that is normally distributed (in either source or binary
+ form) with the major components (compiler, kernel, and so on) of the operating
+ system on which the executable runs, unless that component itself accompanies
+ the executable.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+It may happen that this requirement contradicts the license restrictions
+ of other proprietary libraries that do not normally accompany the operating
+ system.
+ Such a contradiction means you cannot use both them and the Library together
+ in an executable that you distribute.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+7.
+ You may place library facilities that are a work based on the Library side-by-s
+ide in a single library together with other library facilities not covered
+ by this License, and distribute such a combined library, provided that
+ the separate distribution of the work based on the Library and of the other
+ library facilities is otherwise permitted, and provided that you do these
+ two things:
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * a) Accompany the combined library with a copy of the same work based
+ on the Library, uncombined with any other library facilities.
+ This must be distributed under the terms of the Sections above.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+\SpecialChar ~
+\SpecialChar ~
+ * b) Give prominent notice with the combined library of the fact that part
+ of it is a work based on the Library, and explaining where to find the
+ accompanying uncombined form of the same work.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+8.
+ You may not copy, modify, sublicense, link with, or distribute the Library
+ except as expressly provided under this License.
+ Any attempt otherwise to copy, modify, sublicense, link with, or distribute
+ the Library is void, and will automatically terminate your rights under
+ this License.
+ However, parties who have received copies, or rights, from you under this
+ License will not have their licenses terminated so long as such parties
+ remain in full compliance.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+9.
+ You are not required to accept this License, since you have not signed
+ it.
+ However, nothing else grants you permission to modify or distribute the
+ Library or its derivative works.
+ These actions are prohibited by law if you do not accept this License.
+ Therefore, by modifying or distributing the Library (or any work based
+ on the Library), you indicate your acceptance of this License to do so,
+ and all its terms and conditions for copying, distributing or modifying
+ the Library or works based on it.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+10.
+ Each time you redistribute the Library (or any work based on the Library),
+ the recipient automatically receives a license from the original licensor
+ to copy, distribute, link with or modify the Library subject to these terms
+ and conditions.
+ You may not impose any further restrictions on the recipients' exercise
+ of the rights granted herein.
+ You are not responsible for enforcing compliance by third parties with
+ this License.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+11.
+ If, as a consequence of a court judgment or allegation of patent infringement
+ or for any other reason (not limited to patent issues), conditions are
+ imposed on you (whether by court order, agreement or otherwise) that contradict
+ the conditions of this License, they do not excuse you from the conditions
+ of this License.
+ If you cannot distribute so as to satisfy simultaneously your obligations
+ under this License and any other pertinent obligations, then as a consequence
+ you may not distribute the Library at all.
+ For example, if a patent license would not permit royalty-free redistribution
+ of the Library by all those who receive copies directly or indirectly through
+ you, then the only way you could satisfy both it and this License would
+ be to refrain entirely from distribution of the Library.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+If any portion of this section is held invalid or unenforceable under any
+ particular circumstance, the balance of the section is intended to apply,
+ and the section as a whole is intended to apply in other circumstances.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+It is not the purpose of this section to induce you to infringe any patents
+ or other property right claims or to contest validity of any such claims;
+ this section has the sole purpose of protecting the integrity of the free
+ software distribution system which is implemented by public license practices.
+ Many people have made generous contributions to the wide range of software
+ distributed through that system in reliance on consistent application of
+ that system; it is up to the author/donor to decide if he or she is willing
+ to distribute software through any other system and a licensee cannot impose
+ that choice.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+This section is intended to make thoroughly clear what is believed to be
+ a consequence of the rest of this License.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+12.
+ If the distribution and/or use of the Library is restricted in certain
+ countries either by patents or by copyrighted interfaces, the original
+ copyright holder who places the Library under this License may add an explicit
+ geographical distribution limitation excluding those countries, so that
+ distribution is permitted only in or among countries not thus excluded.
+ In such case, this License incorporates the limitation as if written in
+ the body of this License.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+13.
+ The Free Software Foundation may publish revised and/or new versions of
+ the Lesser General Public License from time to time.
+ Such new versions will be similar in spirit to the present version, but
+ may differ in detail to address new problems or concerns.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Each version is given a distinguishing version number.
+ If the Library specifies a version number of this License which applies
+ to it and "any later version", you have the option of following the terms
+ and conditions either of that version or of any later version published
+ by the Free Software Foundation.
+ If the Library does not specify a license version number, you may choose
+ any version ever published by the Free Software Foundation.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+14.
+ If you wish to incorporate parts of the Library into other free programs
+ whose distribution conditions are incompatible with these, write to the
+ author to ask for permission.
+ For software which is copyrighted by the Free Software Foundation, write
+ to the Free Software Foundation; we sometimes make exceptions for this.
+ Our decision will be guided by the two goals of preserving the free status
+ of all derivatives of our free software and of promoting the sharing and
+ reuse of software generally.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+NO WARRANTY
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+15.
+ BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR
+ THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
+ EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER
+ PARTIES PROVIDE THE LIBRARY "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+ EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE LIBRARY IS WITH
+ YOU.
+ SHOULD THE LIBRARY PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY
+ SERVICING, REPAIR OR CORRECTION.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+16.
+ IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL
+ ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR REDISTRIBUTE
+ THE LIBRARY AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING
+ ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF
+ THE USE OR INABILITY TO USE THE LIBRARY (INCLUDING BUT NOT LIMITED TO LOSS
+ OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR
+ THIRD PARTIES OR A FAILURE OF THE LIBRARY TO OPERATE WITH ANY OTHER SOFTWARE),
+ EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY
+ OF SUCH DAMAGES.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+END OF TERMS AND CONDITIONS
+\layout Standard
+
+
+\lang american
+How to Apply These Terms to Your New Libraries
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+If you develop a new library, and you want it to be of the greatest possible
+ use to the public, we recommend making it free software that everyone can
+ redistribute and change.
+ You can do so by permitting redistribution under these terms (or, alternatively
+, under the terms of the ordinary General Public License).
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+To apply these terms, attach the following notices to the library.
+ It is safest to attach them to the start of each source file to most effectivel
+y convey the exclusion of warranty; and each file should have at least the
+ "copyright" line and a pointer to where the full notice is found.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+one line to give the library's name and an idea of what it does.
+\layout Standard
+
+
+\lang american
+Copyright (C) year name of author
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+This library is free software; you can redistribute it and/or
+\layout Standard
+
+
+\lang american
+modify it under the terms of the GNU Lesser General Public
+\layout Standard
+
+
+\lang american
+License as published by the Free Software Foundation; either
+\layout Standard
+
+
+\lang american
+version 2.1 of the License, or (at your option) any later version.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+This library is distributed in the hope that it will be useful,
+\layout Standard
+
+
+\lang american
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+\layout Standard
+
+
+\lang american
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\SpecialChar ~
+ See the GNU
+\layout Standard
+
+
+\lang american
+Lesser General Public License for more details.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+You should have received a copy of the GNU Lesser General Public
+\layout Standard
+
+
+\lang american
+License along with this library; if not, write to the Free Software
+\layout Standard
+
+
+\lang american
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA\SpecialChar ~
+ 02111-1307\SpecialChar ~
+ USA
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Also add information on how to contact you by electronic and paper mail.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+You should also get your employer (if you work as a programmer) or your
+ school, if any, to sign a "copyright disclaimer" for the library, if necessary.
+ Here is a sample; alter the names:
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+Yoyodyne, Inc., hereby disclaims all copyright interest in
+\layout Standard
+
+
+\lang american
+the library `Frob' (a library for tweaking knobs) written
+\layout Standard
+
+
+\lang american
+by James Random Hacker.
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+signature of Ty Coon, 1 April 1990
+\layout Standard
+
+
+\lang american
+Ty Coon, President of Vice
+\layout Standard
+
+
+\lang american
+\SpecialChar ~
+
+\layout Standard
+
+
+\lang american
+That's all there is to it!
+\the_end
