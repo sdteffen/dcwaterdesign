@@ -1,0 +1,89 @@
+' DCWatDesExtension.uninstall
+
+' (c) 2000, 2001 DORSCH Consult
+' uninstall the Water Design Extension
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+'Make sure there is a project
+if (av.GetProject = nil) then
+  return nil
+end
+
+extDCWatDes = Extension.find("DC Water Design")
+dicPreferences = Dictionary.make(1)
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+end
+
+'Uninstall only if the project is not closing
+if (av.GetProject.IsClosing) then
+  return nil
+end
+
+'The self object for this script is the extension
+'The first root is the menu
+'The second root is the view
+'
+' Remove the menu from the View GUI 
+theMenubar = av.GetProject.FindGUI("View").GetMenuBar
+theMenuBar.remove(self.Get(1))
+
+' remove the menu from the Project Gui
+
+theProjectMenuBar = av.getProject.findGui("Project").getMenuBar
+theProjectMenuBar.remove(self.get(8))
+ 
+'remove buttons
+theViewButtonBar = av.getProject.findGUI("View").getButtonBar
+'node theme menu
+'theViewButtonBar.remove(self.get(2))
+
+'remove the popups
+pu = av.GetProject.FindGUI("View").GetPopups
+if (pu <> nil) then
+  pu.remove(self.Get(3))
+  pu.remove(self.get(4))
+  'PipesAndNodesPopup
+  pu.remove(self.get(17))
+  pu.setUpdate(dicPreferences.get("strOriginalViewPopupUpdate"))
+  pu.setActive(dicPreferences.get("objOriginalViewPopup"))
+end
+
+'remove classification button
+'theViewButtonBar.remove(self.get(5))
+
+'classify House Connections button
+theTableButtonBar = av.getProject.findGUI("Table").getButtonBar
+'theTableButtonBar.remove(self.get(6))
+
+'remove epanet theme button
+theViewButtonBar.remove(self.get(11))
+
+' 12 remove flip polyline tool
+theViewToolBar = av.getProject.findGUI("View").getToolBar
+theViewToolBar.remove(self.get(12))
+
+' 14 remove digitizing node toolbar
+theViewToolBar.remove(self.get(14))
+
+' 15 remove epanet tables button
+theViewButtonBar.remove(self.get(15))
+
+' 16 Bitcode Calculator Button
+theTableButtonBar = av.getProject.findGUI("Table").getButtonBar
+theTableButtonBar.remove(self.get(16))
+
+

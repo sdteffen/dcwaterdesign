@@ -1,0 +1,584 @@
+' DCWatDes.Model.Epanet.writeInpFile
+
+' (c) 2000, 2001 DORSCH Consult
+' saves an Epanet Input file
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+'expects a boolean variable wether to export spatial data
+
+blnExportSpatial = true
+
+if(self<>nil)then
+  if(self=false)then
+    blnExportSpatial = false
+  end
+end
+
+' snapping
+
+numSnappingRadius = 0.1
+
+' set up
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
+
+activeView = av.getActiveDoc
+if(activeView.is(View).not)then
+  exit
+end
+
+'get File Locations
+if(dicPreferences <> nil)then
+  strSabCmd = dicPreferences.get("strSabcmd")
+  strXslt = dicPreferences.get("strXslt")
+  strOptions = dicPreferences.get("strOptions")
+  strReport = dicPreferences.get("strReport")
+  strTimes = dicPreferences.get("strTimes")
+else
+  'fallback for development purposes
+  strSabCmd = "c:\winnt\system32\testxslt"
+  strXslt = "c:\home\sdteffen\projects\epanetxml\xml2net.xsl"
+  strOptions = "Options"
+  strReport = "Report"
+  strTimes = "Times"
+end
+
+fln_Xml = FileDialog.put("hydraulic_model.xml".asFilename,"*.xml","Save Epanet Model")
+if(fln_Xml = nil ) then
+' User selected cancel
+  exit
+end
+
+lnf_Xml = LineFile.make(fln_Xml, #FILE_PERM_WRITE)
+
+'locate the themes
+
+dicThemes = Dictionary.make(6)
+
+for each strTheme in {"Pipes", "Junctions", "Pumps", "Reservoirs", "Tanks", "Valves"}
+  if(extDCWatDes <> nil)then
+    strThemeName = dicPreferences.get("str"+strTheme)
+  else
+    'fallback for development purposes
+    if(strTheme = "Pipes")then
+      strThemeName="Pll_lines_al_koura.shp"
+    end
+    if(strTheme = "Junctions")then
+      strThemeName = "Pnt_nodes_al_koura.shp"
+    end
+  end
+  if(strThemeName <> nil)then
+    lstThemes = activeView.getThemes
+    for each thmSearch in lstThemes
+      if(thmSearch.getName.lcase = strThemeName.lcase)then
+        dicThemes.add(strTheme, thmSearch)
+      end
+    end
+  end
+end
+
+' start writing
+av.showStopButton
+lnf_Xml.writeElt("<network>")
+
+' write title section
+
+lnf_Xml.writeElt("<title>"+activeView.getName++Date.now.asString+"</title>")
+
+' write Pumps and Valves section
+
+thmPipes = dicThemes.get("Pipes")
+ftbPipes = thmPipes.getFTab
+fldPipeShape = ftbPipes.findField("Shape")
+
+lstSections = {{"Pumps",{"dc_id", "elevation", "properties"}},
+              {"Valves",{"dc_id", "elevation", "diameter", "setting", "minorloss"}}}
+              
+lstDynamicJunctions = List.make
+lstDynamicCoordinates = List.make
+lstDynamicNodes = List.make         
+
+' List to hold Shutoff Valves and Check Valves
+lstDynamicPipes = List.make
+     
+for each lstSection in lstSections
+  strSection = lstSection.get(0)
+  lnf_Xml.writeElt("<"+strSection.lcase+">")
+  strSectionSingular = strSection.substitute("s","")
+  thmSection = dicThemes.get(strSection)
+  if(thmSection <> nil)then
+    ftbSection = thmSection.getFTab
+    fldPointShape = ftbSection.findField("Shape")
+    
+    bmpMischiefFeatures = ftbSection.getSelection.clone
+    bmpMischiefFeatures.clearAll
+    
+    ' find fields
+    lstRequiredAttributes = lstSection.get(1)
+    lstFields = List.make
+    blnFieldsMissing = false
+    for each strAttribute in lstRequiredAttributes
+      fldAttribute = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbSection, strAttribute})
+      if(fldAttribute <> nil)then
+        lstFields.add(fldAttribute)
+      else
+        MsgBox.error("Field '"+strAttribute+"' is missing in the "+strSection+" table."+NL+"Can't export Epanet Model."+NL+"Please set the proper Alias.","DC Water Design Extension")
+        blnFieldsMissing = true
+      end
+    end
+    if(blnFieldsMissing)then
+      lnf_Xml.close
+      exit
+    end
+    fldID = lstFields.get(0)
+    lstFields.remove(0)
+    fldElevation = lstFields.get(0)
+    lstFields.remove(0)
+    strSection = strSection.lcase
+    for each rec in ftbSection
+      pntFirstNode = ftbSection.returnValue(fldPointShape, rec)
+      strFirstNodeID = ftbSection.returnValue(fldID, rec).asString
+      strSecondNodeID = strFirstNodeID+"dn"
+      ftbPipes.selectByPoint(pntFirstNode, numSnappingRadius, #VTAB_SELTYPE_NEW) 
+      bmpPipes = ftbPipes.getSelection
+      'second run is necessary because selectByPoint returns also Pipes that
+      'cross the point rather than start at it
+      recConnected = nil
+      for each recPipe in bmpPipes
+        pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
+        lstPipeNodes = pllPipe.connect.asList.get(0)
+        pntStart = lstPipeNodes.get(0)
+        'pntEnd = lstPipeNodes.get(lstPipeNodes.count-1)
+        numDistanceStart = pntStart.distance(pntFirstNode)
+        'numDistanceEnd = pntEnd.distance(pntFirstNode)
+        if( numDistanceStart < numSnappingRadius) then
+          recConnected = recPipe
+          break
+        end
+      end
+      if(recConnected = nil)then      
+        bmpMischiefFeatures.set(rec)
+      else
+      
+      'actually create pump or valve
+      
+        lstExplodedPipe = pllPipe.explode
+        pllFirstSection = Line.make(pntFirstNode, lstExplodedPipe.get(0).asList.get(0).get(1)).asPolyline
+        numLength = pllFirstSection.returnLength
+
+        if(numLength > 1.00)then
+          pntSecondNode = pllFirstSection.along(100/numLength)
+        else
+          pntSecondNode = pllFirstSection.along(50)
+        end
+        strAttributes=""
+        for each fld in lstFields
+          strAttribute = ftbSection.returnValue(fld, rec).asString
+          strAttributes = strAttributes++fld.getAlias.lcase+"="+strAttribute.quote
+        end
+        strAttributes = strAttributes++"node1="+strFirstNodeID.quote
+        strAttributes = strAttributes++"node2="+strSecondNodeID.quote
+        if(strSectionSingular="pump")then
+          lnf_Xml.writeElt("<"+strSectionSingular.lcase++strAttributes+">"+strFirstNodeID+"</"+strSectionSingular.lcase+">")
+        else
+          strType = ftbSection.returnValue(ftbSection.findField("type"), rec).asString.ucase
+          if((strType <> "CV")and(strType <> "SOV"))then
+            lnf_Xml.writeElt("<"+strSectionSingular.lcase++"type="+strType.quote++strAttributes+">"+strFirstNodeID+"</"+strSectionSingular.lcase+">")
+          else
+            strAttributes = strAttributes.substitute("setting=", "status=")
+            lstDynamicPipes.add("<pipe"++strAttributes++"roughness="+"0.1".quote++"length="+"1".quote+">"+strFirstNodeID+"</pipe>")
+          end
+        end
+        ' create dynamic junctions
+        
+        strDynamicJunction = "<junction elevation="+ftbSection.returnValue(fldElevation, rec).asString.quote
+        strDynamicJunction = strDynamicJunction++"demand="+"0".quote++"pattern="+"".quote
+        strDynamicJunction = strDynamicJunction+">"+strFirstNodeID+"</junction>"
+        lstDynamicJunctions.add(strDynamicJunction)
+        strDynamicJunction = "<junction elevation="+ftbSection.returnValue(fldElevation, rec).asString.quote
+        strDynamicJunction = strDynamicJunction++"demand="+"0".quote++"pattern="+"".quote
+        strDynamicJunction = strDynamicJunction+">"+strSecondNodeID+"</junction>"
+        lstDynamicJunctions.add(strDynamicJunction)
+        
+        ' create dynamic coordinates
+        strDynamicCoordinate = "<node x="++pntFirstNode.getX.asString.quote
+        strDynamicCoordinate = strDynamicCoordinate++"y="+pntFirstNode.getY.asString.quote
+        strDynamicCoordinate = strDynamicCoordinate+">"+strFirstNodeID+"</node>"
+        lstDynamicCoordinates.add(strDynamicCoordinate)
+        strDynamicCoordinate = "<node x="++pntSecondNode.getX.asString.quote
+        strDynamicCoordinate = strDynamicCoordinate++"y="+pntSecondNode.getY.asString.quote
+        strDynamicCoordinate = strDynamicCoordinate+">"+strSecondNodeID+"</node>"
+        lstDynamicCoordinates.add(strDynamicCoordinate)
+      end
+    end
+    ftbSection.setSelection(bmpMischiefFeatures)
+    ftbSection.updateSelection
+    if(bmpMischiefFeatures.getNextSet(-1) <> -1)then
+      MsgBox.warning("Some "+strSection+" are not properly connected. Check the selection.", "DC Water Design Extension")
+    end
+  end
+  lnf_Xml.writeElt("</"+strSection.lcase+">")
+end
+
+' write out dynamic Junctions
+
+lnf_Xml.writeElt("<junctions>")
+for each strDynamicJunction in lstDynamicJunctions
+  lnf_Xml.writeElt(strDynamicJunction)
+end
+lnf_Xml.writeElt("</junctions>")
+
+' write out dynamic Coordinates
+
+lnf_Xml.writeElt("<coordinates>")
+for each strDynamicCoordinate in lstDynamicCoordinates
+  lnf_Xml.writeElt(strDynamicCoordinate)
+end
+lnf_Xml.writeElt("</coordinates>")
+
+' write Pipes section
+
+lnf_Xml.writeElt("<pipes>")
+
+' write out Shutoff Valves and Check Valves
+
+for each strDynamicPipe in lstDynamicPipes
+  lnf_Xml.writeElt(strDynamicPipe)
+end
+
+thmPipes = dicThemes.get("Pipes")
+if(thmPipes <> nil)then
+  ftbPipes = thmPipes.getFTab
+  
+  ' check for the fields
+  
+  lstPipeAttributes = {"dc_id", "node1", "node2", "length", "diameter", "roughness", "minorloss", "status"}
+  lstFields = List.make
+  blnFieldsMissing = false
+  for each strAttribute in lstPipeAttributes
+    fldAttribute = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbPipes, strAttribute})
+    if(fldAttribute <> nil)then
+      lstFields.add(fldAttribute)
+    else
+      MsgBox.error("Field '"+strAttribute+"' is missing in the Pipes table."+NL+"Can't export Epanet Model."+NL+"Please set the proper Alias.","DC Water Design Extension")
+      blnFieldsMissing = true
+    end
+  end
+  if(blnFieldsMissing)then
+    lnf_Xml.close
+    exit
+  end
+  fldID = lstFields.get(0)
+  lstFields.remove(0)
+  numRecords = ftbPipes.getNumRecords
+  numWritten = 0
+  for each rec in ftbPipes
+    numWritten = numWritten+1
+    strAttributes=""
+    for each fld in lstFields
+        strAttribute = ftbPipes.returnValue(fld, rec).asString
+        strAttributes = strAttributes++fld.getAlias.lcase+"="+strAttribute.quote
+    end
+    strID = ftbPipes.returnValue(fldID, rec).asString
+    lnf_Xml.writeElt("<pipe"++strAttributes+">"+strID+"</pipe>")
+    av.setStatus(numWritten/numRecords*50)
+  end
+else
+  MsgBox.error("Can't locate Pipes Theme. Unable to export Epanet model.","DC Water Design Extension")
+  lnf_Xml.close
+  exit
+end
+lnf_Xml.writeElt("</pipes>")
+
+' write Junctions section
+
+lnf_Xml.writeElt("<junctions>")
+thmJunctions = dicThemes.get("Junctions")
+if(thmJunctions <> nil)then
+  ftbJunctions = thmJunctions.getFTab
+  
+  ' check for the fields
+  
+  lstJunctionAttributes = {"dc_id", "elevation", "demand", "pattern"}
+  lstFields = List.make
+  blnFieldsMissing = false
+  for each strAttribute in lstJunctionAttributes
+    fldAttribute = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbJunctions,strAttribute})
+    if(fldAttribute <> nil)then
+      lstFields.add(fldAttribute)
+      fldAttribute.setAlias(fldAttribute.getAlias.lcase)
+    else
+      MsgBox.error("Field '"+strAttribute+"' is missing in the Junctions table."+NL+"Can't export Epanet Model."+NL+"Please set the proper Alias.","DC Water Design Extension")
+      blnFieldsMissing = true
+    end
+  end
+  if(blnFieldsMissing)then
+    lnf_Xml.close
+    exit
+  end
+  fldID = lstFields.get(0)
+  lstFields.remove(0)
+  numRecords = ftbJunctions.getNumRecords
+  numWritten = 0
+  for each rec in ftbJunctions
+    numWritten = numWritten+1
+    strAttributes=""
+    for each fld in lstFields
+        strAttribute = ftbJunctions.returnValue(fld, rec).asString
+        strAttributes = strAttributes++fld.getAlias+"="+strAttribute.quote
+    end
+    strID = ftbJunctions.returnValue(fldID, rec).asString
+    lnf_Xml.writeElt("<junction"++strAttributes+">"+strID+"</junction>")
+    av.setStatus(numWritten/numRecords*50+50)
+  end
+else
+  MsgBox.error("Can't locate Junctions Theme. Unable to export Epanet model.","DC Water Design Extension")
+  lnf_Xml.close
+  exit
+end
+lnf_Xml.writeElt("</junctions>")
+
+' write Reservoir and Tank data
+
+for each lstSection in { {"Reservoirs",{"dc_id", "head","pattern"}},
+                              {"Tanks",{"dc_id", "elevation", "initiallevel", "minimumlevel","maximumlevel","diameter","minimumvolume","volumecurve"}}}
+  strSection = lstSection.get(0)
+  lstAttributes = lstSection.get(1)
+  lnf_Xml.writeElt("<"+strSection.lcase+">")
+  thmSection = dicThemes.get(strSection)
+  if(thmSection <> nil)then
+    ftbSection = thmSection.getFTab
+  
+    ' check for the fields
+  
+    lstFields = List.make
+    blnFieldsMissing = false
+    for each strAttribute in lstAttributes
+      fldAttribute = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbSection, strAttribute})
+      if(fldAttribute <> nil)then
+        lstFields.add(fldAttribute)
+        fldAttribute.setAlias(fldAttribute.getAlias.lcase)
+      else
+        MsgBox.error("Field '"+strAttribute+"' is missing in the "+strSection+" table."+NL+"Can't export Epanet Model."+NL+"Please set the proper Alias.","DC Water Design Extension")
+        blnFieldsMissing = true
+      end
+    end
+    if(blnFieldsMissing)then
+      lnf_Xml.close
+      exit
+    end
+    fldID = lstFields.get(0)
+    lstFields.remove(0)
+    strSectionSingular = strSection.substitute("rs","r").substitute("ks","k").lcase
+    for each rec in ftbSection
+      strAttributes=""
+      for each fld in lstFields
+          strAttribute = ftbSection.returnValue(fld, rec).asString
+          strAttributes = strAttributes++fld.getAlias+"="+strAttribute.quote
+      end
+      strID = ftbSection.returnValue(fldID, rec).asString
+      lnf_Xml.writeElt("<"+strSectionSingular++strAttributes+">"+strID+"</"+strSectionSingular+">")
+    end
+  end
+lnf_Xml.writeElt("</"+strSection.lcase+">")
+  
+end
+
+' write Spatial Data
+if(blnExportSpatial)then
+  lnf_Xml.writeElt("<coordinates>") 
+  for each strFeature in { "Junctions", "Reservoirs", "Tanks"}
+    thmFeature = dicThemes.get(strFeature)
+    if(thmFeature <> nil)then
+      ftbFeatures = thmFeature.getFTab
+      fldNodeShape = ftbFeatures.findField("Shape")
+      fldID = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeatures, "dc_id"})
+      for each rec in ftbFeatures
+        pntNode = ftbFeatures.returnValue(fldNodeShape, rec)
+        strCoordinate = "<node x="+pntNode.getX.asString.quote
+        strCoordinate = strCoordinate++"y="+pntNode.getY.asString.quote
+        strCoordinate = strCoordinate+">"+ftbFeatures.returnValue(fldID, rec).asString+"</node>"+NL
+        lnf_Xml.writeElt(strCoordinate)
+      end
+    end
+  end
+  lnf_Xml.writeElt("</coordinates>")
+  
+  ' writeVertices
+
+  lnf_Xml.writeElt("<vertices>")
+  fldPipeShape = ftbPipes.findField("Shape")
+  fldID = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbPipes,"dc_id"})
+  
+  for each rec in ftbPipes
+    pllPipe = ftbPipes.returnValue(fldPipeShape, rec)
+    lstVertices = pllPipe.connect.asList.get(0)
+    strID = ftbPipes.returnValue(fldID, rec).asString
+    if(lstVertices.count > 2)then
+      for each i in 1..(lstVertices.count-2)
+        pntVertex = lstVertices.get(i) 
+        strVertex = "<link x="+pntVertex.getX.asString.quote
+        strVertex = strVertex++"y="+pntVertex.getY.asString.quote
+        strVertex = strVertex+">"+strID+"</link>"+NL
+        lnf_Xml.writeElt(strVertex)
+      end
+    end
+  end
+  lnf_Xml.writeElt("</vertices>")
+  
+    
+end
+
+
+' write out settings from tables
+for each lstSetting in {{"Options", strOptions}, {"Times", strTimes}, {"Report", strReport}}
+  strTable = lstSetting.get(1)
+  strTag = lstSetting.get(0)
+  tableEN = nil
+  for each aTable in av.getProject.getDocsWithGui(av.findGui("Table"))
+    if(aTable.getName = strTable)then
+      tableEN = aTable
+      break
+    end
+  end
+  if(tableEN <> nil)then
+    av.run("XmlParser.Table.writeToLineFile", {tableEN, lnf_Xml, strTag.lcase})
+  else 
+    MsgBox.info("DCWatDes.Model.runEpanet: Table"++strTable++"not found."+NL+"Epanet will use default settings.","DC Water Design Extension")
+  end
+end
+
+' write out controls section
+
+lnf_Xml.writeElt("<controls>")
+tableControls = nil
+strControlTableName = dicPreferences.get("strControls")
+for each docTable in av.getProject.getDocsWithGui(av.findGui("Table"))
+  if(docTable.getName = strControlTableName)then
+    tableControls = docTable
+    break
+  end
+end
+if(tableControls <> nil)then
+  vtbControls = tableControls.getVTab
+  fldFirst=vtbControls.getFields.get(0)
+  for each recControl in vtbControls 
+    strControl = "<control whattodoif="
+    strControl = strControl+vtbControls.returnValue(fldFirst, recControl).asString.quote
+    strControl = strControl+"/>"
+    lnf_Xml.writeElt(strControl)
+  end
+end
+lnf_Xml.writeElt("</controls>")
+
+
+' curves
+lnf_Xml.writeElt("<curves>")
+strCurvesTable = dicPreferences.get("strCurves")
+if(strCurvesTable <> nil)then
+  lstTables = av.getProject.getDocsWithGui(av.findGui("Table"))
+  vtbCurves = nil
+  for each tableInDoc in lstTables
+    if(strCurvesTable = tableInDoc.getName)then
+      vtbCurves = tableInDoc.getVTab
+      break
+    end    
+  end
+  if(vtbCurves = nil)then
+    Msgbox.error("Couldn't find Curves table.", "DC Water Design Extension")
+    lnf_Xml.close
+    av.clearStatus
+    exit
+  end
+  if(vtbCurves.getFields.count <> 3)then
+    Msgbox.error("The Curves table should contain three fields: Id, x and y", "DC Water Design Extension")
+    lnf_Xml.close
+    av.clearStatus
+    exit
+  end
+  fldID = vtbCurves.getFields.get(0)
+  fldX = vtbCurves.getFields.get(1)
+  fldY = vtbCurves.getFields.get(2)
+  for each recCurve in vtbCurves
+    strCurve = "<curve x="+vtbCurves.returnValue(fldX, recCurve).asString.quote
+    strCurve = strCurve+" y="+vtbCurves.returnValue(fldY, recCurve).asString.quote
+    strCurve = strCurve+">"+vtbCurves.returnValue(fldID, recCurve).asString+"</curve>"
+    lnf_Xml.writeElt(strCurve)
+  end      
+end  
+lnf_Xml.writeElt("</curves>")
+
+lnf_Xml.writeElt("</network>")
+lnf_Xml.close
+av.clearStatus
+
+strXml= fln_Xml.getFullName
+strBasePath=strXml.left(strXml.count-3)
+
+flnInp = (strBasePath+"inp").asFilename
+
+'clean up
+File.delete(flnInp)
+
+system.execute(strSabCmd+" -text -xsl "+strXslt+" -in "+strXml+" -out "+strBasePath+"inp")
+
+' wait for the input file appearing
+flnKernel32 = "c:\WINNT\system32\kernel32.dll".AsFileName
+if(File.exists(flnKernel32))then
+  kernel32 = DLL.Make(flnKernel32)
+  sleep = DLLProc.Make(kernel32, "Sleep", #DLLPROC_TYPE_VOID, {#DLLPROC_TYPE_INT32})
+else 
+  sleep=nil
+end
+
+timeStart=Date.now
+while(File.exists(flnInp).not)
+  if((Date.now-timeStart).asSeconds>20)then
+    MsgBox.info("XLST Transformation failed. Check your data.","DC Water Design Extension")
+    exit
+  end
+  if(sleep <>nil)then
+    sleep.call({1000})
+  end
+end
+
+timeStart=Date.now
+while(File.isWritable(flnInp).not)
+  if((Date.now-timeStart).asSeconds>20)then
+    MsgBox.info("Couldn't open Epanet Input file. Check your data.","DC Water Design Extension")
+    exit
+  end
+  if(sleep <>nil)then
+    sleep.call({1000})
+  end
+end
+
+return fln_Xml
+

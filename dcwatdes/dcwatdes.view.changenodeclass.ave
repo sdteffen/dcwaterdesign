@@ -1,0 +1,110 @@
+' DCWatDes.View.changeNodeClass
+
+' (c) 2000 DORSCH Consult
+' change the Class for a given node
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+theView = av.GetActiveDoc
+pntUser = theView.getDisplay.returnUserPoint
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+ftbRemoveNode = nil
+recRemoveNode = nil
+blnDropMovedNode = false
+
+numSnappingRadius = 0.1
+
+if (pntUser.IsNull) then
+  return nil
+else
+  ftbPipes = dicFTabs.get("Pipes")
+  thmPipes = nil
+  lstNodeThemes = List.make
+  for each strNode in dicFTabs.returnKeys
+    if(strNode <> "Pipes")then
+      ftbNodes = dicFTabs.get(strNode)
+      for each thmInView in theView.getThemes
+        if(ftbNodes = thmInView.getFTab)then
+          lstNodeThemes.add(thmInView)
+        end
+      end
+    end
+  end
+  ftbNode = nil
+  recNode = nil
+  for each thmNode in lstNodeThemes
+    lstNodes = thmNode.findByPoint(pntUser)
+    if(lstNodes.count = 1)then
+      ftbNode = thmNode.getFTab
+      recNode = lstNodes.get(0)
+      break
+    end
+  end
+  if(recNode = nil)then
+   return nil
+  end
+  strOriginClass = nil
+  for each strClass in dicFTabs.returnKeys
+    if(dicFTabs.get(strClass) = ftbNode)then
+      strOriginClass = strClass
+    end
+  end
+  
+  dicFTabs.remove("Pipes")
+  dicFTabs.remove(strOriginClass)
+  strChoice = MsgBox.choice(dicFTabs.asList,"Move Node from "+strOriginClass+" Theme to:" ,"DC Water Design Extension")
+  if(strChoice <> nil)then
+    strChoice = strChoice.asString
+  else
+    return nil
+  end  
+  ftbNew = dicFTabs.get(strChoice)
+  lstAllFields = av.run("DCWatDes.Model.Epanet.returnFieldLists",nil)
+  lstOriginFields = nil
+  lstNewFields = nil
+  for each lstFields in lstAllFields
+    if(lstFields.get(0) = strOriginClass)then
+      lstOriginFields = lstFields.get(1)
+    elseif(lstFields.get(0) = strChoice)then
+      lstNewFields = lstFields.get(1)
+    end
+  end
+  lstCommonFields = List.make
+  lstCommonFields.add("Shape")
+  for each strOriginField in lstOriginFields
+    for each strNewField in lstNewFields
+      if(strNewField = strOriginField)then
+        lstCommonFields.add(strNewField.clone)
+      end
+    end
+  end
+    
+  ftbNew.setEditable(true)
+  recNew = ftbNew.addRecord
+  for each strField in lstCommonFields
+    fldOrigin = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbNode, strField})
+    fldNew = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbNew, strField})
+    if((fldOrigin <> nil)and(fldNew <> nil))then
+      objOrigin = ftbNode.returnValue(fldOrigin, recNode)
+      ftbNew.setValue(fldNew, recNew, objOrigin)
+    end
+  end
+  ftbNew.setEditable(false)
+  ftbNode.setEditable(true)
+  ftbNode.removeRecord(recNode)
+  ftbNode.setEditable(false)
+end 

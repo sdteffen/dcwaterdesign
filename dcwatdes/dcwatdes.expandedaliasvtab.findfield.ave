@@ -1,0 +1,53 @@
+' DCWatDes.ExpandedAliasVTab.findField
+
+' (c) 2000, 2001 DORSCH Consult
+' finds a field in a table. Epanet aliases are automatically expanded
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' expects the VTab/FTab as the first argument
+' expects the (expanded) Field name as the second argument
+' returns the field if it is found - nil if not successful
+
+vtbExpanded = self.get(0)
+strFieldname = self.get(1)
+
+
+' try to find the field
+
+fldReturn = vtbExpanded.findField(strFieldname)
+
+if(fldReturn <> nil)then
+  return fldReturn
+end
+
+if(strFieldname.count > 10)then
+  strDisrupted = strFieldname.left(10)
+  fldReturn = vtbExpanded.findField(strDisrupted)
+  if(fldReturn <> nil)then
+    fldReturn.setAlias(strFieldname)
+    return fldReturn
+  end
+else
+ for each fld in vtbExpanded.getFields
+   if(fld.getAlias.lcase = strFieldname.lcase)then
+     return fld
+   end
+ end
+end
+
+' can't find the field
+
+return nil

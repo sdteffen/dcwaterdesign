@@ -1,0 +1,23 @@
+' DCWatDes.Dialog.EpanetThemes.CheckBox.click
+
+' (c) 2000 DORSCH Consult
+
+chbSelf = self
+
+
+strChbName = chbSelf.getName
+strCbxName = strChbName.substitute("chb","cbx")
+
+dlgEpanetThemes = av.findDialog("DCWatDes.Dialog.EpanetThemes")
+cbxSelf = dlgEpanetThemes.findByName(strCbxName)
+cbxSelf.setEnabled(chbSelf.isSelected)
+
+' at least one of tanks and reservoirs has to be enabled
+
+chbTanks = dlgEpanetThemes.findByName("chbTanks")
+chbReservoirs = dlgEpanetThemes.findByName("chbReservoirs")
+if((chbReservoirs.isSelected.not)and(chbTanks.isSelected.not))then
+  Msgbox.info("At least one of Tanks and Reservoirs has to be enabled in order to run Epanet.","DC Water Design")
+  cbxSelf.setEnabled(true)
+  chbSelf.setSelected(true)
+end

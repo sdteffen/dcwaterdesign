@@ -1,0 +1,116 @@
+' DCWatDesExtension.install
+
+' (c) 2000, 2001 DORSCH Consult
+' install the Extension
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+'Make sure there is a project
+if (av.GetProject = nil) then
+  return nil
+end
+
+' The self object for this script is the extension
+
+'Add the menu after the view's Theme menu 
+theMenuBar = av.GetProject.FindGUI("View").GetMenuBar
+m = theMenuBar.FindByLabel("Theme")
+if (m <> nil) then
+  'DC Water Design menu
+  theMenuBar.Add(self.Get(1), theMenuBar.getControls.find(m))
+    
+else
+'DC Water Design menu
+  theMenuBar.Add(self.get(1), 999)
+end
+
+'add the buttons at the end of the button bar
+theViewButtonBar = av.GetProject.FindGUI("View").getButtonBar
+
+'model selection button
+'theViewButtonBar.add(self.get(2), 999)
+
+'connection type classification
+'theViewButtonBar.add(self.get(5), 999)
+
+'classify House Connection Button
+theTableButtonBar = av.GetProject.FindGUI("Table").getButtonBar
+'theTableButtonBar.add(self.get(6), 999)
+
+' add the DC Water Design menu in the Project GUI
+
+theProjectMenuBar = av.getProject.findGUI("Project").getMenuBar
+m = theProjectMenuBar.findByLabel("Project")
+if(m<>nil)then
+  theProjectMenuBar.add(self.get(8), theProjectMenubar.getControls.find(m))
+else
+  theProjectMenuBar.add(self.get(8), 999)
+end
+
+av.getProject.findGUI("View").setModified(true)
+
+av.getProject.findGUI("Project").setModified(true)
+
+'initialize the Extension
+
+av.run("DCWatDes.i18n.createDictionaries", nil)
+
+extDCWatDes = Extension.find("DC Water Design")
+dicPreferences = extDCWatDes.getPreferences
+if(dicPreferences.count=0)then
+  av.run("DCWatDes.Dialog.Setup.open",nil)
+end
+
+dicPreferences.set("strOriginalStartupScript", av.getProject.getStartup)
+av.getProject.setStartup("DCWatDes.i18n.createDictionaries")
+
+
+'add the popups
+pu = av.GetProject.FindGUI("View").GetPopups
+if (pu <> nil) then
+  objOriginalViewPopup = pu.getActive
+  if(objOriginalViewPopup = nil)then
+    objOriginalViewPopup = pu.getControls.get(0)
+  end
+  pu.Add(self.get(3), -1)
+  pu.add(self.get(4), -1)
+  'View Pipes And Nodes Popup
+  pu.add(self.get(17), -1)
+  dicPreferences.set("strOriginalViewPopupUpdate", pu.getUpdate)
+  dicPreferences.set("objOriginalViewPopup", objOriginalViewPopup)  
+  pu.setUpdate("DCWatDes.View.PopupUpdate")
+end
+
+av.run("DCWatDes.Tables.loadEpanetTables",nil)
+for each strPropertyName in {"Options", "Times", "Report"}
+  dicPreferences.set("str"+strPropertyName, strPropertyName)
+end
+
+'epanet themes button
+theViewButtonBar.add(self.get(11), 999)
+
+' 12 Polyline Flip Tool
+theViewToolBar = av.getProject.findGUI("View").getToolBar
+theViewToolBar.add(self.get(12), 999)
+
+' 14 Digitizing Nodes Toolbar
+theViewToolBar.add(self.get(14), 999)
+
+' 15 Epanet Tables Button
+theViewButtonBar.add(self.get(15), 999)
+
+' 16 Bitcode Calculator Button
+theTableButtonBar.add(self.get(16), 999)
+

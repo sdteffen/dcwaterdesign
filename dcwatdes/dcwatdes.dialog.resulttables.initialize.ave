@@ -1,0 +1,52 @@
+' DCWatDes.Dialog.ResultTables.initialize
+
+' (c) 2000,2001 DORSCH Consult
+' initializes the Result Tables Dialog
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+dlgResultTables = av.findDialog("DCWatDes.Dialog.ResultTables")
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+end
+
+cplResultTables = dlgResultTables.getControlPanel
+
+strResultTablesI18n = av.run("DCWatDes.i18n.returnTranslation", "Result Tables")
+dlgResultTables.setTitle(strResultTablesI18n)
+
+' translate the buttons
+lstControls = dlgResultTables.findByClass(LabelButton)
+for each ctlLabelControl in lstControls
+  strEnglish = ctlLabelControl.getLabel
+  strTranslation = av.run("DCWatDes.i18n.returnTranslation",strEnglish)
+  ctlLabelControl.setLabel(strTranslation)
+end
+
+' translate the combobox labels
+lstControls = dlgResultTables.findByClass(ComboBox)
+for each ctlLabelControl in lstControls
+  strEnglish = ctlLabelControl.getTag
+  strTranslation = av.run("DCWatDes.i18n.returnTranslation",strEnglish)
+  ctlLabelControl.setLabel(strTranslation)
+  rctBox = ctlLabelControl.returnBox.clone
+  cplResultTables.remove(ctlLabelControl)
+  cplResultTables.add(ctlLabelControl, rctBox)
+end
+
+cbxSqlConnection = dlgResultTables.findByName("cbxSqlConnection")
+lstSqlConnections = SqlCon.GetConnections
+cbxSqlConnection.defineFromList(lstSqlConnections)

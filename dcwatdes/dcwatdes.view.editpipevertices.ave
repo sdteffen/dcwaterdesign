@@ -1,0 +1,89 @@
+' DCWatDes.View.editPipeVertices
+
+' (c) 2000 DORSCH Consult
+' vertex edit for pipes
+' The tool ensures that start and end point of the pipe are
+' maintained (the network stays intact)
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+viewActive = av.GetActiveDoc
+
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+thmPipes = dicThemes.get("Pipes")
+if(thmPipes = nil)then
+  return nil
+end
+
+pntUser = viewActive.getDisplay.returnUserPoint
+
+lstRecPipes = thmPipes.findByPoint(pntUser)
+if(lstRecPipes.count <> 1)then
+  av.showMsg("Can't edit Pipe Vertices: "+lstRecPipes.count.asString+" pipes selected.")
+  return nil
+end
+
+ftbPipes = thmPipes.getFTab
+
+pllPipe = ftbPipes.returnValue(ftbPipes.findField("Shape"),lstRecPipes.get(0))
+rectOldExtent = pllPipe.returnExtent
+pllConnected = pllPipe.connect
+pntStart = pllConnected.asList.get(0).get(0).clone
+pntEnd = pllConnected.asList.get(0).get(pllConnected.asList.get(0).count-1).clone
+
+if((viewActive.getEditableTheme <> thmPipes) and (viewActive.setEditableTheme(thmPipes).not))then
+  return nil  
+end
+
+thmPipes.getFTab.getSelection.clearAll
+thmPipes.getFTab.getSelection.set(lstRecPipes.get(0))
+thmPipes.getFTab.updateSelection
+thmPipes.selectToEdit
+
+thmPipes.stopEditing(true)
+
+pllPipe = ftbPipes.returnValue(ftbPipes.findField("Shape"),lstRecPipes.get(0))
+pllConnected = pllPipe.connect
+pntEditedStart = pllConnected.asList.get(0).get(0).clone
+pntEditedEnd = pllConnected.asList.get(0).get(pllConnected.asList.get(0).count-1).clone
+
+lstCorrectedPipe = pllConnected.asList.deepclone
+
+blnCorrectionRequired = false
+
+if(pntEditedStart.intersects(pntStart).not)then
+  lstCorrectedPipe.get(0).insert(pntStart)
+  av.showMsg("Vertex edit: re-establishing start node")
+  blnCorrectionRequired = true
+end
+
+if(pntEditedEnd.intersects(pntEnd).not)then
+
+  lstCorrectedPipe.get(0).add(pntEnd)
+  av.showMsg("Vertex edit: re-establishing end node")
+  blnCorrectionRequired = true
+end
+
+if(blnCorrectionRequired)then
+  pllCorrectedPipe = Polyline.make(lstCorrectedPipe)
+  ftbPipes.setEditable(true)
+  ftbPipes.setValue(ftbPipes.findField("Shape"), lstRecPipes.get(0), pllCorrectedPipe)
+  ftbPipes.setEditable(false)
+  rectOldExtent = pllCorrectedPipe.returnExtent.returnUnion(rectOldExtent).returnExtent
+end
+
+viewActive.getDisplay.invalidateRect(rectOldExtent)
+
+av.getProject.setModified(true)

@@ -1,0 +1,67 @@
+' DCWatDes.View.PopupUpdate
+
+' (c) 2000 DORSCH Consult
+' select the correct popup menu for the current mouse location
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+pntMouse = av.getActiveDoc.getDisplay.getMouseLoc.clone
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+  dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary",nil)
+  blnNodeSelected = false
+  for each strFeature in dicThemes.returnKeys
+   if(strFeature <> "Pipes")then
+     thmFeature = dicThemes.get(strFeature)
+     lstFeatures = thmFeature.findByPoint(pntMouse)
+     if(lstFeatures.count>1)then
+       av.showMsg(lstFeatures.count.asString++strFeature++"selected.")
+     elseif(lstFeatures.count=1)then
+       blnNodeSelected = true
+     end
+   end
+  end
+  blnPipeSelected=false
+  thmPipes = dicThemes.get("Pipes")
+  lstPipes = thmPipes.findByPoint(pntMouse)
+  if(lstPipes.count>1)then
+    av.showMsg(lstPipes.count.asString++"Pipes selected.")
+  elseif(lstPipes.count=1)then
+    blnPipeSelected = true
+  end
+  if(blnPipeSelected and blnNodeSelected)then
+    menuPipesAndNodes = self.findByLabel("DCWatDes.View.Popup.PipesAndNodes")
+    self.setActive(menuPipesAndNodes)
+    menuPipesAndNodes.setObjectTag(pntMouse)
+  elseif(blnPipeSelected)then
+    menuPipes = self.findByLabel("DCWatDes.View.Popup.Pipes")
+    self.setActive(menuPipes)
+    menuPipes.setObjectTag(pntMouse)    
+  elseif(blnNodeSelected)then
+    menuNodes = self.findByLabel("DCWatDes.View.Popup.Nodes")
+    self.setActive(menuNodes)
+    menuNodes.setObjectTag(pntMouse)
+  else
+    self.setActive(dicPreferences.get("objOriginalViewPopup"))
+    strOriginalViewPopupUpdate = dicPreferences.get("strOriginalViewPopupUpdate")
+    if((strOriginalViewPopupUpdate <> nil)and(strOriginalViewPopupUpdate <> ""))then
+      av.run(strOriginalViewPopupUpdate, self)
+    end
+  end
+else 
+  return nil
+end

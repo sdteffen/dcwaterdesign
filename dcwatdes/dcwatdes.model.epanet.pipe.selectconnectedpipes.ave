@@ -1,0 +1,127 @@
+' DCWatDes.Model.Epanet.Pipe.selectConnectedPipes
+
+' (c) 1999 - 2001 DORSCH Consult
+' ******** OUTDATED !!!! TODO: REMOVE
+' traces to all connected Pipes, selects the connected
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+thm_Pipes = av.run("DCWatDes.getActivePipeTheme", nil)
+ftb_Pipes = thm_Pipes.getFTab
+ftb_Nodes = av.run("DCWatDes.getActiveNodeTheme", nil).getFTab
+viw_Active = av.run("DCWatDes.getActiveView",nil)
+fna_PipeShape = ftb_Pipes.findField("Shape")
+fna_NodeShape = ftb_Nodes.findField("Shape")
+fna_NodeCode = ftb_Nodes.findField("Wn_Code")
+fna_NodeType = ftb_Nodes.findField("Wn_Type")
+
+rec_StartPipe = self
+av.clearStatus
+av.showStopButton
+
+str_DisconnectionPointQuery = "[Wn_code] = 1"
+str_DisconnectionPointQuery.setName("Disconnection Point")
+str_PRVQuery = "[Wn_type] = 91"
+str_PRVQuery.setName("PRV")
+str_MeterQuery = "[Wn_type] = 95"
+str_MeterQuery.setName("Water Meter")
+str_ExposedValveQuery = "[Wn_type] = 2"
+str_ExposedValveQuery.setName("Closed Exposed Valve")
+str_CoveredValveQuery = "[Wn_type] = 4"
+str_CoveredValveQuery.setName("Closed Covered Valve")
+str_ChamberValveQuery = "[Wn_type] = 35"
+str_ChamberValveQuery.setName("Closed Valve in Chamber")
+str_Pipe2000MeterQuery = "[~type] = 3"
+str_Pipe2000MeterQuery.setName("Pipe 2000 Water Meter")
+str_Pipe2000PRVQuery = "[~type] = 9"
+str_Pipe2000PRVQuery.setName("Pipe 2000 PRV")
+lst_StopQueries = MsgBox.MultiList({str_DisconnectionPointQuery, str_PRVQuery, str_MeterQuery, str_ExposedValveQuery, str_CoveredValveQuery, str_ChamberValveQuery, str_Pipe2000MeterQuery, str_Pipe2000PRVQuery},
+                                    "Pipe Networks stops at:","DC Water Design")
+if(lst_StopQueries = nil) then
+  'user selected cancel
+  exit
+end
+
+bmp_StopNodes = Bitmap.make(ftb_Nodes.getNumRecords)
+
+for each str_StopNodeQuery in lst_StopQueries
+  ftb_Nodes.query(str_StopNodeQuery, bmp_StopNodes, #VTAB_SELTYPE_OR)
+end
+
+bln_InteractiveDisplay = MsgBox.YesNo("Display selection during Script run?","DC Water Design", true)
+if(bln_InteractiveDisplay)then
+  bln_ZoomFollowsSelection = MsgBox.YesNo("Follow the Selection?","DC Water Design", true)
+end
+
+av.showStopButton
+
+num_Pipes = ftb_Pipes.getNumRecords
+num_ConnectedPipes = 0
+bmp_Selection = Bitmap.make(num_Pipes)
+bmp_Selection.set(rec_StartPipe)
+
+stk_Pipes = Stack.make
+
+'initialize Stack
+stk_Pipes.push(rec_StartPipe)
+
+while(stk_Pipes.isEmpty.not)
+
+  if ( av.setStatus(num_ConnectedPipes/num_Pipes*100).not) then
+    'user wants to terminate
+     exit
+  end
+
+  rec_Pipe = stk_Pipes.pop
+  pll_Pipe = ftb_Pipes.returnValue(fna_PipeShape, rec_Pipe)
+  lst_PipeNodes = pll_Pipe.asList.get(0)
+  for each pnt_Node in {lst_PipeNodes.get(0), lst_PipeNodes.get(lst_PipeNodes.count -1)}
+    rec_Node = av.run("DCWatDes.Node.findByPoint", pnt_Node)
+
+    'connection requires node
+    if(rec_Node <> nil) then
+
+    'stop at disconnection points
+      if(bmp_StopNodes.get(rec_Node).not) then
+        lst_ConnectedPipes = av.run("DCWatDes.Pipe.findPipesByPoint", pnt_Node)
+        for each rec_ConnectedPipe in lst_ConnectedPipes
+          if(bmp_Selection.get(rec_ConnectedPipe).not) then
+            'connected pipe which is not already on the stack
+            bmp_Selection.set(rec_ConnectedPipe)
+            stk_Pipes.push(rec_ConnectedPipe)
+            num_ConnectedPipes = num_ConnectedPipes + 1
+            if(bln_InteractiveDisplay)then
+              ftb_Pipes.setSelection(bmp_Selection)
+              ftb_Pipes.updateSelection
+              thm_Pipes.invalidate(false)
+              if(bln_ZoomFollowsSelection)then
+                pnt_PipeCentre = ftb_Pipes.returnValue(fna_PipeShape, rec_ConnectedPipe).returnCenter
+                viw_Active.getDisplay.panTo(pnt_PipeCentre)
+              end  
+              av.processAllInvals
+            end
+          end
+        end
+      end
+    else
+'      MsgBox.info("Pipe Junction missing Node", "DC Water Design")
+    end
+  end
+end
+
+ftb_Pipes.setSelection(bmp_Selection)
+ftb_Pipes.updateSelection
+av.clearStatus
+

@@ -1,0 +1,47 @@
+' DCDCWatDes.SqlConnection.login
+
+' (c) 2000 DORSCH Consult
+' log in to SQL via ODBC
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' expects the SQLConnection as the argument
+
+extDCWatDes = Extension.find("DC Water Design")
+dicPreferences = extDCWatDes.getPreferences
+
+sqlConnection = self
+
+strPrompt = av.run("DCWatDes.i18n.returnTranslation","Enter the User name for the SQL Connection")
+
+strLoginName = dicPreferences.get("strSqlLogin")
+if(strLoginName = nil)then
+  strLoginName = ""
+end
+strLoginName = MsgBox.input(strPrompt,"DC Water Design", strLoginName)
+
+if(strLoginName = nil)then
+  exit
+end
+
+strPassword = MsgBox.password
+
+if(strPassword = nil)then
+  exit
+end
+
+sqlConnection.login(strLoginName+"/"+strPassword)
+
+dicPreferences.set("strSqlLogin",strLoginName)

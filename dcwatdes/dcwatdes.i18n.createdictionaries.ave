@@ -1,0 +1,107 @@
+' DCWatDes.i18n.createDictionaries
+
+' (c) 2000, 2001 DORSCH Consult
+' creates the Localization dictionaries
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+_dcwDicDictionaries = Dictionary.make(10)
+
+' dummy English Dictionary
+_dcwDicDictionaries.add("en",nil)
+
+' create the Arabic Dictionary
+'dicArabic = Dictionary.make(100)
+'dicArabic.add("Complaint type","ÇÏÎÇá ÈíÇäÇÊ ÇáÔß")
+'_dcwDicDictionaries.add("ar",dicArabic)
+
+' create the German Dictionary
+dicGerman = Dictionary.make(100)
+dicGerman.add("Setup","Einstellungen")
+dicGerman.add("OK","OK")
+dicGerman.add("Cancel","Abbrechen")
+dicGerman.add("Help","Hilfe")
+dicGerman.add("Browse","Durchsuchen")
+dicGerman.add("Language","Sprache")
+dicGerman.add("Times", "Zeiten")
+dicGerman.add("Report", "Bericht")
+dicGerman.add("Options", "Optionen")
+dicGerman.add("Epanet Tables", "Epanet Tabellen")
+dicGerman.add("Setup", "Einstellungen")
+dicGerman.add("Epanet Themes", "Epanet Themen")
+dicGerman.add("Junctions", "Knoten")
+dicGerman.add("Tanks", "Behälter")
+dicGerman.add("Pumps", "Pumpen")
+dicGerman.add("Valves", "Ventile")
+dicGerman.add("Reservoirs", "Reservoire")
+dicGerman.add("Pipes", "Rohrleitungen")
+dicGerman.add("Location of epanet2d.exe","Pfad zu epanet2d.exe")
+dicGerman.add("Location of testXSLT.exe","Pfad zu testXSLT.exe")
+dicGerman.add("Location of xml2net.xsl","Pfad zu xml2net.xsl")
+dicGerman.add("Controls", "Regelungen")
+dicGerman.add("Curves", "Kurven")
+dicGerman.add("Result Tables", "Ergebnistabellen")
+dicGerman.add("Drop Tables", "Tabellen löschen")
+dicGerman.add("Create Tables", "Tabellen erzeugen")
+dicGerman.add("Enter the User name for the SQL Connection", "Benutzernamen für die SQL Verbindung eingeben")
+dicGerman.add("Write Epanet File", "Epanet Datei speichern")
+dicGerman.add("Run Epanet Calculation", "Epanet Berechnung durchführen")
+dicGerman.add("Load Results for hydraulic timestep", "Ergebnisse für Zeitschritt ... laden")
+dicGerman.add("Make Epanet Model", "Epanet Modell erzeugen")
+dicGerman.add("Check Epanet Model", "Epanet Modell überprüfen")
+dicGerman.add("Valve Control", "Schieberkontrolle")
+dicGerman.add("Make House Connections", "Hausanschlüsse erzeugen")
+dicGerman.add("Create Supply Strings", "Versorgungstexte erzeugen")
+dicGerman.add("Calculate Pipe Length for Junctions", "Rohrnetzlängen für Knoten berechnen")
+dicGerman.add("Clip Themes by Bitcode", "Themen nach Bitcode ausschneiden")
+dicGerman.add("Number of Connected Pipes", "Anzahl der angeschlossenen Rohre")
+dicGerman.add("Number of Connected Diameters", "Anzahl der angeschlossenen Durchmesser")
+dicGerman.add("Number of Selected Pipes", "Anzahl der ausgewählten Rohre")
+dicGerman.add("About DC Water Design Extension", "Über DC Water Design Extension")
+dicGerman.add("show Table Entry", "zeige Tabelleneintrag")
+dicGerman.add("edit Table Entry", "bearbeite Tabelleneintrag")
+dicGerman.add("select", "auswählen")
+dicGerman.add("show Pipe Table Entry", "zeige Rohr in Tabelle")
+dicGerman.add("edit Pipe Table Entry", "bearbeite Rohr in Tabelle")
+dicGerman.add("select connected Pipes", "verbundene Rohre auswählen")
+dicGerman.add("show Node Table", "zeige Knoten in Tabelle")
+dicGerman.add("edit Node Table Entry", "bearbeite Knoten in Tabelle")
+dicGerman.add("select Node", "Knoten auswählen")
+dicGerman.add("About", "Über")
+dicGerman.add("Please select the Junctions Theme in the Epanet Themes Dialog", "Bitte wählen sie das Knotenthema im Epanet Themen Dialog")
+dicGerman.add("Please select the Pipes Theme in the Epanet Themes Dialog", "Bitte wählen sie das Rohrleitungsthema im Epanet Themen Dialog")
+dicGerman.add("Choose the length field. The field will be overwritten", "Wählen Sie das Längen-Feld. Das Feld wird überschrieben")
+
+_dcwDicDictionaries.add("de",dicGerman)
+
+'create French
+dicFrench = Dictionary.make(100)
+_dcwDicDictionaries.add("fr",dicFrench)
+
+'create Turkish
+dicTurkish = Dictionary.make(100)
+_dcwDicDictionaries.add("tr",dicTurkish)
+
+extdcw = Extension.find("DC Water Design")
+if(extdcw <>nil)then
+  dicPreferences = extdcw.getPreferences
+
+  strOriginalStartupScript = dicPreferences.get("strOriginalStartupScript")
+  if((strOriginalStartupScript <> nil)and
+      (strOriginalStartupScript <> "")and
+      (strOriginalStartupScript <> "DCWatDes.i18n.createDictionaries"))then
+    av.run(strOriginalStartupScript, self)
+  end
+end

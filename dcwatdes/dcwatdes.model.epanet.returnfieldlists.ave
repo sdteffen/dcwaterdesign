@@ -1,0 +1,28 @@
+' DCWatDes.Model.Epanet.returnFieldLists
+
+' (c) 2000 DORSCH Consult
+' return a list that contains lists of epanet themes and the required fields
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' expects no argument
+
+return { {"Junctions",{"dc_id", "elevation", "demand", "pattern", "result_head", "result_pressure", "result_demand"}}, 
+      {"Pipes",{"dc_id", "node1", "node2", "length", "diameter", "roughness", "minorloss", "result_flow", "result_velocity", "result_headloss"}}, 
+      {"Tanks",{"dc_id", "elevation", "initiallevel", "minimumlevel","maximumlevel","diameter","minimumvolume","volumecurve", "result_pressure", "result_head", "result_demand"}}, 
+      {"Reservoirs",{"dc_id", "head","pattern", "result_head", "result_pressure", "result_demand"}}, 
+      {"Valves", {"dc_id","elevation","diameter","type","setting","minorloss","result_head", "result_pressure", "result_demand", "result_flow", "result_velocity", "result_headloss"}},
+      {"Pumps",{"dc_id","elevation","properties","result_flow", "result_head", "result_pressure", "result_demand","result_velocity", "result_headloss"}}}
+

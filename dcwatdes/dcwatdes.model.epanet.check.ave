@@ -1,0 +1,72 @@
+' DCWatDes.Model.Epanet.check
+
+' (c) 2001 DORSCH Consult
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+av.run("DCWatDes.Model.Epanet.ensureAliases",nil)
+
+lstFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+numToGo = lstFTabs.count
+numCompleted = 0
+numDoubleIDs = 0
+
+lstThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+
+for each thmFeature in lstThemes
+  thmFeature.clearSelection
+end 
+
+for each ftbFeature in lstFTabs
+  numFeature = 0
+  fldID = ftbFeature.findField("dc_id")
+  for each recFeature in ftbFeature
+    strID = ftbFeature.returnValue(fldID, recFeature)
+    for each ftbCheck in lstFTabs
+      if(ftbCheck = ftbFeature)then
+        numExpectedCount = 1
+      else
+        numExpectedCount = 0
+      end
+      bmpCheck = ftbCheck.getSelection.clone
+      bmpCheck.clearAll
+      ftbCheck.query("[dc_id]="+strID.quote, bmpCheck, #VTAB_SELTYPE_NEW)
+      numCount = bmpCheck.count 
+      if(numCount > numExpectedCount)then
+        numDoubleIDs = numDoubleIDs+numCount-numExpectedCount
+        bmpOld = ftbCheck.getSelection.clone
+        bmpCheck.or(bmpOld)
+        ftbCheck.setSelection(bmpCheck)
+        ftbCheck.updateSelection
+      end
+    end
+    numFeature = numFeature+1
+  end
+  numCompleted = numCompleted+1
+end
+
+numDoubleIDs = numDoubleIDs/2
+if(numDoubleIDs>0)then
+  MsgBox.warning("The model has"++numDoubleIDs.asString++" duplicate ID(s)."+NL+"Check the Selection.", "DC Water Design")
+else
+  MsgBox.info("The model ID's are unique", "DC Water Design")
+end
+
+for each ftbTheme in lstFtabs
+  ftbTheme.updateSelection
+end
+
+av.getActiveDoc.getDisplay.invalidate(true)

@@ -1,0 +1,98 @@
+' DCWatDes.Dialog.EpanetThemes.initialize
+
+' (c) 2000, 2001 DORSCH Consult
+' initializes the Themes Dialog
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+
+activeView = av.getActiveDoc
+if(activeView.is(View).not)then
+  exit
+end
+
+dlgEpanetThemes = av.findDialog("DCWatDes.Dialog.EpanetThemes")
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  exit
+end
+
+cplEpanetThemes = dlgEpanetThemes.getControlPanel
+
+strEpanetThemesI18n = av.run("DCWatDes.i18n.returnTranslation", "Epanet Themes")
+dlgEpanetThemes.setTitle(strEpanetThemesI18n)
+
+' translate the buttons
+lstControls = dlgEpanetThemes.findByClass(LabelButton)
+for each ctlLabelControl in lstControls
+  strEnglish = ctlLabelControl.getLabel
+  strTranslation = av.run("DCWatDes.i18n.returnTranslation",strEnglish)
+  ctlLabelControl.setLabel(strTranslation)
+end
+
+' translate the Text Lines
+lstControls = dlgEpanetThemes.findByClass(TextLine)
+for each ctlLabelControl in lstControls
+  strEnglish = ctlLabelControl.getTag
+  if(strEnglish <> "")then
+    strTranslation = av.run("DCWatDes.i18n.returnTranslation",strEnglish)
+    ctlLabelControl.setLabel(strTranslation)
+  end
+end
+
+' translate the combobox labels
+lstControls = dlgEpanetThemes.findByClass(ComboBox)
+for each ctlLabelControl in lstControls
+  strEnglish = ctlLabelControl.getTag
+  strTranslation = av.run("DCWatDes.i18n.returnTranslation",strEnglish)
+  ctlLabelControl.setLabel(strTranslation)
+  rctBox = ctlLabelControl.returnBox.clone
+  cplEpanetThemes.remove(ctlLabelControl)
+  cplEpanetThemes.add(ctlLabelControl, rctBox)
+end
+
+for each strCombobox in {"Junctions", "Tanks","Pumps", "Valves", "Reservoirs", "Pipes"}
+  lstThemes = activeView.getThemes
+  theCombobox = dlgEpanetThemes.findByName("cbx"+strCombobox)
+  theCombobox.defineFromList(lstThemes)
+  theCheckbox = dlgEpanetThemes.findByName("chx"+strCombobox)
+  if(theCheckbox <> nil)then
+    theCheckbox.setSelected(false)
+  end
+  strSelected = dicPreferences.get("str"+strCombobox)
+  if(strSelected <> nil)then
+     for each thmCheck in theCombobox.getList
+       if(strSelected = thmCheck.getName)then
+         theCombobox.findByValue(thmCheck)
+       end
+     end
+  else
+    strComboTranslated = av.run("DCWatDes.i18n.returnTranslation", strCombobox)
+    for each avTheme in lstThemes
+      if((avTheme.getName.lcase.contains(strComboTranslated.lcase)) or
+         (avTheme.getName.lcase.contains(strCombobox.lcase)))then
+        theCombobox.findByValue(avTheme)
+        if(theCheckbox <> nil)then
+          theCheckbox.setSelected(true)
+        end
+      end
+    end
+  end
+  theCombobox.selectCurrent
+end
+

@@ -1,0 +1,171 @@
+' DCWatDes.Model.Epanet.run
+
+' (c) 2000, 2001 DORSCH Consult
+' Export Pipe Model as Epanet Model, run Epanet and load the results
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+'get File Locations
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+  strEpanet = dicPreferences.get("strEpanet")
+else
+  'fallback for development purposes
+  strEpanet = "c:\program files\epanet2\epanet2d.exe"
+end
+
+' this will not export spatial data
+fln_Xml = av.run("DCWatDes.Model.Epanet.writeInpFile", false)
+
+strXml= fln_Xml.getFullName
+strBasePath=strXml.left(strXml.count-3)
+
+flnInp = (strBasePath+"inp").asFilename
+flnOut = (strBasePath+"out").asFilename
+
+'clean up
+File.delete(flnOut)
+
+' run Epanet
+
+System.execute(strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"out").quote) 
+
+' show Epanet Report
+
+' wait for the report file appearing
+
+kernel32 = DLL.Make("c:\WINNT\system32\kernel32.dll".AsFileName)
+sleep = DLLProc.Make(kernel32, "Sleep", #DLLPROC_TYPE_VOID, {#DLLPROC_TYPE_INT32})
+
+timeStart=Date.now
+while(File.exists(flnOut).not)
+  if((Date.now-timeStart).asSeconds>20)then
+    MsgBox.info("No Report file found. Check your settings.","DC Water Design Extension")
+    exit
+  end
+  if(sleep <>nil)then
+    sleep.call({1000})
+  end
+end
+
+timeStart=Date.now
+while(File.isWritable(flnOut).not)
+  if((Date.now-timeStart).asSeconds>20)then
+    MsgBox.info("Couldn't open Report file. Check your settings.","DC Water Design Extension")
+    exit
+  end
+  if(sleep <>nil)then
+    sleep.call({1000})
+  end
+end
+
+File.delete((flnOut.getFullName+".report.xml").asFilename)
+for each strResult in {"links", "nodes"}
+ flnResult = (flnOut.getFullName+"."+strResult+".txt").asFilename
+ File.delete(flnResult)
+end
+strCmd = "c:\winnt\system32\cmd.exe /c c:\cygwin\bin\sh.exe"++("$AVEXT\dcwatdes\epanetreport2xml.sh".asFilename.getFullname)++(flnOut.getFullName)++(flnOut.getFullName)+".report.xml"
+System.execute(strCmd)
+
+flnReport = (flnOut.getFullName+".report.xml").asFilename
+
+timeStart=Date.now
+while(File.exists(flnReport).not)
+  if((Date.now-timeStart).asSeconds>60)then
+    MsgBox.info("No Report file found. Check your settings.","DC Water Design Extension")
+    exit
+  end
+  if(sleep <>nil)then
+    sleep.call({1000})
+  end
+end
+
+timeStart=Date.now
+while(File.isWritable(flnReport).not)
+  if((Date.now-timeStart).asSeconds>60)then
+    MsgBox.info("Couldn't open Report file. Check your settings.","DC Water Design Extension")
+    exit
+  end
+  if(sleep <>nil)then
+    sleep.call({1000})
+  end
+end
+
+strReport=""
+
+twinReport = TextWin.make(flnReport, "DC Water Design")
+
+' find the SQL Connection
+strSqlConnection = dicPreferences.get("strSqlConnection")
+if(strSqlConnection = nil)then
+  MsgBox.warning("You've got to setup a SQL Connection in order to load Results.", "DCWater Design")
+  return nil
+end
+
+sqlConnection = SqlCon.find(strSqlConnection)
+
+if(sqlConnection.isLogin.not)then
+  av.run("DCWatDes.SqlConnection.login",sqlConnection)
+end
+
+if(strReport.contains("Error").not)then
+  'load results
+  for each strResult in {"links", "nodes"}
+    flnResult = (flnOut.getFullName+"."+strResult+".txt").asFilename
+    timeStart=Date.now
+    while(File.exists(flnResult).not)
+      if((Date.now-timeStart).asSeconds>60)then
+        MsgBox.info("No Result file found. Check your settings.","DC Water Design Extension")
+        exit
+      end
+      if(sleep <>nil)then
+        sleep.call({1000})
+      end
+    end
+    
+    timeStart=Date.now
+    while(File.isWritable(flnResult).not)
+      if((Date.now-timeStart).asSeconds>60)then
+        MsgBox.info("Couldn't open Result file. Check your settings.","DC Water Design Extension")
+        exit
+      end
+      if(sleep <>nil)then
+        sleep.call({1000})
+      end
+    end  
+    if(sleep <> nil)then
+      sleep.call({3000})
+    end
+    sqlConnection.executeSql("delete from dc_"+strResult+";")
+    sqlConnection.executeSql("load data infile '"+flnResult.getFullName.substitute("\","\\")+"'"+NL+" into table dc_"+strResult+NL+" fields terminated by ' ' lines terminated by '\r\n';")
+  end
+end
+twinReport.open
+vtbSteps = VTab.makeSql(sqlConnection, "select distinct time from dc_nodes")
+fldTime = vtbSteps.getFields.get(0)
+lstSteps = List.make
+for each rec in vtbSteps
+  strStep = vtbSteps.returnValue(fldTime, rec)
+  strStep.setName(strStep)
+  lstSteps.add(strStep)
+end
+
+' load results
+
+dicPreferences.set("lstSteps", lstSteps.deepclone)
+
+av.run("DCWatDes.Model.Epanet.loadResultsForStep", nil)
+

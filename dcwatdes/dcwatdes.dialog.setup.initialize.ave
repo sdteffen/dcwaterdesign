@@ -1,0 +1,87 @@
+' DCWatDes.Dialog.Setup.initialize
+
+' (c) 2000, 2001 DORSCH Consult
+' Initializes the Settings of the Setup Dialog
+' translation, fill comboboxes, etc.
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+dlgSetup = av.findDialog("DCWatDes.Dialog.Setup")
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+end
+
+cplSetup = dlgSetup.getControlPanel
+
+strSetupI18n = av.run("DCWatDes.i18n.returnTranslation", "Setup")
+dlgSetup.setTitle(strSetupI18n)
+
+' translate the buttons
+lstControls = dlgSetup.findByClass(LabelButton)
+for each ctlLabelControl in lstControls
+  strEnglish = ctlLabelControl.getLabel
+  strTranslation = av.run("DCWatDes.i18n.returnTranslation",strEnglish)
+  ctlLabelControl.setLabel(strTranslation)
+end
+
+' translate the Text Lines
+lstControls = dlgSetup.findByClass(TextLine)
+for each ctlLabelControl in lstControls
+  strEnglish = ctlLabelControl.getTag
+  if(strEnglish <> "")then
+    strTranslation = av.run("DCWatDes.i18n.returnTranslation",strEnglish)
+    ctlLabelControl.setLabel(strTranslation)
+  end
+end
+
+' translate the combobox labels
+lstControls = dlgSetup.findByClass(ComboBox)
+for each ctlLabelControl in lstControls
+  strEnglish = ctlLabelControl.getTag
+  strTranslation = av.run("DCWatDes.i18n.returnTranslation",strEnglish)
+  ctlLabelControl.setLabel(strTranslation)
+  rctBox = ctlLabelControl.returnBox.clone
+  cplSetup.remove(ctlLabelControl)
+  cplSetup.add(ctlLabelControl, rctBox)
+end
+
+'fill the Text Lines
+
+txlEpanet = dlgSetup.findByName("txlEpanet")
+txlEpanet.setText("c:\program files\epanet2\epanet2d.exe")
+
+txlSabcmd = dlgSetup.findByName("txlSabcmd")
+txlSabcmd.setText("$AVEXT\dcwatdes\xslt\testxslt.exe".asFilename.getFullname)
+
+txlXslt = dlgSetup.findByName("txlXslt")
+txlXslt.setText("$AVEXT\dcwatdes\xml2net.xsl".asFilename.getFullname)
+
+' setup the languages combobox
+strLanguage = nil
+if(dicPreferences<>nil)then
+  strLanguage = dicPreferences.get("strLanguage")
+end
+if(strLanguage = nil)then
+  strLanguage="en"
+end
+cbxLanguage = dlgSetup.findByName("cbxLanguage")
+cbxLanguage.defineFromDictionary(_dcwDicDictionaries)
+'strTag = cbxLanguage.getObjectTag
+if (strLanguage <> nil)then
+  cbxLanguage.findByValue(strLanguage)
+  cbxLanguage.selectCurrent
+end
+

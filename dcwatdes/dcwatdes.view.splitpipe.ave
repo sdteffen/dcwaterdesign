@@ -1,0 +1,116 @@
+' DCWatDes.View.splitPipe
+
+' (c) 2000 DORSCH Consult
+' tool that splits a Pipe and adds a new Junction at the splitting point
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+ftbPipes = dicFTabs.get("Pipes")
+fldPipeShape = ftbPipes.findField("Shape")
+ftbJunctions = dicFTabs.get("Junctions")
+fldJunctionShape = ftbJunctions.findField("Shape")
+
+viewActive = av.getActiveDoc
+pntUser = viewActive.getDisplay.returnUserPoint
+
+thmPipes = nil
+for each thmInView in viewActive.getThemes
+  if(thmInView.getFTab = ftbPipes)then
+    thmPipes = thmInView
+    break 
+  end
+end
+if(thmPipes = nil)then
+  MsgBox.error("Unable to find Pipes Theme in this View","DC Water Design Extension")
+  return nil
+end
+
+lstPipeRecords = thmPipes.findByPoint(pntUser)
+if(lstPipeRecords.count=0)then
+  av.showMsg("No pipe to split.")
+  return nil
+end
+
+if(viewActive.getEditableTheme <> thmPipes) then
+  viewActive.setEditableTheme(thmPipes)
+end
+
+recPipe = lstPipeRecords.get(0)
+
+pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
+if(pllPipe.intersects(pntUser))then
+  pnt_Disconnection = pntUser.clone
+else
+  lstPipeParts = pllPipe.explode
+  numNearestPart = 0
+  numSmallestDistance = lstPipeParts.get(0).distance(pntUser)
+  num_i = 0
+  for each pllPart in lstPipeParts
+    if( numSmallestDistance > pllPart.distance(pntUser) ) then
+      numSmallestDistance = pllPart.distance(pntUser)
+      numNearestPart = num_i  
+    end
+    num_i = num_i + 1
+  end
+  
+  
+  lineNearestPart = lstPipeParts.get(numNearestPart).asLine
+  pntDelta = lineNearestPart.returnEnd - lineNearestPart.returnStart
+  numSlopeOrtho = -1* (pntDelta.getX / pntDelta.getY)
+  numDeltaXOrtho = (4*numSmallestDistance*numSmallestDistance/(1+(numSlopeOrtho*numSlopeOrtho))).sqrt
+  numDeltaYOrtho = numSlopeOrtho * numDeltaXOrtho
+  pntSplitLineEnd = Point.make(pntUser.getX-numDeltaXOrtho, pntUser.getY - numDeltaYOrtho)
+  pllSplit = Line.make(pntUser, pntSplitLineEnd).asPolyline
+  if(pllPipe.intersects(pllSplit).not)then
+    pntSplitLineEnd = Point.make(pntUser.getX+numDeltaXOrtho, pntUser.getY + numDeltaYOrtho)
+    pllSplit = Line.make(pntUser, pntSplitLineEnd).asPolyline
+  end
+  pntSplit = pllPipe.PointIntersection(pllSplit).asList.get(0)
+end
+if(pllPipe.contains(pntSplit))then
+ ftbPipes.setEditable(true)
+ lstSplittedPipes = pllPipe.split(pllSplit)
+ ftbPipes.setValue(fldPipeShape, recPipe, lstSplittedPipes.get(0))
+ for each i in 1..(lstSplittedPipes.count-1)
+   recNewPipe = ftbPipes.addRecord
+   ftbPipes.setValue(fldPipeShape, recNewPipe, lstSplittedPipes.get(i))
+   for each fldPipeAttribute in ftbPipes.getFields
+     if(fldPipeAttribute.isTypeShape.not)then
+       objAttribute = ftbPipes.returnValue(fldPipeAttribute, recPipe)
+       ftbPipes.setValue(fldPipeAttribute, recNewPipe, objAttribute)
+     end
+   end
+ end
+ fldPipeID = ftbPipes.findField("dc_id")
+ if(fldPipeID <> nil)then
+   ftbPipes.setValue(fldPipeID, recNewPipe, "p"+ftbPipes.getNumRecords.asString) 
+ end
+ ftbPipes.setEditable(false)
+ ftbJunctions.setEditable(true)
+ recNewJunction = ftbJunctions.addRecord
+ ftbJunctions.setValue(fldJunctionShape, recNewJunction, pntSplit)
+ fldID = ftbJunctions.findField("dc_id")
+ if(fldID <> nil)then
+   ftbJunctions.setValue(fldID, recNewJunction, "j"+ftbJunctions.getNumRecords.asString)
+ end
+ ftbJunctions.setEditable(false)
+ ftbPipes.setEditable(true)
+ av.run("DCWatDes.Model.Epanet.Pipe.updateNodeFields", recNewPipe)
+ av.run("DCWatDes.Model.Epanet.Pipe.updateNodeFields", recPipe)
+ ftbPipes.setEditable(false)
+end
+

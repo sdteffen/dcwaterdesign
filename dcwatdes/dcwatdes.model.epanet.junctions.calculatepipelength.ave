@@ -1,0 +1,77 @@
+' DCWatDes.Model.Epanet.Junctions.calculatePipeLength
+
+' (c) 2001 DORSCH Consult
+' calculates the length of pipeline connected to each junction
+' the pipes are virtually cut in half
+' the shape length is used
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' no argument
+' nothing returned
+
+numSnappingRadius = 0.1
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
+
+ftbJunctions = dicFTabs.get("Junctions")
+if(ftbJunctions = nil)then
+  strTranslation = av.run("DCWatDes.i18n.returnTranslation", "Please select the Junctions Theme in the Epanet Themes Dialog")
+  MsgBox.warning(strTranslation, "DC Water Design")
+  return nil
+end
+
+ftbPipes = dicFTabs.get("Pipes")
+if(ftbPipes = nil)then
+  strTranslation = av.run("DCWatDes.i18n.returnTranslation", "Please select the Pipes Theme in the Epanet Themes Dialog")
+  MsgBox.warning(strTranslation, "DC Water Design")
+  return nil
+end
+
+lstJunctionFields = ftbJunctions.getFields.clone
+lstJunctionFields.remove(0)
+strTranslation = av.run("DCWatDes.i18n.returnTranslation", "Choose the length field. The field will be overwritten")
+fldLength = MsgBox.choice(lstJunctionFields, strTranslation, "DC Water Design")
+if(fldLength = nil)then
+  return nil
+end
+
+numToGo = ftbJunctions.getNumRecords
+numComplete = 0
+av.showStopButton
+
+fldJunctionShape = ftbJunctions.findField("Shape")
+ftbJunctions.setEditable(true)
+
+fldPipeShape = ftbPipes.findField("Shape")
+
+for each recJunction in ftbJunctions
+  pntJunction = ftbJunctions.returnValue(fldJunctionShape, recJunction)
+  lstConnectedPipes = av.run("DCWatDes.PolylineFTab.findPllsByEndPoint", {ftbPipes, pntJunction, numSnappingRadius}) 
+  numTotalLength = 0
+  for each recPipe in lstConnectedPipes
+    numLength = ftbPipes.returnValue(fldPipeShape, recPipe).returnLength
+    numTotalLength = numTotalLength + (numLength/2)
+  end  
+  ftbJunctions.setValue(fldLength, recJunction, numTotalLength)
+  numComplete = numComplete+1
+  if(av.setStatus(numComplete/numToGo*100).not)then
+    av.clearStatus
+    ftbJunctions.setEditable(false)
+    return nil
+  end
+end
+ftbJunctions.setEditable(false)
+av.clearStatus

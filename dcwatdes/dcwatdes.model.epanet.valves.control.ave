@@ -1,0 +1,77 @@
+' DCWatDes.Model.Epanet.Valves.control
+
+' (c) 2001 DORSCH Consult
+' lets the user select settings from the
+' Controls table and applies them to the model
+' currently supported is opening/closing of SOVs
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else 
+  exit
+end
+
+tableControls = nil
+strControlTableName = dicPreferences.get("strControls")
+for each docTable in av.getProject.getDocsWithGui(av.findGui("Table"))
+  if(docTable.getName = strControlTableName)then
+    tableControls = docTable
+    break
+  end
+end
+
+lstFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
+ftbValves = lstFTabs.get("Valves")
+if(ftbValves = nil)then
+  MsgBox.warning("Please select a Valve Theme in the Epanet Themes Dialog. This will change values in the settings field of the Valves Theme.", "DC Water Design")
+  exit
+end
+
+if(tableControls <> nil)then
+  ftbValves.setEditable(true)
+  vtbControls = tableControls.getVTab
+  fldFirst=vtbControls.getFields.get(0)
+  lstControls = List.make
+  for each recControl in vtbControls 
+    strControl = vtbControls.returnValue(fldFirst, recControl).asString
+    lstControls.add(strControl)
+  end
+  lstControls = MsgBox.MultiListAsString(lstControls, "Choose the Controls to apply", "DC Water Design Extension")
+  if(lstControls = nil)then
+    exit
+  end
+  numSuccess = 0
+  fldValveID = ftbValves.findField("dc_id")
+  fldValveSetting = ftbValves.findField("setting")
+  for each strControl in lstControls
+    lstTokens = strControl.asTokens(" ")
+    if(lstTokens.count > 2)then
+      for each recValve in ftbValves
+        if(ftbValves.returnValue(fldValveID, recValve).asString = lstTokens.get(1))then
+          numSuccess = numSuccess+1
+          ftbValves.setValue(fldValveSetting, recValve, lstTokens.get(2))
+        end
+      end
+    end
+  end
+  ftbValves.setEditable(false)
+  MsgBox.info("Successfully applied"++numSuccess.asString++"out of"++lstControls.count.asString++"controls.","DC Water Design Extension")
+else
+  MsgBox.warning("Please choose a Controls Table in the Epanet Tables setup dialog.", "DC Water Design")
+end
+

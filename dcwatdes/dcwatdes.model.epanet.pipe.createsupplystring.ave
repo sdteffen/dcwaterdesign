@@ -1,0 +1,64 @@
+' DCWatDes.Model.Epanet.Pipe.createSupplyString
+
+' (c) 2000 DORSCH Consult
+' calculate a text that describes when a node is pressurized
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else 
+  return nil
+end
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+ftbPipes = dicFTabs.get("Pipes")
+
+' find the SQL Connection
+sqlConnection = SqlCon.find(dicPreferences.get("strSqlConnection"))
+
+if(sqlConnection.isLogin.not)then
+  av.run("DCMMS.SqlConnection.login",sqlConnection)
+end
+
+fldPipeID = ftbPipes.findField("dc_id")
+fldSupplyString = ftbPipes.findField("supply")
+ftbPipes.setEditable(true)
+av.shoStopButton
+numRecords = ftbPipes.getNumRecords
+numDone = 0
+for each recPipe in ftbPipes
+  strPipeID = ftbPipes.returnValue(fldPipeID, recPipe).asString
+  vtbPipeResults = VTab.makeSql(sqlConnection, "select * from dc_links where dc_id='"+strPipeID+"';")
+  fldResultFlow = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbPipeResults, "flow"})
+  strSupply = ""
+  for each recResult in vtbPipeResults
+    numFlow = vtbPipeResults.returnValue(fldResultFlow, recResult)
+    if(numFlow <> 0)then
+      strSupply = strSupply+"1"
+    else
+      strSupply = strSupply+"0"
+    end
+  end 
+  ftbPipes.setValue(fldSupplyString, recPipe, strSupply)
+  if(av.setStatus(numDone/numRecords * 100).not)then
+    av.clearStatus
+    ftbPipes.setEditable(false)
+    return nil
+  end
+end
+ftbPipes.setEditable(false)
+av.clearStatus

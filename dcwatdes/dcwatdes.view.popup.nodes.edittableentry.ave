@@ -1,0 +1,51 @@
+' DCWatDes.View.Popup.Nodes.editTableEntry
+
+' (c) 2000 DORSCH Consult
+' edit the table entry of a network node
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary",nil)
+
+pntMouse = self.getControlSet.getObjectTag
+if(pntMouse.is(Point).not)then
+  return nil
+end
+for each strFeature in dicThemes.returnKeys
+  if(strFeature <> "Pipes")then
+    thmFeature = dicThemes.get(strFeature)
+    lstFound = thmFeature.findByPoint(pntMouse)
+    if(lstFound.count = 1)then
+      ftbFeature = thmFeature.getFTab
+      ftbFeature.startEditingWithRecovery
+      bmpSelection = Bitmap.make(ftbFeature.getNumRecords)
+      bmpSelection.set(lstFound.get(0))
+      ftbFeature.setSelection(bmpSelection)
+      ftbFeature.updateSelection
+      thmFeature.editTable
+      tableFeature = av.getActiveDoc
+      tableFeature.promoteSelection
+      toolbarTable = av.GetProject.FindGUI("Table").getToolBar
+      if(toolbarTable <> nil)then
+        toolEdit = toolbarTable.findByScript("Table.Edit")
+        if(toolEdit <> nil)then
+          toolEdit.select
+        end
+      end    
+      break 
+    end
+  end
+end
+

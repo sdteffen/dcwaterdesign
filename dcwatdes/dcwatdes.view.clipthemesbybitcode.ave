@@ -1,0 +1,168 @@
+' DCWatDes.View.clipThemesByBitcode
+
+' (c) 2001 DORSCH Consult
+' walks through all active Themes in the view,
+' asks for a bitcode field and a bit number
+' clips the themes based on the bit set or not
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+viewActive = av.getActiveDoc
+
+lstActiveThemes = viewActive.getActiveThemes
+
+if(lstActiveThemes.count = 0)then
+  MsgBox.info("Please activate the Themes to clip.", "DC Water Design Extension")
+  return nil
+end
+
+lstBitcodes = List.make
+
+for each i in 0 .. 19
+  i.setName(i.asString)
+  lstBitcodes.add(i)
+end
+
+numBitcode = MsgBox.List(lstBitcodes, "Select Bitcode to clip Themes.", "DC Water Design")
+
+if(numBitcode = nil)then
+  return nil
+end
+  
+thmFirst = lstActiveThemes.get(0)
+
+lstFields = thmFirst.getFTab.getFields
+lstIntegerFields = List.make
+for each fldBitcode in lstFields
+  if((fldBitcode.isTypeNumber)and(fldBitcode.getPrecision = 0))then
+    lstIntegerFields.add(fldBitcode)
+  end
+end
+fldBitcode = MsgBox.list(lstFields, "Select Bitcode field", "DC Water Design Extension")
+
+if(fldBitcode = nil)then
+  return nil
+end
+
+strBitcodeField = fldBitcode.getName
+
+for each thmWhole in lstActiveThemes
+  ftbWhole = thmWhole.getFTab
+  ftbWhole.query("av.run(""DCWatDes.Bitcode.isSetAsNumber"",{["+strBitcodeField+"],"+numBitcode.asString+"})=1", ftbWhole.getSelection, #VTAB_SELTYPE_NEW)
+end
+
+theView = av.GetActiveDoc
+for each t in theView.GetActiveThemes
+  p = FALSE
+
+  if (t.Is( FTHEME ).Not) then 
+    if (t.CanExportToFtab.Not) then continue end
+  
+    def = av.GetProject.MakeFileName(t.getName, "shp")
+    def = FileDialog.Put(def, "*.shp", "Convert " + t.getName)
+    if (def = NIL) then return NIL end
+    anFTab = t.ExportToFtab(def)
+    
+    ' For Database themes, which can return a nil FTab sometimes 
+    if (anFTab=nil) then
+      MsgBox.Warning("Error occurred while converting to shapefile."+NL+
+          "Shapefile was not created.", "Convert " + t.getName)
+      continue
+    end  
+
+    shpfld = anFTab.FindField("Shape")
+   
+  else
+  
+    tbl = t.GetFTab
+    attribVis = FALSE
+    for each f in tbl.GetFields
+      if ((f.IsVisible) and not (f.IsTypeShape)) then
+        attribVis = TRUE
+        break
+      end
+    end
+    shapeVis = tbl.FindField("Shape").IsVisible
+    if ((attribVis and shapeVis).Not) then
+      continue
+    end
+    
+    def = av.GetProject.MakeFileName(t.getName, "shp")
+    def = FileDialog.Put(def, "*.shp", "Convert " + t.getName)
+    
+    if (def = NIL) then return nil end
+    
+    shpfld = (tbl.FindField("Shape"))
+    if (shpfld.IsVisible.Not) then
+      shpfld.SetVisible(shpfld.IsVisible.Not)
+      WasNotVisible = TRUE
+    else
+      WasNotVisible = FALSE
+    end
+    
+    ' see if the view is projected
+    thePrj = theView.GetProjection
+    if (thePrj.IsNull.Not) then
+      p = MsgBox.YesNoCancel("ArcView has detected that your view is projected."++
+        "Do you want the new shapefile to be saved in the projected units?",
+        "Convert", FALSE)
+      if (p = Nil) then return nil end
+    end
+    
+    ' if the user wants to project the shape, use ExportProjected
+    if (p) then
+      anFTab = tbl.ExportProjected(def, thePrj, tbl.GetSelection.Count > 0)
+    else
+      anFTab = tbl.Export(def, Shape, tbl.GetSelection.Count > 0)
+    end
+    
+    if (anFTab.HasError) then
+      if (anFTab.HasLockError) then
+        MsgBox.Error("Unable to acquire Write Lock for file " +
+          def.GetBaseName,"")
+      else
+        MsgBox.Error("Unable to create " + def.GetBaseName,"")
+      end
+      return nil
+    end
+    
+    if (WasNotVisible) then
+      shpfld.SetVisible(FALSE)
+    end
+   
+  end
+
+  ' build the spatial index
+  anFTab.CreateIndex(shpfld)
+  
+  ' don't add the projected shapefile to the view -
+  ' it won't show up if you do!
+  if (p.Not) then
+    if (MsgBox.YesNo("Add shapefile as theme to the view?",
+      "Convert to Shapefile",true).Not) then continue end
+  
+    ' create a theme and add it to the View
+    fthm = FTheme.Make(anFTab)
+    theView.AddTheme(fthm)
+  else
+    MsgBox.Info("Since your view is projected, the projected data" ++
+      "will not be added to the view. It has been saved on disk.", "Convert")
+  end
+  
+  ' bring the View to the front
+  theView.GetWin.Activate
+end
+
+

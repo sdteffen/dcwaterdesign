@@ -1,0 +1,58 @@
+'DCWatDes.View.flipPolyline 
+
+' (c) 2000 DORSCH Consult
+' flip a pipe
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+theView = av.GetActiveDoc
+pntUser = theView.getDisplay.returnUserPoint
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+theTheme = dicThemes.get("Pipes")
+
+if(theTheme=nil)then
+  MsgBox.info("Please set up the Pipes Theme in the Epanet Themes Dialog.","DC Water Design Extension")
+  return nil
+end
+
+
+if (pntUser.IsNull) then
+  return nil
+else
+  if (theTheme <> nil) then
+'    theTheme.GetFtab.BeginTransaction
+    theTheme.getFTab.setEditable(true)
+    thePrj = theView.GetProjection
+    if (thePrj.IsNull.Not) then
+      pnt = pntUser.ReturnUnprojected(thePrj)
+    end
+    theField = theTheme.GetFTab.FindField("Shape")
+    lstPllFlip = theTheme.findByPoint(pntUser)
+    theTheme.getFTab.getSelection.clearAll
+    rectInvalidExtent = Rect.makeEmpty
+    for each recFlip in lstPllFlip
+      pllFlip = theTheme.getFTab.returnValue(theField, recFlip)
+      pllFlip = pllFlip.flip
+      theTheme.getFTab.setValue(theField, recFlip, pllFlip)
+      'theTheme.getFTab.getSelection.set(recFlip)
+      rectInvalidExtent = rectInvalidExtent.returnUnion(pllFlip.returnExtent).returnExtent
+    end 
+    'theTheme.getFTab.updateSelection
+ '   theTheme.getFTAb.endTransaction
+     theTheme.getFTab.setEditable(false)
+    theView.getDisplay.invalidateRect(rectInvalidExtent)
+    av.GetProject.SetModified(true)
+  end
+end

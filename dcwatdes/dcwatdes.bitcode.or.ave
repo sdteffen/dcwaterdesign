@@ -1,0 +1,48 @@
+' DCWatDes.Bitcode.or
+
+' (c) 2001 DORSCH Consult
+' support for bitcoded integers
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' expects a bitcoded integers as the first two arguments
+' returns or of the two bitcoded integers
+
+if((self.is(List).not)or(self.count<>2)or(self.get(0).is(Number).not)or(self.get(1).is(Number).not))then
+  MsgBox.error("DCWatDes.Bitcode.or expects two integers as argument", "DC Water Design")
+  System.echo("DCWatDes.Bitcode.or expects two integers as argument")
+  exit
+end
+
+numBitcode1 = self.get(0)
+numBitcode2 = self.get(1)
+
+numResult = 0
+
+for each i in 0 .. 19
+  if(i>0)then
+    numCheck1 = (numBitcode1/(2^(i))).truncate
+    numCheck2 = (numBitcode2/(2^(i))).truncate  
+  else
+    numCheck1 = numBitcode1
+    numCheck2 = numBitcode2
+  end
+  
+  if((numCheck1.mod(2)=1)or(numCheck2.mod(2)=1))then
+    numResult = numResult+(2^i)
+  end
+end
+
+return numResult

@@ -1,0 +1,48 @@
+' DCWatDes.View.deleteFeature
+
+' (c) 2001 DORSCH Consult
+' deletes a selectable Network Feature
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' no undo support !
+
+theView = av.GetActiveDoc
+pntUser = theView.getDisplay.returnUserPoint
+
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+
+for each strFeature in dicThemes.returnKeys
+  thmFeature = dicThemes.get(strFeature)
+  lstFeatures = thmFeature.findByPoint(pntUser)
+  if(lstFeatures.count > 0)then
+    blnDelete = MsgBox.yesNo("Delete"++lstFeatures.count.asString++strFeature+"?", "DC Water Design", true)
+    if(blnDelete)then
+      ftbFeature = thmFeature.getFTab
+      ftbFeature.setEditable(true)
+      bmpDelete = Bitmap.make(ftbFeature.getNumRecords)
+      bmpDelete.clearAll
+      for each recFeature in lstFeatures
+        bmpDelete.set(recFeature)
+      end
+      ftbFeature.removeRecords(bmpDelete)
+      ftbFeature.setEditable(false)
+      av.getProject.setModified(true)
+      theView.getDisplay.invalidate(true) 
+      return nil
+    end
+  end
+end
+
