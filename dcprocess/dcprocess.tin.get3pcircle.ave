@@ -1,0 +1,30 @@
+' DCProcess.Tin.get3PCircle
+
+' from Thiessen Polygon Extension
+
+a_Point = Self.Get(0)
+a_X = a_Point.GetX
+a_Y = a_Point.GetY
+b_Point = Self.Get(1)
+b_X = b_Point.GetX
+b_Y = b_Point.GetY
+c_Point = Self.Get(2)
+c_X = c_Point.GetX
+c_Y = c_Point.GetY
+calcA = b_X - a_X
+calcB = b_Y - a_Y
+calcC = c_X - a_X
+calcD = c_Y - a_Y
+calcG = 2 * ((calcA * (c_Y - b_Y)) - (calcB * (c_X - b_X)))
+if (calcG = 0) then
+  theCircle = Circle.MakeNull
+else 
+  calcE = (calcA * (a_X + b_X)) + (calcB * (a_Y + b_Y))
+  calcF = (calcC * (a_X + c_X)) + (calcD * (a_Y + c_Y))
+  centerX = ((calcD * calcE) - (calcB * calcF)) / calcG
+  centerY = ((calcA * calcF) - (calcC * calcE)) / calcG
+  centerPoint = Point.Make(centerX, centerY)
+  theRadius = a_Point.Distance(centerPoint)
+  theCircle = Circle.Make(centerPoint, theRadius)
+end
+return theCircle

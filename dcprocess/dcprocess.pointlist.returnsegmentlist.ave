@@ -1,0 +1,58 @@
+' DCProcess.PointList.returnSegmentList
+
+' (c) 2004 DORSCH Consult
+
+' For a list of points return a list of segments with a given
+' maximum segment length
+
+' First argument is a list of Points forming a Polyline
+' Second argument is the maximum segment length
+' returns a list of Polyline Segments
+
+lstLinePoints = self.get(0)
+numSegmentLength = self.get(1)
+
+lstSegmentPoints = List.make
+lstSegmentPoints.add(lstLinePoints.get(0))
+numOffset = 0
+for each numI in 1..(lstLinePoints.count-1)
+  pntLast = lstLinePoints.get(numI-1)
+  pntCurrent = lstLinePoints.get(numI)
+  while((pntLast.distance(pntCurrent)+numOffset) > numSegmentLength)
+    numDistance = pntLast.distance(pntCurrent)
+    numX = pntLast.getX + ((pntCurrent.getX-pntLast.getX)*(numSegmentLength-numOffset)/numDistance)
+    numY = pntLast.getY + ((pntCurrent.getY-pntLast.getY)*(numSegmentLength-numOffset)/numDistance)
+    pntLast = Point.make(numX, numY)
+    lstSegmentPoints.add(pntLast)
+    numOffset = 0
+  end
+  numOffset = numOffset + pntLast.distance(pntCurrent)
+  lstSegmentPoints.add(pntCurrent)
+end
+lstLinePoints = lstSegmentPoints
+lstSegmentPoints = List.make
+lstSegmentPoints.add(lstLinePoints.get(0))
+lstSegmentPoints.add(lstLinePoints.get(1))
+pllSegment = Polyline.make({lstSegmentPoints})
+numPointIterator = 2
+lstSegments = List.make
+while(numPointIterator < lstLinePoints.count)
+  pntLast = lstLinePoints.get(numPointIterator-1)
+  pntCurrent = lstLinePoints.get(numPointIterator)
+  numDistance = pntLast.distance(pntCurrent)
+  ' factor is required to make function robust
+  if(pllSegment.returnLength + numDistance <= (numSegmentLength*1.000000001))then
+    pntSegment = lstLinePoints.get(numPointIterator)
+    lstSegmentPoints.add(pntSegment)
+  else
+    lstSegments.add(pllSegment)
+    lstSegmentPoints = List.make
+    lstSegmentPoints.add(lstLinePoints.get(numPointIterator-1))
+    lstSegmentPoints.add(lstLinePoints.get(numPointIterator))
+  end
+  pllSegment = Polyline.make({lstSegmentPoints})
+  numPointIterator = numPointIterator + 1
+end
+lstSegments.add(pllSegment)
+
+return lstSegments

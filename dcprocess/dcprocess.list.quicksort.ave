@@ -1,0 +1,72 @@
+' DCProcess.List.quicksort
+' Performs quick sort algorithm on list of objects
+
+' Improved/faster code based on algorithm at Larry Ogren's web site:
+' http://www.azstarnet.com/~logren/qsort.htm
+
+' Arguments:   theList     List    List of objects to be sorted
+'              ScriptName  String  Name of comparison script
+
+' ScriptName is the name of the comparison script to be executed.
+' It must be executable as follows:
+
+'    test = av.Run(ScriptName,{obj1,obj2})
+
+' and must return a number such that:
+
+'    test < 0 when obj1 < obj2
+'    test = 0 when obj1 = obj2
+'    test > 0 when obj1 > obj2
+
+theList = SELF.Get(0)
+ScriptName = SELF.Get(1)
+
+n = theList.Count
+if (n < 2) then return theList end
+
+l = 0
+r = n - 1
+theStack = Stack.Make
+theStack.Push({l,r})
+
+av.ShowMsg("Sorting...")
+e = 0
+nume = n
+while (theStack.Depth > 0)
+   e = e + 1
+   av.SetStatus(e / nume * 100)
+   arg = theStack.Pop
+   l = arg.Get(0)
+   r = arg.Get(1)
+   i = l
+   j = r
+   pivot = theList.Get((l + r) / 2)
+   NotDone = True
+   while (NotDone)
+      while (av.Run(Scriptname,{theList.Get(i),pivot}) < 0)
+         i = i + 1
+      end
+      while (av.Run(Scriptname,{theList.Get(j),pivot}) > 0)
+         j = j - 1
+      end
+      if (i <= j) then
+         temp = theList.Get(i)
+         theList.Set(i, theList.Get(j))
+         theList.Set(j, temp)
+         i = i + 1
+         j = j - 1
+      end
+      NotDone = (i <= j)
+   end
+   if (i < r) then
+      theStack.Push({i,r})
+   end
+   if (l < j) then
+      theStack.Push({l,j})
+   end
+end
+av.ClearMsg
+av.ClearStatus
+return theList
+
+

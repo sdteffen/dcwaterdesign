@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "doc/project.dtd" []>
+<!-- build the DC Processing source distribution -->
+<project name="DC Processing" basedir="." default="DCProcessingDistribution">
+  <!-- configuration -->
+  
+  <!-- Custom DC Processing stylesheets -->
+  <property name="dcprocessing_version" value="1.2.6" />
+  
+  <target name="DCProcessingDistribution" id="DCProcessingDistribution">
+    <tar destfile="dcprocessing-${dcprocessing_version}.tar">
+      <tarfileset dir="." prefix="dcprocessing-${dcprocessing_version}" includes=
+        "**/*.ave,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />
+      <tarfileset dir="." prefix="dcprocessing-${dcprocessing_version}" includes=
+        "INSTALL,NEWS" />
+      <tarfileset dir="." prefix="dcprocessing-${dcprocessing_version}" includes=
+        "doc/*.xsl,doc/project.dtd" />
+      <tarfileset dir="." prefix="dcprocessing-${dcprocessing_version}" includes=
+        "**/dcprocessing.xml,**/figure/*.png" />
+      <tarfileset dir="." prefix="dcprocessing-${dcprocessing_version}" includes=
+        "**/*.sql" />
+    </tar>
+    <bzip2 zipfile="dcprocessing-${dcprocessing_version}.tar.bz2" 
+      src="dcprocessing-${dcprocessing_version}.tar"/>
+  </target>
+  
+  <target name="clean">
+    <delete defaultexcludes="no" dir="." includes=
+      "**/*~,**/htmlhelp.chm,tmp/*.png,tmp/*.pdf,**/.#*,**/*.hhc,**/*.html,**/*.hhk,**/*.fo,**/*.hhp" 
+      excludes="**/index.html"/>
+  </target>
+</project>

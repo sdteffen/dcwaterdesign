@@ -1,0 +1,54 @@
+' DCProcess.convertLinesToArrows
+' draw lines as arrows
+
+' (c) 2002,2004 DORSCH Consult
+
+viewActive = av.GetActiveDoc
+
+themeList = viewActive.GetThemes 
+thmLine = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme") 
+if(thmLine = nil)then
+  exit
+end  
+  
+ftbLine = thmLine.GetFTab 
+
+fldLineShape = ftbLine.findField("Shape")
+
+ftbLine.setEditable(true)
+
+numToGo = ftbLine.getNumRecords
+numComplete = 0
+av.showStopButton
+
+numArrowLength = 0.001
+
+for each recLine in ftbLine
+  pllLine = ftbLine.returnValue(fldLineShape, recLine)
+  ' Polyline.asLine.returnStartEnd definitely does not seem to work...
+  pntStart = pllLine.asList.get(0).get(0)
+  pntEnd = pllLine.asList.get(0).get(pllLine.asList.get(0).count-1)
+  pntVector = pntEnd-pntStart
+  
+  tfmRotate = Transform2D.Make 
+  tfmRotate.rotate(7)
+  pntArrowRight = (pntVector.clone).transform(tfmRotate)
+  tfmRotate = Transform2D.Make 
+  tfmRotate.rotate(353)
+  pntArrowLeft = pntVector.transform(tfmRotate)
+  
+  pllArrow = Polyline.make({{pntStart, pntEnd, 
+  pntEnd-(pntArrowLeft/Point.make(4,4)),
+  pntEnd-(pntArrowRight/Point.make(4,4)), pntEnd}})
+    
+  ftbLine.setValue(fldLineShape, recLine, pllArrow)
+  
+  numComplete = numComplete + 1
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    ftbLine.setEditable(false)
+    exit
+  end
+end
+
+ftbLine.setEditable(false)
+av.clearStatus

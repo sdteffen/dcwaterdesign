@@ -1,0 +1,27 @@
+' DCProcess.Network.Connection.returnDetail12
+
+' (c) 2004 DORSCH Consult
+
+' First argument is the node Point.
+' Second argument is the Valve FTab.
+' Third argument is the list of connected lines.
+' Returns the last digit of the connection detail number
+
+pnt_Node = self.get(0)
+ftbValve = self.get(1)
+lstLines = self.get(2)
+
+numDetail = Number.makeNull
+
+numSnappingRadius = 0.01
+
+' Merge Polylines
+pllLine = lstLines.get(0).returnMerged(lstLines.get(1))
+pllLine = pllLine.returnMerged(lstLines.get(2))
+mpntLine = MultiPoint.make({pllLine.along(0.0), pllLine.along(100.0)})
+ftbValve.selectByPolygon(mpntLine.returnbuffered(numSnappingRadius), #VTAB_SELTYPE_NEW)
+bmpSelection = ftbValve.getSelection
+
+numDetail = bmpSelection.count+1
+
+return numDetail

@@ -1,0 +1,103 @@
+' DCProcess.Network.interpolatePointValues
+
+' Linear interpolation of point values in a network (line-node topology)
+
+' (c) 2004 DORSCH Consult
+
+' Select Polyline Theme
+lstPolylineThemes = av.run("DCProcess.View.getThemesByShapeClass", "Polyline")
+thmLine = Msgbox.choice (lstPolylineThemes, "Select a Polyline Theme.", "Interpolate Point Values") 
+if(thmLine = nil)then
+  exit
+end  
+ftbLine = thmLine.getFTab 
+fldLineShape = ftbLine.findField("Shape")
+
+' Select Point Theme
+lstPointThemes = av.run("DCProcess.View.getThemesByShapeClass", "Point")
+thmPoint = Msgbox.choice (lstPointThemes, "Select a Point Theme for Interpolation.", "Interpolate Point Values") 
+if(thmPoint = nil)then
+  exit
+end  
+ftbPoint = thmPoint.getFTab 
+fldPointShape = ftbLine.findField("Shape")
+
+' Select field to interpolate
+
+lstFields = av.run("DCPRocess.Fields.returnNumberFields", ftbPoint.getFields)
+fldInterpolate = Msgbox.choice(lstFields, "Select the field for interpolation.","Interpolate Point Values")
+if(fldInterpolate.asString = "nil")then
+  exit
+end
+
+numToGo = ftbPoint.getNumRecords
+numComplete = 0
+av.showStopButton
+ftbPoint.setEditable(true)
+
+for each recPoint in ftbPoint
+  numValue = ftbPoint.returnValue(fldInterpolate, recPoint)
+  if((numValue.isNull) or (numValue = 0))then
+    ' trace upstream
+    blnTraceUpstream = true
+    blnTraceDownstream = false
+    blnInterpolate = false
+    recNode = recPoint
+    numUpstreamValue = 0
+    numUpstreamLength = 0
+    numDownstreamValue = 0
+    numDownstreamLength = 0
+    while(blnTraceUpstream)
+      pntNode = ftbPoint.returnValue(fldPointShape, recNode)
+      lstUpstreamLines = av.run("DCProcess.Node.findUpstreamLines", {ftbLine, pntNode})
+      if(lstUpstreamLines.count <> 1)then
+        ' cannot interpolate for network branches or ends
+        System.echo("Upstream Trace: Cannot interpolate for network branches or ends.")
+        blnTraceUpstream = false
+        break
+      end
+      recLine = lstUpstreamLines.get(0)
+      pllLine = ftbLine.returnValue(fldLineShape, recLine)
+      numUpstreamLength = numUpstreamLength + pllLine.returnLength
+      recNode = av.run("DCProcess.Line.findNodes", {ftbLine, ftbPoint, recLine}).get(0)
+      numUpstreamValue = ftbPoint.returnValue(fldInterpolate, recNode)
+      if((numUpstreamValue.isNull.not) and (numUpstreamValue <> 0))then
+        blnTraceUpstream = false
+        blnTraceDownstream = true
+      end
+    end
+    ' trace downstream
+    while(blnTraceDownstream)
+      pntNode = ftbPoint.returnValue(fldPointShape, recNode)
+      lstDownstreamLines = av.run("DCProcess.Node.findDownstreamLines", {ftbLine, pntNode})
+      if(lstDownstreamLines.count <> 1)then
+        System.echo("Downstream Trace: Cannot interpolate for network branches or ends.")
+        ' cannot interpolate for network branches or ends
+        break
+      end
+      recLine = lstDownstreamLines.get(0)
+      pllLine = ftbLine.returnValue(fldLineShape, recLine)
+      numDownstreamLength = numDownstreamLength + pllLine.returnLength
+      recNode = av.run("DCProcess.Line.findNodes", {ftbLine, ftbPoint, recLine}).get(1)
+      numDownstreamValue = ftbPoint.returnValue(fldInterpolate, recNode)
+      if((numDownstreamValue.isNull.not) and (numDownstreamValue <> 0))then
+        blnTraceDownstream = false
+        blnInterpolate = true
+      end
+    end
+    ' interpolate value
+    if(blnInterpolate)then
+      numInterpolate = numUpstreamValue-((numUpstreamValue-numDownstreamValue)*numUpstreamLength/(numUpstreamLength+numDownstreamLength))
+      ftbPoint.setValue(fldInterpolate, recPoint, numInterpolate)
+    end
+  end
+  numComplete = numComplete + 1
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    ftbPoint.setEditable(false)
+    exit
+  end
+end
+
+ftbPoint.setEditable(false)
+
+av.clearStatus

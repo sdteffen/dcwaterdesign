@@ -1,0 +1,118 @@
+' DCProcess.createPllThemeFromPllzTheme
+
+'Convert a 2D feature theme to 3D
+  
+ ' 
+  '   Initial setup 
+  ' 
+  theDoc = av.GetActiveDoc 
+  theTheme = theDoc.GetActiveThemes.Get(0) 
+  theInFTab = theTheme.GetFTab 
+  theInShape = theInFTab.GetShapeClass.MakeNull 
+  thePrj = Prj.MakeNull 
+  
+  ' 
+  '   Clone visible fields so values can be copied over to output 
+  ' 
+  outFields = {} 
+  for each f in theInFTab.GetFields 
+    if (f.IsVisible and f.IsTypeShape.Not) then 
+      outFields.Add(f.Clone) 
+    end 
+  end 
+  
+  ' 
+  '   Get output name and create file 
+  ' 
+  def = av.GetProject.GetWorkDir.MakeTmp("thm","shp") 
+  
+ def = SourceManager.PutDataSet(ftab, "Output Shapefile Name", def, true) 
+  if (def = NIL) then 
+    exit 
+  end 
+  inClass = theInFTab.GetShapeClass 
+  if (inClass.IsSubclassOf(Point)) then 
+    outClass = Point 
+    zFldNam = MsgBox.Input("Name of new attribute field used to store heights:", "Height Field Name", "Height") 
+    if (zFldNam = NIL) then 
+      exit 
+    end 
+    if (theInFTab.FindField(zFldNam) <> NIL) then 
+      MsgBox.Error("Field name is already used by another attribute", "Field Exists") 
+  
+     exit 
+    end 
+    zFld = Field.Make(zFldNam, #FIELD_FLOAT, 5, 4) 
+    outFields.Add(zFld) 
+  elseif (inClass.IsSubclassOf(Polygon)) then 
+    outClass = Polygon 
+  elseif (inClass.IsSubclassOf(PolyLine)) then 
+    outClass = Polyline 
+  end 
+  theOutFTab = FTab.MakeNew(def, outClass) 
+  theOutFTab.SetEditable(TRUE) 
+  theOutFTab.AddFields(outFields) 
+                     
+  ' 
+  '   Loop through and write out selected features 
+  ' 
+  theBitMap = theInFTab.GetSelection 
+  if (theBitMap.Count = 0) then 
+  
+   theBitMap.SetAll 
+    unsetBitmap = TRUE 'reset flag for end of loop 
+  else 
+    unsetBitmap = FALSE 
+  end 
+  shapeField = theInFTab.FindField("Shape") 
+  done = FALSE 
+  offset = -1 
+  while (not done) 
+    recNum = theBitmap.GetNextSet(offset) 
+    offset = recNum 
+    if (recNum <> -1) then                         
+      theInFTab.QueryShape(recNum, thePrj, theInShape) 
+      rec = theOutFTab.AddRecord 
+      if (outClass.GetClassName = "Point") then 
+        theOutShape = theInShape.AsPoint 
+      elseif (outClass.GetClassName = "Polyline") then 
+  
+       theOutShape = theInShape.AsPolyLine 
+      else 
+        theOutShape = Polygon.Make(theInShape.AsPolyLineZ.AsPolyLine.AsList) 
+      end 
+      theOutFTab.SetValue(shapeField, rec, theOutShape) 
+      for each f in outFields       
+        inField = theInFTab.FindField(f.GetName) 
+        if (inField <> NIL) then 
+          attVal = theInFTab.ReturnValue(inField, recNum) 
+          theOutFTab.SetValue(f, rec, attVal) 
+        else 
+          theOutFTab.SetValue(f, rec, theInShape.GetZ) 
+        end 
+  
+     end 
+    else 
+      done = TRUE 
+    end 
+  end 
+  
+  ' 
+  '   Clean up 
+  ' 
+  if (unsetBitmap) then 
+    theBitmap.ClearAll 
+  end 
+  theOutFTab.Flush 
+  theOutFTab.SetEditable(FALSE) 
+  
+  ' 
+  '   Optionally add output as theme 
+  ' 
+  if (MsgBox.YesNo("Add 3D shapefile as theme?","Convert to 2D Shapefile",TRUE)) then  
+    fthm = FTheme.Make(theOutFTab) 
+    theDoc.AddTheme(fthm) 
+  end 
+  
+  
+  

@@ -1,0 +1,81 @@
+' DCProcess.Tin.RadialPointSort
+
+' From Thiessen Polygon Extension
+
+pointList = Self.Get(0)
+sortCenter = Self.Get(1)
+
+sortList = List.Make
+for each aPoint in pointList
+  if(aPoint.IsNull) then
+    continue
+  end
+  distX = aPoint.GetX - sortCenter.GetX
+  distY = aPoint.GetY - sortCenter.GetY
+  if (distX.Abs + distY.Abs = 0) then
+    sortKey = 0
+  else
+    sortKey = distY / (distX.Abs + distY.Abs)
+  end
+  if (distX < 0) then
+    sortKey = 2 - sortKey
+  elseif (distY < 0) then
+    sortKey = 4 + sortKey
+  end
+  sortKey  = sortKey * 90
+
+  if (sortList.IsEmpty) then
+    sortList.Add({sortKey, aPoint})
+    continue
+  end
+
+  newSet = {sortKey, aPoint}
+
+  if (sortKey < sortList.Get(0).Get(0)) then
+    sortList.Insert(newSet)
+  elseif (sortKey = sortList.Get(0).Get(0)) then
+    sortList.Insert(sortList.Get(0))
+    sortList.Set(1, newSet)
+  elseif (sortKey >= sortList.Get(sortList.Count -1).Get(0)) then
+    sortList.Add(newSet)
+  else
+    indexBase = 0
+    indexBound = sortList.Count -1
+    addIndex = Number.MakeNull
+    while (addIndex.IsNull)
+      searchCount = indexBound - indexBase
+      if (searchCount < 4) then
+        for each idxVector in 0 .. searchCount
+          binIndex = indexBound - idxVector
+          binValue = sortList.Get(binIndex).Get(0)
+          if (sortKey >= binValue) then
+            addIndex = binIndex + 1
+            break
+          end
+        end
+        if (addIndex.IsNull) then
+          addIndex = indexBase
+        end
+      else
+        binIndex = indexBase + (searchCount / 2).Round
+        binValue = sortList.Get(binIndex).Get(0)
+        if (sortKey = binValue) then
+          addIndex = binIndex + 1
+        elseif (sortKey < binValue) then
+          indexBound = binIndex
+        elseif (sortKey > binValue) then
+          indexBase = binIndex
+        end
+      end
+    end
+    sortList.Add(newSet)
+    sortList.Shuffle(newSet, addIndex)
+  end
+end
+
+radialList = List.Make
+for each sortSet in sortList
+   radialList.Add(sortSet.Get(1))
+end
+
+return radialList

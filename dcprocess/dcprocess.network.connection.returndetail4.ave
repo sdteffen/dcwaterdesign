@@ -1,0 +1,84 @@
+' DCProcess.Network.Connection.returnDetail4
+
+' (c) 2004 DORSCH Consult
+
+' First argument is the node Point.
+' Second argument is the Valve FTab.
+' Third argument is the list of connected lines.
+' Returns the last digit of the connection detail number
+
+pnt_Node = self.get(0)
+ftbValve = self.get(1)
+lstLines = self.get(2)
+
+numDetail = Number.makeNull
+
+numSnappingRadius = 0.01
+
+' Merge Polylines
+pllLine = lstLines.get(0).returnMerged(lstLines.get(1))
+pllLine = pllLine.returnMerged(lstLines.get(2))
+mpntLine = MultiPoint.make({pllLine.along(0.0), pllLine.along(100.0)})
+ftbValve.selectByPolygon(mpntLine.returnbuffered(numSnappingRadius), #VTAB_SELTYPE_NEW)
+bmpSelection = ftbValve.getSelection
+
+if(bmpSelection.count = 0)then
+  ' *** Connection 61
+  numDetail = 1
+else
+  num_Direction1 = av.run("DCProcess.Point.returnPolyLineAngle",{pnt_Node, lstLines.get(0)})
+  num_Direction2 = av.run("DCProcess.Point.returnPolyLineAngle",{pnt_Node, lstLines.get(1)})
+  num_Direction3 = av.run("DCProcess.Point.returnPolyLineAngle", {pnt_Node, lstLines.get(2)})
+  num_Angle1 = num_Direction1.max(num_Direction2) - num_Direction1.min(num_Direction2)
+  num_Angle2 = num_Direction2.max(num_Direction3) - num_Direction2.min(num_Direction3)
+  num_Angle3 = num_Direction3.max(num_Direction1) - num_Direction3.min(num_Direction1)
+  if(num_Angle1 > 90 ) then
+   num_Angle1 = num_Angle1-180
+  end
+  if(num_Angle2 > 90 ) then
+   num_Angle2 = num_Angle2-180
+  end
+  if(num_Angle3 > 90 ) then
+   num_Angle3 = num_Angle3-180
+  end
+  
+  'the arms of the T have the same direction, the bone is orthogonal to them
+  lstPllArms = List.make                      
+  
+  num_Angle1 = num_Angle1.abs
+  num_Angle2 = num_Angle2.abs              
+  num_Angle3 = num_Angle3.abs
+                
+  if( num_Angle1 < num_Angle2 ) then
+    if(num_Angle1 < num_Angle3) then
+      pllBone = lstLines.get(2)
+      lstPllArms.add(lstLines.get(0))
+      lstPllArms.add(lstLines.get(1))
+    else
+      pllBone = lstLines.get(1)
+      lstPllArms.add(lstLines.get(0))
+      lstPllArms.add(lstLines.get(2))                    
+    end            
+  else
+    if(num_Angle2 < num_Angle3) then
+      pllBone = lstLines.get(0)
+      lstPllArms.add(lstLines.get(2))
+      lstPllArms.add(lstLines.get(1))                    
+    else
+      pllBone = lstLines.get(1)
+      lstPllArms.add(lstLines.get(0))
+      lstPllArms.add(lstLines.get(2))                    
+    end
+  end
+  recValve = bmpSelection.getNextSet(-1)
+  pntValve = ftbValve.returnValue(ftbValve.findField("shape"), recValve)
+  if(bmpSelection.count = 1)then
+    numDetail = 2
+  elseif(bmpSelection.count = 2)then
+    numDetail = 3
+  elseif(bmpSelection.count = 3)then
+    numDetail = 4
+  end
+end
+
+return numDetail

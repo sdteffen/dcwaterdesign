@@ -1,0 +1,27 @@
+' DCProcess.Node.findDownstreamLines
+' Arguments: The Line FTab and a Point (at the location of the node)
+' Returns the record of the line downstream of the node
+
+' 0.01 map units snap tolerance
+
+' (c) 2000 - 2004 DORSCH Consult
+
+ftbLines = self.get(0)
+pntManhole = self.get(1)
+
+' Increases the speed, because it uses ArcView's spatial index
+ftbLines.selectByPoint(pntManhole, 10.0, #VTAB_SELTYPE_NEW)
+bmpLines = ftbLines.getSelection
+lstLines = List.make
+fldLineShape = ftbLines.findField("Shape")
+for each recConnectedLine in bmpLines
+  pllConnectedLine = ftbLines.returnValue(ftbLines.findField("Shape"),recConnectedLine)
+  if(pllConnectedLine.countParts <> 1)then
+    System.echo("DCProcess.Node.findDownstreamLines: ERROR: PolyLine is not simple.")
+  end
+  if(pllConnectedLine.asList.get(0).get(0).distance(pntManhole) < 0.01)then
+    lstLines.add(recConnectedLine.clone)
+  end
+end
+
+return lstLines.deepclone

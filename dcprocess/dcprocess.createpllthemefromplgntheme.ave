@@ -1,0 +1,64 @@
+' DCProcess.createPllThemeFromPlgnTheme
+' create a Polyline Theme containing the Boundaries of a
+' given Polygon Theme
+
+' (c) 2000, 2004 DORSCH Consult
+
+viewActive = av.GetActiveDoc
+
+themeList = viewActive.GetThemes 
+thmPolygon = Msgbox.Choice (themeList, "Select a Polygon Theme.", "Select a Theme") 
+if(thmPolygon = nil)then
+  exit
+end
+
+'  Proj = v.GetProjection 
+  
+ftbPolygon = thmPolygon.GetFTab 
+  
+  clsPolyline = Polyline
+  def = av.GetProject.MakeFileName("theme", "shp") 
+  def = FileDialog.Put(def, "*.shp", "New Polyline Theme") 
+  
+  if (def = nil) then 
+   exit
+  end
+  ftbPolyline = FTab.MakeNew(def, clsPolyline) 
+
+  
+fldPolygonShape = ftbPolygon.findField("Shape")
+fldPolylineShape = ftbPolyline.findField("Shape")
+
+lstFields = ftbPolygon.getFields.deepclone
+lstFields.remove(0)
+
+ftbPolyline.setEditable(true)
+ftbPolyline.addFields(lstFields)
+fldPolylineShape = ftbPolyline.findField("Shape")
+
+numCounter = 0 
+numTotal = ftbPolygon.GetNumRecords 
+av.showStopButton  
+
+for each recPolygon in ftbPolygon
+  recPolyline = ftbPolyline.addRecord
+  plgnShape = ftbPolygon.returnValue(fldPolygonShape,recPolygon).asPolyline
+  if(plgnShape <> nil)then
+  ftbPolyline.setValue(fldPolylineShape, recPolyline, plgnShape)
+  
+    for each i in 1 .. (lstFields.count)
+      fldPolyline = ftbPolyline.getFields.get(i)
+      fldPolygon = ftbPolygon.getFields.get(i)
+      ftbPolyline.setValue(fldPolyline, recPolyline, ftbPolygon.returnValue(fldPolygon, recPolygon))
+    end
+  end
+      
+  numCounter = numCounter + 1
+  if(av.setStatus((numCounter/numTotal)*100).not)then
+    exit
+  end
+
+end
+
+ftbPolyline.setEditable(false)
+av.clearStatus

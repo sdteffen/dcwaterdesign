@@ -1,0 +1,75 @@
+' DCProcess.splitPlgnThemeByPllTheme
+' split a polyPolygon theme with a Line theme
+' (c) 2002 DORSCH Consult
+
+viewActive = av.getActiveDoc
+
+lstPolygonThemes = av.run("DCProcess.View.getThemesByShapeClass", "Polygon")
+thmPolygon = Msgbox.choice (lstPolygonThemes, "Select a Polygon Theme.", "Split Polygons by Lines") 
+if(thmPolygon = nil)then
+  exit
+end  
+  
+ftbPolygon = thmPolygon.getFTab 
+
+lstPolylineThemes = av.run("DCProcess.View.getThemesByShapeClass", "Polyline")
+thmLine = Msgbox.choice (lstPolylineThemes, "Select a Polyline Theme.", "Split Polygons by Lines") 
+
+if(thmLine = nil)then
+  exit
+end  
+  
+ftbLine = thmLine.getFTab 
+
+fldPolygonShape = ftbPolygon.findField("Shape")
+fldLineShape = ftbLine.findField("Shape")
+
+ftbPolygon.setEditable(true)
+
+numToGo = ftbLine.getNumRecords
+numComplete = 0
+av.showStopButton
+
+numCrossLength = 0.001
+
+for each recLine in ftbLine
+  pllShape = ftbLine.returnValue(fldLineShape, recLine)
+  if((pllShape <> nil)and(pllShape.isNull.not)and(pllShape.isEmpty.not))then
+    ' increases the speed, because it uses ArcView's spatial index
+    ftbPolygon.selectByPolyline(pllShape, #VTAB_SELTYPE_NEW) 
+    ftbPolygon.updateSelection
+    bmpSplit = ftbPolygon.getSelection
+    if(bmpSplit.count > 0)then
+      for each recPolygon in bmpSplit
+        plgnPolygon = ftbPolygon.returnValue(fldPolygonShape, recPolygon)
+        lstSplit = plgnPolygon.split(pllShape)
+        
+        if(lstSplit.get(0) <> nil)then
+          ftbPolygon.setValue(fldPolygonShape, recPolygon, lstSplit.get(0))
+          for each i in 1..3
+            plgnSplit = lstSplit.get(i)
+            if((plgnSplit <> nil)and(plgnSplit.isNull.not)and(plgnSplit.isEmpty.not))then
+              recNewPolygon = ftbPolygon.addRecord
+              ftbPolygon.setValue(fldPolygonShape, recNewPolygon, plgnSplit)
+              for each fldPolygonAttribute in ftbPolygon.getFields
+                if(fldPolygonAttribute.isTypeShape.not)then
+                  objAttribute = ftbPolygon.returnValue(fldPolygonAttribute, recPolygon)
+                  ftbPolygon.setValue(fldPolygonAttribute, recNewPolygon, objAttribute)
+                end   
+              end
+            end
+          end    
+        end
+      end
+    end
+  end
+  
+  numComplete = numComplete + 1
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    ftbPolygon.setEditable(false)
+    exit
+  end
+end
+
+ftbPolygon.setEditable(false)
+av.clearStatus

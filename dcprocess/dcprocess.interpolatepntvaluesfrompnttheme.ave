@@ -1,0 +1,176 @@
+'DCProcess.interpolatePntValuesFromPntTheme
+
+' (c) 2004 DORSCH Consult
+
+' Interpolate point values using the three closest points
+' from another point theme
+
+viewActive = av.GetActiveDoc 
+  
+themeList = viewActive.GetThemes
+blnViewHasPointTheme = false
+lstPointThemes = List.make
+for each  thmCheck in themeList
+  if(thmCheck.getClass.getClassName = "FTheme")then
+    if(thmCheck.getFTab.getShapeClass.getClassName = "Point")then
+      lstPointThemes.add(thmCheck)
+      blnViewHasPointTheme = true
+    end
+  end
+end
+
+if(blnViewHasPointTheme.not)then
+  MsgBox.error("Found no PointThemes in View.", "DC Conversion Extension")
+  exit
+end
+
+thmSource = MsgBox.choice(lstPointThemes, "Select the point theme from which the data will be interpolated","Select a Theme")
+
+thmDestination = MsgBox.Choice(lstPointThemes, "Select the Point Theme to assign data to", "Select a Theme")
+
+if((thmDestination = nil)or(thmSource = nil))then
+  exit
+end
+
+Proj = viewActive.GetProjection 
+
+ftbSource = thmSource.getFtab
+fldSourceShape = ftbSource.findField("Shape")
+lstSourceFields = ftbSource.getFields
+
+ftbDestination = thmDestination.getFtab
+fldDestinationShape = ftbDestination.findField("Shape")
+lstDestinationFields = ftbDestination.getFields
+
+fldSourceAttribute = MsgBox.choice(lstSourceFields, "Select the field for interpolation","Select a Field")
+if(fldSourceAttribute = nil)then
+  exit
+end
+if(fldSourceAttribute.isTypeNumber.not)then
+  MsgBox.error("Field must be of type Number.","DC Conversion Extension")
+  exit
+end
+
+fldDestinationAttribute = MsgBox.choice(lstDestinationFields, "Select the field to store the interpolated values","Select a Field")
+if(fldDestinationAttribute = nil)then
+  exit
+end
+if(fldDestinationAttribute.isTypeNumber.not)then
+  MsgBox.error("Field must be of type Number.","DC Conversion Extension")
+  exit
+end
+
+numCounter = 0 
+numTotal = ftbDestination.GetNumRecords 
+av.showStopButton  
+
+if(ftbSource.getNumRecords < 3)then
+  MsgBox.error("Source Theme must contain at least 3 records.", "DC Conversion Extension")
+  exit
+end
+ 
+' initial selection radius 
+numSelectionRadius = 1 
+  
+ftbDestination.setEditable(true)
+for each recDestination in ftbDestination
+  pntDestination = ftbDestination.returnValue(fldDestinationShape, recDestination)
+  
+  ' select closest 3 points
+  
+  numSelected = 0
+  while (numSelected < 3)
+    ftbSource.selectByPoint(pntDestination, numSelectionRadius, #VTAB_SELTYPE_NEW)
+    numSelected = ftbSource.getNumSelRecords
+    numSelectionRadius = numSelectionRadius*2
+  end
+  numSmallestDistance = numSelectionRadius
+  numClosestIndex = 0
+  lstSelected = List.make
+  numI = 0
+  for each recSource in ftbSource.getSelection
+    pntSource = ftbSource.returnValue(fldSourceShape, recSource)
+    numSourceValue = ftbSource.returnValue(fldSourceAttribute, recSource)
+    numDistance = pntSource.distance(pntDestination)
+    lstSource = {pntSource, numSourceValue}
+    lstSelected.add(lstSource)
+    if(numDistance < numSmallestDistance)then
+      numClosestIndex = numI
+      numSmallestDistance = numDistance
+    end
+    numI = numI+1
+  end
+  lstA = lstSelected.get(numClosestIndex)
+  lstSelected.remove(numClosestIndex)
+  
+  numClosestIndex = 0
+  numI = 0
+  numSmallestDistance = numSelectionRadius
+  for each lstSource in lstSelected
+    numDistance = pntDestination.distance(lstSource.get(0))
+    if(numDistance < numSmallestDistance)then
+      numClosestIndex = numI
+      numSmallestDistance = numSmallestDistance
+    end
+    numI = numI + 1 
+  end  
+  lstB = lstSelected.get(numClosestIndex)
+  lstSelected.remove(numClosestIndex)
+
+  numI = 0
+  numClosestIndex = 0
+  numSmallestDistance = numSelectionRadius
+  for each lstSource in lstSelected
+    numDistance = pntDestination.distance(lstSource.get(0))
+    if(numDistance < numSmallestDistance)then
+      numClosestIndex = numI
+      numSmallestDistance = numDistance
+    end
+    numI = numI + 1
+  end  
+  
+  lstC = lstSelected.get(numClosestIndex)
+  
+  pntA = lstA.get(0)
+  az = lstA.get(1)
+  pntB = lstB.get(0)
+  bz = lstB.get(1)
+  pntC = lstC.get(0)
+  cz = lstC.get(1)
+  
+  ax = pntA.getX
+  ay = pntA.getY
+
+  bx = pntB.getX
+  by1= pntB.getY
+  
+  cx = pntC.getX
+  cy = pntC.getY
+
+  px = pntDestination.getX
+  py = pntDestination.getY
+   
+  ' interpolate
+  
+  a1 = px-ax
+  a2 = py-ay
+  b1 = px-bx
+  b2 = py-by1
+  c1 = px-cx
+  c2 = py-cy
+  
+  numValue = ((a1*b2*cz)-(a1*bz*c2)+(a2*bz*c1)-(a2*b1*cz)+(az*b1*c2)-(az*b2*c1))/((a1*b2)-(a1*c2)+(a2*c1)-(a2*b1)+(b1*c2)-(b2*c1))
+  
+  ' write value
+  
+  ftbDestination.setValue(fldDestinationAttribute, recDestination, numValue)
+  numSelectionRadius = numSelectionRadius*1.5/numSelected
+  
+  numCounter = numCounter + 1
+  if(av.setStatus((numCounter/numTotal)*100).not)then
+    exit
+  end
+end
+
+ftbDestination.setEditable(false)
+av.clearStatus

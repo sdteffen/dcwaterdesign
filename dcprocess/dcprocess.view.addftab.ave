@@ -1,0 +1,22 @@
+' DCProcess.View.addFTab
+
+' Ask the user to add a theme to the view before doing so.
+
+' (c) 2004 DORSCH Consult
+
+' first argument is the View
+' second argument is the FTab
+' returns nothing
+
+viewActive = self.get(0)
+ftbTheme = self.get(1)
+
+if(MsgBox.YesNo("Add shapefile as theme to the view?",
+   "Convert to Shapefile",true)) then
+  ' create a theme and add it to the View
+  thmTheme = FTheme.make(ftbTheme)
+  viewActive.addTheme(thmTheme)
+end
+  
+' bring the View to the front
+viewActive.getWin.activate

@@ -1,0 +1,152 @@
+' DCProcess.Tin.getTinPolygons
+
+' based on Thiessen Polygon Extension
+
+pointList = Self.Get(0)
+limitsPG = Self.Get(1)
+limitsPL = limitsPG.AsPolyLine
+
+'*** geometry subroutines
+subGet3PCircle = av.FindScript("DCProcess.Tin.get3PCircle")
+subRadialPointSort = av.FindScript("DCProcess.Tin.RadialPointSort")
+
+'*** input validation
+if (subGet3PCircle = nil) then
+  MsgBox.Error("Subroutine not found: ""DCProcess.Tin.get3PCircle""", "DCProcess.Tin.getTinPolygons")
+  return nil
+elseif (subRadialPointSort = nil) then
+  MsgBox.Error("Subroutine not found: ""DCProcess.Tin.RadialPointSort""", "DCProcess.Tin.GetTinPolygons")
+  return nil
+elseif (pointList.Is(List).Not) then
+  MsgBox.Error("Invalid point list", "DCProcess.Tin.getTinPolygons")
+  return nil
+elseif (pointList.Count < 2) then
+  MsgBox.Error("Point list count < 2", "DCProcess.Tin.getTinPolygons")
+  return nil
+elseif (limitsPG.Is(Polygon).Not) then
+  MsgBox.Error("Invalid limits polygon", "DCProcess.getTinPolygons")
+  return nil
+end
+
+'*** begin calcs
+limitsRect = limitsPG.ReturnExtent
+limitsCenter = limitsRect.ReturnCenter
+limitsRadius = limitsCenter.Distance(limitsRect.ReturnOrigin) * 2
+worldTop = Point.Make(limitsCenter.GetX, limitsCenter.GetY + (limitsRadius * 2))
+worldLeft = Point.Make(limitsCenter.GetX - (limitsRadius * (3.Sqrt)), limitsCenter.GetY - limitsRadius)
+worldRight = Point.Make(limitsCenter.GetX + (limitsRadius * (3.Sqrt)), limitsCenter.GetY - limitsRadius)
+
+worldList = {worldTop, worldLeft, worldRight}
+tinCirList = {{Circle.Make(limitsCenter, limitsRadius * 3.Sqrt), worldList}}
+
+dropDuplicates = False
+dropList = List.Make
+
+av.ClearStatus
+av.ClearMsg
+
+thsnList = List.Make
+
+av.ShowMsg("Generating tin...")
+statusCount = pointList.Count
+eltCount = 0
+buildList = List.Make
+tinRemoveList = List.Make
+for each insPoint in pointList
+  buildList.Empty
+  tinRemoveList.Empty
+  dropPoint = False
+  for each tinSet in tinCirList
+    tinCircle = tinSet.Get(0)
+    insDist = insPoint.Distance(tinCircle.ReturnCenter)
+    if (insDist > tinCircle.GetRadius) then
+      continue
+    end
+    if (tinCircle.GetRadius - insDist <= 1) then
+      for each aPoint in tinSet.Get(1)
+        if ((aPoint.GetX = insPoint.GetX) and (aPoint.GetY = insPoint.GetY)) then
+          if(dropDuplicates) then
+            dropPoint = True
+            break
+          else
+            MsgBox.Error("Duplicate input points at:"++aPoint.GetX.AsString+","++aPoint.GetY.AsString, "Sub.GetThsnPolygons")
+            if(MsgBox.YesNo("Do you want to continue without this point?", "Duplicate Point", False)) then
+              if(MsgBox.YesNo("Do you want to drop all other duplicate points?", "Drop Duplicate Points", True)) then
+                dropDuplicates = True
+              end
+              dropPoint = True
+              break
+            else
+              av.ClearMsg
+              av.ClearStatus
+              return nil
+            end
+          end
+        end
+      end
+    end
+    
+    if(dropPoint) then
+      break
+    end
+
+    buildList.Merge(tinSet.Get(1))
+    tinRemoveList.Add(tinSet)
+  end
+  
+  if(buildList.IsEmpty) then
+    if(dropDuplicates) then
+      dropPoint = True
+    else
+      MsgBox.Error("Duplicate input points at:"++insPoint.GetX.AsString+","++insPoint.GetY.AsString, "Sub.GetThsnPolygons")
+      if(MsgBox.YesNo("Do you want to continue without this point?", "Duplicate Point", False)) then
+        if(MsgBox.YesNo("Do you want to drop all other duplicate points?", "Drop Duplicate Points", True)) then
+          dropDuplicates = True
+        end
+        dropPoint = True
+      else
+        av.ClearMsg
+        av.ClearStatus
+        return nil
+      end
+    end
+  end
+  
+  if(dropPoint) then
+    dropList.Add(insPoint)
+    eltCount = eltCount + 1
+    av.SetStatus(eltCount / statusCount * 100)
+    continue
+  end
+  
+  for each tinSet in tinRemoveList
+    tinCirList.RemoveObj(tinSet)
+  end
+  
+  buildList.RemoveDuplicates
+  buildList = subRadialPointSort.DoIt({buildList, insPoint})
+  lastPoint = Point.MakeNull
+  for each buildPoint in buildList
+    if (lastPoint.IsNull) then
+      lastPoint = buildPoint
+      continue
+    end
+    tinDef = {insPoint, lastPoint, buildPoint}
+    thsnPolygon = Polygon.Make({tinDef})
+    thsnList.Add(thsnPolygon)
+
+    tinCircle = subGet3PCircle.DoIt(tinDef)
+    tinCirList.Add({tinCircle, tinDef})
+    lastPoint = buildPoint
+  end
+  
+  tinDef = {insPoint, buildList.Get(buildList.Count -1), buildList.Get(0)}
+  tinCircle = subGet3PCircle.DoIt(tinDef)
+  tinCirList.Add({tinCircle, tinDef})
+  eltCount = eltCount + 1
+  av.SetStatus(eltCount / statusCount * 100)
+end
+av.ClearStatus
+av.ClearMsg
+
+return {thsnList, nil}

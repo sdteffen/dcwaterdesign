@@ -1,0 +1,41 @@
+' Make sure there is a project
+
+if (av.GetProject = nil) then
+  return nil
+end
+
+' The self object for this script is the extension
+
+'Add the menu after the view's Theme menu 
+theMenuBar = av.GetProject.FindGUI("View").getMenuBar
+m = theMenuBar.FindByLabel("Theme")
+if (m <> nil) then
+  'DC Processing menu
+  theMenuBar.add(self.get(0), theMenuBar.getControls.find(m))
+else
+'DC Processing Extention menu
+  theMenuBar.add(self.get(0), 999)
+end
+av.getProject.findGUI("View").setModified(true)
+
+' Add the menu after the Project's Project menu 
+theMenuBar = av.GetProject.FindGUI("Project").GetMenuBar
+m = theMenuBar.FindByLabel("Project")
+if (m <> nil) then
+  ' DC Processing menu
+  theMenuBar.Add(self.get(1), theMenuBar.getControls.find(m))    
+else
+' DC Processing menu
+  theMenuBar.Add(self.get(1), 999)
+end
+
+' Table GUI Menu
+theMenuBar = av.getProject.findGUI("Table").getMenuBar
+m = theMenuBar.findByLabel("Table")
+if(m <> nil)then
+  theMenuBar.add(self.get(2), theMenuBar.getControls.find(m))
+else
+  theMenuBar.add(self.get(2), 999)
+end
+
+av.getProject.findGUI("Project").setModified(true)

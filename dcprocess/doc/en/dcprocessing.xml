@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE article 
+  PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
+  []
+>
+<article lang="en">
+<articleinfo>
+ <title>DC Processing Extension Manual</title>
+     <pubdate>2004</pubdate>
+     <edition>Version 1.2.6</edition>
+    <copyright>
+      <year>2004</year>
+      <holder>DORSCH Consult</holder>
+    </copyright>
+    <author>
+      <personname>
+	<firstname>Steffen</firstname>
+	<surname>Macke</surname>
+      </personname>
+      <email>Steffen_Macke@dorsch.com.jo</email>
+    </author>
+    <pubdate>$Date$</pubdate>
+ </articleinfo>
+<sect1 id="introduction">
+  <title>Introduction</title>
+  <para>The DC <citetitle>Processing Extension</citetitle> provides several 
+    functions to process and 
+    convert data in <citetitle>ArcView</citetitle> 3.*.</para>
+  <para>The <citetitle>DC Processing Extension</citetitle> is available from
+    <ulink url="http://dcwaterdesign.sourceforge.net"
+      >http://dcwaterdesign.sourceforge.net</ulink>. It is free software 
+    released under the
+    terms of the GNU Lesser General License (LGPL) - the full source code
+    is available (Open Source).</para>
+  <para>This manual describes version 1.2.6 of the <citetitle>DC Processing 
+    Extension</citetitle>.</para>
+  <sect2 id="news">
+    <title>What's New?</title>
+    <para>A summary of changes in the different versions of the DC Processing
+      Extension.</para>
+    <sect3 id="version_1_2_6">
+      <title>Version 1.2.6</title>
+      <para><itemizedlist>
+        <listitem><para>Robustness improvements for connection classification
+	  and angle calculation.</para></listitem>
+	<listitem><para>Bug fix for the connection classification (script
+	  wasn't compiled).</para></listitem>  
+        </itemizedlist></para>
+    </sect3>
+    <sect3 id="version_1_2_5">
+      <title>Version 1.2.5</title>
+      <para><itemizedlist>
+        <listitem><para>Bug fix for angle calculation. Angle calculation
+	  allows to enter an offset.</para></listitem>
+	<listitem><para>Water network connection classification function for 
+	  BoQ generation.</para></listitem>
+	<listitem><para>More robust <guimenuitem>Segmentize 
+	  Polylines</guimenuitem> function.</para></listitem>
+	<listitem><para>New function <guimenuitem>Calculate Network Tree
+	  Names</guimenuitem></para></listitem>
+	<listitem><para>New function <guimenuitem>Split Polylines by 
+	Polylines</guimenuitem>.</para></listitem> 
+	</itemizedlist></para>
+	
+    </sect3>
+  </sect2>
+</sect1>
+<sect1 id="requirements">
+  <title>Requirements</title>
+  <para><citetitle>ArcView</citetitle> version 3.0, 3.1, 3.2 or 3.3 is required 
+    in order to use the <citetitle>DC Processing Extension</citetitle>.</para>
+  <para>Some functions require the <citetitle>Spatial 
+    Analyst</citetitle> or <citetitle>3D Analyst</citetitle> extensions.</para>
+</sect1>
+<sect1 id="installation">
+  <title>Installation</title>
+  <para>How to install the <citetitle>DC Processing Extension</citetitle> using 
+    either the installer or manually.</para>
+  <sect2 id="installer_installation">
+    <title>Installation Using the Installer</title>
+    <para>How to install the <citetitle>DC Processing Extension</citetitle> 
+      using the installer.</para>
+    <para>Download the installer and execute it.</para>
+    <para>Select your ArcView installation folder.</para>
+  </sect2>
+  <sect2 id="manual_installation">
+    <title>Manual Installation</title>
+    <para>Save the extension file (dcprocessing.avx) in the ArcView 
+      extensions directory (Usually this is 
+    <filename>c:\esri\av_gis30\arcview\ext32</filename>).</para>
+  </sect2>
+</sect1>
+<sect1 id="loading">
+  <title>Loading the Extension</title>
+  <para>The extension has to be loaded to your ArcView project before you can
+    use it.</para> 
+  <para>Load the Extension into ArcView ( <guimenu>File</guimenu> -&gt; 
+      <guimenuitem>Extensions...</guimenuitem> )</para>
+    <para>In the View GUI, there will be a new menu called &quot;DC 
+      Processing&quot;  (If necessary, open a view to see it).</para>
+    <para>In additon, there will be a new menus called &quot;DC Processing&quot; 
+      in the Project and Table GUIs.</para>
+    <para>For more information on Extensions, see your ArcView Documentation.
+    </para>
+</sect1>
+<sect1 id="functions">
+  <title>Functions</title>
+  <para>The functions provided by the <citetitle>DC Processing 
+    Extension</citetitle>.</para>
+  <sect2 id="view_gui">
+    <title>View GUI</title>
+    <para>Functions added to the View GUI by the extension.</para>
+    
+    <sect3 id="split_polylines_by_polylines">
+      <title>Split Polylines by Polylines</title>
+      <para><guimenuitem>Split Polylines by Polylines</guimenuitem> allows to
+        split a polylines theme by another polyline theme.</para>
+      <para>Activate two polyline themes. Start editing of the theme you want
+        to split and select <guimenuitem>Split Polylines by 
+	Polylines</guimenuitem> from the <guimenu>DC Processing</guimenu>
+	menu.</para>
+      <para>All attributes will be copied ignoring split rules so that you'll
+        have to update shape related attributes manually.</para>
+    </sect3>
+    
+    <sect3 id="split_polylines_by_points">
+      <title>Split Polylines by Points</title>
+      <para><guimenuitem>Split Polylines By Points</guimenuitem> allows to 
+        split a polyline theme by a point theme.</para>
+      <para>Make sure that the points are properly snapped.</para>
+      <para>Remember to set the split rules or update your shape related 
+        attributes after splitting.</para>
+    </sect3>	
+      
+    <sect3 id="split_polygons_by_lines">
+      <title>Split Polygons by Lines</title>
+      <para>Split a polygon theme by a line theme.</para>
+      <para>The splitting lines should overlap the Polygons.</para>
+    </sect3>
+    
+    <sect3 id="points_from_polylines">
+      <title>Points from Polylines</title>
+      <para>Extract vertices from lines.</para>
+      <para><guimenuitem>Points from Polylines</guimenuitem> takes a polyline 
+        theme and creates a new point theme from its vertices.</para> 
+      <para>All the attributes of the line are copied to the respecting points.
+        </para>
+      <para>Useful to generate a DTM from contour lines, as the 
+	<citetitle>Spatial Analyst</citetitle> and <citetitle>3D 
+	Analyst</citetitle> only take point data as DTM input.</para>
+    </sect3>
+	
+    <sect3 id="polylines_from_point_and_table">
+      <title>Polyline from Points and Table</title>
+      <para><guimenuitem>Polylines from Points and Table</guimenuitem> allows 
+        the user to create 2-vertex-lines (like in a sewer network) from a point 
+	theme with unique IDs and a table (e.g. a DBF file) which contains all 
+	the line information: start node ID and end node ID.</para>
+      <para>The table should contain the following fields:
+        <itemizedlist>
+	  <listitem><para>From_ID</para></listitem>
+          <listitem><para>To_ID</para></listitem>
+          <listitem><para>Diameter</para></listitem>
+	</itemizedlist>
+      </para>
+      <para>The point theme should contain the following fields:
+        <itemizedlist>
+	  <listitem><para>Nodeid</para></listitem>
+          <listitem><para>Node_Z</para></listitem>
+	</itemizedlist></para>
+    </sect3>  
+      
+    <sect3 id="polylines_from_polylinez">
+      <title>Polylines from PolylineZ</title>
+      <para>With <guimenuitem>Polylines from PolylineZ</guimenuitem> you can 
+      convert a 3D shapefile to a 2D shapefile. The dropped z-value will
+      be added to a new attribute field. This way, it doesn't get lost. 3D 
+      shapes are not editable with the current ArcView versions.</para>
+    </sect3>
+   
+    <sect3 id="center_points_from_polygons">
+      <title>Create Center Points from Polygons</title>
+      <para>Choose "Create Center Points from Polygons" in the 
+        <guimenu>DC Processing</guimenu> menu.</para> 
+      <para>Choose the polygon theme you want to
+        extract the center points from.</para>
+      <para>Enter the name of the new point theme.</para> 
+      <para>All the attributes of the polygon theme will
+        be copied to respective center points.</para>
+    </sect3>  
+    
+    <sect3 id="polylines_from_polygons">
+      <title>Create Polylines from Polygons</title>
+      <para><guimenuitem>Create Polylines from Polygons</guimenuitem> creates 
+        a new polyline theme containing the boundaries of the given polygon theme.
+        The user is asked for a polygon theme and the name of the new polyline
+        theme.</para>
+    </sect3>
+    
+    <sect3 id="grid_attributes_to_points">
+      <title>Assign Attributes from Grid to Points</title>
+      <para><guimenuitem>Assign Attributes from Grid to Points</guimenuitem> 
+        reads the grid values for every point in a point theme and stores it in 
+	a numerical field of the point table.</para>
+      <important><para>This function requires the Spatial Analyst Extension.
+        </para></important>
+    </sect3>
+    
+    <sect3 id="points_from_multipoints">
+      <title>Create Points from Multipoints</title>
+      <para><guimenuitem>Create Points from Multipoints</guimenuitem> creates a 
+        new point theme, where the points are located at the center of the 
+        respecting multipoint. All the attributes are copied.</para>
+      <para>The user is asked to select a multipoint theme from the current view
+        and the output shapefile name.</para>
+    </sect3>
+    
+    <sect3 id="square_polygons_from_points">
+      <title>Create Square Polygons from Points</title>
+      <para>Create a polygon theme containing square polygons from  a point 
+        theme containing the centers of the polygons.</para>
+      <para>The user is prompted to enter the square length.  All the 
+        attributes are copied.</para>
+    </sect3>
+    
+    <sect3 id="points_from_grid">
+      <title>Create Points from Grid</title>
+      <para>Create a point theme from a grid. The points are located
+        in the grid center.</para>
+    </sect3>
+    
+    <sect3 id="cross_polylines_from_points">
+      <title>Create Cross Polylines from Points</title>
+      <para>Create a polyline theme containing cross-shaped polylines from  a 
+        point theme containing the centers of the crosses.</para>
+      <para>The user is prompted to enter the cross length.</para>
+      <para>All the attributes are copied.</para>
+    </sect3>
+    
+    <sect3 id="polygons_from_polylines">
+      <title>Create Polygons from Polylines</title>
+      <para>Converts polygons to polylines.</para>
+      <para>Make sure that the polylines are closed.</para>
+    </sect3>
+    
+    <sect3 id="arrows_from_lines">
+      <title>Create Arrows from Lines</title>
+      <para>Converts the lines in an existing polyline theme to arrows. The 
+        arrow will stretch from the first point to the last point of the line.
+	</para>
+    </sect3>
+    
+    <sect3 id="polygons_from_tin">
+      <title>Create Polygons from TIN</title>
+      <para>Create a polygon theme frm a a TIN (Triangular Irregular Network).
+        </para>
+      <important><para>This function requires the <citetitle>3D 
+        Analyst</citetitle>.</para></important>
+    </sect3>
+    
+    <sect3 id="interpolate_point_values_from_other_points">
+      <title>Interpolate Point Values from Other Points</title>
+      <para>Interpolates point values from other points.</para>
+    </sect3>
+    
+    <sect3 id="interpolate_point_values_from_points_and_tin">
+      <title>Interpolate Point Values from Points and TIN</title>
+      <para>Interpolate values in a point values from a point theme and a TIN.
+        </para>
+    </sect3>  
+    
+    <sect3 id="interpolate_node_values_in_network">
+      <title>Interpolate Node Values in Network</title>
+      <para>Linear interpolation of point values in a network (line-node 
+        topology).</para>
+      <para>
+        <itemizedlist>
+          <listitem><para>Select polyline and point that form the 
+            network from the list of themes in the view.</para></listitem>
+	  <listitem><para>Select the field to interpolate from the table
+	    of the point theme.</para></listitem>
+	  <listitem><para>The interpolation takes place for all nodes where
+	   the value is 0 or NULL and upstream and downstream traces find
+	   values for interpolation.</para></listitem>
+	</itemizedlist></para>
+      <para>The traces end where the network branches.</para>
+    </sect3>
+    
+    <sect3 id="segmentize_polylines">
+      <title>Segmentize Polylines</title>
+      <para>Create a new polyline theme by segmentizing an existing polyline 
+        theme.</para>
+      <para>The maximum and minimum segment length has to be specified.</para>
+      <para>All attributes are copied to the new theme's respective segments.
+        </para>
+      <para>Lines that are too long will be split up into separate
+        segments, but lines shorter than the minimum segment length will not
+	be concatenated. The concatenation can be performed with the 
+	skeletonization function of the <citetitle>DC Water Design 
+	Extension.</citetitle>.
+	</para>
+      <para>The minimum segment is used to avoid those short lines that would
+        be created if a line is just a little bit longer than the maximum 
+	segment length. If the last segment created by segmentation with the
+	maximum segment length is shorter than the minimum segment length, the 
+	last two segments are merged again and split into one segment with the
+	minimum segment length and the remainder.</para>
+    </sect3>
+    
+    <sect3 id="calculate_node_angles">
+      <title>Calculate Node Angles</title>
+      <para>Calculate angles for those nodes in the network that have one or 
+        two lines connected to it.</para>
+      <para>Node and line theme of the network have to be selected from the list
+        of themes in the view.</para>
+      <para>A field from the node theme has to be selected to store the 
+        calculated node angle.</para>
+      <para>The angle can be used to rotate symbols (e.g. valves).</para>
+      <para>In case the two lines connected to a node don't form a straight
+        line, the average of both angles is calculated as a compromise.</para>
+    </sect3>
+    <sect3 id="classify_node_connections">
+      <title>Classify Node Connections</title>
+      <para>Classifies the connection types of different water supply network 
+        nodes in order to allow
+        the automatic creation of a BoQ (Bill of Quantities).</para>
+      <para>To use this function, add your network's line, node and valve 
+        themes to the view.</para>
+      <para>Start editing the node theme.</para>
+      <para>Activate the three themes.</para>
+      <para>Select <guimenuitem>Classify Node Connections</guimenuitem> from the
+        <guimenu>DC Processing</guimenu> menu.</para>
+      <para>You will be asked to provide select a string field from the node 
+        theme to store the classification.</para>
+	<!-- TODO: add information about the classification -->
+      <para>To create a BoQ, you'll have to load the classified shapefile to
+        a relational database and execute the SQL scripts 
+	<filename>create_dcboq_ddl.sql</filename> and 
+	<filename>fitting_boq.sql</filename>. The scripts can be found in the
+	<filename>scripts</filename> folder of the DC Processing Extension
+	source distribution.</para>
+      <para>The view &quot;PositionView&quot; will contain the BoQ.</para>
+    </sect3>
+  </sect2>
+  <sect2 id="table_gui">
+    <title>Table GUI</title>
+    <para>Functions added to the table GUI by the extension.</para>
+    
+    <sect3 id="tag_duplicate_records">
+      <title>Tag Duplicate Records</title>
+      <para>Selects duplicate records in a field.</para>
+    </sect3>
+    
+    <sect3 id="unique_id">
+      <title>Create Unique ID</title>
+      <para><guimenuitem>Create Unique ID</guimenuitem> creates a unique ID for
+        a selected field of a selcted theme in the active view.</para>
+      <para>The field type may be number or string.</para>
+      <para>Like the ArcView field calculator, 
+      <guimenuitem>Create Unique ID</guimenuitem> will only work on selected
+        rows of a table which is editable. If there's no selection, the function
+	will work on all records of the table.</para>
+    </sect3>
+    
+    <sect3 id="calculate_network_tree_names">
+      <title>Calculate Network Tree Names</title>
+      <para><guimenuitem>Calculate Network Tree Names</guimenuitem> creates
+        a unique ID for lines in a network. The IDs are based on the position
+	of the lines in the network tree.</para>
+      <para>Sequential lines will be numbered in sequential order (1,2,3...).
+        Branch lines will be indicated by &quot;.&quot; and a new
+	numbering starting from one: 4.1, 4,2, 4.2.1...</para>
+      <para>In case of loops, it is unpredictable at which point the loop will
+        be closed. The IDs may look strange in these areas.</para>
+      <para>To use the function, have a string field of appropriate length
+        ready.</para>
+      <para>Use the calculator to assign the value &quot;&quot; to all
+	records.</para>
+      <para>Select your starting line and assign the value 
+	&quot;1&quot;</para>
+´     <para>Make sure that the table is still editable and your field is 
+        selected.</para>
+      <para>From the <guimenu>DC Processing</guimenu> menu, select 
+        <guimenuitem>Calculate Network Tree Names</guimenuitem>.</para>
+    </sect3>
+    
+  </sect2>
+  <sect2 id="project_gui">
+    <title>Project GUI</title>
+    <para>Functions added to the project GUI by the extension.</para>
+    <sect3 id="recursive_copy_projection_files">
+      <title>Recursive Copy of Projection Files</title>
+      <para>Projection files are a feature introduced by ArcView 3.2 and 
+        ArcInfo 8. They are important when it comes to loading
+        data into Geodatabases. The menu item "Copy Projection Files" lets the 
+        user select one projection file which will be
+        copied to all the shapefiles in a folder and its subfolder which don't
+        have a projection file.</para>
+    </sect3>
+    
+    <sect3 id="convert_coverages_to_shapefiles">
+      <title>Batch-convert Coverages To Shapefiles</title>
+      <para>This Function allows to convert all coverages in a directory to 
+        shapefiles.</para>
+      <para>The user is prompted for the folder containing the coverages, the 
+        coverage features to be exported and the destination folder.</para>
+      <important><para>This function requires the DC Directory Browsing 
+        extension.</para></important>
+    </sect3>
+  </sect2>
+</sect1>
+
+</article>

@@ -1,0 +1,63 @@
+' DCProcess.recursiveCopyPrjFiles
+' recursive creation of .prj-files for all shapefiles
+' in a folder
+' (c) 2000, 2004 DORSCH Consult
+
+'get the path to be recursed from the user
+strPathToFolder = msgbox.input("Path to Folder with Shapefiles. The script will recursively run through all subfolders and copy a given projection file.","DC Conversion","")
+if (strPathToFolder=nil)then
+  exit
+end
+
+flnPathToFolder = Filename.make(strPathToFolder)
+if(flnPathToFolder.isDir.not)then
+  Msgbox.error(strPathToFolder+" is not a directory.","DC Conversion")
+  exit
+end
+
+' get a sample Projection File from the user
+lstPrjFiles = FileDialog.returnFiles({"*.prj"},{"Projection Files (*.prj)"},"Select Projection File To Copy",0)
+if(lstPrjFiles.count = 0 )then
+  exit
+end
+
+' open the projection file
+lnfProjection = LineFile.make(lstPrjFiles.get(0), #FILE_PERM_READ)
+strProjection = lnfProjection.readElt
+lnfProjection.close
+
+'build directory tree
+stkDirectories = Stack.make
+stkDirectories.push(flnPathToFolder)
+lstDirectories = List.make
+lstDirectories.add(flnPathToFolder)
+while (stkDirectories.isEmpty.not)
+  flnDir = stkDirectories.pop
+  lstFiles = flnDir.read("")
+  for each flnFile in lstFiles
+    if(flnFile.isDir)then
+      stkDirectories.push(flnFile)
+      lstDirectories.add(flnFile)
+    end
+  end
+end
+
+'recurse through all directories, look for shapefiles
+
+numProjectionFilesCreated = 0
+
+for each flnDir in lstDirectories
+  lstShapefiles = flnDir.readFiles("*.shp")
+  for each flnShapefile in lstShapefiles
+    flnPrjFile = flnShapefile.clone
+    flnPrjFile.setExtension("prj")
+    if(flnPrjFile.isFile.not)then
+      lnfProjection = Linefile.make(flnPrjFile, #FILE_PERM_WRITE)
+      lnfProjection.writeElt(strProjection)
+      lnfProjection.close
+      numProjectionFilesCreated = numProjectionFilesCreated + 1
+    end
+  end
+end
+
+Msgbox.info("Created "+numProjectionFilesCreated.asString+" Projection Files.","DC Conversion")

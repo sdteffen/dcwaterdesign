@@ -1,0 +1,1 @@
+return(System.canUnloadLibrary(self.getDependencies.get(0)))

@@ -1,0 +1,6 @@
+' DCProcess.Table.UniqueID.update
+
+' (c) 2004 DORSCH Consult
+
+tableActive = av.getActiveDoc
+self.setEnabled((nil <> tableActive.getActiveField) and (tableActive.getActiveField.isTypeNumber or tableActive.getActiveField.isTypeString) and tableActive.getVTab.isEditable)

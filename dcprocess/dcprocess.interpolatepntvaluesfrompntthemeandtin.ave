@@ -1,0 +1,171 @@
+'DCProcess.interpolatePntValuesFromPntThemeAndTin
+
+' (c) 2004 DORSCH Consult
+
+' Interpolate point values using the three vertex points of a tin
+
+viewActive = av.GetActiveDoc 
+  
+themeList = viewActive.GetThemes
+blnViewHasPointTheme = false
+lstPointThemes = List.make
+for each  thmCheck in themeList
+  if(thmCheck.getClass.getClassName = "FTheme")then
+    if(thmCheck.getFTab.getShapeClass.getClassName = "Point")then
+      lstPointThemes.add(thmCheck)
+      blnViewHasPointTheme = true
+    end
+  end
+end
+
+blnViewHasPolygonTheme = false
+lstPolygonThemes = List.make
+for each  thmCheck in themeList
+  if(thmCheck.getClass.getClassName = "FTheme")then
+    if(thmCheck.getFTab.getShapeClass.getClassName = "Polygon")then
+      lstPolygonThemes.add(thmCheck)
+      blnViewHasPolygonTheme = true
+    end
+  end
+end
+
+
+if(blnViewHasPointTheme.not)then
+  MsgBox.error("Found no PointThemes in View.", "DC Conversion Extension")
+  exit
+end
+
+if(blnViewHasPolygonTheme.not)then
+  MsgBox.error("Found no Polygon Themes in View.", "DC Conversion Extension")
+  exit
+end
+
+thmSource = MsgBox.choice(lstPointThemes, "Select the point theme from which the data will be interpolated","Select a Theme")
+if(thmSource = nil)then
+  exit
+end
+
+thmTin = MsgBox.choice(lstPolygonThemes, "Select a TIN polygon theme","Select a Theme")
+if(thmTin = nil)then
+  exit
+end
+
+thmDestination = MsgBox.Choice(lstPointThemes, "Select the Point Theme to assign data to", "Select a Theme")
+
+if(thmDestination = nil)then
+  exit
+end
+
+Proj = viewActive.GetProjection 
+
+ftbSource = thmSource.getFtab
+fldSourceShape = ftbSource.findField("Shape")
+lstSourceFields = ftbSource.getFields
+
+ftbDestination = thmDestination.getFtab
+fldDestinationShape = ftbDestination.findField("Shape")
+lstDestinationFields = ftbDestination.getFields
+
+ftbTin = thmTin.getFtab
+fldTinShape = ftbTin.findField("shape")
+
+
+fldSourceAttribute = MsgBox.choice(lstSourceFields, "Select the field for interpolation","Select a Field")
+if(fldSourceAttribute = nil)then
+  exit
+end
+if(fldSourceAttribute.isTypeNumber.not)then
+  MsgBox.error("Field must be of type Number.","DC Conversion Extension")
+  exit
+end
+
+fldDestinationAttribute = MsgBox.choice(lstDestinationFields, "Select the field to store the interpolated values","Select a Field")
+if(fldDestinationAttribute = nil)then
+  exit
+end
+if(fldDestinationAttribute.isTypeNumber.not)then
+  MsgBox.error("Field must be of type Number.","DC Conversion Extension")
+  exit
+end
+
+numCounter = 0 
+numTotal = ftbDestination.GetNumRecords 
+av.showStopButton  
+
+if(ftbSource.getNumRecords < 3)then
+  MsgBox.error("Source Theme must contain at least 3 records.", "DC Conversion Extension")
+  exit
+end
+  
+numSelectionRadius = 0.0000001  
+
+numPointsOutsideTin = 0
+numFailures = 0
+  
+ftbDestination.setEditable(true)
+for each recDestination in ftbDestination
+  pntDestination = ftbDestination.returnValue(fldDestinationShape, recDestination)
+  
+  ' select triangle
+  
+  ftbTin.selectByPoint(pntDestination, numSelectionRadius, #VTAB_SELTYPE_NEW)
+  if(ftbTin.getNumSelRecords > 0)then
+    recTin = ftbTin.getSelection.getNextSet(-1)
+    plgnTin = ftbTin.returnValue(fldTinShape, recTin)
+    ftbSource.selectByPolygon(plgnTin, #VTAB_SELTYPE_NEW)
+    if(ftbSource.getNumSelRecords = 3)then
+      selSource = ftbSource.getSelection
+      recSource = selSource.getNextSet(-1)
+      pntA = ftbSource.returnValue(fldSourceShape, recSource)
+      az = ftbSource.returnValue(fldSourceAttribute, recSource)
+      recSource = selSource.getNextSet(recSource)
+      pntB = ftbSource.returnValue(fldSourceShape, recSource)
+      bz = ftbSource.returnValue(fldSourceAttribute, recSource)
+      recSource = selSource.getNextSet(recSource)
+      pntC = ftbSource.returnValue(fldSourceShape, recSource)
+      cz = ftbSource.returnValue(fldSourceAttribute, recSource)
+     
+      ax = pntA.getX
+      ay = pntA.getY
+
+      bx = pntB.getX
+      by1= pntB.getY
+      
+      cx = pntC.getX
+      cy = pntC.getY
+
+      px = pntDestination.getX
+      py = pntDestination.getY
+       
+      ' interpolate
+      
+      a1 = px-ax
+      a2 = py-ay
+      b1 = px-bx
+      b2 = py-by1
+      c1 = px-cx
+      c2 = py-cy
+      
+      numValue = ((a1*b2*cz)-(a1*bz*c2)+(a2*bz*c1)-(a2*b1*cz)+(az*b1*c2)-(az*b2*c1))/((a1*b2)-(a1*c2)+(a2*c1)-(a2*b1)+(b1*c2)-(b2*c1))
+            
+      ' write value
+      
+      ftbDestination.setValue(fldDestinationAttribute, recDestination, numValue)
+      
+      numCounter = numCounter + 1
+      if(av.setStatus((numCounter/numTotal)*100).not)then
+        exit
+      end
+
+    else
+      numFailures = numFailures + 1
+    end
+  else
+    numPointsOutsideTin = numPointsOutsideTin + 1 
+  end
+end
+  
+ftbDestination.setEditable(false)
+av.clearStatus
+
+MsgBox.info(numPointsOutsideTin.asString++"points outside TIN."++numFailures.asString++"lookup failures.","DC Conversion")

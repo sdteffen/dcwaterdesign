@@ -1,0 +1,69 @@
+' Script.saveAllScripts
+
+' If the scripts are to be saved elsewhere, change the following line... 
+
+strSaveDir = "c:\data\sandbox\sourceforge\dcwaterdesign\dcprocess"
+
+if (File.exists(strSaveDir.asFilename).Not) then
+  MsgBox.Error("Working directory:"++strSaveDir++"does not exist", "")
+  exit 
+end
+
+lstScripts = List.make
+
+' find all scripts
+
+for each docObj in av.getProject.getDocs
+  if (docObj.is(SEd)) then
+    lstScripts.Add(docObj)
+  end
+end
+
+' Loop over all scripts, write to files
+
+blnOverwrite = nil
+numWritten = 0
+	
+lstScriptsToWrite = List.make
+
+for each sedScript in lstScripts
+
+  strSaveDir2 = strSaveDir.clone
+  strScriptName = sedScript.asString ' .substitute(".",",")
+   
+  flnScript = FileName.merge(strSaveDir2, strScriptName)
+  ' System.echo(flnScript.getFullName)
+  flnScript.setName(strScriptName+".ave")
+  if (flnScript.isFile) then
+    if(blnOverwrite = nil)then
+      blnOverwrite = MsgBox.YesNo("Overwrite files?", "Saving Scripts", false)
+      if(blnOverwrite.not)then
+        continue 
+      end
+    end
+      
+    ' check if file has been changed
+    txfScript = TextFile.make(flnScript, #FILE_PERM_READ)
+    strFileSource = txfScript.read(txfScript.getSize)
+    blnChanged = false
+    if(strFileSource <> sedScript.getSource)then
+      blnChanged = true
+    end
+    txfScript.close
+    if(blnChanged)then
+    '  File.delete(flnScript)
+    else
+     continue
+    end
+  end 
+  
+  txfScript = TextFile.make(flnScript, #FILE_PERM_WRITE)
+  if (txfScript <> nil) then
+    txfScript.write(sedScript.getSource, sedScript.getSource.count)
+    txfScript.close
+    numWritten = numWritten+1
+  else
+    MsgBox.warning("Unable to open file for writing:"++flnScript.getFullName,"Saving Scripts")
+  end
+end
+MsgBox.info(numWritten.asString++"Scripts were written.", "Saving Scripts")

@@ -1,0 +1,83 @@
+' DCProcess.createCrossPolylinesFromPoints
+
+' (c) 2000,2004 DORSCH Consult
+
+' create a Polyline Theme containing Cross Polylines from 
+' a point Them containing the Centers of the Crosses.
+' The user is prompted to enter the cross length.
+' All the attributes are copied.
+
+viewActive = av.GetActiveDoc
+
+themeList = viewActive.GetThemes 
+lstPointThemes = List.make
+for each thmPoint in themeList
+  if(thmPoint.is(FTheme))then
+    if(thmPoint.getFTab.getShapeClass.getClassName = "Point")then
+      lstPointThemes.add(thmPoint)
+    end
+  end
+end
+thmPoint = Msgbox.Choice (lstPointThemes, "Select a Point Theme.", "Select a Theme") 
+if(thmPoint=nil)then
+  exit
+end  
+  
+ftbPoint = thmPoint.GetFTab 
+
+'prompt for Cross length
+
+strCrossLength = MsgBox.input("Enter the Cross length:", "DC Conversion Extension", "0.001")
+if((strCrossLength=nil)or(strCrossLength.isNumber.not))then
+  exit
+end
+
+numCrossLength = strCrossLength.asNumber
+
+'prompt for file location
+  
+clsPolyline = Polyline
+def = av.GetProject.MakeFileName("Cross", "shp") 
+def = FileDialog.Put(def, "*.shp", "New Cross Polyline Theme") 
+if (def = nil) then 
+ exit
+end
+
+ftbPolyline = FTab.MakeNew(def, clsPolyline) 
+
+fldPolylineShape = ftbPolyline.findField("Shape")
+fldPointShape = ftbPoint.findField("Shape")
+
+lstFields = ftbPoint.getFields.deepclone
+lstFields.remove(0)
+
+ftbPolyline.setEditable(true)
+ftbPolyline.addFields(lstFields)
+
+numCounter = 0 
+numTotal = ftbPoint.GetNumRecords 
+av.showStopButton  
+
+for each recPoint in ftbPoint
+  recPolyline = ftbPolyline.addRecord
+  pntShape = ftbPoint.returnValue(fldPointShape,recPoint)
+  if(pntShape <> nil)then
+    plgnCross = Polyline.make({{pntShape-(numCrossLength@0.0), pntShape+(numCrossLength@0.0)},
+                                {pntShape-(0.0@numCrossLength), pntShape+(0.0@numCrossLength)}})
+    ftbPolyline.setValue(fldPolylineShape, recPoint, plgnCross)
+  
+    for each i in 1 .. (lstFields.count)
+      fldPoint = ftbPoint.getFields.get(i)
+      fldPolyline = ftbPolyline.getFields.get(i)
+      ftbPolyline.setValue(fldPolyline, recPolyline, ftbPoint.returnValue(fldPoint, recPoint))
+    end
+  end
+  
+  numCounter = numCounter + 1
+  if(av.setStatus((numCounter/numTotal)*100).not)then
+    exit
+  end
+end
+
+ftbPolyline.setEditable(false)
+av.clearStatus

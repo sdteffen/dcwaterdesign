@@ -1,0 +1,92 @@
+' DCProcess.createPllThemeFromPntThemeAndDbf
+
+' Create line theme from point shapefile and dbf table
+' (c) 2000,2004 DORSCH Consult
+ 
+  viewActive = av.GetActiveDoc 
+  
+  themeList = viewActive.GetThemes 
+
+  PointTheme = Msgbox.Choice(themeList, "Select a Theme containing the Points.", "Select a Theme")
+  if(PointTheme = nil)then
+    exit
+  end
+
+  thmPoint = viewActive.findTheme(PointTheme.asString)
+  
+  tableList = av.GetProject.getDocsWithGUI(av.FindGUI("Table"))
+  LineTable = MsgBox.Choice(tableList, "Select a Table containing the Line Data.","Select a Table")
+  if(LineTable = nil)then
+    exit
+  end
+
+  vtbLine = LineTable.getVTab
+  fldFromID = vtbLine.findField("From_ID")
+  fldToID = vtbLine.findField("To_ID")
+  fldLineID = vtbLine.findField("Diameter")
+
+'  Proj = v.GetProjection 
+  
+  ftbPoint = thmPoint.GetFTab 
+  fldPointShape = ftbPoint.FindField("Shape") 
+  fldPointID = ftbPoint.findField("Nodeid")
+  fldPointZ = ftbPoint.findField("Node_Z")
+  
+  numCounter = 0 
+  numTotal = vtbLine.GetNumRecords 
+  
+  pll= PolylineZ.MakeNull
+
+  clsPolylineZ = PolyLineZ 
+  def = av.GetProject.MakeFileName("theme", "shp") 
+  def = FileDialog.Put(def, "*.shp", "New Section Theme") 
+  
+  if (def = nil) then
+    exit
+  end 
+  
+  ftbLine = FTab.MakeNew(def, clsPolylineZ) 
+  fldClonedLineID = fldLineID.clone
+  ftbLine.addFields({fldClonedLineID}) 
+
+  thmLine = FTheme.Make(ftbLine) 
+  viewActive.AddTheme(thmLine) 
+  thmLine.SetActive(TRUE) 
+  thmLine.SetVisible(FALSE) 
+  viewActive.SetEditableTheme(thmLine) 
+  av.GetProject.SetModified(true) 
+
+  fldLineShape = thmLine.getFTab.findField("Shape")
+
+ for each recLine in vtbLine
+   strFromID = vtbLine.returnValue(fldFromID, recLine)
+   for each recPoint in ftbPoint
+     if( ftbPoint.returnValue(fldPointID, recPoint) = strFromID)then
+       pntFrom = ftbPoint.returnValue(fldPointShape, recPoint)
+       numZ = ftbPoint.returnValue(fldPointZ, recPoint)
+       pntFromZ = PointZ.make(pntFrom.getX, pntFrom.getY, numZ)
+       break
+     end
+   end
+   strToID = vtbLine.returnValue(fldToID, recLine)
+   for each recPoint in ftbPoint
+     if( ftbPoint.returnValue(fldPointID, recPoint) = strToID)then
+       pntTo = ftbPoint.returnValue(fldPointShape, recPoint)
+       numZ = ftbPoint.returnValue(fldPointZ, recPoint)
+       pntToZ = PointZ.make(pntTo.getX, pntTo.getY, numZ)
+       break
+     end
+   end   
+   pllLine = PolylineZ.Make({{pntFromZ, pntToZ}})
+   recLineShape = ftbLine.addRecord
+   ftbLine.setValue(fldLineShape, recLineShape, pllLine)
+   ftbLine.setValue(fldClonedLineID, recLineShape, vtbLine.returnValue(fldLineID,recLine))
+
+   av.setStatus((numCounter/numTotal)*100)
+   numCounter = numCounter+1
+ end
+ av.clearStatus
+  
+  'cleaning up
+  thmLine.getFTab.setEditable(FALSE)
+  thmLine.setVisible(TRUE)

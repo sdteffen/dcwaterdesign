@@ -1,0 +1,28 @@
+' DCProcess.Node.returnLineAngle
+
+' Calculate the angle of a line that is connected to the node
+
+' (c) 1999, 2004 DORSCH Consult
+
+' First Argument is the node FTab.
+ftb_Nodes = self.get(0)
+' Second Argument is the line FTab.
+ftb_Pipes = self.get(1)
+' Third argument is the record of the node.
+rec_Node = self.get(2)
+' Fourth argument is the record of the pipe.
+rec_Pipe = self.get(3)
+
+' Returns the angle in degrees.
+
+fna_NodeShape = ftb_Nodes.findField("Shape")
+pnt_Node = ftb_Nodes.returnValue(fna_NodeShape, rec_Node)
+
+fna_Polyline = ftb_Pipes.findField("Shape")
+
+'find out the angle of the pipe
+pll_Pipe = ftb_Pipes.returnValue(fna_Polyline, rec_Pipe)
+
+numAngle = av.run("DCProcess.Point.returnPolylineAngle", {pnt_Node, pll_Pipe})
+
+return numAngle

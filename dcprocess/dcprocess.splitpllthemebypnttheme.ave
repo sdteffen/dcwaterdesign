@@ -1,0 +1,105 @@
+' DCProcess.splitPllThemeByPntTheme
+' split a polyline theme with a point theme
+' (c) 2001 - 2004 DORSCH Consult
+
+viewActive = av.GetActiveDoc
+
+themeList = viewActive.GetThemes 
+thmLine = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme") 
+if(thmLine = nil)then
+  exit
+end  
+  
+ftbLine = thmLine.GetFTab 
+
+themeList = viewActive.GetThemes 
+thmPoint = Msgbox.Choice (themeList, "Select a Point Theme.", "Select a Theme") 
+
+if(thmPoint = nil)then
+  exit
+end  
+  
+ftbPoint = thmPoint.GetFTab 
+
+fldLineShape = ftbLine.findField("Shape")
+fldPointShape = ftbPoint.findField("Shape")
+
+ftbLine.setEditable(true)
+
+numToGo = ftbPoint.getNumRecords
+numComplete = 0
+av.showStopButton
+
+numCrossLength = 0.001
+
+for each recPoint in ftbPoint
+  pntShape = ftbPoint.returnValue(fldPointShape, recPoint)
+  if((pntShape <> nil)and(pntShape.isNull.not)and(pntShape.isEmpty.not))then
+    pllCross = Polyline.make({{pntShape-(numCrossLength@0.0), pntShape+(numCrossLength@0.0)},
+                              {pntShape-(0.0@numCrossLength), pntShape+(0.0@numCrossLength)}})
+                                
+    ' increases the speed, because it uses ArcView's spatial index
+    ftbLine.selectByPolyline(pllCross, #VTAB_SELTYPE_NEW) 
+    ftbLine.updateSelection
+    bmpSplit = ftbLine.getSelection
+    if(bmpSplit.count > 0)then
+ '     System.echo("splitting cross selected "+bmpSplit.count.asString+" records")                        
+      for each recLine in bmpSplit
+        pllLine = ftbLine.returnValue(fldLineShape, recLine)
+        lineLine = pllLine.asLine
+        if((lineLine.returnStart.intersects(pntShape).not)and(lineLine.returnEnd.intersects(pntShape).not))then
+          lstParts = pllLine.split(pllCross)
+          lstRealParts = lstParts.deepclone
+          if(lstParts.count = 3)then
+'           System.echo("splitted into "+lstParts.count.asString+" parts.")
+            lstRealParts = List.make
+            for each pllTest in lstParts
+              pllTest.snap(pntShape, 0.01)
+'             System.echo("length "+pllTest.returnLength.asString)
+              ' Check for start and end node
+              numFound = 0
+              for each i in {0, 100}
+                ftbPoint.selectByPoint(pllTest.along(i), 0.01, #VTAB_SELTYPE_NEW)
+                if(ftbPoint.getSelection.count = 1)then
+                  numFound = numFound+1
+                end
+              end
+              if(numFound <> 2)then
+                System.echo("Splitting Record "+recLine.asString+": Nodes not found")
+              end
+              if((pllTest.returnLength > 0.001)and(numFound = 2))then
+                lstRealParts.add(pllTest)
+              end
+            end
+          end
+          if(lstRealParts.count = 2)then 
+            'System.echo(lstRealParts.get(0).getClass.getClassName)
+            ftbLine.setValue(fldLineShape, recLine, lstRealParts.get(0))
+            if(ftbLine.canAddRecord.not)then
+              MsgBox.error("Can't add record","")
+              ftbLine.setEditable(false)
+              exit
+            end
+            recNewPipe = ftbLine.addRecord
+            ftbLine.setValue(fldLineShape, recNewPipe, lstRealParts.get(1))
+            for each fldPipeAttribute in ftbLine.getFields
+              if(fldPipeAttribute.isTypeShape.not)then
+                objAttribute = ftbLine.returnValue(fldPipeAttribute, recLine)
+                ftbLine.setValue(fldPipeAttribute, recNewPipe, objAttribute)
+              end
+            end        
+          end
+        end
+      end
+    end
+  end
+  
+  numComplete = numComplete + 1
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    ftbLine.setEditable(false)
+    exit
+  end
+end
+
+ftbLine.setEditable(false)
+av.clearStatus
