@@ -16,21 +16,8 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
   
-  */
-
-  /*
-  parse nodes  - necessary?
-  parse pipes - done
-    fill with null shapes -done
-  parse coordinates
-    reserve node x y buffer
-    order as index
-  parse vertices
-    get start, end vertices from node x y buffer
-  build remaining pipes
-    for all null shape pipes:
-      get start, end vertices from node x y */
-
+*/
+  
 #include "epanet2.h"
 #include "shapefil.h"
 #include <stdlib.h>
@@ -42,7 +29,6 @@
 
 /* the following sections have to be parsed in addition
    to the toolkit parsing */
-   
 char *SectTxt[]         = {"[COORDINATES]", "[VERTICES]", "[END]",
   			   "[PIPES]",
                            NULL};
@@ -73,8 +59,10 @@ DBFHandle hValveDBF;
 SHPHandle hPumpSHP;
 DBFHandle hPumpDBF;
 
+/* tokens in INP file **/
 char   *Tok[MAXTOKS];
 
+/* number of features in shapefiles */ 
 int num_junctions;
 int num_pipes;
 int num_tanks;
@@ -85,6 +73,9 @@ int num_valves;
 char vertex_line_name[16];
 int vertex_line_index;
 int num_vertices;
+
+/* caching the vertices of a line while
+   parsing the vertices section */
 double vertex_x[5000];
 double vertex_y[5000];
 
@@ -154,6 +145,7 @@ int main( int argc, char ** argv ) {
       if (*Tok[0] == '[')
       {
 	 if(sect == 1) write_pipe_shape();
+	 if(sect == 0) handle_virtual_line_nodes();
 	 sect = (-1);
          newsect = findmatch(Tok[0], SectTxt);
          if (newsect >= 0)
@@ -244,8 +236,29 @@ int write_remaining_pipe_shapes() {
  }
 }
 
+/* turn virtual lines into points */
+int handle_virtual_line_nodes() {
+   int i;
+   int from_node, to_node;
+   int num_lines;
+   int linktype;
+   
+   ENgetcount(EN_LINKCOUNT, &num_lines);
+   for(i=0; i<num_lines; i++) {
+   ENgetlinktype(i+1, &linktype);
+   switch(linktype) {
+     case EN_PIPE:
+     break;
+     default: ENgetlinknodes(i+1, &from_node, &to_node);
+       node_x[to_node] = node_x[from_node];
+       node_y[to_node] = node_y[from_node];
+     break; 
+   }   
+ }
+  return 0;
+}
+
 int write_virtual_lines() {
-  /* TODO: improve performance with some kind of cache */
   /* TODO: remove superfluous nodes */
 
   int i;
@@ -264,14 +277,15 @@ int write_virtual_lines() {
    ENgetlinktype(i+1, &linktype);
    switch(linktype) {
      case EN_PIPE:
-     case EN_CVPIPE:
      break;
      case EN_PUMP: write_pump(i+1);
-     default:
+     break;
+     default: write_valve(i+1);
      break; 
    }   
  }
-  printf("leaving write_virtual_lines()\n");
+  
+  return 0;
 }
 
 int write_pump(int index) {
@@ -279,7 +293,7 @@ int write_pump(int index) {
   int *panParts;
   double x, y;
   int from_node, to_node;
-  char *string;
+  char string[16];
   
   ENgetlinkid(index, string);
   ENgetlinknodes(index, &from_node, &to_node);
@@ -291,7 +305,28 @@ int write_pump(int index) {
   SHPDestroyObject(shape);
   DBFWriteStringAttribute(hPumpDBF, num_pumps, 0, string);
   num_pumps++;
-  printf("leaving write_pump()\n");
+  
+  return 0;
+}
+
+int write_valve(int index) {
+  SHPObject *shape;
+  int *panParts;
+  double x, y;
+  int from_node, to_node;
+  char string[16];
+  
+  ENgetlinkid(index, string);
+  ENgetlinknodes(index, &from_node, &to_node);
+  printf("valve %s %d x %f y %f \n", string, index,  node_x[from_node], node_y[from_node]);
+  x = node_x[from_node];
+  y = node_y[from_node];
+  shape = SHPCreateSimpleObject( SHPT_POINT, 1, &x, &y, NULL );
+  SHPWriteObject(hValveSHP, -1, shape);
+  SHPDestroyObject(shape);
+  DBFWriteStringAttribute(hValveDBF, num_valves, 0, string);
+  num_valves++;
+  
   return 0;
 }
 
