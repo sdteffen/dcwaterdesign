@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "project.dtd" []>
 <!-- compile the docbook documentation using ant, saxon, fop and hhc -->
-<project name="DC Water Design Documentation" basedir="." default="DC_Water_Documentation">
+<project name="DC Water Design Documentation" basedir="." default="DCWater_documentation">
   <!-- configuration -->
   
   <!-- Custom DCWater stylesheets -->
@@ -137,7 +137,7 @@
   <target name="DCWater_documentation" id="DCWater_guide">
     <antcall target="docbook">
       <param name="dir" value="${basedir}/en" />
-      <param name="basename" value="dcWaterdesign" />
+      <param name="basename" value="dcwaterdesign" />
     </antcall>
   </target>
   

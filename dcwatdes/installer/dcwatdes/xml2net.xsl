@@ -82,8 +82,8 @@
 [CURVES]
 <xsl:for-each select="curves/curve">
 			<xsl:value-of select="text()"/><xsl:text>   </xsl:text>
-			<xsl:value-of select="@x"/><xsl:text>   </xsl:text>
-			<xsl:value-of select="@y"/><xsl:text>
+			<xsl:value-of select="@dc_x"/><xsl:text>   </xsl:text>
+			<xsl:value-of select="@dc_y"/><xsl:text>
 </xsl:text>
 		</xsl:for-each>
 [PATTERNS]

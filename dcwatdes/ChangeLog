@@ -1,3 +1,9 @@
+2004-07-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/build.xml: Fixed default target; formatting
+	* dcwatdes.help.openchm: added new function to open Help file
+	* dcwatdesextension.make: updated for 2.10 release
+	
 2004-07-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/figure/virtual-line-validity.png:
