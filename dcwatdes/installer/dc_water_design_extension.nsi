@@ -17,7 +17,10 @@ SetOverwrite on
 
 Section "DC Water Design Extension V 2.02"
 SetOutPath $INSTDIR\dcwatdes
-File dcwatdes\*.*
+File dcwatdes\epanet_options.dbf
+File dcwatdes\epanet_report.dbf
+File dcwatdes\epanet_times.dbf
+File dcwatdes\epanet2mysql.exe
 SetOutPath $INSTDIR
 File d:\esri\av_gis30\arcview\ext32\dcwatdes2.avx
 
@@ -62,3 +65,4 @@ RMDir "$SMPROGRAMS\DC Water Design Extension"
 DeleteRegValue HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension" "UninstallString"
 DeleteRegValue HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension" "DisplayName"
 DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension"
+

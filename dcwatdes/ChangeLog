@@ -1,3 +1,11 @@
+2001-08-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/dcwatdes.manual.lyx: updated documentation
+	* script.saveallscripts: fixed bug (path corruption)
+	* installer/dc_water_design_extension.nsi: added epanet2mysql
+	* dcwatdes.model.epanet.run: more work on arcview backend for epanet
+	result loading: switched to epanet2mysql.exe
+	
 2001-08-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.i18n.createdictionaries:

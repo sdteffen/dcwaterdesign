@@ -33,26 +33,37 @@ strXml= fln_Xml.getFullName
 strBasePath=strXml.left(strXml.count-3)
 
 flnInp = (strBasePath+"inp").asFilename
-flnOut = (strBasePath+"out").asFilename
+flnOut = (strBasePath+"txt").asFilename
+flnBin = (strBasePath+"bin").asFilename	
 
 'clean up
 File.delete(flnOut)
+File.delete(flnBin)	
 
+' check for Epanet
+if(File.exists(strEpanet.asFilename).not)then
+  MsgBox.error("Couldn't find the EPANET executable:"+NL+"'"+strEPANET+"'", "DC Water Design")
+  exit	
+end		 
+	
 ' run Epanet
 
-System.execute(strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"out").quote) 
+System.execute(strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"txt").quote++(strBasePath+"bin").quote) 
 
 ' show Epanet Report
 
-' wait for the report file appearing
+' wait for the result file appearing
 if(File.exists("c:\WINNT\system32\kernel32.dll".AsFileName))then
   MsgBox.error("The dynamic link library kernel32.dll was not found.","DC Water Design")
 end
 kernel32 = DLL.Make("c:\WINNT\system32\kernel32.dll".AsFileName)
 sleep = DLLProc.Make(kernel32, "Sleep", #DLLPROC_TYPE_VOID, {#DLLPROC_TYPE_INT32})
+if(sleep = nil)then
+  MsgBox.warning("The dynamic link library 'kernel32.dll' could not be found. This might cause problems.","DC Water Design")
+end	
 
 timeStart=Date.now
-while(File.exists(flnOut).not)
+while(File.exists(flnBin).not)
   if((Date.now-timeStart).asSeconds>20)then
     MsgBox.info("No Report file found. Check your settings.","DC Water Design Extension")
     exit
@@ -63,7 +74,7 @@ while(File.exists(flnOut).not)
 end
 
 timeStart=Date.now
-while(File.isWritable(flnOut).not)
+while(File.isWritable(flnBin).not)
   if((Date.now-timeStart).asSeconds>20)then
     MsgBox.info("Couldn't open Report file. Check your settings.","DC Water Design Extension")
     exit
@@ -139,3 +150,12 @@ if(strReport.contains("Error").not)then
     end
   end
 end
+
+
+
+
+
+
+
+
+

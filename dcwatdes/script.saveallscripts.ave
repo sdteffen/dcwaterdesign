@@ -2,7 +2,7 @@
 
 ' If the scripts are to be saved elsewhere, change the following line... 
 
-strSaveDir = "c:\sandbox\dcwatdes"
+strSaveDir = "e:\sandbox\dcwatdes"
 
 if (File.exists(strSaveDir.asFilename).Not) then
   MsgBox.Error("Working directory:"++strSaveDir++"does not exist", "")
@@ -30,8 +30,9 @@ for each sedScript in lstScripts
 
   strSaveDir2 = strSaveDir.clone
   strScriptName = sedScript.asString ' .substitute(".",",")
-   
-  flnScript = FileName.merge(strSaveDir2, strScriptName)
+  
+  flnScript = strSaveDir.asFilename 
+  flnScript.mergeFile(strScriptName)
   ' System.echo(flnScript.getFullName)
   flnScript.setName(strScriptName+".ave")
   if (flnScript.isFile) then
