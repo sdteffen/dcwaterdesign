@@ -1,8 +1,18 @@
-2002-04-09  Steffen Macke <Steffen_macke@dorsch.com.jo>
+2002-06-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.make: Fixed model creation for node themes
+	containing only one record. Fixes bug #570335
+
+2002-06-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popupupdate:
+	* dcwatdesextension.install: fixed some problems with the popup handling
+
+2002-04-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.file.waitfor: initializing variable sleep now
 	* dcwatdes.system.call: using System.call() as a backfall if the dll
-	call fails (this seems to be the case for Win9* systems
+	call fails (this seems to be the case for Win9* systems)
 	
 2002-04-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 

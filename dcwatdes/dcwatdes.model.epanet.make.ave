@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.make
 
-' (c) 2000, 2001 DORSCH Consult
+' (c) 2000 - 2002 DORSCH Consult
 ' establish the necessary structure for an Epant hydraulic model
 
 ' This library is free software; you can redistribute it and/or
@@ -107,9 +107,21 @@ for each recPipe in ftbPipes
   for each i in 0..1
     for each j in 0..(lstNodeFTabs.count-1)
       ftbNodes = lstNodeFTabs.get(j)
-      ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
-      bmpNodes = ftbNodes.getSelection
-      recConnectedNode = bmpNodes.getNextSet(-1)
+      recConnectedNode = (-1)
+      if(ftbNodes.getNumRecords > 1)then
+        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
+        bmpNodes = ftbNodes.getSelection
+        recConnectedNode = bmpNodes.getNextSet(-1)
+      else
+       if(ftbNodes.getNumRecords = 1)then
+         for each recNode in ftbNodes
+           pntNode = ftbNodes.returnValue(ftbNodes.findField("Shape"),recNode)
+           if(pntNode.distance(lstNodesPoints.get(i)) < numSnappingRadius)then
+             recConnectedNode = recNode
+           end
+         end
+       end
+      end
       if(recConnectedNode <> -1)then
         fldNodeID = lstNodeIDFields.get(j)
         strNodeID = ftbNodes.returnValue(fldNodeID, recConnectedNode).asString
