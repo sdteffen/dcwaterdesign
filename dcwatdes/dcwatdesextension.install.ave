@@ -1,6 +1,6 @@
 ' DCWatDesExtension.install
 
-' (c) 2000, 2001 DORSCH Consult
+' (c) 2000 - 2002 DORSCH Consult
 ' install the Extension
 
 ' This library is free software; you can redistribute it and/or
@@ -78,19 +78,25 @@ av.getProject.setStartup("DCWatDes.i18n.createDictionaries")
 
 
 'add the popups
-pu = av.GetProject.FindGUI("View").GetPopups
-if (pu <> nil) then
+pu = av.GetProject.FindGUI("View").getPopups
+if ((pu <> nil)and(pu.getUpdate.asString <> "DCWatDes.View.PopupUpdate")) then
   objOriginalViewPopup = pu.getActive
   if(objOriginalViewPopup = nil)then
     objOriginalViewPopup = pu.getControls.get(0)
   end
-  pu.Add(self.get(3), -1)
-  pu.add(self.get(4), -1)
+'  pu.Add(self.get(3), -1)
+'  pu.add(self.get(4), -1)
   'View Pipes And Nodes Popup
-  pu.add(self.get(17), -1)
+'  pu.add(self.get(17), -1)
   dicPreferences.set("strOriginalViewPopupUpdate", pu.getUpdate)
   dicPreferences.set("objOriginalViewPopup", objOriginalViewPopup)  
   pu.setUpdate("DCWatDes.View.PopupUpdate")
+end
+
+for each popupMenu in {self.get(3), self.get(4), self.get(17) }
+  if(pu.findByLabel(popupMenu.asString) = nil)then
+    pu.add(popupMenu, -1)
+  end
 end
 
 av.run("DCWatDes.Tables.loadEpanetTables",nil)

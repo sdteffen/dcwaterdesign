@@ -1,6 +1,6 @@
 ' DCWatDes.File.waitFor
 
-' (c) 2001,2002 DORSCH Consult
+' (c) 2001 DORSCH Consult
 ' Wait until a file exists and is writeable
 
 ' This library is free software; you can redistribute it and/or
@@ -21,7 +21,6 @@
 ' second argument is the number of seconds to wait for the file
 ' returns true if the file exists and is writeable and false if not
 
-sleep=nil
 flnFile = self.get(0)
 numSecondsToWait = self.get(1)
 strKernel32 = "c:\WINNT\system32\kernel32.dll"

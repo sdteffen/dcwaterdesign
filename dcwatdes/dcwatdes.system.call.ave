@@ -1,6 +1,6 @@
 ' DCWatDes.System.call
 
-' (c) 2001,2002 DORSCH Consult
+' (c) 2001 DORSCH Consult
 
 ' execute a command using the C system function
 ' uses the systemcall wrapper dll
@@ -43,6 +43,5 @@ strReturnValue = procCallSystem.call({strCommand})
 if(strReturnValue = "0")then
   return true
 else
-  System.execute(strCommand)
   return false
 end
