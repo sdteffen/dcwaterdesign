@@ -50,3 +50,27 @@ end
 cbxSqlConnection = dlgResultTables.findByName("cbxSqlConnection")
 lstSqlConnections = SqlCon.GetConnections
 cbxSqlConnection.defineFromList(lstSqlConnections)
+
+' result loader backends
+
+cbxResultLoader = dlgResultTables.findByName("cbxResultLoader")
+lstBackends = List.make
+lstScripts = Extension.getScripts
+for each scriptMayBeLoader in lstScripts
+  if(scriptMayBeLoader.getName.left(34) = "DCWatDes.Model.Epanet.Results.load")then
+    strLoader = scriptMayBeLoader.getName.substitute("DCWatDes.Model.Epanet.Results.load","")
+    strLoader.setName(strLoader)
+    lstBackends.add(strLoader)
+  end
+end
+cbxResultLoader.defineFromList(lstBackends)
+
+for each strCombobox in {"SqlConnection","ResultLoader"}
+
+  strSelected = dicPreferences.get("str"+strCombobox)
+  if(strSelected <> nil)then
+    cbxCombobox = dlgResultTables.findByName("cbx"+strCombobox)
+    cbxCombobox.findByValue(strSelected)
+    cbxCombobox.selectCurrent
+  end
+end

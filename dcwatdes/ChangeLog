@@ -1,3 +1,14 @@
+2001-08-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.i18n.createdictionaries:
+	* dialogs/dcwatdes.dialog.resulttables.ded:
+	* dcwatdes.model.epanet.results.loadmysql:
+	* dcwatdes.dialog.resulttables.initialize:
+	* dcwatdes.dialog.resulttables.btnok.click:
+	* dcwatdes.model.epanet.run:
+	* dcwatdes.model.epanet.results.loadarcview: started new arcview
+	backend for epanet result loading.
+	
 2001-08-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.writeinpfile: checking for & and < in the

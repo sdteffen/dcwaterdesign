@@ -1,7 +1,7 @@
-' DCWatDes.Dialog.ResultTables.btnOK.click
+' DCWatDes.Model.Epanet.Results.loadArcView
 
-' (c) 2000,2001 DORSCH Consult
-' closes the Result Tables Dialog and saves the settings
+' (c) 2000, 2001 DORSCH Consult
+' load the Results of a EPANET analysis via ArcView
 
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public
@@ -17,18 +17,5 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-dlgResultTables = av.findDialog("DCWatDes.Dialog.ResultTables")
-
-extWatDes = Extension.find("DC Water Design")
-dicPreferences = extWatDes.getPreferences
-
-for each strProperty in {"SqlConnection", "ResultLoader"}
-  cbxProperty = dlgResultTables.findByName("cbx"+strProperty)
-  strPropertyValue = cbxProperty.getCurrentValue.asString.clone
-  
-  dicPreferences.set("str"+strProperty,strPropertyValue)
-end  
-
-
-dlgResultTables.close
-
+' no arguments
+' no return value
