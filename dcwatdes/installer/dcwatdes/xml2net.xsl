@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"  xmlns="http://www.w3.org/1999/xhtml"> 
 
-<!-- DC Water Design Extension Version 1.14 Stylesheet -->
-<!-- (c) 2000 DORSCH Consult -->
+<!-- DC Water Design Extension Version 2.02 Stylesheet -->
+<!-- (c) 2000, 2001 DORSCH Consult -->
 <!-- converts data from XML to an Epanet input file -->
 <!-- requires an XLST processor -->
 
@@ -225,8 +225,16 @@ LINKS <xsl:value-of select="report/links/text()"/>
 	<xsl:value-of select="@y"/><xsl:text>
 </xsl:text>
 </xsl:for-each>
-
-
+<xsl:apply-templates select="backdrop"/>
 [END]
 </xsl:template> 
+
+<xsl:template match="backdrop">
+[BACKDROP]
+DIMENSIONS <xsl:value-of select="dimensions/text()"/>
+UNITS <xsl:value-of select="units/text()"/>
+FILE <xsl:value-of select="file/text()"/>
+OFFSET 0.00 0.00
+</xsl:template>
+
 </xsl:stylesheet>
