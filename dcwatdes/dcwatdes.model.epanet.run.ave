@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.run
 
-' (c) 2000, 2001 DORSCH Consult
+' (c) 2000-2002 DORSCH Consult
 ' Export Pipe Model as Epanet Model, run Epanet and load the results
 
 ' This library is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ end
 ' run Epanet
 
 ' System.execute(strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"txt").quote++(strBasePath+"bin").quote) 
-av.run("DCWatDes.System.call", strEpanet.quote++(strBasePath+"inp")++(strBasePath+"txt")++(strBasePath+"bin"))
+av.run("DCWatDes.System.call", strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"txt").quote++(strBasePath+"bin").quote)
 
 ' wait for the result file appearing
 

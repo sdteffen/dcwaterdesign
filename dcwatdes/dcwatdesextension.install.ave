@@ -75,7 +75,7 @@ end
 
 dicPreferences.set("strOriginalStartupScript", av.getProject.getStartup)
 av.getProject.setStartup("DCWatDes.i18n.createDictionaries")
-
+av.run("DCWatDes.i18n.translateExtensionMenus",nil)
 
 'add the popups
 pu = av.GetProject.FindGUI("View").getPopups

@@ -1,3 +1,12 @@
+2002-07-17  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.file.waitfor: initializing variable now (this fix was lost
+	somewhere)
+	* dcwatdes.model.epanet.run: re-added quotation marks to epanet call 
+	* dcwatdesextension.install: menus are translated on project startup
+	now
+	* dcwatdesextension.make: marking as version 2.07rc1
+	
 2002-06-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.i18n.createdictionaries: added french localization
