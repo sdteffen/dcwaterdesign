@@ -213,7 +213,7 @@ for each lstSection in lstSections
         fldPower = ftbSection.findField("power_kw")
         if(fldPower <> nil)then
           strPower = ftbSection.returnValue(fldPower, rec).asString
-          if(strPower.isNumber.not)then
+          if((strPower = nil)or(strPower.isNumber.not))then
             fldPower=nil
           end
         end  
@@ -498,7 +498,7 @@ if(viewActive.getVisibleThemes.count > dicThemes.count)then
   
     strUnits = ""
     strResolution = dicPreferences.get("strBackdropResolution")
-    if(strResolution.isNumber.not)then
+    if((strResolution = nil)or(strResolution.isNumber.not))then
       numResolution = 96
     else
       numResolution = strResolution.asNumber

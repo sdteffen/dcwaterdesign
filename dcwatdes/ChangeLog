@@ -1,4 +1,10 @@
-2001-09-06  Steffem Macke <Steffen_Macke@dorsch.com.jo>
+2001-09-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: added check to complain if the
+	ids are longer than 14 characters
+	* dcwatdes.model.epanet.writeinpfile: added two checks for nil values
+	
+2001-09-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.check: fixed check for duplicate IDs if
 	one of the IDs is not a string. Bug reported by Philipp Magiera

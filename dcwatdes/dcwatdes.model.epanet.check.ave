@@ -30,6 +30,7 @@ lstFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
 numToGo = lstFTabs.count
 numCompleted = 0
 numDoubleIDs = 0
+numIDsTooLong = 0
 
 blnErrorOccured = false
 
@@ -44,6 +45,13 @@ for each ftbFeature in lstFTabs
   fldID = ftbFeature.findField("dc_id")
   for each recFeature in ftbFeature
     strID = ftbFeature.returnValue(fldID, recFeature)
+    if(strID.count > 14)then
+      numIDsTooLong = numIDsTooLong + 1
+      bmpTooLong = ftbFeature.getSelection.clone
+      bmpTooLong.set(recFeature)
+      ftbFeature.setSelection(bmpTooLong)
+      ftbFeature.updateSelection
+    end
     for each ftbCheck in lstFTabs
       if(ftbCheck = ftbFeature)then
         numExpectedCount = 1
@@ -75,6 +83,10 @@ else
   MsgBox.info("The model ID's are unique", "DC Water Design")
 end
 
+if(numIDsTooLong > 0)then
+  blnErrorOccurred = true
+  MsgBox.warning("Some ID's in the model are too long. They should not exceed 14 characters."+NL+"Check the Selection.","DC Water Design")
+end
 if(blnErrorOccured.not)then
   for each ftbTheme in lstFTabs
     ftbTheme.getSelection.clearAll
