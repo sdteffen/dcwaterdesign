@@ -61,8 +61,8 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
 
   bmpNodeResults = Bitmap.make(vtbNodeResults.getNumRecords)
   bmpLinkResults = Bitmap.make(vtbLinkResults.getNumRecords)
-  vtbNodeResults.setDefinition("[timestep]="+strStep)
-  vtbLinkResults.setDefinition("[timestep]="+strStep)  
+  vtbNodeResults.setDefinition("([timestep]="+strStep+")")
+  vtbLinkResults.setDefinition("([timestep]="+strStep+")")  
     
   dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
       
@@ -97,7 +97,7 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
   fldResultFlow = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_flow"})
   fldResultHeadloss = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbLinkResults, "result_headloss"})
   for each fldResult in {fldResultVelocity, fldResultFlow, fldResultHeadloss}
-    fldResult.setAlias(fldResult.getAlias+"_join")
+    fldResult.setAlias(fldResult.getName+"_join")
   end
   bmpResult = bmpLinkResults
   
@@ -116,6 +116,8 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
       ftbFeature.unjoinAll
     end
   end                        
+  vtbNodeResults.setDefinition("")
+  vtbLinkResults.setDefinition("")  
   return nil
 else 
   if(strResultLoader = "MySql")then

@@ -467,7 +467,6 @@ flags 11
 
 
 \end_float 
-
 \layout Subsubsection
 
 Snapping
@@ -667,6 +666,21 @@ Click on the EPANET Themes button.
  Select the appropriate Themes.
 \layout Enumerate
 
+If your fieldnames don't match the ones of the data model, choose 
+\begin_inset Quotes eld
+\end_inset 
+
+Create Missing Fields
+\begin_inset Quotes erd
+\end_inset 
+
+ from the DC Water Design menu.
+\layout Enumerate
+
+If required, use the ArcView table calculator to populate the fields.
+ Leaving fields empty is fine in most cases.
+\layout Enumerate
+
 Choose 
 \begin_inset Quotes eld
 \end_inset 
@@ -675,7 +689,7 @@ Make EPANET Model
 \begin_inset Quotes erd
 \end_inset 
 
- from the DC Water Design menu
+ from the DC Water Design menu.
 \layout Enumerate
 
 If the last step didn't yield any errors, you can create an EPANET input
@@ -690,6 +704,15 @@ Write EPANET File
 
  from the DC Water Design menu.
  Choose filename and location.
+ In case of errors, running 
+\begin_inset Quotes eld
+\end_inset 
+
+Check EPANET Model
+\begin_inset Quotes erd
+\end_inset 
+
+ might help you to track down the most common error.
  
 \layout Enumerate
 
@@ -739,12 +762,16 @@ flags 9
 
 
 \end_float 
-
 \layout Standard
 
 The snapping radius used for network traces and model building is also customiza
 ble in this dialog.
  Usually the default setting should be kept.
+\layout Standard
+
+The backdrop resolution specifies the resolution of the backdrop map if
+ you write your EPANET files with backdrop maps.
+ Set to a higher resolution if required.
 \layout Paragraph
 
 EPANET Tables 
@@ -892,7 +919,6 @@ flags 9
 
 
 \end_float 
-
 \layout Paragraph
 
 Run EPANET Calculation 
@@ -1304,7 +1330,6 @@ flags 9
 
 
 \end_float 
-
 \layout Paragraph
 
 Move Nodes 
@@ -2002,7 +2027,6 @@ flags 11
 
 
 \end_float 
-
 \layout Subsubsection
 
 Apache Software

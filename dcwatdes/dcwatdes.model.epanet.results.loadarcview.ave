@@ -54,7 +54,14 @@ tableNodeResults = Table.make(vtbNodeResults)
 tableNodeResults.setName(av.getActiveDoc.getName+" - Node Results")
 av.getProject.addDoc(tableNodeResults)
 
-'MsgBox.ListAsString(lstSteps, "Select the timestep to load", "DC Water Design") 
+'create indexes
+
+for each vtbResult in {vtbNodeResults, vtbLinkResults}
+  for each strFieldName in {"dc_id", "timestep"}
+    fldField = vtbResult.findField(strFieldName)
+    vtbResult.createIndex(fldField)
+  end
+end
   
 ' load results
   

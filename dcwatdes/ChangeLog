@@ -1,3 +1,10 @@
+2001-09-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep:
+	* dcwatdes.model.epanet.results.loadarcview: fix for field name
+	aliases; adding indexes now to increase performance; the result
+	table definition query gets reset now after joining
+	
 2001-09-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* installer/dc_water_design_extension.nsi: 

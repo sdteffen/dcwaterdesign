@@ -10,7 +10,7 @@ ComponentText "This will install the DC Water Design Extension V 2.03 for ArcVie
 DirText "Select a directory to install the Extension in. (The ArcView Extension directory.)"
 UninstallText "This will uninstall the DC Water Design Extension V 2.03. Hit Next to uninstall, or Cancel to cancel."
 UninstallExeName uninstall-dcwatdes.exe
-OutFile dcwatdes-2.03-5-setup.exe
+OutFile dcwatdes-2.03-setup.exe
 Icon dc.ico
 EnabledBitmap dcbitmap1.bmp
 DisabledBitmap dcbitmap2.bmp
