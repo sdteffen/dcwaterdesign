@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "doc/project.dtd" []>
+<!-- build the DC Water Design source distribution -->
+<project name="DC Water Design" basedir="." default="DCWatDesDistribution">
+  <!-- configuration -->
+  
+  <!-- Custom DC Water Design stylesheets -->
+  <property name="dcwaterdesign_version" value="2.10" />
+  
+  <target name="DCWatDesDistribution" id="DCWaterDesignDistribution">
+    <zip destfile="dcwaterdesign-src-${dcwaterdesign_version}.zip">
+      <zipfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "dcwatdes2.apr,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />
+      <zipfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "INSTALL,NEWS,**/README,**/.url" />
+      <zipfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "doc/*.xsl,doc/project.dtd,installer/dcbitmap*.bmp,installer/dcwatdes/xml2net.xsl,inp2shp/inp2shp.c,inp2shp/Makefile,installer/dcwatdes/license-dcwaterdesignextension.txt" />
+      <zipfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "doc/version.xml,**/dcwaterdesign.xml,**/figure/*.png,doc/av_epanet_data_model.dia,dc.ico,installer/dc_water_design_extension.nsi" />
+    </zip>
+  </target>
+  
+  <target name="clean">
+    <delete defaultexcludes="no" dir="." includes=
+      "**/*~,**/htmlhelp.chm,tmp/*.png,tmp/*.pdf,**/.#*,**/*.hhc,**/*.html,**/*.hhk,**/*.fo,**/*.hhp" 
+      excludes="**/index.html"/>
+  </target>
+</project>

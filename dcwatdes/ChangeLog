@@ -1,5 +1,6 @@
 2004-07-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
+	* build.xml: added build file for source zip
 	* doc/build.xml: Fixed default target; formatting
 	* dcwatdes.help.openchm: added new function to open Help file
 	* dcwatdesextension.make: updated for 2.10 release
