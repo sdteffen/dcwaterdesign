@@ -87,6 +87,7 @@ dicGerman.add("Create Zones from Controls", "Zonen über Schiebersteuerung erstel
 dicGerman.add("Create Missing Junctions", "Fehlende Knoten erzeugen")
 dicGerman.add("Create Missing Fields", "Fehlende Felder erzeugen")
 dicGerman.add("Backdrop Resolution", "Hintergrund Auflösung")
+dicGerman.add("Pattern", "Muster")
 
 _dcwDicDictionaries.add("de",dicGerman)
 

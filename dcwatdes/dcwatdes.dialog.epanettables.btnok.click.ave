@@ -22,7 +22,7 @@ dlgEpanetTables = av.findDialog("DCWatDes.Dialog.EpanetTables")
 extWatDes = Extension.find("DC Water Design")
 dicPreferences = extWatDes.getPreferences
 
-for each strProperty in {"Options","Report","Times", "Controls", "Curves"}
+for each strProperty in {"Options","Report","Times", "Controls", "Curves", "Pattern"}
   cbxProperty = dlgEpanetTables.findByName("cbx"+strProperty)
   if(cbxProperty.isEnabled)then
     strPropertyValue = cbxProperty.getCurrentValue.asString.clone

@@ -1,6 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"  xmlns="http://www.w3.org/1999/xhtml"> 
 
-<!-- DC Water Design Extension Version 2.02 Stylesheet -->
+<!-- DC Water Design Extension Version 2.03 Stylesheet -->
 <!-- (c) 2000, 2001 DORSCH Consult -->
 <!-- converts data from XML to an Epanet input file -->
 <!-- requires an XLST processor -->
@@ -86,11 +86,10 @@
 			<xsl:value-of select="@y"/><xsl:text>
 </xsl:text>
 		</xsl:for-each>
-
 [PATTERNS]
-<xsl:for-each select="patterns/pattern/multiplier">
-			<xsl:value-of select="..@id"/><xsl:text>   </xsl:text>  
-			<xsl:value-of select="text()"/><xsl:text>
+<xsl:for-each select="patterns/pattern">
+			<xsl:value-of select="text()"/><xsl:text>   </xsl:text>  
+			<xsl:value-of select="@multiplier"/><xsl:text>
 </xsl:text>
 		</xsl:for-each>
   

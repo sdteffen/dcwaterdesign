@@ -1,3 +1,11 @@
+2001-08-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* xml2net.xsl:
+	* dcwatdes.dialog.epanettables.btnok.click:
+	* dcwatdes.dialog.epanettables.initilize:
+	* dcwatdes.i18n.createdictionaries:
+	* dcwatdes.model.epanet.writeinpfile: Added support for patterns.
+
 2001-08-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.writeinpfile: fix for bug #436003: field power_kw

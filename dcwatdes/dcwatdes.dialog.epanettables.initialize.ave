@@ -61,7 +61,7 @@ for each ctlLabelControl in lstControls
   cplEpanetTables.add(ctlLabelControl, rctBox)
 end
 
-for each strCombobox in {"Options", "Times","Report", "Controls", "Curves"}
+for each strCombobox in {"Options", "Times","Report", "Controls", "Curves", "Pattern"}
   lstTables = av.getProject.getDocsWithGui(av.findGUI("Table"))
   theCombobox = dlgEpanetTables.findByName("cbx"+strCombobox)
   theCombobox.defineFromList(lstTables)
