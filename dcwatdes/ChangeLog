@@ -1,10 +1,16 @@
+2002-04-09  Steffen Macke <Steffen_macke@dorsch.com.jo>
+
+	* dcwatdes.file.waitfor: initializing variable sleep now
+	* dcwatdes.system.call: using System.call() as a backfall if the dll
+	call fails (this seems to be the case for Win9* systems
+	
 2002-04-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* installer/dc_water_design_extension.nsi:
 	* doc/dcwatdes_manual.lyx:
 	* dcwatdesextension.make: updated for 2.06 release
 	
-	* dcwatdes.model.epanet.importinpfile: fixed bug #476258, improved
+	* dcwatdes.model.epanet.inportinpfile: fixed bug #476258, improved
 	performance
 	
 	* dcwatdes.model.epanet.ensurealiases:
