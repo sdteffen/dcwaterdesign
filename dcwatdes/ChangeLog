@@ -1,3 +1,7 @@
+2004-07-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: started shifting documentation to DocBook
+	
 2004-07-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.writeinpfile:
