@@ -38,7 +38,7 @@ int writeLinksFile(FILE *fileIn, char *strLinkFilename);
 
 int main(int argc, char **argv) {
    FILE *fileIn;
-   
+
    if (argc == 4)
    {
       if ( (fileIn = fopen(argv[1],"r+b")) == NULL)
@@ -53,39 +53,39 @@ int main(int argc, char **argv) {
       fseek(fileIn, 16, SEEK_SET);
       fread(&numLinks, 4, 1, fileIn);
       printf("Number of Links: %d\n", numLinks);
-      
+
       fseek(fileIn, 20, SEEK_SET);
       fread(&numPumps, 4, 1, fileIn);
       printf("Number of Pumps: %d\n", numPumps);
-      
+
       fseek(fileIn, 12, SEEK_SET);
       fread(&numTanks, 4, 1, fileIn);
       printf("Number of Tanks: %d\n", numTanks);
-      
+
       fseek(fileIn, 48, SEEK_SET);
       fread(&numReportStart, 4, 1, fileIn);
       printf("Report Start: %d\n", numReportStart);
-      
+
       fseek(fileIn, 52, SEEK_SET);
       fread(&numTimeStep, 4, 1, fileIn);
       printf("Report Time Step: %d\n", numTimeStep);
-      
+
       fseek(fileIn, 56, SEEK_SET);
       fread(&numDuration, 4, 1, fileIn);
       printf("Simulation Duration: %d\n", numDuration);
-      
-      numPeriods = numDuration/numTimeStep;
+
+      numPeriods = (numDuration/numTimeStep)+1;
       printf("Number of Periods: %d\n", numPeriods);
-      
+
       writeNodesFile(fileIn, argv[2]);
       writeLinksFile(fileIn, argv[3]);
-    
+
       /* close input file */
       fclose(fileIn);
    }
    else {
      printf("usage: epanet2mysql binary_file mysql_nodes_file mysql_links_file\n");
-   } 
+   }
 }
 
 /* writes id, demand, head, pressure,
@@ -110,7 +110,7 @@ int writeNodesFile(FILE *fileIn, char *strNodeFilename) {
 
     offsetResults = 852+(20*numNodes)+(36*numLinks)+(8*numTanks)+(28*numPumps)+4;
     offsetNodeIDs = 852;
-        
+    fprintf(fileOut, "dc_id,result_demand,result_head,result_pressure,timestep\n");
     for(i=0; i<numPeriods; i++) {
       for(j=0; j<numNodes; j++) {
 	fseek(fileIn, offsetNodeIDs+(j*16), SEEK_SET);
@@ -125,16 +125,16 @@ int writeNodesFile(FILE *fileIn, char *strNodeFilename) {
       }
       offsetResults +=(16*numNodes+32*numLinks);
    }
-    
-    
+
+
     fclose(fileOut);
     printf("... done.\n");
   }
   return 0;
 }
 
-/* writes id, flow, velocity, headloss 
-   time  to link output file 
+/* writes id, flow, velocity, headloss
+   time  to link output file
    returns 0 */
 int writeLinksFile(FILE *fileIn, char *strLinkFilename) {
    FILE *fileOut;
@@ -154,18 +154,11 @@ int writeLinksFile(FILE *fileIn, char *strLinkFilename) {
     printf("writing links text file ...\n");
     offsetResults = 852+(20*numNodes)+(36*numLinks)+(8*numTanks)+(28*numPumps)+4+(16*numNodes);
     offsetLinkIDs = 852+(16*numNodes);
-    
-    /*    fseek(fileIn, offsetLinkIDs, SEEK_SET);*/
-    /*fread(strLinkID, 16, 1, fileIn);*/
-    /*    printf("First Link ID: %s\n", strLinkID);*/
-    
-    /*    fseek(fileIn, offsetResults, SEEK_SET);*/
-    /* fread(&test, 4, 1, fileIn);*/
-    /*    printf("First Flow: %f %d\n",test, offsetResults);*/
-    
+
+    fprintf(fileOut, "dc_id,result_flow,result_velocity,result_headloss,timestep\n");
     for(i=0; i<numPeriods; i++) {
       for(j=0; j<numLinks; j++) {
-	
+
 	fseek(fileIn, offsetLinkIDs+(j*16), SEEK_SET);
 	fread(strLinkID, 16, 1, fileIn);
 	fseek(fileIn, offsetResults+(j*4), SEEK_SET);
@@ -179,7 +172,7 @@ int writeLinksFile(FILE *fileIn, char *strLinkFilename) {
       offsetResults +=(16*numNodes+32*numLinks);
    }
    fclose(fileOut);
-   printf("... done\n");   
+   printf("... done\n");
   }
   return 0;
 }

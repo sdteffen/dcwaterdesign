@@ -1,1 +1,5 @@
 compile epanet2mysql.c with any ANSI-compliant C-compiler (e.g. gcc)
+
+example cygwin gcc usage:
+
+gcc -mno-cygwin -fnative-struct -o epanet2mysql.exe epanet2mysql.c
