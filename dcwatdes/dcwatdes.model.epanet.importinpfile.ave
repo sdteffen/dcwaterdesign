@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.importInpFile
 
-' (c) 2001,2002 DORSCH Consult
+' (c) 2001, 2002, 2005 DORSCH Consult
 ' imports an Epanet Input file (*.inp)
 
 ' This library is free software; you can redistribute it and/or
@@ -42,15 +42,7 @@ for each strFeature in {"Junctions", "Pipes", "Pumps", "Reservoirs",
     if(flnTheme = nil)then
       exit
     end
-'    if(strFeature <> "Pipes")then
-'      ftbTheme = FTab.makeNew(flnTheme, Point)
-'    else
-'      ftbTheme = FTab.makeNew(flnTheme, Polyline)
-'    end
-'    thmFeature = FTheme.make(ftbTheme)
-'    dicThemes.add("str"+strFeature, thmFeature)
-'    av.getActiveDoc.addTheme(thmFeature)
-    strCommand = strCommand ++ flnTheme.asString.quote
+    strCommand = strCommand ++ (flnTheme.asString+".shp").quote
     lstThemes.add(flnTheme.clone)
   end
 end
@@ -63,9 +55,25 @@ end
 
 strReport = flnInp.asString.left(flnInp.asString.count-3)+"rpt"
 strCommand = flnInp.asString.quote ++ strReport ++ strCommand
-strCommand = "$AVEXT".asFileName.getFullName+"\dcwatdes\inp2shp.exe"++strCommand
+strTmpDir = Filename.getTmpDir.getFullName
+flnReport = Filename.make(strTmpDir+"\inp2shpreport.txt")
+flnError = Filename.make(strTmpDir+"\inp2shprerror.txt")
+File.delete(flnReport)
+File.delete(flnError)
+strCommand = "$AVEXT".asFileName.getFullName+"\dcwatdes\inp2shp.exe"++strCommand++">"++flnReport.getFullName.quote++"2>"++flnError.getFullName.quote
 av.run("DCWatDes.System.call", strCommand)
 
+twinReport = TextWin.make(flnReport, "inp2shp Output")
+
+if(File.exists(flnError))then
+  txfError = TextFile.make(flnError, #FILE_PERM_READ)
+  if(txfError.getSize > 0)then
+    twinError = TextWin.make(flnError, "inp2shp Errors")
+  end
+  txfError.close
+end
+
+' Add shape files to active view
 for each flnTheme in lstThemes
   srnTheme = SrcName.make(flnTheme.asString+".shp")
   if(srnTheme <> nil)then

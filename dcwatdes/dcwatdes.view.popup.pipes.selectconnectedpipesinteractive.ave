@@ -1,0 +1,149 @@
+' DCWatDes.View.Popup.Pipes.selectConnectedPipesInteractive
+
+' (c) 2000, 2001, 2004 DORSCH Consult
+' selects the connected pipes, interactively following the selection
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' no arguments
+' returns nothing
+
+extWatDes = Extension.find("DC Water Design")
+dicPreferences = extWatDes.getPreferences
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if(numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+thmPipes = dicThemes.get("Pipes")
+
+pntMouse = self.getControlSet.getObjectTag
+if(pntMouse = nil)then
+  return nil
+end
+
+lstPipes = thmPipes.findByPoint(pntMouse)
+if (lstPipes.count = 0 ) then
+  MsgBox.info("No pipe selected", "DC Water Design")
+  exit
+end
+
+lstNodeThemeNames = List.make
+for each strTheme in dicFTabs.returnKeys
+  if(strTheme <> "Pipes")then
+    strTheme.setName(strTheme)
+    lstNodeThemeNames.add(strTheme)
+    if(strTheme = "Valves")then
+      strClosed = "Closed Valves"
+      strClosed.setName("Closed Valves")
+      lstNodeThemeNames.add(strClosed)
+    end
+  end
+end
+
+lstStop = MsgBox.multiList(lstNodeThemeNames, "Select the Node Themes where the Trace should stop.", "DC Water Design Extension")
+if(lstStop = nil)then
+  return nil
+end
+
+blnStopAtClosedValves = false
+
+for each strTheme in lstStop
+  if(strTheme = "Closed Valves")then
+    blnStopAtClosedValves = true
+  else
+    lstNodeThemeNames.removeObj(strTheme)
+  end
+end
+for each i in 0 .. (lstNodeThemeNames.count-1)
+  if(lstNodeThemeNames.get(i)="Closed Valves")then
+    lstNodeThemeNames.remove(i)
+    break
+  end
+end
+
+lstNodeFTabs = List.make
+for each strNodeTheme in lstNodeThemeNames
+  lstNodeFTabs.add(dicFTabs.get(strNodeTheme))
+end
+
+ftbValves = dicFTabs.get("Valves")
+
+ftbPipes = dicFTabs.get("Pipes")
+fldPipeShape = ftbPipes.findField("Shape")
+activeView = av.getActiveDoc
+
+recStartPipe = lstPipes.get(0)
+av.clearStatus
+av.showStopButton
+
+numPipes = ftbPipes.getNumRecords
+numConnectedPipes = 0
+bmpSelection = Bitmap.make(numPipes)
+bmpSelection.set(recStartPipe)
+
+stkPipes = Stack.make
+
+'initialize Stack
+stkPipes.push(recStartPipe)
+
+while(stkPipes.isEmpty.not)
+
+  if ( av.setStatus(numConnectedPipes/numPipes*100).not) then
+    ' User wants to terminate
+    ftbPipes.setSelection(bmpSelection)
+    ftbPipes.updateSelection
+    av.clearStatus
+    exit
+  end
+
+  recPipe = stkPipes.pop
+  pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
+  lstPipeNodes = pllPipe.asList.get(0)
+  for each pntNode in {lstPipeNodes.get(0), lstPipeNodes.get(lstPipeNodes.count -1)}
+    recNode = nil
+
+    for each ftbNode in lstNodeFTabs
+      ftbNode.selectByPoint(pntNode, numSnappingRadius, #VTAB_SELTYPE_NEW)
+      if(ftbNode.getSelection.getNextSet(-1) <> -1)then
+        if((ftbNode <> ftbValves)or(blnStopAtClosedValves.not)or(ftbNode.returnValue(ftbNode.findField("setting"), ftbNode.getSelection.getNextSet(-1))<>"closed"))then
+          lstConnectedPipes = av.run("DCWatDes.PolylineFTab.findPllsByEndPoint", {ftbPipes, pntNode, numSnappingRadius})
+          for each recConnectedPipe in lstConnectedPipes
+            if(bmpSelection.get(recConnectedPipe).not)then
+              ' connected pipe which is not already on the stack
+              bmpSelection.set(recConnectedPipe)
+              ftbPipes.setSelection(bmpSelection)
+              ftbPipes.updateSelection
+              pntPipeCentre = ftbPipes.returnValue(fldPipeShape, recConnectedPipe).returnCenter
+              activeView.getDisplay.panTo(pntPipeCentre)
+              av.processAllInvals
+              numConnectedPipes = numConnectedPipes + 1
+              stkPipes.push(recConnectedPipe)
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+ftbPipes.setSelection(bmpSelection)
+ftbPipes.updateSelection
+av.clearStatus
+

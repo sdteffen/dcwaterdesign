@@ -64,7 +64,7 @@ for each flnResult in {flnNodeResults, flnLinkResults}
   lstTables = av.getProject.getDocsWithGUI(av.findGUI("Table"))
   for each tableRemove in lstTables
     vtbRemove = tableRemove.getVTab
-    if(vtbRemove <> nil)then
+    if((vtbRemove <> nil)and(vtbRemove.getBaseTableFilename <> nil))then
       if(vtbRemove.getBaseTableFilename.getFullName = strResultFileName)then
         vtbRemove.deActivate
         av.getProject.removeDoc(tableRemove)
