@@ -98,8 +98,8 @@ for each strFeature in {"Junctions", "Valves", "Reservoirs", "Tanks", "Pumps"}
       if(MsgBox.yesNo("The"++strFeature++"Theme contains"++numOrphanNodes.asString++"unconnected nodes."+NL+
       "Delete them?","DC Water Design",true))then
           ftbFeature.getSelection.not
-          ftbFeature.getSelection.updateSelection
-          ftbFeature.setEditable
+          ftbFeature.updateSelection
+          ftbFeature.setEditable(true)
           ftbFeature.removeRecords(ftbFeature.getSelection)
           ftbFeature.setEditable(false)
       end

@@ -1,3 +1,7 @@
+2001-10-19  Steffen Macke <Steffe_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: fixed orphan node deletion
+	
 2001-10-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.run: 
