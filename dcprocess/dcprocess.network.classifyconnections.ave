@@ -130,7 +130,7 @@ for each rec_Node in bmpSelection
       'equal diameter
       if(numDiameter1 = numDiameter2) then
         '******* not required
-         numClass = 81
+         numClass = 91
          lstDiameters.add(numDiameter1)
       else
     

@@ -72,10 +72,11 @@ else
   end
   recValve = bmpSelection.getNextSet(-1)
   pntValve = ftbValve.returnValue(ftbValve.findField("shape"), recValve)
+  mpntBone = Multipoint.make({pllBone.along(0), pllBone.along(100)})
   if(bmpSelection.count = 2)then
     pntSecondValve = ftbValve.returnValue(ftbValve.findField("shape"), bmpSelection.getNextSet(recValve))
-    if((pntValve.intersects(pllBone.returnBuffered(numSnappingRadius)).not)and
-      (pntSecondValve.intersects(pllBone.returnBuffered(numSnappingRadius)).not))then
+    if((pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not)and
+      (pntSecondValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not))then
       numDetail = 2
     end
   end

@@ -1,9 +1,9 @@
 ; DC Processing Extension Installer
 ; NSIS 2.0 Script
-; (c) 2004 DORSCH Consult
+; (c) 2004, 2005 DORSCH Consult
 
 !define MUI_PRODUCT "DC Processing Extension"
-!define MUI_VERSION "1.2.6"
+!define MUI_VERSION "1.2.7"
 !define MUI_PACKAGING "1"
 
 !include "MUI.nsh"

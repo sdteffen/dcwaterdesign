@@ -1,3 +1,16 @@
+2005-03-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.classifyconnections.ave: Connection detail for
+	two connected pipes with the same diameter is 0 now
+	* dcproess.network.connection.returndetail11.ave:
+	* dcprocess.network.connection.returndetail2.ave:
+	* dcprocess.network.connection.returndetail3.ave:
+	* dcprocess.network.connection.returndetail5.ave:
+	* dcprocess.network.connection.returndetail6.ave: Work around ArcView
+	PolyLine.returnBuffered() robustness problem (endless loop) by 
+	converting the Polyline to a MultiPoint of the end points.
+	* dcprocessextension.make.ave: Updated for 1.2.7 release
+	
 2005-02-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* script/fitting_boq.sql: Fixed two spelling mistakes and the BOQ

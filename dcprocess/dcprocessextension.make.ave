@@ -2,7 +2,7 @@
 
 ' (c) 2000 - 2004 DORSCH Consult
 
-strVersion = msgbox.input("Enter version","Make DC Processing Extension","1.2.6")
+strVersion = msgbox.input("Enter version","Make DC Processing Extension","1.2.6+cvs")
 if (strVersion=nil)then
   exit
 end
