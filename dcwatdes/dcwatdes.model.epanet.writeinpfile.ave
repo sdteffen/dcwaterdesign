@@ -616,7 +616,7 @@ end
 lnf_Xml.writeElt("</controls>")
 
 ' write Curves and Patterns
-for each lstSection in { {"Curves",{"dc_id", "x","y"}},
+for each lstSection in { {"Curves",{"dc_id", "dc_x","dc_y"}},
                          {"Patterns",{"dc_id", "multiplier"}}}
   strSection = lstSection.get(0)
   lstAttributes = lstSection.get(1)

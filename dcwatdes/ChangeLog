@@ -1,4 +1,15 @@
-2004-01-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+2004-06-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile:
+	* dcwatdes.dialog.epanettables.btnok.click:
+	* dcwatdes.dialog.epanettables.initialize
+	* dialogs/dcwatdes.dialog.tables.ded:
+	* installer/dcwatdes/xml2net.xsl: using dc_x and dc_y instead of
+	x and y; harmonized setting storage, inp output and table dialog
+	for patterns (fixes pattern export bug #947865)
+	* dcwatdesextension.make: version number is 2.09+cvs now
+	
+2004-04-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.loadresultsforstep: The result import only
 	worked only partially as only some records were selected during
