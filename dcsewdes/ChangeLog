@@ -1,3 +1,10 @@
+2004-06-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: added section on "Enforce Drainage"
+	* dcsewerdesign.enforcedrainage.ave: added optional diameter
+	parameter
+	* dcsewerdesignextension.make.ave: version number is now 2.0.2+cvs
+	
 2004-06-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.enforcedrainage.ave:

@@ -1,6 +1,6 @@
 ' DCSewerDesignExtension.make
 
-strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.2")
+strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.2+cvs")
 if (strVersion=nil)then
   exit
 end

@@ -6,13 +6,6 @@
 ' If upstream invert of downstream section > downstream invert,
 ' move downstream section down
 ' connecting lines with different diameters will have different invert levels
-
-' information about the configuration file
-MsgBox.info("One mapping per line, '=' as separator"+NL+
-  "MaxUpstream=??? MaxDownstream=???"+NL+
-  "DesDownstream=???, DesUpstream=???, Diameter=???"+NL+
-  "DesDownstream and DesUpstream will be overwritten"
-  ,"Field Configuration File")
   
 viewActive = av.GetActiveDoc
 themeList = viewActive.GetThemes
@@ -23,6 +16,14 @@ if (LineTheme.asString = "nil") then
 end
 thmLine = viewActive.FindTheme(LineTheme.AsString)
 ftbLine = thmLine.GetFTab 
+
+' information about the configuration file
+MsgBox.info("One mapping per line, '=' as separator"+NL+
+  "MaxUpstream=??? MaxDownstream=???"+NL+
+  "DesDownstream=???, DesUpstream=???, (optional) Diameter=???"+NL+
+  "DesDownstream and DesUpstream will be overwritten"
+  ,"Field Configuration File")
+
 
 lstConfFiles = FileDialog.returnFiles({"*.txt"},{"Text Files (*.txt)"},"Select Configuration File",0)
 if(lstConfFiles.count = 0 )then
@@ -97,8 +98,11 @@ while(numCounter < numTotal)
           blnReady = false
           break
         else
-          numMinUpstream = numMinUpstream.min(numUpstream)
-          System.echo(numMinUpstream.asString)
+          numDiameter = 0
+          if(fldDiameter <> nil)then
+            numDiameter = ftbLine.returnValue(fldDiameter, recUpstream)
+          end
+          numMinUpstream = numMinUpstream.min(numUpstream+(numDiameter/1000))
         end
       end
       if(blnReady)then
@@ -108,8 +112,11 @@ while(numCounter < numTotal)
           ftbLine.setValue(fldDesUpstream, recLine, numMaxUpstream)
           ftbLine.setValue(fldDesDownstream, recLine, numMaxDownstream)
         else
-          ' TODO: handle diameter
-          numShift = numMaxUpstream - (numMaxUpstream.min(numMinUpstream))
+          numDiameter = 0
+          if(fldDiameter <> nil)then
+            numDiameter = ftbLine.returnValue(fldDiameter, recLine)
+          end
+          numShift = numMaxUpstream - (numMaxUpstream.min(numMinUpstream - (numDiameter/1000))) 
           ftbLine.setValue(fldDesDownstream, recLine, numMaxDownstream-numShift)
           ftbLine.setValue(fldDesUpstream, recLine, numMaxUpstream-numShift)
         end
