@@ -1,3 +1,7 @@
+2002-09-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp/inp2shp.c: preliminary support for pumps and valves
+
 2002-09-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* inp2shp/inp2shp.c: pipe vertices are imported now
