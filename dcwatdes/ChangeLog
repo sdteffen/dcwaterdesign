@@ -1,3 +1,20 @@
+2001-06-19  Steffen Macke <sdteffen@yahoo.com>
+
+	* dcwatdes.dialog.setup.initialize: 
+	* dcwatdes.dialog.setup.btnok.click:
+	* dcwatdes.model.epanet.pipe.updatenodefields:
+	* dcwatdes.model.epanet.createzonesfromcontrols:
+	* dcwatdes.model.epanet.junctions.calculatepipelength:
+	* dcwatdes.model.epanet.make:
+	* dcwatdes.model.epanet.writeinpfile:
+	* dcwatdes.popup.pipes.selectconnectedpipes:
+	* dcwatdes.view.changenodeclass:
+	* dcwatdes.view.movenode:
+	* dcwatdes.model.epanet.junctions.createmissing: made snapping radius
+	configurable
+	* dcwatdesextension.unload: fixed extension unloading if dialogs 
+	are open
+	
 2001-05-31  Steffen Macke <sdteffen@yahoo.com>
 
 	* dcscript.compileallscripts:
