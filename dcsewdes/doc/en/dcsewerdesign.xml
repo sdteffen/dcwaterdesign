@@ -31,7 +31,7 @@
 <sect1 id="introduction">
   <title>Introduction</title>
   <para>This document describes the design process for simple sewer networks
-    using version 2.0.2+cvs of the DC Sewer Design extension for ArcView 3.*.
+    using version 2.0.3 of the DC Sewer Design extension for ArcView 3.*.
     </para>
   <para>The final calculation can be an Excel Sheet.</para>
   <para>The <citetitle>DC Sewer Design Extension</citetitle> is free software
@@ -259,7 +259,7 @@ Line.Theme=???</programlisting></para>
       <itemizedlist>
         <listitem><para>ManholeData - One data box for each manhole</para>
 	  </listitem>
-	<listitem><para>LineDate - One data box for each line</para>
+	<listitem><para>LineData - One data box for each line</para>
 	  </listitem>
 	<listitem><para>CumulativeLineData - One data box stretching
 	  as long as the value doesn't change</para></listitem>
@@ -276,7 +276,7 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting>
   </sect3>
   <sect3 id="select_profile_configuration">
     <title>Select Profile Configuration</title>
-    <para>Select the configuration file to be used by <xref linked=
+    <para>Select the configuration file to be used by <xref linkend=
       "create_profile" /></para>
   </sect3>
   <sect3 id="enforce_maximum_line_length">

@@ -1,3 +1,10 @@
+2004-07-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml:
+	* dcsewerdesign.nsi:
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesignextension.make.ave: updated for 2.0.3 release
+
 2004-06-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.complexprofile.create.ave: improved configuration
