@@ -21,17 +21,13 @@
 #include "epanet2.h"
 #include "shapefil.h"
 #include <stdlib.h>
-
-#define MAXLINE 255
-#define   SEPSTR    " \t\n\r"  /* Token separator characters */
-#define   MAXTOKS   40       /* Max. items per line of input           */
-#define UCHAR(x) (((x) >= 'a' && (x) <= 'z') ? ((x)&~32) : (x))
+#include <string.h>
+#include "inp2shp.h"
 
 /* the following sections have to be parsed in addition
    to the toolkit parsing */
-char *SectTxt[]         = {"[COORDINATES]", "[VERTICES]", "[END]",
-  			   "[PIPES]",
-                           NULL};
+char *SectTxt[] = {"[COORDINATES]", "[VERTICES]", "[END]",
+  	           "[PIPES]", NULL};
 /* INP file */
 FILE *InFile;
 
@@ -83,13 +79,11 @@ double node_x[5000];
 double node_y[5000];
 
 int main( int argc, char ** argv ) {
- int i, nnodes;
  int error;
  char line[MAXLINE];
  char wline[MAXLINE];
  int Ntokens;
- char  *tok;                /* First token of line          */
- int newsect, sect, errcode;
+ int newsect, sect;
 
  sect = -1;
  num_junctions = 0;
@@ -130,7 +124,7 @@ int main( int argc, char ** argv ) {
    {
       strcpy(wline,line);
       Ntokens = gettokens(wline);
-      printf("num tokens : %d\n", Ntokens);
+      /*printf("num tokens : %d\n", Ntokens);*/
       /* Skip blank lines and comments */
       if (Ntokens == 0) continue;
       if (*Tok[0] == ';') continue;
@@ -140,7 +134,7 @@ int main( int argc, char ** argv ) {
          {
             printf("line too long\n");
          }
-      printf("token: %s\n",Tok[0]);
+      /*printf("token: %s\n",Tok[0]);*/
    /* Check if line begins with a new section heading */
       if (*Tok[0] == '[')
       {
@@ -150,7 +144,7 @@ int main( int argc, char ** argv ) {
          newsect = findmatch(Tok[0], SectTxt);
          if (newsect >= 0)
          {
-	   printf("section: %d\n", newsect);
+	   /*printf("section: %d\n", newsect);*/
             sect = newsect;
             if (sect == 2) break;
             continue;
@@ -158,7 +152,6 @@ int main( int argc, char ** argv ) {
          else continue;
       }
 
-   /* Add to count of current component */
       switch(sect)
       {
             case 0: if(Ntokens == 3) write_node();   
@@ -172,14 +165,13 @@ int main( int argc, char ** argv ) {
    }
   
   write_remaining_pipe_shapes();
+  write_virtual_lines();
+  
   SHPClose(hPipeSHP);
   DBFClose(hPipeDBF); 
- write_virtual_lines();
   
   DBFClose(hJunctionDBF);
   SHPClose(hJunctionSHP);
-  
-  
   
   SHPClose(hTankSHP);
   DBFClose(hTankDBF);
@@ -194,12 +186,12 @@ int main( int argc, char ** argv ) {
   DBFClose(hValveDBF);
   
   ENclose(); 
+  return 0;
 }
 
 int write_remaining_pipe_shapes() {
   int i;
   SHPObject *shape;
-  int *panParts;
   double x[2], y[2];
   char *pipe_id;
   int pipe_index;
@@ -214,14 +206,14 @@ int write_remaining_pipe_shapes() {
    y[1] = 0;
    if(shape->nSHPType == SHPT_NULL) {
      SHPDestroyObject(shape);
-     printf("pipe shape null at %d\n",i);
+     /* printf("pipe shape null at %d\n",i); */
      pipe_id = (char *) DBFReadStringAttribute(hPipeDBF, i, 0);
-     printf("pipe id %s\n",pipe_id);
+     /* printf("pipe id %s\n",pipe_id); */
      ENgetlinkindex(pipe_id, &pipe_index);
      ENgetlinknodes(pipe_index, &from_node, &to_node);
-     printf("node %d to  %d #### x %f y %f - x %f y %f\n",from_node, 
+     /* printf("node %d to  %d #### x %f y %f - x %f y %f\n",from_node, 
      	    to_node, node_x[from_node], node_y[from_node],
-     node_x[to_node], node_y[to_node]);
+     node_x[to_node], node_y[to_node]);*/
      x[0] = node_x[from_node];
      y[0] = node_y[from_node];
      x[1] = node_x[to_node];
@@ -234,6 +226,7 @@ int write_remaining_pipe_shapes() {
      SHPDestroyObject(shape);
    }
  }
+ return 0;
 }
 
 /* turn virtual lines into points */
@@ -245,59 +238,51 @@ int handle_virtual_line_nodes() {
    
    ENgetcount(EN_LINKCOUNT, &num_lines);
    for(i=0; i<num_lines; i++) {
-   ENgetlinktype(i+1, &linktype);
-   switch(linktype) {
-     case EN_PIPE:
-     break;
-     default: ENgetlinknodes(i+1, &from_node, &to_node);
-       node_x[to_node] = node_x[from_node];
-       node_y[to_node] = node_y[from_node];
-     break; 
-   }   
- }
-  return 0;
+     ENgetlinktype(i+1, &linktype);
+     switch(linktype) {
+       case EN_PIPE:
+	 case EN_CVPIPE:
+       break;
+       default: ENgetlinknodes(i+1, &from_node, &to_node);
+	 node_x[to_node] = node_x[from_node];
+	 node_y[to_node] = node_y[from_node];
+       break; 
+     }   
+   }
+   return 0;
 }
 
 int write_virtual_lines() {
   /* TODO: remove superfluous nodes */
-
   int i;
   int num_lines;
   int linktype;
   
-  SHPObject *shape;
-  int *panParts;
-  double x[2], y[2];
-  char *pipe_id;
-  int pipe_index;
-  int from_node, to_node;
-  
   ENgetcount(EN_LINKCOUNT, &num_lines);    
- for(i=0; i<num_lines; i++) {
-   ENgetlinktype(i+1, &linktype);
-   switch(linktype) {
-     case EN_PIPE:
-     break;
-     case EN_PUMP: write_pump(i+1);
-     break;
-     default: write_valve(i+1);
-     break; 
-   }   
- }
-  
+  for(i=0; i<num_lines; i++) {
+    ENgetlinktype(i+1, &linktype);
+    switch(linktype) {
+      case EN_PIPE:
+      case EN_CVPIPE:
+      break;
+      case EN_PUMP: write_pump(i+1);
+      break;
+      default: write_valve(i+1);
+      break; 
+    }   
+  }
   return 0;
 }
 
 int write_pump(int index) {
   SHPObject *shape;
-  int *panParts;
   double x, y;
   int from_node, to_node;
   char string[16];
   
   ENgetlinkid(index, string);
   ENgetlinknodes(index, &from_node, &to_node);
-  printf("pump %s %d x %f y %f \n", string, index,  node_x[from_node], node_y[from_node]);
+  /* printf("pump %s %d x %f y %f \n", string, index,  node_x[from_node], node_y[from_node]); */
   x = node_x[from_node];
   y = node_y[from_node];
   shape = SHPCreateSimpleObject( SHPT_POINT, 1, &x, &y, NULL );
@@ -311,14 +296,13 @@ int write_pump(int index) {
 
 int write_valve(int index) {
   SHPObject *shape;
-  int *panParts;
   double x, y;
   int from_node, to_node;
   char string[16];
   
   ENgetlinkid(index, string);
   ENgetlinknodes(index, &from_node, &to_node);
-  printf("valve %s %d x %f y %f \n", string, index,  node_x[from_node], node_y[from_node]);
+  /* printf("valve %s %d x %f y %f \n", string, index,  node_x[from_node], node_y[from_node]); */
   x = node_x[from_node];
   y = node_y[from_node];
   shape = SHPCreateSimpleObject( SHPT_POINT, 1, &x, &y, NULL );
@@ -326,7 +310,6 @@ int write_valve(int index) {
   SHPDestroyObject(shape);
   DBFWriteStringAttribute(hValveDBF, num_valves, 0, string);
   num_valves++;
-  
   return 0;
 }
 
@@ -358,143 +341,143 @@ int write_node() {
 
 int write_vertex() {
   int linktype;
+  int index;
       
   if(strcmp(vertex_line_name, Tok[0]) != 0) {
-      ENgetlinkindex(Tok[0], &vertex_line_index);
-      if(vertex_line_index == 0) {
+      ENgetlinkindex(Tok[0], &index);
+      if(index == 0) {
 	printf("[COORDINATES]: link '%s' was not found\n",Tok[0]);
 	return 0;
       }
       if(strcmp(vertex_line_name, "")!=0) {
 	ENgetlinktype(vertex_line_index, &linktype);
 	switch(linktype) {
+	  case EN_CVPIPE:
 	  case EN_PIPE: write_pipe_shape();
 	  break;
 	} 
       }
     num_vertices = 1;
+    vertex_line_index = index;
     strcpy(vertex_line_name, Tok[0]);
   } else {
     num_vertices++;
   }
   vertex_x[num_vertices] = atof(Tok[1]);
   vertex_y[num_vertices] = atof(Tok[2]);
-  printf("write_vertex() vertex_line_index: %d line name '%s'\n",vertex_line_index, vertex_line_name);
+  /* printf("write_vertex() vertex_line_index: %d line name '%s'\n",vertex_line_index, vertex_line_name);*/
   return 0;
 }
 
 int write_junction(int index) {
-    double x, y;
-    char string[MAXLINE];
-    SHPObject   *shape;
-    int *panParts;
-     
-   x = atof(Tok[1]);
-   y = atof(Tok[2]);
-   printf("x %f y %f\n",x,y);
-    
-    ENgetnodeid(index, string);
-    printf("nodeid %s\n",string);
+  double x, y;
+  char string[MAXLINE];
+  SHPObject   *shape;
+   
+  x = atof(Tok[1]);
+  y = atof(Tok[2]);
+  /* printf("x %f y %f\n",x,y); */
   
-    shape = SHPCreateSimpleObject( SHPT_POINT, 1, 
-                             &x, &y, NULL );
-    SHPWriteObject(hJunctionSHP, -1, shape);
-    SHPDestroyObject(shape);
-    DBFWriteStringAttribute(hJunctionDBF, num_junctions, 0, string);
-    num_junctions++;
+  ENgetnodeid(index, string);
+/*  printf("nodeid %s\n",string); */
+
+  shape = SHPCreateSimpleObject( SHPT_POINT, 1, 
+			   &x, &y, NULL );
+  SHPWriteObject(hJunctionSHP, -1, shape);
+  SHPDestroyObject(shape);
+  num_junctions++;
+  return 0;
 }
 
 int write_tank(int index) {
-    double x, y;
-    char string[MAXLINE];
-    SHPObject   *shape;
-    int *panParts;
-     
-   x = atof(Tok[1]);
-   y = atof(Tok[2]);
+  double x, y;
+  char string[MAXLINE];
+  SHPObject   *shape;
+   
+  x = atof(Tok[1]);
+  y = atof(Tok[2]);
     
-    ENgetnodeid(index, string);
+  ENgetnodeid(index, string);
   
-    shape = SHPCreateSimpleObject( SHPT_POINT, 1, 
+  shape = SHPCreateSimpleObject( SHPT_POINT, 1, 
                              &x, &y, NULL );
-    SHPWriteObject(hTankSHP, -1, shape);
-    SHPDestroyObject(shape);
-    DBFWriteStringAttribute(hTankDBF, num_tanks, 0, string);
-    num_tanks++;
+  SHPWriteObject(hTankSHP, -1, shape);
+  SHPDestroyObject(shape);
+  DBFWriteStringAttribute(hTankDBF, num_tanks, 0, string);
+  num_tanks++;
+  return 0;
 }
 
 int write_reservoir(int index) {
-    double x, y;
-    char string[MAXLINE];
-    SHPObject   *shape;
-    int *panParts;
+  double x, y;
+  char string[MAXLINE];
+  SHPObject   *shape;
      
-   x = atof(Tok[1]);
-   y = atof(Tok[2]);
+  x = atof(Tok[1]);
+  y = atof(Tok[2]);
     
-   ENgetnodeid(index, string);
+  ENgetnodeid(index, string);
   
-   shape = SHPCreateSimpleObject( SHPT_POINT, 1, 
+  shape = SHPCreateSimpleObject( SHPT_POINT, 1, 
                              &x, &y, NULL );
-   SHPWriteObject(hReservoirSHP, -1, shape);
-   SHPDestroyObject(shape);
-   DBFWriteStringAttribute(hReservoirDBF, num_reservoirs, 0, string);
-   num_reservoirs++;
+  SHPWriteObject(hReservoirSHP, -1, shape);
+  SHPDestroyObject(shape);
+  DBFWriteStringAttribute(hReservoirDBF, num_reservoirs, 0, string);
+  num_reservoirs++;
+  return 0;
 }
 
 int write_null_pipe() {
-    SHPObject   *shape;
-    int *panParts;
-    int index;
-    double x[2], y[2];
+  SHPObject   *shape;
+  int index;
+  double x[2], y[2];
     
-    ENgetlinkindex(Tok[0], &index);
-    printf("linkid %s\n", Tok[0]);
-    DBFWriteStringAttribute(hPipeDBF, num_pipes, 0, Tok[0]);
-    x[0] = 0;
-    y[0] = 0;
-    x[1] = 1;
-    y[1] = 1;
-    shape = SHPCreateSimpleObject( SHPT_NULL, 2, 
+  ENgetlinkindex(Tok[0], &index);
+  /* printf("linkid %s\n", Tok[0]); */
+  DBFWriteStringAttribute(hPipeDBF, num_pipes, 0, Tok[0]);
+  x[0] = 0;
+  y[0] = 0;
+  x[1] = 1;
+  y[1] = 1;
+  shape = SHPCreateSimpleObject( SHPT_NULL, 2, 
                              x, y, NULL );
-    SHPWriteObject(hPipeSHP, -1, shape);
-    SHPDestroyObject(shape);
-    num_pipes++;
+  SHPWriteObject(hPipeSHP, -1, shape);
+  SHPDestroyObject(shape);
+  num_pipes++;
+  return 0;
 }
 
 int write_pipe_shape() {
-    double x, y;
-    char *string;
-    SHPObject   *shape;
-    int *panParts;
-    int to_node, from_node;
-    int index = vertex_line_index;
+  char *string;
+  SHPObject   *shape;
+  int to_node, from_node;
+  int index = vertex_line_index;
+  
+  ENgetlinknodes(index, &from_node, &to_node);
+  vertex_x[0] = node_x[from_node];
+  vertex_y[0] = node_y[from_node];
+  vertex_x[num_vertices+1] = node_x[to_node];
+  vertex_y[num_vertices+1] = node_y[to_node];
+  
+  do {
+    string = (char *) DBFReadStringAttribute(hPipeDBF, index, 0);
+    index--;
+  } while((strcmp(string, vertex_line_name)!=0)&&(index > 0));
+  if(index != 0) {
+    /* printf("write_pipe_shape(): linkid '%s' line_index %d\n",
+    string, vertex_line_index);*/
+    /*printf("num_vertices %d\n", num_vertices);*/
     
-    ENgetlinknodes(index, &from_node, &to_node);
-    vertex_x[0] = node_x[from_node];
-    vertex_y[0] = node_y[from_node];
-    vertex_x[num_vertices+1] = node_x[to_node];
-    vertex_y[num_vertices+1] = node_y[to_node];
-    
-    do {
-      string = (char *) DBFReadStringAttribute(hPipeDBF, index, 0);
-      index--;
-    } while((strcmp(string, vertex_line_name)!=0)&&(index > 0));
-    if(index != 0) {
-      printf("write_pipe_shape(): linkid '%s' line_index %d\n",
-      string, vertex_line_index);
-      printf("num_vertices %d\n", num_vertices);
-      
-      shape = SHPCreateSimpleObject( SHPT_ARC, num_vertices+2, 
-			       vertex_x, vertex_y, NULL );
-      SHPWriteObject(hPipeSHP, index+1, shape);
-      SHPDestroyObject(shape);
-    }
+    shape = SHPCreateSimpleObject( SHPT_ARC, num_vertices+2, 
+			     vertex_x, vertex_y, NULL );
+    SHPWriteObject(hPipeSHP, index+1, shape);
+    SHPDestroyObject(shape);
+  }
+  return 0;
 }
 
 
 int create_junction_shapefile(char *filename) {
-
   hJunctionSHP = SHPCreate(filename, SHPT_POINT);
   hJunctionDBF = DBFCreate(filename);
   if(hJunctionSHP == NULL || hJunctionDBF == NULL) {
@@ -513,10 +496,10 @@ int create_junction_shapefile(char *filename) {
   DBFAddField(hJunctionDBF, "demand", FTDouble, 16, 8);
   DBFAddField(hJunctionDBF, "pattern", FTString, 16, 0);
   num_junctions = 0;
+  return 0;
 }
 
 int create_tank_shapefile(char *filename) {
-
   hTankSHP = SHPCreate(filename, SHPT_POINT);
   hTankDBF = DBFCreate(filename);
   if(hTankSHP == NULL || hTankDBF == NULL) {
@@ -539,10 +522,10 @@ int create_tank_shapefile(char *filename) {
   DBFAddField(hTankDBF, "minimumvol", FTDouble, 16, 8);
   DBFAddField(hTankDBF, "volumecurv", FTString, 16, 0);
   num_tanks = 0;
+  return 0;
 }
 
 int create_reservoir_shapefile(char *filename) {
-
   hReservoirSHP = SHPCreate(filename, SHPT_POINT);
   hReservoirDBF = DBFCreate(filename);
   if(hReservoirSHP == NULL || hReservoirDBF == NULL) {
@@ -562,10 +545,10 @@ int create_reservoir_shapefile(char *filename) {
   DBFAddField(hReservoirDBF, "head", FTDouble, 16, 8);
   DBFAddField(hReservoirDBF, "pattern", FTString, 16, 0);
   num_reservoirs = 0;
+  return 0;
 }
 
 int create_pump_shapefile(char *filename) {
-
   hPumpSHP = SHPCreate(filename, SHPT_POINT);
   hPumpDBF = DBFCreate(filename);
   if(hPumpSHP == NULL || hPumpDBF == NULL) {
@@ -587,10 +570,10 @@ int create_pump_shapefile(char *filename) {
   DBFAddField(hPumpDBF, "properties", FTString, 200, 0);
   DBFAddField(hPumpDBF, "power_kw", FTInteger, 16,0);
   num_pumps = 0;
+  return 0;
 }
 
 int create_valve_shapefile(char *filename) {
-
   hValveSHP = SHPCreate(filename, SHPT_POINT);
   hValveDBF = DBFCreate(filename);
   if(hValveSHP == NULL || hValveDBF == NULL) {
@@ -614,10 +597,10 @@ int create_valve_shapefile(char *filename) {
   DBFAddField(hValveDBF, "setting", FTString, 16, 0);
   DBFAddField(hValveDBF, "minorloss", FTDouble, 16, 8);
   num_valves = 0;
+  return 0;
 }
 
 int create_pipe_shapefile(char *filename) {
-
   hPipeSHP = SHPCreate(filename, SHPT_ARC);
   hPipeDBF = DBFCreate(filename);
   if(hPipeSHP == NULL || hPipeDBF == NULL) {
@@ -631,6 +614,7 @@ int create_pipe_shapefile(char *filename) {
   DBFAddField(hPipeDBF, "bitcodezon", FTInteger, 20, 0);
   DBFAddField(hPipeDBF, "diameter", FTInteger, 16, 0);
   num_pipes = 0;
+  return 0;
 }
 
 int  findmatch(char *line, char *keyword[])

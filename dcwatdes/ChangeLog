@@ -1,3 +1,10 @@
+2002-09-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* inp2shp/Makefile: updated for gcc 3.2 (MinGW 2.0), optimizing
+	* inp2shp/inp2shp.h:
+	* inp2shp/inp2shp.c: worked on compiler error messages, commented out
+	printfs, checkvalves and vertices are working
+	
 2002-09-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* inp2shp/inp2shp.c: preliminary support for pumps and valves
