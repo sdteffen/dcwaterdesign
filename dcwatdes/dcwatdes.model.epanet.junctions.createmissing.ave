@@ -1,0 +1,133 @@
+' DCWatDes.Model.Epanet.Junctions.createMissing
+	
+' (c) 2001 DORSCH Consult
+
+' create the junctions that are missing in the
+' alters the junctions theme
+' no arguments, no return value: called from menu
+' requires pipes and junctions themes 
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+numSnappingRadius = dicPreferences.get("numSnappingRadius")
+if(numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+
+av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
+
+activeView = av.getActiveDoc
+if(activeView.is(View).not)then
+  exit
+end
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+' check for missing junctions
+
+numMissingJunctions = 0
+lstMissingPoints = List.make	
+		
+ftbPipes = dicFTabs.get("Pipes")
+fldPipeShape = ftbPipes.findField("Shape")
+	
+lstNodeFTabs = List.make
+lstNodeIDFields = List.make
+
+for each strNetworkFeature in dicFTabs.returnKeys
+  if(strNetworkFeature <> "Pipes")then
+    ftbNetworkFeature = dicFTabs.get(strNetworkFeature)
+    lstNodeFTabs.add(ftbNetworkFeature)
+    av.run("DCWatDes.FTab.ensureSpatialIndex", ftbNetworkFeature)
+    fldNodeID = ftbNetworkFeature.findField("dc_id")
+    lstNodeIDFields.add(fldNodeID)
+  end
+end
+
+numToGo = ftbPipes.getNumRecords
+numDone = 0
+av.showStopButton
+for each recPipe in ftbPipes
+  pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
+  lstPipeNodes = pllPipe.connect.asList.get(0)
+  lstNodesPoints = List.make
+  lstNodesPoints.add(lstPipeNodes.get(0))
+  lstNodesPoints.add(lstPipeNodes.get(lstPipeNodes.count-1))
+  for each i in 0..1
+    for each j in 0..(lstNodeFTabs.count-1)
+      ftbNodes = lstNodeFTabs.get(j)
+      ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
+      bmpNodes = ftbNodes.getSelection
+      recConnectedNode = bmpNodes.getNextSet(-1)
+      if(recConnectedNode <> -1)then
+        break
+      end      
+    end
+    if(recConnectedNode = -1)then
+      lstMissingPoints.add(lstNodesPoints.get(i)
+      numMissingJunctions = numMissingJunctions+1	 	
+    end     
+  end
+  numDone = numDone+1
+  if(av.setStatus(numDone/numToGo * 100).not)then
+    av.clearStatus
+    exit
+  end
+end
+
+if(numMissingJunctions = 0)then
+  MsgBox.info("The model is not missing any Junctions.","DC Water Design")
+  exit
+end
+	
+' ask the user if the nodes should be added
+
+strQuestion = "This will add"++numMissingJunctions.asString++"missing Junctions to your Epanet Hydraulic Model."+NL
+strQuestion = strQuestion+"Running 'Make EPANET Model' is recommended after the Junctions"+NL
+strQuestion = strQuestion+"have been added."+NL	
+strQuestion = strQuestion+"Continue with adding the Junctions?"
+blnContinue = MsgBox.longYesNo(strQuestion, "DC Water Design Extension",true)
+             
+if(blnContinue.not)then
+  'user selected No
+  exit
+end
+
+ftbJunctions = dicFTabs.get("Junctions")
+fldShape = ftbJunctions.findField("Shape")
+fldID = ftbJunctions.findField("dc_id")
+
+ftbJunctions.setEditable(true)
+for each pntJunction in lstMissingJunctions
+  recJunction = ftbJunctions.addRecord
+  ftbJunctions.setValue(fldShape, recJunction, pntJunction)
+  strID = (ftbJunctions.getNumRecords+1).asString	
+  ftbJunctions.setValue(fldID, recJunction, strID) 			
+end		
+ftbJunctions.setEditable(false)					
