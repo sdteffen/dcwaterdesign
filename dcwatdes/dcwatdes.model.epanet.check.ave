@@ -27,6 +27,14 @@ av.run("DCWatDes.Model.Epanet.ensureAliases",nil)
 
 lstFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
 
+extWatDes = Extension.find("DC Water Design")
+dicPreferences = extWatDes.getPreferences
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if(numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+
 numToGo = lstFTabs.count
 numCompleted = 0
 numDoubleIDs = 0
@@ -34,7 +42,7 @@ numDoubleIDs = 0
 
 blnErrorOccurred = false
 
-lstThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
 
 ' check for NULL shapes
 
@@ -56,7 +64,50 @@ for each ftbFeature in lstFTabs
   end
 end
 
-for each thmFeature in lstThemes
+' check for pipes shorter than the snapping radius
+
+ftbPipes = lstFTabs.get("Pipes")
+strSnappingRadius = dicPreferences.get("strSnappingRadius")
+strQuery = "[Shape].returnLength <"++strSnappingRadius
+bmpSelection = ftbPipes.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbPipes.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"pipes that are shorter than the snapping radius."+NL+"Records in question are selected now.","DC Water Design")
+  ftbPipes.updateSelection
+  exit
+end
+
+
+' check for orphan nodes
+
+' TODO: this should actually check for end nodes
+
+thmPipes = dicThemes.get("Pipes")
+
+for each strFeature in {"Junctions", "Valves", "Reservoirs", "Tanks", "Pumps"}
+  thmFeature = dicThemes.get(strFeature)
+  if(thmFeature <> nil)then
+    thmFeature.selectByTheme(thmPipes, #FTAB_RELTYPE_ISWITHINDISTANCEOF, numSnappingRadius, #VTAB_SELTYPE_NEW)
+    ftbFeature = thmFeature.getFTab
+    if(ftbFeature.getSelection.count <> ftbFeature.getNumRecords)then
+      numOrphanNodes = ftbFeature.getNumRecords - ftbFeature.getSelection.count
+      if(MsgBox.yesNo("The"++strFeature++"Theme contains"++numOrphanNodes.asString++"unconnected nodes."+NL+
+      "Delete them?","DC Water Design",true))then
+          ftbFeature.getSelection.not
+          ftbFeature.getSelection.updateSelection
+          ftbFeature.setEditable
+          ftbFeature.removeRecords(ftbFeature.getSelection)
+          ftbFeature.setEditable(false)
+      end
+    end  
+  end
+end
+  
+for each thmFeature in dicThemes
   thmFeature.clearSelection  
 end 
 

@@ -1,3 +1,17 @@
+2001-10-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	* installer/dc_water_design_extension.nsi: added systemcall.dll,
+	a wrapper that allows to wait for EPANET returning
+	* dcwatdes.model.epanet.check: detecting orphan nodes
+	now (can still be enhanced)
+	* dcwatdes.model.epanet.junctions.createmissing: removing duplicate
+	nodes now, not creating several junctions on top of each other any
+	more (Thanks to Philipp Magiera)
+	
+2001-10-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: checking for pipes shorter than
+	the snapping radius now.
+	
 2001-10-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dialogs/dcwatdes.dialog.setup.ded:

@@ -73,6 +73,15 @@ end
 numToGo = ftbPipes.getNumRecords
 numDone = 0
 av.showStopButton
+
+lstPurgeBitmaps = List.make
+for each j in 0..(lstNodeFTabs.count-1)
+  ftbNodes = lstNodeFTabs.get(j)
+  bmpPurge = ftbNodes.getSelection.clone
+  bmpPurge.clearAll
+  lstPurgeBitmaps.add(bmpPurge)
+end
+
 for each recPipe in ftbPipes
   pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
   lstPipeNodes = pllPipe.connect.asList.get(0)
@@ -80,18 +89,48 @@ for each recPipe in ftbPipes
   lstNodesPoints.add(lstPipeNodes.get(0))
   lstNodesPoints.add(lstPipeNodes.get(lstPipeNodes.count-1))
   for each i in 0..1
+    numNodes = 0
     for each j in 0..(lstNodeFTabs.count-1)
       ftbNodes = lstNodeFTabs.get(j)
       ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
       bmpNodes = ftbNodes.getSelection
       recConnectedNode = bmpNodes.getNextSet(-1)
       if(recConnectedNode <> -1)then
-        break
+        if(numNodes=0)then
+          bmpNodes.clear(recConnectedNode)
+        end
+        numNodes = numNodes + bmpNodes.count
+        bmpPurge = lstPurgeBitmaps.get(j)
+        bmpPurge.or(bmpNodes)          
+      end           
+    end
+    if(numNodes > 1)then
+      'System.echo("WARNING: Found"++numNodes.asString++"Nodes on top of each other. Removing"++(numNodes-1).asString)
+      for each j in 0..(lstNodeFTabs.count-1)
+        ftbNodes = lstNodeFTabs.get(j)
+        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
+         bmpNodes = ftbNodes.getSelection
+      recConnectedNode = bmpNodes.getNextSet(-1)
+      if(recConnectedNode <> -1)then
+        numNodes = numNodes + bmpNodes.count
       end      
+        
+      end
     end
     if(recConnectedNode = -1)then
-      lstMissingPoints.add(lstNodesPoints.get(i))
-      numMissingJunctions = numMissingJunctions+1	 	
+      ' check if junction has been added to the list before
+      pntMissingJunction = lstNodesPoints.get(i)
+      blnReallyMissing = true
+      for each pntJunction in lstMissingPoints
+        if(pntJunction.intersects(pntMissingJunction))then      
+          blnReallyMissing = false
+          break
+        end
+      end
+      if(blnReallyMissing)then
+        lstMissingPoints.add(pntMissingJunction)
+        numMissingJunctions = numMissingJunctions + 1
+      end
     end     
   end
   numDone = numDone+1
@@ -101,10 +140,38 @@ for each recPipe in ftbPipes
   end
 end
 
+numDuplicates = 0
+for each j in 0..(lstNodeFTabs.count-1)
+  numDuplicates = numDuplicates + lstPurgeBitmaps.get(j).count
+end
+
+if(numDuplicates <> 0)then
+  strQuestion = "Do you want to remove the "++numDuplicates.asString++"duplicate Nodes?"+NL
+  strQuestion = strQuestion+"Running 'Make EPANET Model' is recommended after removing the Nodes."+NL
+  strQuestion = strQuestion+"You may loose attributes this way."+NL	
+  strQuestion = strQuestion+"Continue with removing the Nodes?"
+  blnContinue = MsgBox.longYesNo(strQuestion, "DC Water Design Extension",true)
+               
+  if(blnContinue.not)then
+    'user selected No
+    exit
+  end
+  
+  for each j in 0..(lstNodeFTabs.count-1)
+    ftbNodes = lstNodeFTabs.get(j)
+    bmpPurge = lstPurgeBitmaps.get(j)
+    ftbNodes.setEditable(true)
+    ftbNodes.removeRecords(bmpPurge)
+    ftbNodes.setEditable(false)
+  end
+  
+end
+
 if(numMissingJunctions = 0)then
   MsgBox.info("The model is not missing any Junctions.","DC Water Design")
   exit
 end
+
 	
 ' ask the user if the nodes should be added
 
