@@ -1,3 +1,7 @@
+2001-11-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.file.waitfor: fixed kernel32.dll problem for non-nt win32
+	
 2001-10-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.importinpfile: importing pipes and junctions
