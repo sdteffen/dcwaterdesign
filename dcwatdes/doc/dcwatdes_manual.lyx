@@ -97,6 +97,13 @@ The DC Water Design Extension is an Extension to ESRI's ArcView GIS software.
 What's new?
 \layout Paragraph
 
+Version 2.04
+\layout Itemize
+
+Customizable timeout (Thanks to Melissa Henderson of Lockwood, Andrews &
+ Newnam, Inc.)
+\layout Paragraph
+
 Version 2.03
 \layout Itemize
 
@@ -772,6 +779,11 @@ ble in this dialog.
 The backdrop resolution specifies the resolution of the backdrop map if
  you write your EPANET files with backdrop maps.
  Set to a higher resolution if required.
+\layout Standard
+
+The command timeout specifies the time in seconds for which the extension
+ will wait when creating epanet files or running epanet calculations.
+ If the EPANET run doesn't finish in time, there'll be an error message.
 \layout Paragraph
 
 EPANET Tables 

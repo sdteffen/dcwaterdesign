@@ -89,6 +89,7 @@ dicGerman.add("Create Missing Fields", "Fehlende Felder erzeugen")
 dicGerman.add("Backdrop Resolution", "Hintergrund Auflösung")
 dicGerman.add("Pattern", "Muster")
 dicGerman.add("Result Loader", "Ergebnislader")
+dicGerman.add("Command Timeout", "Kommando Wartezeit")
 
 _dcwDicDictionaries.add("de",dicGerman)
 

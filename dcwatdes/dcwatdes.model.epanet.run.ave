@@ -54,13 +54,20 @@ System.execute(strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"txt").q
 
 ' wait for the result file appearing
 
-if(av.run("DCWatDes.File.waitFor", {flnOut, 30}).not)then
+strTimeout = dicPreferences.get("strCommandTimeout")
+if((strTimeout <> nil)and(strTimeout.isNumber))then
+  numTimeout = strTimeout.asNumber
+else
+  numTimeout = 30  
+end
+
+if(av.run("DCWatDes.File.waitFor", {flnOut, numTimeout}).not)then
   exit
 end
 
 twinReport = TextWin.make(flnOut, "DC Water Design")
 
-if(av.run("DCWatDes.File.waitFor", {flnBin, 30}).not)then
+if(av.run("DCWatDes.File.waitFor", {flnBin, numTimeout}).not)then
   exit
 end
 
@@ -95,7 +102,7 @@ System.execute(strCmd)
 
 ' wait for tables
 for each flnResult in {flnLinkResults, flnNodeResults}
-  if(av.run("DCWatDes.File.waitFor", {flnResult, 30}).not)then
+  if(av.run("DCWatDes.File.waitFor", {flnResult, numTimeout}).not)then
     exit
   end
 end

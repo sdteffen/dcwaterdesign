@@ -695,9 +695,16 @@ else
   sleep=nil
 end
 
+strTimeout = dicPreferences.get("strCommandTimeout")
+if((strTimeout <> nil)and(strTimeout.isNumber))then
+  numTimeout = strTimeout.asNumber
+else
+  numTimeout = 30  
+end
+
 timeStart=Date.now
 while(File.exists(flnInp).not)
-  if((Date.now-timeStart).asSeconds>20)then
+  if((Date.now-timeStart).asSeconds>numTimeout)then
     MsgBox.info("XSLT Transformation failed. Check your data.","DC Water Design Extension")
     exit
   end
@@ -708,7 +715,7 @@ end
 
 timeStart=Date.now
 while(File.isWritable(flnInp).not)
-  if((Date.now-timeStart).asSeconds>20)then
+  if((Date.now-timeStart).asSeconds>numTimeout)then
     MsgBox.info("Couldn't open Epanet Input file. Check your data.","DC Water Design Extension")
     exit
   end

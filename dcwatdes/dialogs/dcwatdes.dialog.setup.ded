@@ -1,0 +1,846 @@
+/3.2
+(ODB.1
+	Dependencies:	"$AVEXT/dialog.avx\n"
+	FirstRootClassName:	"DEd"
+	Roots:	2
+	Roots:	108
+	Roots:	112
+	Version:	32
+)
+
+(DEd.2
+	Name:	"DCWatDes.Dialog.Setup"
+	CreationDate:	"Samstag, 18. November 2000 11:44:16"
+	GUIName:	"DialogEditor"
+	Win:	3
+	CSMgr:	4
+	DocExts:	6
+	DocExts:	7
+	Graphics:	8
+	Dpy:	57
+	Dialog:	60
+	DialogExtent:	107
+	Compiled:	1
+)
+
+(DocWin.3
+	Owner:	2
+	Open:	1
+	X:	-4
+	Y:	-4
+	W:	1410
+	H:	910
+)
+
+(CSMgr.4
+	Client:	5
+)
+
+(CSClient.5
+	Client:	6
+	ReqName:	"ClientNfy"
+)
+
+(PanMgr.6
+	Doc:	2
+)
+
+(DocAct.7
+	Doc:	2
+)
+
+(GList.8
+	Child:	9
+	Child:	13
+	Child:	17
+	Child:	20
+	Child:	23
+	Child:	26
+	Child:	30
+	Child:	33
+	Child:	36
+	Child:	39
+	Child:	42
+	Child:	47
+	Child:	52
+	Dpy:	57
+	FormatNumb:	59
+)
+
+(GCtrl.9
+	Name:	"cbxLanguage"
+	Bounds:	10
+	ControlConstraints:	0x55
+	Control:	11
+	Editable:	1
+)
+
+(RectD.10
+	Left:	0.27500000000000
+	Top:	6.95000000000000
+	Right:	2.03333333333333
+	Bottom:	6.13333333333333
+)
+
+(AVCBBox.11
+	InternalName:	"cbxLanguage"
+	UseGraphicNfy:	1
+	Tag:	"Language"
+	NextControl:	12
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Language"
+)
+
+(Nil.12
+)
+
+(GCtrl.13
+	Name:	"txlEpanet"
+	Bounds:	14
+	ControlConstraints:	0x55
+	Control:	15
+	Editable:	1
+)
+
+(RectD.14
+	Left:	0.26666666666667
+	Top:	6.69166666666667
+	Right:	3.73333333333333
+	Bottom:	6.52500000000000
+)
+
+(TextLine.15
+	InternalName:	"txlEpanet"
+	UseGraphicNfy:	1
+	Tag:	"Location of epanet2d.exe"
+	Label:	"Location of epanet2d.exe"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	16
+	NextControl:	12
+)
+
+(AVEnum.16
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(GCtrl.17
+	Name:	"btnBrowseEpanet"
+	Bounds:	18
+	ControlConstraints:	0x55
+	Control:	19
+	Editable:	1
+)
+
+(RectD.18
+	Left:	3.81666666666667
+	Top:	6.74166666666667
+	Right:	4.55833333333333
+	Bottom:	6.50000000000000
+)
+
+(LButn.19
+	InternalName:	"btnBrowseEpanet"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(GCtrl.20
+	Name:	"txlSabcmd"
+	Bounds:	21
+	ControlConstraints:	0x55
+	Control:	22
+	Editable:	1
+)
+
+(RectD.21
+	Left:	0.27500000000000
+	Top:	6.38333333333333
+	Right:	3.73333333333333
+	Bottom:	6.21666666666667
+)
+
+(TextLine.22
+	InternalName:	"txlSabcmd"
+	UseGraphicNfy:	1
+	Tag:	"Location of testXSLT.exe"
+	Label:	"Location of testXSLT.exe"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	16
+	NextControl:	12
+)
+
+(GCtrl.23
+	Name:	"btnBrowseSabcmd"
+	Bounds:	24
+	ControlConstraints:	0x55
+	Control:	25
+	Editable:	1
+)
+
+(RectD.24
+	Left:	3.80833333333333
+	Top:	6.42500000000000
+	Right:	4.55833333333333
+	Bottom:	6.17500000000000
+)
+
+(LButn.25
+	InternalName:	"btnBrowseSabcmd"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(GCtrl.26
+	Name:	"txlXslt"
+	Bounds:	27
+	ControlConstraints:	0x55
+	Control:	28
+	Editable:	1
+)
+
+(RectD.27
+	Left:	0.28333333333333
+	Top:	6.03333333333333
+	Right:	3.74166666666667
+	Bottom:	5.86666666666667
+)
+
+(TextLine.28
+	InternalName:	"txlXslt"
+	UseGraphicNfy:	1
+	Tag:	"Location of xml2net.xsl"
+	Label:	"Location of xml2net.xsl"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	29
+	NextControl:	12
+)
+
+(AVEnum.29
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(GCtrl.30
+	Name:	"btnBrowseXslt"
+	Bounds:	31
+	ControlConstraints:	0x55
+	Control:	32
+	Editable:	1
+)
+
+(RectD.31
+	Left:	3.80833333333333
+	Top:	6.08333333333333
+	Right:	4.54166666666667
+	Bottom:	5.85000000000000
+)
+
+(LButn.32
+	InternalName:	"btnBrowseXslt"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(GCtrl.33
+	Name:	"btnOK"
+	Bounds:	34
+	ControlConstraints:	0x55
+	Control:	35
+	Editable:	1
+)
+
+(RectD.34
+	Left:	0.47500000000000
+	Top:	5.16666666666667
+	Right:	1.50833333333333
+	Bottom:	4.94166666666667
+)
+
+(LButn.35
+	InternalName:	"btnOK"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"OK"
+	Click:	"DCWatDes.Dialog.Setup.btnOK.click"
+)
+
+(GCtrl.36
+	Name:	"btnCancel"
+	Bounds:	37
+	ControlConstraints:	0x55
+	Control:	38
+	Editable:	1
+)
+
+(RectD.37
+	Left:	1.90000000000000
+	Top:	5.15000000000000
+	Right:	2.93333333333333
+	Bottom:	4.93333333333333
+)
+
+(LButn.38
+	InternalName:	"btnCancel"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Cancel"
+	Click:	"DCWatDes.Dialog.Setup.btnCancel.click"
+)
+
+(GCtrl.39
+	Name:	"aLabelButton10"
+	Bounds:	40
+	ControlConstraints:	0x55
+	Control:	41
+	Editable:	1
+)
+
+(RectD.40
+	Left:	3.38333333333333
+	Top:	5.16666666666667
+	Right:	4.40000000000000
+	Bottom:	4.94166666666667
+)
+
+(LButn.41
+	InternalName:	"aLabelButton10"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Help"
+	Click:	"DCWatDes.Dialog.Setup.help"
+)
+
+(GCtrl.42
+	Name:	"txlSnappingRadius"
+	Bounds:	43
+	ControlConstraints:	0x55
+	Control:	44
+	Editable:	1
+)
+
+(RectD.43
+	Left:	0.29166666666667
+	Top:	5.70833333333333
+	Right:	2.35833333333333
+	Bottom:	5.54166666666667
+)
+
+(TextLine.44
+	InternalName:	"txlSnappingRadius"
+	UseGraphicNfy:	1
+	Tag:	"Snapping Radius"
+	Label:	"Snapping Radius"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	45
+	NextControl:	46
+)
+
+(AVEnum.45
+	Name:	"TEXTLINE_TYPE_REAL"
+)
+
+(Nil.46
+)
+
+(GCtrl.47
+	Name:	"txlBackdropResolution"
+	Bounds:	48
+	ControlConstraints:	0x55
+	Control:	49
+	Editable:	1
+)
+
+(RectD.48
+	Left:	2.44166666666667
+	Top:	5.69166666666667
+	Right:	4.51666666666667
+	Bottom:	5.52500000000000
+)
+
+(TextLine.49
+	InternalName:	"txlBackdropResolution"
+	UseGraphicNfy:	1
+	Tag:	"Backdrop Resolution"
+	Text:	"96"
+	Label:	"Backdrop Resolution"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	50
+	NextControl:	51
+)
+
+(AVEnum.50
+	Name:	"TEXTLINE_TYPE_INTEGER"
+)
+
+(Nil.51
+)
+
+(GCtrl.52
+	Name:	"txlCommandTimeout"
+	Bounds:	53
+	ControlConstraints:	0x55
+	Control:	54
+	Editable:	1
+)
+
+(RectD.53
+	Left:	0.29166666666667
+	Top:	5.45000000000000
+	Right:	2.35833333333333
+	Bottom:	5.28333333333333
+)
+
+(TextLine.54
+	InternalName:	"txlCommandTimeout"
+	UseGraphicNfy:	1
+	Tag:	"Command Timeout"
+	Label:	"Command Timeout"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	55
+	NextControl:	56
+)
+
+(AVEnum.55
+	Name:	"TEXTLINE_TYPE_INTEGER"
+)
+
+(Nil.56
+)
+
+(PageDpy.57
+	Top:	7.33333333333333
+	Right:	11.69166666666667
+	ReportUnits:	1
+	Units:	1
+	Scale:	58
+	ZoomRight:	11.69166666666667
+	ZoomTop:	7.33333333333333
+	GridSpacingX:	0.10000000000000
+	GridSpacingY:	0.10000000000000
+)
+
+(Numb.58
+	N:	120.00000000000000
+)
+
+(Numb.59
+)
+
+(AVDLog.60
+	Name:	"DCWatDes.Dialog.Setup"
+	X:	26
+	Y:	66
+	W:	530
+	H:	258
+	ConstrainedControlNames:	61
+	ConstrainedControlNames:	62
+	ConstrainedControlNames:	63
+	ConstrainedControlNames:	64
+	ConstrainedControlNames:	65
+	ConstrainedControlNames:	66
+	Constraints:	67
+	Constraints:	68
+	Constraints:	69
+	Constraints:	70
+	Constraints:	71
+	Constraints:	72
+	Server:	56
+	ControlPanel:	73
+	Title:	"Setup"
+	EscapeEnabled:	1
+	Resizable:	1
+	AlwaysOnTop:	1
+	HasTitleBar:	1
+	Closeable:	1
+	Open:	"DCWatDes.Dialog.Setup.initialize"
+	DefaultButton:	106
+)
+
+(AVStr.61
+	S:	"btnBrowseEpanet"
+)
+
+(AVStr.62
+	S:	"btnBrowseSabcmd"
+)
+
+(AVStr.63
+	S:	"btnBrowseXslt"
+)
+
+(AVStr.64
+	S:	"btnOK"
+)
+
+(AVStr.65
+	S:	"btnCancel"
+)
+
+(AVStr.66
+	S:	"aLabelButton10"
+)
+
+(Numb.67
+	N:	85.00000000000000
+)
+
+(Numb.68
+	N:	85.00000000000000
+)
+
+(Numb.69
+	N:	85.00000000000000
+)
+
+(Numb.70
+	N:	85.00000000000000
+)
+
+(Numb.71
+	N:	85.00000000000000
+)
+
+(Numb.72
+	N:	85.00000000000000
+)
+
+(CPanel.73
+	Child:	74
+	Child:	75
+	Child:	77
+	Child:	78
+	Child:	80
+	Child:	81
+	Child:	83
+	Child:	84
+	Child:	85
+	Child:	86
+	Child:	87
+	Child:	89
+	Child:	91
+	ResBox:	93
+	ResBox:	94
+	ResBox:	95
+	ResBox:	96
+	ResBox:	97
+	ResBox:	98
+	ResBox:	99
+	ResBox:	100
+	ResBox:	101
+	ResBox:	102
+	ResBox:	103
+	ResBox:	104
+	ResBox:	105
+	Listening:	1
+)
+
+(AVCBBox.74
+	InternalName:	"cbxLanguage"
+	Tag:	"Language"
+	NextControl:	56
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Language"
+)
+
+(TextLine.75
+	InternalName:	"txlEpanet"
+	Tag:	"Location of epanet2d.exe"
+	Label:	"Location of epanet2d.exe"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	76
+	NextControl:	56
+)
+
+(AVEnum.76
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(LButn.77
+	InternalName:	"btnBrowseEpanet"
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(TextLine.78
+	InternalName:	"txlSabcmd"
+	Tag:	"Location of testXSLT.exe"
+	Label:	"Location of testXSLT.exe"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	79
+	NextControl:	56
+)
+
+(AVEnum.79
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(LButn.80
+	InternalName:	"btnBrowseSabcmd"
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(TextLine.81
+	InternalName:	"txlXslt"
+	Tag:	"Location of xml2net.xsl"
+	Label:	"Location of xml2net.xsl"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	82
+	NextControl:	56
+)
+
+(AVEnum.82
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(LButn.83
+	InternalName:	"btnBrowseXslt"
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(LButn.84
+	InternalName:	"btnOK"
+	Tag:	"Browse"
+	Label:	"OK"
+	Click:	"DCWatDes.Dialog.Setup.btnOK.click"
+)
+
+(LButn.85
+	InternalName:	"btnCancel"
+	Tag:	"Browse"
+	Label:	"Cancel"
+	Click:	"DCWatDes.Dialog.Setup.btnCancel.click"
+)
+
+(LButn.86
+	InternalName:	"aLabelButton10"
+	Tag:	"Browse"
+	Label:	"Help"
+	Click:	"DCWatDes.Dialog.Setup.help"
+)
+
+(TextLine.87
+	InternalName:	"txlSnappingRadius"
+	Tag:	"Snapping Radius"
+	Label:	"Snapping Radius"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	88
+	NextControl:	56
+)
+
+(AVEnum.88
+	Name:	"TEXTLINE_TYPE_REAL"
+)
+
+(TextLine.89
+	InternalName:	"txlBackdropResolution"
+	Tag:	"Backdrop Resolution"
+	Text:	"96"
+	Label:	"Backdrop Resolution"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	90
+	NextControl:	56
+)
+
+(AVEnum.90
+	Name:	"TEXTLINE_TYPE_INTEGER"
+)
+
+(TextLine.91
+	InternalName:	"txlCommandTimeout"
+	Tag:	"Command Timeout"
+	Label:	"Command Timeout"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	92
+	NextControl:	56
+)
+
+(AVEnum.92
+	Name:	"TEXTLINE_TYPE_INTEGER"
+)
+
+(RectD.93
+	Left:	10.00000000000000
+	Top:	105.00000000000000
+	Right:	221.00000000000000
+	Bottom:	7.00000000000000
+)
+
+(RectD.94
+	Left:	9.00000000000000
+	Top:	58.00000000000000
+	Right:	425.00000000000000
+	Bottom:	38.00000000000000
+)
+
+(RectD.95
+	Left:	435.00000000000000
+	Top:	61.00000000000000
+	Right:	524.00000000000000
+	Bottom:	32.00000000000000
+)
+
+(RectD.96
+	Left:	10.00000000000000
+	Top:	95.00000000000000
+	Right:	425.00000000000000
+	Bottom:	75.00000000000000
+)
+
+(RectD.97
+	Left:	434.00000000000000
+	Top:	100.00000000000000
+	Right:	524.00000000000000
+	Bottom:	70.00000000000000
+)
+
+(RectD.98
+	Left:	11.00000000000000
+	Top:	137.00000000000000
+	Right:	426.00000000000000
+	Bottom:	117.00000000000000
+)
+
+(RectD.99
+	Left:	434.00000000000000
+	Top:	139.00000000000000
+	Right:	522.00000000000000
+	Bottom:	111.00000000000000
+)
+
+(RectD.100
+	Left:	34.00000000000000
+	Top:	248.00000000000000
+	Right:	158.00000000000000
+	Bottom:	221.00000000000000
+)
+
+(RectD.101
+	Left:	205.00000000000000
+	Top:	249.00000000000000
+	Right:	329.00000000000000
+	Bottom:	223.00000000000000
+)
+
+(RectD.102
+	Left:	383.00000000000000
+	Top:	248.00000000000000
+	Right:	505.00000000000000
+	Bottom:	221.00000000000000
+)
+
+(RectD.103
+	Left:	12.00000000000000
+	Top:	176.00000000000000
+	Right:	260.00000000000000
+	Bottom:	156.00000000000000
+)
+
+(RectD.104
+	Left:	270.00000000000000
+	Top:	178.00000000000000
+	Right:	519.00000000000000
+	Bottom:	158.00000000000000
+)
+
+(RectD.105
+	Left:	12.00000000000000
+	Top:	207.00000000000000
+	Right:	260.00000000000000
+	Bottom:	187.00000000000000
+)
+
+(Nil.106
+)
+
+(RectD.107
+	Left:	0.19166666666667
+	Top:	7.00833333333333
+	Right:	4.60833333333333
+	Bottom:	4.85833333333333
+)
+
+(SEd.108
+	Name:	"DCWatDes.i18n.returnTranslation"
+	Creator:	"sdteffen"
+	CreationDate:	"Samstag, 18. November 2000 11:35:39"
+	GUIName:	"Script"
+	Win:	109
+	CSMgr:	110
+	DocExts:	111
+	Source:	"' DCWatDes.i18n.returnTranslation\n\n' (c) 2000 DORSCH Consult\n' returns a translation of a string from the localization dictionary\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warr
+anty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\n' expects the string to be translated as the argument\n' returns the translation or the string if no translation\n' is available\n\n'typecheck arguments\nif( self.getClass.getC
+lassName<>\"String\")then\n  MsgBox.error(\"DCWatDes.i18n.returnTranslation:\"+NL+\"Expecting one argument: strToBeTranslated\",\"DC Water Design Extension\")\n  exit\nend\n\nstrToBeTranslated = self\n\nextdcw = Extension.find(\"DC Water Design\")\nif(extdcw <>nil)then\n  dicPreferences = extdcw.getPreferences\nelse\n  return strToBeTranslated\n'  MsgBox.error(\"DCWatDes.i18n.returnTranslation: Can't find the DC Water Design Extension\", \"DC Water Design\")\nend\n\nstrLanguage = dicPreferences.get(\"strLanguage\")\n\nif(strLanguage=\"en\")t
+hen\n  ' if the language is english, no translation is needed\n  return strToBeTranslated\nelse\n  ' translation from dictionary\n    if(_dcwDicDictionaries <> nil)then\n      dicTranslations = _dcwDicDictionaries.get(strLanguage)\n      if(dicTranslations = nil)then\n        return strToBeTranslated\n      end \n      strTranslation = dicTranslations.get(strToBeTranslated)\n      if(strTranslation = nil)then\n        strTranslation = strToBeTranslated\n        System.echo(\"Missing Translation:\"++strToBeTranslated)\n    
+  end\n      return strTranslation\n    else\n      return strToBeTranslated\n    end\nend"
+	SearchStr:	"mms"
+	FontSize:	1
+)
+
+(DocWin.109
+	Owner:	108
+	X:	-4
+	Y:	-4
+	W:	1410
+	H:	910
+)
+
+(CSMgr.110
+)
+
+(DocAct.111
+	Doc:	108
+)
+
+(SEd.112
+	Name:	"DCWatDes.i18n.translateExtensionMenus"
+	CreationDate:	"Donnerstag, 11. Januar 2001 14:59:03"
+	GUIName:	"Script"
+	Win:	113
+	CSMgr:	114
+	DocExts:	115
+	Source:	"' DCWatDes.i18n.translateExtensionMenus\n\n' (c) 2001 DORSCH Consult\n' localizes all the menus of the extension\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warranty of\n' MERCHANTAB
+ILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\nextDCWatDes = Extension.find(\"DC Water Design\")\ndicPreferences = Dictionary.make(1)\nif(extDCWatDes <> nil)then\n  dicPreferences = extDCWatDes.getPreferences\nend\n\nfor each i in 0 .. (extDCWatD
+es.count - 1)\n  objExtension = extDCWatDes.get(i)\n  if(objExtension.is(Menu))then\n    lstControls = objExtension.getControls\n    for each ctrlItem in lstControls\n      if(ctrlItem.is(Space).not)then\n        strTag = ctrlItem.getTag\n        if(strTag <> nil)then\n          strTranslation = av.run(\"DCWatDes.i18n.returnTranslation\", strTag)\n          ctrlItem.setLabel(strTranslation)\n        end\n      end\n    end\n  end\nend\n"
+)
+
+(DocWin.113
+	Owner:	112
+	X:	14
+	Y:	12
+	W:	721
+	H:	879
+)
+
+(CSMgr.114
+)
+
+(DocAct.115
+	Doc:	112
+)
+

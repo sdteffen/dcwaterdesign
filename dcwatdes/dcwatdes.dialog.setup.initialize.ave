@@ -106,3 +106,14 @@ if(dicPreferences <> nil)then
 end
 txlBackdropResolution = dlgSetup.findByName("txlBackdropResolution")
 txlBackdropResolution.setText(strBackdropResolution)
+
+'setup the command timeout
+strCommandTimeout="20"
+if(dicPreferences <> nil)then
+  strCommandTimeout = dicPreferences.get("strCommandTimeout")
+  if(strCommandTimeout = nil)then
+    strCommandTimeout = "20"
+  end
+end
+txlCommandTimeout = dlgSetup.findByName("txlCommandTimeout")
+txlCommandTimeout.setText(strCommandTimeout)
