@@ -92,6 +92,7 @@ dicGerman.add("Result Loader", "Ergebnislader")
 dicGerman.add("Command Timeout", "Kommando Wartezeit")
 dicGerman.add("Import EPANET Inp File", "EPANET Inp Datei importieren")
 dicGerman.add("Import Binary Result File", "Binaere EPANER Ergebnisdatei importieren")
+dicGerman.add("Skeletonize Model", "Modell skeletieren")
 
 _dcwDicDictionaries.add("de",dicGerman)
 

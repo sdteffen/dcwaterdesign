@@ -1,3 +1,9 @@
+2002-11-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.skeletonize:
+	* dcwatdes.i18n.createdictionaries: added function to
+	remove superfluous vertices from a model
+	
 2002-11-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.junctions.createmissing: fix for
