@@ -1,6 +1,7 @@
-
-LINKOPT	=	-L. -lepanet2vc -ggdb
-CFLAGS	=	-march=pentium -mms-bitfields -ggdb -O2 -Wall
+# for debugging add -ggdb
+LINKOPT	=	-L. -lepanet2vc
+# for debugging add -ggdb
+CFLAGS	=	-march=pentium -mms-bitfields -O2 -Wall
 
 default:	all
 

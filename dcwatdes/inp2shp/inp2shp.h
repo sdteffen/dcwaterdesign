@@ -1,6 +1,6 @@
 /* inp2shp.h convert EPANET INP files to Shapefiles
   
-  (c) 2002 DORSCH Consult 
+  (c) 2002, 2005 DORSCH Consult 
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,9 +22,16 @@
 #define   SEPSTR    " \t\n\r"  /* Token separator characters */
 #define   MAXTOKS   40       /* Max. items per line of input */
 #define UCHAR(x) (((x) >= 'a' && (x) <= 'z') ? ((x)&~32) : (x))
+/* #define DEBUG 1 */
+#define MAXNUMNODES 5000
 
-int write_remaining_pipe_shapes();
-int handle_virtual_line_nodes();
+void remove_shp(char *shapefile);
+int str_is_shp(char *str);
+void initialize();
+void exit_inp2shp(int error);
+void write_remaining_pipe_shapes();
+void handle_virtual_line_nodes();
+void print_statistics();
 int write_virtual_lines();
 int write_pump(int index);
 int write_valve(int index);
@@ -35,7 +42,7 @@ int write_tank(int index);
 int write_reservoir(int index);
 int write_null_pipe();
 int write_pipe_shape();
-int create_junction_shapefile(char *filename);
+int create_junction_shapefile();
 int create_tank_shapefile(char *filename);
 int create_reservoir_shapefile(char *filename);
 int create_pump_shapefile(char *filename);

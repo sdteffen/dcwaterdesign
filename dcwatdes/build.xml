@@ -4,20 +4,23 @@
 <project name="DC Water Design" basedir="." default="DCWatDesDistribution">
   <!-- configuration -->
   
-  <!-- Custom DC Water Design stylesheets -->
-  <property name="dcwaterdesign_version" value="2.10" />
+  <property name="dcwaterdesign_version" value="2.11" />
   
   <target name="DCWatDesDistribution" id="DCWaterDesignDistribution">
-    <zip destfile="dcwaterdesign-src-${dcwaterdesign_version}.zip">
-      <zipfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+    <tar destfile="dcwaterdesign-src-${dcwaterdesign_version}.tar">
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
         "dcwatdes2.apr,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />
-      <zipfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
         "INSTALL,NEWS,**/README,**/.url" />
-      <zipfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
         "doc/*.xsl,doc/project.dtd,installer/dcbitmap*.bmp,installer/dcwatdes/xml2net.xsl,inp2shp/inp2shp.c,inp2shp/Makefile,installer/dcwatdes/license-dcwaterdesignextension.txt" />
-      <zipfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
         "doc/version.xml,**/dcwaterdesign.xml,**/figure/*.png,doc/av_epanet_data_model.dia,dc.ico,installer/dc_water_design_extension.nsi" />
-    </zip>
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "inp2shp/doc/doxygen/doxygen.cfg, inp2shp/inp2shp.h" />
+    </tar>
+    <bzip2 zipfile="dcwaterdesign-src-${dcwaterdesign_version}.tar.bz2" 
+      src="dcwaterdesign-src-${dcwaterdesign_version}.tar"/>
   </target>
   
   <target name="clean">

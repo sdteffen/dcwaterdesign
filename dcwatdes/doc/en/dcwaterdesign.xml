@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE article 
   PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
-  [ 
-  <!ENTITY version SYSTEM "../version.xml">
-  ]
+  []
 >
 <article lang="en">
   <articleinfo>
-    <title>DC Water Design Extension</title> 
-    <pubdate>2004</pubdate>
-    <edition>Version &version;</edition>
+    <title>DC Water Design Extension Manual</title> 
     <copyright>
-      <year>2001-2004</year>
+      <year>2001-2005</year>
       <holder>DORSCH Consult</holder>
     </copyright>
     <author>
@@ -21,18 +17,31 @@
       </personname>
       <email>Steffen_Macke@dorsch.com.jo</email>
     </author>
+    <legalnotice>
+      <para>Permission is granted to copy, distribute and/or modify this 
+        document under the terms of the GNU Free Documentation License, 
+	Version 1.2 or any later version published by the Free Software 
+	Foundation; with no Invariant Sections, no Front-Cover Texts, and no 
+	Back-Cover Texts. A copy of the license is available from the
+	Free Software Foundation (<ulink url="http://www.gnu.org" />).
+	</para></legalnotice>
   </articleinfo>
   <sect1 id="introduction">
     <title>Introduction</title>
     <para>This Manual describes the DC Water Design Extension 
-      Version &version;.</para>
-
+      Version 2.11.</para>
     <para>This Document uses Terminology from ArcView and EPANET. 
-    Refer to the respective documentation for in-depth explanations.</para>
-    
-    <sect2>
+      Refer to the respective documentation for in-depth explanations.</para>
+    <important><para>Be sure to check the <citetitle>DC Processing 
+      Extension</citetitle>
+      and the <citetitle>DC Sewer Design Extension</citetitle> which
+      are also freely available. These extensions provide additional
+      functionality that is very helpful. E.g. the <citetitle>DC Sewer Design
+      Extension</citetitle> can be used to draw water network profiles.
+      </para></important>	  
+      
+    <sect2 id="what_is_dcwaterdesign">
       <title>What is the DC Water Design Extension?</title>
-    
       <para>The DC Water Design Extension is an Extension to ESRI's 
 	ArcView GIS software. Starting with Versions 2.00 the 
 	DC Water Design Extension integrates the EPANET 2.00 
@@ -40,18 +49,24 @@
 	store, edit and retrieve EPANET hydraulic models 
 	including all options in ArcView. Also it's possible to 
 	run the EPANET hydraulic analysis from ArcView and load 
-	the results into the GIS.</para> 
+	the results into the GIS.</para>
     </sect2>
-    
-    <sect2>
+ 
+    <sect2 id="news">
       <title>What's New?</title>
         <sect3>
 	  <title>Version 2.11</title>
 	  <para>
 	    <itemizedlist>
+	      <listitem><para>INP file import is handling virtual lines now.
+	        Function robustness has been improved and error messages
+		are displayed in ArcView.</para></listitem>
 	      <listitem><para>More robust &quot;Create Missing Junctions&quot;
 	        function.</para></listitem>
 	      <listitem><para>Updated documentation</para></listitem>
+	      <listitem><para>New installer interface.</para></listitem>
+	      <listitem><para>Bug fixes for patterns, help file integration,
+	        result import.</para></listitem>
 	    </itemizedlist>
 	  </para>
 	</sect3>
@@ -113,7 +128,8 @@
 	    <itemizedlist>
 	      <listitem><para>Completely new and much faster EPANET INP import 
 		      based on the EPANET toolkit and shapelib. Import 
-		      function still incomplete: Attributes are omitted.</para></listitem>
+		      function still incomplete: Attributes are omitted.
+		      </para></listitem>
       
       	      <listitem><para>French and Arabic localizations.</para></listitem>
       
@@ -173,26 +189,32 @@
 	      <listitem><para>Added function to automatically add the theme 
 	        fields required by the data model.</para></listitem>
 		    
-	      <listitem><para>EPANET result import works now without mySQL.
+	      <listitem><para>EPANET result import works now without MySQL.
 	        </para></listitem>
 		    
 	      <listitem><para>Check EPANET Model provides more checks now and is 
 		      much faster.</para></listitem>
 		    
-	      <listitem><para>"Create Missing Junctions": Add additional junctions to 
-		      make sure that the network topology is sane.</para></listitem>
+	      <listitem><para>"Create Missing Junctions": Add additional 
+	        junctions to make sure that the network topology is sane.
+		</para></listitem>
 		    
 	      <listitem><para>Updated Documentation.</para></listitem>
 		    
-	      <listitem><para>Checking for spaces in path names which are not allowed.</para></listitem>
+	      <listitem><para>Checking for spaces in path names which are not 
+	        allowed.</para></listitem>
 		    
-	      <listitem><para>Customizable backdrop map resolution.</para></listitem>
+	      <listitem><para>Customizable backdrop map resolution.
+	        </para></listitem>
 		    
 	      <listitem><para>Support for patterns.</para></listitem>
 		    
-	      <listitem><para>More checks while writing EPANET files.</para></listitem>
+	      <listitem><para>More checks while writing EPANET files.
+	        </para></listitem>
 		    
-	      <listitem><para>Various bugfixes (see CVS ChangeLog for the details).</para></listitem>
+	      <listitem><para>Various bugfixes (see 
+	        <filename>ChangeLog</filename> for the 
+	        details).</para></listitem>
 	    </itemizedlist>
 	  </para>
 	</sect3>
@@ -213,8 +235,8 @@
       
 	      <listitem><para>Updated Documentation.</para></listitem>
 		    
-	      <listitem><para>Support for Backdrop Maps (Thanks to Roland Salgado, 
-		      page [sec:backdrop-map]).</para></listitem>
+	      <listitem><para>Support for Backdrop Maps (Thanks to Roland 
+	        Salgado, <xref linkend="backdrop-map" />).</para></listitem>
 		    
 	      <listitem><para>Create Zones From SOV Controls (<xref linkend=
 		      "create_zones_from_controls" />).</para></listitem>
@@ -411,16 +433,13 @@
   <sect1 id="installation">
     <title>Installation</title>
     <para>Description of the DC Water Design Extension Installation.</para>
-    <sect2>
+    <sect2 id="how_to_obtain">
       <title>How to Obtain the DC Water Design Extension</title>
     
-      <para>For DORSCH Consult staff, the DC Water Design Extension 
-	is available from the DC GIS Database (Lotus Notes). 
-	For others, the DC Water Design Extension can be 
+      <para>The DC Water Design Extension can be 
 	obtained from the website 
-	http://dcwaterdesign.sourceforge.net. In general, the 
-	sourceforge version should be more recent than the one 
-	in the DC GIS Database.</para>
+	<ulink url="http://dcwaterdesign.sourceforge.net"
+	>http://dcwaterdesign.sourceforge.net</ulink>.</para>
 	
       <para>The sourceforge site offers a multitude of services 
         related to the DC Water Design Extension, including:
@@ -445,29 +464,31 @@
       <para>The following software packages are required in order to use the
         DC Water Design extension:
 	<itemizedlist>
-	  <listitem><para>ArcView 3.1 or higher, but not ArcView 8.x or 9.x
-	    </para></listitem>
-      
-	  <listitem><para>Windows 95, 98, ME, NT or 2000 in order to export 
+	  <listitem><para>ArcView 3.1 or higher (3.2, 3.3), but not ArcView 
+	    8.x or 9.x</para></listitem>
+	  <listitem><para>Windows 95, 98, ME, NT, 2000 or XP in order to export 
 		EPANET files </para></listitem>
-	      
 	  <listitem><para>EPANET 2.0 or higher is needed in order to run a 
 		hydraulic analysis</para></listitem>
-	      
 	  <listitem><para>An (ANSI SQL compliant) ODBC connection can improve 
 		the performance when importing hydraulic analysis results
 		</para></listitem>
 	</itemizedlist>
       </para>
+      <note><para>Note that the commandline tools described in <xref linkend=
+        "commandline" /> do not rely on ArcView or the Windows operating
+	system. They are platform independent, however you may have to
+	compile them for your platform.</para></note>
     </sect2>
     <sect2>
       <title>Setup</title>    
       <para>To install the DC Water Design Extension, you've got to 
       run the installer executable. After accepting the 
-      license (s. [sec:dcwatdes-license]), you'll be prompted to select the 
+      license (s. <xref linkend="copyright_dcwaterdesign" />), you'll be 
+      prompted to select the 
       installation path. The installation path should be the 
       path to ArcView's EXT32 folder. Usually this should be 
-      the default path (c:\ESRI\av_gis30\arcview\EXT32). It 
+      the default path (<filename>c:\ESRI\av_gis30\arcview\EXT32</filename>). It 
       might differ for custom ArcView installations. The only 
       thing left to do now is to select which components of 
       the extension should be installed. In general, you 
@@ -520,21 +541,19 @@
     <title>Usage</title>
     <para>How to use the DC Water Design Extension.</para>
     <sect2 id="general_usage">
-      <title>General Usage</title>
-    
-      <para>Extension loading
-    
-	1. Start ArcView
-	
-	2. Open the Extensions Dialog (<guimenu>File</guimenu>-&gt;
-	<guimenuitem>Extensions ...</guimenuitem>)
-	
-	3. Select the DC Water Design Extension (Put a 
-	  checkmark in the box on the left side).
-	
-	4. After the Extension is loaded, the Setup Dialog 
-	  informs you about several settings. You shouldn't 
-	  change them without knowing what you're doing.</para> 
+      <title>General Usage</title> 
+      <para>
+        <orderedlist>
+	  <listitem><para>Start ArcView</para></listitem>
+	  <listitem><para>Open the Extensions Dialog 
+	    (<guimenu>File</guimenu>-&gt;<guimenuitem>Extensions 
+	    ...</guimenuitem>)</para></listitem>
+	  <listitem><para>Select the DC Water Design Extension (Put a 
+	    checkmark in the box on the left side).</para></listitem>
+	  <listitem><para>After the Extension is loaded, the Setup Dialog 
+	    informs you about several settings. You shouldn't 
+	    change them without knowing what you're doing.</para></listitem>
+	    </orderedlist></para> 
     </sect2>
     
     <sect2 id="project_menus">
@@ -551,8 +570,10 @@
 	  language of the Extension. Currently supported are the 
 	  following localizations:
 	  <itemizedlist>
+	    <listitem><para>Arabic</para></listitem>
 	    <listitem><para>English</para></listitem>
 	    <listitem><para>German</para></listitem>
+	    <listitem><para>Russian</para></listitem>
 	  </itemizedlist>
 	</para>
 	<note><para>Note that the Localization is not completed yet. It is 
@@ -603,7 +624,9 @@
 	<sect3>
 	  <title>About</title>
 	  <para>Displays information about the DC Water Design 
-	  Extension License. See section [sec:dcwatdes-license] for the license details.</para>
+	    Extension License. See section <xref linkend=
+	    "copyright_dcwaterdesign" /> 
+	    for the license details.</para>
 	</sect3>  
       </sect2>
       
@@ -626,7 +649,7 @@
       
       <para>The additional functionality is explained below.</para>
       
-      <sect3>
+      <sect3 id="write_epanet_file">
         <title>Write EPANET File</title> 
     
         <para>Exports the hydraulic model to an EPANET input file.</para>
@@ -648,7 +671,7 @@
 	    (temporary file).</para></note>
       </sect3>
 
-      <sect3>
+      <sect3 id="run_epanet_calculation">
         <title>Run EPANET Calculation</title> 
     
 	<para>Exports the hydraulic model to an EPANET input file, 
@@ -664,7 +687,7 @@
 	will be loaded.</para> 
       </sect3>
       
-      <sect3>
+      <sect3 id="import_binary_result_file">
 	<title>Import Binary Result File</title>
       
 	<para>Loads binary results of an EPANET calculation into ArcView.</para>
@@ -676,27 +699,23 @@
 	which the results will be loaded.</para>
       </sect3>
       
-      <sect3>
+      <sect3 id="import_epanet_inp_file">
 	<title>Import EPANET Inp File</title>
-	
 	<para>Imports an EPANET model from an EPANET INP file.</para>
-	
 	<para>The EPANET INP format is an ASCII format (it can be 
-	easily edited by any text editor) that is documented in 
-	the EPANET toolkit. The windows version of EPANET can 
-	export models to this format (<guimenu>File</guimenu> -&gt; 
-	<guimenuitem>Export</guimenuitem> -&gt; 
-	<guimenuitem>Network ...</guimenuitem>). </para>
-	
-	<para>Currently the function will only import the geometry of 
-	the features. Attributes have to be linked manually. 
-	The import will create new shapefiles that have to be 
-	registered with the extension before they can be used. 
-	In the case of virtual lines, the import function 
-	creates unwanted nodes. These nodes can be removed with 
-	standard ArcView functionality (Select by Theme).</para>
+	  easily edited by any text editor) that is documented in 
+	  the EPANET toolkit. The windows version of EPANET can 
+	  export models to this format (<guimenu>File</guimenu> -&gt; 
+	  <guimenuitem>Export</guimenuitem> -&gt; 
+	  <guimenuitem>Network ...</guimenuitem>).</para>
+	<caution><para>Currently the function will not import the full EPANET
+	  model. Be sure to check whether the imported results fit your needs.
+	  </para></caution>
+	<para>The function uses the <command>inp2shp</command> command. (<xref 
+	  linkend="inp2shp" />).</para>  
       </sect3>
-      <sect3>
+      
+      <sect3 id="check_epanet_model">
         <title>Check EPANET Model</title>
     
 	<para>Performs a number of checks on the hydraulic model.</para>
@@ -713,7 +732,7 @@
 	    <listitem><para>Check for IDs that are too long</para></listitem>
 	  </itemizedlist></para>
       </sect3>
-      <sect3>
+      <sect3 id="load_results_for_step">
         <title>Load Results for Step ...</title> 
     
 	<para>Loads the results of an EPANET hydraulic analysis to ArcView.</para>
@@ -739,8 +758,9 @@
 	selected after the run.</para>
 	
 	<para>In case there are reports about inconsistent flow 
-	direction at pumps or valves, you can use the "Flip Polylines"
-	 tool of the extension to correct the errors.</para>
+	  direction at pumps or valves, you can use the &quot;Flip 
+	  Polylines&quot; tool to correct the errors (<xref linkend=
+	  "flip_polylines" />).</para>
       </sect3>
       <sect3 id="epanet_themes_dialog">
         <title>EPANET Themes</title> 
@@ -925,7 +945,7 @@
     <sect2 id="view_tools">
       <title>View Tools</title>
       <para>Tools that are added to the View GUI.</para>
-      <sect3>
+      <sect3 id="flip_polylines">
         <title>Flip Polylines</title> 
     
 	<para>This tool allows to flip the digitizing direction of lines.</para>
@@ -1169,127 +1189,29 @@
 	</para>
       </sect3>
     </sect2>
-  </sect1>
-  <sect1 id="api">
-    <title>API Documentation</title>
-    
-    <para>This section documents extension scripts that could be 
-    used from the field calculator or in queries. In 
-    Addition, the script responsible for the extension 
-    dictionaries is documented. In general, the API 
-    documentation should only be of concern for programmers.</para>
-    
-    <sect2>
-      <title>DCWatDes.Bitcode.or</title> 
-    
-      <para>DCWatDes.Bitcode.or performs a bitwise or operation on integer 
-	numbers.
-      <programlisting>
-      integer DCWatDes.Bitcode.or(integer a, integer b)</programlisting></para>
-      
-	<para>a bit-coded integer</para>
-      
-	<para>b bit-coded integer</para>
-      
-	<para>Returns: the result of the bitwise a or b as an integer</para>
-      
-      <para>The following AVENUE code can be used in the field 
-      calculator to perform of a bitwise or-operation on the 
-      fields a and b: 
-      <programlisting>
-      av.run("DCWatDes.Bitcode.or", {[a], [b]})
-      </programlisting></para>
-    </sect2>
-    <sect2>
-      <title>DCWatDes.Bitcode.and</title>
-      <para>DCWatDes.Bitcode.and
-	performs a bitwise and operation on integer numbers
-      <programlisting>
-	integer DCWatDes.Bitcode.and(integer a, integer b)</programlisting></para>
-      
-	<para>a bit-coded integer</para>
-      
-	<para>b bit-coded integer</para>
-      
-	<para>Returns: the result of the bitwise a and b as an integer</para>
-      
-      <para>The following AVENUE code can be used in the field 
-      calculator to perform of a bitwise and-operation on the 
-      fields a and b: 
-      <programlisting>
-      av.run("DCWatDes.Bitcode.and", {[a], [b]})
-      </programlisting></para>
-    </sect2>
-    <sect2>
-      <title>DCWatDes.Bitcode.isSetAsNumber</title>
-    
-      <para>DCWatDes.Bitcode.isSetAsNumber returns whether the n-th bit of an 
-	integer is set or not
-      <programlisting>
-      integer DCWatDes.Bitcode.isSetAsNumber(integer a, integer n)</programlisting>
-      </para>
-	<para>a bit-coded integer</para>
-      
-	<para>n number of the bit to check</para>
-      
-	<para>Returns: an integer of value 1 in case the n-th bit 
-	is set, 0 otherwise</para>
-      
-      <para>The following AVENUE query can be used to select all 
-	the records which have set the 4th bit in the example 
-	field (usable with the query tools of view and table GUI):
-	<programlisting>
-	av.run("DCWatDes.Bitcode.isSetAsNumber",{[example], 3}) 
-	= 1</programlisting></para>
-      
-      <para>Note that the bit numbering starts at 0. "= 1" is used to 
-	convert the numbers 0 and 1 to the boolean values to 
-	true or false, respective.</para>
-    </sect2>
-    <sect2>
-      <title>DCWatDes.i18n.createDictionaries</title>
-    
-      <para>Creates the Localization dictionaries of the Extension</para>
-      
-      <para>In order to add another Dictionary, you'll first have 
-      to create one:
-      <programlisting>
-      dicNew = Dictionary.make(100)</programlisting>
-      </para><para>
-      Then you can start adding dictionary entries:
-      <programlisting>
-      dicNew.add("English Term", "New translated term")</programlisting></para>
-      <para>
-      Look at the German dictionary for the terms that have 
-      to be translated. After you've added all the terms to 
-      the new Dictionary, you have to add the Dictionary to 
-      the Dictionary of Dictionaries:
-      <programlisting>
-      _dcwDicDictionaries.add("de", dicNew)</programlisting>
-      </para>
-      <para>
-      	Where "de" is describes the locale (In this case "de" for Germany).</para>
-    </sect2>
-    <sect2>
-      <title>DCWatDes.Model.Epanet.Valves.controlByTime</title>
-    
-      <para>Updates the valves status field, reflecting the status 
-      at a given time.</para>
-      
-      <para>All valves are closed before applying the controls.</para>
-      
-      <para>Expects the timestep as a number as the argument (Hours 
-      since simulation start).</para>
-      
-      <para>Returns nothing.</para>
-      
-      <para>Requires valves theme and controls table registered 
-      with the extension.</para>
-      
-      <para>Works only for SOV valves. The supported controls 
-      syntax is:
-      
-      <programlisting>LINK link_id status AT TIME hours_since_simulation_start</programlisting></para>
+    <sect2 id="commandline">
+      <title>Commandline Tools</title>
+      <para>Several commandline tools that are available together
+        with the DC Water Design Extension.</para>
+      <para>If you do not know what a commandline tool is, you may want to skip
+        this section as the DC Water Design Extension provides </para>
+      <para>Note that these tools don't rely on ArcView and may be used
+        independent of the DC Water Design Extension.</para>
+      <sect3 id="inp2shp">
+        <title>inp2shp</title>
+	<para>Converts EPANET INP files to a group of shapefiles that conform
+	  to the EPANET/ArcView data model.</para>
+	<para>Used by the EPANET INP import function (<xref linkend=
+	  "import_epanet_inp_file" />).</para>  
+      </sect3>
+      <sect3 id="epanet2mysql">
+        <title>epanet2mysql</title>
+	<para>Convert binary EPANET result files to comma separated ASCII 
+	  files.</para>
+	<para>Used by several functions (<xref linkend="run_epanet_calculation" 
+	  />, <xref linkend="import_binary_result_file" />, <xref linkend=
+	  "load_results_for_step" />)</para>  
+      </sect3>
     </sect2>
   </sect1>
   <sect1 id="faq">
@@ -1302,7 +1224,8 @@
       <para>The provided AVENUE functions are more flexible this 
 	way. Bit codes can be useful for quite a number of 
 	operations. Try using the functions with the field 
-	calculator and the query. Examples are given in [sec:dcwatdes-api-docs].</para>
+	calculator and the query. Examples are given in <xref linkend=
+	"api" />.</para>
     </sect2>
     <sect2>
       <title>What is the Setup Dialog for?</title>
@@ -1380,9 +1303,11 @@
 	HEAD Curve1 SPEED 1.2</programlisting>
       </para>
     </sect2>
-    <sect2>
+    <sect2 id="bug_report">
       <title>I found a bug in the Extension. What should I do?</title>
-      <para>Please send your bug reports to Steffen_Macke@dorsch.com.jo</para>
+      <para>Please send your bug reports to 
+        <email>dcwaterdesign-info@lists.sourceforge.net</email> or
+	use the bug tracker on the website.</para>
     </sect2>
     <sect2 id="maximum_field_length">
       <title>How Can I Select All Rows where DC_ID is Longer than
@@ -1410,39 +1335,202 @@
 	    </para></listitem>
 	</itemizedlist>
     </sect2>
-  </sect1>  
-  <sect1 id="dcwatdes_license">
-    <title>Copyright</title>
-    
-    <para>DC Water Design Extension 2.10. This ArcView Extension 
-    integrates EPANET with ArcView.</para> 
-    
-    <para>Copyright (C) 1998-2004 DORSCH Consult</para>
-    
-    <para>This library is free software; you can redistribute it 
-    and/or modify it under the terms of the GNU Lesser 
-    General Public License as published by the Free 
-    Software Foundation; either version 2.1 of the License, 
-    or (at your option) any later version.</para>
-    
-    <para>This library is distributed in the hope that it will be 
-    useful, but WITHOUT ANY WARRANTY; without even the 
-    implied warranty of MERCHANTABILITY or FITNESS FOR A 
-    PARTICULAR PURPOSE. See the GNU Lesser General Public 
-    License for more details.</para>
-    
-    <para>You should have received a copy of the GNU Lesser 
-    General Public License along with this library; if not, 
-    write to the Free Software Foundation, Inc., 59 Temple 
-    Place, Suite 330, Boston, MA 02111-1307 USA</para>
-    
-    <sect2>
-      <title>Apache Software</title>
-    
-      <para>testXSLT (Xalan C++) Copyright (C) 2000 Apache Software 
-      Foundation. All rights reserved.</para>
+  </sect1>
+  <sect1 id="development">
+    <title>Development</title>
+    <para>This section contains information that is relevant to developers.
+      Most probably you only want to read this if you are a programmer.</para>
+    <sect2 id="api">
+      <title>API Documentation</title>
       
+      <para>This section documents extension scripts that could be 
+      used from the field calculator or in queries. In 
+      Addition, the script responsible for the extension 
+      dictionaries is documented. In general, the API 
+      documentation should only be of concern for programmers.</para>
+      
+      <sect3>
+	<title>DCWatDes.Bitcode.or</title> 
+      
+	<para>DCWatDes.Bitcode.or performs a bitwise or operation on integer 
+	  numbers.
+	<programlisting>
+	integer DCWatDes.Bitcode.or(integer a, integer b)</programlisting></para>
+	
+	  <para>a bit-coded integer</para>
+	
+	  <para>b bit-coded integer</para>
+	
+	  <para>Returns: the result of the bitwise a or b as an integer</para>
+	
+	<para>The following AVENUE code can be used in the field 
+	calculator to perform of a bitwise or-operation on the 
+	fields a and b: 
+	<programlisting>
+	av.run("DCWatDes.Bitcode.or", {[a], [b]})
+	</programlisting></para>
+      </sect3>
+      <sect3>
+	<title>DCWatDes.Bitcode.and</title>
+	<para>DCWatDes.Bitcode.and
+	  performs a bitwise and operation on integer numbers
+	<programlisting>
+	  integer DCWatDes.Bitcode.and(integer a, integer b)</programlisting></para>
+	
+	  <para>a bit-coded integer</para>
+	
+	  <para>b bit-coded integer</para>
+	
+	  <para>Returns: the result of the bitwise a and b as an integer</para>
+	
+	<para>The following AVENUE code can be used in the field 
+	calculator to perform of a bitwise and-operation on the 
+	fields a and b: 
+	<programlisting>
+	av.run("DCWatDes.Bitcode.and", {[a], [b]})
+	</programlisting></para>
+      </sect3>
+      <sect3>
+	<title>DCWatDes.Bitcode.isSetAsNumber</title>
+      
+	<para>DCWatDes.Bitcode.isSetAsNumber returns whether the n-th bit of an 
+	  integer is set or not
+	<programlisting>
+	integer DCWatDes.Bitcode.isSetAsNumber(integer a, integer n)</programlisting>
+	</para>
+	  <para>a bit-coded integer</para>
+	
+	  <para>n number of the bit to check</para>
+	
+	  <para>Returns: an integer of value 1 in case the n-th bit 
+	  is set, 0 otherwise</para>
+	
+	<para>The following AVENUE query can be used to select all 
+	  the records which have set the 4th bit in the example 
+	  field (usable with the query tools of view and table GUI):
+	  <programlisting>
+	  av.run("DCWatDes.Bitcode.isSetAsNumber",{[example], 3}) 
+	  = 1</programlisting></para>
+	
+	<para>Note that the bit numbering starts at 0. "= 1" is used to 
+	  convert the numbers 0 and 1 to the boolean values to 
+	  true or false, respective.</para>
+      </sect3>
+      <sect3>
+	<title>DCWatDes.i18n.createDictionaries</title>
+      
+	<para>Creates the Localization dictionaries of the Extension</para>
+	
+	<para>In order to add another Dictionary, you'll first have 
+	to create one:
+	<programlisting>
+	dicNew = Dictionary.make(100)</programlisting>
+	</para><para>
+	Then you can start adding dictionary entries:
+	<programlisting>
+	dicNew.add("English Term", "New translated term")</programlisting></para>
+	<para>
+	Look at the German dictionary for the terms that have 
+	to be translated. After you've added all the terms to 
+	the new Dictionary, you have to add the Dictionary to 
+	the Dictionary of Dictionaries:
+	<programlisting>
+	_dcwDicDictionaries.add("de", dicNew)</programlisting>
+	</para>
+	<para>
+	  Where "de" is describes the locale (In this case "de" for Germany).</para>
+      </sect3>
+      <sect3>
+	<title>DCWatDes.Model.Epanet.Valves.controlByTime</title>
+      
+	<para>Updates the valves status field, reflecting the status 
+	at a given time.</para>
+	
+	<para>All valves are closed before applying the controls.</para>
+	
+	<para>Expects the timestep as a number as the argument (Hours 
+	since simulation start).</para>
+	
+	<para>Returns nothing.</para>
+	
+	<para>Requires valves theme and controls table registered 
+	with the extension.</para>
+	
+	<para>Works only for SOV valves. The supported controls 
+	  syntax is:
+	  <programlisting>LINK link_id status AT TIME hours_since_simulation_start</programlisting></para>
+      </sect3>
+    </sect2>
+    <sect2 id="procedures">
+      <title>Procedures</title>
+      <para>Procedures in the development process.</para>
+      <sect3 id="release_process">
+        <title>Release Process</title>
+	<para>Steps that should be followed in the release process.</para>
+	<para><itemizedlist>
+	  <listitem><para>Update the version number in 
+	    <filename>dcwatdes2.apr</filename>, <filename>build.xml</filename>,
+	    <filename>doc/en/dcwaterdesign.xml</filename>, 
+	    <filename>installer/dc_water_design_extension.nsi</filename>.
+	    </para></listitem>
+	  <listitem><para>Build the documentation using <command>ant</command> 
+	    and <filename>doc/build.xml</filename>.</para></listitem>
+	  <listitem><para>Build the installer using <command>NSIS</command> and
+	    <filename>installer/dc_water_design_extension.nsi</filename>.
+	    </para></listitem>
+	  <listitem><para>Test the installer.</para></listitem>
+	  <listitem><para>Build the source zip file using <command>ant</command>
+	    and <filename>build.xml</filename>.</para></listitem>
+	  <listitem><para>Upload the files to 
+	    ftp://upload.sourceforge.net/incoming/</para></listitem>
+	  <listitem><para>Create the release on Sourceforge.</para></listitem>
+	  <listitem><para>Create a Sourceforge news item</para></listitem>
+	  <listitem><para>Announce the release on the EPANET, DC Water Design
+	    mailing lists.</para></listitem>
+	  </itemizedlist></para>
+      </sect3>
+    </sect2>
+  </sect1>
+  <sect1 id="copyright">
+    <title>Copyright</title>
+    <para>Copyright information for the various components of the
+      DC Water Design Extension.</para>
+    <sect2 id="copyright_dcwaterdesign">
+      <title>DC Water Design Extension</title>
+      <para>DC Water Design Extension. This ArcView Extension 
+	integrates EPANET with ArcView.</para>   
+      <para>Copyright (C) 1998-2005 DORSCH Consult</para>
+      <para>This library is free software; you can redistribute it 
+        and/or modify it under the terms of the GNU Lesser 
+        General Public License as published by the Free 
+        Software Foundation; either version 2.1 of the License, 
+        or (at your option) any later version.</para>
+      <para>This library is distributed in the hope that it will be 
+        useful, but WITHOUT ANY WARRANTY; without even the 
+        implied warranty of MERCHANTABILITY or FITNESS FOR A 
+        PARTICULAR PURPOSE. See the GNU Lesser General Public 
+        License for more details.</para>
+      <para>You should have received a copy of the GNU Lesser 
+        General Public License along with this library; if not, 
+        write to the Free Software Foundation, Inc., 59 Temple 
+        Place, Suite 330, Boston, MA 02111-1307 USA</para>
+    </sect2>
+    
+    <sect2 id="copyright_apache">
+      <title>Apache Software</title>
+      <para>testXSLT (Xalan C++) Copyright (C) 2000 Apache Software 
+        Foundation. All rights reserved.</para>
       <para>Visit http://xml.apache.org for the details and/or sources.</para>
+    </sect2>
+    
+    <sect2 id="copyright_dcwaterdesign_manual">
+      <title>DC Water Design Extension Manual</title>
+      <para>Permission is granted to copy, distribute and/or modify this 
+        document under the terms of the GNU Free Documentation License, 
+	Version 1.2 or any later version published by the Free Software 
+	Foundation; with no Invariant Sections, no Front-Cover Texts, and no 
+	Back-Cover Texts. A copy of the license is available from the
+	Free Software Foundation (<ulink url="http://www.gnu.org" />).</para>
     </sect2>
   </sect1>
     
