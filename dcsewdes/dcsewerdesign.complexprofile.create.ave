@@ -284,7 +284,41 @@ while (not (strLine=nil ))
   strLine = lnfConfiguration.readElt
 end
 lnfConfiguration.close
-  
+
+' Check configuration
+if(fldManholeID = nil)then
+  MsgBox.error("Error: Field Manhole.ID was not found.","DC Sewer Design")
+  exit
+end
+if(fldManholeDiameter = nil)then
+  MsgBox.error("Error: Field Manhole.Diameter was not found.","DC Sewer Design")
+  exit
+end
+if(fldManholeInvertLevel = nil)then
+  MsgBox.error("Error: Field Manhole.InvertLevel was not found.","DC Sewer Design")
+  exit
+end
+if(fldManholeElevation = nil)then
+  MsgBox.error("Error: Field Manhole.Elevation was not found.","DC Sewer Design")
+  exit
+end
+if(fldLineID = nil)then
+  MsgBox.error("Error: Field Line.ID was not found.","DC Sewer Design")
+  exit
+end
+if(fldLineDiameter = nil)then
+  MsgBox.error("Error: Field Line.Diameter was not found.","DC Sewer Design")
+  exit
+end
+if(fldLineUpstreamInvert = nil)then
+  MsgBox.error("Error: Field Line.UpstreamInvert was not found.","DC Sewer Design")
+  exit
+end
+if(fldLineDownstreamInvert = nil)then
+  MsgBox.error("Error: Field Line.DownstreamInvert was not found.","DC Sewer Design")
+  exit
+end
+
 fldManholeShape = ftbManhole.findField("Shape")
 fldLineShape = ftbLine.findField("Shape")
 

@@ -1,6 +1,9 @@
 2004-06-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
-	* doc/en/dcsewerdesign.xml: added section on "Enforce Drainage"
+	* dcsewerdesign.complexprofile.create.ave: improved configuration
+	file checks
+	* doc/en/dcsewerdesign.xml: added section on "Enforce Drainage"; 
+	enhanced profile creation documentation
 	* dcsewerdesign.enforcedrainage.ave: added optional diameter
 	parameter
 	* dcsewerdesignextension.make.ave: version number is now 2.0.2+cvs
