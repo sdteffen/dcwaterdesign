@@ -1,3 +1,11 @@
+2004-09-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave: Involve random in looking for
+	upsteam/downstream end; fixed bug #1024872
+	* dcsewerdesign.lines.enforcemaximumlength.ave: the function is now
+	transferring the attributes to the splitted lines. (Kevin's idea)
+	* dcsewerdesignextension.make.ave: version number is now 2.0.4+cvs-2
+	
 2004-09-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcserwerdesign.xml: added missing Line.ID line

@@ -3,7 +3,7 @@
 ' cuts lines exceeding a specified length, inserting
 ' new manholes at the cutting points.
 
-' (c) 2000,2002 DORSCH Consult
+' (c) 2000,2002,2004 DORSCH Consult
 
 
 'get the line table
@@ -28,6 +28,8 @@ numMaximumLength = strMaximumLength.asNumber
  numComplete = 0
  av.showStopButton
  lstNewLines = List.make
+ lstListAttributes = List.make
+ lstFields = ftbLine.getFields
  
  for each recLine in ftbLine
    pllLine = ftbLine.returnValue(fldLineShape, recLine)
@@ -39,6 +41,15 @@ numMaximumLength = strMaximumLength.asNumber
        if(pntFirst.intersects(pntSecond).not)then
          pllNew = Polyline.make({{pntFirst, pntSecond}})
          lstNewLines.add(pllNew)
+         lstAttributes = List.make
+         for each fldField in lstFields
+           if(fldField <> fldLineShape)then
+             lstAttributes.add(ftbLine.returnValue(fldField, recLine))
+           else
+             lstAttributes.add("")
+           end
+         end
+         lstListAttributes.add(lstAttributes.deepclone)
        end
      end
      pntFirst = pllLine.along(0)
@@ -53,9 +64,18 @@ numMaximumLength = strMaximumLength.asNumber
    end
  end   
  
- for each pllLine in lstNewLines
+ for each i in 0..(lstNewLines.count-1)
+   pllLine = lstNewLines.get(i)
+   lstAttributes = lstListAttributes.get(i)
    recLine = ftbLine.addRecord
-   ftbLine.setValue(fldLineShape, recLine, pllLine)   
+   ftbLine.setValue(fldLineShape, recLine, pllLine)
+   for each j in 0..(lstFields.count-1)
+     fldField = lstFields.get(j)
+     objValue = lstAttributes.get(j)
+     if(fldField <> fldLineShape)then
+       ftbLine.setValue(fldField, recLine, objValue)
+     end
+   end
  end
  
  ftbLine.setEditable(false)
