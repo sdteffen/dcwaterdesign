@@ -102,7 +102,7 @@ else
     ftbPipes.updateSelection
     fldPipeID = ftbPipes.findField("dc_id")
     if(fldPipeID <> nil)then
-      ftbPipes.setValue(fldPipeID, recPipe, "p"+ftbPipes.getNumRecords.asString)
+      ftbPipes.setValue(fldPipeID, recPipe, "l"+ftbPipes.getNumRecords.asString)
     end
     ' keep network alive
      

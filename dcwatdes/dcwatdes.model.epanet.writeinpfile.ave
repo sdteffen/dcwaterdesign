@@ -615,76 +615,61 @@ if(tableControls <> nil)then
 end
 lnf_Xml.writeElt("</controls>")
 
-
-' curves
-lnf_Xml.writeElt("<curves>")
-strCurvesTable = dicPreferences.get("strCurves")
-if(strCurvesTable <> nil)then
-  lstTables = av.getProject.getDocsWithGui(av.findGui("Table"))
-  vtbCurves = nil
-  for each tableInDoc in lstTables
-    if(strCurvesTable = tableInDoc.getName)then
-      vtbCurves = tableInDoc.getVTab
-      break
-    end    
+' write Curves and Patterns
+for each lstSection in { {"Curves",{"dc_id", "x","y"}},
+                         {"Patterns",{"dc_id", "multiplier"}}}
+  strSection = lstSection.get(0)
+  lstAttributes = lstSection.get(1)
+  lnf_Xml.writeElt("<"+strSection.lcase+">")
+  strSectionTable = dicPreferences.get("str"+strSection)
+  if(strSectionTable <> nil)then
+    lstTables = av.getProject.getDocsWithGui(av.findGui("Table"))
+    vtbSection = nil
+    for each tableInDoc in lstTables
+      if(strSectionTable = tableInDoc.getName)then
+        vtbSection = tableInDoc.getVTab
+        break
+      end    
+    end
+    if(vtbSection = nil)then
+      Msgbox.error("Couldn't find "+strSection+" table.", "DC Water Design Extension")
+      lnf_Xml.close
+      av.clearStatus
+      exit
+    end  
+    ' check for the fields
+  
+    lstFields = List.make
+    blnFieldsMissing = false
+    for each strAttribute in lstAttributes
+      fldAttribute = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbSection, strAttribute})
+      if(fldAttribute <> nil)then
+        lstFields.add(fldAttribute)
+        fldAttribute.setAlias(fldAttribute.getAlias.lcase)
+      else
+        MsgBox.error("Field '"+strAttribute+"' is missing in the "+strSection+" table."+NL+"Can't export Epanet Model."+NL+"Please set the proper Alias.","DC Water Design Extension")
+        blnFieldsMissing = true
+      end
+    end
+    if(blnFieldsMissing)then
+      lnf_Xml.close
+      exit
+    end
+    fldID = lstFields.get(0)
+    lstFields.remove(0)
+    strSectionSingular = strSection.substitute("es","e").substitute("ns","n").lcase
+    for each rec in vtbSection
+      strAttributes=""
+      for each fld in lstFields
+          strAttribute = vtbSection.returnValue(fld, rec).asString
+          strAttributes = strAttributes++fld.getAlias+"="+strAttribute.quote
+      end
+      strID = vtbSection.returnValue(fldID, rec).asString
+      lnf_Xml.writeElt("<"+strSectionSingular++strAttributes+">"+strID+"</"+strSectionSingular+">")
+    end
   end
-  if(vtbCurves = nil)then
-    Msgbox.error("Couldn't find Curves table.", "DC Water Design Extension")
-    lnf_Xml.close
-    av.clearStatus
-    exit
-  end
-  if(vtbCurves.getFields.count <> 3)then
-    Msgbox.error("The Curves table should contain three fields: Id, x and y", "DC Water Design Extension")
-    lnf_Xml.close
-    av.clearStatus
-    exit
-  end
-  fldID = vtbCurves.getFields.get(0)
-  fldX = vtbCurves.getFields.get(1)
-  fldY = vtbCurves.getFields.get(2)
-  for each recCurve in vtbCurves
-    strCurve = "<curve x="+vtbCurves.returnValue(fldX, recCurve).asString.quote
-    strCurve = strCurve+" y="+vtbCurves.returnValue(fldY, recCurve).asString.quote
-    strCurve = strCurve+">"+vtbCurves.returnValue(fldID, recCurve).asString+"</curve>"
-    lnf_Xml.writeElt(strCurve)
-  end      
-end  
-lnf_Xml.writeElt("</curves>")
-
-' pattern
-lnf_Xml.writeElt("<patterns>")
-strPatternTable = dicPreferences.get("strPattern")
-if(strPatternTable <> nil)then
-  lstTables = av.getProject.getDocsWithGui(av.findGui("Table"))
-  vtbPattern = nil
-  for each tableInDoc in lstTables
-    if(strPatternTable = tableInDoc.getName)then
-      vtbPattern = tableInDoc.getVTab
-      break
-    end    
-  end
-  if(vtbPattern = nil)then
-    Msgbox.error("Couldn't find Pattern table.", "DC Water Design Extension")
-    lnf_Xml.close
-    av.clearStatus
-    exit
-  end
-  if(vtbPattern.getFields.count <> 2)then
-    Msgbox.error("The Pattern table should contain two fields: Id and multiplier", "DC Water Design Extension")
-    lnf_Xml.close
-    av.clearStatus
-    exit
-  end
-  fldID = vtbPattern.getFields.get(0)
-  fldMultiplier = vtbPattern.getFields.get(1)
-  for each recPattern in vtbPattern
-    strPattern = "<pattern multiplier="+vtbPattern.returnValue(fldMultiplier, recPattern).asString.quote
-    strPattern = strPattern+">"+vtbPattern.returnValue(fldID, recPattern).asString+"</pattern>"
-    lnf_Xml.writeElt(strPattern)
-  end      
-end  
-lnf_Xml.writeElt("</patterns>")
+  lnf_Xml.writeElt("</"+strSection.lcase+">")
+end
 
 lnf_Xml.writeElt("</network>")
 lnf_Xml.close

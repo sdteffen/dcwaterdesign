@@ -62,7 +62,14 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
   bmpNodeResults = Bitmap.make(vtbNodeResults.getNumRecords)
   bmpLinkResults = Bitmap.make(vtbLinkResults.getNumRecords)
   vtbNodeResults.setDefinition("([timestep]="+strStep+")")
-  vtbLinkResults.setDefinition("([timestep]="+strStep+")")  
+  vtbLinkResults.setDefinition("([timestep]="+strStep+")")
+  bmpNodeSelection = vtbNodeResults.getSelection
+  bmpNodeSelection.clearAll
+  vtbNodeResults.setSelection(bmpNodeSelection)
+  bmpLinkSelection = vtbLinkResults.getSelection
+  bmpLinkSelection.clearAll
+  vtbLinkResults.setSelection(bmpLinkSelection)
+    
     
   dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
       
@@ -83,6 +90,16 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
       fldFeatureID = ftbFeature.findField("dc_id")
       ftbFeature.join(fldFeatureID, vtbNodeResults, fldResultID)
       ftbFeature.setEditable(true)
+      bmpSelection = ftbFeature.getSelection
+      bmpSelection.clearAll
+      ftbFeature.setSelection(bmpSelection)
+      bmpNodeSelection = vtbNodeResults.getSelection
+      bmpNodeSelection.clearAll
+      vtbNodeResults.setSelection(bmpNodeSelection)
+      bmpLinkSelection = vtbLinkResults.getSelection
+      bmpLinkSelection.clearAll
+      vtbLinkResults.setSelection(bmpLinkSelection)
+
       for each strField in {"result_pressure", "result_head", "result_demand"}
         fldResult = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbFeature, strField})
         ftbFeature.calculate("["+strField+"_join]",fldResult)
@@ -108,6 +125,16 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
       fldFeatureID = ftbFeature.findField("dc_id")
       ftbFeature.join(fldFeatureID, vtbLinkResults, fldResultID)
       ftbFeature.setEditable(true)
+      bmpSelection = ftbFeature.getSelection
+      bmpSelection.clearAll
+      ftbFeature.setSelection(bmpSelection)
+      bmpNodeSelection = vtbNodeResults.getSelection
+      bmpNodeSelection.clearAll
+      vtbNodeResults.setSelection(bmpNodeSelection)
+      bmpLinkSelection = vtbLinkResults.getSelection
+      bmpLinkSelection.clearAll
+      vtbLinkResults.setSelection(bmpLinkSelection)
+
       for each strField in {"result_velocity", "result_flow", "result_headloss"}
         fldResult = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbFeature, strField})
         ftbFeature.calculate("["+strField+"_join]",fldResult)

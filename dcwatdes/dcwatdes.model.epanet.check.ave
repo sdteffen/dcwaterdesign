@@ -1,13 +1,13 @@
 ' DCWatDes.Model.Epanet.check
 
-' (c) 2001 DORSCH Consult
+' (c) 2001 - 2004 DORSCH Consult
 
 ' expects no arguments (called from menu)
 ' returns nothing (reports with message boxes)
 
 ' checks for unique dc_ids throughout the model
 ' checks if node1, node2 fields in the pipes table are of type string
-' if pumps or valves are used in the model
+' if pumps or valves are used in the model, checks for diameter 0
 
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,20 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+' check for duplicate themes
+dictThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+lstThemes = dictThemes.asList
+lstThemeNames = List.make
+for each thmTheme in lstThemes
+  lstThemeNames.add(thmTheme.getSrcName.asString)
+end
+numThemeCount = lstThemeNames.count
+lstThemeNames.removeDuplicates
+if(lstThemeNames.count <> numThemeCount)then
+  MsgBox.error("You have duplicates themes in your setup. Please correct the theme selection.","DC Water Design")
+  av.run("DCWatDes.Dialog.EpanetThemes.open", nil)
+end
+
 av.run("DCWatDes.Model.Epanet.ensureAliases",nil)
 
 lstFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
@@ -30,9 +44,17 @@ lstFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
 extWatDes = Extension.find("DC Water Design")
 dicPreferences = extWatDes.getPreferences
 
-numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
-if(numSnappingRadius = nil)then
-  numSnappingRadius = 0.1
+strSnappingRadius = dicPreferences.get("strSnappingRadius")
+if(strSnappingRadius = nil)then
+  MsgBox.error("The snapping radius is not defined. Please define it","DC Water Design")
+  av.run("DCWatDes.Dialog.Setup.open",nil)
+  exit
+end
+numSnappingRadius = strSnappingRadius.asNumber
+if((numSnappingRadius = nil)or(numSnappingRadius = 0))then
+  MsgBox.error("The snapping radius is not defined. Please define it","DC Water Design")
+  av.run("DCWatDes.Dialog.Setup.open",nil)
+  exit
 end
 
 numToGo = lstFTabs.count
@@ -52,6 +74,18 @@ for each ftbFeature in lstFTabs
   if(bmpSelection = nil)then
     MsgBox.error("Empty Selection","DC Water Design")
     exit
+  end
+  ' check for 3D shapes
+  bmpSelection.setAll
+  recOne = bmpSelection.getNextSet(-1)
+  if(recOne > 0)then
+    shpOne = ftbFeature.returnValue(ftbFeature.findField("shape"), recOne)
+    if(shpOne.hasZ)then
+      ' check for 3D Analyst Extension
+      if(Extension.find("3D Analyst").not)then
+        MsgBox.warning("You will not be able to edit 3D shapes. 3D Analyst is required.", "DC Water Design")
+      end
+    end
   end
   ftbFeature.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
   if(bmpSelection.count > 0)then
@@ -81,6 +115,20 @@ if(bmpSelection.count > 0)then
   exit
 end
 
+' check for pipes with diameter 0
+
+strQuery = "([diameter] = 0)or([diameter].isnull)"
+bmpSelection = ftbPipes.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbPipes.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"pipes with diameter 0."+NL+"Records in question are selected now.","DC Water Design")
+  ftbPipes.updateSelection
+  exit
+end
 
 ' check for orphan nodes
 

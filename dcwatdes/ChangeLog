@@ -1,3 +1,20 @@
+2004-01-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep: The result import only
+	worked only partially as only some records were selected during
+	the process; fixes bug #541859
+	* dcwatdes.view.digitizepipe: using "l" instead of "p" to prepend
+	in front of pipes to avoid namespace problems with pumps (partial
+	fix for bug #888235
+	* dcwatdes.model.epanet.writeinpfile: allowing more fields in pattern
+	and curve tables; fix for bug #884265
+	* dcwatdes.model.epanet.check: Checking for diameter 0, 
+	duplicate themes, 3D shapes, bad snapping radius according to
+	RFE #907304
+	* dcwatdesextension.make:
+	* installer/dc_water_design_extension.nsi:
+	* doc/dcwatdes_manual.lyx: updated for 2.09 release
+
 2004-01-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.returnfieldlists: fixed typo ("Curve" instead

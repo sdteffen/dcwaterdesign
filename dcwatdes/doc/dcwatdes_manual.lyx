@@ -81,7 +81,7 @@ thispagestyle {empty}
 DC Water Design Extension Manual
 \layout Standard
 
-This Manual describes the DC Water Design Extension Version 2.08.
+This Manual describes the DC Water Design Extension Version 2.09.
 \layout Standard
 
 This Document uses Terminology from ArcView and EPANET.
@@ -102,6 +102,27 @@ The DC Water Design Extension is an Extension to ESRI's ArcView GIS software.
 \layout Subsection
 
 What's new?
+\layout Paragraph
+
+Version 2.09
+\layout Itemize
+
+Bug fix for result import.
+ 
+\layout Itemize
+
+Better handling of curves and patterns.
+\layout Itemize
+
+Improved 
+\begin_inset Quotes eld
+\end_inset 
+
+Check Epanet model
+\begin_inset Quotes erd
+\end_inset 
+
+ functionality.
 \layout Paragraph
 
 Version 2.08
@@ -3538,12 +3559,10 @@ StandardThe licenses for most software are designed to take away your freedom
 \layout Standard
 
 \SpecialChar 
- this license or the ordinary General Public License is the better strategy
  to use in any particular case, based on the explanations below.
 \layout Standard
 
 \SpecialChar 
- if you wish); that you receive source code or can get it if you want it;
  that you can change the software and use pieces of it in new free programs;
  and that you are informed that you can do these things.
 \layout Standard
@@ -3581,13 +3600,11 @@ StandardThe licenses for most software are designed to take away your freedom
 \layout Standard
 
 \SpecialChar 
- Public License.
  We use this license for certain libraries in order to permit linking those
  libraries into non-free programs.
 \layout Standard
 
 \SpecialChar 
- if the entire combination fits its criteria of freedom.
  The Lesser General Public License permits more lax criteria for linking
  other code with the library.
 \layout Standard
@@ -3602,14 +3619,12 @@ s.
 \layout Standard
 
 \SpecialChar 
- A more frequent case is that a free library does the same job as widely
  used non-free libraries.
  In this case, there is little to gain by limiting the free library to free
  software only, so we use the Lesser General Public License.
 \layout Standard
 
 \SpecialChar 
- many more people to use the whole GNU operating system, as well as its
  variant, the GNU/Linux operating system.
 \layout Standard
 
@@ -3618,7 +3633,6 @@ s.
 \layout Standard
 
 \SpecialChar 
- The former contains code derived from the library, whereas the latter must
  be combined with the library in order to run.
 \layout Standard
 
@@ -3646,11 +3660,10 @@ ion".)
 \layout Standard
 
 \SpecialChar 
- used to control compilation and installation of the library.
+
 \layout Standard
 
 \SpecialChar 
- on the Library (independent of the use of the Library in a tool for writing
  it).
  Whether that is true depends on what the Library does and what the program
  that uses the Library does.
@@ -3665,7 +3678,7 @@ ion".)
 \layout Standard
 
 \SpecialChar 
-Standard\SpecialChar \-
+\SpecialChar \-
 Standard2.
  You may modify your copy or copies of the Library or any portion of it,
  thus forming a work based on the Library, and copy and distribute such
@@ -3673,7 +3686,6 @@ Standard2.
  you also meet all of these conditions:
 \layout Standard
 
-\SpecialChar 
 \SpecialChar 
 \SpecialChar \-
 \SpecialChar \-
@@ -3690,7 +3702,6 @@ Standard\SpecialChar \-
 \layout Standard
 
 \SpecialChar 
- then this License, and its terms, do not apply to those sections when you
  distribute them as separate works.
  But when you distribute the same sections as part of a whole which is a
  work based on the Library, the distribution of the whole must be on the
@@ -3704,10 +3715,7 @@ Standard\SpecialChar \-
 \layout Standard
 
 \SpecialChar 
-
-\layout Standard
-
-\SpecialChar \-
+Standard\SpecialChar \-
 Standard3.
  You may opt to apply the terms of the ordinary GNU General Public License
  instead of this License to a given copy of the Library.
@@ -3720,7 +3728,7 @@ Standard3.
 \layout Standard
 
 \SpecialChar 
-Standard\SpecialChar \-
+\SpecialChar \-
  the Library into a program that is not a library.
 \layout Standard
 
@@ -3739,7 +3747,6 @@ Standard4.
 \layout Standard
 
 \SpecialChar 
- Such a work, in isolation, is not a derivative work of the Library, and
  therefore falls outside the scope of this License.
 \layout Standard
 
@@ -3751,12 +3758,10 @@ Standard4.
 \layout Standard
 
 \SpecialChar 
- without the Library, or if the work is itself a library.
  The threshold for this to be true is not precisely defined by law.
 \layout Standard
 
 \SpecialChar 
- (Executables containing this object code plus portions of the Library will
  still fall under Section 6.)
 \layout Standard
 
@@ -3783,7 +3788,6 @@ Standard4.
 \layout Standard
 
 \SpecialChar 
- the work is an executable linked with the Library, with the complete machine-re
 adable "work that uses the Library", as object code and/or source code,
  so that the user can modify the Library and then relink to produce a modified
  executable containing the modified Library.
@@ -3793,15 +3797,13 @@ adable "work that uses the Library", as object code and/or source code,
 \layout Standard
 
 \SpecialChar 
- version of the library, if the user installs one, as long as the modified
  version is interface-compatible with the version that the work was made
  with.
 \layout Standard
 
 \SpecialChar 
-Standard\SpecialChar 
-Standard\SpecialChar 
- However, as a special exception, the materials to be distribute
+\SpecialChar 
+\SpecialChar 
 d need not include anything that is normally distributed (in either source
  or binary form) with the major components (compiler, kernel, and so on)
  of the operating system on which the executable runs, unless that component
@@ -3814,7 +3816,6 @@ d need not include anything that is normally distributed (in either source
 \layout Standard
 
 \SpecialChar 
- the separate distribution of the work based on the Library and of the other
  library facilities is otherwise permitted, and provided that you do these
  two things:
 \layout Standard
@@ -3840,7 +3841,6 @@ Standard8.
 \layout Standard
 
 \SpecialChar 
- Library or its derivative works.
  These actions are prohibited by law if you do not accept this License.
  Therefore, by modifying or distributing the Library (or any work based
  on the Library), you indicate your acceptance of this License to do so,
@@ -3849,7 +3849,6 @@ Standard8.
 \layout Standard
 
 \SpecialChar 
- and conditions.
  You may not impose any further restrictions on the recipients' exercise
  of the rights granted herein.
  You are not responsible for enforcing compliance by third parties with
@@ -3857,7 +3856,6 @@ Standard8.
 \layout Standard
 
 \SpecialChar 
- the conditions of this License, they do not excuse you from the conditions
  of this License.
  If you cannot distribute so as to satisfy simultaneously your obligations
  under this License and any other pertinent obligations, then as a consequence
@@ -3869,19 +3867,14 @@ Standard8.
 \layout Standard
 
 \SpecialChar 
-
+Standard\SpecialChar 
+ Many people have made generous contributions to the wide range
+ of software distributed through that system in reliance on consistent applicati
+on of that system; it is up to the author/donor to decide if he or she is
+ willing to distribute software through any other system and a licensee
+ cannot impose that choice.
 \layout Standard
 
-\SpecialChar 
- license practices.
- Many people have made generous contributions to the wide range of software
- distributed through that system in reliance on consistent application of
- that system; it is up to the author/donor to decide if he or she is willing
- to distribute software through any other system and a licensee cannot impose
- that choice.
-\layout Standard
-
-\SpecialChar 
 \SpecialChar 
  add an explicit geographical distribution limitation excluding those countries,
  so that distribution is permitted only in or among countries not thus excluded.
@@ -3890,7 +3883,7 @@ Standard8.
 \layout Standard
 
 \SpecialChar 
- may differ in detail to address new problems or concerns.
+
 \layout Standard
 
 \SpecialChar \-
@@ -3922,7 +3915,6 @@ Standard8.
 \layout Standard
 
 \SpecialChar 
- ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF
  THE USE OR INABILITY TO USE THE LIBRARY (INCLUDING BUT NOT LIMITED TO LOSS
  OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR
  THIRD PARTIES OR A FAILURE OF THE LIBRARY TO OPERATE WITH ANY OTHER SOFTWARE),
@@ -3931,17 +3923,14 @@ Standard8.
 \layout Standard
 
 \SpecialChar 
-Standard\SpecialChar 
-, under the terms of the ordinary General Public License).
-\layout Standard
-
 \SpecialChar 
 
 \layout Standard
 
 \SpecialChar 
 Standard\SpecialChar 
-StandardLicense as published by the Free Software Foundation; either
+\SpecialChar 
+
 \layout Standard
 
 version 2.1 of the License, or (at your option) any later version.

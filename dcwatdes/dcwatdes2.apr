@@ -134,7 +134,7 @@
 	Doc:	810
 	Doc:	822
 	Doc:	826
-	ActiveDoc:	517
+	ActiveDoc:	773
 	Buttons:	830
 	Buttons:	831
 	Buttons:	832
@@ -146,24 +146,24 @@
 	GUI:	850
 	GUI:	1231
 	GUI:	1633
-	GUI:	1748
-	GUI:	1851
-	WorkDir:	2008
+	GUI:	1750
+	GUI:	1854
+	WorkDir:	2011
 	WinX:	-4
 	WinY:	-3
 	WinW:	1608
 	WinH:	1179
 	SerialNumber:	"752171190022"
-	SelColor:	2009
-	GUINames:	2010
-	GUINames:	2011
-	GUINames:	2012
+	SelColor:	2012
 	GUINames:	2013
 	GUINames:	2014
 	GUINames:	2015
 	GUINames:	2016
 	GUINames:	2017
 	GUINames:	2018
+	GUINames:	2019
+	GUINames:	2020
+	GUINames:	2021
 	TocWidthScale:	1.00000000000000
 )
 
@@ -3955,30 +3955,32 @@ ak\n    end\n  end\nend\n\nreturn lst_Result"
 	Win:	502
 	CSMgr:	503
 	DocExts:	504
-	Source:	"' DCWatDes.Model.Epanet.check\n\n' (c) 2001 DORSCH Consult\n\n' expects no arguments (called from menu)\n' returns nothing (reports with message boxes)\n\n' checks for unique dc_ids throughout the model\n' checks if node1, node2 fields in the pipes table are of type string\n' if pumps or valves are used in the model\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 
-of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warranty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-130
-7  USA\n\nav.run(\"DCWatDes.Model.Epanet.ensureAliases\",nil)\n\nlstFTabs = av.run(\"DCWatDes.Model.Epanet.returnFTabDictionary\", nil)\n\nextWatDes = Extension.find(\"DC Water Design\")\ndicPreferences = extWatDes.getPreferences\n\nnumSnappingRadius = dicPreferences.get(\"strSnappingRadius\").asNumber\nif(numSnappingRadius = nil)then\n  numSnappingRadius = 0.1\nend\n\nnumToGo = lstFTabs.count\nnumCompleted = 0\nnumDoubleIDs = 0\n'numIDsTooLong = 0\n\nblnErrorOccurred = false\n\ndicThemes = av.run(\"DCWatDes.Model.Epanet.returnThemeDict
-ionary\", nil)\n\n' check for NULL shapes\n\nfor each ftbFeature in lstFTabs\n  strQuery = \"[Shape].isNull\"\n  bmpSelection = ftbFeature.getSelection\n  if(bmpSelection = nil)then\n    MsgBox.error(\"Empty Selection\",\"DC Water Design\")\n    exit\n  end\n  ftbFeature.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)\n  if(bmpSelection.count > 0)then\n    blnDelete = MsgBox.yesNo(\"Found\"++bmpSelection.count.asString++\"records with NULL shapes. Should these records be deleted?\",\"DC Water Design\", true)\n    if(blnDelete)then\n 
-     ftbFeature.setEditable(true)\n      ftbFeature.removeRecords(bmpSelection)\n      ftbFeature.setEditable(false)\n    end\n  end\nend\n\n' check for pipes shorter than the snapping radius\n\nftbPipes = lstFTabs.get(\"Pipes\")\nstrSnappingRadius = dicPreferences.get(\"strSnappingRadius\")\nstrQuery = \"[Shape].returnLength <\"++strSnappingRadius\nbmpSelection = ftbPipes.getSelection\nif(bmpSelection = nil)then\n  MsgBox.error(\"Empty Selection\", \"DC Water Design\")\n  exit\nend\nftbPipes.query(strQuery, bmpSelection, #VTAB_SELTY
-PE_NEW)\nif(bmpSelection.count > 0)then\n  MsgBox.warning(\"Found\"++bmpSelection.count.asString++\"pipes that are shorter than the snapping radius.\"+NL+\"Records in question are selected now.\",\"DC Water Design\")\n  ftbPipes.updateSelection\n  exit\nend\n\n\n' check for orphan nodes\n\n' TODO: this should actually check for end nodes\n\nthmPipes = dicThemes.get(\"Pipes\")\n\nfor each strFeature in {\"Junctions\", \"Valves\", \"Reservoirs\", \"Tanks\", \"Pumps\"}\n  thmFeature = dicThemes.get(strFeature)\n  if(thmFeature <> nil)then\n    th
-mFeature.selectByTheme(thmPipes, #FTAB_RELTYPE_ISWITHINDISTANCEOF, numSnappingRadius, #VTAB_SELTYPE_NEW)\n    ftbFeature = thmFeature.getFTab\n    if(ftbFeature.getSelection.count <> ftbFeature.getNumRecords)then\n      numOrphanNodes = ftbFeature.getNumRecords - ftbFeature.getSelection.count\n      if(MsgBox.yesNo(\"The\"++strFeature++\"Theme contains\"++numOrphanNodes.asString++\"unconnected nodes.\"+NL+\n      \"Delete them?\",\"DC Water Design\",true))then\n          ftbFeature.getSelection.not\n          ftbFeature.upd
-ateSelection\n          ftbFeature.setEditable(true)\n          ftbFeature.removeRecords(ftbFeature.getSelection)\n          ftbFeature.setEditable(false)\n      end\n    end  \n  end\nend\n  \nfor each thmFeature in dicThemes\n  thmFeature.clearSelection  \nend \n\n' merge into one table\nflnTemp = Filename.getTmpDir.makeTmp(\"dc_id_summary\",\"dbf\")\nvtbTemp = VTab.makeNew(flnTemp, dBase)\nfldTemp = Field.make(\"dc_id\", #FIELD_CHAR, 16, 0)\nif(vtbTemp.isEditable.not)then\n  vtbTemp.setEditable(true)\nend\nvtbTemp.addFields({fldT
-emp})\n\nfor each ftbFeature in lstFTabs\n  fldID = ftbFeature.findField(\"dc_id\")\n  if(fldID = nil)then\n    MsgBox.error(\"Field 'dc_id' is missing\",\"DC Water Design\")\n    vtbTemp.setEditable(false)\n    exit\n  end\n  for each recFeature in ftbFeature\n    strID = ftbFeature.returnValue(fldID, recFeature).asString\n    recNew = vtbTemp.addRecord\n    vtbTemp.setValue(fldTemp, recNew, strID)\n  end\nend\n\n'summarize\nflnTemp2 = Filename.getTmpDir.makeTmp(\"dc_id_summary\",\"dbf\")\nvtbSummary = vtbTemp.summarize(flnTemp2, dBa
-se, fldTemp, {},{})\n\n' check for duplicate IDs\n\nstrProblematicQuery = \"([dc_id].asString.count=(-1))\"\n\n\nstrQuery = \"[count] > 1\"\nbmpSelection = vtbSummary.getSelection\nvtbSummary.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)\nnumDoubleIDs = bmpSelection.count\nfldSummaryID = vtbSummary.findField(\"dc_id\")\n\nfor each recProblematic in bmpSelection\n  strID = vtbSummary.returnValue(fldSummaryID, recProblematic)\n  strProblematicQuery = strProblematicQuery+\"or([dc_id].asString.trim=\"+strID.quote+\")\"\nend\n\n\n' check
- for IDs that are too long\nstrQuery = \"[dc_id].count > 13\"\nbmpSelection = vtbSummary.getSelection\nvtbSummary.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)\nnumIDsTooLong = bmpSelection.count\nfldSummaryID = vtbSummary.findField(\"dc_id\")\n\nfor each recProblematic in bmpSelection\n  strID = vtbSummary.returnValue(fldSummaryID, recProblematic)\n  strProblematicQuery = strProblematicQuery+\"or([dc_id].asString.trim=\"+strID.quote+\")\"\nend\n\n' select problematic records\n\nfor each ftbFeature in lstFTabs\n  bmpSelection 
-= ftbFeature.getSelection\n  ftbFeature.query(strProblematicQuery, bmpSelection, #VTAB_SELTYPE_NEW)\n  ftbFeature.setSelection(bmpSelection.clone)\n  ftbFeature.updateSelection\nend\n\nvtbSummary.setEditable(false)\nvtbSummary.deactivate\nvtbTemp.setEditable(false)\nvtbTemp.deactivate\nFile.delete(flnTemp)\nFile.delete(flnTemp2)\n\nif(numDoubleIDs>0)then\n  blnErrorOccurred = true\n  MsgBox.warning(\"The model has\"++numDoubleIDs.asString++\" duplicate ID(s).\"+NL+\"Check the Selection.\", \"DC Water Design\")\nelse\n  MsgBox.info(
-\"The model ID's are unique\", \"DC Water Design\")\nend\n\nif(numIDsTooLong > 0)then\n  blnErrorOccurred = true\n  MsgBox.warning(\"Some ID's in the model are too long. They should not exceed 13 characters.\"+NL+\"Check the Selection.\",\"DC Water Design\")\nend\n\nif(blnErrorOccurred.not)then\n  for each ftbTheme in lstFTabs\n    ftbTheme.getSelection.clearAll\n    ftbTheme.updateSelection\n  end\nend\n\nav.getActiveDoc.getDisplay.invalidate(true)\n\nftbValves = lstFTabs.get(\"Valves\")\nftbPumps = lstFTabs.get(\"Pumps\")\nftbPipes = lst
-FTabs.get(\"Pipes\")\nif(ftbPipes = nil)then\n  MsgBox.warning(\"No Pipes Theme selected.\", \"DC Water Design\")\nend\nif((ftbValves <> nil)or(ftbPumps <> nil))then\n  for each i in 1..2\n    strFieldName = \"node\"+i.asString\n    fldNode = ftbPipes.findField(strFieldName)\n    if(fldNode = nil)then\n      MsgBox.warning(\"The Pipes theme is missing the field '\"+strFieldName+\"'.\", \"DC Water Design\")\n    else\n      if(fldNode.isTypeString.not)then\n        MsgBox.warning(\"The type of field '\"+strFieldName+\"' in the Pipes the
-me should be string.\",\"DC Water Design\")\n      end\n    end\n  end\nend"
-	SearchStr:	"delete"
+	Source:	"' DCWatDes.Model.Epanet.check\n\n' (c) 2001 - 2004 DORSCH Consult\n\n' expects no arguments (called from menu)\n' returns nothing (reports with message boxes)\n\n' checks for unique dc_ids throughout the model\n' checks if node1, node2 fields in the pipes table are of type string\n' if pumps or valves are used in the model, checks for diameter 0\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Fou
+ndation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warranty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Su
+ite 330, Boston, MA  02111-1307  USA\n\n' check for duplicate themes\ndictThemes = av.run(\"DCWatDes.Model.Epanet.returnThemeDictionary\", nil)\nlstThemes = dictThemes.asList\nlstThemeNames = List.make\nfor each thmTheme in lstThemes\n  lstThemeNames.add(thmTheme.getSrcName.asString)\nend\nnumThemeCount = lstThemeNames.count\nlstThemeNames.removeDuplicates\nif(lstThemeNames.count <> numThemeCount)then\n  MsgBox.error(\"You have duplicates themes in your setup. Please correct the theme selection.\",\"DC Water Design\")\n  av.r
+un(\"DCWatDes.Dialog.EpanetThemes.open\", nil)\nend\n\nav.run(\"DCWatDes.Model.Epanet.ensureAliases\",nil)\n\nlstFTabs = av.run(\"DCWatDes.Model.Epanet.returnFTabDictionary\", nil)\n\nextWatDes = Extension.find(\"DC Water Design\")\ndicPreferences = extWatDes.getPreferences\n\nstrSnappingRadius = dicPreferences.get(\"strSnappingRadius\")\nif(strSnappingRadius = nil)then\n  MsgBox.error(\"The snapping radius is not defined. Please define it\",\"DC Water Design\")\n  av.run(\"DCWatDes.Dialog.Setup.open\",nil)\n  exit\nend\nnumSnappingRadius
+ = strSnappingRadius.asNumber\nif((numSnappingRadius = nil)or(numSnappingRadius = 0))then\n  MsgBox.error(\"The snapping radius is not defined. Please define it\",\"DC Water Design\")\n  av.run(\"DCWatDes.Dialog.Setup.open\",nil)\n  exit\nend\n\nnumToGo = lstFTabs.count\nnumCompleted = 0\nnumDoubleIDs = 0\n'numIDsTooLong = 0\n\nblnErrorOccurred = false\n\ndicThemes = av.run(\"DCWatDes.Model.Epanet.returnThemeDictionary\", nil)\n\n' check for NULL shapes\n\nfor each ftbFeature in lstFTabs\n  strQuery = \"[Shape].isNull\"\n  bmpSelection 
+= ftbFeature.getSelection\n  if(bmpSelection = nil)then\n    MsgBox.error(\"Empty Selection\",\"DC Water Design\")\n    exit\n  end\n  ' check for 3D shapes\n  bmpSelection.setAll\n  recOne = bmpSelection.getNextSet(-1)\n  if(recOne > 0)then\n    shpOne = ftbFeature.returnValue(ftbFeature.findField(\"shape\"), recOne)\n    if(shpOne.hasZ)then\n      ' check for 3D Analyst Extension\n      if(Extension.find(\"3D Analyst\").not)then\n        MsgBox.warning(\"You will not be able to edit 3D shapes. 3D Analyst is required.\", \"DC Wat
+er Design\")\n      end\n    end\n  end\n  ftbFeature.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)\n  if(bmpSelection.count > 0)then\n    blnDelete = MsgBox.yesNo(\"Found\"++bmpSelection.count.asString++\"records with NULL shapes. Should these records be deleted?\",\"DC Water Design\", true)\n    if(blnDelete)then\n      ftbFeature.setEditable(true)\n      ftbFeature.removeRecords(bmpSelection)\n      ftbFeature.setEditable(false)\n    end\n  end\nend\n\n' check for pipes shorter than the snapping radius\n\nftbPipes = lstFTabs
+.get(\"Pipes\")\nstrSnappingRadius = dicPreferences.get(\"strSnappingRadius\")\nstrQuery = \"[Shape].returnLength <\"++strSnappingRadius\nbmpSelection = ftbPipes.getSelection\nif(bmpSelection = nil)then\n  MsgBox.error(\"Empty Selection\", \"DC Water Design\")\n  exit\nend\nftbPipes.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)\nif(bmpSelection.count > 0)then\n  MsgBox.warning(\"Found\"++bmpSelection.count.asString++\"pipes that are shorter than the snapping radius.\"+NL+\"Records in question are selected now.\",\"DC Water Design\"
+)\n  ftbPipes.updateSelection\n  exit\nend\n\n' check for pipes with diameter 0\n\nstrQuery = \"([diameter] = 0)or([diameter].isnull)\"\nbmpSelection = ftbPipes.getSelection\nif(bmpSelection = nil)then\n  MsgBox.error(\"Empty Selection\", \"DC Water Design\")\n  exit\nend\nftbPipes.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)\nif(bmpSelection.count > 0)then\n  MsgBox.warning(\"Found\"++bmpSelection.count.asString++\"pipes with diameter 0.\"+NL+\"Records in question are selected now.\",\"DC Water Design\")\n  ftbPipes.updateSelection
+\n  exit\nend\n\n' check for orphan nodes\n\n' TODO: this should actually check for end nodes\n\nthmPipes = dicThemes.get(\"Pipes\")\n\nfor each strFeature in {\"Junctions\", \"Valves\", \"Reservoirs\", \"Tanks\", \"Pumps\"}\n  thmFeature = dicThemes.get(strFeature)\n  if(thmFeature <> nil)then\n    thmFeature.selectByTheme(thmPipes, #FTAB_RELTYPE_ISWITHINDISTANCEOF, numSnappingRadius, #VTAB_SELTYPE_NEW)\n    ftbFeature = thmFeature.getFTab\n    if(ftbFeature.getSelection.count <> ftbFeature.getNumRecords)then\n      numOrphanNodes = 
+ftbFeature.getNumRecords - ftbFeature.getSelection.count\n      if(MsgBox.yesNo(\"The\"++strFeature++\"Theme contains\"++numOrphanNodes.asString++\"unconnected nodes.\"+NL+\n      \"Delete them?\",\"DC Water Design\",true))then\n          ftbFeature.getSelection.not\n          ftbFeature.updateSelection\n          ftbFeature.setEditable(true)\n          ftbFeature.removeRecords(ftbFeature.getSelection)\n          ftbFeature.setEditable(false)\n      end\n    end  \n  end\nend\n  \nfor each thmFeature in dicThemes\n  thmFeature.cle
+arSelection  \nend \n\n' merge into one table\nflnTemp = Filename.getTmpDir.makeTmp(\"dc_id_summary\",\"dbf\")\nvtbTemp = VTab.makeNew(flnTemp, dBase)\nfldTemp = Field.make(\"dc_id\", #FIELD_CHAR, 16, 0)\nif(vtbTemp.isEditable.not)then\n  vtbTemp.setEditable(true)\nend\nvtbTemp.addFields({fldTemp})\n\nfor each ftbFeature in lstFTabs\n  fldID = ftbFeature.findField(\"dc_id\")\n  if(fldID = nil)then\n    MsgBox.error(\"Field 'dc_id' is missing\",\"DC Water Design\")\n    vtbTemp.setEditable(false)\n    exit\n  end\n  for each recFeature in
+ ftbFeature\n    strID = ftbFeature.returnValue(fldID, recFeature).asString\n    recNew = vtbTemp.addRecord\n    vtbTemp.setValue(fldTemp, recNew, strID)\n  end\nend\n\n'summarize\nflnTemp2 = Filename.getTmpDir.makeTmp(\"dc_id_summary\",\"dbf\")\nvtbSummary = vtbTemp.summarize(flnTemp2, dBase, fldTemp, {},{})\n\n' check for duplicate IDs\n\nstrProblematicQuery = \"([dc_id].asString.count=(-1))\"\n\n\nstrQuery = \"[count] > 1\"\nbmpSelection = vtbSummary.getSelection\nvtbSummary.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)\nnumDou
+bleIDs = bmpSelection.count\nfldSummaryID = vtbSummary.findField(\"dc_id\")\n\nfor each recProblematic in bmpSelection\n  strID = vtbSummary.returnValue(fldSummaryID, recProblematic)\n  strProblematicQuery = strProblematicQuery+\"or([dc_id].asString.trim=\"+strID.quote+\")\"\nend\n\n\n' check for IDs that are too long\nstrQuery = \"[dc_id].count > 13\"\nbmpSelection = vtbSummary.getSelection\nvtbSummary.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)\nnumIDsTooLong = bmpSelection.count\nfldSummaryID = vtbSummary.findField(\"dc_i
+d\")\n\nfor each recProblematic in bmpSelection\n  strID = vtbSummary.returnValue(fldSummaryID, recProblematic)\n  strProblematicQuery = strProblematicQuery+\"or([dc_id].asString.trim=\"+strID.quote+\")\"\nend\n\n' select problematic records\n\nfor each ftbFeature in lstFTabs\n  bmpSelection = ftbFeature.getSelection\n  ftbFeature.query(strProblematicQuery, bmpSelection, #VTAB_SELTYPE_NEW)\n  ftbFeature.setSelection(bmpSelection.clone)\n  ftbFeature.updateSelection\nend\n\nvtbSummary.setEditable(false)\nvtbSummary.deactivate\nvtb
+Temp.setEditable(false)\nvtbTemp.deactivate\nFile.delete(flnTemp)\nFile.delete(flnTemp2)\n\nif(numDoubleIDs>0)then\n  blnErrorOccurred = true\n  MsgBox.warning(\"The model has\"++numDoubleIDs.asString++\" duplicate ID(s).\"+NL+\"Check the Selection.\", \"DC Water Design\")\nelse\n  MsgBox.info(\"The model ID's are unique\", \"DC Water Design\")\nend\n\nif(numIDsTooLong > 0)then\n  blnErrorOccurred = true\n  MsgBox.warning(\"Some ID's in the model are too long. They should not exceed 13 characters.\"+NL+\"Check the Selection.\",\"DC Water
+ Design\")\nend\n\nif(blnErrorOccurred.not)then\n  for each ftbTheme in lstFTabs\n    ftbTheme.getSelection.clearAll\n    ftbTheme.updateSelection\n  end\nend\n\nav.getActiveDoc.getDisplay.invalidate(true)\n\nftbValves = lstFTabs.get(\"Valves\")\nftbPumps = lstFTabs.get(\"Pumps\")\nftbPipes = lstFTabs.get(\"Pipes\")\nif(ftbPipes = nil)then\n  MsgBox.warning(\"No Pipes Theme selected.\", \"DC Water Design\")\nend\nif((ftbValves <> nil)or(ftbPumps <> nil))then\n  for each i in 1..2\n    strFieldName = \"node\"+i.asString\n    fldNode = ftbPip
+es.findField(strFieldName)\n    if(fldNode = nil)then\n      MsgBox.warning(\"The Pipes theme is missing the field '\"+strFieldName+\"'.\", \"DC Water Design\")\n    else\n      if(fldNode.isTypeString.not)then\n        MsgBox.warning(\"The type of field '\"+strFieldName+\"' in the Pipes theme should be string.\",\"DC Water Design\")\n      end\n    end\n  end\nend"
+	SearchStr:	"selectByTheme"
 )
 
 (DocWin.502
 	Owner:	501
-	X:	-4
-	Y:	-4
-	W:	1024
-	H:	633
+	Open:	1
+	W:	794
+	H:	1047
 )
 
 (CSMgr.503
@@ -4254,20 +4256,22 @@ ion+\"Running 'Make EPANET Model' is recommended after the Junctions\"+NL\nstrQu
  the implied warranty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\n' no arguments\n' nothing is returned\n\nav.run(\"DCWatDes.Model.Epanet.ensureAliases\", nil)\n\nextDCWatDes = Extension.find(\"DC Water Design\")\nif(extDCWatDes <
 > nil)then\n  dicPreferences = extDCWatDes.getPreferences\nelse \n  return nil\nend\n\nlstSteps = dicPreferences.get(\"lstSteps\")\nif(lstSteps = nil)then\n  return nil\nend\n\nstrStep = MsgBox.choice(lstSteps, \"Choose the Timestep to load\", \"DC Water Design\")\nif(strStep = nil)then\n  return nil\nend\n\nstrResultLoader = dicPreferences.get(\"strResultLoader\")\nif((strResultLoader=\"ArcView\")or(strResultLoader = nil))then\n  vtbNodeResults = nil\n  vtbLinkResults = nil\n  lstTables = av.getProject.getDocsWithGUI(av.findGUI(\"Table\"
 ))\n  strNodeResults = dicPreferences.get(\"strNodeResults\")\n  strLinkResults = dicPreferences.get(\"strLinkResults\") \n  for each tableFeature in lstTables\n    vtbFeature = tableFeature.getVTab\n    if(vtbFeature <> nil)then\n      if(vtbFeature.getBaseTableFilename.getFullName = strLinkResults)then\n        vtbLinkResults = vtbFeature\n      else\n        if(vtbFeature.getBaseTableFilename.getFullName = strNodeResults)then          \n          vtbNodeResults = vtbFeature\n        end\n      end\n    end\n  end\n\n  bmpNo
-deResults = Bitmap.make(vtbNodeResults.getNumRecords)\n  bmpLinkResults = Bitmap.make(vtbLinkResults.getNumRecords)\n  vtbNodeResults.setDefinition(\"([timestep]=\"+strStep+\")\")\n  vtbLinkResults.setDefinition(\"([timestep]=\"+strStep+\")\")  \n    \n  dicFTabs = av.run(\"DCWatDes.Model.Epanet.returnFTabDictionary\",nil)\n      \n  fldResultID = vtbNodeResults.findField(\"dc_id\")\n  fldResultPressure = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_pressure\"})\n  fldResultPressure.setAlias(\"result_pr
-essure_join\")\n  fldResultHead = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_head\"})\n  fldResultHead.setAlias(\"result_head_join\")\n  fldResultDemand = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_demand\"})\n  fldResultDemand.setAlias(\"result_demand_join\")\n  bmpResult = bmpNodeResults\n  \n  ' write results to feature themes \n  for each strFeature in {\"Junctions\", \"Tanks\", \"Reservoirs\"}\n    ftbFeature = dicFTabs.get(strFeature)\n    if(ftbFeature <> nil)then\n 
-     ftbFeature.unjoinAll\n      fldFeatureID = ftbFeature.findField(\"dc_id\")\n      ftbFeature.join(fldFeatureID, vtbNodeResults, fldResultID)\n      ftbFeature.setEditable(true)\n      for each strField in {\"result_pressure\", \"result_head\", \"result_demand\"}\n        fldResult = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbFeature, strField})\n        ftbFeature.calculate(\"[\"+strField+\"_join]\",fldResult)\n      end\n      ftbFeature.setEditable(false)\n      ftbFeature.unjoinAll\n    end\n  end\n  \n  fldResultID 
-= vtbLinkResults.findField(\"dc_id\")\n  fldResultVelocity = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_velocity\"})\n  fldResultFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_flow\"})\n  fldResultHeadloss = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_headloss\"})\n  for each fldResult in {fldResultVelocity, fldResultFlow, fldResultHeadloss}\n    fldResult.setAlias(fldResult.getName+\"_join\")\n  end\n  bmpResult = bmpLinkResults\n  \n
-  for each strFeature in {\"Pumps\", \"Valves\", \"Pipes\"}\n    ftbFeature = dicFTabs.get(strFeature)\n    if(ftbFeature <> nil)then\n      ftbFeature.unjoinAll\n      fldFeatureID = ftbFeature.findField(\"dc_id\")\n      ftbFeature.join(fldFeatureID, vtbLinkResults, fldResultID)\n      ftbFeature.setEditable(true)\n      for each strField in {\"result_velocity\", \"result_flow\", \"result_headloss\"}\n        fldResult = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbFeature, strField})\n        ftbFeature.calculate(\"[\"+strF
-ield+\"_join]\",fldResult)\n      end\n      ftbFeature.setEditable(false)\n      ftbFeature.unjoinAll\n    end\n  end                        \n  vtbNodeResults.setDefinition(\"\")\n  vtbLinkResults.setDefinition(\"\")  \n  return nil\nelse \n  if(strResultLoader = \"MySql\")then\n    ' find the SQL Connection\n    strSqlConnection = dicPreferences.get(\"strSqlConnection\")\n    if(strSqlConnection = nil)then\n      MsgBox.warning(\"You've got to setup a SQL Connection in order to load results.\", \"DC Water Design\")\n      return nil
-\n    end\n    \n    sqlConnection = SqlCon.find(strSqlConnection)\n    \n    if(sqlConnection.isLogin.not)then\n      av.run(\"DCMMS.SqlConnection.login\",sqlConnection)\n    end\n    \n    dicFTabs = av.run(\"DCWatDes.Model.Epanet.returnFTabDictionary\",nil)\n    \n    ' node results\n    vtbNodeResults = VTab.makeSql(sqlConnection, \"select * from dc_nodes where time='\"+strStep+\"';\")\n    \n    fldResultID = vtbNodeResults.findField(\"dc_id\")\n    fldResultPressure = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeRes
-ults, \"result_pressure\"})\n    fldResultHead = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_head\"})\n    fldResultDemand = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_demand\"})\n    bmpResult = vtbNodeResults.getSelection\n    \n    for each strFeature in {\"Junctions\", \"Tanks\", \"Reservoirs\", \"Pumps\", \"Valves\"}\n      ftbFeature = dicFTabs.get(strFeature)\n      fldFeatureID = ftbFeature.findField(\"dc_id\")\n      fldFeaturePressure = av.run(\"DCWatDes.ExpandedAli
-asVTab.findField\",{ftbFeature, \"result_pressure\"})\n      fldFeatureHead = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeature, \"result_head\"})\n      fldFeatureDemand = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeature, \"result_demand\"})\n      for each recFeature in ftbFeature\n        strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString\n        vtbNodeResults.query(\"[dc_id]='\"+strID+\"'\", bmpResult, #VTAB_SELTYPE_NEW)\n        recResult = bmpResult.getNextSet(-1)\n        if(recResu
-lt<> -1)then\n          objPressure = vtbNodeResults.returnValue(fldResultPressure, recResult)\n          ftbFeature.setValue(fldFeaturePressure, recFeature, objPressure)\n          objHead = vtbNodeResults.returnValue(fldResultHead, recResult)\n          ftbFeature.setValue(fldFeatureHead, recFeature, objHead)\n          objDemand = vtbNodeResults.returnValue(fldResultDemand, recResult)\n          ftbFeature.setValue(fldFeatureDemand, recFeature, objDemand)\n        end\n      end\n    end\n    \n    ' link results\n 
-   vtbLinkResults = VTab.makeSql(sqlConnection, \"select * from dc_links where time='\"+strStep+\"';\")\n    fldResultID = vtbLinkResults.findField(\"dc_id\")\n    fldResultVelocity = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_velocity\"})\n    fldResultFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_flow\"})\n    fldResultHeadloss = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_headloss\"})\n    bmpResult = vtbLinkResults.getSelection\n
-    \n    for each strFeature in {\"Pumps\", \"Valves\", \"Pipes\"}\n      ftbFeature = dicFTabs.get(strFeature)\n      fldFeatureID = ftbFeature.findField(\"dc_id\")\n      fldFeatureVelocity = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbFeature, \"result_velocity\"})\n      fldFeatureFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeature, \"result_flow\"})\n      fldFeatureHeadloss = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeature, \"result_headloss\"})\n      for each recFeature in ftbFeature\n    
-    strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString\n        vtbLinkResults.query(\"[dc_id]='\"+strID+\"'\", bmpResult, #VTAB_SELTYPE_NEW)\n        recResult = bmpResult.getNextSet(-1)\n        if(recResult<> -1)then\n          objVelocity = vtbLinkResults.returnValue(fldResultVelocity, recResult)\n          ftbFeature.setValue(fldFeatureVelocity, recFeature, objVelocity)\n          objFlow = vtbLinkResults.returnValue(fldResultFlow, recResult)\n          ftbFeature.setValue(fldFeatureFlow, recFeatur
-e, objFlow)\n          objHeadloss = vtbLinkResults.returnValue(fldResultHeadloss, recResult)\n          ftbFeature.setValue(fldFeatureHeadloss, recFeature, objHeadloss)\n        end\n      end\n    end\n  end  \nend    \n"
+deResults = Bitmap.make(vtbNodeResults.getNumRecords)\n  bmpLinkResults = Bitmap.make(vtbLinkResults.getNumRecords)\n  vtbNodeResults.setDefinition(\"([timestep]=\"+strStep+\")\")\n  vtbLinkResults.setDefinition(\"([timestep]=\"+strStep+\")\")\n  bmpNodeSelection = vtbNodeResults.getSelection\n  bmpNodeSelection.clearAll\n  vtbNodeResults.setSelection(bmpNodeSelection)\n  bmpLinkSelection = vtbLinkResults.getSelection\n  bmpLinkSelection.clearAll\n  vtbLinkResults.setSelection(bmpLinkSelection)\n    \n    \n  dicFTabs = av.run
+(\"DCWatDes.Model.Epanet.returnFTabDictionary\",nil)\n      \n  fldResultID = vtbNodeResults.findField(\"dc_id\")\n  fldResultPressure = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_pressure\"})\n  fldResultPressure.setAlias(\"result_pressure_join\")\n  fldResultHead = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_head\"})\n  fldResultHead.setAlias(\"result_head_join\")\n  fldResultDemand = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_demand\"})\n
+  fldResultDemand.setAlias(\"result_demand_join\")\n  bmpResult = bmpNodeResults\n  \n  ' write results to feature themes \n  for each strFeature in {\"Junctions\", \"Tanks\", \"Reservoirs\"}\n    ftbFeature = dicFTabs.get(strFeature)\n    if(ftbFeature <> nil)then\n      ftbFeature.unjoinAll\n      fldFeatureID = ftbFeature.findField(\"dc_id\")\n      ftbFeature.join(fldFeatureID, vtbNodeResults, fldResultID)\n      ftbFeature.setEditable(true)\n      bmpSelection = ftbFeature.getSelection\n      bmpSelection.clearAll\n      ftb
+Feature.setSelection(bmpSelection)\n      bmpNodeSelection = vtbNodeResults.getSelection\n      bmpNodeSelection.clearAll\n      vtbNodeResults.setSelection(bmpNodeSelection)\n      bmpLinkSelection = vtbLinkResults.getSelection\n      bmpLinkSelection.clearAll\n      vtbLinkResults.setSelection(bmpLinkSelection)\n\n      for each strField in {\"result_pressure\", \"result_head\", \"result_demand\"}\n        fldResult = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbFeature, strField})\n        ftbFeature.calculate(\"[\"+
+strField+\"_join]\",fldResult)\n      end\n      ftbFeature.setEditable(false)\n      ftbFeature.unjoinAll\n    end\n  end\n  \n  fldResultID = vtbLinkResults.findField(\"dc_id\")\n  fldResultVelocity = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_velocity\"})\n  fldResultFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_flow\"})\n  fldResultHeadloss = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_headloss\"})\n  for each fldResult in {fldResul
+tVelocity, fldResultFlow, fldResultHeadloss}\n    fldResult.setAlias(fldResult.getName+\"_join\")\n  end\n  bmpResult = bmpLinkResults\n  \n  for each strFeature in {\"Pumps\", \"Valves\", \"Pipes\"}\n    ftbFeature = dicFTabs.get(strFeature)\n    if(ftbFeature <> nil)then\n      ftbFeature.unjoinAll\n      fldFeatureID = ftbFeature.findField(\"dc_id\")\n      ftbFeature.join(fldFeatureID, vtbLinkResults, fldResultID)\n      ftbFeature.setEditable(true)\n      bmpSelection = ftbFeature.getSelection\n      bmpSelection.clearAll\n  
+    ftbFeature.setSelection(bmpSelection)\n      bmpNodeSelection = vtbNodeResults.getSelection\n      bmpNodeSelection.clearAll\n      vtbNodeResults.setSelection(bmpNodeSelection)\n      bmpLinkSelection = vtbLinkResults.getSelection\n      bmpLinkSelection.clearAll\n      vtbLinkResults.setSelection(bmpLinkSelection)\n\n      for each strField in {\"result_velocity\", \"result_flow\", \"result_headloss\"}\n        fldResult = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbFeature, strField})\n        ftbFeature.calcu
+late(\"[\"+strField+\"_join]\",fldResult)\n      end\n      ftbFeature.setEditable(false)\n      ftbFeature.unjoinAll\n    end\n  end                        \n  vtbNodeResults.setDefinition(\"\")\n  vtbLinkResults.setDefinition(\"\")  \n  return nil\nelse \n  if(strResultLoader = \"MySql\")then\n    ' find the SQL Connection\n    strSqlConnection = dicPreferences.get(\"strSqlConnection\")\n    if(strSqlConnection = nil)then\n      MsgBox.warning(\"You've got to setup a SQL Connection in order to load results.\", \"DC Water Design\")\n   
+   return nil\n    end\n    \n    sqlConnection = SqlCon.find(strSqlConnection)\n    \n    if(sqlConnection.isLogin.not)then\n      av.run(\"DCMMS.SqlConnection.login\",sqlConnection)\n    end\n    \n    dicFTabs = av.run(\"DCWatDes.Model.Epanet.returnFTabDictionary\",nil)\n    \n    ' node results\n    vtbNodeResults = VTab.makeSql(sqlConnection, \"select * from dc_nodes where time='\"+strStep+\"';\")\n    \n    fldResultID = vtbNodeResults.findField(\"dc_id\")\n    fldResultPressure = av.run(\"DCWatDes.ExpandedAliasVTab.findField\"
+, {vtbNodeResults, \"result_pressure\"})\n    fldResultHead = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_head\"})\n    fldResultDemand = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbNodeResults, \"result_demand\"})\n    bmpResult = vtbNodeResults.getSelection\n    \n    for each strFeature in {\"Junctions\", \"Tanks\", \"Reservoirs\", \"Pumps\", \"Valves\"}\n      ftbFeature = dicFTabs.get(strFeature)\n      fldFeatureID = ftbFeature.findField(\"dc_id\")\n      fldFeaturePressure = av.run(\"DCWatDe
+s.ExpandedAliasVTab.findField\",{ftbFeature, \"result_pressure\"})\n      fldFeatureHead = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeature, \"result_head\"})\n      fldFeatureDemand = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeature, \"result_demand\"})\n      for each recFeature in ftbFeature\n        strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString\n        vtbNodeResults.query(\"[dc_id]='\"+strID+\"'\", bmpResult, #VTAB_SELTYPE_NEW)\n        recResult = bmpResult.getNextSet(-1)\n     
+   if(recResult<> -1)then\n          objPressure = vtbNodeResults.returnValue(fldResultPressure, recResult)\n          ftbFeature.setValue(fldFeaturePressure, recFeature, objPressure)\n          objHead = vtbNodeResults.returnValue(fldResultHead, recResult)\n          ftbFeature.setValue(fldFeatureHead, recFeature, objHead)\n          objDemand = vtbNodeResults.returnValue(fldResultDemand, recResult)\n          ftbFeature.setValue(fldFeatureDemand, recFeature, objDemand)\n        end\n      end\n    end\n    \n    ' l
+ink results\n    vtbLinkResults = VTab.makeSql(sqlConnection, \"select * from dc_links where time='\"+strStep+\"';\")\n    fldResultID = vtbLinkResults.findField(\"dc_id\")\n    fldResultVelocity = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_velocity\"})\n    fldResultFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_flow\"})\n    fldResultHeadloss = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbLinkResults, \"result_headloss\"})\n    bmpResult = vtbLinkResults.
+getSelection\n    \n    for each strFeature in {\"Pumps\", \"Valves\", \"Pipes\"}\n      ftbFeature = dicFTabs.get(strFeature)\n      fldFeatureID = ftbFeature.findField(\"dc_id\")\n      fldFeatureVelocity = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbFeature, \"result_velocity\"})\n      fldFeatureFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeature, \"result_flow\"})\n      fldFeatureHeadloss = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeature, \"result_headloss\"})\n      for each recFeature in ft
+bFeature\n        strID = ftbFeature.returnValue(fldFeatureID, recFeature).asString\n        vtbLinkResults.query(\"[dc_id]='\"+strID+\"'\", bmpResult, #VTAB_SELTYPE_NEW)\n        recResult = bmpResult.getNextSet(-1)\n        if(recResult<> -1)then\n          objVelocity = vtbLinkResults.returnValue(fldResultVelocity, recResult)\n          ftbFeature.setValue(fldFeatureVelocity, recFeature, objVelocity)\n          objFlow = vtbLinkResults.returnValue(fldResultFlow, recResult)\n          ftbFeature.setValue(fldFeatureFl
+ow, recFeature, objFlow)\n          objHeadloss = vtbLinkResults.returnValue(fldResultHeadloss, recResult)\n          ftbFeature.setValue(fldFeatureHeadloss, recFeature, objHeadloss)\n        end\n      end\n    end\n  end  \nend    \n"
 	SearchStr:	"findField"
 	FontSize:	1
 )
@@ -4562,7 +4566,7 @@ or each rec in vtbSteps\n    strStep = vtbSteps.returnValue(fldTime, rec)\n    s
 	Source:	"' DCWatDes.Model.Epanet.returnFieldLists\n\n' (c) 2000 DORSCH Consult\n' return a list that contains lists of epanet themes and the required fields\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even t
 he implied warranty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\n' expects no argument\n\nreturn { {\"Junctions\",{\"dc_id\", \"elevation\", \"demand\", \"pattern\", \"result_head\", \"result_pressure\", \"result_demand\", \"emittercoeffici
 ent\"}}, \n      {\"Pipes\",{\"dc_id\", \"node1\", \"node2\", \"length\", \"diameter\", \"roughness\", \"minorloss\", \"result_flow\", \"result_velocity\", \"result_headloss\", \"status\"}}, \n      {\"Tanks\",{\"dc_id\", \"elevation\", \"initiallevel\", \"minimumlevel\",\"maximumlevel\",\"diameter\",\"minimumvolume\",\"volumecurve\", \"result_pressure\", \"result_head\", \"result_demand\"}}, \n      {\"Reservoirs\",{\"dc_id\", \"head\",\"pattern\", \"result_head\", \"result_pressure\", \"result_demand\"}}, \n      {\"Valves\", {\"dc_id\",\"elevation\",\"diameter\",\"type\",\"setting
-\",\"minorloss\", \"result_flow\", \"result_velocity\", \"result_headloss\"}},\n      {\"Pumps\",{\"dc_id\",\"elevation\",\"properties\",\"result_flow\",\"result_velocity\", \"result_headloss\"}},\n      {\"Pattern\", {\"dc_id\", \"multiplier\"}},\n      {\"Curve\", {\"dc_id\", \"dc_x\", \"dc_y\"}}}\n"
+\",\"minorloss\", \"result_flow\", \"result_velocity\", \"result_headloss\"}},\n      {\"Pumps\",{\"dc_id\",\"elevation\",\"properties\",\"result_flow\",\"result_velocity\", \"result_headloss\"}},\n      {\"Pattern\", {\"dc_id\", \"multiplier\"}},\n      {\"Curves\", {\"dc_id\", \"dc_x\", \"dc_y\"}}}\n"
 	FontSize:	1
 )
 
@@ -4820,14 +4824,13 @@ tent   ' Visable extent as rect\n    X1 = VE.GetLeft.setFormatPrecision(10)\n   
 \n      thmModel.SetVisible(true)\n    end\n  \n    'redraw view\n    if(rectOldExtent <> nil)then\n      viewActive.getDisplay.setExtent(rectOldExtent)\n      viewActive.invalidate\n    end    \n  end\nend\n\n' write out settings from tables\nfor each lstSetting in {{\"Options\", strOptions}, {\"Times\", strTimes}, {\"Report\", strReport}}\n  strTable = lstSetting.get(1)\n  strTag = lstSetting.get(0)\n  tableEN = nil\n  for each aTable in av.getProject.getDocsWithGui(av.findGui(\"Table\"))\n    if(aTable.getName = strTable)then\n   
    tableEN = aTable\n      break\n    end\n  end\n  if(tableEN <> nil)then\n    av.run(\"XmlParser.Table.writeToLineFile\", {tableEN, lnf_Xml, strTag.lcase})\n  else \n    MsgBox.info(\"DCWatDes.Model.runEpanet: Table\"++strTable++\"not found.\"+NL+\"Epanet will use default settings.\",\"DC Water Design Extension\")\n  end\nend\n\n' write out controls section\n\nlnf_Xml.writeElt(\"<controls>\")\ntableControls = nil\nstrControlTableName = dicPreferences.get(\"strControls\")\nfor each docTable in av.getProject.getDocsWithGui(av.findGui(\"T
 able\"))\n  if(docTable.getName = strControlTableName)then\n    tableControls = docTable\n    break\n  end\nend\nif(tableControls <> nil)then\n  vtbControls = tableControls.getVTab\n  fldFirst=vtbControls.getFields.get(0)\n  for each recControl in vtbControls\n    strControl = vtbControls.returnValue(fldFirst, recControl).asString.quote\n    for each strBreaksXML in  {\"&\",\"<\"}\n      if(strControl.contains(strBreaksXML))then\n        System.echo(\"ERROR: \"+strBreaksXML+\" not allowed in controls table, it will be dropped.\"
-)\n        strControl = strControl.substitute(strBreaksXML,\"\")\n      end\n    end\n    strControl = \"<control whattodoif=\"+strControl+\"/>\"\n    lnf_Xml.writeElt(strControl)\n  end\nend\nlnf_Xml.writeElt(\"</controls>\")\n\n\n' curves\nlnf_Xml.writeElt(\"<curves>\")\nstrCurvesTable = dicPreferences.get(\"strCurves\")\nif(strCurvesTable <> nil)then\n  lstTables = av.getProject.getDocsWithGui(av.findGui(\"Table\"))\n  vtbCurves = nil\n  for each tableInDoc in lstTables\n    if(strCurvesTable = tableInDoc.getName)then\n      vtbCurves =
- tableInDoc.getVTab\n      break\n    end    \n  end\n  if(vtbCurves = nil)then\n    Msgbox.error(\"Couldn't find Curves table.\", \"DC Water Design Extension\")\n    lnf_Xml.close\n    av.clearStatus\n    exit\n  end\n  if(vtbCurves.getFields.count <> 3)then\n    Msgbox.error(\"The Curves table should contain three fields: Id, x and y\", \"DC Water Design Extension\")\n    lnf_Xml.close\n    av.clearStatus\n    exit\n  end\n  fldID = vtbCurves.getFields.get(0)\n  fldX = vtbCurves.getFields.get(1)\n  fldY = vtbCurves.getFields.get(2
-)\n  for each recCurve in vtbCurves\n    strCurve = \"<curve x=\"+vtbCurves.returnValue(fldX, recCurve).asString.quote\n    strCurve = strCurve+\" y=\"+vtbCurves.returnValue(fldY, recCurve).asString.quote\n    strCurve = strCurve+\">\"+vtbCurves.returnValue(fldID, recCurve).asString+\"</curve>\"\n    lnf_Xml.writeElt(strCurve)\n  end      \nend  \nlnf_Xml.writeElt(\"</curves>\")\n\n' pattern\nlnf_Xml.writeElt(\"<patterns>\")\nstrPatternTable = dicPreferences.get(\"strPattern\")\nif(strPatternTable <> nil)then\n  lstTables = av.getProj
-ect.getDocsWithGui(av.findGui(\"Table\"))\n  vtbPattern = nil\n  for each tableInDoc in lstTables\n    if(strPatternTable = tableInDoc.getName)then\n      vtbPattern = tableInDoc.getVTab\n      break\n    end    \n  end\n  if(vtbPattern = nil)then\n    Msgbox.error(\"Couldn't find Pattern table.\", \"DC Water Design Extension\")\n    lnf_Xml.close\n    av.clearStatus\n    exit\n  end\n  if(vtbPattern.getFields.count <> 2)then\n    Msgbox.error(\"The Pattern table should contain two fields: Id and multiplier\", \"DC Water Design Ex
-tension\")\n    lnf_Xml.close\n    av.clearStatus\n    exit\n  end\n  fldID = vtbPattern.getFields.get(0)\n  fldMultiplier = vtbPattern.getFields.get(1)\n  for each recPattern in vtbPattern\n    strPattern = \"<pattern multiplier=\"+vtbPattern.returnValue(fldMultiplier, recPattern).asString.quote\n    strPattern = strPattern+\">\"+vtbPattern.returnValue(fldID, recPattern).asString+\"</pattern>\"\n    lnf_Xml.writeElt(strPattern)\n  end      \nend  \nlnf_Xml.writeElt(\"</patterns>\")\n\nlnf_Xml.writeElt(\"</network>\")\nlnf_Xml.close\n
-av.clearStatus\n\nstrXml= fln_Xml.getFullName\nstrBasePath=strXml.left(strXml.count-3)\n\nflnInp = (strBasePath+\"inp\").asFilename\n\n'clean up\nFile.delete(flnInp)\n\nstrCmd = strSabCmd+\" -text -xsl \"+strXslt+\" -in \"+strXml+\" -out \"+strBasePath+\"inp\"\nav.run(\"DCWatDes.System.call\", strCmd)\n\nstrTimeout = dicPreferences.get(\"strCommandTimeout\")\nif((strTimeout <> nil)and(strTimeout.isNumber))then\n  numTimeout = strTimeout.asNumber\nelse\n  numTimeout = 30  \nend\n\n\nif(av.run(\"DCWatDes.File.waitFor\", {flnInp, numTimeout}).not
-)then\n  MsgBox.info(\"XSLT Transformation failed. Check your data.\",\"DC Water Design Extension\")\n  exit\nend\n\nreturn fln_Xml\n"
-	SearchStr:	"three"
+)\n        strControl = strControl.substitute(strBreaksXML,\"\")\n      end\n    end\n    strControl = \"<control whattodoif=\"+strControl+\"/>\"\n    lnf_Xml.writeElt(strControl)\n  end\nend\nlnf_Xml.writeElt(\"</controls>\")\n\n' write Curves and Patterns\nfor each lstSection in { {\"Curves\",{\"dc_id\", \"x\",\"y\"}},\n                         {\"Patterns\",{\"dc_id\", \"multiplier\"}}}\n  strSection = lstSection.get(0)\n  lstAttributes = lstSection.get(1)\n  lnf_Xml.writeElt(\"<\"+strSection.lcase+\">\")\n  strSectionTable = dicPreferences.get(
+\"str\"+strSection)\n  if(strSectionTable <> nil)then\n    lstTables = av.getProject.getDocsWithGui(av.findGui(\"Table\"))\n    vtbSection = nil\n    for each tableInDoc in lstTables\n      if(strSectionTable = tableInDoc.getName)then\n        vtbSection = tableInDoc.getVTab\n        break\n      end    \n    end\n    if(vtbSection = nil)then\n      Msgbox.error(\"Couldn't find \"+strSection+\" table.\", \"DC Water Design Extension\")\n      lnf_Xml.close\n      av.clearStatus\n      exit\n    end  \n    ' check for the fields\n  \n  
+  lstFields = List.make\n    blnFieldsMissing = false\n    for each strAttribute in lstAttributes\n      fldAttribute = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbSection, strAttribute})\n      if(fldAttribute <> nil)then\n        lstFields.add(fldAttribute)\n        fldAttribute.setAlias(fldAttribute.getAlias.lcase)\n      else\n        MsgBox.error(\"Field '\"+strAttribute+\"' is missing in the \"+strSection+\" table.\"+NL+\"Can't export Epanet Model.\"+NL+\"Please set the proper Alias.\",\"DC Water Design Extension
+\")\n        blnFieldsMissing = true\n      end\n    end\n    if(blnFieldsMissing)then\n      lnf_Xml.close\n      exit\n    end\n    fldID = lstFields.get(0)\n    lstFields.remove(0)\n    strSectionSingular = strSection.substitute(\"es\",\"e\").substitute(\"ns\",\"n\").lcase\n    for each rec in vtbSection\n      strAttributes=\"\"\n      for each fld in lstFields\n          strAttribute = vtbSection.returnValue(fld, rec).asString\n          strAttributes = strAttributes++fld.getAlias+\"=\"+strAttribute.quote\n      end\n      strID = 
+vtbSection.returnValue(fldID, rec).asString\n      lnf_Xml.writeElt(\"<\"+strSectionSingular++strAttributes+\">\"+strID+\"</\"+strSectionSingular+\">\")\n    end\n  end\n  lnf_Xml.writeElt(\"</\"+strSection.lcase+\">\")\nend\n\nlnf_Xml.writeElt(\"</network>\")\nlnf_Xml.close\nav.clearStatus\n\nstrXml= fln_Xml.getFullName\nstrBasePath=strXml.left(strXml.count-3)\n\nflnInp = (strBasePath+\"inp\").asFilename\n\n'clean up\nFile.delete(flnInp)\n\nstrCmd = strSabCmd+\" -text -xsl \"+strXslt+\" -in \"+strXml+\" -out \"+strBasePath+\"inp\"\nav.run(\"DCWatDes.
+System.call\", strCmd)\n\nstrTimeout = dicPreferences.get(\"strCommandTimeout\")\nif((strTimeout <> nil)and(strTimeout.isNumber))then\n  numTimeout = strTimeout.asNumber\nelse\n  numTimeout = 30  \nend\n\n\nif(av.run(\"DCWatDes.File.waitFor\", {flnInp, numTimeout}).not)then\n  MsgBox.info(\"XSLT Transformation failed. Check your data.\",\"DC Water Design Extension\")\n  exit\nend\n\nreturn fln_Xml\n"
+	SearchStr:	"pattern"
 	FontSize:	1
 )
 
@@ -5417,7 +5420,7 @@ ULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\
 wJunctions.add(pntEnd.clone)\n    end\n  end\n  \n  if(numSnapped <> 2)then\n    blnKeep = MsgBox.yesNo((2-numSnapped).asString +\" Endnode(s) unsnapped. \"+(2-numSnapped).asString+\" Junction(s) will be automatically added. Keep pipe?\",\"DC Water Design\", true)\n    if(blnKeep.not)then\n      return nil\n    end\n  end\n  \n  ftbJunctions = dicFTabs.get(\"Junctions\")\n  if((ftbPipes <> nil)and(ftbJunctions<>nil))then\n    'add dynamic junctions\n    ftbJunctions.setEditable(true)\n    fldSubtype = av.run(\"DCWatDes.ExpandedAli
 asVTab.findField\", {ftbJunctions, \"dcSubtype\"})\n    fldJunctionID = ftbJunctions.findField(\"dc_id\")\n    fldShape = ftbJunctions.findField(\"Shape\")\n    for each pntJunction in lstNewJunctions\n      recJunction = ftbJunctions.addRecord\n      ftbJunctions.setValue(fldShape, recJunction, pntJunction)\n      if(fldSubtype <> nil)then\n        ftbJunctions.setValue(fldSubtype, recJunction, 101)\n      end\n      if(fldJunctionID <> nil)then\n        ftbJunctions.setValue(fldJunctionID, recJunction, \"j\"+ftbJunctions.ge
 tNumRecords.asString)\n      end\n    end\n    ftbJunctions.setEditable(false)\n    \n    ' create new pipe\n    ftbPipes.setEditable(true)\n    fldShape = ftbPipes.findField(\"Shape\")\n    recPipe = ftbPipes.addRecord\n    ftbPipes.setValue(fldShape, recPipe, Polyline.make(lstPllPoints))\n    av.getProject.setModified(true)\n    ftbPipes.getSelection.clearAll\n    ftbPipes.getSelection.set(recPipe)\n    ftbPipes.updateSelection\n    fldPipeID = ftbPipes.findField(\"dc_id\")\n    if(fldPipeID <> nil)then\n      ftbPipes.setVa
-lue(fldPipeID, recPipe, \"p\"+ftbPipes.getNumRecords.asString)\n    end\n    ' keep network alive\n     \n    av.run(\"DCWatDes.Model.Epanet.Pipe.updateNodeFields\", recPipe)\n    \n    ftbPipes.setEditable(false)\n  end\nend  \n"
+lue(fldPipeID, recPipe, \"l\"+ftbPipes.getNumRecords.asString)\n    end\n    ' keep network alive\n     \n    av.run(\"DCWatDes.Model.Epanet.Pipe.updateNodeFields\", recPipe)\n    \n    ftbPipes.setEditable(false)\n  end\nend  \n"
 )
 
 (DocWin.682
@@ -6088,15 +6091,16 @@ Extension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename, \"$AVE
 CWatDes.View.Popup.Pipes\") )\n'4\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.Nodes\"))\n'5\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"BOQ.make\"))\n'6\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.classifyHouseConnections\"))\n\n'7\ndlgSetup = av.findDialog(\"DCWatDes.Dialog.Setup\")\ndlgSetup.setServer(nil)\nmyExt.add(dlgSetup)\n\n'8\nmyExt.add(av.getProject.findGUI(\"Project\").getMenuBar.findByLabel(\"DC Water Design\"))\n\n
 '9\ndlgEpanetTables = av.findDialog(\"DCWatDes.Dialog.EpanetTables\")\ndlgEpanetTables.setServer(nil)\nmyExt.add(dlgEpanetTables)\n\n'10\ndlgEpanetThemes = av.findDialog(\"DCWatDes.Dialog.EpanetThemes\")\ndlgEpanetThemes.setServer(nil)\nmyExt.add(dlgEpanetThemes)\n\n'11\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetThemes.open\"))\n\n' 12 Flip Tool\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.flipPolyline\"))\n\n' 13 \ndlgResultTables = av.findDialog(
 \"DCWatDes.Dialog.ResultTables\")\ndlgResultTables.setServer(nil)\nmyExt.add(dlgResultTables)\n\n' 14 Node Digitizing\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.digitizeNode\"))\n\n' 15 Epanet Tables Button\nmyExt.add(av.getProject.findGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetTables.open\"))\n\n' 16 Bitcode Calculator Button\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.calculateBitcode\"))\n\n' 17 PipesAndNodes View Popup\nmyExt.a
-dd( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.08+cvs\"+NL+\"(c) 1998 - 2004 DORSCH Consult.\"+NL+\n\"T
-his extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(208)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadE
-lt\n  if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
+dd( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.09\"+NL+\"(c) 1998 - 2004 DORSCH Consult.\"+NL+\n\"This 
+extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(209)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n 
+ if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
 	SearchStr:	"06"
 	FontSize:	2
 )
 
 (DocWin.774
 	Owner:	773
+	Open:	1
 	X:	-4
 	Y:	-4
 	W:	1610
@@ -6431,10 +6435,10 @@ gClose = av.findDialog(strDialog)\n  dlgClose.close\nend\n\nDialog.detachFromExt
 	Win:	823
 	CSMgr:	824
 	DocExts:	825
-	Source:	"' Script.saveAllScripts\n\n' If the scripts are to be saved elsewhere, change the following line... \n\nstrSaveDir = \"c:\\data\\sandbox\\sourceforge\\dcwatdes\"\n\nif (File.exists(strSaveDir.asFilename).Not) then\n  MsgBox.Error(\"Working directory:\"++strSaveDir++\"does not exist\", \"\")\n  exit \nend\n\nlstScripts = List.make\n\n' find all scripts\n\nfor each docObj in av.getProject.getDocs\n  if (docObj.is(SEd)) then\n    lstScripts.Add(docObj)\n  end\nend\n\n' Loop over all scripts, write to files\n\nblnOverwrite = nil\nnumWritten = 0\n	
-\nlstScriptsToWrite = List.make\n\nfor each sedScript in lstScripts\n\n  strSaveDir2 = strSaveDir.clone\n  strScriptName = sedScript.asString ' .substitute(\".\",\",\")\n   \n  flnScript = FileName.merge(strSaveDir2, strScriptName)\n  ' System.echo(flnScript.getFullName)\n  flnScript.setName(strScriptName+\".ave\")\n  if (flnScript.isFile) then\n    if(blnOverwrite = nil)then\n      blnOverwrite = MsgBox.YesNo(\"Overwrite files?\", \"Saving Scripts\", false)\n      if(blnOverwrite.not)then\n        continue \n      end\n    end\n     
- \n    ' check if file has been changed\n    txfScript = TextFile.make(flnScript, #FILE_PERM_READ)\n    strFileSource = txfScript.read(txfScript.getSize)\n    blnChanged = false\n    if(strFileSource <> sedScript.getSource)then\n      blnChanged = true\n    end\n    txfScript.close\n    if(blnChanged)then\n    '  File.delete(flnScript)\n    else\n     continue\n    end\n  end \n  \n  txfScript = TextFile.make(flnScript, #FILE_PERM_WRITE)\n  if (txfScript <> nil) then\n    txfScript.write(sedScript.getSource, sedScript.getSou
-rce.count)\n    txfScript.close\n    numWritten = numWritten+1\n  else\n    MsgBox.warning(\"Unable to open file for writing:\"++flnScript.getFullName,\"Saving Scripts\")\n  end\nend\nMsgBox.info(numWritten.asString++\"Scripts were written.\", \"Saving Scripts\")\n\n\n\n\n\n\n\n\n"
+	Source:	"' Script.saveAllScripts\n\n' If the scripts are to be saved elsewhere, change the following line... \n\nstrSaveDir = \"c:\\data\\sandbox\\sourceforge\\dcwaterdesign\\dcwatdes\"\n\nif (File.exists(strSaveDir.asFilename).Not) then\n  MsgBox.Error(\"Working directory:\"++strSaveDir++\"does not exist\", \"\")\n  exit \nend\n\nlstScripts = List.make\n\n' find all scripts\n\nfor each docObj in av.getProject.getDocs\n  if (docObj.is(SEd)) then\n    lstScripts.Add(docObj)\n  end\nend\n\n' Loop over all scripts, write to files\n\nblnOverwrite = nil\nnu
+mWritten = 0\n	\nlstScriptsToWrite = List.make\n\nfor each sedScript in lstScripts\n\n  strSaveDir2 = strSaveDir.clone\n  strScriptName = sedScript.asString ' .substitute(\".\",\",\")\n   \n  flnScript = FileName.merge(strSaveDir2, strScriptName)\n  ' System.echo(flnScript.getFullName)\n  flnScript.setName(strScriptName+\".ave\")\n  if (flnScript.isFile) then\n    if(blnOverwrite = nil)then\n      blnOverwrite = MsgBox.YesNo(\"Overwrite files?\", \"Saving Scripts\", false)\n      if(blnOverwrite.not)then\n        continue \n      end
+\n    end\n      \n    ' check if file has been changed\n    txfScript = TextFile.make(flnScript, #FILE_PERM_READ)\n    strFileSource = txfScript.read(txfScript.getSize)\n    blnChanged = false\n    if(strFileSource <> sedScript.getSource)then\n      blnChanged = true\n    end\n    txfScript.close\n    if(blnChanged)then\n    '  File.delete(flnScript)\n    else\n     continue\n    end\n  end \n  \n  txfScript = TextFile.make(flnScript, #FILE_PERM_WRITE)\n  if (txfScript <> nil) then\n    txfScript.write(sedScript.getSource, se
+dScript.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  else\n    MsgBox.warning(\"Unable to open file for writing:\"++flnScript.getFullName,\"Saving Scripts\")\n  end\nend\nMsgBox.info(numWritten.asString++\"Scripts were written.\", \"Saving Scripts\")\n\n\n\n\n\n\n\n\n"
 )
 
 (DocWin.823
@@ -10908,9 +10912,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Modified:	1
 	Visible:	1
 	MenuBar:	1634
-	ButnBar:	1699
-	Popups:	1745
-	ToolBar:	1746
+	ButnBar:	1701
+	Popups:	1747
+	ToolBar:	1748
 	NewScript:	"Script.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Script.Action"
@@ -10918,7 +10922,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Script.ActionUpdate"
 	Title:	"Scripts"
-	Icon:	1747
+	Icon:	1749
 )
 
 (MenuBar.1634
@@ -10926,7 +10930,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1648
 	Child:	1664
 	Child:	1683
-	Child:	1694
+	Child:	1696
 )
 
 (PMenu.1635
@@ -11063,7 +11067,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1652
-	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -11316,6 +11319,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1691
 	Child:	1692
 	Child:	1693
+	Child:	1694
+	Child:	1695
 	Label:	"&Window"
 )
 
@@ -11360,7 +11365,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVStr.1690
-	S:	"dcwatdes2.apr DCWatDes.Model.Epanet.ensureAliases DCWatDes.Model.Epanet.Fields.createMissing"
+	S:	"dcwatdes2.apr DCWatDes.Model.Epanet.check DCWatDes.Model.Epanet.ensureAliases DCWatDes.Model.Epanet.Fields.createMissing DCWatDesExtension.make"
 )
 
 (Choice.1691
@@ -11371,29 +11376,43 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1692
-	Help:	"Activates DCWatDes.Model.Epanet.ensureAliases"
-	Label:	"&2 DCWatDes.Model.Epanet.ensureAliases"
+	Help:	"Activates DCWatDes.Model.Epanet.check"
+	Label:	"&2 DCWatDes.Model.Epanet.check"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
 (Choice.1693
-	Help:	"Activates DCWatDes.Model.Epanet.Fields.createMissing"
-	Label:	"&3 DCWatDes.Model.Epanet.Fields.createMissing"
+	Help:	"Activates DCWatDes.Model.Epanet.ensureAliases"
+	Label:	"&3 DCWatDes.Model.Epanet.ensureAliases"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1694
-	InternalName:	"Help"
-	Child:	1695
-	Child:	1696
-	Child:	1697
-	Child:	1698
-	Label:	"&Help"
+(Choice.1694
+	Help:	"Activates DCWatDes.Model.Epanet.Fields.createMissing"
+	Label:	"&4 DCWatDes.Model.Epanet.Fields.createMissing"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
 )
 
 (Choice.1695
+	Help:	"Activates DCWatDesExtension.make"
+	Label:	"&5 DCWatDesExtension.make"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.1696
+	InternalName:	"Help"
+	Child:	1697
+	Child:	1698
+	Child:	1699
+	Child:	1700
+	Label:	"&Help"
+)
+
+(Choice.1697
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -11401,7 +11420,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1696
+(Choice.1698
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help"
@@ -11409,10 +11428,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1697
+(Space.1699
 )
 
-(Choice.1698
+(Choice.1700
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -11420,358 +11439,358 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1699
-	Child:	1700
+(ButnBar.1701
 	Child:	1702
 	Child:	1704
 	Child:	1706
 	Child:	1708
-	Child:	1709
+	Child:	1710
 	Child:	1711
-	Child:	1712
+	Child:	1713
 	Child:	1714
 	Child:	1716
-	Child:	1717
+	Child:	1718
 	Child:	1719
 	Child:	1721
 	Child:	1723
 	Child:	1725
 	Child:	1727
-	Child:	1728
+	Child:	1729
 	Child:	1730
 	Child:	1732
 	Child:	1734
-	Child:	1735
+	Child:	1736
 	Child:	1737
 	Child:	1739
 	Child:	1741
-	Child:	1742
 	Child:	1743
+	Child:	1744
+	Child:	1745
 )
 
-(Butn.1700
+(Butn.1702
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1701
+	Icon:	1703
 	Click:	"Project.Save"
 )
 
-(AVIcon.1701
+(AVIcon.1703
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Butn.1702
+(Butn.1704
 	Disabled:	1
 	Help:	"Cut//Cuts the selection and puts it into the clipboard"
 	HelpTopic:	"Cut"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1703
+	Icon:	1705
 	Click:	"Script.Cut"
 )
 
-(AVIcon.1703
+(AVIcon.1705
 	Name:	"Cut"
 	Res:	"Icons.Cut"
 
 )
 
-(Butn.1704
+(Butn.1706
 	Disabled:	1
 	Help:	"Copy//Copies the selection and puts it into the clipboard"
 	HelpTopic:	"Copy"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1705
+	Icon:	1707
 	Click:	"Script.Copy"
 )
 
-(AVIcon.1705
+(AVIcon.1707
 	Name:	"Copy"
 	Res:	"Icons.Copy"
 
 )
 
-(Butn.1706
+(Butn.1708
 	Help:	"Paste//Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
-	Icon:	1707
+	Icon:	1709
 	Click:	"Script.Paste"
 )
 
-(AVIcon.1707
+(AVIcon.1709
 	Name:	"Paste"
 	Res:	"Icons.Paste"
 
 )
 
-(Space.1708
+(Space.1710
 )
 
-(Butn.1709
+(Butn.1711
 	Help:	"Undo//Undoes the last modification to the script editor text"
 	HelpTopic:	"Undo__Script_"
-	Icon:	1710
+	Icon:	1712
 	Click:	"Script.Undo"
 )
 
-(AVIcon.1710
+(AVIcon.1712
 	Name:	"Undo"
 	Res:	"Icons.Undo"
 
 )
 
-(Space.1711
+(Space.1713
 )
 
-(Butn.1712
+(Butn.1714
 	Help:	"Shift Lines Left//Shifts selected lines or current line two spaces to the left"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1713
+	Icon:	1715
 	Click:	"Script.ShiftLeft"
 )
 
-(AVIcon.1713
+(AVIcon.1715
 	Name:	"ShiftLeft"
 	Res:	"Icons.ShiftLeft"
 
 )
 
-(Butn.1714
+(Butn.1716
 	Help:	"Shift Lines Right//Shifts selected lines or current line two spaces to the right"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1715
+	Icon:	1717
 	Click:	"Script.ShiftRight"
 )
 
-(AVIcon.1715
+(AVIcon.1717
 	Name:	"ShiftRight"
 	Res:	"Icons.ShiftRight"
 
 )
 
-(Space.1716
+(Space.1718
 )
 
-(Butn.1717
+(Butn.1719
 	Disabled:	1
 	Help:	"Compile//Compiles the script"
 	HelpTopic:	"Compile"
 	Update:	"Script.CompileUpdate"
-	Icon:	1718
+	Icon:	1720
 	Click:	"Script.Compile"
 )
 
-(AVIcon.1718
+(AVIcon.1720
 	Name:	"Check"
 	Res:	"Icons.Check"
 
 )
 
-(Butn.1719
+(Butn.1721
 	Help:	"Run//Runs the compiled script"
 	HelpTopic:	"Run"
 	Update:	"Script.RunUpdate"
-	Icon:	1720
+	Icon:	1722
 	Click:	"Script.Run"
 )
 
-(AVIcon.1720
+(AVIcon.1722
 	Name:	"Run"
 	Res:	"Icons.Run"
 
 )
 
-(Butn.1721
+(Butn.1723
 	Help:	"Step//Executes one request or object reference in the compiled script"
 	HelpTopic:	"Step"
 	Update:	"Script.RunUpdate"
-	Icon:	1722
+	Icon:	1724
 	Click:	"Script.Step"
 )
 
-(AVIcon.1722
+(AVIcon.1724
 	Name:	"Footprints"
 	Res:	"Icons.Footprints"
 
 )
 
-(Butn.1723
+(Butn.1725
 	Help:	"Toggle Breakpoint//Toggles a breakpoint on or off at the current cursor position"
 	HelpTopic:	"Toggle_Breakpoint"
 	Update:	"Script.RunUpdate"
-	Icon:	1724
+	Icon:	1726
 	Click:	"Script.ToggleBreak"
 )
 
-(AVIcon.1724
+(AVIcon.1726
 	Name:	"Hand"
 	Res:	"Icons.Hand"
 
 )
 
-(Butn.1725
+(Butn.1727
 	Help:	"Examine Variables//Displays the current value of local and global variables"
 	HelpTopic:	"Examine_Variables"
 	Update:	"Script.RunUpdate"
-	Icon:	1726
+	Icon:	1728
 	Click:	"Script.ShowVariables"
 )
 
-(AVIcon.1726
+(AVIcon.1728
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1727
+(Space.1729
 )
 
-(Butn.1728
+(Butn.1730
 	Help:	"Load System Script//Inserts the source code of a system script"
 	HelpTopic:	"Load_System_Script"
-	Icon:	1729
+	Icon:	1731
 	Click:	"Script.SystemLoad"
 )
 
-(AVIcon.1729
+(AVIcon.1731
 	Name:	"LoadScript"
 	Res:	"Icons.LoadScript"
 
 )
 
-(Butn.1730
+(Butn.1732
 	Help:	"Load Text File//Inserts the contents of a text file"
 	HelpTopic:	"Load_Text_File"
-	Icon:	1731
+	Icon:	1733
 	Click:	"Script.FileLoad"
 )
 
-(AVIcon.1731
+(AVIcon.1733
 	Name:	"Open"
 	Res:	"Icons.Open"
 
 )
 
-(Butn.1732
+(Butn.1734
 	Help:	"Write Text File//Writes the entire script or the selected text to a text file"
 	HelpTopic:	"Write_Text_File"
-	Icon:	1733
+	Icon:	1735
 	Click:	"Script.FileWrite"
 )
 
-(AVIcon.1733
+(AVIcon.1735
 	Name:	"Write"
 	Res:	"Icons.Write"
 
 )
 
-(Space.1734
+(Space.1736
 )
 
-(Butn.1735
+(Butn.1737
 	Help:	"Script Help//Searches for help using the current selection"
 	HelpTopic:	"Getting_help_about_script_components"
-	Icon:	1736
+	Icon:	1738
 	Click:	"Script.Help"
 )
 
-(AVIcon.1736
+(AVIcon.1738
 	Name:	"Help"
 	Res:	"Icons.Help"
 
 )
 
-(Butn.1737
+(Butn.1739
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1738
+	Icon:	1740
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1738
+(AVIcon.1740
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.1739
-	Icon:	1740
+(Butn.1741
+	Icon:	1742
 	Click:	"Programming.findInAllScripts"
 )
 
-(AVIcon.1740
+(AVIcon.1742
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1741
+(Space.1743
 )
 
-(Butn.1742
+(Butn.1744
 	Icon:	1087
 	Click:	"DCWatDesExtension.make"
 )
 
-(Butn.1743
-	Icon:	1744
+(Butn.1745
+	Icon:	1746
 	Click:	"Script.setNameFromFirstComment"
 )
 
-(AVIcon.1744
+(AVIcon.1746
 	Name:	"Yen"
 	Res:	"Icons.Yen"
 
 )
 
-(PopupSet.1745
+(PopupSet.1747
 )
 
-(ToolBar.1746
+(ToolBar.1748
 )
 
-(AVIcon.1747
+(AVIcon.1749
 	Name:	"Icon"
 	Res:	"SEd.Icon"
 
 )
 
-(DocGUI.1748
+(DocGUI.1750
 	Name:	"Project"
 	Type:	"Project"
 	Modified:	1
-	MenuBar:	1749
-	ButnBar:	1823
-	Popups:	1830
-	ToolBar:	1831
-	Icon:	1832
+	MenuBar:	1751
+	ButnBar:	1826
+	Popups:	1833
+	ToolBar:	1834
+	Icon:	1835
 )
 
-(MenuBar.1749
-	Child:	1750
-	Child:	1762
-	Child:	1802
-	Child:	1807
-	Child:	1818
-)
-
-(PMenu.1750
-	InternalName:	"File"
-	Child:	1751
+(MenuBar.1751
 	Child:	1752
+	Child:	1764
+	Child:	1804
+	Child:	1809
+	Child:	1821
+)
+
+(PMenu.1752
+	InternalName:	"File"
 	Child:	1753
 	Child:	1754
 	Child:	1755
 	Child:	1756
+	Child:	1757
 	Child:	1758
-	Child:	1759
 	Child:	1760
 	Child:	1761
+	Child:	1762
+	Child:	1763
 	Label:	"&File"
 )
 
-(Choice.1751
+(Choice.1753
 	Help:	"Creates a new project"
 	HelpTopic:	"New_Project"
 	Label:	"&New Project"
@@ -11779,7 +11798,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+N"
 )
 
-(Choice.1752
+(Choice.1754
 	Help:	"Opens an existing project"
 	HelpTopic:	"Open_Project"
 	Label:	"&Open Project..."
@@ -11787,7 +11806,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1753
+(Choice.1755
 	Help:	"Closes the project window"
 	HelpTopic:	"Close_Project"
 	Label:	"&Close Project"
@@ -11795,10 +11814,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1754
+(Space.1756
 )
 
-(Choice.1755
+(Choice.1757
 	Help:	"Saves the current project"
 	HelpTopic:	"Save_Project"
 	Label:	"&Save Project"
@@ -11806,7 +11825,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+S"
 )
 
-(Choice.1756
+(Choice.1758
 	Help:	"Saves the current project with a new name"
 	HelpTopic:	"Save_Project_As"
 	Label:	"Save Project &As..."
@@ -11814,10 +11833,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1758
+(Space.1760
 )
 
-(Choice.1759
+(Choice.1761
 	Help:	"Displays the Extensions dialog"
 	HelpTopic:	"Extensions"
 	Label:	"&Extensions..."
@@ -11825,10 +11844,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1760
+(Space.1762
 )
 
-(Choice.1761
+(Choice.1763
 	Help:	"Exits ArcView"
 	HelpTopic:	"Exit"
 	Label:	"E&xit"
@@ -11836,10 +11855,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1762
+(PMenu.1764
 	InternalName:	"Project"
-	Child:	1763
-	Child:	1764
 	Child:	1765
 	Child:	1766
 	Child:	1767
@@ -11877,7 +11894,11 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1799
 	Child:	1800
 	Child:	1801
-	Child:	1772
+	Child:	1802
+	Child:	1803
+	Child:	1774
+	Child:	1803
+	Child:	1802
 	Child:	1801
 	Child:	1800
 	Child:	1799
@@ -11905,12 +11926,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1777
 	Child:	1776
 	Child:	1775
-	Child:	1774
-	Child:	1773
 	Label:	"&Project"
 )
 
-(Choice.1763
+(Choice.1765
 	Help:	"Displays the dialog box to edit properties of the project"
 	HelpTopic:	"Project_Properties"
 	Label:	"&Properties..."
@@ -11918,7 +11937,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1764
+(Choice.1766
 	Help:	"Customizes the active project"
 	HelpTopic:	"Customize"
 	Update:	"Project.CustomizeUpdate"
@@ -11927,31 +11946,31 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1765
+(Space.1767
 )
 
-(Choice.1766
+(Choice.1768
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
-	Label:	"&Rename 'DCWatDes.Model.Epanet.ensureAliases'..."
+	Label:	"&Rename 'DCWatDesExtension.make'..."
 	Click:	"Project.Rename"
 	Shortcut:	"Keys.Ctrl+R"
 )
 
-(Choice.1767
+(Choice.1769
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
-	Label:	"&Delete 'DCWatDes.Model.Epanet.ensureAliases'..."
+	Label:	"&Delete 'DCWatDesExtension.make'..."
 	Click:	"Project.Delete"
 	Shortcut:	"Keys.Del"
 )
 
-(Space.1768
+(Space.1770
 )
 
-(Choice.1769
+(Choice.1771
 	Help:	"Adds a table to the project"
 	HelpTopic:	"Add_Table"
 	Update:	"Project.AddTableUpdate"
@@ -11960,7 +11979,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1770
+(Choice.1772
 	Help:	"Creates a new project component from an external source"
 	HelpTopic:	"Import"
 	Update:	"Project.ImportUpdate"
@@ -11969,19 +11988,13 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1771
+(Choice.1773
 	Help:	"Opens the SQL Connection manager"
 	HelpTopic:	"SQL_Connect"
 	Update:	"Project.HasSQL"
 	Label:	"&SQL Connect..."
 	Click:	"Project.SQLConnect"
 	Shortcut:	"Keys.None"
-)
-
-(Space.1772
-)
-
-(Space.1773
 )
 
 (Space.1774
@@ -12068,57 +12081,64 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 (Space.1801
 )
 
-(PMenu.1802
-	Child:	1803
-	Child:	1804
+(Space.1802
+)
+
+(Space.1803
+)
+
+(PMenu.1804
 	Child:	1805
 	Child:	1806
+	Child:	1807
+	Child:	1808
 	Label:	"DC Water Design"
 )
 
-(Choice.1803
+(Choice.1805
 	Tag:	"Setup"
 	Label:	"Setup"
 	Click:	"DCWatDes.Dialog.Setup.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1804
+(Choice.1806
 	Tag:	"Epanet Tables"
 	Label:	"Epanet Tables"
 	Click:	"DCWatDes.Dialog.EpanetTables.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1805
+(Choice.1807
 	Tag:	"Result Tables"
 	Label:	"Result Tables"
 	Click:	"DCWatDes.Dialog.ResultTables.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1806
+(Choice.1808
 	Tag:	"About"
 	Label:	"About"
 	Click:	"DCWatDes.about"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1807
+(PMenu.1809
 	InternalName:	"Window"
-	Child:	1808
-	Child:	1809
 	Child:	1810
 	Child:	1811
 	Child:	1812
 	Child:	1813
+	Child:	1814
 	Child:	1815
-	Child:	1816
 	Child:	1817
+	Child:	1818
+	Child:	1819
+	Child:	1820
 	Label:	"&Window"
 )
 
-(Choice.1808
+(Choice.1810
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -12126,7 +12146,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1809
+(Choice.1811
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -12134,7 +12154,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1810
+(Choice.1812
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -12142,10 +12162,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1811
+(Space.1813
 )
 
-(Choice.1812
+(Choice.1814
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -12153,46 +12173,53 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.1813
-	ObjectTag:	1814
+(Space.1815
+	ObjectTag:	1816
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.1814
-	S:	"dcwatdes2.apr DCWatDes.Model.Epanet.ensureAliases DCWatDes.Model.Epanet.Fields.createMissing"
+(AVStr.1816
+	S:	"dcwatdes2.apr DCWatDes.Model.Epanet.check DCWatDes.Model.Epanet.ensureAliases DCWatDes.Model.Epanet.Fields.createMissing"
 )
 
-(Choice.1815
+(Choice.1817
 	Help:	"Activates dcwatdes2.apr"
 	Label:	"&1 dcwatdes2.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1816
-	Help:	"Activates DCWatDes.Model.Epanet.ensureAliases"
-	Label:	"&2 DCWatDes.Model.Epanet.ensureAliases"
+(Choice.1818
+	Help:	"Activates DCWatDes.Model.Epanet.check"
+	Label:	"&2 DCWatDes.Model.Epanet.check"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
-)
-
-(Choice.1817
-	Help:	"Activates DCWatDes.Model.Epanet.Fields.createMissing"
-	Label:	"&3 DCWatDes.Model.Epanet.Fields.createMissing"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1818
-	InternalName:	"Help"
-	Child:	1819
-	Child:	1820
-	Child:	1821
-	Child:	1822
-	Label:	"&Help"
 )
 
 (Choice.1819
+	Help:	"Activates DCWatDes.Model.Epanet.ensureAliases"
+	Label:	"&3 DCWatDes.Model.Epanet.ensureAliases"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.1820
+	Help:	"Activates DCWatDes.Model.Epanet.Fields.createMissing"
+	Label:	"&4 DCWatDes.Model.Epanet.Fields.createMissing"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.1821
+	InternalName:	"Help"
+	Child:	1822
+	Child:	1823
+	Child:	1824
+	Child:	1825
+	Label:	"&Help"
+)
+
+(Choice.1822
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12200,7 +12227,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1820
+(Choice.1823
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12208,10 +12235,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1821
+(Space.1824
 )
 
-(Choice.1822
+(Choice.1825
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12219,69 +12246,69 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1823
+(ButnBar.1826
 	Update:	"Project.UpdateButtons"
-	Child:	1824
-	Child:	1826
 	Child:	1827
 	Child:	1829
+	Child:	1830
+	Child:	1832
 )
 
-(Butn.1824
+(Butn.1827
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1825
+	Icon:	1828
 	Click:	"Project.Save"
 )
 
-(AVIcon.1825
+(AVIcon.1828
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1826
+(Space.1829
 )
 
-(Butn.1827
+(Butn.1830
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1828
+	Icon:	1831
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1828
+(AVIcon.1831
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.1829
+(Butn.1832
 	Icon:	1087
 	Click:	"DCWatDesExtension.make"
 )
 
-(PopupSet.1830
+(PopupSet.1833
 )
 
-(ToolBar.1831
+(ToolBar.1834
 )
 
-(AVIcon.1832
+(AVIcon.1835
 	Name:	"Icon"
 	Res:	"Project.Icon"
 
 )
 
-(DocGUI.1851
+(DocGUI.1854
 	Name:	"Overview"
 	DocBaseName:	"Overview for "
 	Type:	"View"
 	Modified:	1
-	MenuBar:	1852
-	ButnBar:	1862
-	Popups:	1868
-	ToolBar:	1887
+	MenuBar:	1855
+	ButnBar:	1865
+	Popups:	1871
+	ToolBar:	1890
 	NewScript:	"View.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Doc.Action"
@@ -12289,23 +12316,23 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Doc.ActionUpdate"
 	Title:	"Overviews"
-	Icon:	1890
+	Icon:	1893
 )
 
-(MenuBar.1852
-	Child:	1853
-	Child:	1857
-)
-
-(PMenu.1853
-	InternalName:	"Edit"
-	Child:	1854
-	Child:	1855
+(MenuBar.1855
 	Child:	1856
+	Child:	1860
+)
+
+(PMenu.1856
+	InternalName:	"Edit"
+	Child:	1857
+	Child:	1858
+	Child:	1859
 	Label:	"&Edit"
 )
 
-(Choice.1854
+(Choice.1857
 	Help:	"Displays the TOC so you can delete or changed themes."
 	Update:	"OverView.DisplayTOCUpdate"
 	Label:	"Display TOC"
@@ -12313,7 +12340,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1855
+(Choice.1858
 	Disabled:	1
 	Help:	"Removes the active themes from the view"
 	HelpTopic:	"Delete_Themes"
@@ -12323,19 +12350,19 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1856
+(Space.1859
 )
 
-(PMenu.1857
+(PMenu.1860
 	InternalName:	"Help"
-	Child:	1858
-	Child:	1859
-	Child:	1860
 	Child:	1861
+	Child:	1862
+	Child:	1863
+	Child:	1864
 	Label:	"&Help"
 )
 
-(Choice.1858
+(Choice.1861
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12343,7 +12370,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1859
+(Choice.1862
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12351,10 +12378,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1860
+(Space.1863
 )
 
-(Choice.1861
+(Choice.1864
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12362,49 +12389,46 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1862
-	Child:	1863
-	Child:	1865
+(ButnBar.1865
 	Child:	1866
+	Child:	1868
+	Child:	1869
 )
 
-(Butn.1863
+(Butn.1866
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1864
+	Icon:	1867
 	Click:	"Project.Save"
 )
 
-(AVIcon.1864
+(AVIcon.1867
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1865
+(Space.1868
 )
 
-(Butn.1866
+(Butn.1869
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1867
+	Icon:	1870
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1867
+(AVIcon.1870
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(PopupSet.1868
-	Child:	1869
+(PopupSet.1871
+	Child:	1872
 )
 
-(Popup.1869
-	Child:	1870
-	Child:	1871
-	Child:	1872
+(Popup.1872
 	Child:	1873
 	Child:	1874
 	Child:	1875
@@ -12419,10 +12443,13 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1884
 	Child:	1885
 	Child:	1886
+	Child:	1887
+	Child:	1888
+	Child:	1889
 	Label:	"Menu"
 )
 
-(Choice.1870
+(Choice.1873
 	Disabled:	1
 	Invisible:	1
 	Help:	"Deletes the last entered point on the line or polygon being drawn"
@@ -12432,7 +12459,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1871
+(Choice.1874
 	Help:	"Undo the last edit to graphics on a view"
 	HelpTopic:	"Undo_Graphic_Edit_on_a_view"
 	Update:	"View.UndoEditUpdate"
@@ -12441,7 +12468,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1872
+(Choice.1875
 	Disabled:	1
 	Invisible:	1
 	Help:	"Redo the last edit operation on a theme that was undone"
@@ -12451,10 +12478,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1873
+(Space.1876
 )
 
-(Choice.1874
+(Choice.1877
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns general snapping on"
@@ -12464,7 +12491,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1875
+(Choice.1878
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns interactive snapping on"
@@ -12474,10 +12501,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1876
+(Space.1879
 )
 
-(Choice.1877
+(Choice.1880
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest vertex within the user tolerance"
@@ -12487,7 +12514,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1878
+(Choice.1881
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest line segment"
@@ -12497,7 +12524,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1879
+(Choice.1882
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest node common to two or more features"
@@ -12507,7 +12534,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1880
+(Choice.1883
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest endpoint of an existing line"
@@ -12517,10 +12544,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1881
+(Space.1884
 )
 
-(Choice.1882
+(Choice.1885
 	Help:	"Unselects the selected features in all active themes"
 	Update:	"View.AttributeThemesUpdate"
 	Label:	"Clear Selection"
@@ -12528,7 +12555,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1883
+(Choice.1886
 	Help:	"Zooms in at point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom In"
@@ -12536,7 +12563,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1884
+(Choice.1887
 	Help:	"Zooms out from point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom Out"
@@ -12544,7 +12571,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1885
+(Choice.1888
 	Help:	"Zooms to the extent of the selected features"
 	Update:	"View.SelectableThemesUpdate"
 	Label:	"Zoom to Selected"
@@ -12552,7 +12579,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1886
+(Choice.1889
 	Help:	"Centers display on point where you click to bring up popup"
 	Update:	"View.HasDataUpdate"
 	Label:	"Pan"
@@ -12560,74 +12587,74 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ToolBar.1887
-	Child:	1888
+(ToolBar.1890
+	Child:	1891
 )
 
-(Tool.1888
+(Tool.1891
 	Help:	"Pointer//Selects, moves, and resizes graphics"
 	HelpTopic:	"Pointer_tool"
 	Update:	"View.HasDataUpdate"
-	Icon:	1889
+	Icon:	1892
 	Cursor:	"Cursors.Select"
 	Apply:	"Overview.ResizeBox"
 	Click:	"View.SelectTool"
 )
 
-(AVIcon.1889
+(AVIcon.1892
 	Name:	"Select"
 	Res:	"Icons.Select"
 
 )
 
-(AVIcon.1890
+(AVIcon.1893
 	Name:	"O"
 	Res:	"Icons.O"
 
 )
 
-(FN.2008
+(FN.2011
 	Path:	"$HOME"
 )
 
-(TClr.2009
+(TClr.2012
 	Red:	0xffff
 	Green:	0xffff
 )
 
-(AVStr.2010
+(AVStr.2013
 	S:	"View"
 )
 
-(AVStr.2011
+(AVStr.2014
 	S:	"Table"
 )
 
-(AVStr.2012
+(AVStr.2015
 	S:	"Chart"
 )
 
-(AVStr.2013
+(AVStr.2016
 	S:	"Layout"
 )
 
-(AVStr.2014
+(AVStr.2017
 	S:	"Script"
 )
 
-(AVStr.2015
+(AVStr.2018
 	S:	"Project"
 )
 
-(AVStr.2016
+(AVStr.2019
 	S:	"Appl"
 )
 
-(AVStr.2017
+(AVStr.2020
 	S:	"Overview"
 )
 
-(AVStr.2018
+(AVStr.2021
 	S:	"DialogEditor"
 )
 
