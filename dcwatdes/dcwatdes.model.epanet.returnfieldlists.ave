@@ -19,7 +19,7 @@
 
 ' expects no argument
 
-return { {"Junctions",{"dc_id", "elevation", "demand", "pattern", "result_head", "result_pressure", "result_demand"}}, 
+return { {"Junctions",{"dc_id", "elevation", "demand", "pattern", "result_head", "result_pressure", "result_demand", "emittercoefficient"}}, 
       {"Pipes",{"dc_id", "node1", "node2", "length", "diameter", "roughness", "minorloss", "result_flow", "result_velocity", "result_headloss", "status"}}, 
       {"Tanks",{"dc_id", "elevation", "initiallevel", "minimumlevel","maximumlevel","diameter","minimumvolume","volumecurve", "result_pressure", "result_head", "result_demand"}}, 
       {"Reservoirs",{"dc_id", "head","pattern", "result_head", "result_pressure", "result_demand"}}, 

@@ -388,6 +388,20 @@ else
 end
 lnf_Xml.writeElt("</junctions>")
 
+' write emitters section
+lnf_Xml.writeElt("<emitters>")
+if(thmJunctions <> nil)then
+  fldEmitter = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbJunctions, "emittercoefficient"})
+  for each rec in ftbJunctions
+    numEmitter = ftbJunctions.returnValue(fldEmitter, rec)
+    if((numEmitter.isNull.not) and (numEmitter <> 0))then
+      strID = ftbJunctions.returnValue(fldID, rec).asString
+      lnf_Xml.writeElt("<emitter flowcoefficient="+numEmitter.asString.quote+">"+strID+"</emitter>")
+    end
+  end
+end
+lnf_Xml.writeElt("</emitters>")
+
 ' write Reservoir and Tank data
 
 for each lstSection in { {"Reservoirs",{"dc_id", "head","pattern"}},

@@ -1,3 +1,12 @@
+2003-07-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.returnfieldlists: added emittercoefficient to
+	junction
+	* dcwatdes.model.epanet.createmissingfields: emittercoefficient field
+	is created when missing
+	* dcwatdes.model.epanet.writeinpfile: writing emitters to the inp file
+	* dcwatdesextension.make: updated for 2.08 release
+	
 2003-07-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/av_epanet_data_model.dia: added EmitterCoefficient to Junction

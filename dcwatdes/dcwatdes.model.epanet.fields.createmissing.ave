@@ -38,7 +38,7 @@ numCreated = 0
 lstIntegerFieldNames = {"diameter"}
 lstFloatFieldNames = {"Elevation", "demand", "result_head", "result_pressure", "result_demand", "length",
                       "roughness","minorloss","result_flow","result_velocity","result_headloss","initiallevel",
-                      "minimumlevel","maximumlevel","minimumvolume"}
+                      "minimumlevel","maximumlevel","minimumvolume", "emittercoefficient"}
 
 for each lstTheme in lstAllFields
 
