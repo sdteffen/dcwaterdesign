@@ -1,3 +1,11 @@
+2003-01-12  Steffen Macke <Steffe_Macke@dorsch.com.jo>
+	* dcwatdes.i18n.createdictionaries: added russian translations
+	(Thanks to Tom Chidley)
+	
+2002-11-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.skeletonize: skeletonization works now
+	
 2002-11-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.skeletonize:

@@ -103,8 +103,11 @@ for each recJunction in ftbJunctions
       pllFirstPipe = ftbPipes.returnValue(fldPipeShape, lstConnectedPipes.get(0))
       pllSecondPipe = ftbPipes.returnValue(fldPipeShape, lstConnectedPipes.get(1))
       pllUnion = pllFirstPipe.returnUnion(pllSecondPipe).clean
-      lstUnionedPipes.add({lstConnectedPipes.get(0), pllUnion})
-      numToGo = numToGo + 1
+      
+      ftbPipes.setValue(fldPipeShape, lstConnectedPipes.get(0), pllUnion)
+      ftbPipes.setValue(fldPipeShape, lstConnectedPipes.get(1), Polyline.makeNull)
+      'lstUnionedPipes.add({lstConnectedPipes.get(0), pllUnion})
+ '     numToGo = numToGo + 1
       ' remove pipe
       bmpPurgePipes.set(lstConnectedPipes.get(1))
     end
@@ -118,16 +121,15 @@ for each recJunction in ftbJunctions
 end
 
 ' commit unioned pipes
-for each lstRecPll in lstUnionedPipes
-  ftbPipes.setValue(fldPipeShape, lstRecPll.get(0), lstRecPll.get(1))
-  numDone = numDone+1
-   if(av.setStatus(numDone/numToGo * 100).not)then
-    av.clearStatus
-    av.showMsg("")
-    exit
-   end
-
-end
+'for each lstRecPll in lstUnionedPipes
+ ' ftbPipes.setValue(fldPipeShape, lstRecPll.get(0), lstRecPll.get(1))
+  'numDone = numDone+1
+   'if(av.setStatus(numDone/numToGo * 100).not)then
+    'av.clearStatus
+    'av.showMsg("")
+    'exit
+   'end
+'end
 
 ' delete pipes
 ftbPipes.removeRecords(bmpPurgePipes)
