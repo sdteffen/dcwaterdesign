@@ -210,20 +210,9 @@ for each lstSection in lstSections
           pntSecondNode = pllFirstSection.along(50)
         end
         strAttributes=""
-        fldPower = ftbSection.findField("power_kw")
-        if(fldPower <> nil)then
-          strPower = ftbSection.returnValue(fldPower, rec).asString
-          if((strPower = nil)or(strPower.isNumber.not))then
-            fldPower=nil
-          end
-        end  
         for each fld in lstFields
           strAttribute = ftbSection.returnValue(fld, rec).asString
-          if((fld.getName="properties")and(fldPower<>nil))then
-            strAttributes = strAttributes++fld.getAlias.lcase+"="+(strAttribute+" POWER "+strPower).quote
-          else
-            strAttributes = strAttributes++fld.getAlias.lcase+"="+strAttribute.quote
-          end
+          strAttributes = strAttributes++fld.getAlias.lcase+"="+strAttribute.quote
         end
         strAttributes = strAttributes++"node1="+strFirstNodeID.quote
         strAttributes = strAttributes++"node2="+strSecondNodeID.quote

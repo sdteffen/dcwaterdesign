@@ -1,3 +1,9 @@
+2004-07-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile:
+	* doc/av_epanet_data_model.dia: dropping support for power_kw field
+	of pumps as this is dangerous (fixes bug #986213)
+
 2004-06-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.writeinpfile:
