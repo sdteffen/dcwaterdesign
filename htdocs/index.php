@@ -218,14 +218,7 @@
                         <p><B><A HREf="http://xml.apache.org/xalan-c/index.html">Xalan</A></B>
                         <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://xml.apache.org/dist/xalan-c/Xalan-C_1_2-win32.zip">Win32 XSLT Parser.</A><BR>
-                        <A HREf="http://xml.apache.org/xalan-c/index.html">more...</A>
-
-
-
-                        <p><B><A HREf="http://www.lyx.org">LyX</A></B>
-
-
+                        <p><B><A HREf="http://www.redhisp.upv.es/software/gisred/GISRed_eng.htm">GISRed</A></B>
 
                         <p><B><A HREf="http://sourceforge.net">Sourceforge</A>:</B>
 
@@ -292,7 +285,8 @@
     $url = "http://sourceforge.net/export/rss2_projfiles.php?group_id=21566&rss_limit=10";
     $rss = fetch_rss($url);
     foreach ($rss->items as $item ) { ?>
-	    <h3><?= str_replace("dcwaterdesign", "DC Water Design Extension", $item[title]); ?></h3>
+	    <h3><?= str_replace("dcsewerdesign", "DC Sewer Design Extension", 
+	    str_replace("dcwaterdesign", "DC Water Design Extension", $item[title])); ?></h3>
 	    <p><?= $item["description"]; ?></p><?php
     } ?>
 
@@ -326,7 +320,7 @@
 
                         <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://prdownloads.sourceforge.net/dcwaterdesign/example_network.zip">example_network.zip.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/project/showfiles.php?group_id=21566&package_id=17283">Sample Data</A><BR>
 
                         </FONT>
         </FONT>
@@ -360,17 +354,19 @@
 
                 <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#000000">
 
-
+                <p><b>Flyer:</b><br /><font face="Arial, Helvetica, Sans-Serif" size="2">
+		  <img src="images/point.png" border="0" alt="o" width="12" height="12" />
+		  <a href="dcwaterdesign_flyer.pdf">PDF</a></font></p>
 
                 <p><B>Manual:</B>
 
                         <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://download.sourceforge.net/dcwaterdesign/dcwatdes_manual.pdf">PDF.</A><BR>
-
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/docman/display_doc.php?docid=3152&group_id=21566">Text.</A><BR>
-
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/dcwaterdesign/dcwatdes/doc/dcwatdes_manual.lyx">LyX.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/dcwaterdesign.pdf">PDF.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/index.html">HTML.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/dcwaterdesign.chm">CHM.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/dcwaterdesign.xml">DocBook.</A><BR>
+                                
 
                         <A HREf="http://sourceforge.net/docman/?group_id=21566">more...</A>
 
@@ -384,7 +380,7 @@
 
                                 <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/dcwaterdesign/dcwatdes/doc/av_epanet_data_model.dia">dia.</A><BR>
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://download.sourceforge.net/dcwaterdesign/av_epanet_data_model_2.00.pdf">PDF.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/av_epanet_data_model.pdf">PDF.</A><BR>
 
                         <A HREf="http://sourceforge.net/project/showfiles.php?group_id=21566">more...</A>
 
