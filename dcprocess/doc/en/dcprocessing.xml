@@ -38,12 +38,19 @@
     released under the
     terms of the GNU Lesser General License (LGPL) - the full source code
     is available (Open Source).</para>
-  <para>This manual describes version 1.2.7 of the <citetitle>DC Processing 
+  <para>This manual describes version 1.2.8 of the <citetitle>DC Processing 
     Extension</citetitle>.</para>
   <sect2 id="news">
     <title>What's New?</title>
     <para>A summary of changes in the different versions of the DC Processing
       Extension.</para>
+    <sect3 id="version_1_2_8">
+      <title>Version 1.2.8</title>
+      <itemizedlist>
+        <listitem><para>New function &quot;Flip End Lines&quot;.
+	  See <xref linkend="flip_end_lines" />.</para></listitem>
+      </itemizedlist>
+    </sect3>
     <sect3 id="version_1_2_7">
       <title>Version 1.2.7</title>
       <para><itemizedlist>
@@ -392,6 +399,17 @@
 	  errors.</para></caution>
       <note><para>The function uses a snapping radius of 0.01.</para></note>
     </sect3>
+    <sect3 id="flip_end_lines">
+      <title>Flip End Lines</title>
+      <para>Flip all lines connected to end nodes (end lines) in a consistent 
+        direction. This is useful e.g. to determine the correct node angle
+	for end caps in water supply networks.</para>
+      <para>All end lines will end at the end node.</para>
+      <note><para>Isolated lines (those lines having two end nodes) will be 
+        flipped randomly.</para></note>
+      <note><para>This function uses a snapping radius of 0.01 map
+        units.</para></note>	
+    </sect3>  
   </sect2>
   <sect2 id="table_gui">
     <title>Table GUI</title>

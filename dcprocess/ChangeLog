@@ -1,3 +1,15 @@
+2005-04-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.flipendlines.ave:
+	* dcprocess.network.flipendlines.update.ave:
+	* doc/en/dcprocessing.xml: new function "Flip End Lines" for preparation
+	of network drawings.
+	* doc/docbook.xsl:
+	* doc/build.xml: removed WINDOWS-1256 encoding
+	* doc/docbook_pdf.xsl: Using SVG icons in PDF
+	* dcprocessing.nsi:
+	* build.xml: version number is 1.2.7+cvs
+	
 2005-03-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcprocess.network.classifyconnections.ave: Connection detail for

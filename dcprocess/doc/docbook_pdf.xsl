@@ -3,4 +3,6 @@
   <xsl:import href="file:///c:/program%20files/docbook-xsl/fo/profile-docbook.xsl"/>
   <xsl:import href="docbook.xsl"/>
   <xsl:param name="admon.graphics">1</xsl:param>
+  <xsl:param name="use.svg" select="1"/>
+  <xsl:param name="admon.graphics.extension">.svg</xsl:param>
 </xsl:stylesheet>

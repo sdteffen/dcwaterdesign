@@ -50,6 +50,7 @@
       <fileset dir="${docbookdir}/images">
         <include name="*.PNG"/>
         <include name="*.png"/>
+	<include name="*.svg" />
       </fileset>
     </copy>
     <copy todir="${dir}/images/callouts">

@@ -5,7 +5,7 @@
   <!-- configuration -->
   
   <!-- Custom DC Processing stylesheets -->
-  <property name="dcprocessing_version" value="1.2.7" />
+  <property name="dcprocessing_version" value="1.2.7+cvs" />
   
   <target name="DCProcessingDistribution" id="DCProcessingDistribution">
     <tar destfile="dcprocessing-${dcprocessing_version}.tar">

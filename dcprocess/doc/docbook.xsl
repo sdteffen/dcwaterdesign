@@ -89,9 +89,6 @@
   <xsl:param name="toc.indent.width">20</xsl:param>
   <xsl:param name="ulink.show">1</xsl:param>
   <xsl:param name="insert.xref.page.number">1</xsl:param>
-  <xsl:param name="htmlhelp.encoding" select="'CP1256'" />
-  <xsl:param name="default.encoding" select="'CP1256'" />
-  <xsl:param name="chunker.output.encoding" select="'CP1256'" />
   <xsl:param name="saxon.character.representation" select="'native'" />
   <!-- xsl:output method="html" 
             encoding="UTF-8"

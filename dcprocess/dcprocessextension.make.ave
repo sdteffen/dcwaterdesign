@@ -1,8 +1,8 @@
 ' DCProcessExtension.make
 
-' (c) 2000 - 2004 DORSCH Consult
+' (c) 2000 - 2005 DORSCH Consult
 
-strVersion = msgbox.input("Enter version","Make DC Processing Extension","1.2.6+cvs")
+strVersion = msgbox.input("Enter version","Make DC Processing Extension","1.2.7")
 if (strVersion=nil)then
   exit
 end
@@ -32,7 +32,7 @@ for each d in av.getProject.getDocs
   end
 end
 
-myExt.SetAbout("Processing Extension "+strVersion+NL+"(c) 2000 - 2004 DORSCH Consult."+NL+
+myExt.SetAbout("Processing Extension "+strVersion+NL+"(c) 2000 - 2005 DORSCH Consult."+NL+
 "This extension helps to process and convert various formats of data."+NL+Date.now.asString)
 myExt.SetExtVersion(numVersion)
 myExt.setUnloadScript(av.findScript("DCProcessExtension.unload"))

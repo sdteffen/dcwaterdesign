@@ -88,6 +88,9 @@ num_NodesToProcess = numSelected
 
 '*** identify all selected connections
 for each rec_Node in bmpSelection
+  if(blnDebug)then
+    System.echo("dc_id: "+ftb_Nodes.returnValue(ftb_Nodes.findField("dc_id"), rec_Node))
+  end
   
   if ( av.setStatus(num_ProcessedNodes/num_NodesToProcess*100).not) then
     'user wants to terminate Classification
@@ -130,7 +133,7 @@ for each rec_Node in bmpSelection
       'equal diameter
       if(numDiameter1 = numDiameter2) then
         '******* not required
-         numClass = 91
+         numClass = 0
          lstDiameters.add(numDiameter1)
       else
     
