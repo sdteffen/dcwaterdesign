@@ -1,7 +1,13 @@
-' DCWatDes.Model.Epanet.run
+' DCWatDes.Model.Epanet.Results.importBinary
 
-' (c) 2000, 2001 DORSCH Consult
-' Export Pipe Model as Epanet Model, run Epanet and load the results
+' (c) 2001 DORSCH Consult
+
+' expects no arguments (called from menu)
+' returns nothing (reports with message boxes)
+
+' checks for unique dc_ids throughout the model
+' checks if node1, node2 fields in the pipes table are of type string
+' if pumps or valves are used in the model
 
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public
@@ -17,60 +23,34 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-av.run("DCWatDes.Model.Epanet.ensureAliases",nil)
 
-'get File Locations
 extDCWatDes = Extension.find("DC Water Design")
 if(extDCWatDes <> nil)then
   dicPreferences = extDCWatDes.getPreferences
-  strEpanet = dicPreferences.get("strEpanet")
 else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+lstFileNames = FileDialog.returnFiles({"*.bin"},{"EPANET Binary Result files (*.bin)"},"Load EPANET binary result file", 0)
+if((lstFileNames = nil)or(lstFileNames.count < 1)) then
+  ' User selected cancel
+  exit
+end
+flnBin = lstFileNames.get(0)
+if(flnBin.getFullName.contains(" "))then
+  MsgBox.error("The path"+NL+"'"+flnBin.getFullName+"'"+NL+"contains spaces. This is not allowed.","DC Water Design")
   exit
 end
 
-' this will not export spatial data
-fln_Xml = av.run("DCWatDes.Model.Epanet.writeInpFile", false)
-
-strXml= fln_Xml.getFullName
-strBasePath=strXml.left(strXml.count-3)
-
-flnInp = (strBasePath+"inp").asFilename
-flnOut = (strBasePath+"txt").asFilename
-flnBin = (strBasePath+"bin").asFilename	
-
-'clean up
-File.delete(flnOut)
-File.delete(flnBin)	
-
-' check for Epanet
-if(File.exists(strEpanet.asFilename).not)then
-  MsgBox.error("Couldn't find the EPANET executable:"+NL+"'"+strEPANET+"'", "DC Water Design")
-  exit	
-end		 
-	
-' run Epanet
-
-' System.execute(strEpanet.quote++(strBasePath+"inp").quote++(strBasePath+"txt").quote++(strBasePath+"bin").quote) 
-av.run("DCWatDes.System.call", strEpanet.quote++(strBasePath+"inp")++(strBasePath+"txt")++(strBasePath+"bin"))
-
-' wait for the result file appearing
-
-strTimeout = dicPreferences.get("strCommandTimeout")
-if((strTimeout <> nil)and(strTimeout.isNumber))then
-  numTimeout = strTimeout.asNumber
-else
-  numTimeout = 30  
-end
-
-if(av.run("DCWatDes.File.waitFor", {flnOut, numTimeout}).not)then
-  exit
-end
-
-twinReport = TextWin.make(flnOut, "DC Water Design")
-
-if(av.run("DCWatDes.File.waitFor", {flnBin, numTimeout}).not)then
-  exit
-end
+strBin = flnBin.getFullName
+strBasePath=strBin.left(strBin.count-3)
 
 strResultFiles = "" 
 flnLinkResults = (strBasePath+"-link-results.txt").asFilename
@@ -101,12 +81,6 @@ strCmd = ("$AVEXT\dcwatdes\epanet2mysql.exe".asFilename.getFullname)++
          flnBin.getFullName+strResultFiles
 av.run("DCWatDes.System.call", strCmd)
 
-' wait for tables
-for each flnResult in {flnLinkResults, flnNodeResults}
-  if(av.run("DCWatDes.File.waitFor", {flnResult, numTimeout}).not)then
-    exit
-  end
-end
 
 ' choose processing backend
 

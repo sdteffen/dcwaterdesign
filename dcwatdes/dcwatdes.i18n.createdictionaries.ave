@@ -90,6 +90,7 @@ dicGerman.add("Backdrop Resolution", "Hintergrund Auflösung")
 dicGerman.add("Pattern", "Muster")
 dicGerman.add("Result Loader", "Ergebnislader")
 dicGerman.add("Command Timeout", "Kommando Wartezeit")
+dicGerman.add("Import EPANET Inp File", "EPANET Inp Datei importieren")
 
 _dcwDicDictionaries.add("de",dicGerman)
 

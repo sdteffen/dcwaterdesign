@@ -25,13 +25,15 @@ flnFile = self.get(0)
 numSecondsToWait = self.get(1)
 
 if(File.exists("c:\WINNT\system32\kernel32.dll".AsFileName).not)then
-  MsgBox.error("The dynamic link library kernel32.dll was not found.","DC Water Design")
+  MsgBox.warning("The dynamic link library kernel32.dll was not found. This might cause problems.","DC Water Design")
 end
 kernel32 = DLL.Make("c:\WINNT\system32\kernel32.dll".AsFileName)
-sleep = DLLProc.Make(kernel32, "Sleep", #DLLPROC_TYPE_VOID, {#DLLPROC_TYPE_INT32})
-if(sleep = nil)then
-  MsgBox.warning("The dynamic link library 'kernel32.dll' could not be found. This might cause problems.","DC Water Design")
-end	
+if(kernel32 <> nil)then
+  sleep = DLLProc.Make(kernel32, "Sleep", #DLLPROC_TYPE_VOID, {#DLLPROC_TYPE_INT32})
+  if(sleep = nil)then
+    MsgBox.warning("The dynamic link library 'kernel32.dll' could not be found. This might cause problems.","DC Water Design")
+  end	
+end
 
 timeStart=Date.now
 while(File.exists(flnFile).not)

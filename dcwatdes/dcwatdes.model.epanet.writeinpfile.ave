@@ -684,16 +684,8 @@ flnInp = (strBasePath+"inp").asFilename
 'clean up
 File.delete(flnInp)
 
-system.execute(strSabCmd+" -text -xsl "+strXslt+" -in "+strXml+" -out "+strBasePath+"inp")
-
-' wait for the input file appearing
-flnKernel32 = "c:\WINNT\system32\kernel32.dll".AsFileName
-if(File.exists(flnKernel32))then
-  kernel32 = DLL.Make(flnKernel32)
-  sleep = DLLProc.Make(kernel32, "Sleep", #DLLPROC_TYPE_VOID, {#DLLPROC_TYPE_INT32})
-else 
-  sleep=nil
-end
+strCmd = strSabCmd+" -text -xsl "+strXslt+" -in "+strXml+" -out "+strBasePath+"inp"
+av.run("DCWatDes.System.call", strCmd)
 
 strTimeout = dicPreferences.get("strCommandTimeout")
 if((strTimeout <> nil)and(strTimeout.isNumber))then
@@ -702,30 +694,10 @@ else
   numTimeout = 30  
 end
 
-timeStart=Date.now
-while(File.exists(flnInp).not)
-  if((Date.now-timeStart).asSeconds>numTimeout)then
-    MsgBox.info("XSLT Transformation failed. Check your data.","DC Water Design Extension")
-    exit
-  end
-  if(sleep <>nil)then
-    sleep.call({1000})
-  end
+
+if(av.run("DCWatDes.File.waitFor", {flnInp, numTimeout}).not)then
+  MsgBox.info("XSLT Transformation failed. Check your data.","DC Water Design Extension")
+  exit
 end
 
-timeStart=Date.now
-while(File.isWritable(flnInp).not)
-  if((Date.now-timeStart).asSeconds>numTimeout)then
-    MsgBox.info("Couldn't open Epanet Input file. Check your data.","DC Water Design Extension")
-    exit
-  end
-  if(sleep <>nil)then
-    sleep.call({1000})
-  end
-end
-if(blnErrorOccured.not)then
-  for each thmToClear in dicThemes
-    thmToClear.clearSelection 
-  end
-end
 return fln_Xml

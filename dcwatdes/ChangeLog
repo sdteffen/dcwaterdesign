@@ -1,4 +1,16 @@
-2001-10-19  Steffen Macke <Steffe_Macke@dorsch.com.jo>
+2001-10-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.results.importbinary: new option to
+	import binary epanet results created with the epanet commandline
+	* dcwatdes.file.waitfor: should be fixed for non-NT/2000 systems
+	* dcwatdes.model.epanet.run:
+	* dcwatdes.model.epanet.writeinpfile: switched to systemcall wrapper
+	dll, file.waitfor cleanup
+	* dcwatdes.i18n.createdictionaries:
+	* dcwatdes.model.epanet.importinpfile: started with import of
+	EPANET inp files
+	
+2001-10-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.check: fixed orphan node deletion
 	
