@@ -1,0 +1,10 @@
+/* Cascading stylesheet for http://dcwaterdesign.sourceforge.net */
+
+body, p, li, h1, h2, h3 {
+  font-family: Arial, Helvectica, sans-serif;
+}
+
+.important {
+  font-weight: bold;
+  color: red;
+}
