@@ -2,6 +2,13 @@
 
 ' (c) 2001 DORSCH Consult
 
+' expects no arguments (called from menu)
+' returns nothing (reports with message boxes)
+
+' checks for unique dc_ids throughout the model
+' checks if node1, node2 fields in the pipes table are of type string
+' if pumps or valves are used in the model
+
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public
 ' License as published by the Free Software Foundation; either
@@ -43,7 +50,7 @@ for each ftbFeature in lstFTabs
       end
       bmpCheck = ftbCheck.getSelection.clone
       bmpCheck.clearAll
-      ftbCheck.query("[dc_id]="+strID.quote, bmpCheck, #VTAB_SELTYPE_NEW)
+      ftbCheck.query("([dc_id]="+strID.asString.quote+")or([dc_id]="+strID.asString+")", bmpCheck, #VTAB_SELTYPE_NEW)
       numCount = bmpCheck.count 
       if(numCount > numExpectedCount)then
         numDoubleIDs = numDoubleIDs+numCount-numExpectedCount
@@ -70,3 +77,23 @@ for each ftbTheme in lstFtabs
 end
 
 av.getActiveDoc.getDisplay.invalidate(true)
+
+ftbValves = lstFTabs.get("Valves")
+ftbPumps = lstFTabs.get("Pumps")
+ftbPipes = lstFTabs.get("Pipes")
+if(ftbPipes = nil)then
+  MsgBox.warning("No Pipes Theme selected.", "DC Water Design")
+end
+if((ftbValves <> nil)or(ftbPumps <> nil))then
+  for each i in 1..2
+    strFieldName = "node"+i.asString
+    fldNode = ftbPipes.findField(strFieldName)
+    if(fldNode = nil)then
+      MsgBox.warning("The Pipes theme is missing the field '"+strFieldName+"'.", "DC Water Design")
+    else
+      if(fldNode.isTypeString.not)then
+        MsgBox.warning("The type of field '"+strFieldName+"' in the Pipes theme should be string.","DC Water Design")
+      end
+    end
+  end
+end

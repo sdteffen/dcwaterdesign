@@ -4,6 +4,8 @@
 ' lets the user select settings from the
 ' Controls table and applies them to the model
 ' currently supported is opening/closing of SOVs
+' the control syntax is:
+' LINK link_id status AT TIME hours_since_simulation_start
 
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public

@@ -83,6 +83,7 @@ dicGerman.add("About", "Über")
 dicGerman.add("Please select the Junctions Theme in the Epanet Themes Dialog", "Bitte wählen sie das Knotenthema im Epanet Themen Dialog")
 dicGerman.add("Please select the Pipes Theme in the Epanet Themes Dialog", "Bitte wählen sie das Rohrleitungsthema im Epanet Themen Dialog")
 dicGerman.add("Choose the length field. The field will be overwritten", "Wählen Sie das Längen-Feld. Das Feld wird überschrieben")
+dicGerman.add("Create Zones from Controls", "Zonen über Schiebersteuerung erstellen")
 
 _dcwDicDictionaries.add("de",dicGerman)
 

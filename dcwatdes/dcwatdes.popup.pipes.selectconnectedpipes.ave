@@ -86,8 +86,6 @@ recStartPipe = lstPipes.get(0)
 av.clearStatus
 av.showStopButton
 
-av.showStopButton
-
 numPipes = ftbPipes.getNumRecords
 numConnectedPipes = 0
 bmpSelection = Bitmap.make(numPipes)

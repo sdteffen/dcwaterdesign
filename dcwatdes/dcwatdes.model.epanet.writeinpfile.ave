@@ -49,8 +49,8 @@ end
 
 av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
 
-activeView = av.getActiveDoc
-if(activeView.is(View).not)then
+viewActive = av.getActiveDoc
+if(viewActive.is(View).not)then
   exit
 end
 
@@ -95,7 +95,7 @@ for each strTheme in {"Pipes", "Junctions", "Pumps", "Reservoirs", "Tanks", "Val
     end
   end
   if(strThemeName <> nil)then
-    lstThemes = activeView.getThemes
+    lstThemes = viewActive.getThemes
     for each thmSearch in lstThemes
       if(thmSearch.getName.lcase = strThemeName.lcase)then
         dicThemes.add(strTheme, thmSearch)
@@ -110,7 +110,7 @@ lnf_Xml.writeElt("<network>")
 
 ' write title section
 
-lnf_Xml.writeElt("<title>"+activeView.getName++Date.now.asString+"</title>")
+lnf_Xml.writeElt("<title>"+viewActive.getName++Date.now.asString+"</title>")
 
 ' write Pumps and Valves section
 
@@ -228,12 +228,12 @@ for each lstSection in lstSections
         lstDynamicJunctions.add(strDynamicJunction)
         
         ' create dynamic coordinates
-        strDynamicCoordinate = "<node x="++pntFirstNode.getX.asString.quote
-        strDynamicCoordinate = strDynamicCoordinate++"y="+pntFirstNode.getY.asString.quote
+        strDynamicCoordinate = "<node x="++pntFirstNode.getX.setFormatPrecision(10).asString.quote
+        strDynamicCoordinate = strDynamicCoordinate++"y="+pntFirstNode.getY.setFormatPrecision(10).asString.quote
         strDynamicCoordinate = strDynamicCoordinate+">"+strFirstNodeID+"</node>"
         lstDynamicCoordinates.add(strDynamicCoordinate)
-        strDynamicCoordinate = "<node x="++pntSecondNode.getX.asString.quote
-        strDynamicCoordinate = strDynamicCoordinate++"y="+pntSecondNode.getY.asString.quote
+        strDynamicCoordinate = "<node x="++pntSecondNode.getX.setFormatPrecision(10).asString.quote
+        strDynamicCoordinate = strDynamicCoordinate++"y="+pntSecondNode.getY.setFormatPrecision(10).asString.quote
         strDynamicCoordinate = strDynamicCoordinate+">"+strSecondNodeID+"</node>"
         lstDynamicCoordinates.add(strDynamicCoordinate)
       end
@@ -422,8 +422,8 @@ if(blnExportSpatial)then
       fldID = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeatures, "dc_id"})
       for each rec in ftbFeatures
         pntNode = ftbFeatures.returnValue(fldNodeShape, rec)
-        strCoordinate = "<node x="+pntNode.getX.asString.quote
-        strCoordinate = strCoordinate++"y="+pntNode.getY.asString.quote
+        strCoordinate = "<node x="+pntNode.getX.setFormatPrecision(10).asString.quote
+        strCoordinate = strCoordinate++"y="+pntNode.getY.setFormatPrecision(10).asString.quote
         strCoordinate = strCoordinate+">"+ftbFeatures.returnValue(fldID, rec).asString+"</node>"+NL
         lnf_Xml.writeElt(strCoordinate)
       end
@@ -444,18 +444,74 @@ if(blnExportSpatial)then
     if(lstVertices.count > 2)then
       for each i in 1..(lstVertices.count-2)
         pntVertex = lstVertices.get(i) 
-        strVertex = "<link x="+pntVertex.getX.asString.quote
-        strVertex = strVertex++"y="+pntVertex.getY.asString.quote
+        strVertex = "<link x="+pntVertex.getX.setFormatPrecision(10).asString.quote
+        strVertex = strVertex++"y="+pntVertex.getY.setFormatPrecision(10).asString.quote
         strVertex = strVertex+">"+strID+"</link>"+NL
         lnf_Xml.writeElt(strVertex)
       end
     end
   end
   lnf_Xml.writeElt("</vertices>")
-  
-    
-end
 
+
+' write backdrop file?
+if(viewActive.getVisibleThemes.count > dicThemes.count)then
+  if(MsgBox.yesNo("Write Backdrop Map?", "DC Water Design",true))then
+  
+  ' turn off model themes so that they don't show up the in the backdrop
+  
+    for each thmModel in dicThemes
+      if (thmModel.isVisible) then
+        thmModel.setVisible(false)
+      end
+    end
+  
+    ' redraw view
+    viewActive.invalidate
+  
+    strUnits = ""
+    numResolution = 400
+  
+    ' Set UNITS for the Background
+    if (viewActive.getUnits = #UNITS_LINEAR_FEET) then
+      strUnits = "FEET"
+    elseif (viewActive.getUnits = #UNITS_LINEAR_METERS) then
+      strUnits = "METERS"
+    elseif (viewActive.getUnits = #UNITS_LINEAR_DEGREES) then
+      strUnits = "DEGREES"
+    end
+    ' If none of the above then take our chances with "NONE":
+    if (strUnits = "") then 
+      strUnits = "NONE"
+    end
+    
+    VE = viewActive.getDisplay.returnVisExtent   ' Visable extent as rect
+    X1 = VE.GetLeft.setFormatPrecision(10)
+    Y1 = VE.GetBottom.setFormatPrecision(10)
+    X2 = VE.GetRight.setFormatPrecision(10)
+    Y2 = VE.GetTop.setFormatPrecision(10)
+  
+    lnf_Xml.writeElt("<backdrop>")
+    lnf_Xml.writeElt("<dimensions>"+X1.SetFormat("d.dd").asString++Y1.SetFormat("d.dd").asString++X2.SetFormat("d.dd").asString++Y2.SetFormat("d.dd").asString+"</dimensions>")
+    lnf_Xml.writeElt("<units>"+strUnits+"</units>")
+    strScreenDump = fln_Xml.asString
+    ' remove File Extension
+    strScreenDump = strScreenDump.left(strScreenDump.count - 4).asFileName 
+    flnScreenDump = viewActive.exportToFile(strScreenDump,"Placeable WMF",{numResolution})
+    lnf_Xml.writeElt("<file>"+flnScreenDump.asString.quote+"</file>")
+    lnf_Xml.writeElt("</backdrop>")
+    end
+    
+    ' turn on model themes again
+    for each thmModel in dicThemes
+      thmModel.SetVisible(true)
+    end
+  
+    'redraw view
+    viewActive.invalidate
+        
+  end
+end
 
 ' write out settings from tables
 for each lstSetting in {{"Options", strOptions}, {"Times", strTimes}, {"Report", strReport}}
@@ -561,7 +617,7 @@ end
 timeStart=Date.now
 while(File.exists(flnInp).not)
   if((Date.now-timeStart).asSeconds>20)then
-    MsgBox.info("XLST Transformation failed. Check your data.","DC Water Design Extension")
+    MsgBox.info("XSLT Transformation failed. Check your data.","DC Water Design Extension")
     exit
   end
   if(sleep <>nil)then

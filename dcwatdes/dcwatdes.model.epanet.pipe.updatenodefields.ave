@@ -38,13 +38,22 @@ for each strNetworkFeature in dicFTabs.returnKeys
     lstNodeFTabs.add(ftbNetworkFeature)
     av.run("DCWatDes.FTab.ensureSpatialIndex", ftbNetworkFeature)
     fldNodeID = ftbNetworkFeature.findField("dc_id")
+    if(fldNodeID=nil)then
+      MsgBox.warning(strNetworkFeature++" table is missing the 'dc_id' field.", "DC Water Design Extension")
+    end
     lstNodeIDFields.add(fldNodeID)
   end
 end
 
 lstPipeNodeFields = List.make
 lstPipeNodeFields.add(ftbPipes.findField("node1"))
+if(lstPipeNodeFields.get(0) = nil)then
+ MsgBox.warning("Pipes table is missing the 'node1' field.", "DC Water Design")
+end
 lstPipeNodeFields.add(ftbPipes.findField("node2"))
+if(lstPipeNodeFields.get(1) = nil)then
+ MsgBox.warning("Pipes table is missing the 'node2' field.", "DC Water Design")
+end
 
 pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
 lstPipeNodes = pllPipe.connect.asList.get(0)
@@ -60,12 +69,16 @@ for each i in 0..1
     recConnectedNode = bmpNodes.getNextSet(-1)
     if(recConnectedNode <> -1)then
       fldNodeID = lstNodeIDFields.get(j)
-      strNodeID = ftbNodes.returnValue(fldNodeID, recConnectedNode).asString
-      if((i = 0) and ((ftbNodes.getName="Valves")or(ftbNodes.getName="Pumps")))then
-        ftbPipes.setValue(lstPipeNodeFields.get(i), recPipe, strNodeID+"dn")
-      else
-        ftbPipes.setValue(lstPipeNodeFields.get(i), recPipe, strNodeID)
-      end  
+      if((fldNodeID <> nil))then
+        strNodeID = ftbNodes.returnValue(fldNodeID, recConnectedNode).asString
+        if(lstPipeNodeFields.get(i) <> nil)then
+          if((i = 0) and ((ftbNodes.getName="Valves")or(ftbNodes.getName="Pumps")))then
+            ftbPipes.setValue(lstPipeNodeFields.get(i), recPipe, strNodeID+"dn")
+          else
+            ftbPipes.setValue(lstPipeNodeFields.get(i), recPipe, strNodeID)
+          end
+        end
+      end    
       break
     end      
   end
