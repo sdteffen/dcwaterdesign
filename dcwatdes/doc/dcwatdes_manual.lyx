@@ -96,6 +96,12 @@ The DC Water Design Extension is an Extension to ESRI's ArcView GIS software.
 What's new?
 \layout Paragraph
 
+Version 2.02
+\layout Itemize
+
+Updated Documentation
+\layout Paragraph
+
 Version 2.01
 \layout Itemize
 
@@ -418,6 +424,23 @@ flags 9
 
 
 \end_float 
+\layout Subsubsection
+
+Snapping
+\begin_inset LatexCommand \label{sec:snapping}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{Snapping}
+
+\end_inset 
+
+
+\layout Standard
+
+The editing tools of the DC Water Design Extension use a snapping tolerance
+ equal to 3 screen pixels.
 \layout Subsection
 
 Installation
