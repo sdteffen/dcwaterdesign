@@ -1,3 +1,7 @@
+2001-06-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* dcwatdes.extension.uninstall: fixed startup script restauration when unloading
+	
 2001-06-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.writeinpfile: removed yesterdays fix as it was broken
@@ -45,17 +49,3 @@
 
 	* doc/dcwatdes_manual.lyx
 	* doc/*.eps: updated documentation for 2.01 release
-
-
-
-
-
-
-
-
-
-
-
-
-
-	

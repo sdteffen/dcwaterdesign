@@ -17,6 +17,9 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+' no arguments
+' returns nothing
+
 'Make sure there is a project
 if (av.GetProject = nil) then
   return nil
@@ -32,6 +35,9 @@ end
 if (av.GetProject.IsClosing) then
   return nil
 end
+
+strOriginalStartupScript = dicPreferences.get("strOriginalStartupScript")
+av.getProject.setStartup(strOriginalStartupScript)
 
 'The self object for this script is the extension
 'The first root is the menu
