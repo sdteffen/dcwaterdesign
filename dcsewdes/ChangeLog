@@ -1,3 +1,16 @@
+2004-06-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.enforcedrainage.ave:
+	* dcsewerdesign.line.findupstreamlines.ave: added new function to
+	complete design process
+	* doc/en/dcsewerdesign.xml: updated "Accumulate Population" section;
+	formatting
+	* dcsewerdesign.calculatemaximummanholeelevations.ave: added DEM
+	factor; fixed bug that prevented correct calculation of maxium
+	manhole elevations
+	* dcsewerdesign.calculateminimumelevationdifferences.ave: added 
+	possibility to specify gradient field
+
 2004-06-28  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.accumulatepopulation.ave: added check for precision of

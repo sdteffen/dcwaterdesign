@@ -1,5 +1,5 @@
 ' DCSewerDesign.calculateMaximumManholeElevations
-' (c) 2000 DORSCH Consult
+' (c) 2000,2004 DORSCH Consult
 
 ' requires Spatial Analyst
 
@@ -50,6 +50,14 @@
   exit
  end
 
+  strDemFactor = msgbox.input("Enter the DEM factor","DC Sewer Design","0.1")
+  if(strDemFactor = nil)then
+    exit
+  end
+  numDemFactor = strDemFactor.asNumber
+  if(numDemFactor.isNull)then
+    exit
+  end
 
  ' 1 m grid should be fine
  numStepWidth = 1
@@ -70,25 +78,25 @@
   numGradient = ftbLine.returnValue(fldGradient, recLine)
   pllLine = ftbLine.returnValue(fldShape, recLine)
   numLength = pllLine.returnLength
-  numMaxUpstreamElevation = 0
+  numMaxUpstreamElevation = 1000000
   numSteps = (numLength/numStepWidth).ceiling
   for each i in 0..numSteps
     pntAlongLine = pllLine.along(100*i/numSteps)
-    numGroundElevation = grdTerrain.pointValue(pntAlongLine, Prj.makeNull)
-    'distance from upstream manhole...
+    numGroundElevation = grdTerrain.pointValue(pntAlongLine, viewActive.getProjection)*numDemFactor
+    ' distance from upstream manhole...
     numX = numLength*i/numSteps
     numUpstreamElevation = numGroundElevation +(numGradient*numX)
-    numMaxUpstreamElevation = numMaxUpstreamElevation.max(numUpstreamElevation)
+    numMaxUpstreamElevation = numMaxUpstreamElevation.min(numUpstreamElevation)
   end
   numMaxUpstreamElevation = numMaxUpstreamElevation - numMinimumCover
   numMaxDownstreamElevation = numMaxUpstreamElevation - (numGradient * numLength)
   ftbLine.setValue(fldMaxDownstreamElevation, recLine, numMaxDownstreamElevation)
   ftbLine.setValue(fldMaxUpstreamElevation, recLine, numMaxUpstreamElevation)
 
-   'update status display
+   ' update status display
    numCounter = numCounter + 1 
    if(av.setStatus((numCounter/numTotal)*100).not)then
-    'user hit the stop button
+    ' user hit the stop button
      exit
    end
   

@@ -22,7 +22,7 @@ Msgbox.info("The downstream Elevation should be 0 for all the records except for
  thmLine = viewActive.FindTheme(LineTheme.AsString)
  ftbLine = thmLine.GetFTab
  
- 'get the elevation fields
+ ' get the elevation fields
  lstFields = thmLine.getFTab.getFields
  fldDownstreamElevation = Msgbox.choice(lstFields, "Select the Downstream Elevation Field.","Select a Field")
  if(fldDownstreamElevation.asString = "nil")then
@@ -36,7 +36,10 @@ Msgbox.info("The downstream Elevation should be 0 for all the records except for
  fldShape = ftbLine.findField("Shape")
  
  
-  'ask the user to enter a gradient
+' ask the user to specify a gradient
+numGradient = 0.02
+fldGradient = MsgBox.choice(lstFields, "Select Gradient Field", "DC Sewer Design")
+if(fldGradient.asString = "nil")then
   strGradient = msgbox.input("Enter the minimum gradient","DC Sewer Design","0.02")
   if (strGradient=nil)then
     exit
@@ -45,17 +48,17 @@ Msgbox.info("The downstream Elevation should be 0 for all the records except for
   if(numGradient.isNull)then
     exit
   end
+end
  
- 'data for status display
+ ' data for status display
  numCounter = 0 
  numTotal = ftbLine.GetNumRecords
- 
 
-'give the user a chance to kill script
+' give the user a chance to kill script
  av.showStopButton 
  ftbLine.setEditable(true)
  
- 'The queue of lines for which the connections will be searched
+ ' The queue of lines for which the connections will be searched
  stkQueue = Stack.make
     
  'run over all records in the table, find the startline(s)
@@ -70,9 +73,13 @@ Msgbox.info("The downstream Elevation should be 0 for all the records except for
         numCounter = numCounter+1
      end
   end
+  
+if(stkQueue.isEmpty)then
+  MsgBox.info("Did you set the downstream elevation at the lowest point?","DC Sewer Design")
+  exit
+end
 
-
-'loop until all lines are calculated  
+' loop until all lines are calculated  
 while(numCounter < numTotal)
   if(stkQueue.isEmpty)then
     ftbLine.setEditable(false)
@@ -85,8 +92,11 @@ while(numCounter < numTotal)
   numDownstreamElevation = ftbLine.returnValue(fldUpstreamElevation,recStart)
 
   for each recLine in lstConnectedLines
+     if(fldGradient.asString <> "nil")then
+       numGradient = ftbLine.returnValue(fldGradient, recLine)
+     end
      if(ftbLine.returnValue(fldDownstreamElevation,recLine) = 0.0)then
-       'calculate the upstream elevation
+       ' calculate the upstream elevation
        numLength = ftbLine.returnValue(fldShape,recLine).returnLength
        numUpstreamElevation = numDownstreamElevation + (numGradient * numLength)
       ftbLine.setValue(fldDownstreamElevation, recLine, numDownstreamElevation)
@@ -94,9 +104,9 @@ while(numCounter < numTotal)
        numCounter = NumCounter+1
        stkQueue.push(recLine.clone)
              
-       'update status display
+       ' update status display
        if(av.setStatus((numCounter/numTotal)*100).not)then
-        'user hit the stop button
+        ' user hit the stop button
          exit
        end
      end
