@@ -24,4 +24,6 @@ return { {"Junctions",{"dc_id", "elevation", "demand", "pattern", "result_head",
       {"Tanks",{"dc_id", "elevation", "initiallevel", "minimumlevel","maximumlevel","diameter","minimumvolume","volumecurve", "result_pressure", "result_head", "result_demand"}}, 
       {"Reservoirs",{"dc_id", "head","pattern", "result_head", "result_pressure", "result_demand"}}, 
       {"Valves", {"dc_id","elevation","diameter","type","setting","minorloss", "result_flow", "result_velocity", "result_headloss"}},
-      {"Pumps",{"dc_id","elevation","properties","result_flow","result_velocity", "result_headloss"}}}
+      {"Pumps",{"dc_id","elevation","properties","result_flow","result_velocity", "result_headloss"}},
+      {"Pattern", {"dc_id", "multiplier"}},
+      {"Curves", {"dc_id", "dc_x", "dc_y"}}}

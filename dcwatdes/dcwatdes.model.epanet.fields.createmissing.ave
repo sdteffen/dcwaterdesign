@@ -53,13 +53,27 @@ for each lstTheme in lstAllFields
        break
      end
    end
+   if(thmAliased = nil)then 
+     lstTables = av.getProject.getDocsWithGUI(av.findGUI("Table"))
+     for each tabTable in lstTables
+       if(tabTable.getName = strThemeName)then
+         thmAliased = tabTable
+         break
+       end
+     end
+   end
+
    if(thmAliased = nil)then
      MsgBox.error("Can't find Theme "+strThemeName+" in the View. Please select the Epanet Themes.", "DC Water Design Extension")
      exit
    end
 
    lstRequiredAliases = lstTheme.get(1)
-   ftbAliased = thmAliased.getFTab
+   if(thmAliased.is(FTheme))then
+     ftbAliased = thmAliased.getFTab
+   else
+     ftbAliased = thmAliased.getVTab
+   end
    lstFields = ftbAliased.getFields
    for each strRequiredAlias in lstRequiredAliases
      fldAliased = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbAliased, strRequiredAlias})

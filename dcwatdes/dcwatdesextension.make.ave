@@ -1,6 +1,6 @@
 ' DCWatDesExtension.make
 
-' (c) 2000 - 2002 DORSCH Consult
+' (c) 2000 - 2004 DORSCH Consult
 ' make the Water Design Extension
 
 ' This library is free software; you can redistribute it and/or
@@ -92,7 +92,7 @@ for each d in av.getProject.getDocs
   end
 end
 
-myExt.SetAbout("Water Design Extension 2.08"+NL+"(c) 1998 - 2002 DORSCH Consult."+NL+
+myExt.SetAbout("Water Design Extension 2.08+cvs"+NL+"(c) 1998 - 2004 DORSCH Consult."+NL+
 "This extension integrates EPANET with ArcView"+NL+Date.now.asString)
 myExt.SetExtVersion(208)
 myExt.setUnloadScript(av.findScript("DCWatDesExtension.unload"))

@@ -671,7 +671,7 @@ if(strPatternTable <> nil)then
     exit
   end
   if(vtbPattern.getFields.count <> 2)then
-    Msgbox.error("The Pattern table should contain three fields: Id and multiplier", "DC Water Design Extension")
+    Msgbox.error("The Pattern table should contain two fields: Id and multiplier", "DC Water Design Extension")
     lnf_Xml.close
     av.clearStatus
     exit

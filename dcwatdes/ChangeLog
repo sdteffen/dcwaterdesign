@@ -1,3 +1,8 @@
+2004-01-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.returnfieldlists: fixed typo ("Curve" instead
+	of "Curves")
+
 2004-01-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.writeinpfile: fixed error message for pattern
