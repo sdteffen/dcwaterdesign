@@ -1,6 +1,6 @@
 
-LINKOPT	=	-L. -lepanet2vc
-CFLAGS	=	-mno-cygwin -fnative-struct
+LINKOPT	=	-L. -lepanet2vc -ggdb
+CFLAGS	=	-mno-cygwin -fnative-struct -ggdb
 
 default:	all
 
