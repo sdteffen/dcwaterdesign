@@ -1,3 +1,16 @@
+2002-09-28  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp/inp2shp.c: commandline parameter checking, usage
+	reporting; fix for junction file
+	* dcwatdes.model.epanet.importinpfile: loading via inp2shp
+	now
+	* dcwatdes.file.waitfor: checking for standard xp location
+	of kernel32.dll; allowing the user to select the kernel32.dll
+	location
+	* dc_water_design_extension.nsi: now installing start menu entries
+	for all users; updated for 2.07 release
+	* doc/dcwatdes_manual.lyx: updated for 2.07 release
+	
 2002-09-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 	
 	* inp2shp/Makefile: updated for gcc 3.2 (MinGW 2.0), optimizing

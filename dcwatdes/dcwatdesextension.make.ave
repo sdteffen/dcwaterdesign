@@ -92,7 +92,7 @@ for each d in av.getProject.getDocs
   end
 end
 
-myExt.SetAbout("Water Design Extension 2.07rc3"+NL+"(c) 1998 - 2002 DORSCH Consult."+NL+
+myExt.SetAbout("Water Design Extension 2.07"+NL+"(c) 1998 - 2002 DORSCH Consult."+NL+
 "This extension integrates EPANET with ArcView"+NL+Date.now.asString)
 myExt.SetExtVersion(207)
 myExt.setUnloadScript(av.findScript("DCWatDesExtension.unload"))

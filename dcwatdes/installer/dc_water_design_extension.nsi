@@ -3,13 +3,13 @@
 
 ; (c) 2000 - 2002 DORSCH Consult
 
-Name "DC Water Design Extension 2.06"
+Name "DC Water Design Extension 2.07"
 LicenseText "Please read and agree to this license before continuing."
 LicenseData dcwatdes\license-dcwaterdesignextension.txt
-ComponentText "This will install the DC Water Design Extension V 2.06 for ArcView on your system. Select which options you want set up."
+ComponentText "This will install the DC Water Design Extension V 2.07 for ArcView on your system. Select which options you want set up."
 DirText "Select a directory to install the Extension in. (The ArcView Extension directory.)"
-UninstallText "This will uninstall the DC Water Design Extension V 2.06. Hit Next to uninstall, or Cancel to cancel."
-OutFile dcwatdes-2.06-setup.exe
+UninstallText "This will uninstall the DC Water Design Extension V 2.07. Hit Next to uninstall, or Cancel to cancel."
+OutFile dcwatdes-2.07-setup.exe
 Icon dc.ico
 EnabledBitmap dcbitmap1.bmp
 DisabledBitmap dcbitmap2.bmp
@@ -19,7 +19,7 @@ InstallDir "c:\esri\av_gis30\arcview\ext32"
 InstallDirRegKey HKEY_LOCAL_MACHINE "Software\DCWaterDesignExtension" "instpath"
 SetOverwrite on
 
-Section "DC Water Design Extension V 2.06"
+Section "DC Water Design Extension V 2.07"
 SetOutPath $INSTDIR\dcwatdes
 WriteUninstaller uninstall-dcwatdes.exe
 File dcwatdes\epanet_options.dbf
@@ -31,11 +31,13 @@ File dcwatdes\license-dcwaterdesignextension.txt
 File dcwatdes\av_epanet_data_model.pdf
 File dcwatdes\xml2net.xsl
 File dcwatdes\systemcall.dll
+File ..\inp2shp\inp2shp.exe
+File dcwatdes\epanet2.dll
 
 SetOutPath $INSTDIR
 File c:\esri\av_gis30\arcview\ext32\dcwatdes2.avx
 
-WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension" "DisplayName" "DC Water Design Extension V 2.06 (remove only)"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension" "DisplayName" "DC Water Design Extension V 2.07 (remove only)"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\DCWaterDesignExtension" "UninstallString" '"$INSTDIR\uninstall-dcwatdes.EXE"'
 WriteRegStr HKEY_LOCAL_MACHINE "Software\DCWaterDesignExtension" "instpath" $INSTDIR
 SectionEnd
@@ -60,6 +62,7 @@ SectionEnd
 
 Section "Start Menu Entries"
 SectionIn 1
+SetShellVarContext all
 SetOutPath "$SMPROGRAMS\DC Water Design Extension"
 CreateShortCut "$SMPROGRAMS\DC Water Design Extension\DC Water Design Manual.lnk" "$INSTDIR\dcwatdes\dcwatdes_manual.pdf" "" "" 0
 CreateShortCut "$SMPROGRAMS\DC Water Design Extension\DC Water Design Data Model.lnk" "$INSTDIR\dcwatdes\av_epanet_data_model.pdf" "" "" 0
@@ -70,6 +73,7 @@ File "Report a Bug.url"
 SectionEnd
 
 Section Uninstall
+SetShellVarContext all
 Delete $INSTDIR\dcwatdes\cygwin\*.*
 RMDir $INSTDIR\dcwatdes\cygwin
 Delete $INSTDIR\dcwatdes\xslt\*.*

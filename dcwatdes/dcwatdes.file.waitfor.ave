@@ -24,12 +24,32 @@
 flnFile = self.get(0)
 numSecondsToWait = self.get(1)
 sleep = nil
-strKernel32 = "c:\WINNT\system32\kernel32.dll"
-if(File.exists(strKernel32.AsFileName).not)then
-  strKernel32 = "c:\windows\system\kernel32.dll"
-  if(File.exists(strKernel32.AsFileName).not)then
-    MsgBox.warning("The dynamic link library kernel32.dll was not found. This might cause problems.","DC Water Design")
+stKernel32 = nil
+for each strLocation in {"c:\winnt\system32\kernel32.dll",
+                         "c:\windows\system\kernel32.dll",
+                         "c:\windows\system32\kernel32.dll"}
+  if(File.exists(strLocation.asFileName))then
+    strKernel32 = strLocation
   end
+end
+if(strKernel32 = nil)then
+  extDCWatDes = Extension.find("DC Water Design")
+  if(extDCWatDes <> nil)then
+    dicPreferences = extDCWatDes.getPreferences
+    strKernel32 = dicPreferences.get("strKernel32")
+    if(File.exists(strKernel32.asFilename).not)then
+      strKernel32 = nil
+    end
+  end
+end
+
+if(strKernel32 = nil)then
+ MsgBox.warning("The dynamic link library kernel32.dll was not found. Please select it", "DC Water Design")
+ flnKernel32 = FileDialog.show("*.dll","DLL","Locate kernel32.dll")
+ if(flnKernel32 <> nil)then
+   strKernel32 = flnKernel32.asString
+   dicPreferences.add("strKernel32",strKernel32)
+ end
 end
 kernel32 = DLL.Make(strKernel32.asFileName)
 if(kernel32 <> nil)then
