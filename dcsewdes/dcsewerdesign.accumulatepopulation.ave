@@ -6,7 +6,7 @@
 ' will be accumulated in the AccumulatedPopulation field.
 ' Note: The lines have to be flipped to the AccumulatedPopulation direction!
 
-' (c) 2000, 2002 DORSCH Consult
+' (c) 2000 - 2004 DORSCH Consult
  
 'information about the configuration file
   MsgBox.info("The Lines have to be flipped to the Flow direction!","DC Sewer Design")
@@ -32,6 +32,11 @@
     exit
   end
   fldAccumulatedPopulation = ftbLine.findField(fldAccumulatedPopulation.getName)
+  if(fldAccumulatedPopulation.getPrecision < 3)then
+    MsgBox.error("The Accumulated Population Field needs at least 3 digits after the decimal point.","DC Sewer Design")
+    exit
+  end
+  
   fldPopulation = MsgBox.choice(lstNumberFields, "Select the Population field.","DC Sewer Design")
   if(fldPopulation = nil)then
     exit
