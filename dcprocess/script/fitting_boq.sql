@@ -88,7 +88,7 @@ insert into IndividualPosition (select dc_id, 1, 'No.', 'DCI',
   'All Flanged Tee ' || DN1 || '/' || DN2 from MixedFitting where
   connection = 23);
 insert into IndividualPosition (select dc_id, 1, 'No.', 'DCI',
-  'Flanged Gate Valve' || DN1 from MixedFitting where
+  'Flanged Gate Valve ' || DN1 from MixedFitting where
   connection = 23);
 insert into IndividualPosition (select dc_id, 1, 'No.', 'DCI',
   'Flanged Gate Valve ' || DN2 from MixedFitting where
@@ -656,7 +656,7 @@ insert into IndividualPosition (select dc_id, 1, 'No.', 'DCI',
   connection = 61);
   
 insert into IndividualPosition (select dc_id, 1, 'No.', 'PE',
-  'Pushfit Tee ' || DN1 || '/' || DN2 from PeFitting where
+  'Pushfit Tee ' || DN1 from PeFitting where
   connection = 61);
   
 -- Detail 62
@@ -674,7 +674,7 @@ insert into IndividualPosition (select dc_id, 1, 'No.', 'PE',
   'Pushfit Tee ' || DN1 from PeFitting where
   connection = 62);
 insert into IndividualPosition (select dc_id, 1, 'No.', 'DCI',
-  'Flanged Gate Valve' || DN1 from PeFitting where
+  'Flanged Gate Valve ' || DN1 from PeFitting where
   connection = 62);
 insert into IndividualPosition (select dc_id, 2, 'No.', 'PE',
   'Flanged Pushfit Adapter ' || DN1 from PeFitting where
