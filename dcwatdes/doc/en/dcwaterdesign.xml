@@ -280,7 +280,7 @@
       <para>
 	<figure id="fig_virtual_line_validity">
 	  <title>Virtual Line Validity</title>
-	  <graphic fileref="/virtual-line-validity.png" />
+	  <graphic fileref="figure/virtual-line-validity.png" />
 	</figure>
       
       <xref linkend="fig_virtual_line_validity" /> shows examples of different 

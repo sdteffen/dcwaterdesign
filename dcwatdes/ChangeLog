@@ -1,7 +1,8 @@
 2004-09-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/version.xml:
-	* doc/en/dcwaterdesign.xml: using version.xml; added two FAQ items
+	* doc/en/dcwaterdesign.xml: using version.xml; added two FAQ items; 
+	fixed figure inclusion
 	
 2004-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
