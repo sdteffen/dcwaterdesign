@@ -1,11 +1,15 @@
 2004-07-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
+	* doc/en/figure/virtual-line-validity.png:
+	* doc/en/figure/virtual-line-creation.png:
+	* doc/en/bitcoding-zones.png:
 	* doc/build.xml:
 	* doc/docbook.css:
 	* doc/docbook_html.xsl:
 	* doc/docbook_htmlhelp.xsl:
 	* doc/docbook_pdf.xsl:
-	* doc/en/dcwaterdesign.xml: more work on DocBook documentation
+	* doc/en/dcwaterdesign.xml: more work on DocBook documentation; updated
+	for 2.10 release
 
 2004-07-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
