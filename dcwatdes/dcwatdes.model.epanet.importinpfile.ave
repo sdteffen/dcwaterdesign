@@ -1,7 +1,7 @@
 ' DCWatDes.Model.Epanet.importInpFile
 
 ' (c) 2001 DORSCH Consult
-' imports an Epanet Input file
+' imports an Epanet Input file (*.inp)
 
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public
@@ -19,3 +19,200 @@
 
 ' no arguments
 ' returns nothing
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+av.run("DCWatDes.Model.Epanet.delete", nil)
+av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
+
+lstFileNames = FileDialog.returnFiles({"*.inp"},{"EPANET INP Model (*.inp)"},"Load EPANET INP file", 0)
+if((lstFileNames = nil)or(lstFileNames.count < 1)) then
+  ' User selected cancel
+  exit
+end
+flnInp = lstFileNames.get(0)
+
+strInp = flnInp.getFullName
+
+lnfInp = LineFile.make(flnInp, #FILE_PERM_READ)
+
+strSection = ""
+strLine = lnfInp.readElt
+
+dicFTabs = av.run("DCWatDes.Model.EPANET.returnFTabDictionary", nil)
+
+numFileSize = lnfInp.getSize
+av.showStopButton
+numCompleted = 0
+
+vtbCurrentEditable = nil
+fldShapeEditable = nil
+
+while (strLine <> nil)
+ strLine = strLine.substitute(TAB," ")
+ strLine = strLine.trim
+ numCompleted = numCompleted + 1
+ if(av.setStatus(numCompleted/numFileSize*100).not)then
+   ' user clicked stop button
+   av.clearStatus
+   lnfInp.close
+   exit
+ end
+ if(strLine.count = 0)then
+   strLine = lnfInp.readElt
+   continue
+ end
+ 
+ ' strip off comments
+ if(strLine.contains(";"))then
+   if(strLine.right(1)=";")then
+     strLine = strLine.left(strLine.count-1)
+   else
+     lstTokens = strLine.asTokens(";")
+     if(lstTokens.count > 1)then
+       strLine = lstTokens.get(0)
+  '     System.echo("comment "+lstTokens.get(1))
+     else
+      ' line is only a comment
+  '     System.echo("comment "+strLine)
+       strLine = lnfInp.readElt       
+       continue
+     end
+   end  
+ end
+ 
+ ' check for section
+ if(strLine.left(1) = "[")then
+   ' end of coordinates section
+   if(strSection = "coordinates")then
+     ftbJunctions = dicFTabs.get("Junctions")
+     fldJunctionShape = ftbJunctions.findField("Shape")
+     bmpJunctions = ftbJunctions.getSelection
+     lstVertices = List.make
+     ftbPipes = dicFTabs.get("Pipes")
+     fldPipeShape = ftbPipes.findField("Shape")
+     fldNode1 = ftbPipes.findField("node1")
+     fldNode2 = ftbPipes.findField("node2")
+     ftbPipes.setEditable(true)
+     for each numRecord in ftbPipes
+       lstVertices = List.make
+       for each fldNode in {fldNode1, fldNode2}
+         strNodeID = ftbPipes.returnValue(fldNode, numRecord)
+         strQuery = "[dc_id]="+strNodeID.quote
+         ftbJunctions.query(strQuery, bmpJunctions, #VTAB_SELTYPE_NEW)
+         if(bmpJunctions.count = 1)then
+           pntVertex = ftbJunctions.returnValue(fldJunctionShape, bmpJunctions.getNextSet(-1))
+           lstVertices.add(pntVertex)
+         end     
+       end
+       if(lstVertices.count = 2)then
+         pllPipe = Polyline.make({lstVertices})
+         ftbPipes.setValue(fldPipeShape, numRecord, pllPipe)
+       end
+     end
+     ftbPipes.setEditable(false)
+   end
+   strSection = strLine.asTokens(" []").get(0).lcase
+   System.echo("section "+strSection)
+   if(vtbCurrentEditable <> nil)then
+     vtbCurrentEditable.setEditable(false)
+     fldShapeEditable = nil
+     vtbCurrentEditable = nil
+   end
+   for each strVTab in {"Junctions", "Pipes"}
+     if(strVTab.lcase = strSection.lcase)then
+       vtbCurrentEditable = dicFTabs.get(strVTab)
+       vtbCurrentEditable.setEditable(true)
+       fldShapeEditable = vtbCurrentEditable.findField("Shape")
+    end
+   end
+   if(strSection.lcase = "coordinates")then
+       vtbCurrentEditable = dicFTabs.get("Junctions")
+       vtbCurrentEditable.setEditable(true)
+       fldShapeEditable = vtbCurrentEditable.findField("Shape")
+   elseif(strSection.lcase = "vertices")then
+       vtbCurrentEditable = dicFTabs.get("Pipes")
+       vtbCurrentEditable.setEditable(true)
+       fldShapeEditable = vtbCurrentEditable.findField("Shape")
+   end
+   strLine = lnfInp.readElt
+   continue
+ end  
+ 
+ ' deal with junctions  
+ if(strSection="junctions")then
+   lstTokens = strLine.asTokens(" ")
+   numRecord = vtbCurrentEditable.addRecord
+   lstFieldNames = {"dc_id", "demand", "elevation", "pattern"}
+   for each numI in 0 ..  (lstTokens.count.min(lstFieldNames.count)-1)
+     strFieldName = lstFieldNames.get(numI)
+     strAttribute = lstTokens.get(numI)
+'     System.echo(strFieldName++strAttribute)
+     av.run("DCWatDes.ExpandedAliasVTab.setValueString", {vtbCurrentEditable, strFieldName, numRecord,strAttribute})
+   end
+ elseif(strSection="coordinates")then
+   lstTokens = strLine.asTokens(" ")
+   if(lstTokens.count = 3)then
+     strID = lstTokens.get(0)
+     numX = lstTokens.get(1).asNumber
+     numY = lstTokens.get(2).asNumber
+     pntNode = Point.make(numX, numY)
+     strQuery = "[dc_id]="+strID.quote
+     bmpQuery = vtbCurrentEditable.getSelection
+     vtbCurrentEditable.query(strQuery, bmpQuery, #VTAB_SELTYPE_NEW)
+     if(bmpQuery.count = 1)then
+       vtbCurrentEditable.setValue(fldShapeEditable, bmpQuery.getNextSet(-1), pntNode)
+     end
+   end
+ ' import pipes
+ elseif(strSection="pipes")then
+   lstTokens = strLine.asTokens(" ")
+   numRecord = vtbCurrentEditable.addRecord
+   lstFieldNames = {"dc_id", "node1", "node2", "length", "diameter", "roughness","minorloss"}
+   for each numI in 0 ..  (lstTokens.count.min(lstFieldNames.count)-1)
+     strFieldName = lstFieldNames.get(numI)
+     strAttribute = lstTokens.get(numI)
+'     System.echo(strFieldName++strAttribute)
+     av.run("DCWatDes.ExpandedAliasVTab.setValueString", {vtbCurrentEditable, strFieldName, numRecord,strAttribute})
+   end
+ elseif(strSection="vertices")then
+   lstTokens = strLine.asTokens(" ")
+   if(lstTokens.count = 3)then
+     strID = lstTokens.get(0)
+     numX = lstTokens.get(1).asNumber
+     numY = lstTokens.get(2).asNumber
+     pntNode = Point.make(numX, numY)
+     strQuery = "[dc_id]="+strID.quote
+     bmpQuery = vtbCurrentEditable.getSelection
+     vtbCurrentEditable.query(strQuery, bmpQuery, #VTAB_SELTYPE_NEW)
+     if(bmpQuery.count = 1)then
+       numRecord = bmpQuery.getNextSet(-1)
+       pllPipe = vtbCurrentEditable.returnValue(fldShapeEditable, numRecord)
+       lstPipe = pllPipe.asList.get(0)
+       pntEnd = lstPipe.get(lstPipe.count-1)
+       lstPipe.remove(lstPipe.count-1)
+       lstPipe.add(pntNode)
+       lstPipe.add(pntEnd)
+       pllPipe = Polyline.make({lstPipe})
+       vtbCurrentEditable.setValue(fldShapeEditable, numRecord, pllPipe)
+     end
+   end
+ end
+  
+ strLine = lnfInp.readElt
+ 
+end
+av.clearStatus
+lnfInp.close

@@ -1,3 +1,15 @@
+2001-10-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.importinpfile: importing pipes and junctions
+	now
+	* dcwatdes.model.delete: ability to delete a complete model (empty
+	all the tables)
+	* dcwatdes.expandedaliasvtab.setvaluestring: new function to write
+	string values to string/number fields in tables
+	* doc/dcwatdes_manual.lyx: 
+	* dcwatdesextension.make:
+	* installer/dc_water_design_extension.nsi: prepared for 2.04 release
+	
 2001-10-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.results.importbinary: new option to
