@@ -91,19 +91,26 @@ for each recPipe in ftbPipes
   for each i in 0..1
     numNodes = 0
     blnNodeMissing = true
+    
     for each j in 0..(lstNodeFTabs.count-1)
       ftbNodes = lstNodeFTabs.get(j)
-      ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
-      bmpNodes = ftbNodes.getSelection
-      recConnectedNode = bmpNodes.getNextSet(-1)
-      if(recConnectedNode <> -1)then
-        blnNodeMissing = false
-        if(numNodes=0)then
-          bmpNodes.clear(recConnectedNode)
+      if(ftbNodes.getNumRecords = 1)then
+        if(ftbNodes.returnValue(ftbNodes.findField("shape"),0).distance(lstNodesPoints.get(i)) < numSnappingRadius)then
+          blnNodeMissing = false
         end
-        numNodes = numNodes + bmpNodes.count
-        bmpPurge = lstPurgeBitmaps.get(j)
-        bmpPurge.or(bmpNodes)          
+      else
+        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
+        bmpNodes = ftbNodes.getSelection
+        recConnectedNode = bmpNodes.getNextSet(-1)
+        if(recConnectedNode <> -1)then
+          blnNodeMissing = false
+          if(numNodes = 0)then
+            bmpNodes.clear(recConnectedNode)
+          end
+          numNodes = numNodes + bmpNodes.count
+          bmpPurge = lstPurgeBitmaps.get(j)
+          bmpPurge.or(bmpNodes)          
+        end
       end           
     end
     if(numNodes > 1)then

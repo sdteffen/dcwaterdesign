@@ -1,3 +1,15 @@
+2003-06-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.junctions.createmissing: fix for special case 
+	of bug #633812: junctions were created if the shapefiles contained only
+	one record
+
+2003-06-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* installer/dcwatdes/xml2net.xsl: fixed typos that prevented
+	emitter exponents and demandmultipliers from working correctly (bug
+	#746245)
+
 2003-01-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.i18n.createdictionaries: added arabic translations
