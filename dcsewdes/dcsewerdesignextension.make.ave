@@ -1,6 +1,6 @@
 ' DCSewerDesignExtension.make
 
-strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.6")
+strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.6+cvs")
 if (strVersion=nil)then
   exit
 end
@@ -32,7 +32,7 @@ for each d in av.getProject.getDocs
   end
 end
 
-myExt.SetAbout("Sewer Design Extension "+strVersion+NL+"(c) 2000-2004 DORSCH Consult."+NL+
+myExt.SetAbout("Sewer Design Extension "+strVersion+NL+"(c) 2000-2005 DORSCH Consult."+NL+
 "This extension is helpful to design sewer networks")
 myExt.SetExtVersion(numVersion)
 myExt.setUnloadScript(av.findScript("DCSewerDesignExtension.unload"))

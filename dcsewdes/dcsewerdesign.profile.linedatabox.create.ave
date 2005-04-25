@@ -9,8 +9,8 @@
 ' (c) 2000 DORSCH Consult
 
 ' Parameter
-if(self.count <> 10)then
-  System.echo("DCSewerDesign.Profile.LineDataBox.create: ERROR: Expected 10 arguments, got "+self.count.asString)
+if(self.count <> 11)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: ERROR: Expected 11 arguments, got "+self.count.asString)
   exit
 end
 ftbProfile = self.get(0)
@@ -62,6 +62,10 @@ numHeight = self.get(9)
 if(numHeight.is(Number).not)then
   System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 9 is not a Number")
 end
+numJustification = self.get(10)
+if(numJustification.is(EnumerationElt).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 10 is not a EnumerationElt but a "+numJustification.getClass.getClassName)
+end
 
 strFormat = "dd"
 if(numPrecision > 0)then
@@ -110,12 +114,24 @@ for each i in 0..(lstLineRecords.count-1)
       strText = strText.setFormat(strFormat).asString
     end
   end
-  pntTextLocation = Point.make(numX+numWidth+(numLength/2),numY-(numHeight/2)+1)
+  pntTextLocation = Point.make(numX+numWidth+(numLength/2), numY-(numHeight/2)+1)
+  if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+    pntTextLocation = Point.make(numX+numWidth, numY-(numHeight/2)+1)
+  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+    pntTextLocation = Point.make(numX+numWidth+(numLength), numY-(numHeight/2)+1)
+  end
   gtxText = GraphicText.make(strText, pntTextLocation)
   viewActive.getGraphics.add(gtxText)
   tpsText = TextPositioner.make(Point)
-  tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
-  tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
+  if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then
+    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+  elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)
+  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)
+  end
+  tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_ON)
+  gtxText.setAlignment(numJustification)
   tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)
   gtxText.setOrigin(tpsText.getOrigin)
   for each symText in gtxText.returnSymbols

@@ -1,3 +1,21 @@
+2005-03-10  Steffen Macke <sdteffen@gmail.com>
+
+	* dcsewerdesign.complexprofile.create.ave:
+	* dcsewerdesign.profile.cumulativelinedatebox.create.ave:
+	* dcsewerdesign.profile.linedatabox.ave:
+	* dcsewerdesign.profile.manholedatabox.ave:
+	* doc/en/dcsewerdesign.xml: Text alignment for data box contents can
+	be specified now (RFE #1158375)
+	* doc/version.xml:
+	* dcsewerdesign.nsi: 
+	* dcsewerdesignextension.make.ave: version is 2.0.6+cvs now
+	
+2005-03-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave: Profiles can be created for
+	single lines now (RFE #1111927)
+	* dcsewerdesignextension.make.ave: Version number is 2.0.6+cvs now
+
 2005-02-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcsewerdesign.xml: Added tip to create function 

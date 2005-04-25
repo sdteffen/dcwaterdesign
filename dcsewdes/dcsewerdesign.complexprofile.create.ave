@@ -104,90 +104,19 @@ end
 if (thmManhole.asString = "nil") then
   exit
 end
-ftbManhole = thmManhole.GetFTab 
+ftbManhole = thmManhole.getFTab 
 
 ' get one selected line
 bmpSelectedLines = ftbLine.getSelection.clone
-if(bmpSelectedLines.count < 2)then
-  MsgBox.info("Please select the Lines for which the Profile should be created","DC Sewer - Complex Profile")
-  exit
-end
-recTrace = bmpSelectedLines.getNextSet(-1)
-lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
-lstConnectedSelected = List.make
-for each recConnected in lstConnectedLines
-  if(bmpSelectedLines.get(recConnected))then
-    lstConnectedSelected.add(recConnected)
-  end
-end
-
-av.showStopButton
-numSelected = bmpSelectedLines.count
-
-' trace to end section (of selection)
-numFreezePrevent = 0
-lstTried = List.make
-while(lstConnectedSelected.count = 2)
-    if((recTrace = lstConnectedSelected.get(0))or(lstTried.findByValue(recTrace)<>(-1)))then
-    recTrace = lstConnectedSelected.get(1)
-  else
-    recTrace = lstConnectedSelected.get(0)
-  end
-  if(lstConnectedSelected.findByValue(recTrace) = -1)then
-    lstConnectedSelected.add(recTrace)
-  end
-  lstConnectedSelected = List.make
-  strControl = ""
-  lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
-  if(Number.makeRandom(0,1) > 0.5)then
-    lstConnectedLines.sort(true)
-  else
-    lstConnectedLines.sort(false)
-  end
-  for each recConnected in lstConnectedLines
-    if((bmpSelectedLines.get(recConnected)and(lstConnectedSelected.find(recConnected) = -1)))then
-      lstConnectedSelected.add(recConnected)
-      lstTried.add(recConnected)
-      strControl = strControl ++ftbLine.returnValue(fldLineDcId, recConnected).asString
-    end
-  end
-  numFreezePrevent = numFreezePrevent+1
-  if(numFreezePrevent = 10000)then
-    System.echo(strControl)
-    MsgBox.info("Went into endless loop. Check the Topology.", "DC Sewer Design")
-    exit
-  end
-  if(av.setStatus(0).not)then
-    exit
-  end
-end
-if(lstConnectedSelected.count>2)then
-  MsgBox.info("Can't draw Profile for forks. Please check the selection.","DC Sewer Design")
-  exit
-end
-
-' bounce: start the real trace to other end of selection
-
 lstProfileLines = List.make
-lstProfileLines.add(recTrace)
-
-recTrace = lstConnectedSelected.get(0)
-lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
-lstConnectedSelected = List.make
-for each recConnected in lstConnectedLines
-  if(bmpSelectedLines.get(recConnected))then
-    lstConnectedSelected.add(recConnected)
-  end
+if(bmpSelectedLines.count < 1)then
+  MsgBox.info("Please select the Line(s) for which the Profile should be created","DC Sewer - Complex Profile")
+  exit
 end
-lstProfileLines.add(recTrace)
-
-while(lstConnectedSelected.count = 2)
-  if(lstProfileLines.findByValue(lstConnectedSelected.get(0)) <> -1)then
-    recTrace = lstConnectedSelected.get(1)
-  else
-    recTrace = lstConnectedSelected.get(0)
-  end
-  lstProfileLines.add(recTrace)
+if(bmpSelectedLines.count = 1)then
+  lstProfileLines.add(bmpSelectedLines.getNextSet(-1))
+else
+  recTrace = bmpSelectedLines.getNextSet(-1)
   lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
   lstConnectedSelected = List.make
   for each recConnected in lstConnectedLines
@@ -195,27 +124,106 @@ while(lstConnectedSelected.count = 2)
       lstConnectedSelected.add(recConnected)
     end
   end
-  if(av.setStatus(lstProfileLines.count/numSelected*100).not)then
+  
+  av.showStopButton
+  numSelected = bmpSelectedLines.count
+  
+  ' trace to end section (of selection)
+  numFreezePrevent = 0
+  lstTried = List.make
+  while(lstConnectedSelected.count = 2)
+      if((recTrace = lstConnectedSelected.get(0))or(lstTried.findByValue(recTrace)<>(-1)))then
+      recTrace = lstConnectedSelected.get(1)
+    else
+      recTrace = lstConnectedSelected.get(0)
+    end
+    if(lstConnectedSelected.findByValue(recTrace) = -1)then
+      lstConnectedSelected.add(recTrace)
+    end
+    lstConnectedSelected = List.make
+    strControl = ""
+    lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+    if(Number.makeRandom(0,1) > 0.5)then
+      lstConnectedLines.sort(true)
+    else
+      lstConnectedLines.sort(false)
+    end
+    for each recConnected in lstConnectedLines
+      if((bmpSelectedLines.get(recConnected)and(lstConnectedSelected.find(recConnected) = -1)))then
+        lstConnectedSelected.add(recConnected)
+        lstTried.add(recConnected)
+        strControl = strControl ++ftbLine.returnValue(fldLineDcId, recConnected).asString
+      end
+    end
+    numFreezePrevent = numFreezePrevent+1
+    if(numFreezePrevent = 10000)then
+      System.echo(strControl)
+      MsgBox.info("Went into endless loop. Check the Topology.", "DC Sewer Design")
+      exit
+    end
+    if(av.setStatus(0).not)then
+      exit
+    end
+  end
+  if(lstConnectedSelected.count>2)then
+    MsgBox.info("Can't draw Profile for forks. Please check the selection.","DC Sewer Design")
     exit
   end
+  
+  ' bounce: start the real trace to other end of selection
+  
+  lstProfileLines = List.make
+  lstProfileLines.add(recTrace)
+  
+  recTrace = lstConnectedSelected.get(0)
+  lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+  lstConnectedSelected = List.make
+  for each recConnected in lstConnectedLines
+    if(bmpSelectedLines.get(recConnected))then
+      lstConnectedSelected.add(recConnected)
+    end
+  end
+  lstProfileLines.add(recTrace)
+  
+  while(lstConnectedSelected.count = 2)
+    if(lstProfileLines.findByValue(lstConnectedSelected.get(0)) <> -1)then
+      recTrace = lstConnectedSelected.get(1)
+    else
+      recTrace = lstConnectedSelected.get(0)
+    end
+    lstProfileLines.add(recTrace)
+    lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+    lstConnectedSelected = List.make
+    for each recConnected in lstConnectedLines
+      if(bmpSelectedLines.get(recConnected))then
+        lstConnectedSelected.add(recConnected)
+      end
+    end
+    if(av.setStatus(lstProfileLines.count/numSelected*100).not)then
+      exit
+    end
+  end
+  if(lstConnectedSelected.count>2)then
+    MsgBox.info("Can't draw profile for forks. Please check the selection.","DC Sewer - Complex Profile")
+    exit
+  end
+  if(lstProfileLines.count <> bmpSelectedLines.count)then
+    MsgBox.info("Selected lines are not fully connected. Please check.","DC Sewer - Complex Profile")
+    exit
+  end
+  
+  ftbLine.setSelection(bmpSelectedLines)
 end
-if(lstConnectedSelected.count>2)then
-  MsgBox.info("Can't draw profile for forks. Please check the selection.","DC Sewer - Complex Profile")
-  exit
-end
-if(lstProfileLines.count <> bmpSelectedLines.count)then
-  MsgBox.info("Selected lines are not fully connected. Please check.","DC Sewer - Complex Profile")
-  exit
-end
-
-ftbLine.setSelection(bmpSelectedLines)
 
 ' build Manhole list
 
 lstProfileManholes = List.make
 
 lstPreviousManholes = av.run("DCSewerDesign.Line.findManholes",{ftbLine,ftbManhole,lstProfileLines.get(0)}).clone
-lstManholes = av.run("DCSewerDesign.Line.findManholes",{ftbLine,ftbManhole,lstProfileLines.get(1)}).clone
+lstManholes = List.make
+if(lstProfileLines.count > 1)then
+  lstManholes = av.run("DCSewerDesign.Line.findManholes",{ftbLine,ftbManhole,lstProfileLines.get(1)}).clone
+end
 for each recManhole in lstPreviousManholes
   if(lstManholes.findByValue(recManhole) = -1)then
     lstProfileManholes.add(recManhole)
@@ -291,9 +299,16 @@ while (not (strLine=nil ))
     for each lstFreeField in lstFreeFields
       if(strScriptFieldName = lstFreeField.get(0))then
         lstFieldTokens = strTableFieldName.asTokens("@")
-        if(lstFieldTokens.count = 4)then
+        if(lstFieldTokens.count = 5)then
+          strJustificationToken = lstFieldTokens.get(4)
+          intJustification = #TEXTCOMPOSER_JUST_LEFT
+          if(strJustificationToken = "center")then
+            intJustification = #TEXTCOMPOSER_JUST_CENTER
+          elseif(strJustificationToken = "right")then
+            intJustification = #TEXTCOMPOSER_JUST_RIGHT
+          end
           lstFree = {lstFieldTokens.get(0),lstFieldTokens.get(1).asNumber,
-            lstConfTokens.get(1).asTokens("@").get(2), lstFieldTokens.get(3).asNumber}
+            lstConfTokens.get(1).asTokens("@").get(2), lstFieldTokens.get(3).asNumber, intJustification.clone}
           lstFreeField.get(1).add(lstFree)      
         end
       end 
@@ -525,7 +540,7 @@ numY = numY + (ftbManhole.returnValue(fldManholeInvertLevel, lstProfileManholes.
 for each lstFreeField in lstFreeManholeFields
   fldFree = ftbManhole.findField(lstFreeField.get(0))
   if(fldFree <> nil)then
-    numY = av.run("DCSewerDesign.Profile.ManholeDataBox.create", {ftbProfile, ftbLine, ftbManhole, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileManholes, lstProfileLines, lstFreeField.get(1), true, lstFreeField.get(3)})
+    numY = av.run("DCSewerDesign.Profile.ManholeDataBox.create", {ftbProfile, ftbLine, ftbManhole, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileManholes, lstProfileLines, lstFreeField.get(1), true, lstFreeField.get(3), lstFreeField.get(4)})
   else
     System.echo("Could not find field "+lstFreeField.get(0)+" in manhole table.")
   end
@@ -534,7 +549,7 @@ end
 for each lstFreeField in lstFreeLineFields
   fldFree = ftbLine.findField(lstFreeField.get(0))
   if(fldFree <> nil)then
-    numY = av.run("DCSewerDesign.Profile.LineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3)})
+    numY = av.run("DCSewerDesign.Profile.LineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3), lstFreeField.get(4)})
   else
     System.echo("Could not find field "+lstFreeField.get(0)+" in line table.")
   end
@@ -543,7 +558,7 @@ end
 for each lstFreeField in lstFreeCumulativeLineFields
   fldFree = ftbLine.findField(lstFreeField.get(0))
   if(fldFree <> nil)then
-    numY = av.run("DCSewerDesign.Profile.CumulativeLineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3)ö})
+    numY = av.run("DCSewerDesign.Profile.CumulativeLineDataBox.create", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3), lstFreeField.get(4)})
   else
     System.echo("Could not find field "+lstFreeField.get(0)+" in line table.")
   end

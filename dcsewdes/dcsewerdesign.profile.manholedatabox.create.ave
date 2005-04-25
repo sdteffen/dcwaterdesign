@@ -9,8 +9,8 @@
 ' (c) 2000 - 2004 DORSCH Consult
 
 ' Parameter
-if(self.count <> 13)then
-  System.echo("DCSewerDesign.Profile.ManholeDataBox.create: ERROR: Expected 13 arguments")
+if(self.count <> 14)then
+  System.echo("DCSewerDesign.Profile.ManholeDataBox.create: ERROR: Expected 14 arguments")
   exit
 end
 ftbProfile = self.get(0)
@@ -26,6 +26,7 @@ lstLineRecords = self.get(9)
 numPrecision = self.get(10)
 blnVerticalText = self.get(11)
 numHeight = self.get(12)
+numJustification = self.get(13)
 
 fldProfileShape = ftbProfile.findField("Shape")
 fldLineShape = ftbLine.findField("Shape")
@@ -76,9 +77,15 @@ for each i in 0..(lstManholeRecords.count-1)
     strText = strText.setFormat(strFormat).asString
   end
   if(blnVerticalText)then
-    pntTextLocation = Point.make(numX+numWidth,numY)
+    pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2))
+    if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+      pntTextLocation = Point.make(numX+numWidth, numY-numHeight)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+      pntTextLocation = Point.make(numX+numWidth, numY)
+    end
   else
     pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)
+    
   end  
   gtxText = GraphicText.make(strText, pntTextLocation)
   if(blnVerticalText)then
@@ -88,13 +95,27 @@ for each i in 0..(lstManholeRecords.count-1)
   tpsText = TextPositioner.make(Point)
   if(blnVerticalText)then
     tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
-    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_BELOW)
+    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
+    if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+      tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_TOP)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+      tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_BOTTOM)
+    end
   else
     tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
     tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
   end
   tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)
   gtxText.setOrigin(tpsText.getOrigin)
+  if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+    gtxText.setAlignment(#TEXTCOMPOSER_JUST_RIGHT)
+  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+    gtxText.setAlignment(#TEXTCOMPOSER_JUST_LEFT)
+  else
+    gtxText.setAlignment(#TEXTCOMPOSER_JUST_CENTER)
+  end
   for each symText in gtxText.returnSymbols
     viewActive.getDisplay.hookupSymbol(symText)
   end

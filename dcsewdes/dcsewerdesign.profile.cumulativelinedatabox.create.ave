@@ -9,8 +9,8 @@
 ' (c) 2000 - 2004 DORSCH Consult
 
 ' Parameter
-if(self.count <> 10)then
-  System.echo("DCSewerDesign.Profile.CumulativeLineDataBox.create: ERROR: Expected 10 arguments")
+if(self.count <> 11)then
+  System.echo("DCSewerDesign.Profile.CumulativeLineDataBox.create: ERROR: Expected 11 arguments")
   exit
 end
 ftbProfile = self.get(0)
@@ -23,6 +23,7 @@ strLabel = self.get(6)
 lstLineRecords = self.get(7)
 numPrecision = self.get(8)
 numHeight = self.get(9)
+numJustification = self.get(10)
 
 numI = 0
 for each objArgument in self
@@ -87,11 +88,23 @@ for each i in 0..(lstLineRecords.count-1)
   end
   if((strText <> strPreviousText) and(i<>0))then
     pntTextLocation = Point.make(numX+numWidth-(numCumulativeLength/2),numY-(numHeight/2)+1)
+    if(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+      pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+      pntTextLocation = Point.make(numX,numY-(numHeight/2)+1)
+    end
     gtxText = GraphicText.make(strPreviousText, pntTextLocation)
     viewActive.getGraphics.add(gtxText)
     tpsText = TextPositioner.make(Point)
     tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
     tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
+    if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)
+    end
     tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)
     gtxText.setOrigin(tpsText.getOrigin)
     for each symText in gtxText.returnSymbols
@@ -110,11 +123,24 @@ end
 
 if(strPreviousText <> " ")then
   pntTextLocation = Point.make(numX+numWidth-(numCumulativeLength/2),numY-(numHeight/2)+1)
+    if(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+      pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+      pntTextLocation = Point.make(numX,numY-(numHeight/2)+1)
+    end
+
     gtxText = GraphicText.make(strPreviousText, pntTextLocation)
     viewActive.getGraphics.add(gtxText)
     tpsText = TextPositioner.make(Point)
     tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
     tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
+     if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)
+    end
     tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)
     gtxText.setOrigin(tpsText.getOrigin)
     for each symText in gtxText.returnSymbols
