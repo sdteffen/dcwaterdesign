@@ -24,7 +24,7 @@
       <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
         "sample/profileconfiguration.txt,sample/profilemanhole.avl" />	
     </tar>
-    <bzip2 zipfile="dcwsewerdesign-src-${dcsewerdesign_version}.tar.bz2" 
+    <bzip2 zipfile="dcsewerdesign-src-${dcsewerdesign_version}.tar.bz2" 
       src="dcsewerdesign-src-${dcsewerdesign_version}.tar"/>
     <delete file="dcsewerdesign-src-${dcsewerdesign_version}.tar" />  
   </target>
