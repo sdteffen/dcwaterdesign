@@ -1,3 +1,11 @@
+2005-04-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.nsi:
+	* build.xml:
+	* dcsewerdesignextension.make.ave:
+	* doc/en/version.xml: version is 2.0.7 now
+	* doc/en/dcsewerdesign.xml: updated What's new section
+	
 2005-04-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.profile.buildlinelist.ave:

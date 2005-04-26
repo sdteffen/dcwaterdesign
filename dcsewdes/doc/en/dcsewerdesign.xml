@@ -75,6 +75,8 @@
 	<listitem><para>It is now possible to specify the text justification
 	  for data boxes created by the &quot;Create Profile&quot; function.
 	  </para></listitem>
+	<listitem><para>Bug fixes for &quot;Create Profile&quot; function
+	  </para></listitem>  
        </itemizedlist></para>	  
     </sect3>
     <sect3 id="version_2_0_6">
