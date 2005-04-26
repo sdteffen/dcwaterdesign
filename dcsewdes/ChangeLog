@@ -1,3 +1,11 @@
+2005-04-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.profile.buildlinelist.ave:
+	* dcsewerdesign.profile.create.ave: deleted (old code, not used
+	any more)
+	* dcsewerdesign.complexprofile.create.ave: fixed bug #1182188 (buggy
+	profile creation for water networks)
+	
 2005-03-10  Steffen Macke <sdteffen@gmail.com>
 
 	* dcsewerdesign.complexprofile.create.ave:

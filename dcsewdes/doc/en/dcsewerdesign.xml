@@ -67,6 +67,16 @@
     <title>What's New?</title>
     <para>A summary of changes in different versions of the DC Sewer Design
       Extension.</para>
+    <sect3 id="version_2_0_7">
+      <title>Version 2.0.7</title>
+      <para><itemizedlist>
+        <listitem><para>&quot;Create Profile&quot; works now for single lines.
+	  </para></listitem>
+	<listitem><para>It is now possible to specify the text justification
+	  for data boxes created by the &quot;Create Profile&quot; function.
+	  </para></listitem>
+       </itemizedlist></para>	  
+    </sect3>
     <sect3 id="version_2_0_6">
       <title>Version 2.0.6</title>
       <para><itemizedlist>
@@ -443,11 +453,19 @@ Line.Theme=???</programlisting></para>
       </itemizedlist></para>
     <para>The following is an example of the data box configuration syntax:
       <programlisting>
-CumulativeLineData=diameter@0@Diameter Nominal in mm@30</programlisting></para>
+CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting></para>
     <para>Where CumulativeLineData is the data box type, diameter is the field
       name in the line table, 0 is the number of decimal digits, 
-      &quot;Diameter Nominal in mm&quot; is the data box label and 30 is the
-      height of the data box.</para>
+      &quot;Diameter Nominal in mm&quot; is the data box label, 30 is the
+      height of the data box and &quot;Center&quot; is the text justification
+      in the data box.</para>
+    <para>The text justification should be one of the following:
+      <itemizedlist>
+        <listitem><para>Left</para></listitem>
+	<listitem><para>Center</para></listitem>
+	<listitem><para>Right</para></listitem>
+      </itemizedlist>
+    </para>
     <para>Different data boxes should be combined to obtain the desired 
       output.</para>
     <para>Adding the following line will add datum lines at a 5m interval:

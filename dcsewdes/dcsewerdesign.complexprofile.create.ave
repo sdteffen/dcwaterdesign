@@ -413,14 +413,7 @@ for each i in 0..(lstProfileManholes.count-1)
   pllManhole = Polyline.make({{pntLowerLeft,pntUpperLeft,pntUpperRight, pntLowerRight, pntLowerLeft}})
   ftbProfile.setValue(fldProfileShape, recProfile, pllManhole)
   ftbProfile.setValue(fldProfileStyle, recProfile, "bold")
-  
-  recProfile = ftbProfile.addRecord
-  pntCenterlineStart = Point.make(numX, numY+(numElevation*10))
-  pntCenterlineEnd = Point.make(numX, numY+(ftbManhole.returnValue(fldManholeInvertLevel, lstProfileManholes.get(lstProfileManholes.count-1))*10)-12-numAdjustment)
-  pllManholeCenterline = Polyline.make({{pntCenterlineStart, pntCenterlineEnd}})
-  ftbProfile.setValue(fldProfileShape, recProfile, pllManholeCenterline)
-  ftbProfile.setValue(fldProfileStyle, recProfile, "normal") 
-    
+      
   ' Draw connecting lines
   if((i <> 0)and(i<>(lstProfileManholes.count-1)))then
     pntManhole = ftbManhole.returnValue(fldManholeShape, recManhole)
@@ -533,9 +526,26 @@ for each i in 0..(lstProfileLines.count-1)
   numX = numX + numLineLength
 end
 
+' Draw manhole center lines
+numX = 1000.0
+for each i in 0..(lstProfileManholes.count-1)
+  recManhole = lstProfileManholes.get(i)
+  numElevation = ftbManhole.returnValue(fldManholeElevation, recManhole)
+  recProfile = ftbProfile.addRecord
+  pntCenterlineStart = Point.make(numX, numY+(numElevation*10))
+  pntCenterlineEnd = Point.make(numX, numY+(numMinInvertElevation*10)-12-numAdjustment)
+  pllManholeCenterline = Polyline.make({{pntCenterlineStart, pntCenterlineEnd}})
+  ftbProfile.setValue(fldProfileShape, recProfile, pllManholeCenterline)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+  if(i < lstProfileLines.count)then
+    numX = numX + ftbLine.returnValue(fldLineShape,lstProfileLines.get(i)).returnLength
+  end
+ 
+end
+
 numTotalLength = numX - 1000.0
 numX = 1000.0
-numY = numY + (ftbManhole.returnValue(fldManholeInvertLevel, lstProfileManholes.get(lstProfileManholes.count-1))*10)-12-numAdjustment
+numY = numY + (numMinInvertElevation*10)-12-numAdjustment
 
 for each lstFreeField in lstFreeManholeFields
   fldFree = ftbManhole.findField(lstFreeField.get(0))
@@ -566,7 +576,7 @@ end
  
 ' draw bounding box
 
-numBoundingBoxTop = 1000 + (ftbManhole.returnValue(fldManholeInvertLevel, lstProfileManholes.get(lstProfileManholes.count-1))*10)-8-numAdjustment  
+numBoundingBoxTop = 1000 + (numMinInvertElevation*10)-8-numAdjustment  
 pntBoundingBoxOrigin = Point.make(1000-60, numY)
 pntBoundingBoxSize = Point.make(numTotalLength+60+20, numBoundingBoxTop-numY-4)
 pllBoundingBox = Rect.make(pntBoundingBoxOrigin, pntBoundingBoxSize).asPolygon.asPolyline

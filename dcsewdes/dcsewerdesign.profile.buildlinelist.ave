@@ -1,9 +1,0 @@
-' DCSewerDesign.Profile.buildLineList
-
-' performs the necessary network trace to establish a list of lines
-
-' argument: ftab of the lines
-' returns the list containing the record numbers
-
-' (c) 2000 DORSCH Consult
-
