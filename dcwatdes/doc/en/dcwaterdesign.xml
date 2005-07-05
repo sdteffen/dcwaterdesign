@@ -1102,6 +1102,7 @@
       </sect3>
     </sect2>
     <sect2 id="view_context_menus">
+      <title>View Context Menus</title>
       <para>The context menu items described in this section are available if 
         the right mouse button is pressed over a theme that has been registered 
 	with the DC Water Design Extension (See <xref linkend=
