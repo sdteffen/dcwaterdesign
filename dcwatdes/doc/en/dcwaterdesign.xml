@@ -54,6 +54,17 @@
  
     <sect2 id="news">
       <title>What's New?</title>
+        <sect3 id="news_2_12">
+	  <title>Version 2.12</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>&quot;Select Connected Pipes&quot; looks for
+	        &quot;closed&quot; as a substring rather than a closed
+		string (If &quot;Closed Valve&quot; is selected).</para>
+		</listitem>
+	    </itemizedlist>
+	  </para>  
+	</sect3>
         <sect3>
 	  <title>Version 2.11</title>
 	  <para>
@@ -261,6 +272,7 @@
 	model. Through specifying network features at which the 
 	trace should stop, it's possible to isolate supply 
 	zones.</para>
+      <para>See <xref linkend="select_connected_pipes" />.</para>	
     </sect2> 
     <sect2 id="virtual_lines">
       <title>Virtual Lines</title>
@@ -1088,7 +1100,13 @@
 	  EPANET themes dialog. The tool is disabled if the pump 
 	  theme is not enabled in the EPANET themes dialog.</para>
       </sect3>
-      <sect3>
+    </sect2>
+    <sect2 id="view_context_menus">
+      <para>The context menu items described in this section are available if 
+        the right mouse button is pressed over a theme that has been registered 
+	with the DC Water Design Extension (See <xref linkend=
+	"epanet_themes_dialog" />).</para>
+      <sect3 id="show_pipe_table_entry">
         <title>Show Pipe Table Entry</title>
     
 	<para>Pop-up menu item that allows to show the attributes of 
@@ -1101,7 +1119,7 @@
 	<para>The appropriate pipe theme has to be selected in the 
 	  EPANET themes dialog.</para>
       </sect3>
-      <sect3>	  
+      <sect3 id="edit_pipe_table_entry">	  
 	<title>Edit Pipe Table Entry</title>
       
 	<para>Pop-up menu item allowing to edit the attributes of a pipe.</para>
@@ -1112,12 +1130,10 @@
 	  attributes of the pipe can be edited. Keep in mind that 
 	  there's no undo.</para>
       </sect3>
-      <sect3>
+      <sect3 id="select_connected_pipes">
         <title>Select Connected Pipes</title>
-    
 	<para>Pop-up menu item that allows to trace the pipes 
 	  connected to the selected pipe.</para>
-	  
 	<para>Right-clicking on a pipe and selecting this menu item 
 	  opens a dialog that offers node types at which the 
 	  trace should stop. Multiple types can be selected. 
@@ -1128,8 +1144,18 @@
 	  is fully connected and no stopper has been selected. 
 	  The connected pipes up to all stop points are returned 
 	  as the selection.</para>
+	<tip><para>The option &quot;Closed Valves&quot; will stop if
+	  a feature in the valve theme contains the text &quot;closed&quot; in
+	  the field <structfield>status</structfield>.</para></tip>  
       </sect3>
-      <sect3>
+      <sect3 id="select_connected_pipes_interactively">
+        <title>Select Connected Pipes Interactively</title>
+	<para>Interactively traces connected pipes.</para>
+	<para>See <xref linkend="select_connected_pipes" /> for more 
+	  information on network traces.
+	  </para>
+      </sect3>
+      <sect3 id="show_node_table_entry">
 	<title>Show Node Table Entry</title>
       
 	<para>Pop-up menu item that shows the attributes of a node.</para>
@@ -1141,7 +1167,7 @@
 	<para>The appropriate node theme has to be selected in the 
 	EPANET themes dialog.</para>
       </sect3>
-      <sect3>
+      <sect3 id="edit_node_table_entry">
         <title>Edit Node Table Entry</title>
     
 	<para>Pop-up menu item that allows to edit the attributes of 
@@ -1153,14 +1179,12 @@
 	  attributes of the node can be edited. Keep in mind that 
 	  there's no undo.</para>
       </sect3>
-      <sect3>
+      <sect3 id="select_node">
         <title>Select Node</title>
-         <para>Selects the current node.</para>
-    
+        <para>Selects the current node.</para>
 	<para>Adds the current node to the selection in the node theme.</para>
-	
 	<para>The appropriate node themes has to be selected in the 
-	EPANET themes dialog.</para>
+	  EPANET themes dialog.</para>
       </sect3>
     </sect2>
     <sect2 id="table_buttons">

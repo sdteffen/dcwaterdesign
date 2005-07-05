@@ -122,7 +122,7 @@ while(stkPipes.isEmpty.not)
     for each ftbNode in lstNodeFTabs
       ftbNode.selectByPoint(pntNode, numSnappingRadius, #VTAB_SELTYPE_NEW)
       if(ftbNode.getSelection.getNextSet(-1) <> -1)then
-        if((ftbNode <> ftbValves)or(blnStopAtClosedValves.not)or(ftbNode.returnValue(ftbNode.findField("setting"), ftbNode.getSelection.getNextSet(-1))<>"closed"))then
+        if((ftbNode <> ftbValves)or(blnStopAtClosedValves.not)or(ftbNode.returnValue(ftbNode.findField("setting"), ftbNode.getSelection.getNextSet(-1)).LCase.contains("closed").not))then
           lstConnectedPipes = av.run("DCWatDes.PolylineFTab.findPllsByEndPoint", {ftbPipes, pntNode, numSnappingRadius})
           for each recConnectedPipe in lstConnectedPipes
             if(bmpSelection.get(recConnectedPipe).not)then

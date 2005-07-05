@@ -1,3 +1,12 @@
+2005-07-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.popup.pipes.selectconnectedpipes.ave:
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.view.popup.pipes.selectconnectedpipesinteractive.ave: Looking
+	for "closed" substring rather than complete match now
+	* dcwatdesextension.make.ave: Version number is 2.11+cvs now
+	* doc/dcwatdes_manual.lyx: Removed old manual format
+                                                                          
 2005-01-22  Steffen Macke <Steffen_Macke@gmail.com>
 
 	* doc/docbook.xsl: improved documentation layout
