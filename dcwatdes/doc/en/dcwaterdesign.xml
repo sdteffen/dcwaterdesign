@@ -11,11 +11,11 @@
       <holder>DORSCH Consult</holder>
     </copyright>
     <author>
-      <personname>
-        <firstname>Steffen</firstname>
-	<surname>Macke</surname>
-      </personname>
-      <email>Steffen_Macke@dorsch.com.jo</email>
+      <firstname>Steffen</firstname>
+      <surname>Macke</surname>
+      <affiliation>
+        <address><email>Steffen_Macke@dorsch.com.jo</email></address>
+      </affiliation>
     </author>
     <legalnotice>
       <para>Permission is granted to copy, distribute and/or modify this 

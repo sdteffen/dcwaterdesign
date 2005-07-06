@@ -1,3 +1,8 @@
+2005-07-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/docbook.css: Improved layout of Author names and their email
+	addresses.
+
 2005-07-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.popup.pipes.selectconnectedpipes.ave:
