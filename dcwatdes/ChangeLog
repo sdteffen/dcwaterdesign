@@ -1,3 +1,8 @@
+2005-07-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsfortimestep.ave: Don't try to link
+	results to tables with 0 records
+
 2005-07-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/docbook.css: Improved layout of Author names and their email

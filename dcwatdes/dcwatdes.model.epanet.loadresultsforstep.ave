@@ -48,7 +48,7 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
   strLinkResults = dicPreferences.get("strLinkResults") 
   for each tableFeature in lstTables
     vtbFeature = tableFeature.getVTab
-    if((vtbFeature <> nil)and(vtbFeature.getBaseTableFilename <> nil))then
+    if((vtbFeature <> nil)and(vtbFeature.getBaseTableFilename <> nil)and(vtbFeature.getNumRecords <> 0))then
       if(vtbFeature.getBaseTableFilename.getFullName = strLinkResults)then
         vtbLinkResults = vtbFeature
       else

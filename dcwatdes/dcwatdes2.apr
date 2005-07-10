@@ -152,8 +152,8 @@
 	WorkDir:	2021
 	WinX:	-4
 	WinY:	-3
-	WinW:	1608
-	WinH:	1179
+	WinW:	1688
+	WinH:	1023
 	SerialNumber:	"752171190022"
 	SelColor:	2022
 	GUINames:	2023
@@ -173,8 +173,8 @@
 	Open:	1
 	X:	-4
 	Y:	-4
-	W:	1610
-	H:	1075
+	W:	1690
+	H:	911
 )
 
 (CSMgr.4
@@ -4455,10 +4455,10 @@ _Selection)\nftb_Pipes.updateSelection\nav.clearStatus\n"
 
 (DocWin.559
 	Owner:	558
-	X:	54
-	Y:	73
-	W:	741
-	H:	643
+	X:	-4
+	Y:	-4
+	W:	1690
+	H:	911
 )
 
 (CSMgr.560
@@ -4929,18 +4929,18 @@ er\nif( numSnappingRadius = nil)then\n  numSnappingRadius = 0.1\nend\n\ndicTheme
 in dicFTabs.returnKeys\n  if(strTheme <> \"Pipes\")then\n    strTheme.setName(strTheme)\n    lstNodeThemeNames.add(strTheme)\n    if(strTheme = \"Valves\")then\n      strClosed = \"Closed Valves\"\n      strClosed.setName(\"Closed Valves\")\n      lstNodeThemeNames.add(strClosed)\n    end\n  end\nend\n\nlstStop = MsgBox.multiList(lstNodeThemeNames, \"Select the Node Themes where the Trace should stop.\", \"DC Water Design Extension\")\nif(lstStop = nil)then\n  return nil\nend\n\nblnStopAtClosedValves = false\n\nfor each strTheme in lstSt
 op\n  if(strTheme = \"Closed Valves\")then\n    blnStopAtClosedValves = true\n  else\n    lstNodeThemeNames.removeObj(strTheme)\n  end\nend\nfor each i in 0 .. (lstNodeThemeNames.count-1)\n  if(lstNodeThemeNames.get(i)=\"Closed Valves\")then\n    lstNodeThemeNames.remove(i)\n    break\n  end\nend\n\nlstNodeFTabs = List.make\nfor each strNodeTheme in lstNodeThemeNames\n  lstNodeFTabs.add(dicFTabs.get(strNodeTheme))\nend\n\nftbValves = dicFTabs.get(\"Valves\")\n\nftbPipes = dicFTabs.get(\"Pipes\")\nfldPipeShape = ftbPipes.findField(\"Shape
 \")\nactiveView = av.getActiveDoc\n\nrecStartPipe = lstPipes.get(0)\nav.clearStatus\nav.showStopButton\n\nnumPipes = ftbPipes.getNumRecords\nnumConnectedPipes = 0\nbmpSelection = Bitmap.make(numPipes)\nbmpSelection.set(recStartPipe)\n\nstkPipes = Stack.make\n\n'initialize Stack\nstkPipes.push(recStartPipe)\n\nwhile(stkPipes.isEmpty.not)\n\n  if ( av.setStatus(numConnectedPipes/numPipes*100).not) then\n    'user wants to terminate\n     exit\n  end\n\n  recPipe = stkPipes.pop\n  pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)\n 
- lstPipeNodes = pllPipe.asList.get(0)\n  for each pntNode in {lstPipeNodes.get(0), lstPipeNodes.get(lstPipeNodes.count -1)}\n    recNode = nil\n\n    for each ftbNode in lstNodeFTabs\n      ftbNode.selectByPoint(pntNode, numSnappingRadius, #VTAB_SELTYPE_NEW)\n      if(ftbNode.getSelection.getNextSet(-1) <> -1)then\n        if((ftbNode <> ftbValves)or(blnStopAtClosedValves.not)or(ftbNode.returnValue(ftbNode.findField(\"setting\"), ftbNode.getSelection.getNextSet(-1))<>\"closed\"))then\n          lstConnectedPipes = av.r
-un(\"DCWatDes.PolylineFTab.findPllsByEndPoint\", {ftbPipes, pntNode, numSnappingRadius})\n          for each recConnectedPipe in lstConnectedPipes\n            if(bmpSelection.get(recConnectedPipe).not)then\n              ' connected pipe which is not already on the stack\n              bmpSelection.set(recConnectedPipe)\n              numConnectedPipes = numConnectedPipes + 1\n              stkPipes.push(recConnectedPipe)\n            end\n          end\n        end\n      end\n    end\n  end\nend\n\nftbPipes.setSelection(
-bmpSelection)\nftbPipes.updateSelection\nav.clearStatus\n\n"
+ lstPipeNodes = pllPipe.asList.get(0)\n  for each pntNode in {lstPipeNodes.get(0), lstPipeNodes.get(lstPipeNodes.count -1)}\n    recNode = nil\n\n    for each ftbNode in lstNodeFTabs\n      ftbNode.selectByPoint(pntNode, numSnappingRadius, #VTAB_SELTYPE_NEW)\n      if(ftbNode.getSelection.getNextSet(-1) <> -1)then\n        if((ftbNode <> ftbValves)or(blnStopAtClosedValves.not)or(ftbNode.returnValue(ftbNode.findField(\"setting\"), ftbNode.getSelection.getNextSet(-1)).LCase.contains(\"closed\").not))then\n          lstCo
+nnectedPipes = av.run(\"DCWatDes.PolylineFTab.findPllsByEndPoint\", {ftbPipes, pntNode, numSnappingRadius})\n          for each recConnectedPipe in lstConnectedPipes\n            if(bmpSelection.get(recConnectedPipe).not)then\n              ' connected pipe which is not already on the stack\n              bmpSelection.set(recConnectedPipe)\n              numConnectedPipes = numConnectedPipes + 1\n              stkPipes.push(recConnectedPipe)\n            end\n          end\n        end\n      end\n    end\n  end\nend\n\nftb
+Pipes.setSelection(bmpSelection)\nftbPipes.updateSelection\nav.clearStatus\n\n"
 	FontSize:	2
 )
 
 (DocWin.615
 	Owner:	614
-	X:	201
-	Y:	90
-	W:	868
-	H:	737
+	X:	-4
+	Y:	-4
+	W:	1690
+	H:	911
 )
 
 (CSMgr.616
@@ -5055,10 +5055,10 @@ STR})\n\nstrReturnValue = procCallSystem.call({strCommand})\n\nif(strReturnValue
 
 (DocWin.631
 	Owner:	630
-	X:	5
-	Y:	5
-	W:	997
-	H:	552
+	X:	-4
+	Y:	-4
+	W:	1690
+	H:	911
 )
 
 (CSMgr.632
@@ -5913,8 +5913,8 @@ t\nend\n\nlstNodeThemeNames = List.make\nfor each strTheme in dicFTabs.returnKey
 nStopAtClosedValves = false\n\nfor each strTheme in lstStop\n  if(strTheme = \"Closed Valves\")then\n    blnStopAtClosedValves = true\n  else\n    lstNodeThemeNames.removeObj(strTheme)\n  end\nend\nfor each i in 0 .. (lstNodeThemeNames.count-1)\n  if(lstNodeThemeNames.get(i)=\"Closed Valves\")then\n    lstNodeThemeNames.remove(i)\n    break\n  end\nend\n\nlstNodeFTabs = List.make\nfor each strNodeTheme in lstNodeThemeNames\n  lstNodeFTabs.add(dicFTabs.get(strNodeTheme))\nend\n\nftbValves = dicFTabs.get(\"Valves\")\n\nftbPipes = dicFTab
 s.get(\"Pipes\")\nfldPipeShape = ftbPipes.findField(\"Shape\")\nactiveView = av.getActiveDoc\n\nrecStartPipe = lstPipes.get(0)\nav.clearStatus\nav.showStopButton\n\nnumPipes = ftbPipes.getNumRecords\nnumConnectedPipes = 0\nbmpSelection = Bitmap.make(numPipes)\nbmpSelection.set(recStartPipe)\n\nstkPipes = Stack.make\n\n'initialize Stack\nstkPipes.push(recStartPipe)\n\nwhile(stkPipes.isEmpty.not)\n\n  if ( av.setStatus(numConnectedPipes/numPipes*100).not) then\n    ' User wants to terminate\n    ftbPipes.setSelection(bmpSelection)\n   
  ftbPipes.updateSelection\n    av.clearStatus\n    exit\n  end\n\n  recPipe = stkPipes.pop\n  pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)\n  lstPipeNodes = pllPipe.asList.get(0)\n  for each pntNode in {lstPipeNodes.get(0), lstPipeNodes.get(lstPipeNodes.count -1)}\n    recNode = nil\n\n    for each ftbNode in lstNodeFTabs\n      ftbNode.selectByPoint(pntNode, numSnappingRadius, #VTAB_SELTYPE_NEW)\n      if(ftbNode.getSelection.getNextSet(-1) <> -1)then\n        if((ftbNode <> ftbValves)or(blnStopAtClosedValves.n
-ot)or(ftbNode.returnValue(ftbNode.findField(\"setting\"), ftbNode.getSelection.getNextSet(-1))<>\"closed\"))then\n          lstConnectedPipes = av.run(\"DCWatDes.PolylineFTab.findPllsByEndPoint\", {ftbPipes, pntNode, numSnappingRadius})\n          for each recConnectedPipe in lstConnectedPipes\n            if(bmpSelection.get(recConnectedPipe).not)then\n              ' connected pipe which is not already on the stack\n              bmpSelection.set(recConnectedPipe)\n              ftbPipes.setSelection(bmpSelection)\n  
-            ftbPipes.updateSelection\n              pntPipeCentre = ftbPipes.returnValue(fldPipeShape, recConnectedPipe).returnCenter\n              activeView.getDisplay.panTo(pntPipeCentre)\n              av.processAllInvals\n              numConnectedPipes = numConnectedPipes + 1\n              stkPipes.push(recConnectedPipe)\n            end\n          end\n        end\n      end\n    end\n  end\nend\n\nftbPipes.setSelection(bmpSelection)\nftbPipes.updateSelection\nav.clearStatus\n\n"
+ot)or(ftbNode.returnValue(ftbNode.findField(\"setting\"), ftbNode.getSelection.getNextSet(-1)).LCase.contains(\"closed\").not))then\n          lstConnectedPipes = av.run(\"DCWatDes.PolylineFTab.findPllsByEndPoint\", {ftbPipes, pntNode, numSnappingRadius})\n          for each recConnectedPipe in lstConnectedPipes\n            if(bmpSelection.get(recConnectedPipe).not)then\n              ' connected pipe which is not already on the stack\n              bmpSelection.set(recConnectedPipe)\n              ftbPipes.setSelecti
+on(bmpSelection)\n              ftbPipes.updateSelection\n              pntPipeCentre = ftbPipes.returnValue(fldPipeShape, recConnectedPipe).returnCenter\n              activeView.getDisplay.panTo(pntPipeCentre)\n              av.processAllInvals\n              numConnectedPipes = numConnectedPipes + 1\n              stkPipes.push(recConnectedPipe)\n            end\n          end\n        end\n      end\n    end\n  end\nend\n\nftbPipes.setSelection(bmpSelection)\nftbPipes.updateSelection\nav.clearStatus\n\n"
 	SearchStr:	"selection"
 	FontSize:	1
 )
@@ -5923,8 +5923,8 @@ ot)or(ftbNode.returnValue(ftbNode.findField(\"setting\"), ftbNode.getSelection.g
 	Owner:	750
 	X:	-4
 	Y:	-4
-	W:	1610
-	H:	1075
+	W:	1690
+	H:	911
 )
 
 (CSMgr.752
@@ -6161,15 +6161,16 @@ Extension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename, \"$AVE
 CWatDes.View.Popup.Pipes\") )\n'4\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.Nodes\"))\n'5\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"BOQ.make\"))\n'6\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.classifyHouseConnections\"))\n\n'7\ndlgSetup = av.findDialog(\"DCWatDes.Dialog.Setup\")\ndlgSetup.setServer(nil)\nmyExt.add(dlgSetup)\n\n'8\nmyExt.add(av.getProject.findGUI(\"Project\").getMenuBar.findByLabel(\"DC Water Design\"))\n\n
 '9\ndlgEpanetTables = av.findDialog(\"DCWatDes.Dialog.EpanetTables\")\ndlgEpanetTables.setServer(nil)\nmyExt.add(dlgEpanetTables)\n\n'10\ndlgEpanetThemes = av.findDialog(\"DCWatDes.Dialog.EpanetThemes\")\ndlgEpanetThemes.setServer(nil)\nmyExt.add(dlgEpanetThemes)\n\n'11\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetThemes.open\"))\n\n' 12 Flip Tool\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.flipPolyline\"))\n\n' 13 \ndlgResultTables = av.findDialog(
 \"DCWatDes.Dialog.ResultTables\")\ndlgResultTables.setServer(nil)\nmyExt.add(dlgResultTables)\n\n' 14 Node Digitizing\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.digitizeNode\"))\n\n' 15 Epanet Tables Button\nmyExt.add(av.getProject.findGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetTables.open\"))\n\n' 16 Bitcode Calculator Button\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.calculateBitcode\"))\n\n' 17 PipesAndNodes View Popup\nmyExt.a
-dd( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.11\"+NL+\"(c) 1998 - 2005 DORSCH Consult.\"+NL+\n\"This 
-extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(210)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n 
- if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
+dd( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.11+cvs\"+NL+\"(c) 1998 - 2005 DORSCH Consult.\"+NL+\n\"T
+his extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(210)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadE
+lt\n  if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
 	SearchStr:	"06"
 	FontSize:	2
 )
 
 (DocWin.783
 	Owner:	782
+	Open:	1
 	X:	-4
 	Y:	-4
 	W:	1610
@@ -6504,19 +6505,18 @@ gClose = av.findDialog(strDialog)\n  dlgClose.close\nend\n\nDialog.detachFromExt
 	Win:	832
 	CSMgr:	833
 	DocExts:	834
-	Source:	"' Script.saveAllScripts\n\n' If the scripts are to be saved elsewhere, change the following line... \n\nstrSaveDir = \"c:\\data\\sandbox\\sourceforge\\dcwaterdesign\\dcwatdes\"\n\nif (File.exists(strSaveDir.asFilename).Not) then\n  MsgBox.Error(\"Working directory:\"++strSaveDir++\"does not exist\", \"\")\n  exit \nend\n\nlstScripts = List.make\n\n' find all scripts\n\nfor each docObj in av.getProject.getDocs\n  if (docObj.is(SEd)) then\n    lstScripts.Add(docObj)\n  end\nend\n\n' Loop over all scripts, write to files\n\nblnOverwrite = nil\nnu
-mWritten = 0\n	\nlstScriptsToWrite = List.make\n\nfor each sedScript in lstScripts\n\n  strSaveDir2 = strSaveDir.clone\n  strScriptName = sedScript.asString ' .substitute(\".\",\",\")\n   \n  flnScript = FileName.merge(strSaveDir2, strScriptName)\n  ' System.echo(flnScript.getFullName)\n  flnScript.setName(strScriptName+\".ave\")\n  if (flnScript.isFile) then\n    if(blnOverwrite = nil)then\n      blnOverwrite = MsgBox.YesNo(\"Overwrite files?\", \"Saving Scripts\", false)\n      if(blnOverwrite.not)then\n        continue \n      end
-\n    end\n      \n    ' check if file has been changed\n    txfScript = TextFile.make(flnScript, #FILE_PERM_READ)\n    strFileSource = txfScript.read(txfScript.getSize)\n    blnChanged = false\n    if(strFileSource <> sedScript.getSource)then\n      blnChanged = true\n    end\n    txfScript.close\n    if(blnChanged)then\n    '  File.delete(flnScript)\n    else\n     continue\n    end\n  end \n  \n  txfScript = TextFile.make(flnScript, #FILE_PERM_WRITE)\n  if (txfScript <> nil) then\n    txfScript.write(sedScript.getSource, se
-dScript.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  else\n    MsgBox.warning(\"Unable to open file for writing:\"++flnScript.getFullName,\"Saving Scripts\")\n  end\nend\nMsgBox.info(numWritten.asString++\"Scripts were written.\", \"Saving Scripts\")\n\n\n\n\n\n\n\n\n"
+	Source:	"' Script.saveAllScripts\n\n' If the scripts are to be saved elsewhere, change the following line... \n\nstrSaveDir = \"c:\\wc\\cvs-ssh.sourceforge.net\\dcwaterdesign\\dcwatdes\"\n\nif (File.exists(strSaveDir.asFilename).Not) then\n  MsgBox.Error(\"Working directory:\"++strSaveDir++\"does not exist\", \"\")\n  exit \nend\n\nlstScripts = List.make\n\n' find all scripts\n\nfor each docObj in av.getProject.getDocs\n  if (docObj.is(SEd)) then\n    lstScripts.Add(docObj)\n  end\nend\n\n' Loop over all scripts, write to files\n\nblnOverwrite = nil\n
+numWritten = 0\n	\nlstScriptsToWrite = List.make\n\nfor each sedScript in lstScripts\n\n  strSaveDir2 = strSaveDir.clone\n  strScriptName = sedScript.asString ' .substitute(\".\",\",\")\n   \n  flnScript = FileName.merge(strSaveDir2, strScriptName)\n  ' System.echo(flnScript.getFullName)\n  flnScript.setName(strScriptName+\".ave\")\n  if (flnScript.isFile) then\n    if(blnOverwrite = nil)then\n      blnOverwrite = MsgBox.YesNo(\"Overwrite files?\", \"Saving Scripts\", false)\n      if(blnOverwrite.not)then\n        continue \n      e
+nd\n    end\n      \n    ' check if file has been changed\n    txfScript = TextFile.make(flnScript, #FILE_PERM_READ)\n    strFileSource = txfScript.read(txfScript.getSize)\n    blnChanged = false\n    if(strFileSource <> sedScript.getSource)then\n      blnChanged = true\n    end\n    txfScript.close\n    if(blnChanged)then\n    '  File.delete(flnScript)\n    else\n     continue\n    end\n  end \n  \n  txfScript = TextFile.make(flnScript, #FILE_PERM_WRITE)\n  if (txfScript <> nil) then\n    txfScript.write(sedScript.getSource, 
+sedScript.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  else\n    MsgBox.warning(\"Unable to open file for writing:\"++flnScript.getFullName,\"Saving Scripts\")\n  end\nend\nMsgBox.info(numWritten.asString++\"Scripts were written.\", \"Saving Scripts\")\n\n\n\n\n\n\n\n\n"
 )
 
 (DocWin.832
 	Owner:	831
-	Open:	1
-	X:	517
-	Y:	384
-	W:	1034
-	H:	643
+	X:	-4
+	Y:	-4
+	W:	1690
+	H:	911
 )
 
 (CSMgr.833
@@ -6592,27 +6592,27 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 
 (NameDict.846
 	Obj:	847
-	Obj:	850
+	Obj:	848
 	Obj:	851
 	Obj:	854
 )
 
 (AVDict.847
-	InternalName:	"Dialog Designer"
-	Key:	848
-	Value:	849
+	InternalName:	"Table of Contents Defaults Dialog"
 )
 
-(AVStr.848
+(AVDict.848
+	InternalName:	"Dialog Designer"
+	Key:	849
+	Value:	850
+)
+
+(AVStr.849
 	S:	"IsVisible"
 )
 
-(Bool.849
+(Bool.850
 	Truth:	1
-)
-
-(AVDict.850
-	InternalName:	"Table of Contents Defaults Dialog"
 )
 
 (AVDict.851
@@ -11154,6 +11154,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1663
+	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -12032,7 +12033,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
-	Label:	"&Rename 'Script.saveAllScripts'..."
+	Label:	"&Rename 'DCWatDes.View.flipPolyline'..."
 	Click:	"Project.Rename"
 	Shortcut:	"Keys.Ctrl+R"
 )
@@ -12041,7 +12042,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
-	Label:	"&Delete 'Script.saveAllScripts'..."
+	Label:	"&Delete 'DCWatDes.View.flipPolyline'..."
 	Click:	"Project.Delete"
 	Shortcut:	"Keys.Del"
 )
@@ -12266,7 +12267,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVStr.1827
-	S:	"dcwatdes2.apr DCWatDes.Model.Epanet.importInpFile Script.saveAllScripts"
+	S:	"dcwatdes2.apr DCWatDes.Model.Epanet.importInpFile DCWatDesExtension.make"
 )
 
 (Choice.1828
@@ -12284,8 +12285,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1830
-	Help:	"Activates Script.saveAllScripts"
-	Label:	"&3 Script.saveAllScripts"
+	Help:	"Activates DCWatDesExtension.make"
+	Label:	"&3 DCWatDesExtension.make"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
