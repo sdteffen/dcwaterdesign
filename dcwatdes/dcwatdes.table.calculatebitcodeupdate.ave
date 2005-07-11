@@ -1,6 +1,6 @@
 ' DCWatDes.Table.calculateBitcodeUpdate
 
-' (c) 2001 DORSCH Consult
+' (c) 2001, 2005 DORSCH Consult
 ' enables the Bicode Calculator
 
 ' This library is free software; you can redistribute it and/or
@@ -17,12 +17,12 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-theTable = av.GetActiveDoc
-theField = theTable.GetActiveField
-if((theField<>nil)and(theField.isTypeNumber))then
-  self.SetEnabled((theField <> NIL) and
-                (theTable.GetVTab.IsEditable) and
-                (theField.IsEditable))
+theTable = av.getActiveDoc
+theField = theTable.getActiveField
+if((theField<>nil)and(theField.isTypeString))then
+  self.setEnabled((theField <> NIL) and
+                (theTable.getVTab.isEditable) and
+                (theField.isEditable))
 else
   self.setEnabled(false)
 end

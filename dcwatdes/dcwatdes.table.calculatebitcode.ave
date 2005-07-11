@@ -1,6 +1,6 @@
 ' DCWatDes.Table.calculateBitcode
 
-' (c) 2001 DORSCH Consult
+' (c) 2001, 2005 DORSCH Consult
 ' sets multiple Bitcodes
 
 ' This library is free software; you can redistribute it and/or
@@ -17,29 +17,32 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-theTable = av.GetActiveDoc
-theVTab = theTable.GetVTab
-theField = theTable.GetActiveField
+theTable = av.getActiveDoc
+theVTab = theTable.getVTab
+theField = theTable.getActiveField
 
-theTable.StopEditing
+theTable.stopEditing
 lstBitcodes = List.make
 
-for each i in 0 .. 19
+numWidth = theField.getWidth
+
+for each i in 0 .. (numWidth-1)
   i.setName(i.asString)
   lstBitcodes.add(i)
 end
 
 lstSet = MsgBox.multiList(lstBitcodes, "Choose Bitcodes to set", "DC Water Design")
 
-if (lstSet <> NIL) then
-  numBitcoded = 0
+if(lstSet <> NIL)then
+  strBitcode = String.makeBuffer(numWidth)
+  strBitcode = strBitcode.substitute(" ", "0")
   for each numBit in lstSet
-    numBitcoded = numBitcoded+(2^numBit)
+    strBitcode = strBitcode.left(numBit) + "1" + strBitcode.right(numWidth-numBit-1)
   end
-  theVTab.BeginTransaction
-  if (not (theVTab.Calculate(numBitcoded.asString, theField))) then
+  theVTab.beginTransaction
+  if (not(theVTab.calculate(strBitcode.quote, theField))) then
     MsgBox.Warning("Syntax Error", "DC Water Design")
   end
-  theVTab.EndTransaction
-  theTable.GetWin.Invalidate
+  theVTab.endTransaction
+  theTable.getWin.invalidate
 end

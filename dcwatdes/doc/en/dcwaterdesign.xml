@@ -62,6 +62,8 @@
 	        &quot;closed&quot; as a substring rather than a closed
 		string (If &quot;Closed Valve&quot; is selected).</para>
 		</listitem>
+	      <listitem><para>Bitcodes are strings now and can distinguish
+	        up to 255 zones.</para></listitem>
 	    </itemizedlist>
 	  </para>  
 	</sect3>
@@ -385,17 +387,15 @@
       <title>Bit Codes</title>
     
       <para>Bit codes make it possible to store fields of yes-no 
-      information in 'normal' numbers. Every bit in the 
-      number having the value 1 is considered set, every bit 
-      of value 0 is not set. Thus making it possible to 
-      bit-code several independent pieces of information in 
-      one ArcView Number.</para> 
+      information in 'normal' text. Every byte in the 
+      number having the value &quot;1&quot; is considered set, every byte 
+      of value &quot;0&quot; is not set. Thus making it possible to 
+      code several independent pieces of information in 
+      one ArcView string.</para> 
       
-      <para>As ArcView is using 32-bit (integer) numbers, it should 
-      be theoretically possible to store up to 32 pieces of 
-      information. This requires that the databases where the 
-      data is stored use 32-bit numbers as well. Tests up to 
-      19 sets of yes-no have been successful.</para>
+      <para>As ArcView shapefiles allow to store strings of up to 255 characters
+        length, it is possible to store up to 255 pieces of 
+      information.</para>
       
       <para>The following example shows how this concept allows 
       storing the network information in one seamless data 
@@ -415,7 +415,7 @@
 	bit in the bit code, indicating if the node is used in 
 	the model or not.</para> 
       
-      <para>Bit codes are stored as integer numbers in GIS data. 
+      <para>Bit codes are stored as strings in GIS data. 
         They provide a powerful method to store hydraulic 
         models in GIS data. The underlying principle is very simple:
         <itemizedlist>  
@@ -423,12 +423,18 @@
 		
 	  <listitem><para>Each bit represents one supply zone</para></listitem>
 		
-	  <listitem><para>If the bit is set (1) than the network feature is 
-		  used in the respective model. Otherwise (0), the 
-		  feature is not used in the model.</para></listitem>
-		
-	  <listitem><para>The different values are assembled by arithmetic 
-	  addition.</para></listitem>
+	  <listitem><para>If the bit is set (&quot;1&quot;) than the network 
+	    feature is used in the respective model. Otherwise (&quot;0&quot;), 
+	    the feature is not used in the model.</para></listitem>		
+	  <listitem><para>The different values are assembled by the following
+	    functions:
+	    <simplelist>
+	      <member>DCWatDes.Bitcode.and</member>
+	      <member>DCWatDes.Bitcode.or</member>
+	      <member>DCWatDes.Bitcode.xor</member>
+	    </simplelist>
+	    See <xref linkend="api" /> for details regarding these functions.
+	    </para></listitem>
         </itemizedlist>
       </para>
       <note><para>Note that the bit numbering starts at 0. You should use 
@@ -1377,39 +1383,61 @@
       <sect3>
 	<title>DCWatDes.Bitcode.or</title> 
       
-	<para>DCWatDes.Bitcode.or performs a bitwise or operation on integer 
+	<para>DCWatDes.Bitcode.or performs a bytewise or operation on string 
 	  numbers.
 	<programlisting>
-	integer DCWatDes.Bitcode.or(integer a, integer b)</programlisting></para>
+	string DCWatDes.Bitcode.or(string a, string b)</programlisting></para>
 	
-	  <para>a bit-coded integer</para>
+	  <para>a byte-coded string</para>
 	
-	  <para>b bit-coded integer</para>
+	  <para>b byte-coded string</para>
 	
-	  <para>Returns: the result of the bitwise a or b as an integer</para>
+	  <para>Returns: the result of the bytewise a or b as a string</para>
 	
 	<para>The following AVENUE code can be used in the field 
-	calculator to perform of a bitwise or-operation on the 
+	calculator to perform of a bytewise or-operation on the 
 	fields a and b: 
 	<programlisting>
 	av.run("DCWatDes.Bitcode.or", {[a], [b]})
 	</programlisting></para>
       </sect3>
       <sect3>
-	<title>DCWatDes.Bitcode.and</title>
-	<para>DCWatDes.Bitcode.and
-	  performs a bitwise and operation on integer numbers
+	<title>DCWatDes.Bitcode.xor</title> 
+      
+	<para>DCWatDes.Bitcode.xor performs a bytewise xor operation on string 
+	  numbers.
 	<programlisting>
-	  integer DCWatDes.Bitcode.and(integer a, integer b)</programlisting></para>
+	string DCWatDes.Bitcode.xor(string a, string b)</programlisting></para>
 	
-	  <para>a bit-coded integer</para>
+	  <para>a byte-coded string</para>
 	
-	  <para>b bit-coded integer</para>
+	  <para>b byte-coded string</para>
 	
-	  <para>Returns: the result of the bitwise a and b as an integer</para>
+	  <para>Returns: the result of the bytewise a xor b as a string</para>
 	
 	<para>The following AVENUE code can be used in the field 
-	calculator to perform of a bitwise and-operation on the 
+	calculator to perform of a bytewise or-operation on the 
+	fields a and b: 
+	<programlisting>
+	av.run("DCWatDes.Bitcode.xor", {&quot;111&quot;, &quot;101&quot;})
+	</programlisting></para>
+	<para>The result of the example above will be &quot;111&quot;.</para>
+      </sect3>
+      <sect3>
+	<title>DCWatDes.Bitcode.and</title>
+	<para>DCWatDes.Bitcode.and
+	  performs a bytewise and operation on string numbers
+	<programlisting>
+	  string DCWatDes.Bitcode.and(string a, string b)</programlisting></para>
+	
+	  <para>a bit-coded string</para>
+	
+	  <para>b bit-coded string</para>
+	
+	  <para>Returns: the result of the bytewise a and b as a string</para>
+	
+	<para>The following AVENUE code can be used in the field 
+	calculator to perform of a bytewise and-operation on the 
 	fields a and b: 
 	<programlisting>
 	av.run("DCWatDes.Bitcode.and", {[a], [b]})
@@ -1418,28 +1446,31 @@
       <sect3>
 	<title>DCWatDes.Bitcode.isSetAsNumber</title>
       
-	<para>DCWatDes.Bitcode.isSetAsNumber returns whether the n-th bit of an 
-	  integer is set or not
+	<para>DCWatDes.Bitcode.isSetAsNumber returns whether the n-th byte of a 
+	  string is set or not
 	<programlisting>
-	integer DCWatDes.Bitcode.isSetAsNumber(integer a, integer n)</programlisting>
+	integer DCWatDes.Bitcode.isSetAsNumber(string a, integer n)</programlisting>
 	</para>
-	  <para>a bit-coded integer</para>
+	  <para>a byte-coded string</para>
 	
-	  <para>n number of the bit to check</para>
+	  <para>n number of the byte to check</para>
 	
-	  <para>Returns: an integer of value 1 in case the n-th bit 
+	  <para>Returns: an integer of value 1 in case the n-th byte 
 	  is set, 0 otherwise</para>
 	
 	<para>The following AVENUE query can be used to select all 
 	  the records which have set the 4th bit in the example 
 	  field (usable with the query tools of view and table GUI):
 	  <programlisting>
-	  av.run("DCWatDes.Bitcode.isSetAsNumber",{[example], 3}) 
+	  av.run("DCWatDes.Bitcode.isSetAsNumber",{&quot;0001&quot;, 3}) 
 	  = 1</programlisting></para>
-	
-	<para>Note that the bit numbering starts at 0. "= 1" is used to 
+	<para>The expression will return true</para>
+	<para>Note that the bit numbering starts at 0. &quot;= 1&quot; is used to 
 	  convert the numbers 0 and 1 to the boolean values to 
 	  true or false, respective.</para>
+	<tip><para>Note that you can also use the <function>middle()</function>
+	  function to find out whether a byte is set:
+	  <programlisting>&quot;0001&quot;.middle(3,1) = &quot;1&quot;</para></tip>  
       </sect3>
       <sect3>
 	<title>DCWatDes.i18n.createDictionaries</title>

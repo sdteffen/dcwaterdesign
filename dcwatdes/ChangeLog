@@ -1,3 +1,14 @@
+2005-07-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.bitcode.or.ave:
+	* dcwatdes.bitcode.xor.ave:
+	* dcwatdes.bitcode.and.ave:
+	* dcwatdes.bitcode.issetasnumber.ave:
+	* dcwatdes.table.calculatebitcodeupdate.ave:
+	* dcwatdes.table.calculatebitcode.ave: Bitcodes are strings now
+	and work up to 255 zones (RFE #1233959)
+	
 2005-07-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.loadresultsfortimestep.ave: Don't try to link

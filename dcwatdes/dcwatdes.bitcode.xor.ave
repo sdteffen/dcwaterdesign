@@ -1,6 +1,6 @@
-' DCWatDes.Bitcode.or
+' DCWatDes.Bitcode.xor
 
-' (c) 2001, 2005 DORSCH Consult
+' (c) 2005 DORSCH Consult
 ' support for bitcoded strings
 
 ' This library is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ for each i in 0..(numWidth-1)
     if(strBitcode2.middle(i, 1) = "1")then
       numSetCount = numSetCount + 1
     end
-    if(numSetCount = 1)then
+    if(numSetCount > 0)then
       strResult = strResult +1
     else
       strResult = strResult + "0"

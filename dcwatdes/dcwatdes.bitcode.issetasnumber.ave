@@ -1,7 +1,7 @@
 ' DCWatDes.Bitcode.isSetAsNumber
 
-' (c) 2001 DORSCH Consult
-' support for bitcoded integers
+' (c) 2001,2005 DORSCH Consult
+' support for bitcoded strings
 
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public
@@ -21,16 +21,10 @@
 ' expects the bitnumber to check as the second argument
 ' returns 1 if the bit is set, otherwise 0
 
-numBitcode = self.get(0)
+strBitcode = self.get(0)
 numBit = self.get(1)
 
-if(numBit>0)then
-  numCheck = (numBitcode/(2^(numBit))).truncate
-else
-  numCheck = numBitcode
-end
-
-if(numCheck.mod(2)=1)then
+if(strBitcode.middle(numBit, 1) = "1")then
   return 1
 else
   return 0

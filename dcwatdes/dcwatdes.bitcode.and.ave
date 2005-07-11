@@ -1,7 +1,7 @@
 ' DCWatDes.Bitcode.and
 
-' (c) 2001 DORSCH Consult
-' support for bitcoded integers
+' (c) 2001, 2005 DORSCH Consult
+' support for bitcoded strings
 
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public
@@ -17,32 +17,33 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-' expects a bitcoded integers as the first two arguments
-' returns and of the two bitcoded integers
+' expects a bitcoded strings as the first two arguments
+' returns and of the two bitcoded strings
 
-if((self.is(List).not)or(self.count<>2)or(self.get(0).is(Number).not)or(self.get(1).is(Number).not))then
-  MsgBox.error("DCWatDes.Bitcode.and expects two integers as argument", "DC Water Design")
-  System.echo("DCWatDes.Bitcode.and expects two integers as argument")
+if((self.is(List).not)or(self.count<>2)or(self.get(0).is(String).not)or(self.get(1).is(String).not))then
+  MsgBox.error("DCWatDes.Bitcode.and expects two strings as argument", "DC Water Design")
+  System.echo("DCWatDes.Bitcode.and expects two strings as argument")
   exit
 end
 
-numBitcode1 = self.get(0)
-numBitcode2 = self.get(1)
+strBitcode1 = self.get(0)
+strBitcode2 = self.get(1)
 
-numResult = 0
+strResult = ""
 
-for each i in 0 .. 19
-  if(i>0)then
-    numCheck1 = (numBitcode1/(2^(i))).truncate
-    numCheck2 = (numBitcode2/(2^(i))).truncate  
+numWidth1 = strBitcode1.count
+numWidth2 = strBitcode2.count
+
+numWidth = numWidth1.max(numWidth2)
+
+for each i in 0..(numWidth-1)
+  if((numWidth1 <= i)or(numWidth2 <= i))then
+    strResult = strResult + "0"
+  elseif((strBitcode1.middle(i,1) = "1")and(strBitcode2.middle(i,1) = "1"))then
+    strResult = strResult + "1"
   else
-    numCheck1 = numBitcode1
-    numCheck2 = numBitcode2
-  end
-  
-  if((numCheck1.mod(2)=1)or(numCheck2.mod(2)=1))then
-    numResult = numResult+(2^i)
+    strResult = strResult + "0"
   end
 end
 
-return numResult
+return strResult
