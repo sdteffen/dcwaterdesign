@@ -1,3 +1,10 @@
+2005-07-14  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.project.splitmodel.ave:
+	* dcwatdes.system.makedir.ave:
+	* dcwatdes.i18n.createdictionaries.ave: Started with implementation of
+	functionality to split the models (RFE #1233961)
+	
 2005-07-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml:
