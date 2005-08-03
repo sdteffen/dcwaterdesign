@@ -1,6 +1,6 @@
-' DCWatDes.Project.splitModel
+' DCWatDes.Project.mergeModel
 
-' Split a model based on the zone field.
+' Merge a model that was previously split by the Split Model function
 
 ' (c) 2005 DORSCH Consult
 ' 
@@ -67,27 +67,47 @@ ftbPipes.setDefinition(strOldDefinition)
 fldZone = ftbZoneSummary.findField("Zone")
 lstZones = List.make
 
-' Create the necessary directory structure
-
 flnBaseDirectory = ftbPipes.getSrcName.getFileName.returnDir
+
+lstDirectories = List.make
 
 for each recZone in ftbZoneSummary
   strZone = ftbZoneSummary.returnValue(fldZone, recZone)
   if(strZone.isNull.not and (strZone <> ""))then
     lstZones.add(strZone)
     flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, strZone)
-    av.run("DCWatDes.System.makeDir", flnZoneDirectory.getFullName)
-    ' Loop over all themes
-    for each thmTheme in dicThemes
-      ftbTheme = thmTheme.getFTab
-      strOldDefinition = ftbTheme.getDefinition
-      strDefinition = "[Zone]="+strZone.quote
-      ftbTheme.setDefinition(strDefinition)
-      if(ftbTheme.getNumRecords > 0)then
-        flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
-        ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
-        ftbTheme.setDefinition(strOldDefinition)
+    lstDirectories.add(flnZoneDirectory)
+  end
+end
+
+
+for each thmTheme in dicThemes
+  ftbTheme = thmTheme.getFTab
+  strOldDefinition = ftbTheme.getDefinition
+  ftbTheme.setDefinition("")
+  ftbTheme.setEditable(true)
+  bmpSelection = ftbTheme.getSelection
+  bmpSelection.setAll
+  ftbTheme.removeRecords(bmpSelection)
+  ftbTheme.setEditable(false)
+  ftbTheme.setEditable(true)
+  lstThemeFields = ftbTheme.getFields
+  numFieldCount = lstThemeFields.count - 1
+  for each flnZone in lstDirectories
+    flnTheme = Filename.merge(flnZone.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
+    ftbZone = FTab.make(SrcName.make(flnTheme.getFullName))
+    lstZoneFields = ftbZone.getFields
+    if(lstThemeFields.count <> lstZoneFields.count)then
+      MsgBox.error("Field names do not match for "+flnTheme.getFullName, "DC Water Design Extension")
+      ftbTheme.setEditable(false)
+      exit
+    end
+    for each recZone in ftbZone
+      recTheme = ftbTheme.addRecord
+      for each i in 0..numFieldCount
+        ftbTheme.setValue(lstThemeFields.get(i), recTheme, ftbZone.returnValue(lstZoneFields.get(i), recZone))
       end
     end
   end
+  ftbTheme.setDefinition(strOldDefinition)
 end
