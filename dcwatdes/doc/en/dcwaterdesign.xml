@@ -64,6 +64,9 @@
 		</listitem>
 	      <listitem><para>Bitcodes are strings now and can distinguish
 	        up to 255 zones.</para></listitem>
+	      <listitem><para>New &quot;Split Model&quot;, &quot;Merge
+	        Model&quot; and &quot;Extract Model&quot; functions in
+		the Project GUI.</para></listitem>	
 	    </itemizedlist>
 	  </para>  
 	</sect3>
@@ -387,20 +390,20 @@
       <title>Bit Codes</title>
     
       <para>Bit codes make it possible to store fields of yes-no 
-      information in 'normal' text. Every byte in the 
-      number having the value &quot;1&quot; is considered set, every byte 
-      of value &quot;0&quot; is not set. Thus making it possible to 
-      code several independent pieces of information in 
-      one ArcView string.</para> 
+        information in 'normal' text. Every byte in the 
+        number having the value &quot;1&quot; is considered set, every byte 
+        of value &quot;0&quot; is not set. Thus making it possible to 
+        code several independent pieces of information in 
+        one ArcView string.</para> 
       
       <para>As ArcView shapefiles allow to store strings of up to 255 characters
         length, it is possible to store up to 255 pieces of 
-      information.</para>
+        information.</para>
       
       <para>The following example shows how this concept allows 
-      storing the network information in one seamless data 
-      set and utilizing the same network features in 
-      different hydraulic models:</para>
+        storing the network information in one seamless data 
+        set and utilizing the same network features in 
+        different hydraulic models:</para>
       
       <para>
 	<figure id="fig_bitcoding_zones">
@@ -440,6 +443,11 @@
       <note><para>Note that the bit numbering starts at 0. You should use 
         a temporary field in order to perform the addition of 
         two bit codes correctly.</para></note>
+      <note><para>Note that you should use a different concept if you want
+        to split up your model for editing purposes.</para>
+	<para>The bit code concept models a one to many relationship, but for
+	editing purposes, a one to one relationship should be used. This makes
+	the automatic assembly of the model after editing easier.</para></note>	
     </sect2>
     
     <sect2 id="snapping">
@@ -580,7 +588,7 @@
         by adding a new Menu, called DC Water Design Extension. 
         The Menu contains the following choices:</para>
       
-      <sect3>
+      <sect3 id="setup_dialog">
         <title>Setup</title> 
 	<para>Shows the Setup Dialog.</para>
 	
@@ -611,7 +619,7 @@
 	  doesn't finish in time, there'll be an error message.</para>
       </sect3>
 	<sect3>
-	  <title>EPANET Tables</title> 
+	  <title>EPANET Tables</title>
       
 	  <para>Displays the EPANET Tables Dialog.</para> 
 	  
@@ -639,7 +647,31 @@
 	  installed, the dialog provides the opportunity to 
 	  switch to an result loader that relies on ArcView only.</para>
         </sect3>
-	<sect3>
+	<sect3 id="split_model">
+	  <title>Split Model</title>
+	  <para>Allows to split a model into different ones.</para>
+	  <para>The values of the <structfield>Zone</structfield> field will
+	    be used to determine to which model a network element belongs</para>
+	  <para>The sub-models will be stored in subfolders named like the
+	    zones.</para>
+	  <para><xref linkend="merge_model" /> can be used to re-assemble the
+	    model automatically.</para>
+	  <caution><para>The <structfield>Zone</structfield> field has to be
+	    filled for all records.</para></caution>
+	</sect3>
+	<sect3 id="merge_model">
+	  <title>Merge Model</title>
+	  <para>Merge a model that was split by <xref linkend="split_model" />.
+	    </para>
+	  <para>Because &quot;Merge Model&quot; is using the zone names from the
+	    main pipes theme, it is not possible to add new zones by simply
+	    adding a new folder. New zones have to be introduced in the
+	    main file first.</para>
+	  <caution><para>The <structfield>Zone</structfield> field should be
+	    filled for all records. Empty fields will be filled with
+	    the zone name from the folder.</para></caution>  
+	</sect3>
+	<sect3 id="about">
 	  <title>About</title>
 	  <para>Displays information about the DC Water Design 
 	    Extension License. See section <xref linkend=
@@ -1470,7 +1502,8 @@
 	  true or false, respective.</para>
 	<tip><para>Note that you can also use the <function>middle()</function>
 	  function to find out whether a byte is set:
-	  <programlisting>&quot;0001&quot;.middle(3,1) = &quot;1&quot;</para></tip>  
+	  <programlisting>&quot;0001&quot;.middle(3,1) = &quot;1&quot;</programlisting>
+	  </para></tip>  
       </sect3>
       <sect3>
 	<title>DCWatDes.i18n.createDictionaries</title>

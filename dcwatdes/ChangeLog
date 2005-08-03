@@ -1,7 +1,10 @@
 2005-08-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
+	* doc/ent/dcwaterdesign.xml:
+	* dcwatdes.i18n.createdictionaries.xml: Documentation and 
+	internationalization for model merge
 	* dcwatdes.project.splitmodel.ave: Finished model splitting code
-	* dcwatedes.project.mergemodel.ave: Basic model merging code; not
+	* dcwatdes.project.mergemodel.ave: Basic model merging code; not
 	very fault tolerant yet. Implements RFE #1233961
 	
 2005-07-14  Steffen Macke <Steffen_Macke@dorsch.com.jo>

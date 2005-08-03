@@ -88,6 +88,7 @@ dicArabic.add("Command Timeout", "Êﬁ  «‰ Â«¡ «·«„—")
 dicArabic.add("Import EPANET Inp File", "EPANET Inp «” Ì—«œ „·› ")
 dicArabic.add("Import Binary Result File", "Binary «” Ì—œ „·› «·‰ «∆Ã «· ")
 dicArabic.add("Split Model", "Split Model")
+dicArabic.add("Merge Model", "Merge Model")
 
 _dcwDicDictionaries.add("ar",dicArabic)
 
@@ -159,6 +160,7 @@ dicGerman.add("Import EPANET Inp File", "EPANET Inp Datei importieren")
 dicGerman.add("Import Binary Result File", "Binaere EPANER Ergebnisdatei importieren")
 dicGerman.add("Skeletonize Model", "Modell skeletieren")
 dicGerman.add("Split Model", "Modell teilen")
+dicGerman.add("Merge Model", "Modell zusammenfuehren")
 
 _dcwDicDictionaries.add("de",dicGerman)
 
@@ -229,6 +231,7 @@ dicFrench.add("Command Timeout","Commande du temps d'attente")
 dicFrench.add("Import EPANET Inp File","Importation du fichier *.INP d'Epanet")
 dicFrench.add("Import Binary Result File","Importation du fichier de rÈsultat (binaire)")
 dicFrench.add("Split Model", "Split Model")
+dicFrench.add("Merge Model", "Merge Model")
 
 'create Russian Dictionary
 dicRussian = Dictionary.make(100)
@@ -295,7 +298,7 @@ dicRussian.add("Backdrop Resolution", "?Ó?Ó‚Ó? ?‡Á?????Ë?")
 dicRussian.add("Result Loader", "?‡???ÁÍ‡ ??Á?Î¸?‡?‡")
 dicRussian.add("Command Timeout", "???????ÓÈ ÎË?Ë? ÍÓ?‡??˚")
 dicRussian.add("Split Model", "Split Model")
-
+dicRussian.add("Merge Model", "Merge Model")
 
 extdcw = Extension.find("DC Water Design")
 if(extdcw <>nil)then
