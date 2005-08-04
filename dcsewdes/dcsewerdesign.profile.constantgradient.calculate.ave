@@ -1,0 +1,72 @@
+' DCSewerDesign.Profile.ConstantGradient.calculate
+
+' Calculate a constant gradient for a sequence of line segments
+
+' (c) 2000 - 2005 DORSCH Consult
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+extSewer = Extension.find("DC Sewer Design")
+ 
+' get the line table
+
+viewActive = av.getActiveDoc
+thmLine = viewActive.getEditableTheme
+themeList = viewActive.getThemes
+lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
+for each thmTheme in lstLineThemes
+  if((strLineTheme <> nil)and(strLineTheme.lcase = thmTheme.getName.lcase))then
+    thmLine = thmTheme
+    break
+  end
+  if(thmTheme.getName.left(6) <> "Profil")then
+    lstLineThemes.shuffle(thmTheme, 0)
+    break
+  end
+end
+if(thmLine.asString = "nil")then
+  thmLine = Msgbox.Choice (lstLineThemes, "Select the Sewer Line Theme.", "DC Sewer - Complex Profile")   
+end
+if(thmLine.asString = "nil") then
+  exit
+end
+ftbLine = thmLine.GetFTab 
+fldLineDcId = ftbLine.findField("dc_id")
+if(fldLineDcId.asString = "nil")then
+  MsgBox.error("Error: Field Line.DC_ID was not found.","DC Sewer Design")
+  exit
+end
+
+' get the manhole table
+thmManhole = nil
+lstManholeThemes = av.run("DCSewerDesign.ThemeList.returnPointThemes", themeList)
+for each thmTheme in lstManholeThemes
+  if((strManholeTheme <> nil)and(strManholeTheme.lcase = thmTheme.getName.lcase))then
+    thmManhole = thmTheme
+    break
+  end
+end
+if(thmManhole.asString = "nil")then
+  thmManhole = Msgbox.Choice (lstManholeThemes, "Select the Manhole Theme.", "DC Sewer - Complex Profile")
+end
+if (thmManhole.asString = "nil") then
+  exit
+end
+ftbManhole = thmManhole.GetFTab 
+
+lstProfileLines = av.run("DCSewerDesign.Profile.buildLineList", {ftbLine, fldLineDcId})
+lstProfileManholes =av.run("DCSewerDesign.Profile.buildNodeList", {ftbLine, ftbManhole, lstProfileLines})
+
+

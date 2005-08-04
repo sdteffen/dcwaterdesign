@@ -1,3 +1,13 @@
+2005-08-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave:
+	* dcsewerdesign.profile.buildnodelist.ave:
+	* dcsewerdesign.profile.buildlinelist.ave: refactored
+	* dcsewerdesign.profile.constantgradient.calculate.ave: Started with
+	RFE #1240904 implementation
+	* scripts.saveallscripts.ave: adjusted for new workstation
+	* dcsewerdesignextension.make.ave: Adjusted for 2.0.8 release
+
 2005-08-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.apr: Added project as binary file.

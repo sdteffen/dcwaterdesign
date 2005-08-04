@@ -1,0 +1,138 @@
+' DCSewerDesign.Profile.buildLineList
+
+' Order a sequence of line segments according to the line direction
+
+' (c) 2005 DORSCH Consult
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+ftbLine = self.get(0)
+fldLineDcId = self.get(1)
+
+if(ftbLine.is(FTab).not)then
+  System.echo("DCSewerDesign.Profile.builLineList() ERROR: First argument is not an FTab")
+  exit  
+end
+
+if(fldLineDcId.is(Field).not)then
+  System.echo("DCSewerDesign.Profile.builLineList() ERROR: Second argument is not a Field.")
+  exit
+end
+
+' Get one selected line
+bmpSelectedLines = ftbLine.getSelection.clone
+if(bmpSelectedLines.count < 2)then
+  MsgBox.info("Please select the Lines for which the Profile should be created","DC Sewer Design")
+  exit
+end
+recTrace = bmpSelectedLines.getNextSet(-1)
+lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+lstConnectedSelected = List.make
+for each recConnected in lstConnectedLines
+  if(bmpSelectedLines.get(recConnected))then
+    lstConnectedSelected.add(recConnected)
+  end
+end
+
+av.showStopButton
+numSelected = bmpSelectedLines.count
+
+' trace to end section (of selection)
+numFreezePrevent = 0
+lstTried = List.make
+while(lstConnectedSelected.count = 2)
+    if((recTrace = lstConnectedSelected.get(0))or(lstTried.findByValue(recTrace)<>(-1)))then
+    recTrace = lstConnectedSelected.get(1)
+  else
+    recTrace = lstConnectedSelected.get(0)
+  end
+  if(lstConnectedSelected.findByValue(recTrace) = -1)then
+    lstConnectedSelected.add(recTrace)
+  end
+  lstConnectedSelected = List.make
+  strControl = ""
+  lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+  if(Number.makeRandom(0,1) > 0.5)then
+    lstConnectedLines.sort(true)
+  else
+    lstConnectedLines.sort(false)
+  end
+  for each recConnected in lstConnectedLines
+    if((bmpSelectedLines.get(recConnected)and(lstConnectedSelected.find(recConnected) = -1)))then
+      lstConnectedSelected.add(recConnected)
+      lstTried.add(recConnected)
+      strControl = strControl ++ftbLine.returnValue(fldLineDcId, recConnected).asString
+    end
+  end
+  numFreezePrevent = numFreezePrevent+1
+  if(numFreezePrevent = 10000)then
+    System.echo(strControl)
+    MsgBox.info("Went into endless loop. Check the Topology.", "DC Sewer Design")
+    exit
+  end
+  if(av.setStatus(0).not)then
+    exit
+  end
+end
+if(lstConnectedSelected.count>2)then
+  MsgBox.info("Can't draw Profile for forks. Please check the selection.","DC Sewer Design")
+  exit
+end
+
+' bounce: start the real trace to other end of selection
+
+lstProfileLines = List.make
+lstProfileLines.add(recTrace)
+
+recTrace = lstConnectedSelected.get(0)
+lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+lstConnectedSelected = List.make
+for each recConnected in lstConnectedLines
+  if(bmpSelectedLines.get(recConnected))then
+    lstConnectedSelected.add(recConnected)
+  end
+end
+lstProfileLines.add(recTrace)
+
+while(lstConnectedSelected.count = 2)
+  if(lstProfileLines.findByValue(lstConnectedSelected.get(0)) <> -1)then
+    recTrace = lstConnectedSelected.get(1)
+  else
+    recTrace = lstConnectedSelected.get(0)
+  end
+  lstProfileLines.add(recTrace)
+  lstConnectedLines=av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine,recTrace})
+  lstConnectedSelected = List.make
+  for each recConnected in lstConnectedLines
+    if(bmpSelectedLines.get(recConnected))then
+      lstConnectedSelected.add(recConnected)
+    end
+  end
+  if(av.setStatus(lstProfileLines.count/numSelected*100).not)then
+    exit
+  end
+end
+if(lstConnectedSelected.count>2)then
+  MsgBox.info("Can't draw profile for forks. Please check the selection.","DC Sewer - Complex Profile")
+  exit
+end
+if(lstProfileLines.count <> bmpSelectedLines.count)then
+  MsgBox.info("Selected lines are not fully connected. Please check.","DC Sewer - Complex Profile")
+  exit
+end
+
+ftbLine.setSelection(bmpSelectedLines)
+
+return lstProfileLines
