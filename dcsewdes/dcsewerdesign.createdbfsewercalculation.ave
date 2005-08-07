@@ -1,33 +1,71 @@
 ' DCSewerDesign.createDbfSewerCalculation
-' Create an Dbf table containing the Sewerage Calculation
-' (c) 2000 DORSCH Consult
- 
-'information about the configuration file
-  MsgBox.info("One mapping per line, '=' as separator"+NL+
-  "PipeID=???    Diameter=???"+NL+
-  "Gradient=???    Roughness=???"+NL+
-  "AccumulatedPopulation=???   PeakFactor=???"
-  ,"Field Configuration File")
-  
-'get the configuration file
-  lstConfFiles = FileDialog.returnFiles({"*.txt"},{"Text Files (*.txt)"},"Select Configuration File",0)
- if(lstConfFiles.count = 0 )then
-   exit
- end
 
-'get the table
-  viewActive = av.GetActiveDoc 
-  themeList = viewActive.GetThemes 
+' Create an Dbf table containing the Sewerage Calculation
+
+' (c) 2000, 2005 DORSCH Consult
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+blnDebug = false
+
+' Try to find configuration file in preferences
+
+extSewer = Extension.find("DC Sewer Design")
+
+dicPreferences = extSewer.getPreferences
+ 
+strDbfCalculationConfig = dicPreferences.get("strDbfCalculationConfig")
+flnConfiguration = nil
+if(strDbfCalculationConfig = nil)then 
+  ' Information about the configuration file
+  MsgBox.info("One mapping per line, '=' as separator"+NL+
+    "PipeID=???    Diameter=??? PerPerson=???"+NL+
+    "Gradient=???    Roughness=???"+NL+
+    "AccumulatedPopulation=???   PeakFactor=???"
+    ,"Field Configuration File")
+    
+  'get the configuration file
+    lstConfFiles = FileDialog.returnFiles({"*.txt"},{"Text Files (*.txt)"},"Select Configuration File",0)
+   if(lstConfFiles.count = 0 )then
+     exit
+   end
+   flnConfiguration = lstConfFiles.get(0)
+   dicPreferences.set("strDbfCalculationConfig", flnConfiguration.getFullName)
+else
+  flnConfiguration = FileName.make(strDbfCalculationConfig)
+end
+
+' Get the table
+  viewActive = av.getActiveDoc 
+  
+strLineTheme = dicPreferences.get("strDbfCalculationTheme")
+if(strLineTheme = nil)then
+  themeList = viewActive.getThemes 
   lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
   LineTheme = Msgbox.Choice (lstLineThemes, "Select a Polyline Theme.", "Select a Theme")   
   if (LineTheme.asString = "nil") then
     exit
   end
-  thmLine = viewActive.FindTheme(LineTheme.AsString)   
-  ftbLine = thmLine.GetFTab 
+  strLineTheme = LineTheme.asString
+  dicPreferences.set("strDbfCalculationTheme", strLineTheme)
+end
+  thmLine = viewActive.findTheme(strLineTheme)   
+  ftbLine = thmLine.getFTab 
 
  'open the configuration file
- lnfConfiguration = LineFile.make(lstConfFiles.get(0), #FILE_PERM_READ)
+ lnfConfiguration = LineFile.make(flnConfiguration, #FILE_PERM_READ)
 
  fldPipeID=nil
  fldDiameter=nil
@@ -35,6 +73,7 @@
  fldRoughness=nil
  fldPopulation=nil
  strPeakFactorFormula="1"
+ strLitersPerDayAndPerson=nil
  strLine=lnfConfiguration.readElt
  'process the configuration file 
  while (not (strLine=nil ))
@@ -72,6 +111,9 @@
           end
         end
       end
+      if(strScriptFieldName = "perperson")then
+        strLitersPerDayAndPerson = strTableFieldName
+      end
     end
     strLine = lnfConfiguration.readElt
  end
@@ -80,18 +122,27 @@
  lnfConfiguration.close
  
  'get information
- strLitersPerDayAndPerson = MsgBox.input("Sewage flow per person and day","DC Sewer Design","120")
- if(strLitersPerDayAndPerson = nil)then
-   exit
- end
+ 'strLitersPerDayAndPerson = MsgBox.input("Sewage flow per person and day","DC Sewer Design","120")
+ 'if(strLitersPerDayAndPerson = nil)then
+ '  exit
+ 'end
  
  'check if configuration was successful
   if((fldPipeID=nil)or(fldDiameter=nil)or(fldGradient=nil)or(fldRoughness=nil)
-  or(fldPopulation=nil))then
+  or(fldPopulation=nil)or(strLitersPerDayAndPerson=nil))then
     MsgBox.error("Field matching not successful. Check your table and configuration file.","DC Sewer Design")
     exit
   end
 
+' Request approval
+
+blnApproval = MsgBox.LongYesNo("Create a calculation for "+strLineTheme.quote+
+  " using the configuration from "+flnConfiguration.getFullName.quote+
+  ". Selecting no will allow you to select the configuration again.", "DC Sewer Design", true)
+if(blnApproval.not)then
+  dicPreferences.remove("strDbfCalculationConfig")
+  dicPreferences.remove("strDbfCalculationTheme")
+end
  ' create DBF-File
   flnDbfFile = FileDialog.put("".asFilename.makeTmp("sewer_calculation","dbf"), "*.dbf", "Save Calculation file")
   if(flnDbfFile = nil )then

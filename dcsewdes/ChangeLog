@@ -1,5 +1,10 @@
 2005-08-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
+	* dcsewerdesign.createdbfsewercalculation.ave: added new
+	configuration file parameter: "PerPerson" - Configuration file name and
+	theme are stored in the preferences now
+	* dcsewerdesignextension.make.ave: Version is 2.0.7+cvs now
+	* dcsewerdesign.profile.buildnodelist.ave: Actually return the node list
 	* doc/en/dcsewerdesign.xml:
 	* dcsewerdesign.profile.constantgradient.update.ave:
 	* dcsewerdesign.profile.constantgradient.calculate.ave:

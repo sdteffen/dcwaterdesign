@@ -69,3 +69,5 @@ if(lstProfileManholes.count <> (lstProfileLines.count + 1))then
   ftbManhole.updateSelection
   exit
 end
+
+return lstProfileManholes

@@ -1,12 +1,12 @@
 ; DC Sewer Design Extension Installer
 ; NSIS 2.0 Script
-; (c) 2004 DORSCH Consult
+; (c) 2004, 2005 DORSCH Consult
 
 ; copy this file to the freshly extracted SewDes zip distribution folder and 
 ; compile
 
 !define MUI_PRODUCT "DC Sewer Design Extension"
-!define MUI_VERSION "2.0.7"
+!define MUI_VERSION "2.0.7+cvs"
 !define MUI_PACKAGING "1"
 
 !include "MUI.nsh"
