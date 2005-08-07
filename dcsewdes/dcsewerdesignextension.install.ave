@@ -32,5 +32,8 @@ else
   mbTable.add(self.get(2), 999)
 end
 
+' Add the constant gradient calculation button
+theViewButtonBar.add(self.get(3), 999)
+
 av.getProject.findGUI("View").setModified(true)
 av.getProject.findGUI("Table").setModified(true)

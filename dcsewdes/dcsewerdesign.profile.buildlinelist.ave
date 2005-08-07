@@ -31,6 +31,8 @@ if(fldLineDcId.is(Field).not)then
   exit
 end
 
+fldLineShape = ftbLine.findField("Shape")
+
 ' Get one selected line
 bmpSelectedLines = ftbLine.getSelection.clone
 if(bmpSelectedLines.count < 2)then
@@ -134,5 +136,13 @@ if(lstProfileLines.count <> bmpSelectedLines.count)then
 end
 
 ftbLine.setSelection(bmpSelectedLines)
+
+' Reverse list if necessary
+
+pllLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(0))
+pllSecondLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(1))
+if(pllSecondLine.distance(pllLine.along(100)) > 0.1)then
+   lstProfileLines = av.run("DCSewerDesign.List.flip", lstProfileLines)
+end
 
 return lstProfileLines

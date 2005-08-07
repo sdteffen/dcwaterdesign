@@ -1,3 +1,14 @@
+2005-08-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.profile.constantgradient.update.ave:
+	* dcsewerdesign.profile.constantgradient.calculate.ave:
+	* dcsewerdesign.profile.buildlinelist.ave:
+	* dcsewerdesignextension.install.ave:
+	* dcsewerdesignextension.make.ave:
+	* dcsewerdesignextension.uninstall.ave: Fully implemented RFE #1240904;
+	"Create Profile" function is currently broken.
+	
 2005-08-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.complexprofile.create.ave:

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE article 
   PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
-  [  
-    <!ENTITY version SYSTEM "version.xml">
-  ]
+  []
 >
 <article lang="en">
 <articleinfo>
@@ -53,7 +51,7 @@
 <sect1 id="introduction">
   <title>Introduction</title>
   <para>This document describes the design process for simple sewer networks
-    using version &version; of the DC Sewer Design extension for ArcView 3.*.
+    using version 2.0.5 of the DC Sewer Design extension for ArcView 3.*.
     </para>
   <para>The <citetitle>DC Sewer Design Extension</citetitle> is free software
     available from <ulink url="http://dcwaterdesign.sourceforge.net/"
@@ -67,6 +65,13 @@
     <title>What's New?</title>
     <para>A summary of changes in different versions of the DC Sewer Design
       Extension.</para>
+    <sect3 id="version_2_0_8">
+      <title>Version 2.0.8</title>
+      <para><itemizedlist>
+        <listitem><para>New function to interpolate constant gradients 
+	(<xref linkend="constant_gradient" />).</para></listitem>
+      </itemizedlist></para>
+    </sect3>
     <sect3 id="version_2_0_7">
       <title>Version 2.0.7</title>
       <para><itemizedlist>
@@ -575,6 +580,41 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
 	</important>
     </sect3>
   </sect2>
+  <sect2 id="view_button_functions">
+    <title>View Button Functions</title>
+    <para>The following functions are available from the button bar in the
+      View GUI.</para>
+    <sect3 id="button_create_profile">
+      <title>Create Profile</title>
+      <para>See <xref linkend="create_profile" />.</para>
+    </sect3>
+    <sect3 id="constant_gradient">
+      <title>Interpolate Constant Gradient</title>
+      <para>Interpolate a constant gradient for a series of lines where the
+        upstream value and the downstream level are given.</para>
+      <orderedlist>
+        <listitem><para>Start editing a line theme that has
+	  two numeric fields for the upstream and downstream values.</para></listitem>
+	<listitem><para>Using the table, enter a value into the upstream
+	  field for the pipe that is most upstream.</para></listitem>
+	<listitem><para>Using the table, enter a value into the downstream field
+	  for the pipe that is most downstream.</para></listitem>
+	<listitem><para>Select the connected sequence of pipes.</para>
+	  <note><para>Branches are not allowed in the selection.</para></note></listitem>
+	<listitem><para>Click on the <guibutton>Calculate Constant 
+	  Gradient</guibutton> button.</para></listitem>
+	<listitem><para>Select the upstream field from the list.</para></listitem>
+	<listitem><para>Select the downstream field from the list.</para></listitem>
+	<listitem><para>Review the fields, line selection and gradient.</para>
+	  <para>Click on the <guibutton>Yes</guibutton> button.</para></listitem>
+      </orderedlist>
+      <para>The function uses the digitizing direction. All lines should
+        point into the same direction.</para>
+      <note><para>The upstream and downstream fields only have to be selected
+        once. To select other fields, click <guibutton>No</guibutton> in
+	the confirmation dialog.</para></note>
+    </sect3>  
+  </sect2>
   <sect2 id="table_menu_functions">
     <title>Table Menu Functions</title>
     <para>The following functions are available from the <guimenu>DC 
@@ -739,6 +779,119 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
 	<para>Label line (gradient/length) and point (elevation=invert level) 
 	  themes (Hint: use scale 1:1000 to get same label size as table)</para>
 	<para>Create the layout. The layout can include more than one view.</para> 
+  </sect2>
+  <sect2 id="water_network_profiles_2">
+    <title>Water Network Profiles (Alternative)</title>
+    <para>Proposed approach for creating longitudinal sections of
+      a water distribution network or any other pressurized
+      system.</para>
+    <para>After the network has been designed in the horizontal
+      dimensions (x, y) it has to be designed as well in the
+      vertical dimension (z) which means the grades of the
+      pipes have to be defined. After the required data has
+      been added to the pipes in ArcView the longitudinal
+      sections can be printed with the &quot;Create Profile&quot;
+      function.</para>
+    <sect3 id="water_network_profiles_basic">
+      <title>Basic Steps</title>
+    <itemizedlist>
+      <listitem><para>In order to obtain the ground elevations of the
+	project area either an accurate field survey has to be
+	carried out or a DEM (Digital Elevation Model) has to
+	be calculated on the basis of precise contour lines
+	digitized from existing base maps (e.g. scale 1:50,000).</para></listitem>
+      <listitem><para>After a network has been designed in x-y-coordinates
+	utilizing digital basemaps or satellite images the
+	z-coordinates have to be defined. That means the invert
+	level of the pipes have to be calculated considering
+	the minimum pipe cover and the minimum grade of pipes.</para></listitem>
+      <listitem><para>As a first approach to obtain the most convenient
+	grades for all pipe work a certain minimum cover has to
+	be assumed (e.g. 1.0 m). Thus a first estimation of the
+	invert level would be:</para>
+	<para>Invert level = ground elevation - 1.0 m.</para></listitem>
+      <listitem><para>Afterwards the whole network has to be split in short
+	pipe sections (e.g. 20 m) and the profile of each pipe
+	has to be printed out in an appropriate scale (e.g.
+        1:1000 horizontal, 1:100 vertical).</para></listitem>
+      <listitem><para>Now the design invert levels can be determined
+	whereby the minimum slope of 0.5 %, the minimum cover
+	of pipes, high- and low points are representing the
+	boundaries within the invert levels are to be chosen.
+	For significant points like high and low points, change
+	of gradient, section valves, air valves or washouts the
+	invert levels will be determined manually on the print
+	outs. Thus the gradient of the pipes will be determined
+	as well.</para></listitem>
+     </itemizedlist>
+   </sect3>
+   <sect3 id="water_network_profiles_invert">
+     <title>Designing Invert Levels</title>
+     <para>Data fields: In the tables of the pipe.shp and the junction/node.shp
+       the following fields are to be provided.</para>
+      <para>For <filename>pipe.shp</filename>:</para>
+      <simplelist>
+       <member>dc_id String, unique ID</member>
+       <member>Groelev_up (ground elevation upstream, 3 digits)</member>
+       <member>Groelev_dw (ground elevation downstream, 3 digits)</member>
+       <member>Invert_up (invert level upstream, 3 digits)</member>
+       <member>Invert_dw (invert level downstream, 3 digits)</member>
+       <member>Length (Length in m, 3 digits)</member>
+       <member>Gradient (slope/gradient of pipe, 5 digits)</member>
+       <member>Check (optional, set to &quot;not checked&quot;, type in 
+	 &quot;ok&quot; after finishing the calculations for a certain 
+	 sequence of pipes in order to control progress of design)</member>
+      </simplelist>	 
+      <para>For <filename>node.shp</filename>:</para>
+      <simplelist>
+        <member>dc_id String, unique ID</member>
+	<member>Groundelev (ground elevation of node)</member>
+	<member>Invert (invert level of pipe at node)</member>
+      </simplelist>
+    </sect3>  
+    <sect3 id="water_network_profiles_procedures">
+      <title>Procedures</title>
+      <para>With the &quot;manhole data to line&quot; function
+        transfer the ground elevation from the node.shp to the pipe.shp
+        (Groelev_up, Groelev_dw).</para>
+      <para>Enter the gradient (taking minus and plus into
+	consideration) for all pipes or sequences of pipes into
+	the pipe table.</para>
+      <para>Enter the invert upstream values ? determined under
+	<xref linkend="water_network_profiles_basic" /> ? into the 
+	Invert_up field of the pipe table.</para>
+      <para>Activate the Invert_up field and select a sequence of
+	pipes between two nodes for which the upstream invert
+	levels are already determined. From the selection
+	exclude the first pipe downstream (the one with the
+	given Invert_up value). With the DC-Sewer
+	Networkcalculator calculate now the missing upstream
+	invert levels in upstream direction using the following
+	formula:</para>
+      <programlisting>Downstream.[invert_up]+([length]*[gradient])</programlisting>
+      <para>The program takes the Invert_up value from the first
+	unselected pipe downstream of the selected sequence and
+	is calculating the upstream invert levels for the
+	selected pipes in upstream direction.</para>
+      <para>With the usual ArcView field calculator calculate the
+	downstream invert levels in the Invert_dw field using
+	the following formula:</para>
+      <programlisting>[Invert_up] - ([Length] * [Gradient])</programlisting>
+      <para>Check the calculated invert levels and gradients carefully</para>
+      <para>With the &quot;Line data to manhole&quot; function 
+        transfer the <structfield>Invert_up</structfield> and
+       <structfield>Invert_dw</structfield> values of the pipe theme to the 
+       <structfield>Invert</structfield> field of the node theme.</para>
+      <para>At locations where 2 or more pipes are sharing the
+        same downstream node, make sure that the downstream
+        node is having the same invert level for each pipe.</para>
+      <para>Optional: Change the <structfield>check</structfield> field for the 
+        finalized pipes from &quot;not checked&quot; to &quot;ok&quot;.</para>
+      <para>Start drawing profiles with the &quot;Create Profile&quot;
+        function.</para>
+      <note><para>For any selected sequence of pipes the flow
+        direction must be uniform.</para></note>
+    </sect3>	
   </sect2>
   <sect2 id="excavation_calculation">
     <title>Excavation Calculation</title>
