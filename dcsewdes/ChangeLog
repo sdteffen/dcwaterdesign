@@ -1,3 +1,12 @@
+2005-08-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/docbook.xsl: Don't include page numbers in cross references;
+	Don't use CP1256
+	* doc/docbook.css: Improved author layout
+	* dcsewerdesign.profile.constantgradient.calculate.ave: Calculation
+	was done in the wrong direction
+	* sample/line.dbf: Added gradient field
+
 2005-08-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.createdbfsewercalculation.ave: added new

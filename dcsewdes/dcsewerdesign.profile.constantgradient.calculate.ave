@@ -51,9 +51,15 @@ if(strDownstream <> nil)then
   fldDownstream = ftbLine.findField(strDownstream)
 end
 
+fldGradient = nil
+strGradient = dicPreferences.get("strGradientField")
+if(strGradient <> nil)then
+  fldGradient = ftbLine.findField(strGradient)
+end  
+
 ' Let the user choose the fields if necessary
 
-if((fldUpstream = nil) or (fldDownstream = nil))then
+if((fldUpstream = nil) or (fldDownstream = nil) or (fldGradient = nil))then
   lstNumberFields = av.run("DCSewerDesign.Fields.returnNumberFields",lstFields)
   fldUpstream = MsgBox.choice(lstNumberFields, "Select upstream field."+NL+
                               "This field will be overwritten for some records.","DC Sewer Design")
@@ -65,10 +71,17 @@ if((fldUpstream = nil) or (fldDownstream = nil))then
   if(fldDownstream = nil)then
     exit
   end
+  fldGradient = MsgBox.choice(lstNumberFields, "Select gradient field."+NL+
+    "This field will be overwritten.", "DC Sewer Design")
+  if(fldGradient = nil)then
+    exit
+  end  
   strUpstream = fldUpstream.getName
   dicPreferences.set("strUpstreamField", strUpstream)
   strDownstream = fldDownstream.getName
   dicPreferences.set("strDownstreamField", strDownstream)
+  strGradient = fldGradient.getName
+  dicPreferences.set("strGradientField", strGradient)
 end
 if(blnDebug)then
   System.echo(fldUpstream.getName)
@@ -76,11 +89,13 @@ if(blnDebug)then
 end
 fldUpstream = ftbLine.findField(fldUpstream.getName)
 fldDownstream = ftbLine.findField(fldDownstream.getName)
-
+fldGradient = ftbLine.findField(fldGradient.getName)
 
 lstProfileLines = av.run("DCSewerDesign.Profile.buildLineList", {ftbLine, fldLineDcId})
 for each recLine in lstProfileLines
-  system.echo(ftbLine.returnValue(fldLineDcId, recLine)+ftbLine.returnValue(fldUpstream, recLine).asString)
+  if(blnDebug)then
+    System.echo(ftbLine.returnValue(fldLineDcId, recLine)+ftbLine.returnValue(fldUpstream, recLine).asString)
+  end
 end
 
 ' Get first upstream value
@@ -114,8 +129,9 @@ numGradient = (numFirstUpstream - numLastDownstream)/numTotalLength
 ' Request approval
 
 blnApproval = MsgBox.yesNoCancel("Interpolate "+strUpstream.quote+","+strDownstream.quote+" fields for "+
-  lstProfileLines.count.asString+" segments? Gradient is "+
-  numGradient.asString+". Selecting ""No"" will allow to reselect the fields","DC Sewer Design", true)
+  lstProfileLines.count.asString+" segments? Gradient "+
+  numGradient.asString+" will be written to " + strGradient.quote+
+  ". Selecting ""No"" will allow to reselect the fields","DC Sewer Design", true)
 
 if(blnApproval = nil)then
   exit
@@ -124,6 +140,7 @@ end
 if(blnApproval.not)then
   dicPreferences.remove("strUpstreamField")
   dicPreferences.remove("strDownstreamField")
+  dicPreferences.remove("strGradientField")
   exit
 end
 
@@ -136,8 +153,9 @@ numElevation = numFirstUpstream
 numI = 0
 for each recLine in lstProfileLines
   ftbLine.setValue(fldUpstream, recLine, numElevation)
+  ftbLine.setValue(fldGradient, recLine, numGradient)
   numSegmentLength = lstSegmentLength.get(numI)
-  numElevation = numElevation + (numSegmentLength*numGradient)
+  numElevation = numElevation - (numSegmentLength*numGradient)
   if(blnDebug)then
     System.echo(numElevation.asString)
   end  

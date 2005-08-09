@@ -1,6 +1,8 @@
 /* css 2.0 stylesheet for DocBook generated XHTML                             */
 /* (c) 2002 e-novative GmbH.                                                  */
 /* http://www.e-novative.de                                                   */
+/* (c) 2005 DORSCH Consult  						      */
+/* http://www.dorsch.de							      */
 
 /* Note that due to different browser interpretation of the standards, the    */
 /* html pages still do not look exactly the same on every browser and system  */
@@ -12,6 +14,17 @@
 /* we will improve documentation over the time                                */
 
 /* basic settings for the document body, some elements inherit from these     */
+
+div.author {
+  text-align: center;
+  display: block;
+}
+
+div.author h3 {
+  display: inline;
+  text-align: center;
+}
+
 body
 {
   /* foreground color = black */

@@ -69,7 +69,9 @@
       <title>Version 2.0.8</title>
       <para><itemizedlist>
         <listitem><para>New function to interpolate constant gradients 
-	(<xref linkend="constant_gradient" />).</para></listitem>
+	  (<xref linkend="constant_gradient" />).</para></listitem>
+	<listitem><para>Preferences for the Dbf calculation are saved
+	  now (<xref linkend="sewer_calculation" />).</para></listitem>
       </itemizedlist></para>
     </sect3>
     <sect3 id="version_2_0_7">
@@ -278,22 +280,38 @@
     </para>
   </sect3>
   <sect3 id="sewer_calculation">
-    <title>Create a Sewer Calculation</title>
-    <para>To use the Menu item "Create Sewer Calculation", you'll need a configuration file, that tells the extension which fields it should use.
-    Create a plain Text file on any of your drives. Use the following as a template, substitute the question marks with your field names.
+    <title>Create Dbf Sewer Calculation</title>
+    <para>To use the Menu item <guimenuitem>Create Dbf Sewer 
+      Calculation</guimenuitem>, you'll need a configuration file, that tells 
+      the extension which fields it should use. Create a plain text file on 
+      any of your drives. Use the following as a template, substitute the 
+      question marks with your field names.</para>
     <programlisting>
     PipeID=????
     Roughness=?????
     Gradient=????
     AccumulatedPopulation=????
     Diameter=????
+    PerPerson=????
     PeakFactor=????
     </programlisting>
-    The Peak Factor should either be a constant ( a number), "Baumann" or "Babitt" (without "). After you select 
-    "Create Sewer Calculation" from the menu, you'll be asked for the configuration file.
-    Also you'll be asked for a Sewage flow per person and day and the theme that you want to run the Sewage
-    calculation on. The Excel file that is created contains all the formulas used. If no peak factor is given, the calculation
-    will be carried out with a constant peak factor of 1.</para>
+    <para>The Peak Factor should either be a constant (a number), &quot;Baumann&quot;
+      or &quot;Babitt&quot; (without &quot;).</para>
+    <para>&quot;PerPerson&quot; is the sewage flow per person and day in liters.</para>  
+    <para>After you select 
+      <menuchoice><guimenu>DC Sewer</guimenu><guimenuitem>Create Sewer 
+        Calculation</guimenuitem></menuchoice>, you'll be asked for the 
+      configuration file.</para>
+    <para>Also you'll be asked for the theme that you want to run the Sewage
+      calculation on.</para>
+    <para>If no peak factor is given, the calculation
+      will be carried out with a constant peak factor of 1.</para>
+    <para>A confirmation dialog allows to review your configuration.</para>
+    <note><para>To reconfigure, click on the <guibutton>No</guibutton> button
+      in the configuration dialog.</para></note>
+    <note><para><menuchoice><guimenu>DC Sewer</guimenu><guimenuitem>Create Excel
+      Calculation</guimenuitem></menuchoice> will most probably not work for you due to
+      an API change.</para></note>  
   </sect3>
   <sect3 id="calculate_minimum_elevation_differences">
     <title>Calculate the Minimum Elevation Differences</title>
