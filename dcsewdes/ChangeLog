@@ -1,3 +1,10 @@
+2005-08-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml:
+	* build.xml:
+	* dcsewerdesign.nsi:
+	* dcsewerdesignextension.make.ave: Updated for 2.0.8 release
+	
 2005-08-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/docbook.xsl: Don't include page numbers in cross references;

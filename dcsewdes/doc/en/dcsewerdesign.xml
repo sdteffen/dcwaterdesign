@@ -51,8 +51,10 @@
 <sect1 id="introduction">
   <title>Introduction</title>
   <para>This document describes the design process for simple sewer networks
-    using version 2.0.5 of the DC Sewer Design extension for ArcView 3.*.
+    using version 2.0.8 of the DC Sewer Design extension for ArcView 3.*.
     </para>
+  <para>It also covers the creation of profiles (longitudinal sections) for 
+    water and sewer networks.</para>
   <para>The <citetitle>DC Sewer Design Extension</citetitle> is free software
     available from <ulink url="http://dcwaterdesign.sourceforge.net/"
     >http://dcwaterdesign.sourceforge.net</ulink>.</para>
