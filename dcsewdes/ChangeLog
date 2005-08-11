@@ -1,3 +1,7 @@
+2005-08-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml: Write md5sum.txt
+	
 2005-08-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcsewerdesign.xml:

@@ -4,6 +4,8 @@
 <project name="DC Sewer Design" basedir="." default="DCSewDesDistribution">
   <!-- configuration -->
   
+  <property name="md5sum" value="c:\wc\cvs.gnome.org\bin\md5sum.exe" />
+  
   <!-- Custom DC Sewer Design stylesheets -->
   <property name="dcsewerdesign_version" value="2.0.8" />
   
@@ -27,6 +29,12 @@
     <bzip2 zipfile="dcsewerdesign-src-${dcsewerdesign_version}.tar.bz2" 
       src="dcsewerdesign-src-${dcsewerdesign_version}.tar"/>
     <delete file="dcsewerdesign-src-${dcsewerdesign_version}.tar" />  
+    <exec dir="." executable="${md5sum}" output="md5sum.txt">
+      <arg line="dcsewerdesign-src-${dcsewerdesign_version}.tar.bz2"/>
+    </exec>
+    <exec dir="." executable="${md5sum}" output="md5sum.txt" append="true">
+      <arg line="dcsewerdesign-setup-${dcsewerdesign_version}-1.exe"/>
+    </exec>
   </target>
   
   <target name="clean">
