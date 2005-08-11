@@ -1,6 +1,18 @@
+2005-08-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.project.extractmodel.ave: 
+	* doc/en/dcwaterdesign.xml: Added function to extract models based on
+	the bytecode
+	* dcwatdes.project.splitmodel.ave: Stop with error message if empty
+	string or NULL is encountered in zone field.
+	* build.xml: Version number is now transferred to manual and nsis file
+	* installer/dc_water_design_extension.nsi: Fixed several problems with
+	Start Menu shortcuts
+	* dcwatdesextension.make.ave: Version number is 2.12 now
+
 2005-08-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
-	* doc/ent/dcwaterdesign.xml:
+	* doc/en/dcwaterdesign.xml:
 	* dcwatdes.i18n.createdictionaries.xml: Documentation and 
 	internationalization for model merge
 	* dcwatdes.project.splitmodel.ave: Finished model splitting code

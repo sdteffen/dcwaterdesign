@@ -4,7 +4,7 @@
 ; (c) 2000 - 2005 DORSCH Consult
 
 !define DC_PRODUCT "DC Water Design Extension"
-!define DC_VERSION "2.11"
+!define DC_VERSION "2.12"
 !define DC_PACKAGING "1"
 
 !include "MUI.nsh"
@@ -58,7 +58,6 @@ File dcwatdes\epanet_report.dbf
 File dcwatdes\epanet_times.dbf
 File dcwatdes\epanet2mysql.exe 
 File dcwatdes\license-dcwaterdesignextension.txt
-File dcwatdes\av_epanet_data_model.pdf
 File dcwatdes\xml2net.xsl
 File dcwatdes\systemcall.dll
 File ..\inp2shp\inp2shp.exe
@@ -67,6 +66,7 @@ File dcwatdes\epanet2.dll
 SetOutPath "$INSTDIR\help"
 File "..\doc\en\dcwaterdesign.pdf"
 File "..\doc\en\dcwaterdesign.chm"
+File dcwatdes\av_epanet_data_model.pdf
 
 SetOutPath "$INSTDIR\ext32"
 File "c:\esri\av_gis30\arcview\ext32\dcwatdes2.avx"
@@ -79,11 +79,11 @@ File "dcwatdes\xslt\*.*"
 
 SetShellVarContext all
 SetOutPath "$SMPROGRAMS\DC Water Design Extension"
-CreateShortCut "$SMPROGRAMS\DC Water Design Extension\DC Water Design Manual (PDF).lnk" "$INSTDIR\help\dcwatdes_manual.pdf" "" "" 0
-CreateShortCut "$SMPROGRAMS\DC Water Design Extension\DC Water Design Manual (CHM).lnk" "$INSTDIR\help\dcwatdes_manual.chm" "" "" 0
-CreateShortCut "$SMPROGRAMS\DC Water Design Extension\DC Water Design Data Model.lnk" "$INSTDIR\dcwatdes\av_epanet_data_model.pdf" "" "" 0
-CreateShortCut "$SMPROGRAMS\DC Water Design Extension\License.lnk" "$INSTDIR\dcwatdes\license-dcwaterdesignextension.txt" "" "" 0
-CreateShortCut "$SMPROGRAMS\DC Water Design Extension\Uninstall DC Water Design.lnk" "$INSTDIR\uninstall-dcwatdes.exe" "" "" 0
+CreateShortCut "$SMPROGRAMS\DC Water Design Extension\DC Water Design Manual (PDF).lnk" "$INSTDIR\help\dcwaterdesign.pdf" "" "" 0
+CreateShortCut "$SMPROGRAMS\DC Water Design Extension\DC Water Design Manual (CHM).lnk" "$INSTDIR\help\dcwaterdesign.chm" "" "" 0
+CreateShortCut "$SMPROGRAMS\DC Water Design Extension\DC Water Design Data Model.lnk" "$INSTDIR\help\av_epanet_data_model.pdf" "" "" 0
+CreateShortCut "$SMPROGRAMS\DC Water Design Extension\License.lnk" "$INSTDIR\ext32\dcwatdes\license-dcwaterdesignextension.txt" "" "" 0
+CreateShortCut "$SMPROGRAMS\DC Water Design Extension\Uninstall DC Water Design.lnk" "$INSTDIR\uninstall-dcwatdes${DC_VERSION}-${DC_PACKAGING}.exe" "" "" 0
 File "DC Water Design Extension Homepage.url"
 File "Report a Bug.url"
 

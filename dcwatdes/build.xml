@@ -4,9 +4,22 @@
 <project name="DC Water Design" basedir="." default="DCWatDesDistribution">
   <!-- configuration -->
   
-  <property name="dcwaterdesign_version" value="2.11" />
-  
+  <property name="dcwaterdesign_version" value="2.12" />
   <target name="DCWatDesDistribution" id="DCWaterDesignDistribution">
+    <replaceregexp
+      match="This Manual describes the DC Water Design Extension Version [0-9]\.[0-9]*\."
+      replace="This Manual describes the DC Water Design Extension Version ${dcwaterdesign_version}." flags="g">
+      <fileset dir="./doc/en/">
+        <include name="dcwaterdesign.xml"/>
+      </fileset>
+     </replaceregexp>
+     <replaceregexp
+      match="!define DC_VERSION &quot;[0-9]\.[0-9]*&quot;"
+      replace="!define DC_VERSION &quot;${dcwaterdesign_version}&quot;" flags="g">
+      <fileset dir="./installer">
+        <include name="dc_water_design_extension.nsi"/>
+      </fileset>
+     </replaceregexp>
     <tar destfile="dcwaterdesign-src-${dcwaterdesign_version}.tar">
       <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
         "dcwatdes2.apr,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />

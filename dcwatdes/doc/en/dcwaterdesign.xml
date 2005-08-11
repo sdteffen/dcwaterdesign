@@ -28,8 +28,7 @@
   </articleinfo>
   <sect1 id="introduction">
     <title>Introduction</title>
-    <para>This Manual describes the DC Water Design Extension 
-      Version 2.11.</para>
+    <para>This Manual describes the DC Water Design Extension Version 2.12.</para>
     <para>This Document uses Terminology from ArcView and EPANET. 
       Refer to the respective documentation for in-depth explanations.</para>
     <important><para>Be sure to check the <citetitle>DC Processing 
@@ -62,11 +61,13 @@
 	        &quot;closed&quot; as a substring rather than a closed
 		string (If &quot;Closed Valve&quot; is selected).</para>
 		</listitem>
-	      <listitem><para>Bitcodes are strings now and can distinguish
+	      <listitem><para>Bitcodes became byte codes (strings) and can distinguish
 	        up to 255 zones.</para></listitem>
 	      <listitem><para>New &quot;Split Model&quot;, &quot;Merge
 	        Model&quot; and &quot;Extract Model&quot; functions in
-		the Project GUI.</para></listitem>	
+		the Project GUI (<xref linkend="split_model" />,
+		<xref linkend="merge_model" />, <xref linkend="extract_model" 
+		/>).</para></listitem>	
 	    </itemizedlist>
 	  </para>  
 	</sect3>
@@ -386,10 +387,10 @@
       two pipes have to have the same digitizing direction 
       (which will be the flow direction in the hydraulic model).</para>
     </sect2>  
-    <sect2 id="bit_codes">
-      <title>Bit Codes</title>
+    <sect2 id="byte_codes">
+      <title>Byte Codes</title>
     
-      <para>Bit codes make it possible to store fields of yes-no 
+      <para>Byte codes make it possible to store fields of yes-no 
         information in 'normal' text. Every byte in the 
         number having the value &quot;1&quot; is considered set, every byte 
         of value &quot;0&quot; is not set. Thus making it possible to 
@@ -407,26 +408,26 @@
       
       <para>
 	<figure id="fig_bitcoding_zones">
-	  <title>Bit-coding Supply Zones</title>
+	  <title>Byte-coding Supply Zones</title>
 	  <graphic fileref="figure/bitcoding-zones.png" />
 	</figure>
       </para>
       
       <para>In <xref linkend="fig_bitcoding_zones" /> the nodes of three 
 	hydraulic models are 
-	bit-coded for storage in the GIS. Each zone has its own 
-	bit in the bit code, indicating if the node is used in 
+	byte-coded for storage in the GIS. Each zone has its own 
+	byte in the byte code, indicating if the node is used in 
 	the model or not.</para> 
       
-      <para>Bit codes are stored as strings in GIS data. 
+      <para>Byte codes are stored as strings in GIS data. 
         They provide a powerful method to store hydraulic 
         models in GIS data. The underlying principle is very simple:
         <itemizedlist>  
 	  <listitem><para>The models are numbered</para></listitem>
 		
-	  <listitem><para>Each bit represents one supply zone</para></listitem>
+	  <listitem><para>Each byte represents one supply zone</para></listitem>
 		
-	  <listitem><para>If the bit is set (&quot;1&quot;) than the network 
+	  <listitem><para>If the byte is set (&quot;1&quot;) than the network 
 	    feature is used in the respective model. Otherwise (&quot;0&quot;), 
 	    the feature is not used in the model.</para></listitem>		
 	  <listitem><para>The different values are assembled by the following
@@ -440,12 +441,12 @@
 	    </para></listitem>
         </itemizedlist>
       </para>
-      <note><para>Note that the bit numbering starts at 0. You should use 
+      <note><para>Note that the byte numbering starts at 0. You should use 
         a temporary field in order to perform the addition of 
-        two bit codes correctly.</para></note>
+        two byte codes correctly.</para></note>
       <note><para>Note that you should use a different concept if you want
         to split up your model for editing purposes.</para>
-	<para>The bit code concept models a one to many relationship, but for
+	<para>The byte code concept models a one to many relationship, but for
 	editing purposes, a one to one relationship should be used. This makes
 	the automatic assembly of the model after editing easier.</para></note>	
     </sect2>
@@ -670,6 +671,21 @@
 	  <caution><para>The <structfield>Zone</structfield> field should be
 	    filled for all records. Empty fields will be filled with
 	    the zone name from the folder.</para></caution>  
+	</sect3>
+	<sect3 id="extract_model">
+	  <title>Extract Model</title>
+	  <para>Extract separate models from the current one based on
+	    the <structfield>ByteCode</structfield> content.</para>
+	  <para>Splits the currently registered themes into several parts.
+	    The parts are stored in the <filename>model</filename> folder
+	    and numbered according to byte code that is set. For example,
+	    all network elements with the first byte set (E.g. &quot;1000&quot;)
+	    are stored in the folder <filename>model/1</filename>.</para>
+	  <para>See <xref linkend="byte_codes" /> for detailed information
+	    about byte codes.</para>
+	  <para>Unlike <xref linkend="split_model" /> and <xref linkend=
+	    "merge_model" /> this function support one-to-many relationships
+	    (One pipe can be part if different models).</para>  
 	</sect3>
 	<sect3 id="about">
 	  <title>About</title>

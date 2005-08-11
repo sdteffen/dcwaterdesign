@@ -1,6 +1,6 @@
-' DCWatDes.Project.splitModel
+' DCWatDes.Project.extractModel
 
-' Split a model based on the zone field.
+' Extract a model based on the bytecode.
 
 ' (c) 2005 DORSCH Consult
 ' 
@@ -58,46 +58,26 @@ end
 thmPipes = dicThemes.get("Pipes")
 ftbPipes = thmPipes.getFTab
 ' TODO: Make field selectable
-fldZone = ftbPipes.findField("Zone")
-strOldDefinition = ftbPipes.getDefinition
-flnTmpDbf = FileName.getTmpDir.makeTmp("zonesummary","dbf")
-ftbPipes.setDefinition("")
-ftbZoneSummary = ftbPipes.summarize(flnTmpDbf, dBASE, fldZone, {}, {})
-ftbPipes.setDefinition(strOldDefinition)
-fldZone = ftbZoneSummary.findField("Zone")
-lstZones = List.make
+fldByteCode = ftbPipes.findField("ByteCode")
+numWidth = fldByteCode.getWidth
 
 ' Create the necessary directory structure
 
 flnBaseDirectory = ftbPipes.getSrcName.getFileName.returnDir
 
-for each recZone in ftbZoneSummary
-  strZone = ftbZoneSummary.returnValue(fldZone, recZone)
-  if(strZone.isNull.not and (strZone <> ""))then
-    lstZones.add(strZone)
-    flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, strZone)
-    av.run("DCWatDes.System.makeDir", flnZoneDirectory.getFullName)
-    ' Loop over all themes
-    for each thmTheme in dicThemes
-      ftbTheme = thmTheme.getFTab
-      strOldDefinition = ftbTheme.getDefinition
-      strDefinition = "[Zone]="+strZone.quote
-      ftbTheme.setDefinition("([Zone].isNull)or([Zone] = """")")
-      if(ftbTheme.getNumRecords > 0)then
-        MsgBox.error(ftbTheme.getSrcName.getFileName.getBaseName.quote+" contains NULL or empty string values in zone field."+NL+
-           "Splitting the model failed.", "DC Water Design") 
-        exit    
-      end
-      ftbTheme.setDefinition(strDefinition)
-      if(ftbTheme.getNumRecords > 0)then
-        flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
-        ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
-        ftbTheme.setDefinition(strOldDefinition)
-      end
+for each numI in 0..(numWidth-1)
+  flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, "model\"+(numI+1).asString)
+  av.run("DCWatDes.System.makeDir", flnZoneDirectory.getFullName)
+  ' Loop over all themes
+  for each thmTheme in dicThemes
+    ftbTheme = thmTheme.getFTab
+    strOldDefinition = ftbTheme.getDefinition
+    strDefinition = "[ByteCode].middle("+numI.asString+",1)=""1"""
+    ftbTheme.setDefinition(strDefinition)
+    if(ftbTheme.getNumRecords > 0)then
+      flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
+      ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
+      ftbTheme.setDefinition(strOldDefinition)
     end
-  else
-    MsgBox.error(ftbPipes.getSrcName.getFileName.getBaseName.quote+" contains NULL or empty string values in zone field."+NL+
-      "Splitting the model failed.", "DC Water Design")  
-    exit
   end
 end

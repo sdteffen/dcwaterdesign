@@ -70,6 +70,7 @@ lstZones = List.make
 flnBaseDirectory = ftbPipes.getSrcName.getFileName.returnDir
 
 lstDirectories = List.make
+dicZones = Dictionary.make(100)
 
 for each recZone in ftbZoneSummary
   strZone = ftbZoneSummary.returnValue(fldZone, recZone)
@@ -77,6 +78,7 @@ for each recZone in ftbZoneSummary
     lstZones.add(strZone)
     flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, strZone)
     lstDirectories.add(flnZoneDirectory)
+    dicZones.add(flnZoneDirectory, strZone)
   end
 end
 
@@ -102,10 +104,19 @@ for each thmTheme in dicThemes
       ftbTheme.setEditable(false)
       exit
     end
+    fldZone = ftbZone.findField("Zone")
+    strZone = dicZones.get(flnZone)
     for each recZone in ftbZone
       recTheme = ftbTheme.addRecord
       for each i in 0..numFieldCount
-        ftbTheme.setValue(lstThemeFields.get(i), recTheme, ftbZone.returnValue(lstZoneFields.get(i), recZone))
+        fldCurrent = lstZoneFields.get(i)
+        objValue = ftbZone.returnValue(lstZoneFields.get(i), recZone)
+        if((fldCurrent.getName = "Zone")and((objValue.isNull)or(objValue = "")))then
+          System.echo("Filling in missing zone value: "+strZone)
+          ftbTheme.setValue(lstThemeFields.get(i), recTheme, strZone)
+        else  
+          ftbTheme.setValue(lstThemeFields.get(i), recTheme, objValue)
+        end  
       end
     end
   end
