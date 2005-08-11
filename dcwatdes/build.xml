@@ -34,6 +34,12 @@
     </tar>
     <bzip2 zipfile="dcwaterdesign-src-${dcwaterdesign_version}.tar.bz2" 
       src="dcwaterdesign-src-${dcwaterdesign_version}.tar"/>
+    <exec dir="." executable="${md5sum}" output="md5sum.txt">
+      <arg line="dcwaterdesign-src-${dcwaterdesign_version}.tar.bz2"/>
+    </exec>
+    <exec dir="." executable="${md5sum}" output="md5sum.txt" append="true">
+      <arg line="installer/dcwaterdesign-setup-${dcsewerdesign_version}-1.exe"/>
+    </exec>  
   </target>
   
   <target name="clean">
