@@ -2,9 +2,11 @@
 <!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "doc/project.dtd" []>
 <!-- build the DC Water Design source distribution -->
 <project name="DC Water Design" basedir="." default="DCWatDesDistribution">
-  <!-- configuration -->
   
-  <property name="dcwaterdesign_version" value="2.12" />
+  <!-- configuration -->  
+  <property name="dcwaterdesign_version" value="2.12.1" />
+  <property name="md5sum" value="c:\wc\cvs.gnome.org\bin\md5sum.exe" />
+  
   <target name="DCWatDesDistribution" id="DCWaterDesignDistribution">
     <replaceregexp
       match="This Manual describes the DC Water Design Extension Version [0-9]\.[0-9]*\."
@@ -38,7 +40,7 @@
       <arg line="dcwaterdesign-src-${dcwaterdesign_version}.tar.bz2"/>
     </exec>
     <exec dir="." executable="${md5sum}" output="md5sum.txt" append="true">
-      <arg line="installer/dcwaterdesign-setup-${dcsewerdesign_version}-1.exe"/>
+      <arg line="installer/dcwaterdesign-setup-${dcwaterdesign_version}-1.exe"/>
     </exec>  
   </target>
   

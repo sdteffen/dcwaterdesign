@@ -1,3 +1,10 @@
+2005-08-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml: Fixed md5sum creation
+	* doc/en/dcwaterdesign.xml:
+	* installer/dc_water_design_extension.nsi:
+	* dcwatdesextension.make.ave: Version number is now 2.12.1
+	
 2005-08-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* build.xml: Write md5sum.txt

@@ -141,6 +141,7 @@
 	Doc:	839
 	Doc:	851
 	Doc:	855
+	ActiveDoc:	851
 	Buttons:	859
 	Buttons:	860
 	Buttons:	861
@@ -6328,9 +6329,9 @@ Extension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename, \"$AVE
 CWatDes.View.Popup.Pipes\") )\n'4\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.Nodes\"))\n'5\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"BOQ.make\"))\n'6\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.classifyHouseConnections\"))\n\n'7\ndlgSetup = av.findDialog(\"DCWatDes.Dialog.Setup\")\ndlgSetup.setServer(nil)\nmyExt.add(dlgSetup)\n\n'8\nmyExt.add(av.getProject.findGUI(\"Project\").getMenuBar.findByLabel(\"DC Water Design\"))\n\n
 '9\ndlgEpanetTables = av.findDialog(\"DCWatDes.Dialog.EpanetTables\")\ndlgEpanetTables.setServer(nil)\nmyExt.add(dlgEpanetTables)\n\n'10\ndlgEpanetThemes = av.findDialog(\"DCWatDes.Dialog.EpanetThemes\")\ndlgEpanetThemes.setServer(nil)\nmyExt.add(dlgEpanetThemes)\n\n'11\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetThemes.open\"))\n\n' 12 Flip Tool\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.flipPolyline\"))\n\n' 13 \ndlgResultTables = av.findDialog(
 \"DCWatDes.Dialog.ResultTables\")\ndlgResultTables.setServer(nil)\nmyExt.add(dlgResultTables)\n\n' 14 Node Digitizing\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.digitizeNode\"))\n\n' 15 Epanet Tables Button\nmyExt.add(av.getProject.findGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetTables.open\"))\n\n' 16 Bitcode Calculator Button\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.calculateBitcode\"))\n\n' 17 PipesAndNodes View Popup\nmyExt.a
-dd( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.12\"+NL+\"(c) 1998 - 2005 DORSCH Consult.\"+NL+\n\"This 
-extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(212)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n 
- if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
+dd( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.12.1\"+NL+\"(c) 1998 - 2005 DORSCH Consult.\"+NL+\n\"Thi
+s extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(212)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt
+\n  if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
 	SearchStr:	"06"
 	FontSize:	2
 )
@@ -6679,6 +6680,7 @@ sedScript.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n
 
 (DocWin.852
 	Owner:	851
+	Open:	1
 	X:	-4
 	Y:	-4
 	W:	1690
@@ -6758,27 +6760,27 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 
 (NameDict.866
 	Obj:	867
-	Obj:	868
+	Obj:	870
 	Obj:	871
 	Obj:	874
 )
 
 (AVDict.867
-	InternalName:	"Table of Contents Defaults Dialog"
-)
-
-(AVDict.868
 	InternalName:	"Dialog Designer"
-	Key:	869
-	Value:	870
+	Key:	868
+	Value:	869
 )
 
-(AVStr.869
+(AVStr.868
 	S:	"IsVisible"
 )
 
-(Bool.870
+(Bool.869
 	Truth:	1
+)
+
+(AVDict.870
+	InternalName:	"Table of Contents Defaults Dialog"
 )
 
 (AVDict.871
@@ -11320,6 +11322,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1683
+	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -11615,7 +11618,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVStr.1721
-	S:	"dcwatdes2.apr DCWatDesExtension.make"
+	S:	"dcwatdes2.apr Script.saveAllScripts"
 )
 
 (Choice.1722
@@ -11626,8 +11629,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1723
-	Help:	"Activates DCWatDesExtension.make"
-	Label:	"&2 DCWatDesExtension.make"
+	Help:	"Activates Script.saveAllScripts"
+	Label:	"&2 Script.saveAllScripts"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )

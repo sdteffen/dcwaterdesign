@@ -28,7 +28,7 @@
   </articleinfo>
   <sect1 id="introduction">
     <title>Introduction</title>
-    <para>This Manual describes the DC Water Design Extension Version 2.12.</para>
+    <para>This Manual describes the DC Water Design Extension Version 2.12.1.1.1.1.</para>
     <para>This Document uses Terminology from ArcView and EPANET. 
       Refer to the respective documentation for in-depth explanations.</para>
     <important><para>Be sure to check the <citetitle>DC Processing 
@@ -53,6 +53,15 @@
  
     <sect2 id="news">
       <title>What's New?</title>
+        <sect3 id="news_2_12_1">
+	  <title>Version 2.12.1</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>Fixed some packaging and documentation problems.</para>
+	      </listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
         <sect3 id="news_2_12">
 	  <title>Version 2.12</title>
 	  <para>
