@@ -25,3 +25,9 @@
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 ALL /usr/bin/perl $CVSROOT/CVSROOT/ciabot_cvs.pl %{,,,s} $USER
+dcwatdes /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} dcwaterdesign-devel@lists.sourceforge.net
+dcsewdes /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} dcwaterdesign-devel@lists.sourceforge.net
+dcprocess /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} dcwaterdesign-devel@lists.sourceforge.net
+calibration /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} dcwaterdesign-devel@lists.sourceforge.net
+epanet2mysql /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} dcwaterdesign-devel@lists.sourceforge.net
+systemcall /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} dcwaterdesign-devel@lists.sourceforge.net
