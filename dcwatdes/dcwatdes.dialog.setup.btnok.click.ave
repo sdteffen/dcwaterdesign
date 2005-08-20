@@ -39,6 +39,12 @@ for each strProperty in {"Epanet", "Sabcmd", "Xslt", "SnappingRadius", "Backdrop
   end
 end
 
+cbxEnforceDataModel = dlgSetup.findByName("cbxEnforceDataModel")
+if(cbxEnforceDataModel.isSelected)then
+  dicPreferences.set("blnEnforceDataModel", true)
+else
+  dicPreferences.set("blnEnforceDataModel", false)
+end
 av.run("DCWatDes.i18n.translateExtensionMenus", nil)
 
 dlgSetup.close

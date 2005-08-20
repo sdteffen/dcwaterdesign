@@ -28,7 +28,7 @@
   </articleinfo>
   <sect1 id="introduction">
     <title>Introduction</title>
-    <para>This Manual describes the DC Water Design Extension Version 2.12.1.1.1.1.</para>
+    <para>This Manual describes the DC Water Design Extension Version 2.12.1+cvs.</para>
     <para>This Document uses Terminology from ArcView and EPANET. 
       Refer to the respective documentation for in-depth explanations.</para>
     <important><para>Be sure to check the <citetitle>DC Processing 
@@ -53,6 +53,20 @@
  
     <sect2 id="news">
       <title>What's New?</title>
+        <sect3 id="news_2_13_0">
+	  <title>Version 2.13.0</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>Bug fixes for <function
+	        >DCWatDes.Bitcode.or()</function> and <function
+	        >DCWatDes.Bitcode.xor()</function> functions.</para></listitem>
+	      <listitem><para>New &quot;Enforce Data Model&quot; option
+	        that allows to relax data model checks when editing networks
+		(E.g. sewer or street networks). See <xref linkend=
+		"setup_dialog" /></para></listitem>
+	    </itemizedlist>
+	  </para>  
+	</sect3>    
         <sect3 id="news_2_12_1">
 	  <title>Version 2.12.1</title>
 	  <para>
@@ -627,6 +641,11 @@
 	  which the extension will wait when creating epanet 
 	  files or running epanet calculations. If the EPANET run 
 	  doesn't finish in time, there'll be an error message.</para>
+	  
+	<para>Deselecting the <guilabel>Enforce Data Model</guilabel> checkbox 
+	  allows to relax checks on fields required for EPANET.</para> 
+	<tip><para>Deselect the <guilabel>Enforce Data Model</guilabel> checkbox
+	  when editing street or sewer networks.</para></tip>  
       </sect3>
 	<sect3>
 	  <title>EPANET Tables</title>

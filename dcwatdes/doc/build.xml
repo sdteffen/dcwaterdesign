@@ -29,7 +29,7 @@
     <java classname="com.icl.saxon.StyleSheet" fork="true" failonerror="true" maxmemory="256m" dir="${dir}">
       <arg line="-o ${output} ${input} &quot;${stylesheetdir}/${stylesheet}&quot;" />
       <classpath>
-        <!-- include the permissive ASCIICharacterSet class before the  real one -->
+        <!-- include the permissive ASCIICharacterSet class before the real one -->
         <dirset dir="${basedir}/../../../lib" />
 	<filelist dir="${basedir}" files="../../../lib/saxon.jar"/>
       </classpath>
@@ -52,6 +52,7 @@
       <fileset dir="${docbookdir}/images">
         <include name="*.PNG"/>
         <include name="*.png"/>
+	<include name="*.svg" />
       </fileset>
     </copy>
     <copy todir="${dir}/images/callouts">

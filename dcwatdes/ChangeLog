@@ -1,3 +1,26 @@
+2005-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.dialog.setup.btnok.click.ave:
+	* dialog/dcwatdes.dialog.setup.ded:
+	* dcwatdes.i18n.createdictionaries.ave:
+	* dcwatdes.model.epanet.ensurealiases.ave:
+	* dcwatdes.model.epanet.pipe.updatenodefields.ave:
+	* doc/en/dcwaterdesign.xml: New setup option "Enforce Data Model"
+	* build.xml: Fixed version number replacement in documentation, 
+	building documentation, checking that extension has correct version 
+	number
+	* doc/build.xml:
+	* doc/docbook_pdf.xsl: Using SVG icons
+
+2005-08-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml: Fixed Version number replacement in NSIS file;
+	included installer build
+	* dcwaterdesignextension.make.ave: Version number is now 2.12.1+cvs
+	* dcwatdes.bitcode.or.ave:
+	* dcwatdes.bitcode.xor.ave: Fixed bug that prevented execution of
+	the commands
+	
 2005-08-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* build.xml: Fixed md5sum creation

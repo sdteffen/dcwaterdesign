@@ -90,6 +90,7 @@ dicArabic.add("Import Binary Result File", "Binary «” Ì—œ „·› «·‰ «∆Ã «· ")
 dicArabic.add("Split Model", "Split Model")
 dicArabic.add("Merge Model", "Merge Model")
 dicArabic.add("Extract Model", "Extract Model")
+dicArabic.add("Enforce Data Model", "Enforce Data Model")
 
 _dcwDicDictionaries.add("ar",dicArabic)
 
@@ -163,6 +164,7 @@ dicGerman.add("Skeletonize Model", "Modell skeletieren")
 dicGerman.add("Split Model", "Modell teilen")
 dicGerman.add("Merge Model", "Modell zusammenfuehren")
 dicGerman.add("Extract Model", "Modell extrahieren")
+dicGerman.add("Enforce Data Model", "Datenmodell erzwingen")
 
 _dcwDicDictionaries.add("de",dicGerman)
 
@@ -235,6 +237,7 @@ dicFrench.add("Import Binary Result File","Importation du fichier de rÈsultat (b
 dicFrench.add("Split Model", "Split Model")
 dicFrench.add("Merge Model", "Merge Model")
 dicFrench.add("Extract Model", "Extract Model")
+dicFrench.add("Enforce Data Model", "Enforce Data Model")
 
 'create Russian Dictionary
 dicRussian = Dictionary.make(100)
@@ -303,6 +306,7 @@ dicRussian.add("Command Timeout", "???????ÓÈ ÎË?Ë? ÍÓ?‡??˚")
 dicRussian.add("Split Model", "Split Model")
 dicRussian.add("Merge Model", "Merge Model")
 dicRussian.add("Extract Model", "Extract Model")
+dicRussian.add("Enforce Data Model", "Enforce Data Model")
 
 extdcw = Extension.find("DC Water Design")
 if(extdcw <>nil)then

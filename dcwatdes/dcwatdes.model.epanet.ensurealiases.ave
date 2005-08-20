@@ -30,6 +30,12 @@ else
   return nil
 end
 
+blnEnforceDataModel = dicPreferences.get("blnEnforceDataModel")
+if(blnEnforceDataModel.not)then
+  return nil
+end
+
+
 activeView = av.getActiveDoc
 if(activeView.getClass.getClassname <> "View")then
   exit

@@ -48,7 +48,7 @@ for each i in 0..(numWidth-1)
       numSetCount = numSetCount + 1
     end
     if(numSetCount > 0)then
-      strResult = strResult +1
+      strResult = strResult + "1"
     else
       strResult = strResult + "0"
     end

@@ -4,24 +4,34 @@
 <project name="DC Water Design" basedir="." default="DCWatDesDistribution">
   
   <!-- configuration -->  
-  <property name="dcwaterdesign_version" value="2.12.1" />
+  <property name="dcwaterdesign_version" value="2.12.1+cvs" />
   <property name="md5sum" value="c:\wc\cvs.gnome.org\bin\md5sum.exe" />
-  
+  <property name="nsis" value="c:\program files\nsis\makensis.exe" />
   <target name="DCWatDesDistribution" id="DCWaterDesignDistribution">
+    <echo message="Checking if dcwatdes2.avx is up to date" />
+    <exec dir="c:\esri\av_gis30\arcview\ext32" executable=
+      "c:\windows\system32\find.exe" failonerror="true">
+      <arg value="&quot;${dcwaterdesign_version}&quot;" />
+      <arg value="dcwatdes2.avx" />
+    </exec>
     <replaceregexp
-      match="This Manual describes the DC Water Design Extension Version [0-9]\.[0-9]*\."
-      replace="This Manual describes the DC Water Design Extension Version ${dcwaterdesign_version}." flags="g">
+      match="This Manual describes the DC Water Design Extension Version [^&lt;]*&lt;"
+      replace="This Manual describes the DC Water Design Extension Version ${dcwaterdesign_version}.&lt;" flags="g">
       <fileset dir="./doc/en/">
         <include name="dcwaterdesign.xml"/>
       </fileset>
-     </replaceregexp>
+     </replaceregexp> 
+     <ant antfile="build.xml" dir="doc"/>
      <replaceregexp
-      match="!define DC_VERSION &quot;[0-9]\.[0-9]*&quot;"
+      match="!define DC_VERSION &quot;[^&quot;]*&quot;"
       replace="!define DC_VERSION &quot;${dcwaterdesign_version}&quot;" flags="g">
       <fileset dir="./installer">
         <include name="dc_water_design_extension.nsi"/>
       </fileset>
      </replaceregexp>
+    <exec dir="./installer" executable="${nsis}">
+      <arg line="dc_water_design_extension.nsi"/>
+    </exec> 
     <tar destfile="dcwaterdesign-src-${dcwaterdesign_version}.tar">
       <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
         "dcwatdes2.apr,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />

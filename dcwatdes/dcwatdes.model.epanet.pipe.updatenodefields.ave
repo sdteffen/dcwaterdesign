@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.Pipe.updateNodeFields
 
-' (c) 2000, 2001 DORSCH Consult
+' (c) 2000, 2001, 2005 DORSCH Consult
 ' updates the fields node1, node2 for a given pipe
 
 ' This library is free software; you can redistribute it and/or
@@ -24,6 +24,10 @@ recPipe = self
 
 extWatDes = Extension.find("DC Water Design")
 dicPreferences = extWatDes.getPreferences
+
+if(dicPreferences.get("blnEnforceDataModel").not)then
+  return nil
+end
 
 numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
 if( numSnappingRadius = nil)then

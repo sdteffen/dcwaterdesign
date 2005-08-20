@@ -3,8 +3,6 @@
 	Dependencies:	"$AVEXT/dialog.avx\n"
 	FirstRootClassName:	"DEd"
 	Roots:	2
-	Roots:	108
-	Roots:	112
 	Version:	32
 )
 
@@ -17,9 +15,9 @@
 	DocExts:	6
 	DocExts:	7
 	Graphics:	8
-	Dpy:	57
-	Dialog:	60
-	DialogExtent:	107
+	Dpy:	60
+	Dialog:	63
+	DialogExtent:	113
 	Compiled:	1
 )
 
@@ -63,8 +61,9 @@
 	Child:	42
 	Child:	47
 	Child:	52
-	Dpy:	57
-	FormatNumb:	59
+	Child:	57
+	Dpy:	60
+	FormatNumb:	62
 )
 
 (GCtrl.9
@@ -76,10 +75,10 @@
 )
 
 (RectD.10
-	Left:	0.27500000000000
-	Top:	6.95000000000000
-	Right:	2.03333333333333
-	Bottom:	6.13333333333333
+	Left:	0.27083333333333
+	Top:	6.94791666666667
+	Right:	2.03125000000000
+	Bottom:	6.13541666666667
 )
 
 (AVCBBox.11
@@ -105,10 +104,10 @@
 )
 
 (RectD.14
-	Left:	0.26666666666667
-	Top:	6.69166666666667
-	Right:	3.73333333333333
-	Bottom:	6.52500000000000
+	Left:	0.27083333333333
+	Top:	6.68750000000000
+	Right:	3.72916666666667
+	Bottom:	6.47916666666667
 )
 
 (TextLine.15
@@ -135,9 +134,9 @@
 )
 
 (RectD.18
-	Left:	3.81666666666667
-	Top:	6.74166666666667
-	Right:	4.55833333333333
+	Left:	3.81250000000000
+	Top:	6.73958333333333
+	Right:	4.56250000000000
 	Bottom:	6.50000000000000
 )
 
@@ -158,10 +157,10 @@
 )
 
 (RectD.21
-	Left:	0.27500000000000
-	Top:	6.38333333333333
-	Right:	3.73333333333333
-	Bottom:	6.21666666666667
+	Left:	0.27083333333333
+	Top:	6.38541666666667
+	Right:	3.72916666666667
+	Bottom:	6.17708333333333
 )
 
 (TextLine.22
@@ -184,10 +183,10 @@
 )
 
 (RectD.24
-	Left:	3.80833333333333
-	Top:	6.42500000000000
-	Right:	4.55833333333333
-	Bottom:	6.17500000000000
+	Left:	3.81250000000000
+	Top:	6.42708333333333
+	Right:	4.56250000000000
+	Bottom:	6.17708333333333
 )
 
 (LButn.25
@@ -207,10 +206,10 @@
 )
 
 (RectD.27
-	Left:	0.28333333333333
-	Top:	6.03333333333333
-	Right:	3.74166666666667
-	Bottom:	5.86666666666667
+	Left:	0.28125000000000
+	Top:	6.03125000000000
+	Right:	3.73958333333333
+	Bottom:	5.82291666666667
 )
 
 (TextLine.28
@@ -237,10 +236,10 @@
 )
 
 (RectD.31
-	Left:	3.80833333333333
+	Left:	3.81250000000000
 	Top:	6.08333333333333
 	Right:	4.54166666666667
-	Bottom:	5.85000000000000
+	Bottom:	5.85416666666667
 )
 
 (LButn.32
@@ -260,10 +259,10 @@
 )
 
 (RectD.34
-	Left:	0.47500000000000
+	Left:	0.47916666666667
 	Top:	5.16666666666667
-	Right:	1.50833333333333
-	Bottom:	4.94166666666667
+	Right:	1.51041666666667
+	Bottom:	4.93750000000000
 )
 
 (LButn.35
@@ -283,10 +282,10 @@
 )
 
 (RectD.37
-	Left:	1.90000000000000
-	Top:	5.15000000000000
-	Right:	2.93333333333333
-	Bottom:	4.93333333333333
+	Left:	1.89583333333333
+	Top:	5.14583333333333
+	Right:	2.93750000000000
+	Bottom:	4.93750000000000
 )
 
 (LButn.38
@@ -306,10 +305,10 @@
 )
 
 (RectD.40
-	Left:	3.38333333333333
+	Left:	3.38541666666667
 	Top:	5.16666666666667
-	Right:	4.40000000000000
-	Bottom:	4.94166666666667
+	Right:	4.39583333333333
+	Bottom:	4.93750000000000
 )
 
 (LButn.41
@@ -331,8 +330,8 @@
 (RectD.43
 	Left:	0.29166666666667
 	Top:	5.70833333333333
-	Right:	2.35833333333333
-	Bottom:	5.54166666666667
+	Right:	2.35416666666667
+	Bottom:	5.50000000000000
 )
 
 (TextLine.44
@@ -362,10 +361,10 @@
 )
 
 (RectD.48
-	Left:	2.44166666666667
-	Top:	5.69166666666667
-	Right:	4.51666666666667
-	Bottom:	5.52500000000000
+	Left:	2.43750000000000
+	Top:	5.68750000000000
+	Right:	4.52083333333333
+	Bottom:	5.47916666666667
 )
 
 (TextLine.49
@@ -397,9 +396,9 @@
 
 (RectD.53
 	Left:	0.29166666666667
-	Top:	5.45000000000000
-	Right:	2.35833333333333
-	Bottom:	5.28333333333333
+	Top:	5.44791666666667
+	Right:	2.35416666666667
+	Bottom:	5.23958333333333
 )
 
 (TextLine.54
@@ -420,45 +419,70 @@
 (Nil.56
 )
 
-(PageDpy.57
-	Top:	7.33333333333333
-	Right:	11.69166666666667
+(GCtrl.57
+	Name:	"cbxEnforceDataModel"
+	Bounds:	58
+	ControlConstraints:	0x55
+	Control:	59
+	Editable:	1
+)
+
+(RectD.58
+	Left:	2.42708333333333
+	Top:	5.43750000000000
+	Right:	3.65625000000000
+	Bottom:	5.27083333333333
+)
+
+(AVCBox.59
+	InternalName:	"cbxEnforceDataModel"
+	UseGraphicNfy:	1
+	Tag:	"Enforce Data Model"
+	Listening:	1
+	Selected:	1
+	Label:	"Enforce Data Model"
+	Constraints:	0x55
+)
+
+(PageDpy.60
+	Top:	9.14583333333333
+	Right:	14.61458333333333
 	ReportUnits:	1
 	Units:	1
-	Scale:	58
-	ZoomRight:	11.69166666666667
-	ZoomTop:	7.33333333333333
+	Scale:	61
+	ZoomRight:	14.61458333333333
+	ZoomTop:	9.14583333333333
 	GridSpacingX:	0.10000000000000
 	GridSpacingY:	0.10000000000000
 )
 
-(Numb.58
-	N:	120.00000000000000
+(Numb.61
+	N:	96.00000000000000
 )
 
-(Numb.59
+(Numb.62
 )
 
-(AVDLog.60
+(AVDLog.63
 	Name:	"DCWatDes.Dialog.Setup"
-	X:	26
-	Y:	66
-	W:	530
-	H:	258
-	ConstrainedControlNames:	61
-	ConstrainedControlNames:	62
-	ConstrainedControlNames:	63
+	X:	21
+	Y:	234
+	W:	424
+	H:	207
 	ConstrainedControlNames:	64
 	ConstrainedControlNames:	65
 	ConstrainedControlNames:	66
-	Constraints:	67
-	Constraints:	68
-	Constraints:	69
+	ConstrainedControlNames:	67
+	ConstrainedControlNames:	68
+	ConstrainedControlNames:	69
 	Constraints:	70
 	Constraints:	71
 	Constraints:	72
-	Server:	56
-	ControlPanel:	73
+	Constraints:	73
+	Constraints:	74
+	Constraints:	75
+	Server:	76
+	ControlPanel:	77
 	Title:	"Setup"
 	EscapeEnabled:	1
 	Resizable:	1
@@ -466,43 +490,31 @@
 	HasTitleBar:	1
 	Closeable:	1
 	Open:	"DCWatDes.Dialog.Setup.initialize"
-	DefaultButton:	106
-)
-
-(AVStr.61
-	S:	"btnBrowseEpanet"
-)
-
-(AVStr.62
-	S:	"btnBrowseSabcmd"
-)
-
-(AVStr.63
-	S:	"btnBrowseXslt"
+	DefaultButton:	112
 )
 
 (AVStr.64
-	S:	"btnOK"
+	S:	"btnBrowseEpanet"
 )
 
 (AVStr.65
-	S:	"btnCancel"
+	S:	"btnBrowseSabcmd"
 )
 
 (AVStr.66
+	S:	"btnBrowseXslt"
+)
+
+(AVStr.67
+	S:	"btnOK"
+)
+
+(AVStr.68
+	S:	"btnCancel"
+)
+
+(AVStr.69
 	S:	"aLabelButton10"
-)
-
-(Numb.67
-	N:	85.00000000000000
-)
-
-(Numb.68
-	N:	85.00000000000000
-)
-
-(Numb.69
-	N:	85.00000000000000
 )
 
 (Numb.70
@@ -517,25 +529,36 @@
 	N:	85.00000000000000
 )
 
-(CPanel.73
-	Child:	74
-	Child:	75
-	Child:	77
+(Numb.73
+	N:	85.00000000000000
+)
+
+(Numb.74
+	N:	85.00000000000000
+)
+
+(Numb.75
+	N:	85.00000000000000
+)
+
+(Nil.76
+)
+
+(CPanel.77
 	Child:	78
-	Child:	80
+	Child:	79
 	Child:	81
-	Child:	83
+	Child:	82
 	Child:	84
 	Child:	85
-	Child:	86
 	Child:	87
+	Child:	88
 	Child:	89
+	Child:	90
 	Child:	91
-	ResBox:	93
-	ResBox:	94
-	ResBox:	95
-	ResBox:	96
-	ResBox:	97
+	Child:	93
+	Child:	95
+	Child:	97
 	ResBox:	98
 	ResBox:	99
 	ResBox:	100
@@ -544,303 +567,266 @@
 	ResBox:	103
 	ResBox:	104
 	ResBox:	105
+	ResBox:	106
+	ResBox:	107
+	ResBox:	108
+	ResBox:	109
+	ResBox:	110
+	ResBox:	111
 	Listening:	1
 )
 
-(AVCBBox.74
+(AVCBBox.78
 	InternalName:	"cbxLanguage"
 	Tag:	"Language"
-	NextControl:	56
+	NextControl:	76
 	ContentKind:	4
 	Constraints:	0x55
 	Listening:	1
 	Label:	"Language"
 )
 
-(TextLine.75
+(TextLine.79
 	InternalName:	"txlEpanet"
 	Tag:	"Location of epanet2d.exe"
 	Label:	"Location of epanet2d.exe"
 	Constraints:	0x55
 	Listening:	1
-	TextType:	76
-	NextControl:	56
+	TextType:	80
+	NextControl:	76
 )
 
-(AVEnum.76
+(AVEnum.80
 	Name:	"TEXTLINE_TYPE_ALL"
 )
 
-(LButn.77
+(LButn.81
 	InternalName:	"btnBrowseEpanet"
 	Tag:	"Browse"
 	Label:	"Browse"
 	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
 )
 
-(TextLine.78
+(TextLine.82
 	InternalName:	"txlSabcmd"
 	Tag:	"Location of testXSLT.exe"
 	Label:	"Location of testXSLT.exe"
 	Constraints:	0x55
 	Listening:	1
-	TextType:	79
-	NextControl:	56
+	TextType:	83
+	NextControl:	76
 )
 
-(AVEnum.79
+(AVEnum.83
 	Name:	"TEXTLINE_TYPE_ALL"
 )
 
-(LButn.80
+(LButn.84
 	InternalName:	"btnBrowseSabcmd"
 	Tag:	"Browse"
 	Label:	"Browse"
 	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
 )
 
-(TextLine.81
+(TextLine.85
 	InternalName:	"txlXslt"
 	Tag:	"Location of xml2net.xsl"
 	Label:	"Location of xml2net.xsl"
 	Constraints:	0x55
 	Listening:	1
-	TextType:	82
-	NextControl:	56
+	TextType:	86
+	NextControl:	76
 )
 
-(AVEnum.82
+(AVEnum.86
 	Name:	"TEXTLINE_TYPE_ALL"
 )
 
-(LButn.83
+(LButn.87
 	InternalName:	"btnBrowseXslt"
 	Tag:	"Browse"
 	Label:	"Browse"
 	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
 )
 
-(LButn.84
+(LButn.88
 	InternalName:	"btnOK"
 	Tag:	"Browse"
 	Label:	"OK"
 	Click:	"DCWatDes.Dialog.Setup.btnOK.click"
 )
 
-(LButn.85
+(LButn.89
 	InternalName:	"btnCancel"
 	Tag:	"Browse"
 	Label:	"Cancel"
 	Click:	"DCWatDes.Dialog.Setup.btnCancel.click"
 )
 
-(LButn.86
+(LButn.90
 	InternalName:	"aLabelButton10"
 	Tag:	"Browse"
 	Label:	"Help"
 	Click:	"DCWatDes.Dialog.Setup.help"
 )
 
-(TextLine.87
+(TextLine.91
 	InternalName:	"txlSnappingRadius"
 	Tag:	"Snapping Radius"
 	Label:	"Snapping Radius"
 	Constraints:	0x55
 	Listening:	1
-	TextType:	88
-	NextControl:	56
+	TextType:	92
+	NextControl:	76
 )
 
-(AVEnum.88
+(AVEnum.92
 	Name:	"TEXTLINE_TYPE_REAL"
 )
 
-(TextLine.89
+(TextLine.93
 	InternalName:	"txlBackdropResolution"
 	Tag:	"Backdrop Resolution"
 	Text:	"96"
 	Label:	"Backdrop Resolution"
 	Constraints:	0x55
 	Listening:	1
-	TextType:	90
-	NextControl:	56
+	TextType:	94
+	NextControl:	76
 )
 
-(AVEnum.90
+(AVEnum.94
 	Name:	"TEXTLINE_TYPE_INTEGER"
 )
 
-(TextLine.91
+(TextLine.95
 	InternalName:	"txlCommandTimeout"
 	Tag:	"Command Timeout"
 	Label:	"Command Timeout"
 	Constraints:	0x55
 	Listening:	1
-	TextType:	92
-	NextControl:	56
+	TextType:	96
+	NextControl:	76
 )
 
-(AVEnum.92
+(AVEnum.96
 	Name:	"TEXTLINE_TYPE_INTEGER"
 )
 
-(RectD.93
-	Left:	10.00000000000000
-	Top:	105.00000000000000
-	Right:	221.00000000000000
-	Bottom:	7.00000000000000
-)
-
-(RectD.94
-	Left:	9.00000000000000
-	Top:	58.00000000000000
-	Right:	425.00000000000000
-	Bottom:	38.00000000000000
-)
-
-(RectD.95
-	Left:	435.00000000000000
-	Top:	61.00000000000000
-	Right:	524.00000000000000
-	Bottom:	32.00000000000000
-)
-
-(RectD.96
-	Left:	10.00000000000000
-	Top:	95.00000000000000
-	Right:	425.00000000000000
-	Bottom:	75.00000000000000
-)
-
-(RectD.97
-	Left:	434.00000000000000
-	Top:	100.00000000000000
-	Right:	524.00000000000000
-	Bottom:	70.00000000000000
+(AVCBox.97
+	InternalName:	"cbxEnforceDataModel"
+	Tag:	"Enforce Data Model"
+	Listening:	1
+	Selected:	1
+	Label:	"Enforce Data Model"
+	Constraints:	0x55
 )
 
 (RectD.98
-	Left:	11.00000000000000
-	Top:	137.00000000000000
-	Right:	426.00000000000000
-	Bottom:	117.00000000000000
+	Left:	8.00000000000000
+	Top:	84.00000000000000
+	Right:	177.00000000000000
+	Bottom:	6.00000000000000
 )
 
 (RectD.99
-	Left:	434.00000000000000
-	Top:	139.00000000000000
-	Right:	522.00000000000000
-	Bottom:	111.00000000000000
+	Left:	8.00000000000000
+	Top:	51.00000000000000
+	Right:	340.00000000000000
+	Bottom:	31.00000000000000
 )
 
 (RectD.100
-	Left:	34.00000000000000
-	Top:	248.00000000000000
-	Right:	158.00000000000000
-	Bottom:	221.00000000000000
+	Left:	348.00000000000000
+	Top:	49.00000000000000
+	Right:	420.00000000000000
+	Bottom:	26.00000000000000
 )
 
 (RectD.101
-	Left:	205.00000000000000
-	Top:	249.00000000000000
-	Right:	329.00000000000000
-	Bottom:	223.00000000000000
+	Left:	8.00000000000000
+	Top:	80.00000000000000
+	Right:	340.00000000000000
+	Bottom:	60.00000000000000
 )
 
 (RectD.102
-	Left:	383.00000000000000
-	Top:	248.00000000000000
-	Right:	505.00000000000000
-	Bottom:	221.00000000000000
+	Left:	348.00000000000000
+	Top:	80.00000000000000
+	Right:	420.00000000000000
+	Bottom:	56.00000000000000
 )
 
 (RectD.103
-	Left:	12.00000000000000
-	Top:	176.00000000000000
-	Right:	260.00000000000000
-	Bottom:	156.00000000000000
+	Left:	9.00000000000000
+	Top:	114.00000000000000
+	Right:	341.00000000000000
+	Bottom:	94.00000000000000
 )
 
 (RectD.104
-	Left:	270.00000000000000
-	Top:	178.00000000000000
-	Right:	519.00000000000000
-	Bottom:	158.00000000000000
+	Left:	348.00000000000000
+	Top:	111.00000000000000
+	Right:	418.00000000000000
+	Bottom:	89.00000000000000
 )
 
 (RectD.105
-	Left:	12.00000000000000
-	Top:	207.00000000000000
-	Right:	260.00000000000000
-	Bottom:	187.00000000000000
+	Left:	28.00000000000000
+	Top:	199.00000000000000
+	Right:	127.00000000000000
+	Bottom:	177.00000000000000
 )
 
-(Nil.106
+(RectD.106
+	Left:	164.00000000000000
+	Top:	199.00000000000000
+	Right:	264.00000000000000
+	Bottom:	179.00000000000000
 )
 
 (RectD.107
-	Left:	0.19166666666667
-	Top:	7.00833333333333
-	Right:	4.60833333333333
-	Bottom:	4.85833333333333
+	Left:	307.00000000000000
+	Top:	199.00000000000000
+	Right:	404.00000000000000
+	Bottom:	177.00000000000000
 )
 
-(SEd.108
-	Name:	"DCWatDes.i18n.returnTranslation"
-	Creator:	"sdteffen"
-	CreationDate:	"Samstag, 18. November 2000 11:35:39"
-	GUIName:	"Script"
-	Win:	109
-	CSMgr:	110
-	DocExts:	111
-	Source:	"' DCWatDes.i18n.returnTranslation\n\n' (c) 2000 DORSCH Consult\n' returns a translation of a string from the localization dictionary\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warr
-anty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\n' expects the string to be translated as the argument\n' returns the translation or the string if no translation\n' is available\n\n'typecheck arguments\nif( self.getClass.getC
-lassName<>\"String\")then\n  MsgBox.error(\"DCWatDes.i18n.returnTranslation:\"+NL+\"Expecting one argument: strToBeTranslated\",\"DC Water Design Extension\")\n  exit\nend\n\nstrToBeTranslated = self\n\nextdcw = Extension.find(\"DC Water Design\")\nif(extdcw <>nil)then\n  dicPreferences = extdcw.getPreferences\nelse\n  return strToBeTranslated\n'  MsgBox.error(\"DCWatDes.i18n.returnTranslation: Can't find the DC Water Design Extension\", \"DC Water Design\")\nend\n\nstrLanguage = dicPreferences.get(\"strLanguage\")\n\nif(strLanguage=\"en\")t
-hen\n  ' if the language is english, no translation is needed\n  return strToBeTranslated\nelse\n  ' translation from dictionary\n    if(_dcwDicDictionaries <> nil)then\n      dicTranslations = _dcwDicDictionaries.get(strLanguage)\n      if(dicTranslations = nil)then\n        return strToBeTranslated\n      end \n      strTranslation = dicTranslations.get(strToBeTranslated)\n      if(strTranslation = nil)then\n        strTranslation = strToBeTranslated\n        System.echo(\"Missing Translation:\"++strToBeTranslated)\n    
-  end\n      return strTranslation\n    else\n      return strToBeTranslated\n    end\nend"
-	SearchStr:	"mms"
-	FontSize:	1
+(RectD.108
+	Left:	10.00000000000000
+	Top:	145.00000000000000
+	Right:	208.00000000000000
+	Bottom:	125.00000000000000
 )
 
-(DocWin.109
-	Owner:	108
-	X:	-4
-	Y:	-4
-	W:	1410
-	H:	910
+(RectD.109
+	Left:	216.00000000000000
+	Top:	147.00000000000000
+	Right:	416.00000000000000
+	Bottom:	127.00000000000000
 )
 
-(CSMgr.110
+(RectD.110
+	Left:	10.00000000000000
+	Top:	170.00000000000000
+	Right:	208.00000000000000
+	Bottom:	150.00000000000000
 )
 
-(DocAct.111
-	Doc:	108
+(RectD.111
+	Left:	215.00000000000000
+	Top:	167.00000000000000
+	Right:	333.00000000000000
+	Bottom:	151.00000000000000
 )
 
-(SEd.112
-	Name:	"DCWatDes.i18n.translateExtensionMenus"
-	CreationDate:	"Donnerstag, 11. Januar 2001 14:59:03"
-	GUIName:	"Script"
-	Win:	113
-	CSMgr:	114
-	DocExts:	115
-	Source:	"' DCWatDes.i18n.translateExtensionMenus\n\n' (c) 2001 DORSCH Consult\n' localizes all the menus of the extension\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warranty of\n' MERCHANTAB
-ILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\nextDCWatDes = Extension.find(\"DC Water Design\")\ndicPreferences = Dictionary.make(1)\nif(extDCWatDes <> nil)then\n  dicPreferences = extDCWatDes.getPreferences\nend\n\nfor each i in 0 .. (extDCWatD
-es.count - 1)\n  objExtension = extDCWatDes.get(i)\n  if(objExtension.is(Menu))then\n    lstControls = objExtension.getControls\n    for each ctrlItem in lstControls\n      if(ctrlItem.is(Space).not)then\n        strTag = ctrlItem.getTag\n        if(strTag <> nil)then\n          strTranslation = av.run(\"DCWatDes.i18n.returnTranslation\", strTag)\n          ctrlItem.setLabel(strTranslation)\n        end\n      end\n    end\n  end\nend\n"
+(Nil.112
 )
 
-(DocWin.113
-	Owner:	112
-	X:	14
-	Y:	12
-	W:	721
-	H:	879
-)
-
-(CSMgr.114
-)
-
-(DocAct.115
-	Doc:	112
+(RectD.113
+	Left:	0.18750000000000
+	Top:	7.01041666666667
+	Right:	4.60416666666667
+	Bottom:	4.85416666666667
 )
 

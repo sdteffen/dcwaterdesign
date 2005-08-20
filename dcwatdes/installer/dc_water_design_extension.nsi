@@ -4,7 +4,7 @@
 ; (c) 2000 - 2005 DORSCH Consult
 
 !define DC_PRODUCT "DC Water Design Extension"
-!define DC_VERSION "2.12.1"
+!define DC_VERSION "2.12.1+cvs"
 !define DC_PACKAGING "1"
 
 !include "MUI.nsh"
