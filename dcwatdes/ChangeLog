@@ -5,7 +5,8 @@
 	* dcwatdes.i18n.createdictionaries.ave:
 	* dcwatdes.model.epanet.ensurealiases.ave:
 	* dcwatdes.model.epanet.pipe.updatenodefields.ave:
-	* doc/en/dcwaterdesign.xml: New setup option "Enforce Data Model"
+	* doc/en/dcwaterdesign.xml: New setup option "Enforce Data Model",
+	implements RFE #1263010
 	* build.xml: Fixed version number replacement in documentation, 
 	building documentation, checking that extension has correct version 
 	number
