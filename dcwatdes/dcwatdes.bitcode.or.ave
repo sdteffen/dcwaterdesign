@@ -37,21 +37,17 @@ numWidth2 = strBitcode2.count
 numWidth = numWidth1.max(numWidth2)
 
 for each i in 0..(numWidth-1)
-  if((numWidth1 <= i)or(numWidth2 <= i))then
-    strResult = strResult + "0"
+  numSetCount = 0
+  if((i < numWidth1)and(strBitcode1.middle(i, 1) = "1"))then
+    numSetCount = 1
+  end
+  if((i < numWidth2)and (strBitcode2.middle(i, 1) = "1"))then
+    numSetCount = numSetCount + 1
+  end
+  if(numSetCount = 1)then
+    strResult = strResult + "1"
   else
-    numSetCount = 0
-    if(strBitcode1.middle(i, 1) = "1")then
-      numSetCount = 1
-    end
-    if(strBitcode2.middle(i, 1) = "1")then
-      numSetCount = numSetCount + 1
-    end
-    if(numSetCount = 1)then
-      strResult = strResult + "1"
-    else
-      strResult = strResult + "0"
-    end
+    strResult = strResult + "0"
   end
 end
 

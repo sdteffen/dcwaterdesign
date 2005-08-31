@@ -1,3 +1,11 @@
+2005-08-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.bitcode.or.ave:
+	* dcwatdes.bitcode.xor.ave: Don't drop "1"'s if one of the input
+	strings is shorter.
+	* dcwatdes.table.calculatebitcode.ave: Allow to select Bitcode.xor
+	to build up the pattern.
+	
 2005-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.dialog.setup.btnok.click.ave:
