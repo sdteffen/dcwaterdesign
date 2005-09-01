@@ -60,10 +60,18 @@
 	      <listitem><para>Bug fixes for <function
 	        >DCWatDes.Bitcode.or()</function> and <function
 	        >DCWatDes.Bitcode.xor()</function> functions.</para></listitem>
+	      <listitem><para>Improved &quot;Bytecode Calculator&quot; 
+	        functionality (<xref linkend="bytecode_calculator" />.
+		</para></listitem>
+	      <listitem><para>&quot;Write Epanet File&quot; collapses 
+	        setting entries of valves to &quot;closed&quot; if they
+		contain &quot;closed&quot;.</para></listitem>
+	      <listitem><para>&quot;Extract Model&quot; allows now to create
+	        one view per model (<xref linkend="extract_model" />.</para></listitem>
 	      <listitem><para>New &quot;Enforce Data Model&quot; option
 	        that allows to relax data model checks when editing networks
 		(E.g. sewer or street networks). See <xref linkend=
-		"setup_dialog" /></para></listitem>
+		"setup_dialog" />.</para></listitem>
 	    </itemizedlist>
 	  </para>  
 	</sect3>    
@@ -709,6 +717,9 @@
 	    and numbered according to byte code that is set. For example,
 	    all network elements with the first byte set (E.g. &quot;1000&quot;)
 	    are stored in the folder <filename>model/1</filename>.</para>
+	  <para>The user is asked whether a new view should be created for
+	    each model. The views will be named &quot;Model 1&quot;, &quot;Model
+	    2&quot;...</para>  
 	  <para>See <xref linkend="byte_codes" /> for detailed information
 	    about byte codes.</para>
 	  <para>Unlike <xref linkend="split_model" /> and <xref linkend=
@@ -1273,14 +1284,14 @@
     <sect2 id="table_buttons">
       <title>Table Buttons</title>
       <para>Table buttons that are added by the extension.</para>
-      <sect3>
-        <title>Bitcode Calculator</title>
+      <sect3 id="bytecode_calculator">
+        <title>Bytecode Calculator</title>
 	
-	<para>The Bitcode Calculator is accessible from the button 
+	<para>The Bytecode Calculator is accessible from the button 
 	  bar of the table GUI. It is disabled unless the table 
 	  is editable and a numerical field is selected. 
 	  <itemizedlist>
-	    <listitem><para>Upon clicking on the Bitcode Calculator button, the 
+	    <listitem><para>Upon clicking on the Bytecode Calculator button, the 
 	      user is prompted to select the bits he wants to set.
 	      </para></listitem> 
 	  
@@ -1290,7 +1301,7 @@
 	    <listitem><para>If no records are selected the bit code is written to 
 	      all the records in the table.</para></listitem> 
 	    
-	    <listitem><para>The field used to store the bit codes should have no 
+	    <listitem><para>The field used to store the byte codes should have no 
 	      decimal places.</para></listitem>
 	   </itemizedlist>
 	</para>

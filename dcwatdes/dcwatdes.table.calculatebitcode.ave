@@ -31,7 +31,7 @@ for each i in 0 .. (numWidth-1)
   lstBitcodes.add(i)
 end
 
-lstFunctions = {"Set","DCWatDes.Bitcode.xor"}
+lstFunctions = {"Set","DCWatDes.Bitcode.xor", "DCWatDes.Bitcode.and", "DCWatDes.Bitcode.or"}
 
 strFunction = MsgBox.listAsString(lstFunctions, "Select a function", "DC Water Design")
 

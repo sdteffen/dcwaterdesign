@@ -1,3 +1,12 @@
+2005-09-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.table.calculatebitcode.ave: Added more calculation options
+	* dcwatdes.model.epanet.writeinpfile.ave: Collapsing valve.setting
+	values that contain "closed" to "closed"
+	* dcwatdes.dialog.epanetthemes.initialize.ave: better initial theme
+	selection
+	
 2005-08-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.bitcode.or.ave:

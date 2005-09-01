@@ -99,7 +99,7 @@ for each strCombobox in {"Junctions", "Tanks","Pumps", "Valves", "Reservoirs"}
     strComboTranslated = av.run("DCWatDes.i18n.returnTranslation", strCombobox)
     for each avTheme in lstThemes
       if((avTheme.getName.lcase.contains(strComboTranslated.lcase)) or
-         (avTheme.getName.lcase.contains(strCombobox.lcase)))then
+         (avTheme.getName.lcase.contains(strCombobox.lcase.left(strCombobox.count-1))))then
         theCombobox.findByValue(avTheme)
       end
     end
