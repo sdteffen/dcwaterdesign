@@ -67,6 +67,10 @@ numWidth = fldByteCode.getWidth
 
 flnBaseDirectory = ftbPipes.getSrcName.getFileName.returnDir
 
+thmJunction = dicThemes.get("Junctions")
+ftbJunction = thmJunction.getFTab
+fldHasDemand = ftbJunction.findField("HasDemand")
+
 for each numI in 0..(numWidth-1)
   flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, "model\"+(numI+1).asString)
   av.run("DCWatDes.System.makeDir", flnZoneDirectory.getFullName)
@@ -81,10 +85,12 @@ for each numI in 0..(numWidth-1)
     strOldDefinition = ftbTheme.getDefinition
     strDefinition = "[ByteCode].middle("+numI.asString+",1)=""1"""
     ftbTheme.setDefinition(strDefinition)
+    ftbTheme.updateDefBitmap
     if(ftbTheme.getNumRecords > 0)then
       flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
       ftbExtracted = ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
       ftbTheme.setDefinition(strOldDefinition)
+      ftbTheme.updateDefBitmap
       if(blnCreateViews)then
         thmExtracted = FTheme.make(ftbExtracted)
         viewModel.addTheme(thmExtracted)
@@ -92,4 +98,23 @@ for each numI in 0..(numWidth-1)
       end
     end
   end
+  ' Write out demand nodes if possible
+  if((fldHasDemand <> nil)and(ftbJunction.getSrcName.getFileName.getBaseName.contains("junction")))then
+    strOldDefinition = ftbJunction.getDefinition
+    strDefinition = "([ByteCode].middle("+numI.asString+",1)=""1"") and ([HasDemand]=1)"
+    ftbJunction.setDefinition(strDefinition)
+    ftbJunction.updateDefBitmap
+    if(ftbJunction.getNumRecords > 0)then
+      flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbJunction.getSrcName.getFileName.getBaseName)
+      flnThemeName = flnThemeName.getFullName.substitute("junction", "junctiondemand").asFileName
+      ftbExtracted = ftbJunction.export(flnThemeName, ftbJunction.getShapeClass, false)
+    end
+    ftbJunction.setDefinition(strOldDefinition)
+    ftbJunction.updateDefBitmap
+  end
 end
+for each thmTheme in dicThemes
+  ftbTheme = thmTheme.getFTab
+  ftbTheme.setDefinition("")
+  ftbTheme.updateDefBitmap
+end  

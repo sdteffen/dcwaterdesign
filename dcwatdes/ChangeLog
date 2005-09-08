@@ -1,3 +1,13 @@
+2005-09-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.model.epanet.loadresultsforstep.ave:
+	* dcwatdes.project.extractmodel.ave:
+	* dcwatdes.project.splitmodel.ave: Now calling .updateDefBitmap after
+	each setDefinition() call. Fixes a critical bug (shapefile changes).
+	* build.xml:
+	* dcwatdesextension.make.ave: Version number 2.12.2 now.
+
 2005-09-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml:

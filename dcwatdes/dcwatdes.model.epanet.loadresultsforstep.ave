@@ -62,7 +62,9 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
   bmpNodeResults = Bitmap.make(vtbNodeResults.getNumRecords)
   bmpLinkResults = Bitmap.make(vtbLinkResults.getNumRecords)
   vtbNodeResults.setDefinition("([timestep]="+strStep+")")
+  vtbNodeResults.updateDefBitmap
   vtbLinkResults.setDefinition("([timestep]="+strStep+")")
+  vtbLinkResults.updateDefBitmap
   bmpNodeSelection = vtbNodeResults.getSelection
   bmpNodeSelection.clearAll
   vtbNodeResults.setSelection(bmpNodeSelection)
@@ -144,7 +146,9 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
     end
   end                        
   vtbNodeResults.setDefinition("")
+  vtbNodeResults.updateDefBitmap
   vtbLinkResults.setDefinition("")  
+  vtbLinkResults.updateDefBitmap
   return nil
 else 
   if(strResultLoader = "MySql")then

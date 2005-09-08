@@ -4,7 +4,7 @@
 <project name="DC Water Design" basedir="." default="DCWatDesDistribution">
   
   <!-- configuration -->  
-  <property name="dcwaterdesign_version" value="2.12.1+cvs" />
+  <property name="dcwaterdesign_version" value="2.12.2" />
   <property name="md5sum" value="c:\wc\cvs.gnome.org\bin\md5sum.exe" />
   <property name="nsis" value="c:\program files\nsis\makensis.exe" />
   <target name="DCWatDesDistribution" id="DCWaterDesignDistribution">

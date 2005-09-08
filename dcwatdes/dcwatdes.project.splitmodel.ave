@@ -62,8 +62,10 @@ fldZone = ftbPipes.findField("Zone")
 strOldDefinition = ftbPipes.getDefinition
 flnTmpDbf = FileName.getTmpDir.makeTmp("zonesummary","dbf")
 ftbPipes.setDefinition("")
+ftbPipes.updateDefBitmap
 ftbZoneSummary = ftbPipes.summarize(flnTmpDbf, dBASE, fldZone, {}, {})
 ftbPipes.setDefinition(strOldDefinition)
+ftbPipes.updateDefBitmap
 fldZone = ftbZoneSummary.findField("Zone")
 lstZones = List.make
 
@@ -83,16 +85,19 @@ for each recZone in ftbZoneSummary
       strOldDefinition = ftbTheme.getDefinition
       strDefinition = "[Zone]="+strZone.quote
       ftbTheme.setDefinition("([Zone].isNull)or([Zone] = """")")
+      ftbTheme.updateDefBitmap
       if(ftbTheme.getNumRecords > 0)then
         MsgBox.error(ftbTheme.getSrcName.getFileName.getBaseName.quote+" contains NULL or empty string values in zone field."+NL+
            "Splitting the model failed.", "DC Water Design") 
         exit    
       end
       ftbTheme.setDefinition(strDefinition)
+      ftbTheme.updateDefBitmap
       if(ftbTheme.getNumRecords > 0)then
         flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
         ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
         ftbTheme.setDefinition(strOldDefinition)
+        ftbTheme.updateDefBitmap
       end
     end
   else

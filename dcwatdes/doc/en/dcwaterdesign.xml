@@ -28,7 +28,7 @@
   </articleinfo>
   <sect1 id="introduction">
     <title>Introduction</title>
-    <para>This Manual describes the DC Water Design Extension Version 2.12.1+cvs.</para>
+    <para>This Manual describes the DC Water Design Extension Version 2.12.2.</para>
     <para>This Document uses Terminology from ArcView and EPANET. 
       Refer to the respective documentation for in-depth explanations.</para>
     <important><para>Be sure to check the <citetitle>DC Processing 
@@ -53,21 +53,28 @@
  
     <sect2 id="news">
       <title>What's New?</title>
-        <sect3 id="news_2_13_0">
-	  <title>Version 2.13.0</title>
+        <sect3 id="news_2_12_2">
+	  <title>Version 2.12.2</title>
 	  <para>
 	    <itemizedlist>
+	      <listitem><para>Critical bug fixes for &quot;Load Results for Step 
+	        ...&quot;, &quot;Extract Model&quot;, &quot;Merge
+		Model&quot; and &quot;Split Model&quot;. The bug could result
+		in involuntary changes to the original data.</para></listitem>
 	      <listitem><para>Bug fixes for <function
 	        >DCWatDes.Bitcode.or()</function> and <function
 	        >DCWatDes.Bitcode.xor()</function> functions.</para></listitem>
 	      <listitem><para>Improved &quot;Bytecode Calculator&quot; 
-	        functionality (<xref linkend="bytecode_calculator" />.
+	        functionality (<xref linkend="bytecode_calculator" />).
 		</para></listitem>
 	      <listitem><para>&quot;Write Epanet File&quot; collapses 
 	        setting entries of valves to &quot;closed&quot; if they
 		contain &quot;closed&quot;.</para></listitem>
 	      <listitem><para>&quot;Extract Model&quot; allows now to create
-	        one view per model (<xref linkend="extract_model" />.</para></listitem>
+	        one view per model (<xref linkend="extract_model" />) and will
+		extract demand junctions to a separate file if a field 
+		<structfield>HasDemand</structfield> is found in the
+		junction table..</para></listitem>
 	      <listitem><para>New &quot;Enforce Data Model&quot; option
 	        that allows to relax data model checks when editing networks
 		(E.g. sewer or street networks). See <xref linkend=
@@ -719,7 +726,14 @@
 	    are stored in the folder <filename>model/1</filename>.</para>
 	  <para>The user is asked whether a new view should be created for
 	    each model. The views will be named &quot;Model 1&quot;, &quot;Model
-	    2&quot;...</para>  
+	    2&quot;...</para>
+	  <para>If the junction theme has a <structfield>HasDemand</structfield>
+	    field and its filename contains &quot;junction&quot;, additional
+	    <filename>demandjunction.shp</filename> files will be written
+	    to the folder. They contain all the records for the particular model
+	    where <structfield>HasDemand</structfield> is &quot;1&quot;.</para>
+	  <para>The definition query for all themes of the model will be
+	    removed by this operation.</para>  
 	  <para>See <xref linkend="byte_codes" /> for detailed information
 	    about byte codes.</para>
 	  <para>Unlike <xref linkend="split_model" /> and <xref linkend=

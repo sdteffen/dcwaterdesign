@@ -62,8 +62,10 @@ fldZone = ftbPipes.findField("Zone")
 strOldDefinition = ftbPipes.getDefinition
 flnTmpDbf = FileName.getTmpDir.makeTmp("zonesummary","dbf")
 ftbPipes.setDefinition("")
+ftbPipes.updateDefBitmap
 ftbZoneSummary = ftbPipes.summarize(flnTmpDbf, dBASE, fldZone, {}, {})
 ftbPipes.setDefinition(strOldDefinition)
+ftbPipes.updateDefBitmap
 fldZone = ftbZoneSummary.findField("Zone")
 lstZones = List.make
 
@@ -87,6 +89,7 @@ for each thmTheme in dicThemes
   ftbTheme = thmTheme.getFTab
   strOldDefinition = ftbTheme.getDefinition
   ftbTheme.setDefinition("")
+  ftbTheme.updateDefBitmap
   ftbTheme.setEditable(true)
   bmpSelection = ftbTheme.getSelection
   bmpSelection.setAll
@@ -121,4 +124,5 @@ for each thmTheme in dicThemes
     end
   end
   ftbTheme.setDefinition(strOldDefinition)
+  ftbTheme.updateDefBitmap
 end
