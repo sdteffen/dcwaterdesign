@@ -59,7 +59,7 @@ thmPipes = dicThemes.get("Pipes")
 ftbPipes = thmPipes.getFTab
 ' TODO: Make field selectable
 fldZone = ftbPipes.findField("Zone")
-strOldDefinition = ftbPipes.getDefinition
+strOldDefinition = ftbPipes.getDefinition.clone
 flnTmpDbf = FileName.getTmpDir.makeTmp("zonesummary","dbf")
 ftbPipes.setDefinition("")
 ftbPipes.updateDefBitmap
@@ -87,7 +87,7 @@ end
 
 for each thmTheme in dicThemes
   ftbTheme = thmTheme.getFTab
-  strOldDefinition = ftbTheme.getDefinition
+  strOldDefinition = ftbTheme.getDefinition.clone
   ftbTheme.setDefinition("")
   ftbTheme.updateDefBitmap
   ftbTheme.setEditable(true)

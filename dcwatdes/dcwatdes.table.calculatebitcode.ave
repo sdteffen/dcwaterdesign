@@ -34,6 +34,9 @@ end
 lstFunctions = {"Set","DCWatDes.Bitcode.xor", "DCWatDes.Bitcode.and", "DCWatDes.Bitcode.or"}
 
 strFunction = MsgBox.listAsString(lstFunctions, "Select a function", "DC Water Design")
+if(strFunction = NIL)then
+  exit
+end
 
 lstSet = MsgBox.multiList(lstBitcodes, "Choose Bitcodes to set", "DC Water Design")
 

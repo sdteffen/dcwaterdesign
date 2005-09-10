@@ -82,7 +82,7 @@ for each numI in 0..(numWidth-1)
   ' Loop over all themes
   for each thmTheme in dicThemes
     ftbTheme = thmTheme.getFTab
-    strOldDefinition = ftbTheme.getDefinition
+    strOldDefinition = ftbTheme.getDefinition.clone
     strDefinition = "[ByteCode].middle("+numI.asString+",1)=""1"""
     ftbTheme.setDefinition(strDefinition)
     ftbTheme.updateDefBitmap
@@ -100,7 +100,7 @@ for each numI in 0..(numWidth-1)
   end
   ' Write out demand nodes if possible
   if((fldHasDemand <> nil)and(ftbJunction.getSrcName.getFileName.getBaseName.contains("junction")))then
-    strOldDefinition = ftbJunction.getDefinition
+    strOldDefinition = ftbJunction.getDefinition.clone
     strDefinition = "([ByteCode].middle("+numI.asString+",1)=""1"") and ([HasDemand]=1)"
     ftbJunction.setDefinition(strDefinition)
     ftbJunction.updateDefBitmap

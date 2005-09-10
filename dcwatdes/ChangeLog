@@ -1,3 +1,8 @@
+2005-09-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdesextension.make.ave: Version number is 2.12.2+cvs now
+	* dcwates.project.splitmodel.ave: Added option to create views
+
 2005-09-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml:

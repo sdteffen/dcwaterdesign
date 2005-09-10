@@ -33,6 +33,8 @@ if(dicPreferences <> nil)then
   end
 end
 
+blnCreateViews = MsgBox.yesNo("Create a view for each zone?", "DC Water Design", true)
+
 lstThemeNames = {"Pipes", "Junctions", "Pumps", "Reservoirs", "Tanks", "Valves"}
 lstViews = av.getProject.getDocsWithGUI(av.findGUI("View"))
 lstThemes = List.make
@@ -74,8 +76,14 @@ lstZones = List.make
 flnBaseDirectory = ftbPipes.getSrcName.getFileName.returnDir
 
 for each recZone in ftbZoneSummary
+  if(blnCreateViews)then
+
   strZone = ftbZoneSummary.returnValue(fldZone, recZone)
-  if(strZone.isNull.not and (strZone <> ""))then
+    if(strZone.isNull.not and (strZone <> ""))then
+      viewModel = View.make
+      viewModel.setName("Zone "+strZone)
+      av.getProject.addDoc(viewModel)
+    end
     lstZones.add(strZone)
     flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, strZone)
     av.run("DCWatDes.System.makeDir", flnZoneDirectory.getFullName)
@@ -95,7 +103,12 @@ for each recZone in ftbZoneSummary
       ftbTheme.updateDefBitmap
       if(ftbTheme.getNumRecords > 0)then
         flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
-        ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
+        ftbExtracted = ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
+        if(blnCreateViews)then
+          thmExtracted = FTheme.make(ftbExtracted)
+          viewModel.addTheme(thmExtracted)
+          thmExtracted.setVisible(true)
+        end
         ftbTheme.setDefinition(strOldDefinition)
         ftbTheme.updateDefBitmap
       end
