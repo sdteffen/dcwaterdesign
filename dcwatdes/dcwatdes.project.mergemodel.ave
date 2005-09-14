@@ -63,6 +63,10 @@ strOldDefinition = ftbPipes.getDefinition.clone
 flnTmpDbf = FileName.getTmpDir.makeTmp("zonesummary","dbf")
 ftbPipes.setDefinition("")
 ftbPipes.updateDefBitmap
+bmpSelection = ftbPipes.getSelection.clone
+bmpSelection.clearAll
+ftbPipes.setSelection(bmpSelection)
+ftbPipes.updateSelection
 ftbZoneSummary = ftbPipes.summarize(flnTmpDbf, dBASE, fldZone, {}, {})
 ftbPipes.setDefinition(strOldDefinition)
 ftbPipes.updateDefBitmap
@@ -84,45 +88,65 @@ for each recZone in ftbZoneSummary
   end
 end
 
+strReport = ""
 
 for each thmTheme in dicThemes
+  System.echo("Merging "+thmTheme.getName)
   ftbTheme = thmTheme.getFTab
+  lstThemeFields = ftbTheme.getFields
   strOldDefinition = ftbTheme.getDefinition.clone
   ftbTheme.setDefinition("")
   ftbTheme.updateDefBitmap
-  ftbTheme.setEditable(true)
-  bmpSelection = ftbTheme.getSelection
+  ftbTheme.startEditingWithRecovery
+  bmpSelection = ftbTheme.getSelection.clone
   bmpSelection.setAll
-  ftbTheme.removeRecords(bmpSelection)
-  ftbTheme.setEditable(false)
-  ftbTheme.setEditable(true)
-  lstThemeFields = ftbTheme.getFields
+  ftbTheme.setSelection(bmpSelection)
+  ftbTheme.updateSelection
+  numOldFeatureCount = bmpSelection.count
+  System.echo("Removing old records...")
+  ftbTheme.beginTransaction
+  ftbTheme.removeRecords(ftbTheme.getSelection.clone)
+  ftbTheme.endTransaction
+  ftbTheme.beginTransaction
   numFieldCount = lstThemeFields.count - 1
+  numNewFeatureCount = 0
   for each flnZone in lstDirectories
+    System.echo("Zone "+flnZone.getBaseName)
     flnTheme = Filename.merge(flnZone.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
-    ftbZone = FTab.make(SrcName.make(flnTheme.getFullName))
-    lstZoneFields = ftbZone.getFields
-    if(lstThemeFields.count <> lstZoneFields.count)then
-      MsgBox.error("Field names do not match for "+flnTheme.getFullName, "DC Water Design Extension")
-      ftbTheme.setEditable(false)
-      exit
-    end
-    fldZone = ftbZone.findField("Zone")
-    strZone = dicZones.get(flnZone)
-    for each recZone in ftbZone
-      recTheme = ftbTheme.addRecord
-      for each i in 0..numFieldCount
-        fldCurrent = lstZoneFields.get(i)
-        objValue = ftbZone.returnValue(lstZoneFields.get(i), recZone)
-        if((fldCurrent.getName = "Zone")and((objValue.isNull)or(objValue = "")))then
-          System.echo("Filling in missing zone value: "+strZone)
-          ftbTheme.setValue(lstThemeFields.get(i), recTheme, strZone)
-        else  
-          ftbTheme.setValue(lstThemeFields.get(i), recTheme, objValue)
-        end  
+    snmTheme = SrcName.make(flnTheme.getFullName)
+    if(snmTheme <> nil)then 
+      ftbZone = FTab.make(snmTheme)
+      if(ftbZone <> nil)then
+        lstZoneFields = ftbZone.getFields
+        if(lstThemeFields.count <> lstZoneFields.count)then
+          MsgBox.error("Field names do not match for "+flnTheme.getFullName, "DC Water Design Extension")
+          ftbTheme.setEditable(false)
+          exit
+        end
+        fldZone = ftbZone.findField("Zone")
+        strZone = dicZones.get(flnZone)
+        for each recZone in ftbZone
+          recTheme = ftbTheme.addRecord
+          numNewFeatureCount = numNewFeatureCount + 1
+          for each i in 0..numFieldCount
+            fldCurrent = lstZoneFields.get(i)
+            objValue = ftbZone.returnValue(lstZoneFields.get(i), recZone)
+            if((fldCurrent.getName = "Zone")and((objValue.isNull)or(objValue = "")))then
+              System.echo("Filling in missing zone value: "+strZone)
+              ftbTheme.setValue(lstThemeFields.get(i), recTheme, strZone)
+            else  
+              ftbTheme.setValue(lstThemeFields.get(i), recTheme, objValue)
+            end
+          end
+        end
       end
     end
   end
-  ftbTheme.setDefinition(strOldDefinition)
-  ftbTheme.updateDefBitmap
+  strReport = strReport + thmTheme.getName + ": Replaced " + numOldFeatureCount.asString + 
+    " features with " + numNewFeatureCount.asString + "("+
+    ((numNewFeatureCount-numOldFeatureCount)/numOldFeatureCount*100).asString+"%)"+NL
+  ftbTheme.endTransaction
+  ftbTheme.stopEditingWithRecovery(true)
 end
+
+MsgBox.report(strReport, "DC Water Design")

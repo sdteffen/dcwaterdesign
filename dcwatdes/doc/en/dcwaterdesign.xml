@@ -53,6 +53,18 @@
  
     <sect2 id="news">
       <title>What's New?</title>
+        <sect3 id="news_2_12_3">
+	  <title>Version 2.12.3</title>
+	  <itemizedlist>
+	    <listitem><para>Bytecode Calculator byte numbering starts with 1 now
+	      instead of 0.</para></listitem>
+	    <listitem><para>&quot;Extract Model&quot; allows to select models
+	      that should be extracted.</para></listitem>
+	    <listitem><para>Robustness improvements for &quot;Extract 
+	      Model&quot;, &quot;Split Model&quot; and &quot;Merge Model&quot;.
+	      </para></listitem>  
+	  </itemizedlist>
+	</sect3>
         <sect3 id="news_2_12_2">
 	  <title>Version 2.12.2</title>
 	  <para>
@@ -479,7 +491,7 @@
 	    </para></listitem>
         </itemizedlist>
       </para>
-      <note><para>Note that the byte numbering starts at 0. You should use 
+      <note><para>Note that the byte numbering starts at 1. You should use 
         a temporary field in order to perform the addition of 
         two byte codes correctly.</para></note>
       <note><para>Note that you should use a different concept if you want
@@ -1318,6 +1330,8 @@
 	    <listitem><para>The field used to store the byte codes should have no 
 	      decimal places.</para></listitem>
 	   </itemizedlist>
+	   <para>See <xref linkend="byte_codes" /> for details regarding byte 
+	     codes.</para>
 	</para>
       </sect3>
     </sect2>
@@ -1481,7 +1495,7 @@
       dictionaries is documented. In general, the API 
       documentation should only be of concern for programmers.</para>
       
-      <sect3>
+      <sect3 id="dcwatdes.bitcode.or">
 	<title>DCWatDes.Bitcode.or</title> 
       
 	<para>DCWatDes.Bitcode.or performs a bytewise or operation on string 
@@ -1502,7 +1516,7 @@
 	av.run("DCWatDes.Bitcode.or", {[a], [b]})
 	</programlisting></para>
       </sect3>
-      <sect3>
+      <sect3 id="dcwatdes.bitcode.xor">
 	<title>DCWatDes.Bitcode.xor</title> 
       
 	<para>DCWatDes.Bitcode.xor performs a bytewise xor operation on string 
@@ -1524,7 +1538,7 @@
 	</programlisting></para>
 	<para>The result of the example above will be &quot;111&quot;.</para>
       </sect3>
-      <sect3>
+      <sect3 id="dcwatdes.bitcode.and">
 	<title>DCWatDes.Bitcode.and</title>
 	<para>DCWatDes.Bitcode.and
 	  performs a bytewise and operation on string numbers
@@ -1544,7 +1558,7 @@
 	av.run("DCWatDes.Bitcode.and", {[a], [b]})
 	</programlisting></para>
       </sect3>
-      <sect3>
+      <sect3 id="dcwatdes.bitcode.issetasnumber">
 	<title>DCWatDes.Bitcode.isSetAsNumber</title>
       
 	<para>DCWatDes.Bitcode.isSetAsNumber returns whether the n-th byte of a 

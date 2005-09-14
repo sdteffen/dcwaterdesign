@@ -61,13 +61,14 @@ thmPipes = dicThemes.get("Pipes")
 ftbPipes = thmPipes.getFTab
 ' TODO: Make field selectable
 fldZone = ftbPipes.findField("Zone")
-strOldDefinition = ftbPipes.getDefinition
 flnTmpDbf = FileName.getTmpDir.makeTmp("zonesummary","dbf")
 ftbPipes.setDefinition("")
 ftbPipes.updateDefBitmap
+bmpSelection = ftbPipes.getSelection.clone
+bmpSelection.clearAll
+ftbPipes.setSelection(bmpSelection)
+ftbPipes.updateSelection
 ftbZoneSummary = ftbPipes.summarize(flnTmpDbf, dBASE, fldZone, {}, {})
-ftbPipes.setDefinition(strOldDefinition)
-ftbPipes.updateDefBitmap
 fldZone = ftbZoneSummary.findField("Zone")
 lstZones = List.make
 
@@ -90,8 +91,6 @@ for each recZone in ftbZoneSummary
     ' Loop over all themes
     for each thmTheme in dicThemes
       ftbTheme = thmTheme.getFTab
-      strOldDefinition = ftbTheme.getDefinition
-      strDefinition = "[Zone]="+strZone.quote
       ftbTheme.setDefinition("([Zone].isNull)or([Zone] = """")")
       ftbTheme.updateDefBitmap
       if(ftbTheme.getNumRecords > 0)then
@@ -99,8 +98,6 @@ for each recZone in ftbZoneSummary
            "Splitting the model failed.", "DC Water Design") 
         exit    
       end
-      ftbTheme.setDefinition(strDefinition)
-      ftbTheme.updateDefBitmap
       if(ftbTheme.getNumRecords > 0)then
         flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
         ftbExtracted = ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
@@ -109,7 +106,7 @@ for each recZone in ftbZoneSummary
           viewModel.addTheme(thmExtracted)
           thmExtracted.setVisible(true)
         end
-        ftbTheme.setDefinition(strOldDefinition)
+        ftbTheme.setDefinition("")
         ftbTheme.updateDefBitmap
       end
     end
