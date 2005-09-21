@@ -1,3 +1,14 @@
+2005-09-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.project.splitmodel.ave: Delete shapes from
+	existing zone shapefiles if no records are found for this zone any more;
+	fixes bug #1296212
+
+2005-09-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.project.splitmodel.ave: Fixed the splitting function
+
 2005-09-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml: Updated with latest information.

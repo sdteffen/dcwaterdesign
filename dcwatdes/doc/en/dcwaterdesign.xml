@@ -28,7 +28,7 @@
   </articleinfo>
   <sect1 id="introduction">
     <title>Introduction</title>
-    <para>This Manual describes the DC Water Design Extension Version 2.12.2.</para>
+    <para>This Manual describes the DC Water Design Extension Version 2.12.2+cvs.</para>
     <para>This Document uses Terminology from ArcView and EPANET. 
       Refer to the respective documentation for in-depth explanations.</para>
     <important><para>Be sure to check the <citetitle>DC Processing 
@@ -62,7 +62,10 @@
 	      that should be extracted.</para></listitem>
 	    <listitem><para>Robustness improvements for &quot;Extract 
 	      Model&quot;, &quot;Split Model&quot; and &quot;Merge Model&quot;.
-	      </para></listitem>  
+	      </para></listitem>
+	    <listitem><para>Fixed bug in &quot;Split Model&quot; that could
+	      lead to feature duplication when elements are moved
+	      from zone to zone in split models.</para></listitem>  
 	  </itemizedlist>
 	</sect3>
         <sect3 id="news_2_12_2">

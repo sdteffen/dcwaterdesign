@@ -88,6 +88,7 @@ for each recZone in ftbZoneSummary
     lstZones.add(strZone)
     flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, strZone)
     av.run("DCWatDes.System.makeDir", flnZoneDirectory.getFullName)
+    strDefinition = "[Zone]="+strZone.quote
     ' Loop over all themes
     for each thmTheme in dicThemes
       ftbTheme = thmTheme.getFTab
@@ -98,8 +99,10 @@ for each recZone in ftbZoneSummary
            "Splitting the model failed.", "DC Water Design") 
         exit    
       end
+      ftbTheme.setDefinition(strDefinition)
+      ftbTheme.updateDefBitmap
+      flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
       if(ftbTheme.getNumRecords > 0)then
-        flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
         ftbExtracted = ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
         if(blnCreateViews)then
           thmExtracted = FTheme.make(ftbExtracted)
@@ -108,6 +111,23 @@ for each recZone in ftbZoneSummary
         end
         ftbTheme.setDefinition("")
         ftbTheme.updateDefBitmap
+      else
+        ' Delete all records if shapefile exists
+        srnZone = SrcName.make(flnThemeName.getFullName)
+        if(srnZone <> nil)then
+          ftbZone = FTab.make(srnZone)
+          if(ftbZone <> nil)then
+            ftbTheme.startEditingWithRecovery
+            bmpZoneSelection = ftbZone.getSelection.clone
+            bmpZoneSelection.setAll
+            ftbZone.setSelection(bmpSelection)
+            ftbZone.updateSelection
+            ftbZone.beginTransaction
+            ftbZone.removeRecords(ftbZone.getSelection.clone)
+            ftbZone.endTransaction
+            ftbZone.stopEditingWithRecovery(true)
+          end
+        end  
       end
     end
   else
