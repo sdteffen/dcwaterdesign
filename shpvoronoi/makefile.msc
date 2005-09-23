@@ -1,0 +1,17 @@
+# Makefile for Microsoft Visual C++ 6.0 (nmake)
+LINKOPT	=      "c:\program files\shapelib\shapelib.lib"
+
+CFLAGS	=      -I"c:\program files\shapelib" -DMSVC
+
+default:	all
+
+all:	shpvoronoi shpdelaunay
+
+shpvoronoi:	shpvoronoi.c shpvoronoi.h
+	cl $(CFLAGS) shpvoronoi.c $(LINKOPT)
+
+shpdelaunay:	shpdelaunay.c shpvoronoi.h
+	cl $(CFLAGS) shpdelaunay.c $(LINKOPT)
+clean:
+	del *.obj shpvoronoi.exe shpdelaunay.exe
+
