@@ -102,7 +102,6 @@ int main( int argc, char **argv ) {
   int nShapes = 0;
   double padfMinBound[4];
   double padfMaxBound[4];
-  int nDcidIndex = -1;
   char *pDCID;
  
   strcpy(vertex_line_name, "");
@@ -121,13 +120,6 @@ int main( int argc, char **argv ) {
   hPointDBF = DBFOpen(argv[1], "rb");
   if(hPointSHP == NULL || hPointDBF == NULL ) {
     printf("FATAL ERROR: Unable to open input file:%s\n", argv[1] );
-    exit(1);
-  }
-  nDcidIndex = DBFGetFieldIndex(hPointDBF, "dc_id");
-  if(nDcidIndex == -1) {
-    printf("FATAL ERROR: Shapefile:%s is lacking the 'dc_id field.'\n", argv[1]);
-    SHPClose(hPointSHP);
-    DBFClose(hPointDBF);
     exit(1);
   }
   SHPGetInfo(hPointSHP, &nEntities, &nShapeType, padfMinBound, padfMaxBound);
@@ -220,15 +212,7 @@ int main( int argc, char **argv ) {
       psCShape = SHPCreateSimpleObject( SHPT_POLYGON, nNodes, polygon_x, polygon_y, NULL );
       SHPWriteObject(hVoronoiSHP, -1, psCShape);
       SHPDestroyObject(psCShape);
-      /**
-       * Take over DC_ID field.
-       */
-      if(nShapes < nEntities) {
-        pDCID = DBFReadStringAttribute(hPointDBF, nShapes, nDcidIndex);
-	DBFWriteStringAttribute(hVoronoiDBF, nShapes, 0, pDCID);
-      } else {
-        DBFWriteStringAttribute(hVoronoiDBF, nShapes, 0, "");
-      }
+      DBFWriteStringAttribute(hVoronoiDBF, nShapes, 0, "");
       nShapes++;
     }
  }
