@@ -59,11 +59,13 @@
 	    <listitem><para>Bytecode Calculator byte numbering starts with 1 now
 	      instead of 0.</para></listitem>
 	    <listitem><para>&quot;Extract Model&quot; allows to select models
-	      that should be extracted.</para></listitem>
+	      that should be extracted as well as the folder to which the
+	      models should be extracted.</para></listitem>
 	    <listitem><para>Robustness improvements for &quot;Extract 
 	      Model&quot;, &quot;Split Model&quot; and &quot;Merge Model&quot;.
 	      </para></listitem>
-	    <listitem><para>Fixed bug in &quot;Split Model&quot; that could
+	    <listitem><para>Fixed bug in &quot;Split Model&quot; and 
+	    &quot;Extract Model&quot; that could
 	      lead to feature duplication when elements are moved
 	      from zone to zone in split models.</para></listitem>  
 	  </itemizedlist>

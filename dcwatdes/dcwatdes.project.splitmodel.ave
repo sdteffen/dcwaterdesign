@@ -104,6 +104,7 @@ for each recZone in ftbZoneSummary
       flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
       if(ftbTheme.getNumRecords > 0)then
         ftbExtracted = ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
+        av.run("DCWatDes.FTab.ensureSpatialIndex", ftbExtracted)
         if(blnCreateViews)then
           thmExtracted = FTheme.make(ftbExtracted)
           viewModel.addTheme(thmExtracted)
@@ -120,7 +121,7 @@ for each recZone in ftbZoneSummary
             ftbTheme.startEditingWithRecovery
             bmpZoneSelection = ftbZone.getSelection.clone
             bmpZoneSelection.setAll
-            ftbZone.setSelection(bmpSelection)
+            ftbZone.setSelection(bmpZoneSelection)
             ftbZone.updateSelection
             ftbZone.beginTransaction
             ftbZone.removeRecords(ftbZone.getSelection.clone)

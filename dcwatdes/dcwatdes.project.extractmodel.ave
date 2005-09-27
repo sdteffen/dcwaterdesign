@@ -55,6 +55,8 @@ end
 
 blnCreateViews = MsgBox.yesNo("Create a view for each model?", "DC Water Design", true)
 
+strFolder = MsgBox.input("Please enter the folder name:", "DC Water Design", "model")
+
 ' Summarize by Zone
 
 thmPipes = dicThemes.get("Pipes")
@@ -87,7 +89,7 @@ if(lstSet = nil)then
 end
 
 for each numI in lstSet
-  flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, "model\"+(numI+1).asString)
+  flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, strFolder+"\"+(numI+1).asString)
   av.run("DCWatDes.System.makeDir", flnZoneDirectory.getFullName)
   if(blnCreateViews)then
     viewModel = View.make
@@ -116,10 +118,29 @@ for each numI in lstSet
     strDefinition = "([ByteCode].middle("+numI.asString+",1)=""1"") and ([HasDemand]=1)"
     ftbJunction.setDefinition(strDefinition)
     ftbJunction.updateDefBitmap
+    flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbJunction.getSrcName.getFileName.getBaseName)
     if(ftbJunction.getNumRecords > 0)then
-      flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbJunction.getSrcName.getFileName.getBaseName)
+
       flnThemeName = flnThemeName.getFullName.substitute("junction", "junctiondemand").asFileName
       ftbExtracted = ftbJunction.export(flnThemeName, ftbJunction.getShapeClass, false)
+      av.run("DCWatDes.FTab.ensureSpatialIndex", ftbExtracted)
+    else
+      ' Delete all records if shapefile exists
+      srnZone = SrcName.make(flnThemeName.getFullName)
+      if(srnZone <> nil)then
+        ftbZone = FTab.make(srnZone)
+        if(ftbZone <> nil)then
+          ftbTheme.startEditingWithRecovery
+          bmpZoneSelection = ftbZone.getSelection.clone
+          bmpZoneSelection.setAll
+          ftbZone.setSelection(bmpZoneSelection)
+          ftbZone.updateSelection
+          ftbZone.beginTransaction
+          ftbZone.removeRecords(ftbZone.getSelection.clone)
+          ftbZone.endTransaction
+          ftbZone.stopEditingWithRecovery(true)
+        end
+      end  
     end
   end
 end

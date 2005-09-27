@@ -1,3 +1,11 @@
+2005-09-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.project.mergemodel.ave: Delete shapes from existing model
+	model shapefiles if no records are found for this zone any more. 
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.project.extractmodel.ave: Allowed to specify the folder name 
+	to which the models will be extracted
+
 2005-09-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml:
