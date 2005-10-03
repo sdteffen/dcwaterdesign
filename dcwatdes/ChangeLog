@@ -2,6 +2,8 @@
 
 	* dcwatdes.model.epanet.loadresultsforstep.ave: Added possibility to
 	pass timestep as script parameter
+	* dcwatdes.model.epanet.results.loadarcview.ave: Pass nil instead of
+	table list
 
 2005-09-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 

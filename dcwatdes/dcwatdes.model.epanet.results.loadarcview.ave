@@ -23,6 +23,10 @@
 
 flnLinkResults = self.get(0)
 flnNodeResults = self.get(1)
+strStep = nil
+if(self.count = 3)then
+  strStep = self.get(2)
+end
 
 vtbLinkResults = VTab.make(flnLinkResults, false, false)
 tableLinkResults = Table.make(vtbLinkResults)
@@ -67,5 +71,5 @@ end
   
 dicPreferences.set("lstSteps", lstSteps.deepclone)
   
-av.run("DCWatDes.Model.Epanet.loadResultsForStep", {vtbLinkResults, vtbNodeResults})
+av.run("DCWatDes.Model.Epanet.loadResultsForStep", strStep)
 
