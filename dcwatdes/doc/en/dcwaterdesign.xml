@@ -1365,6 +1365,15 @@
       </sect3>
     </sect2>
   </sect1>
+  
+  <sect1 id="analysis">
+    <title>Analysis</title>
+    <para>How the results can be analyzed.</para>
+    <para>How to import the results to R:</para>
+    <programlisting
+      >node &lt;- read.csv(&quot;c:\\temp\\node.txt&quot;,header=TRUE)</programlisting>
+  </sect1>
+  
   <sect1 id="faq">
     <title>Frequently Asked Questions</title>
     

@@ -1,3 +1,13 @@
+2005-10-02  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep.ave: Added possibility to
+	pass timestep as script parameter
+
+2005-09-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Added new analysis section with information 
+	how to import the results to R
+	
 2005-09-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.project.mergemodel.ave: Delete shapes from existing model
