@@ -1,3 +1,8 @@
+2005-12-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Added information that it might be necessary
+	to increase the snapping radius when running "Make EPANET Model"
+
 2005-10-02  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.loadresultsforstep.ave: Added possibility to

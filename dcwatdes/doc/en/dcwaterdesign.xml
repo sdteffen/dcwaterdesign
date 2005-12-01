@@ -877,7 +877,7 @@
 	order to to enable this feature. The user is prompted 
 	to select the time step for which the results should be loaded.</para>
       </sect3>
-      <sect3>
+      <sect3 id="make_epanet_model">
         <title>Make EPANET Model</title> 
     
 	<para>Creates the line-node structure required by EPANET.</para>
@@ -897,6 +897,9 @@
 	  direction at pumps or valves, you can use the &quot;Flip 
 	  Polylines&quot; tool to correct the errors (<xref linkend=
 	  "flip_polylines" />).</para>
+	
+	<tip><para>Increase the snapping radius if necesary (<xref linkend=
+	  "setup_dialog" />.</para></tip>  
       </sect3>
       <sect3 id="epanet_themes_dialog">
         <title>EPANET Themes</title> 
@@ -1494,6 +1497,12 @@
 	  <listitem><para>Click the <guibutton>New Set</guibutton> button.
 	    </para></listitem>
 	</itemizedlist>
+    </sect2>
+    <sect2 id="make_fails">
+      <title>Running &quot;Make EPANET Model&quot; Fails. What can I do?</title>
+      <para>Closely analyse the selected records.</para>
+      <para>Try to increase the snapping radius (<xref linkend="setup_dialog" 
+        />).</para>
     </sect2>
   </sect1>
   <sect1 id="development">
