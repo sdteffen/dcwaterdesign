@@ -1,3 +1,9 @@
+2006-01-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* shapedelaunay.c: Updated version number to 0.1.0; added support for
+	3D Shapefiles
+	* shpvoronoi.h: Set MAXNUMNODES to 5,000,0000 
+
 2005-09-22  Steffen Macke <sdteffen@gmail.com>
 
 	* makefile.msc:

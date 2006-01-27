@@ -1,7 +1,8 @@
 /**
  * shpdelaunay.c Create Delaunay triangulation shapefiles using qdelauney
  * 
- * (c) 2005 Steffen Macke 
+ * Copyright (c) 2005 Steffen Macke
+ * Copyright (c) 2006 DORSCH Consult Water and Environment
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,6 +68,7 @@ double dBuffer = 1000.0;
  */
 double vertex_x[MAXNUMNODES];
 double vertex_y[MAXNUMNODES];
+double vertex_z[MAXNUMNODES];
 
 /**
  * Cache of the node vertices.
@@ -74,9 +76,11 @@ double vertex_y[MAXNUMNODES];
  */
 double node_x[MAXNUMNODES];
 double node_y[MAXNUMNODES];
+double node_z[MAXNUMNODES];
 
 double polygon_x[MAXNUMNODES];
 double polygon_y[MAXNUMNODES];
+double polygon_z[MAXNUMNODES];
 
 /**
  * Create Delauney triangulation shapefiles using qdelauney.
@@ -110,7 +114,8 @@ int main( int argc, char **argv ) {
   /* parameter check */
   if(((argc != 3)||
     ((!str_is_shp(argv[1])||(!str_is_shp(argv[2])))))) {
-    printf("shpdelaunay 0.0.1 (c) 2005 Steffen Macke\n");
+    printf("shpdelaunay 0.1.0 (c) 2005 Steffen Macke\n");
+    printf("Portions (c) DORSCH Consult Water and Environment\n");
     printf("usage: shpdelaunay input_shapefile delauney_shapefile\n");
     exit(1);
   }
@@ -123,7 +128,7 @@ int main( int argc, char **argv ) {
     exit(1);
   }
   SHPGetInfo(hPointSHP, &nEntities, &nShapeType, padfMinBound, padfMaxBound);
-  if(nShapeType != SHPT_POINT) {
+  if((nShapeType != SHPT_POINT)&&(nShapeType != SHPT_POINTZ)) {
     printf("FATAL ERROR: Input is not a point shapefile:%s\n", argv[1]);
     SHPClose(hPointSHP);
     DBFClose(hPointDBF);
@@ -139,12 +144,24 @@ int main( int argc, char **argv ) {
     DBFClose(hPointDBF);
     exit(1);
   }
-  fprintf(hTextFile, "2\n%d\n", nEntities);
-  for(i=0; i<nEntities;i++) {
-    psCShape = SHPReadObject(hPointSHP, i);
-    fprintf(hTextFile, "%f %f\n", psCShape->dfXMin, psCShape->dfYMin);
-    node_x[i] = psCShape->dfXMin;
-    node_y[i] = psCShape->dfYMin;
+  if(nShapeType == SHPT_POINT) {
+    fprintf(hTextFile, "2\n%d\n", nEntities);
+    for(i=0; i<nEntities;i++) {
+      psCShape = SHPReadObject(hPointSHP, i);
+      fprintf(hTextFile, "%f %f\n", psCShape->dfXMin, psCShape->dfYMin);
+      node_x[i] = psCShape->dfXMin;
+      node_y[i] = psCShape->dfYMin;
+    }
+  } else { /* SHPT_POINTZ */
+    fprintf(hTextFile, "3\n%d\n", nEntities);
+    for(i=0; i<nEntities;i++) {
+      psCShape = SHPReadObject(hPointSHP, i);
+      fprintf(hTextFile, "%f %f %f\n", psCShape->dfXMin, psCShape->dfYMin,
+        psCShape->dfZMin);
+      node_x[i] = psCShape->dfXMin;
+      node_y[i] = psCShape->dfYMin;
+      node_z[i] = psCShape->dfZMin;
+    }
   }
   num_vertices = nEntities;
   fclose(hTextFile);
@@ -163,8 +180,11 @@ int main( int argc, char **argv ) {
   }
   nPolygons = atoi(line);
   printf("%d polygons\n", nPolygons);
-
-  hVoronoiSHP = SHPCreate(argv[2], SHPT_POLYGON);
+  if(nShapeType == SHPT_POINT) {
+    hVoronoiSHP = SHPCreate(argv[2], SHPT_POLYGON);
+  } else {
+    hVoronoiSHP = SHPCreate(argv[2], SHPT_POLYGONZ);
+  }
   hVoronoiDBF = DBFCreate(argv[2]);
   hPointDBF = DBFOpen(argv[1], "rb");
   if(hVoronoiSHP == NULL || hVoronoiDBF == NULL || hPointDBF == NULL) {
@@ -203,13 +223,23 @@ int main( int argc, char **argv ) {
       //printf("Node reference %d\n", nNodeRef);
       polygon_x[nNodes-1] = node_x[nNodeRef];
       polygon_y[nNodes-1] = node_y[nNodeRef];
+      if(nShapeType == SHPT_POINTZ) {
+	polygon_z[nNodes-1] = node_z[nNodeRef];
+      }
     }
     if(boolWriteShape == 1) {
       nNodes++;
       polygon_x[nNodes-1] = polygon_x[0];
       polygon_y[nNodes-1] = polygon_y[0];
+      if(nShapeType == SHPT_POINTZ) {
+	polygon_z[nNodes-1] = polygon_z[0];
+      }
       //printf("Polygon %d with %d nodes\n", i, nNodes);
-      psCShape = SHPCreateSimpleObject( SHPT_POLYGON, nNodes, polygon_x, polygon_y, NULL );
+      if(nShapeType == SHPT_POINT) {
+        psCShape = SHPCreateSimpleObject( SHPT_POLYGON, nNodes, polygon_x, polygon_y, NULL );
+      } else {
+	psCShape = SHPCreateSimpleObject( SHPT_POLYGONZ, nNodes, polygon_x, polygon_y, polygon_z );
+      }
       SHPWriteObject(hVoronoiSHP, -1, psCShape);
       SHPDestroyObject(psCShape);
       DBFWriteStringAttribute(hVoronoiDBF, nShapes, 0, "");

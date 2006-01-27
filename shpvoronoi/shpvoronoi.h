@@ -21,7 +21,7 @@
 #define   SEPSTR    " \t\n\r"  /* Token separator characters */
 #define   MAXTOKS   40       /* Max. items per line of input */
 /* #define DEBUG 1 */
-#define MAXNUMNODES 50000
+#define MAXNUMNODES 5000000
 
 int str_is_shp(char *str);
 void remove_shp(char *shapefilename);
