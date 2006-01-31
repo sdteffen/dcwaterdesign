@@ -5,13 +5,17 @@ CFLAGS	=      -I"c:\program files\shapelib" -DMSVC
 
 default:	all
 
-all:	shpvoronoi shpdelaunay
+all:	shpvoronoi shpdelaunay shptriangle
 
 shpvoronoi:	shpvoronoi.c shpvoronoi.h
 	cl $(CFLAGS) shpvoronoi.c $(LINKOPT)
 
 shpdelaunay:	shpdelaunay.c shpvoronoi.h
 	cl $(CFLAGS) shpdelaunay.c $(LINKOPT)
+
+shptriangle:	shptriangle.c shpvoronoi.h
+	cl $(CFLAGS) shptriangle.c $(LINKOPT)
+	
 clean:
-	del *.obj shpvoronoi.exe shpdelaunay.exe
+	del *.obj shpvoronoi.exe shpdelaunay.exe shptriangle.exe
 

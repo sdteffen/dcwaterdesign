@@ -1,7 +1,31 @@
+This package contains frontends that allow to feed ESRI Shapefiles
+to triangulation packages.
+
+BUILDING
+
+Makefiles are available for MinGW MSYS 1.0.10 (Makefile) and
+Microsoft Visual C++ (makefile.msc).
+
+Extract the shapelib distribution to c:\program files\shapelib or
+adjust the makefiles.
+
+RUNNING
+
+Place shapelib.dll, qdelaunay.exe, qvoronoi.exe and triangle.exe in the
+same folder as the frontends.
+
 Link against shapelib:
 
 http://shapelib.maptools.org
 
-Uses qvoronoi:
+shpvoronoi uses qvoronoi:
 
 http://www.qhull.org
+
+shpdelaunay uses qdelaunay:
+
+http://www.qhull.org
+
+shptriangle uses triangle:
+
+http://www.cs.cmu.edu/~quake/triangle.html
