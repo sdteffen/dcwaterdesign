@@ -60,32 +60,25 @@ int num_vertices = -1;
 
 double dBuffer = 1000.0;
 
-/** 
- * Caching the vertices of a line while
- * parsing the vertices section
- * \todo Dynamically allocate according to model size.
- */
-double vertex_x[MAXNUMNODES];
-double vertex_y[MAXNUMNODES];
-
 /**
  * Cache of the node vertices.
  * \todo Dynamically allocate according to model size.
  */
 double node_x[MAXNUMNODES];
 double node_y[MAXNUMNODES];
+double node_z[MAXNUMNODES];
 
 double polygon_x[MAXNUMNODES];
 double polygon_y[MAXNUMNODES];
+double polygon_z[MAXNUMNODES];
 
 /**
- * Create Voronoi shape files using Triangle.
+ * Create Delaunay shape files using Triangle.
  * @param argc is the number of arguments provided from the command line 
  * (including the command name).
  * @param argv is an array of strings that contains the argc arguments.
  * @return An error code if something goes wrong or 0 if there was no error
  * during the conversion process.
- * \todo Allow generation of empty report file.
  */
 int main( int argc, char **argv ) {
   int error;
@@ -97,22 +90,39 @@ int main( int argc, char **argv ) {
   int nNodes, nNodeRef;
   SHPObject *psCShape;
   int byRing = 1;
-  int nPolygonPoints;
   char boolWriteShape;
   int nShapes = 0;
   double padfMinBound[4];
   double padfMaxBound[4];
   int nDcidIndex = -1;
   char *pDCID;
+  /**
+   * Vectors to calculate plane parameters
+   */
+  double vector0[3];
+  double vector1[3];
+  /**
+   * Plane parameters
+   */
+  double a,b,c,d;
+  /**
+   * Slope of the plane
+   */
+  double slope;
+  /**
+   * Elevation field (if provided)
+   */
+  int nElevationField = -1; 
  
   strcpy(vertex_line_name, "");
   num_vertices = 0;
   
   /* parameter check */
-  if(((argc != 3)||
+  if((((argc != 3)||
+    ((!str_is_shp(argv[1])||(!str_is_shp(argv[2]))))))&&((argc != 4)||
     ((!str_is_shp(argv[1])||(!str_is_shp(argv[2])))))) {
     printf("shptriangle 0.0.1 (c) 2005,2006 Steffen Macke\n");
-    printf("usage: shptriangle input_shapefile delaunay_shapefile\n");
+    printf("usage: shptriangle input_shapefile delaunay_shapefile [elevationfield]\n");
     exit(1);
   }
   remove_shp(argv[2]);
@@ -123,16 +133,21 @@ int main( int argc, char **argv ) {
     printf("FATAL ERROR: Unable to open input file:%s\n", argv[1] );
     exit(1);
   }
-  nDcidIndex = DBFGetFieldIndex(hPointDBF, "dc_id");
-  if(nDcidIndex == -1) {
-    printf("FATAL ERROR: Shapefile:%s is lacking the 'dc_id field.'\n", argv[1]);
+  SHPGetInfo(hPointSHP, &nEntities, &nShapeType, padfMinBound, padfMaxBound);
+  if(nShapeType != SHPT_POINT) {
+    printf("FATAL ERROR: Input is not a point shapefile:%s\n", argv[1]);
     SHPClose(hPointSHP);
     DBFClose(hPointDBF);
     exit(1);
   }
-  SHPGetInfo(hPointSHP, &nEntities, &nShapeType, padfMinBound, padfMaxBound);
-  if(nShapeType != SHPT_POINT) {
-    printf("FATAL ERROR: Input is not a point shapefile:%s\n", argv[1]);
+  if(4 == argc) {
+    nElevationField = DBFGetFieldIndex(hPointDBF, argv[3]);
+    if(-1 == nElevationField) {
+      printf("WARNING: Could not find elevation field '%s'.\n", argv[3]);
+    }
+  }
+  if(nEntities > MAXNUMNODES) {
+    printf("FATAL ERROR: Too many nodes. Please recompile.\n");
     SHPClose(hPointSHP);
     DBFClose(hPointDBF);
     exit(1);
@@ -147,66 +162,52 @@ int main( int argc, char **argv ) {
     DBFClose(hPointDBF);
     exit(1);
   }
-  fprintf(hTextFile, "2\n%d\n", nEntities+4);
+  fprintf(hTextFile, "%d 2 0 0\n", nEntities);
   for(i=0; i<nEntities;i++) {
     psCShape = SHPReadObject(hPointSHP, i);
-    fprintf(hTextFile, "%f %f\n", psCShape->dfXMin, psCShape->dfYMin);
+    fprintf(hTextFile, "%d %f %f\n", i+1, psCShape->dfXMin, psCShape->dfYMin);
+    node_x[i] = psCShape->dfXMin;
+    node_y[i] = psCShape->dfYMin;
+    if(nElevationField > -1) {
+      node_z[i] = DBFReadDoubleAttribute(hPointDBF, i, nElevationField);
+    } else {
+      node_z[i] = 0.0;
+    }
   }
-  fprintf(hTextFile, "%f %f\n", padfMinBound[0]-dBuffer, padfMinBound[1]-dBuffer);
-  fprintf(hTextFile, "%f %f\n", padfMinBound[0]-dBuffer, padfMaxBound[1]+dBuffer);
-  fprintf(hTextFile, "%f %f\n", padfMaxBound[0]+dBuffer, padfMaxBound[1]+dBuffer);
-  fprintf(hTextFile, "%f %f\n", padfMaxBound[0]+dBuffer, padfMinBound[1]-dBuffer);
+ 
   fclose(hTextFile);
   SHPClose(hPointSHP);
   DBFClose(hPointDBF);
   system("triangle.exe -I shptriangle");
   
-  hTextFile = fopen("shptriangle.off", "rt");
+  hTextFile = fopen("shptriangle.ele", "rt");
   if(hTextFile == NULL) {
-    printf("FATAL ERROR: Cannot open input file:%s\n", "shptriangle.off");
+    printf("FATAL ERROR: Cannot open input file:%s\n", "shptriangle.ele");
     exit(1);
   }
   if(fgets(line, MAXLINE, hTextFile) == NULL) {
-    printf("FATAL ERROR reading first line of shptriangle.off\n");
+    printf("FATAL ERROR: Reading first line of shptriangle.ele\n");
     fclose(hTextFile);
     exit(1);
   }
-  i = atoi(line);
-  if(i != 2) {
-    printf("FATAL ERROR: Wrong dimension in first line of shptriangle.off\n");
-    fclose(hTextFile);
-    exit(1);
-  }
-  if(fgets(line, MAXLINE, hTextFile) == NULL) {
-    printf("FATAL ERROR reading second line of shptriangle.off\n");
+  nPolygons = atoi(line);
+  textpointer = strchr(line, ' ');
+  num_vertices = atoi(textpointer);
+  if(num_vertices != 3) {
+    printf("FATAL ERROR: Wrong node count in first line of shptriangle.ele\n");
     fclose(hTextFile);
     exit(1);
   }
   //printf("%s\n", line);
-  num_vertices = atoi(line);
+  
   if(num_vertices > MAXNUMNODES) {
     printf("FATAL ERROR: Too many nodes, please recompile: %d\n", num_vertices);
     fclose(hTextFile);
     exit(1);
   }
   //printf("%d nodes\n", num_vertices);
-  textpointer = strchr(line, ' ');
-  nPolygons = atoi(textpointer);
   //printf("%d polygons\n", nPolygons);
-  /**
-   * Build node list
-   */
-  for(i=0; i < num_vertices; i++) {
-    if(fgets(line, MAXLINE, hTextFile) == NULL) {
-      printf("FATAL ERROR: shptriangle.off does not contain enough nodes.\n");
-      fclose(hTextFile);
-      exit(1);
-    }
-    node_x[i] = atof(line);
-    textpointer = strchr(line, ' ');
-    node_y[i] = atof(textpointer);
-    //printf("Vertex %d %f %f\n", i, node_x[i], node_y[i]);
-  }
+  
   hVoronoiSHP = SHPCreate(argv[2], SHPT_POLYGON);
   hVoronoiDBF = DBFCreate(argv[2]);
   hPointDBF = DBFOpen(argv[1], "rb");
@@ -217,10 +218,11 @@ int main( int argc, char **argv ) {
     exit(1);
   }
   DBFAddField(hVoronoiDBF, "dc_id", FTString, 16, 0);
+  DBFAddField(hVoronoiDBF, "slope", FTDouble, 16, 8);
   for(i=0; i < nPolygons; i++) {
     //printf("Polygon %d\n", i);
     if(fgets(line, MAXLINE, hTextFile) == NULL) {
-      printf("FATAL ERROR: shptriangle.off does not contain enough polygons.\n");
+      printf("FATAL ERROR: shptriangle.ele does not contain enough polygons.\n");
       SHPClose(hVoronoiSHP);
       DBFClose(hVoronoiDBF);
       DBFClose(hPointDBF);
@@ -228,58 +230,61 @@ int main( int argc, char **argv ) {
       exit(1);
     }
     nNodes = 0;
-    nPolygonPoints = atoi(line);
-    //printf("Polygon Point Count: %d\n", nPolygonPoints);
-    if((nPolygonPoints < 0)||(nPolygonPoints > num_vertices)) {
-      printf("FATAL ERROR: shptriangle.off contains illegal point count.\n");
-      SHPClose(hVoronoiSHP);
-      DBFClose(hVoronoiDBF);
-      DBFClose(hPointDBF);
-      fclose(hTextFile);
-      exit(1);
-    }
     textpointer = line;
+    textpointer = strchr(strpbrk(line, "1234567890"), ' ');
     boolWriteShape = 1;
-    for(j=0; j < nPolygonPoints; j++) {
-      textpointer = strchr(textpointer+1, ' ');
+    for(j=0; j < num_vertices; j++) {
+      textpointer = strpbrk(strchr(textpointer+1, ' '), "1234567890");
       nNodes++;
       nNodeRef = atoi(textpointer);
-      if((nNodeRef < 0)||(nNodeRef > num_vertices)) {
-        printf("FATAL ERROR: shptriangle.off contains illegal node reference.\n");
+      if((nNodeRef < 0)||(nNodeRef > nEntities)) {
+        printf("FATAL ERROR: shptriangle.ele contains illegal node reference.\n");
         SHPClose(hVoronoiSHP);
         DBFClose(hVoronoiDBF);
 	DBFClose(hPointDBF);
         fclose(hTextFile);
         exit(1);
       }
-      /**
-       * Don't write boundary shapes
-       */
-      if(nNodeRef == 0) {
-	boolWriteShape = 0;
-	break;
-      }
       //printf("Node reference %d\n", nNodeRef);
-      polygon_x[nNodes-1] = node_x[nNodeRef];
-      polygon_y[nNodes-1] = node_y[nNodeRef];
+      polygon_x[nNodes-1] = node_x[nNodeRef-1];
+      polygon_y[nNodes-1] = node_y[nNodeRef-1];
+      polygon_z[nNodes-1] = node_z[nNodeRef-1];
     }
     if(boolWriteShape == 1) {
       nNodes++;
       polygon_x[nNodes-1] = polygon_x[0];
       polygon_y[nNodes-1] = polygon_y[0];
+      polygon_z[nNodes-1] = polygon_z[0];
       //printf("Polygon %d with %d nodes\n", i, nNodes);
       psCShape = SHPCreateSimpleObject( SHPT_POLYGON, nNodes, polygon_x, polygon_y, NULL );
       SHPWriteObject(hVoronoiSHP, -1, psCShape);
       SHPDestroyObject(psCShape);
+      DBFWriteStringAttribute(hVoronoiDBF, nShapes, 0, "");
       /**
-       * Take over DC_ID field.
+       * Calculate slope.
+       * Plane equation 0 = a*x + b*y + c*z + d
+       * Sea level plane 0 = 0*x + 0*y + 1*z - 0 
        */
-      if(nShapes < nEntities) {
-        pDCID = DBFReadStringAttribute(hPointDBF, nShapes, nDcidIndex);
-	DBFWriteStringAttribute(hVoronoiDBF, nShapes, 0, pDCID);
-      } else {
-        DBFWriteStringAttribute(hVoronoiDBF, nShapes, 0, "");
-      }
+      vector0[0] = polygon_x[1] - polygon_x[0];
+      vector0[1] = polygon_y[1] - polygon_y[0];
+      vector0[2] = polygon_z[1] - polygon_z[0];
+      
+      vector1[0] = polygon_x[2] - polygon_x[0];
+      vector1[1] = polygon_y[2] - polygon_y[0];
+      vector1[2] = polygon_z[2] - polygon_z[0];
+
+      /**
+       * Use cross product to find plane equation. 
+       */
+      a = vector0[1] * vector1[2] - vector0[2] * vector1[1];
+      b = -(vector0[0] * vector1[2] - vector0[2] * vector1[0]);
+      c = vector0[0] * vector1[1] - vector0[1] * vector1[0];
+      d = -(a * polygon_x[0] + b * polygon_y[0] + c * polygon_z[0]);
+      /**
+       * Calculate dihedral angle between sea level plane and triangle plane
+       */
+      slope = acos(c/(sqrt(a*a+b*b+c*c)))/3.141592654*180;
+      DBFWriteDoubleAttribute(hVoronoiDBF, nShapes, 1, slope);
       nShapes++;
     }
  }

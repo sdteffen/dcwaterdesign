@@ -1,4 +1,11 @@
-2006-01-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+2006-02-01  Steffen Macke <sdteffen@gmail.com>
+
+	* shpdelaunay.c:
+	* shpvoronoi.c: Improved checking for maximum node count
+	* shptriangle.c: added new commandline option to specify elevation 
+	field; added slope calculation
+
+2006-01-31  Steffen Macke <sdteffen@gmail.com>
 
 	* README: Updated, additional information
 	* makefile.msc:

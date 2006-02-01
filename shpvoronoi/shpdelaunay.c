@@ -134,6 +134,12 @@ int main( int argc, char **argv ) {
     DBFClose(hPointDBF);
     exit(1);
   }
+  if(nEntities > MAXNUMNODES) {
+    printf("FATAL ERROR: Too many nodes. Please recompile.\n");
+    SHPClose(hPointSHP);
+    DBFClose(hPointDBF);
+    exit(1);
+  }
   /**
    * \todo Dynamic filename
    */
