@@ -38,7 +38,13 @@
       </personname>
       <email>Steffen_Macke@dorsch.com.jo</email>
     </author>
-    <legalnotice>
+    <author>
+      <personname>
+	<firstname>Dennis</firstname>
+	<surname>Vilovic</surname>
+      </personname>
+      <email>Dennis_Vilovic@dorsch.com.jo</email>
+    </author><legalnotice>
       <para>Permission is granted to copy, distribute and/or modify this 
         document under the terms of the GNU Free Documentation License, 
 	Version 1.2 or any later version published by the Free Software 
@@ -870,48 +876,49 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
       </simplelist>
     </sect3>  
     <sect3 id="water_network_profiles_procedures">
-      <title>Procedures</title>
-      <para>With the &quot;manhole data to line&quot; function
-        transfer the ground elevation from the node.shp to the pipe.shp
-        (Groelev_up, Groelev_dw).</para>
-      <para>Enter the gradient (taking minus and plus into
-	consideration) for all pipes or sequences of pipes into
-	the pipe table.</para>
-      <para>Enter the invert upstream values ? determined under
-	<xref linkend="water_network_profiles_basic" /> ? into the 
-	Invert_up field of the pipe table.</para>
-      <para>Activate the Invert_up field and select a sequence of
-	pipes between two nodes for which the upstream invert
-	levels are already determined. From the selection
-	exclude the first pipe downstream (the one with the
-	given Invert_up value). With the DC-Sewer
-	Networkcalculator calculate now the missing upstream
-	invert levels in upstream direction using the following
-	formula:</para>
-      <programlisting>Downstream.[invert_up]+([length]*[gradient])</programlisting>
-      <para>The program takes the Invert_up value from the first
-	unselected pipe downstream of the selected sequence and
-	is calculating the upstream invert levels for the
-	selected pipes in upstream direction.</para>
-      <para>With the usual ArcView field calculator calculate the
-	downstream invert levels in the Invert_dw field using
-	the following formula:</para>
-      <programlisting>[Invert_up] - ([Length] * [Gradient])</programlisting>
-      <para>Check the calculated invert levels and gradients carefully</para>
-      <para>With the &quot;Line data to manhole&quot; function 
-        transfer the <structfield>Invert_up</structfield> and
-       <structfield>Invert_dw</structfield> values of the pipe theme to the 
-       <structfield>Invert</structfield> field of the node theme.</para>
-      <para>At locations where 2 or more pipes are sharing the
-        same downstream node, make sure that the downstream
-        node is having the same invert level for each pipe.</para>
+      <title>ArcView Procedures</title>
+      <para>With the &quot;manhole data to line&quot; function of the 
+        DC-Sewer-Design_Extension, transfer the ground elevation from the 
+	node.shp to the pipe.shp (Groelev_up, Groelev_dw).</para>
+      <para>Now use the &quot;Calculate constant gradient&quot; function 
+      (button in your view tool bar which shows a single line with a 
+      constant slope) as described in the sewer design extension manual 
+      under chapter 4.3.2. With this function the invert levels (upstream 
+      and down stream) for a selected sequence of pipes will be calculated 
+      and written into the chosen fields as well as the (constant) gradient.</para> 
+      <note><para>Select the pipes from the view and choose &quot;Theme – Start 
+      Editing&quot; from your menu. Then the &quot;Calculate constant 
+      gradient&quot; function will become active and you can run it.</para></note>
+      <para>Check the calculated invert levels and gradients carefully by 
+      comparing them to the levels and gradients written on your printouts.
+      </para>
+      <para>With the &quot;Line data to manhole&quot; function of the 
+      DC-Sewer-Design Extension transfer the <structfield>Invert_up</structfield> 
+      and <structfield>Invert_dw</structfield> values of the pipe theme to the 
+      <structfield>Invert</structfield> field of the node theme.</para>
+      <para>At locations where 2 or more pipes are sharing the same downstream 
+      node, make sure that the downstream node is having the same invert level 
+      for each pipe.</para>
       <para>Optional: Change the <structfield>check</structfield> field for the 
-        finalized pipes from &quot;not checked&quot; to &quot;ok&quot;.</para>
-      <para>Start drawing profiles with the &quot;Create Profile&quot;
-        function.</para>
-      <note><para>For any selected sequence of pipes the flow
-        direction must be uniform.</para></note>
-    </sect3>	
+      finalized pipes from <structfield>not checked</structfield> to 
+      <structfield>ok</structfield>.</para>
+      <para>Start drawing profiles with the &quot;create profile&quot; function.
+      TIP: It is helpful in order to organise your profile-views if you 
+      add a field to your node-table called &quot;node_no&quot; (e.g.) in which 
+      the name of the manhole or node will be written. In your profile 
+      configuration file (config.txt) then set the Manhole.ID=node_no 
+      (first line). First you will have this node_no written in the text 
+      box of your profile plus the view which contains/shows the profile 
+      will be named with the start and end node of the related sequence of 
+      pipes instead of the dc_id.</para>
+      <note><para>For any selected sequence of pipes the flow direction 
+      must be unique!</para></note>
+      <para>Open and prepare a layout with required frame and plan head and 
+      load the views with the profiles you have created into the layout.</para> 
+      <note><para>NOTE: Watch the length of the pipe sequence you have chosen. E.g. 
+      for a 1:1000 scaled map in A1 the max length of a sequences is between 
+      550 and 600 m.</para></note>
+     </sect3>	
   </sect2>
   <sect2 id="excavation_calculation">
     <title>Excavation Calculation</title>
@@ -935,5 +942,17 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
 ([elevationu]-[upstream]+[elevationd]-[downstream])*[length]*[trenchwidt]/2
       </programlisting></para>
   </sect2>
-</sect1>
+ <sect2 id="Frequently Asked Questions (FAQ)">
+    <title>How to import a Digital Elevation Model (DEM) into ArcView</title>
+    <para>Assuming the DEM you want to import to ArcView is a
+    	*.dem file, in your project go to FILE - IMPORT DATA
+    	SOURCE. Choose the data type &quot;USGS DEM&quot;. Browse for
+	the location of your *.dem file and say &quot;ok&quot;. Now you
+	will be asked to browse for the location where the
+	output grid (new folder will be established by ArcView
+	including the grid) shall be saved. After the grid has
+	been created you can load it to ArcView anytime with
+	ADD THEME - DATA SOURCE = &quot;Grid data source&quot;.</para>
+    <note><para>Spatial Analyst is required for this procedure!</para></note>
+  </sect2></sect1>
 </article>
