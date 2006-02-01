@@ -942,7 +942,9 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
 ([elevationu]-[upstream]+[elevationd]-[downstream])*[length]*[trenchwidt]/2
       </programlisting></para>
   </sect2>
- <sect2 id="Frequently Asked Questions (FAQ)">
+ <sect2 id="faq">
+    <title>Frequently Asked Questions (FAQ)</title>
+    <sect3 id="dem_import">
     <title>How to import a Digital Elevation Model (DEM) into ArcView</title>
     <para>Assuming the DEM you want to import to ArcView is a
     	*.dem file, in your project go to FILE - IMPORT DATA
@@ -954,5 +956,6 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
 	been created you can load it to ArcView anytime with
 	ADD THEME - DATA SOURCE = &quot;Grid data source&quot;.</para>
     <note><para>Spatial Analyst is required for this procedure!</para></note>
+    </sect3>
   </sect2></sect1>
 </article>

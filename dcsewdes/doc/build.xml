@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "project.dtd" []>
 <!-- compile the docbook documentation using ant, saxon, fop and hhc -->
-<project name="DC Sewer Design Documentation" basedir="." default="DC_Sewer_Documentation">
+<project name="DC Sewer Design Documentation" basedir="." default="DCSewer_documentation">
   <!-- configuration -->
   
   <!-- Custom DCSewer stylesheets -->
