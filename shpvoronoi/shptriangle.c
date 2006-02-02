@@ -121,7 +121,7 @@ int main( int argc, char **argv ) {
   if((((argc != 3)||
     ((!str_is_shp(argv[1])||(!str_is_shp(argv[2]))))))&&((argc != 4)||
     ((!str_is_shp(argv[1])||(!str_is_shp(argv[2])))))) {
-    printf("shptriangle 0.0.1 (c) 2005,2006 Steffen Macke\n");
+    printf("shptriangle 0.1.0 (c) 2005,2006 Steffen Macke\n");
     printf("usage: shptriangle input_shapefile delaunay_shapefile [elevationfield]\n");
     exit(1);
   }
@@ -208,7 +208,7 @@ int main( int argc, char **argv ) {
   //printf("%d nodes\n", num_vertices);
   //printf("%d polygons\n", nPolygons);
   
-  hVoronoiSHP = SHPCreate(argv[2], SHPT_POLYGON);
+  hVoronoiSHP = SHPCreate(argv[2], SHPT_POLYGONZ);
   hVoronoiDBF = DBFCreate(argv[2]);
   hPointDBF = DBFOpen(argv[1], "rb");
   if(hVoronoiSHP == NULL || hVoronoiDBF == NULL || hPointDBF == NULL) {
@@ -256,7 +256,8 @@ int main( int argc, char **argv ) {
       polygon_y[nNodes-1] = polygon_y[0];
       polygon_z[nNodes-1] = polygon_z[0];
       //printf("Polygon %d with %d nodes\n", i, nNodes);
-      psCShape = SHPCreateSimpleObject( SHPT_POLYGON, nNodes, polygon_x, polygon_y, NULL );
+      psCShape = SHPCreateSimpleObject( SHPT_POLYGONZ, nNodes, polygon_x, 
+        polygon_y, polygon_z );
       SHPWriteObject(hVoronoiSHP, -1, psCShape);
       SHPDestroyObject(psCShape);
       DBFWriteStringAttribute(hVoronoiDBF, nShapes, 0, "");
