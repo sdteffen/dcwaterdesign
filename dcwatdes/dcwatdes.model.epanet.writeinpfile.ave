@@ -212,13 +212,10 @@ for each lstSection in lstSections
         strAttributes=""
         for each fld in lstFields
           strAttribute = ftbSection.returnValue(fld, rec).asString
-          if((strSection="Valves")and(fld.getAlias.lcase = "setting"))then
-            if(strAttribute.contains("closed"))then
-              strAttribute = "closed"
-            elseif(strAttribute.contains("open"))then
-              strAttribute = "open"
-            end    
-          end
+          if((strSection="Valves")and(fld.getAlias.lcase = "setting")
+            and(strAttribute.contains("closed")))then
+            strAttribute = "closed"
+          end  
           strAttributes = strAttributes++fld.getAlias.lcase+"="+strAttribute.quote
         end
         strAttributes = strAttributes++"node1="+strFirstNodeID.quote

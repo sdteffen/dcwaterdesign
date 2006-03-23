@@ -108,6 +108,16 @@ else
      
     av.run("DCWatDes.Model.Epanet.Pipe.updateNodeFields", recPipe)
     
+    ' Enter diameter
+    lstDiameters = {100,150,200,300,400,500,600,700,800,900,1000,1200,1400}
+    objDiameter = MsgBox.ListAsString(lstDiameters, "Please enter the pipe diameter:", "DC Water Design")
+    if(objDiameter <> nil)then
+      fldDiameter = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbPipes, "diameter"})
+      if(fldDiameter <> nil)then
+        ftbPipes.setValue(fldDiameter, recPipe, objDiameter)
+      end
+    end
+    
     ftbPipes.setEditable(false)
   end
 end  

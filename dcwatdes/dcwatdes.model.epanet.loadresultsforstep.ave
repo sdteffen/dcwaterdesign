@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.loadResultsForStep
 
-' (c) 2000, 2001, 2005  DORSCH Consult
+' (c) 2000, 2001  DORSCH Consult
 ' load the results for the given timestep into the appropriate tables
 
 ' This library is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@
 ' License along with this library; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-' optional argument strStep to specify the timestep
+' no arguments
 ' nothing is returned
 
 av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
@@ -29,17 +29,14 @@ else
   return nil
 end
 
-strStep = self
+lstSteps = dicPreferences.get("lstSteps")
+if(lstSteps = nil)then
+  return nil
+end
+
+strStep = MsgBox.choice(lstSteps, "Choose the Timestep to load", "DC Water Design")
 if(strStep = nil)then
-  lstSteps = dicPreferences.get("lstSteps")
-  if(lstSteps = nil)then
-    return nil
-  end
-  
-  strStep = MsgBox.choice(lstSteps, "Choose the Timestep to load", "DC Water Design")
-  if(strStep = nil)then
-    return nil
-  end
+  return nil
 end
 
 strResultLoader = dicPreferences.get("strResultLoader")
@@ -61,7 +58,10 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
       end
     end
   end
-
+  vtbNodeResults.unjoinAll
+  vtbNodeResults.unlinkAll
+  vtbLinkResults.unjoinAll
+  vtbLinkResults.unlinkAll
   bmpNodeResults = Bitmap.make(vtbNodeResults.getNumRecords)
   bmpLinkResults = Bitmap.make(vtbLinkResults.getNumRecords)
   vtbNodeResults.setDefinition("([timestep]="+strStep+")")

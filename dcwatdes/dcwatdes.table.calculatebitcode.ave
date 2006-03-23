@@ -27,7 +27,7 @@ lstBitcodes = List.make
 numWidth = theField.getWidth
 
 for each i in 0 .. (numWidth-1)
-  i.setName((i+1).asString)
+  i.setName(i.asString)
   lstBitcodes.add(i)
 end
 

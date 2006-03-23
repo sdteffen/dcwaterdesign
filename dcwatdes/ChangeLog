@@ -1,3 +1,11 @@
+2006-03-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.loadresultsforstep.ave: 
+	* dcwatdes.model.epanet.run.ave: Unjoining and unlinking result tables
+	to avoid error messages
+	* dcwatdes.view.digitizepipe.ave: Offer default list of diameters when
+	digitizing pipes
+	
 2005-12-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml: Added information that it might be necessary

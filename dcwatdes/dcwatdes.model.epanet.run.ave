@@ -86,6 +86,8 @@ for each flnResult in {flnNodeResults, flnLinkResults}
     vtbRemove = tableRemove.getVTab
     if((vtbRemove <> nil)and(vtbRemove.getBaseTableFilename <> nil))then
       if(vtbRemove.getBaseTableFilename.getFullName = strResultFileName)then
+        vtbRemove.unjoinAll
+        vtbRemove.unlinkAll
         vtbRemove.deActivate
         av.getProject.removeDoc(tableRemove)
         break

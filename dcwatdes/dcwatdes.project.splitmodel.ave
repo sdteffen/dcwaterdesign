@@ -33,8 +33,6 @@ if(dicPreferences <> nil)then
   end
 end
 
-blnCreateViews = MsgBox.yesNo("Create a view for each zone?", "DC Water Design", true)
-
 lstThemeNames = {"Pipes", "Junctions", "Pumps", "Reservoirs", "Tanks", "Valves"}
 lstViews = av.getProject.getDocsWithGUI(av.findGUI("View"))
 lstThemes = List.make
@@ -61,14 +59,13 @@ thmPipes = dicThemes.get("Pipes")
 ftbPipes = thmPipes.getFTab
 ' TODO: Make field selectable
 fldZone = ftbPipes.findField("Zone")
+strOldDefinition = ftbPipes.getDefinition
 flnTmpDbf = FileName.getTmpDir.makeTmp("zonesummary","dbf")
 ftbPipes.setDefinition("")
 ftbPipes.updateDefBitmap
-bmpSelection = ftbPipes.getSelection.clone
-bmpSelection.clearAll
-ftbPipes.setSelection(bmpSelection)
-ftbPipes.updateSelection
 ftbZoneSummary = ftbPipes.summarize(flnTmpDbf, dBASE, fldZone, {}, {})
+ftbPipes.setDefinition(strOldDefinition)
+ftbPipes.updateDefBitmap
 fldZone = ftbZoneSummary.findField("Zone")
 lstZones = List.make
 
@@ -77,21 +74,16 @@ lstZones = List.make
 flnBaseDirectory = ftbPipes.getSrcName.getFileName.returnDir
 
 for each recZone in ftbZoneSummary
-  if(blnCreateViews)then
-
   strZone = ftbZoneSummary.returnValue(fldZone, recZone)
-    if(strZone.isNull.not and (strZone <> ""))then
-      viewModel = View.make
-      viewModel.setName("Zone "+strZone)
-      av.getProject.addDoc(viewModel)
-    end
+  if(strZone.isNull.not and (strZone <> ""))then
     lstZones.add(strZone)
     flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, strZone)
     av.run("DCWatDes.System.makeDir", flnZoneDirectory.getFullName)
-    strDefinition = "[Zone]="+strZone.quote
     ' Loop over all themes
     for each thmTheme in dicThemes
       ftbTheme = thmTheme.getFTab
+      strOldDefinition = ftbTheme.getDefinition
+      strDefinition = "[Zone]="+strZone.quote
       ftbTheme.setDefinition("([Zone].isNull)or([Zone] = """")")
       ftbTheme.updateDefBitmap
       if(ftbTheme.getNumRecords > 0)then
@@ -101,34 +93,11 @@ for each recZone in ftbZoneSummary
       end
       ftbTheme.setDefinition(strDefinition)
       ftbTheme.updateDefBitmap
-      flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
       if(ftbTheme.getNumRecords > 0)then
-        ftbExtracted = ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
-        av.run("DCWatDes.FTab.ensureSpatialIndex", ftbExtracted)
-        if(blnCreateViews)then
-          thmExtracted = FTheme.make(ftbExtracted)
-          viewModel.addTheme(thmExtracted)
-          thmExtracted.setVisible(true)
-        end
-        ftbTheme.setDefinition("")
+        flnThemeName = FileName.merge(flnZoneDirectory.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
+        ftbTheme.export(flnThemeName, ftbTheme.getShapeClass, false)
+        ftbTheme.setDefinition(strOldDefinition)
         ftbTheme.updateDefBitmap
-      else
-        ' Delete all records if shapefile exists
-        srnZone = SrcName.make(flnThemeName.getFullName)
-        if(srnZone <> nil)then
-          ftbZone = FTab.make(srnZone)
-          if(ftbZone <> nil)then
-            ftbTheme.startEditingWithRecovery
-            bmpZoneSelection = ftbZone.getSelection.clone
-            bmpZoneSelection.setAll
-            ftbZone.setSelection(bmpZoneSelection)
-            ftbZone.updateSelection
-            ftbZone.beginTransaction
-            ftbZone.removeRecords(ftbZone.getSelection.clone)
-            ftbZone.endTransaction
-            ftbZone.stopEditingWithRecovery(true)
-          end
-        end  
       end
     end
   else
