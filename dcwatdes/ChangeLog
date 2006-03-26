@@ -1,6 +1,13 @@
+2006-03-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.digitizepipe.ave: Added 250 to the list of
+	diameters
+	* dcwatdes.model.epanet.loadresultsforstep.ave: Unjoining and unlinking
+	at the end of the script
+
 2006-03-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
-	* dcwatdes.model.loadresultsforstep.ave: 
+	* dcwatdes.model.epanet.loadresultsforstep.ave: 
 	* dcwatdes.model.epanet.run.ave: Unjoining and unlinking result tables
 	to avoid error messages
 	* dcwatdes.view.digitizepipe.ave: Offer default list of diameters when

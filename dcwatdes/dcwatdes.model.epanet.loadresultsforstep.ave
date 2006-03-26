@@ -227,6 +227,13 @@ else
           ftbFeature.setValue(fldFeatureHeadloss, recFeature, objHeadloss)
         end
       end
+      ftbFeature.refresh
     end
+    vtbLinkResults.unjoinAll
+    vtbLinkResults.unlinkAll
+    vtbNodeResults.unjoinAll
+    vtbNodeResults.unlinkAll
+    vtbLinkResults.refresh
+    vtbNodeResults.refresh
   end  
 end    
