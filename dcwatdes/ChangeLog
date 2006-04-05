@@ -1,3 +1,18 @@
+2005-04-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep.ave: Remove index on timestep
+	to avoid rare loading problems
+
+2006-04-02  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.setlifecyclestatus.ave:
+	* dcwatdes.view.popup.togglestatus.ave: Added two new context menus
+	
+2006-03-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: Added context menu
+	function to select the economic diameter
+	
 2006-03-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.view.digitizepipe.ave: Added 250 to the list of

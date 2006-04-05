@@ -64,6 +64,12 @@ if((strResultLoader="ArcView")or(strResultLoader = nil))then
   vtbLinkResults.unlinkAll
   bmpNodeResults = Bitmap.make(vtbNodeResults.getNumRecords)
   bmpLinkResults = Bitmap.make(vtbLinkResults.getNumRecords)
+  if(vtbNodeResults.isFieldIndexed(vtbNodeResults.findField("timestep")))then
+    vtbNodeResults.removeIndex(vtbNodeResults.findField("timestep"))
+  end
+  if(vtbLinkResults.isFieldIndexed(vtbLinkResults.findField("timestep")))then
+    vtbLinkResults.removeIndex(vtbLinkResults.findField("timestep"))
+  end
   vtbNodeResults.setDefinition("([timestep]="+strStep+")")
   vtbNodeResults.updateDefBitmap
   vtbLinkResults.setDefinition("([timestep]="+strStep+")")
