@@ -81,7 +81,7 @@
 	Doc:	262
 	Doc:	266
 	Doc:	270
-	ActiveDoc:	270
+	ActiveDoc:	142
 	Buttons:	274
 	Buttons:	275
 	Buttons:	276
@@ -90,21 +90,21 @@
 	GUI:	281
 	GUI:	566
 	GUI:	969
-	GUI:	1080
-	WorkDir:	1151
+	GUI:	1079
+	WorkDir:	1148
 	WinX:	-4
 	WinY:	-3
 	WinW:	1688
 	WinH:	1023
 	SerialNumber:	"595821685479"
-	SelColor:	1152
+	SelColor:	1149
+	GUINames:	1150
+	GUINames:	1151
+	GUINames:	1152
 	GUINames:	1153
 	GUINames:	1154
 	GUINames:	1155
 	GUINames:	1156
-	GUINames:	1157
-	GUINames:	1158
-	GUINames:	1159
 	TocWidthScale:	1.00000000000000
 )
 
@@ -924,14 +924,15 @@ e3 >= 90 ) then\n           num_Angle3 = num_Angle3-180\n          end\n        
 rection2.asString)\n            System.echo(\"Direction3 = \"+num_Direction3.asString)\n            System.echo(\"Angle1 = \"+num_Angle1.asString)\n            System.echo(\"Angle2 = \"+num_Angle2.asString)\n            System.echo(\"Angle3 = \"+num_Angle3.asString)\n          end\n                        \n         if ( num_Angle1 < num_Angle2 ) then\n            if(num_Angle1 < num_Angle3) then\n              rec_Bone = lst_PipeFeatures.get(2)\n              lst_RecArms.add(lst_PipeFeatures.get(0))\n              lst_RecArm
 s.add(lst_PipeFeatures.get(1))\n            else\n              rec_Bone = lst_PipeFeatures.get(1)\n              lst_RecArms.add(lst_PipeFeatures.get(0))\n              lst_RecArms.add(lst_PipeFeatures.get(2))                    \n            end            \n          else\n            if(num_Angle2 < num_Angle3) then\n              rec_Bone = lst_PipeFeatures.get(0)\n              lst_RecArms.add(lst_PipeFeatures.get(2))\n              lst_RecArms.add(lst_PipeFeatures.get(1))                    \n            else\n 
              rec_Bone = lst_PipeFeatures.get(1)\n              lst_RecArms.add(lst_PipeFeatures.get(0))\n              lst_RecArms.add(lst_PipeFeatures.get(2))                    \n            end\n          end\n\n          '*** 2 pipes of the same diameter, one different\n          if((num_Diameter1 = num_Diameter2) or (num_Diameter1 = num_Diameter3) or (num_Diameter2 = num_Diameter3)) then\n            '** arms have the same diameter\n            if(ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) = ftb_Pi
-pes.returnValue(fna_Diameter, lst_RecArms.get(1))) then\n              if(ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) > ftb_Pipes.returnValue(fna_Diameter, rec_Bone)) then\n              '** type 21\n              ' small branch\n                numClass = 20 + av.run(\"DCProcess.Network.Connection.returnDetail2\", {pnt_Node, ftbValve, lstPolylines})\n              else\n              '** type 20\n              ' branch is bigger then the rest\n                numClass = 50 + av.run(\"DCProcess.Network.Con
-nection.returnDetail5\", {pnt_Node, ftbValve, lstPolylines})\n              end\n            else                \n            ' Arms have different diameter: type 21\n              if((ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) < ftb_Pipes.returnValue(fna_Diameter, rec_Bone)) or (ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1)) < ftb_Pipes.returnValue(fna_Diameter, rec_Bone))) then\n                '*** type 21b\n                ' Big branch\n                numClass = 40 + av.run(\"DCProcess.Ne
-twork.Connection.returnDetail4\", {pnt_Node, ftbValve, lstPolylines})\n              else\n               '*** type 21a\n               ' Small branch\n                numClass = 30 + av.run(\"DCProcess.Network.Connection.returnDetail3\", {pnt_Node, ftbValve, lstPolylines})\n              end                                    \n            end\n          \n          '3 different diameters\n          'type 22\n          else\n            num_DN_branch1 = ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0))\n           
- num_DN_branch2 = ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1))\n            num_DN_bone = ftb_Pipes.returnValue(fna_Diameter, rec_Bone)\n\n             '*** type 22c\n             'branch is the biggest diameter \n            if((num_DN_branch1 < num_DN_bone) and (num_DN_branch2 < num_DN_bone)) then\n                numClass = 120 + av.run(\"DCProcess.Network.Connection.returnDetail12\", {pnt_Node, ftbValve, lstPolylines})\n            \n            else\n            \n              '*** type 22b\n           
-   'branch is the smallest diameter\n              if((num_DN_branch1 > num_DN_bone) and (num_DN_branch2 > num_DN_bone)) then\n                numClass = 110 + av.run(\"DCProcess.Network.Connection.returnDetail11\", {pnt_Node, ftbValve, lstPolylines})\n\n              '*** type 22a\n              'branch1 > main > branch2\n              else\n                numClass = 100 + av.run(\"DCProcess.Network.Connection.returnDetail10\", {pnt_Node, ftbValve, lstPolylines})\n    \n              end\n            end  \n          en
-d            \n        end\n      else\n        ' more than 3 pipes connected\n        numClass = 99\n        ' System.echo(\"More than 3 pipes connected:\"+rec_Node.asString)\n      end        \n    'count <> 2\n    end\n  'count <> 1\n  end\n  if(blnDebug)then\n    System.echo(\"Connection Detail = \"+numClass.asString)\n    fldConnProof = ftb_Nodes.findField(\"ConnProof\")\n    if(fldConnProof <> nil)then\n      System.echo(\"Connection Detail Proof = \"+ftb_Nodes.returnValue(fldConnProof, rec_Node).asString)\n    end\n  end\n  f
-tb_Nodes.setValue(fna_Class, rec_Node, numClass)\n  numI = 0\n  lstDiameters.removeDuplicates\n  lstDiameters.sort(false)\n  for each numDiameter in lstDiameters\n    fldDn = lstDnFields.get(numI)\n    ftb_Nodes.setValue(fldDn, rec_Node, numDiameter)\n    numI = numI + 1\n  end\n  if(lstDiameters.count < 3)then\n    for each numI in (lstDiameters.count)..2\n      fldDn = lstDnFields.get(numI)\n      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)\n    end\n  elseif(lstDiameters.count > 3)then\n    for each fldDn in l
-stDnFields\n      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)\n    end\n  end\n'for each node\nend\n\nav.clearStatus\n"
+pes.returnValue(fna_Diameter, lst_RecArms.get(1))) then\n              if(ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) > ftb_Pipes.returnValue(fna_Diameter, rec_Bone)) then\n              '** type 21\n              ' small branch\n                if(blnDebug)then\n                  System.echo(\"Calling DCProcess.Network.Connection.returnDetail2\")\n                end\n                numClass = 20 + av.run(\"DCProcess.Network.Connection.returnDetail2\", {pnt_Node, ftbValve, lstPolylines})\n              el
+se\n              '** type 20\n              ' branch is bigger then the rest\n                if(blnDebug)then\n                  System.echo(\"Calling DCProcess.Network.Connection.returnDetail5\")\n                end\n                numClass = 50 + av.run(\"DCProcess.Network.Connection.returnDetail5\", {pnt_Node, ftbValve, lstPolylines})\n              end\n            else                \n            ' Arms have different diameter: type 21\n              if((ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) <
+ ftb_Pipes.returnValue(fna_Diameter, rec_Bone)) or (ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1)) < ftb_Pipes.returnValue(fna_Diameter, rec_Bone))) then\n                '*** type 21b\n                ' Big branch\n                if(blnDebug)then\n                  System.echo(\"Calling DCProcess.Network.Connection.returnDetail4\")\n                end\n                numClass = 40 + av.run(\"DCProcess.Network.Connection.returnDetail4\", {pnt_Node, ftbValve, lstPolylines})\n              else\n             
+  '*** type 21a\n               ' Small branch\n                if(blnDebug)then\n                  System.echo(\"Calling DCProcess.Network.Connection.returnDetail3\")\n                end\n                numClass = 30 + av.run(\"DCProcess.Network.Connection.returnDetail3\", {pnt_Node, ftbValve, lstPolylines})\n              end                                    \n            end\n          \n          '3 different diameters\n          'type 22\n          else\n            num_DN_branch1 = ftb_Pipes.returnValue(fna_Diame
+ter, lst_RecArms.get(0))\n            num_DN_branch2 = ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1))\n            num_DN_bone = ftb_Pipes.returnValue(fna_Diameter, rec_Bone)\n\n             '*** type 22c\n             'branch is the biggest diameter \n            if((num_DN_branch1 < num_DN_bone) and (num_DN_branch2 < num_DN_bone)) then\n                numClass = 120 + av.run(\"DCProcess.Network.Connection.returnDetail12\", {pnt_Node, ftbValve, lstPolylines})\n            \n            else\n            \n   
+           '*** type 22b\n              'branch is the smallest diameter\n              if((num_DN_branch1 > num_DN_bone) and (num_DN_branch2 > num_DN_bone)) then\n                numClass = 110 + av.run(\"DCProcess.Network.Connection.returnDetail11\", {pnt_Node, ftbValve, lstPolylines})\n\n              '*** type 22a\n              'branch1 > main > branch2\n              else\n                numClass = 100 + av.run(\"DCProcess.Network.Connection.returnDetail10\", {pnt_Node, ftbValve, lstPolylines})\n    \n            
+  end\n            end  \n          end            \n        end\n      else\n        ' more than 3 pipes connected\n        numClass = 99\n        ' System.echo(\"More than 3 pipes connected:\"+rec_Node.asString)\n      end        \n    'count <> 2\n    end\n  'count <> 1\n  end\n  if(blnDebug)then\n    System.echo(\"Connection Detail = \"+numClass.asString)\n    fldConnProof = ftb_Nodes.findField(\"ConnProof\")\n    if(fldConnProof <> nil)then\n      System.echo(\"Connection Detail Proof = \"+ftb_Nodes.returnValue(fldConnProof, r
+ec_Node).asString)\n    end\n  end\n  ftb_Nodes.setValue(fna_Class, rec_Node, numClass)\n  numI = 0\n  lstDiameters.removeDuplicates\n  lstDiameters.sort(false)\n  for each numDiameter in lstDiameters\n    fldDn = lstDnFields.get(numI)\n    ftb_Nodes.setValue(fldDn, rec_Node, numDiameter)\n    numI = numI + 1\n  end\n  if(lstDiameters.count < 3)then\n    for each numI in (lstDiameters.count)..2\n      fldDn = lstDnFields.get(numI)\n      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)\n    end\n  elseif(lstDiameters.co
+unt > 3)then\n    for each fldDn in lstDnFields\n      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)\n    end\n  end\n'for each node\nend\n\nav.clearStatus\n"
 	SearchStr:	"dc_id"
 	FontSize:	1
 )
@@ -940,8 +941,8 @@ stDnFields\n      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)\n    end\
 	Owner:	110
 	X:	-4
 	Y:	-4
-	W:	1610
-	H:	949
+	W:	1690
+	H:	911
 )
 
 (CSMgr.112
@@ -1174,17 +1175,18 @@ ged(MultiPoint.make({lstLines.get(1).along(0.0), lstLines.get(1).along(100.0)}))
 CProcess.Point.returnPolyLineAngle\",{pnt_Node, lstLines.get(1)})\n  num_Direction3 = av.run(\"DCProcess.Point.returnPolyLineAngle\", {pnt_Node, lstLines.get(2)})\n  num_Angle1 = num_Direction1.max(num_Direction2) - num_Direction1.min(num_Direction2)\n  num_Angle2 = num_Direction2.max(num_Direction3) - num_Direction2.min(num_Direction3)\n  num_Angle3 = num_Direction3.max(num_Direction1) - num_Direction3.min(num_Direction1)\n  if(num_Angle1 > 90 ) then\n   num_Angle1 = num_Angle1-180\n  end\n  if(num_Angle2 > 90 ) then
 \n   num_Angle2 = num_Angle2-180\n  end\n  if(num_Angle3 > 90 ) then\n   num_Angle3 = num_Angle3-180\n  end\n  \n  'the arms of the T have the same direction, the bone is orthogonal to them\n  lstPllArms = List.make                      \n  \n  num_Angle1 = num_Angle1.abs\n  num_Angle2 = num_Angle2.abs              \n  num_Angle3 = num_Angle3.abs\n                \n  if( num_Angle1 < num_Angle2 ) then\n    if(num_Angle1 < num_Angle3) then\n      pllBone = lstLines.get(2)\n      lstPllArms.add(lstLines.get(0))\n      lstPllAr
 ms.add(lstLines.get(1))\n    else\n      pllBone = lstLines.get(1)\n      lstPllArms.add(lstLines.get(0))\n      lstPllArms.add(lstLines.get(2))                    \n    end            \n  else\n    if(num_Angle2 < num_Angle3) then\n      pllBone = lstLines.get(0)\n      lstPllArms.add(lstLines.get(2))\n      lstPllArms.add(lstLines.get(1))                    \n    else\n      pllBone = lstLines.get(1)\n      lstPllArms.add(lstLines.get(0))\n      lstPllArms.add(lstLines.get(2))                    \n    end\n  end\n  recVal
-ve = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), recValve)\n  mpntBone = Multipoint.make({pllBone.along(0), pllBone.along(100)})\n  if(bmpSelection.count = 2)then\n    pntSecondValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), bmpSelection.getNextSet(recValve))\n    if((pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not)and\n      (pntSecondValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not))then\n      numDetail = 2\n    end\n  e
-nd\nend\n\nreturn numDetail"
+ve = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), recValve)\n  mpntBone = Multipoint.make({pllBone.along(0), pllBone.along(100)})\n  if(bmpSelection.count = 2)then\n    pntSecondValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), bmpSelection.getNextSet(recValve))\n    if((pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not)and\n      (pntSecondValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not))then\n      numDetail = 2\n    else\n  
+    numDetail = 5\n    end\n  else\n    if(pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)))then\n      numDetail = 3\n    ' TODO: Check only endpoints  \n    elseif(pntValve.intersects(lstPllArms.get(0).returnBuffered(numSnappingRadius)) or\n      pntValve.intersects(lstPllArms.get(1).returnBuffered(numSnappingRadius)))then\n      numDetail = 4\n    end    \n  end\nend\n\nreturn numDetail"
 	FontSize:	1
 )
 
 (DocWin.143
 	Owner:	142
+	Open:	1
 	X:	-4
 	Y:	-4
-	W:	1610
-	H:	1075
+	W:	1690
+	H:	911
 )
 
 (CSMgr.144
@@ -1208,7 +1210,8 @@ CProcess.Point.returnPolyLineAngle\",{pnt_Node, lstLines.get(1)})\n  num_Directi
 \n   num_Angle2 = num_Angle2-180\n  end\n  if(num_Angle3 > 90 ) then\n   num_Angle3 = num_Angle3-180\n  end\n  \n  'the arms of the T have the same direction, the bone is orthogonal to them\n  lstPllArms = List.make                      \n  \n  num_Angle1 = num_Angle1.abs\n  num_Angle2 = num_Angle2.abs              \n  num_Angle3 = num_Angle3.abs\n                \n  if( num_Angle1 < num_Angle2 ) then\n    if(num_Angle1 < num_Angle3) then\n      pllBone = lstLines.get(2)\n      lstPllArms.add(lstLines.get(0))\n      lstPllAr
 ms.add(lstLines.get(1))\n    else\n      pllBone = lstLines.get(1)\n      lstPllArms.add(lstLines.get(0))\n      lstPllArms.add(lstLines.get(2))                    \n    end            \n  else\n    if(num_Angle2 < num_Angle3) then\n      pllBone = lstLines.get(0)\n      lstPllArms.add(lstLines.get(2))\n      lstPllArms.add(lstLines.get(1))                    \n    else\n      pllBone = lstLines.get(1)\n      lstPllArms.add(lstLines.get(0))\n      lstPllArms.add(lstLines.get(2))                    \n    end\n  end\n  recVal
 ve = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), recValve)\n  mpntBone = Multipoint.make({pllBone.along(0), pllBone.along(100)})\n  if(bmpSelection.count = 1)then\n    if(pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)))then\n      numDetail = 2\n    else\n      numDetail = 5\n    end\n  elseif(bmpSelection.count = 2)then\n    pntSecondValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), bmpSelection.getNextSet(recValve))\n    if((pntValve.intersects(
-mpntBone.returnBuffered(numSnappingRadius)).not)and\n      (pntSecondValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not))then\n      numDetail = 3\n    else\n      numDetail = 4\n    end\n  end\nend\n\nreturn numDetail"
+mpntBone.returnBuffered(numSnappingRadius)).not)and\n      (pntSecondValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not))then\n      numDetail = 3\n    else\n      numDetail = 4\n    end\n  elseif(bmpSelection.count = 3)then\n    mpntTee = Multipoint.make({pllBone.along(0), pllBone.along(100),lstPllArms.get(0).along(0), lstPllArms.get(0).along(100), lstPllArms.get(1).along(0), lstPllArms.get(1).along(100)})\n    numValveCount = 0\n    for each recValve in bmpSelection\n      pntValve = ftbValve.returnVa
+lue(ftbValve.findField(\"shape\"), recValve)\n      if(pntValve.intersects(mpntTee.returnBuffered(numSnappingRadius)))then\n        numValveCount = numValveCount + 1\n      end\n    end\n    if(numValveCount = 3)then\n      numDetail = 6\n    end  \n  end\nend\n\nreturn numDetail"
 	FontSize:	1
 )
 
@@ -1216,8 +1219,8 @@ mpntBone.returnBuffered(numSnappingRadius)).not)and\n      (pntSecondValve.inter
 	Owner:	146
 	X:	-4
 	Y:	-4
-	W:	1610
-	H:	1075
+	W:	1690
+	H:	911
 )
 
 (CSMgr.148
@@ -1243,7 +1246,6 @@ ne.along(0).distance(pntNode) < 0.01)then\n      ftbLine.setValue(fldLineShape, 
 
 (DocWin.151
 	Owner:	150
-	Open:	1
 	X:	801
 	Y:	526
 	W:	801
@@ -2154,7 +2156,6 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 
 (DocWin.271
 	Owner:	270
-	Open:	1
 	X:	-4
 	Y:	-4
 	W:	1690
@@ -2172,7 +2173,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	HelpTopic:	"New_button"
 	Update:	"Doc.NewUpdate"
 	Label:	"&New"
-	Click:	"View.New"
+	Click:	"Script.New"
 )
 
 (LButn.275
@@ -2184,9 +2185,9 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 
 (LButn.276
 	HelpTopic:	"Run_button"
-	Update:	"Doc.ActionUpdate"
+	Update:	"Script.ActionUpdate"
 	Label:	"&Run"
-	Click:	"Doc.Action"
+	Click:	"Script.Action"
 )
 
 (NameDict.277
@@ -5561,9 +5562,9 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Modified:	1
 	Visible:	1
 	MenuBar:	970
-	ButnBar:	1033
-	Popups:	1077
-	ToolBar:	1078
+	ButnBar:	1032
+	Popups:	1076
+	ToolBar:	1077
 	NewScript:	"Script.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Script.Action"
@@ -5571,7 +5572,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Script.ActionUpdate"
 	Title:	"Scripts"
-	Icon:	1079
+	Icon:	1078
 )
 
 (MenuBar.970
@@ -5579,7 +5580,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Child:	984
 	Child:	1000
 	Child:	1017
-	Child:	1028
+	Child:	1027
 )
 
 (PMenu.971
@@ -5955,7 +5956,6 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Child:	1023
 	Child:	1025
 	Child:	1026
-	Child:	1027
 	Label:	"&Window"
 )
 
@@ -6000,7 +6000,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (AVStr.1024
-	S:	"dcprocessing.apr DCProcess.Network.flipEndLines Script.saveAllScripts"
+	S:	"dcprocessing.apr DCProcess.Network.Connection.returnDetail5"
 )
 
 (Choice.1025
@@ -6011,29 +6011,22 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.1026
-	Help:	"Activates DCProcess.Network.flipEndLines"
-	Label:	"&2 DCProcess.Network.flipEndLines"
+	Help:	"Activates DCProcess.Network.Connection.returnDetail5"
+	Label:	"&2 DCProcess.Network.Connection.returnDetail5"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1027
-	Help:	"Activates Script.saveAllScripts"
-	Label:	"&3 Script.saveAllScripts"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1028
+(PMenu.1027
 	InternalName:	"Help"
+	Child:	1028
 	Child:	1029
 	Child:	1030
 	Child:	1031
-	Child:	1032
 	Label:	"&Help"
 )
 
-(Choice.1029
+(Choice.1028
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -6041,7 +6034,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1030
+(Choice.1029
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help"
@@ -6049,10 +6042,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1031
+(Space.1030
 )
 
-(Choice.1032
+(Choice.1031
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -6060,330 +6053,331 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1033
-	Child:	1034
+(ButnBar.1032
+	Child:	1033
+	Child:	1035
 	Child:	1036
-	Child:	1037
-	Child:	1039
-	Child:	1041
+	Child:	1038
+	Child:	1040
+	Child:	1042
 	Child:	1043
-	Child:	1044
+	Child:	1045
 	Child:	1046
-	Child:	1047
-	Child:	1049
+	Child:	1048
+	Child:	1050
 	Child:	1051
-	Child:	1052
-	Child:	1054
-	Child:	1056
-	Child:	1058
-	Child:	1060
+	Child:	1053
+	Child:	1055
+	Child:	1057
+	Child:	1059
+	Child:	1061
 	Child:	1062
-	Child:	1063
-	Child:	1065
-	Child:	1067
+	Child:	1064
+	Child:	1066
+	Child:	1068
 	Child:	1069
-	Child:	1070
-	Child:	1072
+	Child:	1071
+	Child:	1073
 	Child:	1074
-	Child:	1075
 )
 
-(Butn.1034
+(Butn.1033
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1035
+	Icon:	1034
 	Click:	"Project.Save"
 )
 
-(AVIcon.1035
+(AVIcon.1034
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1036
+(Space.1035
 )
 
-(Butn.1037
+(Butn.1036
 	Disabled:	1
 	Help:	"Cut//Cuts the selection and puts it into the clipboard"
 	HelpTopic:	"Cut"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1038
+	Icon:	1037
 	Click:	"Script.Cut"
 )
 
-(AVIcon.1038
+(AVIcon.1037
 	Name:	"Cut"
 	Res:	"Icons.Cut"
 
 )
 
-(Butn.1039
+(Butn.1038
 	Disabled:	1
 	Help:	"Copy//Copies the selection and puts it into the clipboard"
 	HelpTopic:	"Copy"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1040
+	Icon:	1039
 	Click:	"Script.Copy"
 )
 
-(AVIcon.1040
+(AVIcon.1039
 	Name:	"Copy"
 	Res:	"Icons.Copy"
 
 )
 
-(Butn.1041
+(Butn.1040
 	Help:	"Paste//Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
-	Icon:	1042
+	Icon:	1041
 	Click:	"Script.Paste"
 )
 
-(AVIcon.1042
+(AVIcon.1041
 	Name:	"Paste"
 	Res:	"Icons.Paste"
 
 )
 
-(Space.1043
+(Space.1042
 )
 
-(Butn.1044
+(Butn.1043
 	Help:	"Undo//Undoes the last modification to the script editor text"
 	HelpTopic:	"Undo__Script_"
-	Icon:	1045
+	Icon:	1044
 	Click:	"Script.Undo"
 )
 
-(AVIcon.1045
+(AVIcon.1044
 	Name:	"Undo"
 	Res:	"Icons.Undo"
 
 )
 
-(Space.1046
+(Space.1045
 )
 
-(Butn.1047
+(Butn.1046
 	Help:	"Shift Lines Left//Shifts selected lines or current line two spaces to the left"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1048
+	Icon:	1047
 	Click:	"Script.ShiftLeft"
 )
 
-(AVIcon.1048
+(AVIcon.1047
 	Name:	"ShiftLeft"
 	Res:	"Icons.ShiftLeft"
 
 )
 
-(Butn.1049
+(Butn.1048
 	Help:	"Shift Lines Right//Shifts selected lines or current line two spaces to the right"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1050
+	Icon:	1049
 	Click:	"Script.ShiftRight"
 )
 
-(AVIcon.1050
+(AVIcon.1049
 	Name:	"ShiftRight"
 	Res:	"Icons.ShiftRight"
 
 )
 
-(Space.1051
+(Space.1050
 )
 
-(Butn.1052
+(Butn.1051
 	Disabled:	1
 	Help:	"Compile//Compiles the script"
 	HelpTopic:	"Compile"
 	Update:	"Script.CompileUpdate"
-	Icon:	1053
+	Icon:	1052
 	Click:	"Script.Compile"
 )
 
-(AVIcon.1053
+(AVIcon.1052
 	Name:	"Check"
 	Res:	"Icons.Check"
 
 )
 
-(Butn.1054
+(Butn.1053
 	Help:	"Run//Runs the compiled script"
 	HelpTopic:	"Run"
 	Update:	"Script.RunUpdate"
-	Icon:	1055
+	Icon:	1054
 	Click:	"Script.Run"
 )
 
-(AVIcon.1055
+(AVIcon.1054
 	Name:	"Run"
 	Res:	"Icons.Run"
 
 )
 
-(Butn.1056
+(Butn.1055
 	Help:	"Step//Executes one request or object reference in the compiled script"
 	HelpTopic:	"Step"
 	Update:	"Script.RunUpdate"
-	Icon:	1057
+	Icon:	1056
 	Click:	"Script.Step"
 )
 
-(AVIcon.1057
+(AVIcon.1056
 	Name:	"Footprints"
 	Res:	"Icons.Footprints"
 
 )
 
-(Butn.1058
+(Butn.1057
 	Help:	"Toggle Breakpoint//Toggles a breakpoint on or off at the current cursor position"
 	HelpTopic:	"Toggle_Breakpoint"
 	Update:	"Script.RunUpdate"
-	Icon:	1059
+	Icon:	1058
 	Click:	"Script.ToggleBreak"
 )
 
-(AVIcon.1059
+(AVIcon.1058
 	Name:	"Hand"
 	Res:	"Icons.Hand"
 
 )
 
-(Butn.1060
+(Butn.1059
 	Help:	"Examine Variables//Displays the current value of local and global variables"
 	HelpTopic:	"Examine_Variables"
 	Update:	"Script.RunUpdate"
-	Icon:	1061
+	Icon:	1060
 	Click:	"Script.ShowVariables"
 )
 
-(AVIcon.1061
+(AVIcon.1060
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1062
+(Space.1061
 )
 
-(Butn.1063
+(Butn.1062
 	Help:	"Load System Script//Inserts the source code of a system script"
 	HelpTopic:	"Load_System_Script"
-	Icon:	1064
+	Icon:	1063
 	Click:	"Script.SystemLoad"
 )
 
-(AVIcon.1064
+(AVIcon.1063
 	Name:	"LoadScript"
 	Res:	"Icons.LoadScript"
 
 )
 
-(Butn.1065
+(Butn.1064
 	Help:	"Load Text File//Inserts the contents of a text file"
 	HelpTopic:	"Load_Text_File"
-	Icon:	1066
+	Icon:	1065
 	Click:	"Script.FileLoad"
 )
 
-(AVIcon.1066
+(AVIcon.1065
 	Name:	"Open"
 	Res:	"Icons.Open"
 
 )
 
-(Butn.1067
+(Butn.1066
 	Help:	"Write Text File//Writes the entire script or the selected text to a text file"
 	HelpTopic:	"Write_Text_File"
-	Icon:	1068
+	Icon:	1067
 	Click:	"Script.FileWrite"
 )
 
-(AVIcon.1068
+(AVIcon.1067
 	Name:	"Write"
 	Res:	"Icons.Write"
 
 )
 
-(Space.1069
+(Space.1068
 )
 
-(Butn.1070
+(Butn.1069
 	Help:	"Script Help//Searches for help using the current selection"
 	HelpTopic:	"Getting_help_about_script_components"
-	Icon:	1071
+	Icon:	1070
 	Click:	"Script.Help"
 )
 
-(AVIcon.1071
+(AVIcon.1070
 	Name:	"Help"
 	Res:	"Icons.Help"
 
 )
 
-(Butn.1072
+(Butn.1071
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1073
+	Icon:	1072
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1073
+(AVIcon.1072
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Space.1074
+(Space.1073
 )
 
-(Butn.1075
-	Icon:	1076
+(Butn.1074
+	Icon:	1075
 	Click:	"DCProcessExtension.make"
 )
 
-(AVIcon.1076
+(AVIcon.1075
 	Name:	"QueryBuilder"
 	Res:	"Icons.QueryBuilder"
 
 )
 
-(PopupSet.1077
+(PopupSet.1076
 )
 
-(ToolBar.1078
+(ToolBar.1077
 )
 
-(AVIcon.1079
+(AVIcon.1078
 	Name:	"Icon"
 	Res:	"SEd.Icon"
 
 )
 
-(DocGUI.1080
+(DocGUI.1079
 	Name:	"Project"
 	Type:	"Project"
 	Modified:	1
-	MenuBar:	1081
-	ButnBar:	1124
-	Popups:	1130
-	ToolBar:	1131
-	Icon:	1132
+	MenuBar:	1080
+	ButnBar:	1121
+	Popups:	1127
+	ToolBar:	1128
+	Icon:	1129
 )
 
-(MenuBar.1081
-	Child:	1082
-	Child:	1093
-	Child:	1103
-	Child:	1114
-	Child:	1119
+(MenuBar.1080
+	Child:	1081
+	Child:	1092
+	Child:	1102
+	Child:	1111
+	Child:	1116
 )
 
-(PMenu.1082
+(PMenu.1081
 	InternalName:	"File"
+	Child:	1082
 	Child:	1083
 	Child:	1084
 	Child:	1085
@@ -6393,11 +6387,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Child:	1089
 	Child:	1090
 	Child:	1091
-	Child:	1092
 	Label:	"&File"
 )
 
-(Choice.1083
+(Choice.1082
 	Help:	"Creates a new project"
 	HelpTopic:	"New_Project"
 	Label:	"&New Project"
@@ -6405,7 +6398,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.Ctrl+N"
 )
 
-(Choice.1084
+(Choice.1083
 	Help:	"Opens an existing project"
 	HelpTopic:	"Open_Project"
 	Label:	"&Open Project..."
@@ -6413,7 +6406,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1085
+(Choice.1084
 	Help:	"Closes the project window"
 	HelpTopic:	"Close_Project"
 	Label:	"&Close Project"
@@ -6421,10 +6414,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1086
+(Space.1085
 )
 
-(Choice.1087
+(Choice.1086
 	Help:	"Saves the current project"
 	HelpTopic:	"Save_Project"
 	Label:	"&Save Project"
@@ -6432,7 +6425,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.Ctrl+S"
 )
 
-(Choice.1088
+(Choice.1087
 	Help:	"Saves the current project with a new name"
 	HelpTopic:	"Save_Project_As"
 	Label:	"Save Project &As..."
@@ -6440,10 +6433,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1089
+(Space.1088
 )
 
-(Choice.1090
+(Choice.1089
 	Help:	"Displays the Extensions dialog"
 	HelpTopic:	"Extensions"
 	Label:	"&Extensions..."
@@ -6451,10 +6444,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1091
+(Space.1090
 )
 
-(Choice.1092
+(Choice.1091
 	Help:	"Exits ArcView"
 	HelpTopic:	"Exit"
 	Label:	"E&xit"
@@ -6462,8 +6455,9 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1093
+(PMenu.1092
 	InternalName:	"Project"
+	Child:	1093
 	Child:	1094
 	Child:	1095
 	Child:	1096
@@ -6472,11 +6466,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Child:	1099
 	Child:	1100
 	Child:	1101
-	Child:	1102
 	Label:	"&Project"
 )
 
-(Choice.1094
+(Choice.1093
 	Help:	"Displays the dialog box to edit properties of the project"
 	HelpTopic:	"Project_Properties"
 	Label:	"&Properties..."
@@ -6484,7 +6477,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1095
+(Choice.1094
 	Help:	"Customizes the active project"
 	HelpTopic:	"Customize"
 	Update:	"Project.CustomizeUpdate"
@@ -6493,31 +6486,31 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1096
+(Space.1095
 )
 
-(Choice.1097
+(Choice.1096
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
-	Label:	"&Rename 'Script.saveAllScripts'..."
+	Label:	"&Rename 'DCProcess.Network.Connection.returnDetail5'..."
 	Click:	"Project.Rename"
 	Shortcut:	"Keys.Ctrl+R"
 )
 
-(Choice.1098
+(Choice.1097
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
-	Label:	"&Delete 'Script.saveAllScripts'..."
+	Label:	"&Delete 'DCProcess.Network.Connection.returnDetail5'..."
 	Click:	"Project.Delete"
 	Shortcut:	"Keys.Del"
 )
 
-(Space.1099
+(Space.1098
 )
 
-(Choice.1100
+(Choice.1099
 	Help:	"Adds a table to the project"
 	HelpTopic:	"Add_Table"
 	Update:	"Project.AddTableUpdate"
@@ -6526,7 +6519,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1101
+(Choice.1100
 	Help:	"Creates a new project component from an external source"
 	HelpTopic:	"Import"
 	Update:	"Project.ImportUpdate"
@@ -6535,7 +6528,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1102
+(Choice.1101
 	Help:	"Opens the SQL Connection manager"
 	HelpTopic:	"SQL_Connect"
 	Update:	"Project.HasSQL"
@@ -6544,21 +6537,19 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1103
+(PMenu.1102
 	InternalName:	"Window"
+	Child:	1103
 	Child:	1104
 	Child:	1105
 	Child:	1106
 	Child:	1107
 	Child:	1108
-	Child:	1109
-	Child:	1111
-	Child:	1112
-	Child:	1113
+	Child:	1110
 	Label:	"&Window"
 )
 
-(Choice.1104
+(Choice.1103
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -6566,7 +6557,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1105
+(Choice.1104
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -6574,7 +6565,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1106
+(Choice.1105
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -6582,10 +6573,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1107
+(Space.1106
 )
 
-(Choice.1108
+(Choice.1107
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -6593,46 +6584,32 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.1109
-	ObjectTag:	1110
+(Space.1108
+	ObjectTag:	1109
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.1110
-	S:	"dcprocessing.apr DCProcess.Network.classifyConnections DCProcess.Network.flipEndLines"
+(AVStr.1109
+	S:	"dcprocessing.apr"
 )
 
-(Choice.1111
+(Choice.1110
 	Help:	"Activates dcprocessing.apr"
 	Label:	"&1 dcprocessing.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1112
-	Help:	"Activates DCProcess.Network.classifyConnections"
-	Label:	"&2 DCProcess.Network.classifyConnections"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1113
-	Help:	"Activates DCProcess.Network.flipEndLines"
-	Label:	"&3 DCProcess.Network.flipEndLines"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1114
+(PMenu.1111
 	InternalName:	"Help"
+	Child:	1112
+	Child:	1113
+	Child:	1114
 	Child:	1115
-	Child:	1116
-	Child:	1117
-	Child:	1118
 	Label:	"&Help"
 )
 
-(Choice.1115
+(Choice.1112
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -6640,7 +6617,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1116
+(Choice.1113
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -6648,10 +6625,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1117
+(Space.1114
 )
 
-(Choice.1118
+(Choice.1115
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -6659,124 +6636,124 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1119
+(PMenu.1116
+	Child:	1117
+	Child:	1118
+	Child:	1119
 	Child:	1120
-	Child:	1121
-	Child:	1122
-	Child:	1123
 	Label:	"DC Processing"
 )
 
-(Choice.1120
+(Choice.1117
 	Help:	"Export a Project and all Data to one folder. Use relative paths."
 	Label:	"Create Portable Project"
 	Click:	"DCProcess.Project.makePortable"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1121
+(Choice.1118
 	Help:	"Convert all Coverages in a Folder to Shapefiles//Convert all Coverages in a Folder to Shapefiles"
 	Label:	"Coverages to Shapefiles"
 	Click:	"DCProcess.batchConvertCoveragesToShapefiles"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1122
+(Choice.1119
 	Help:	"Recursive copy of a projection file to all shapefiles in a folder."
 	Label:	"Copy Projection Files"
 	Click:	"DCProcess.recursiveCopyPrjFiles"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1123
+(Choice.1120
 	Help:	"Open the DC Processing extension help in CHM format."
 	Label:	"Help"
 	Click:	"DCProcess.Help.openCHM"
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1124
+(ButnBar.1121
 	Update:	"Project.UpdateButtons"
+	Child:	1122
+	Child:	1124
 	Child:	1125
-	Child:	1127
-	Child:	1128
 )
 
-(Butn.1125
+(Butn.1122
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1126
+	Icon:	1123
 	Click:	"Project.Save"
 )
 
-(AVIcon.1126
+(AVIcon.1123
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1127
+(Space.1124
 )
 
-(Butn.1128
+(Butn.1125
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1129
+	Icon:	1126
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1129
+(AVIcon.1126
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(PopupSet.1130
+(PopupSet.1127
 )
 
-(ToolBar.1131
+(ToolBar.1128
 )
 
-(AVIcon.1132
+(AVIcon.1129
 	Name:	"Icon"
 	Res:	"Project.Icon"
 
 )
 
-(FN.1151
+(FN.1148
 	Path:	"$HOME"
 )
 
-(TClr.1152
+(TClr.1149
 	Red:	0xffff
 	Green:	0xffff
 )
 
-(AVStr.1153
+(AVStr.1150
 	S:	"View"
 )
 
-(AVStr.1154
+(AVStr.1151
 	S:	"Table"
 )
 
-(AVStr.1155
+(AVStr.1152
 	S:	"Chart"
 )
 
-(AVStr.1156
+(AVStr.1153
 	S:	"Layout"
 )
 
-(AVStr.1157
+(AVStr.1154
 	S:	"Script"
 )
 
-(AVStr.1158
+(AVStr.1155
 	S:	"Project"
 )
 
-(AVStr.1159
+(AVStr.1156
 	S:	"Appl"
 )
 

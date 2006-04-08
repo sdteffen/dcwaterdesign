@@ -78,7 +78,17 @@ else
     if((pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not)and
       (pntSecondValve.intersects(mpntBone.returnBuffered(numSnappingRadius)).not))then
       numDetail = 2
+    else
+      numDetail = 5
     end
+  else
+    if(pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)))then
+      numDetail = 3
+    ' TODO: Check only endpoints  
+    elseif(pntValve.intersects(lstPllArms.get(0).returnBuffered(numSnappingRadius)) or
+      pntValve.intersects(lstPllArms.get(1).returnBuffered(numSnappingRadius)))then
+      numDetail = 4
+    end    
   end
 end
 

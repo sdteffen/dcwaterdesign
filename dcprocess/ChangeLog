@@ -1,5 +1,9 @@
 2006-04-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
+	* dcprocess.network.classifyconnections.ave:
+	* dcprocess.network.returndetail5.ave:
+	* dcprocess.network.returndetail6.ave: Added new connection types
+	53,54,66
 	* dcprocess.network.classifyconnections.ave: Connection detail for
 	4 or more pipes connected is 99 now
 

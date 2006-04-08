@@ -236,10 +236,16 @@ for each rec_Node in bmpSelection
               if(ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) > ftb_Pipes.returnValue(fna_Diameter, rec_Bone)) then
               '** type 21
               ' small branch
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail2")
+                end
                 numClass = 20 + av.run("DCProcess.Network.Connection.returnDetail2", {pnt_Node, ftbValve, lstPolylines})
               else
               '** type 20
               ' branch is bigger then the rest
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail5")
+                end
                 numClass = 50 + av.run("DCProcess.Network.Connection.returnDetail5", {pnt_Node, ftbValve, lstPolylines})
               end
             else                
@@ -247,10 +253,16 @@ for each rec_Node in bmpSelection
               if((ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) < ftb_Pipes.returnValue(fna_Diameter, rec_Bone)) or (ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1)) < ftb_Pipes.returnValue(fna_Diameter, rec_Bone))) then
                 '*** type 21b
                 ' Big branch
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail4")
+                end
                 numClass = 40 + av.run("DCProcess.Network.Connection.returnDetail4", {pnt_Node, ftbValve, lstPolylines})
               else
                '*** type 21a
                ' Small branch
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail3")
+                end
                 numClass = 30 + av.run("DCProcess.Network.Connection.returnDetail3", {pnt_Node, ftbValve, lstPolylines})
               end                                    
             end
