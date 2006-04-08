@@ -1,6 +1,6 @@
 ' DCProcess.Network.classifyConnections
 
-' (c) 1998, 2004 DORSCH Consult
+' (c) 1998, 2004, 2006 DORSCH Consult
 
 ' Classify the connection at a network node.
 
@@ -116,6 +116,9 @@ for each rec_Node in bmpSelection
   end
   
   lstDiameters = List.make
+  if(blnDebug)then
+    System.echo(lst_PipeFeatures.count.asString+" pipes connected")
+  end
               
   ' **************** 1 PIPE CONNECTED ***********************
   
@@ -280,8 +283,9 @@ for each rec_Node in bmpSelection
             end  
           end            
         end
-        numClass=99
+      else
         ' more than 3 pipes connected
+        numClass = 99
         ' System.echo("More than 3 pipes connected:"+rec_Node.asString)
       end        
     'count <> 2
