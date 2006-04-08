@@ -1,3 +1,8 @@
+2006-04-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.classifyconnections.ave: Connection detail for
+	4 or more pipes connected is 99 now
+
 2005-04-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcprocess.network.flipendlines.ave:

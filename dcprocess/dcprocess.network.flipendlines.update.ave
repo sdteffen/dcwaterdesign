@@ -1,0 +1,34 @@
+' DCProcess.Network.flipEndLines.update
+
+' (c) 2005 DORSCH Consult
+
+' Enable the "Flip End Lines" menu item if possible
+
+' Called by menu update
+' No arguments
+' Returns nothing
+
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+blnLine = false
+blnNode = false
+blnValve = false
+if(lstThemes.count = 2)then
+  for each thmTheme in lstThemes
+    if(thmTheme.getFTab.getShapeClass.getClassName = "Polyline")then
+      if(thmTheme.getFTab.isEditable)then
+        blnLine = true
+      end
+    else 
+      if(thmTheme.getFTab.getShapeClass.getClassName = "Point")then
+        blnNode = true
+      end
+    end
+  end
+end
+  
+if(blnLine and blnNode)then
+  self.setEnabled(true)
+else
+  self.setEnabled(false)
+end

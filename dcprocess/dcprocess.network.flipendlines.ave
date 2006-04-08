@@ -1,0 +1,52 @@
+' DCProcess.Network.flipEndLines
+
+' (c) 2005 DORSCH Consult
+
+' Flip all the end lines in such a way that end caps are orientated correctly.
+' 0.01 map units snapping radius
+
+' Called from Menu
+' No arguments
+' Returns nothing
+
+
+' Set up Themes
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+ftbLine = lstThemes.get(0).getFTab
+ftbNode = lstThemes.get(1).getFTab
+for each thmTheme in lstThemes
+  if(thmTheme.getFTab.getShapeClass.getClassName = "Polyline")then
+    ftbLine = thmTheme.getFTab
+  else
+    ftbNode = thmTheme.getFTab
+  end
+end
+
+fldNodeShape = ftbNode.findField("Shape")
+fldLineShape = ftbLine.findField("Shape")
+
+numToGo = ftbNode.getNumRecords
+numComplete = 0
+av.showStopButton
+
+for each recNode in ftbNode
+  pntNode = ftbNode.returnValue(fldNodeShape, recNode)
+  
+  lstLineFeatures = av.run("DCProcess.Node.findConnectedLines", {ftbLine, pntNode})
+  if(lstLineFeatures.count = 1)then
+    recLine = lstLineFeatures.get(0)
+    pllLine = ftbLine.returnValue(fldLineShape, recLine)
+    if(pllLine.along(0).distance(pntNode) < 0.01)then
+      ftbLine.setValue(fldLineShape, recLine, pllLine.flip)
+    end
+  end
+  
+  numComplete = numComplete + 1
+  ' Update status bar, check if user wants to abort
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    exit
+  end  
+end
+
+av.clearStatus

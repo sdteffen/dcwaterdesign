@@ -280,7 +280,7 @@ for each rec_Node in bmpSelection
             end  
           end            
         end
-
+        numClass=99
         ' more than 3 pipes connected
         ' System.echo("More than 3 pipes connected:"+rec_Node.asString)
       end        
