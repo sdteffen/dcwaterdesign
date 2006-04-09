@@ -284,6 +284,9 @@ for each rec_Node in bmpSelection
               '*** type 22b
               'branch is the smallest diameter
               if((num_DN_branch1 > num_DN_bone) and (num_DN_branch2 > num_DN_bone)) then
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail11")
+                end
                 numClass = 110 + av.run("DCProcess.Network.Connection.returnDetail11", {pnt_Node, ftbValve, lstPolylines})
 
               '*** type 22a

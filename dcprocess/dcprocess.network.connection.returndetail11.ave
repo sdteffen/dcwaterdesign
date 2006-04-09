@@ -81,6 +81,18 @@ else
     end
   elseif(bmpSelection.count = 2)then
       numDetail = 3
+  elseif(bmpSelection.count = 3)then
+    mpntTee = Multipoint.make({pllBone.along(0), pllBone.along(100),lstPllArms.get(0).along(0), lstPllArms.get(0).along(100), lstPllArms.get(1).along(0), lstPllArms.get(1).along(100)})
+    numValveCount = 0
+    for each recValve in bmpSelection
+      pntValve = ftbValve.returnValue(ftbValve.findField("shape"), recValve)
+      if(pntValve.intersects(mpntTee.returnBuffered(numSnappingRadius)))then
+        numValveCount = numValveCount + 1
+      end
+    end
+    if(numValveCount = 3)then
+      numDetail = 5
+    end  
   end
 end
 

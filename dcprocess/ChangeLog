@@ -1,3 +1,10 @@
+2006-04-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.classifyconnections.ave:
+	* dcprocess.network.returndetail3.ave:
+	* dcprocess.network.returndetail11.ave: Added new connection types
+	35,115
+	
 2006-04-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcprocess.network.classifyconnections.ave:

@@ -81,7 +81,6 @@
 	Doc:	262
 	Doc:	266
 	Doc:	270
-	ActiveDoc:	142
 	Buttons:	274
 	Buttons:	275
 	Buttons:	276
@@ -111,9 +110,10 @@
 (DocWin.3
 	Owner:	2
 	Open:	1
-	X:	801
-	W:	801
-	H:	526
+	X:	-4
+	Y:	-4
+	W:	1690
+	H:	911
 )
 
 (CSMgr.4
@@ -929,10 +929,10 @@ se\n              '** type 20\n              ' branch is bigger then the rest\n 
  ftb_Pipes.returnValue(fna_Diameter, rec_Bone)) or (ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1)) < ftb_Pipes.returnValue(fna_Diameter, rec_Bone))) then\n                '*** type 21b\n                ' Big branch\n                if(blnDebug)then\n                  System.echo(\"Calling DCProcess.Network.Connection.returnDetail4\")\n                end\n                numClass = 40 + av.run(\"DCProcess.Network.Connection.returnDetail4\", {pnt_Node, ftbValve, lstPolylines})\n              else\n             
   '*** type 21a\n               ' Small branch\n                if(blnDebug)then\n                  System.echo(\"Calling DCProcess.Network.Connection.returnDetail3\")\n                end\n                numClass = 30 + av.run(\"DCProcess.Network.Connection.returnDetail3\", {pnt_Node, ftbValve, lstPolylines})\n              end                                    \n            end\n          \n          '3 different diameters\n          'type 22\n          else\n            num_DN_branch1 = ftb_Pipes.returnValue(fna_Diame
 ter, lst_RecArms.get(0))\n            num_DN_branch2 = ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1))\n            num_DN_bone = ftb_Pipes.returnValue(fna_Diameter, rec_Bone)\n\n             '*** type 22c\n             'branch is the biggest diameter \n            if((num_DN_branch1 < num_DN_bone) and (num_DN_branch2 < num_DN_bone)) then\n                numClass = 120 + av.run(\"DCProcess.Network.Connection.returnDetail12\", {pnt_Node, ftbValve, lstPolylines})\n            \n            else\n            \n   
-           '*** type 22b\n              'branch is the smallest diameter\n              if((num_DN_branch1 > num_DN_bone) and (num_DN_branch2 > num_DN_bone)) then\n                numClass = 110 + av.run(\"DCProcess.Network.Connection.returnDetail11\", {pnt_Node, ftbValve, lstPolylines})\n\n              '*** type 22a\n              'branch1 > main > branch2\n              else\n                numClass = 100 + av.run(\"DCProcess.Network.Connection.returnDetail10\", {pnt_Node, ftbValve, lstPolylines})\n    \n            
-  end\n            end  \n          end            \n        end\n      else\n        ' more than 3 pipes connected\n        numClass = 99\n        ' System.echo(\"More than 3 pipes connected:\"+rec_Node.asString)\n      end        \n    'count <> 2\n    end\n  'count <> 1\n  end\n  if(blnDebug)then\n    System.echo(\"Connection Detail = \"+numClass.asString)\n    fldConnProof = ftb_Nodes.findField(\"ConnProof\")\n    if(fldConnProof <> nil)then\n      System.echo(\"Connection Detail Proof = \"+ftb_Nodes.returnValue(fldConnProof, r
-ec_Node).asString)\n    end\n  end\n  ftb_Nodes.setValue(fna_Class, rec_Node, numClass)\n  numI = 0\n  lstDiameters.removeDuplicates\n  lstDiameters.sort(false)\n  for each numDiameter in lstDiameters\n    fldDn = lstDnFields.get(numI)\n    ftb_Nodes.setValue(fldDn, rec_Node, numDiameter)\n    numI = numI + 1\n  end\n  if(lstDiameters.count < 3)then\n    for each numI in (lstDiameters.count)..2\n      fldDn = lstDnFields.get(numI)\n      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)\n    end\n  elseif(lstDiameters.co
-unt > 3)then\n    for each fldDn in lstDnFields\n      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)\n    end\n  end\n'for each node\nend\n\nav.clearStatus\n"
+           '*** type 22b\n              'branch is the smallest diameter\n              if((num_DN_branch1 > num_DN_bone) and (num_DN_branch2 > num_DN_bone)) then\n                if(blnDebug)then\n                  System.echo(\"Calling DCProcess.Network.Connection.returnDetail11\")\n                end\n                numClass = 110 + av.run(\"DCProcess.Network.Connection.returnDetail11\", {pnt_Node, ftbValve, lstPolylines})\n\n              '*** type 22a\n              'branch1 > main > branch2\n              else\n  
+              numClass = 100 + av.run(\"DCProcess.Network.Connection.returnDetail10\", {pnt_Node, ftbValve, lstPolylines})\n    \n              end\n            end  \n          end            \n        end\n      else\n        ' more than 3 pipes connected\n        numClass = 99\n        ' System.echo(\"More than 3 pipes connected:\"+rec_Node.asString)\n      end        \n    'count <> 2\n    end\n  'count <> 1\n  end\n  if(blnDebug)then\n    System.echo(\"Connection Detail = \"+numClass.asString)\n    fldConnProof = ftb_Nodes.f
+indField(\"ConnProof\")\n    if(fldConnProof <> nil)then\n      System.echo(\"Connection Detail Proof = \"+ftb_Nodes.returnValue(fldConnProof, rec_Node).asString)\n    end\n  end\n  ftb_Nodes.setValue(fna_Class, rec_Node, numClass)\n  numI = 0\n  lstDiameters.removeDuplicates\n  lstDiameters.sort(false)\n  for each numDiameter in lstDiameters\n    fldDn = lstDnFields.get(numI)\n    ftb_Nodes.setValue(fldDn, rec_Node, numDiameter)\n    numI = numI + 1\n  end\n  if(lstDiameters.count < 3)then\n    for each numI in (lstDiameters
+.count)..2\n      fldDn = lstDnFields.get(numI)\n      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)\n    end\n  elseif(lstDiameters.count > 3)then\n    for each fldDn in lstDnFields\n      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)\n    end\n  end\n'for each node\nend\n\nav.clearStatus\n"
 	SearchStr:	"dc_id"
 	FontSize:	1
 )
@@ -1021,7 +1021,8 @@ rged(MultiPoint.make({lstLines.get(1).along(0.0), lstLines.get(1).along(100.0)})
 \"DCProcess.Point.returnPolyLineAngle\",{pnt_Node, lstLines.get(1)})\n  num_Direction3 = av.run(\"DCProcess.Point.returnPolyLineAngle\", {pnt_Node, lstLines.get(2)})\n  num_Angle1 = num_Direction1.max(num_Direction2) - num_Direction1.min(num_Direction2)\n  num_Angle2 = num_Direction2.max(num_Direction3) - num_Direction2.min(num_Direction3)\n  num_Angle3 = num_Direction3.max(num_Direction1) - num_Direction3.min(num_Direction1)\n  if(num_Angle1 > 90 ) then\n   num_Angle1 = num_Angle1-180\n  end\n  if(num_Angle2 > 90 ) th
 en\n   num_Angle2 = num_Angle2-180\n  end\n  if(num_Angle3 > 90 ) then\n   num_Angle3 = num_Angle3-180\n  end\n  \n  'the arms of the T have the same direction, the bone is orthogonal to them\n  lstPllArms = List.make                      \n  \n  num_Angle1 = num_Angle1.abs\n  num_Angle2 = num_Angle2.abs              \n  num_Angle3 = num_Angle3.abs\n                \n  if( num_Angle1 < num_Angle2 ) then\n    if(num_Angle1 < num_Angle3) then\n      pllBone = lstLines.get(2)\n      lstPllArms.add(lstLines.get(0))\n      lstPll
 Arms.add(lstLines.get(1))\n    else\n      pllBone = lstLines.get(1)\n      lstPllArms.add(lstLines.get(0))\n      lstPllArms.add(lstLines.get(2))                    \n    end            \n  else\n    if(num_Angle2 < num_Angle3) then\n      pllBone = lstLines.get(0)\n      lstPllArms.add(lstLines.get(2))\n      lstPllArms.add(lstLines.get(1))                    \n    else\n      pllBone = lstLines.get(1)\n      lstPllArms.add(lstLines.get(0))\n      lstPllArms.add(lstLines.get(2))                    \n    end\n  end\n  recV
-alve = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), recValve)\n  mpntBone = Multipoint.make({pllBone.along(0), pllBone.along(100)})\n  if(bmpSelection.count = 1)then\n    if(pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)))then\n      numDetail = 2\n    else\n      numDetail = 4\n    end\n  elseif(bmpSelection.count = 2)then\n      numDetail = 3\n  end\nend\n\nreturn numDetail"
+alve = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), recValve)\n  mpntBone = Multipoint.make({pllBone.along(0), pllBone.along(100)})\n  if(bmpSelection.count = 1)then\n    if(pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)))then\n      numDetail = 2\n    else\n      numDetail = 4\n    end\n  elseif(bmpSelection.count = 2)then\n      numDetail = 3\n  elseif(bmpSelection.count = 3)then\n    mpntTee = Multipoint.make({pllBone.along(0), pllBone.along(100),lstPllA
+rms.get(0).along(0), lstPllArms.get(0).along(100), lstPllArms.get(1).along(0), lstPllArms.get(1).along(100)})\n    numValveCount = 0\n    for each recValve in bmpSelection\n      pntValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), recValve)\n      if(pntValve.intersects(mpntTee.returnBuffered(numSnappingRadius)))then\n        numValveCount = numValveCount + 1\n      end\n    end\n    if(numValveCount = 3)then\n      numDetail = 5\n    end  \n  end\nend\n\nreturn numDetail"
 	FontSize:	1
 )
 
@@ -1029,8 +1030,8 @@ alve = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.f
 	Owner:	122
 	X:	-4
 	Y:	-4
-	W:	1610
-	H:	1075
+	W:	1690
+	H:	911
 )
 
 (CSMgr.124
@@ -1111,7 +1112,8 @@ ged(MultiPoint.make({lstLines.get(1).along(0.0), lstLines.get(1).along(100.0)}))
 Process.Point.returnPolyLineAngle\",{pnt_Node, lstLines.get(1)})\n  num_Direction3 = av.run(\"DCProcess.Point.returnPolyLineAngle\", {pnt_Node, lstLines.get(2)})\n  num_Angle1 = num_Direction1.max(num_Direction2) - num_Direction1.min(num_Direction2)\n  num_Angle2 = num_Direction2.max(num_Direction3) - num_Direction2.min(num_Direction3)\n  num_Angle3 = num_Direction3.max(num_Direction1) - num_Direction3.min(num_Direction1)\n  if(num_Angle1 > 90 ) then\n   num_Angle1 = num_Angle1-180\n  end\n  if(num_Angle2 > 90 ) then\n
    num_Angle2 = num_Angle2-180\n  end\n  if(num_Angle3 > 90 ) then\n   num_Angle3 = num_Angle3-180\n  end\n  \n  'the arms of the T have the same direction, the bone is orthogonal to them\n  lstPllArms = List.make                      \n  \n  num_Angle1 = num_Angle1.abs\n  num_Angle2 = num_Angle2.abs              \n  num_Angle3 = num_Angle3.abs\n                \n  if( num_Angle1 < num_Angle2 ) then\n    if(num_Angle1 < num_Angle3) then\n      pllBone = lstLines.get(2)\n      lstPllArms.add(lstLines.get(0))\n      lstPllArm
 s.add(lstLines.get(1))\n    else\n      pllBone = lstLines.get(1)\n      lstPllArms.add(lstLines.get(0))\n      lstPllArms.add(lstLines.get(2))                    \n    end            \n  else\n    if(num_Angle2 < num_Angle3) then\n      pllBone = lstLines.get(0)\n      lstPllArms.add(lstLines.get(2))\n      lstPllArms.add(lstLines.get(1))                    \n    else\n      pllBone = lstLines.get(1)\n      lstPllArms.add(lstLines.get(0))\n      lstPllArms.add(lstLines.get(2))                    \n    end\n  end\n  recValv
-e = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), recValve)\n    mpntBone = Multipoint.make({pllBone.along(0), pllBone.along(100)})\n  if(bmpSelection.count = 1)then\n    if(pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)))then\n      numDetail = 2\n    else\n      numDetail = 4\n    end\n  elseif(bmpSelection.count = 2)then\n    numDetail = 3\n  end\nend\n\nreturn numDetail"
+e = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), recValve)\n    mpntBone = Multipoint.make({pllBone.along(0), pllBone.along(100)})\n  if(bmpSelection.count = 1)then\n    if(pntValve.intersects(mpntBone.returnBuffered(numSnappingRadius)))then\n      numDetail = 2\n    else\n      numDetail = 4\n    end\n  elseif(bmpSelection.count = 2)then\n    numDetail = 3\n  elseif(bmpSelection.count = 3)then\n    mpntTee = Multipoint.make({pllBone.along(0), pllBone.along(100),lstPllArms
+.get(0).along(0), lstPllArms.get(0).along(100), lstPllArms.get(1).along(0), lstPllArms.get(1).along(100)})\n    numValveCount = 0\n    for each recValve in bmpSelection\n      pntValve = ftbValve.returnValue(ftbValve.findField(\"shape\"), recValve)\n      if(pntValve.intersects(mpntTee.returnBuffered(numSnappingRadius)))then\n        numValveCount = numValveCount + 1\n      end\n    end\n    if(numValveCount = 3)then\n      numDetail = 5\n    end  \n  end\nend\n\nreturn numDetail"
 	FontSize:	1
 )
 
@@ -1119,8 +1121,8 @@ e = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.find
 	Owner:	134
 	X:	-4
 	Y:	-4
-	W:	1610
-	H:	1075
+	W:	1690
+	H:	911
 )
 
 (CSMgr.136
@@ -1182,7 +1184,6 @@ ve = bmpSelection.getNextSet(-1)\n  pntValve = ftbValve.returnValue(ftbValve.fin
 
 (DocWin.143
 	Owner:	142
-	Open:	1
 	X:	-4
 	Y:	-4
 	W:	1690
@@ -5717,7 +5718,6 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.988
-	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -6000,7 +6000,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (AVStr.1024
-	S:	"dcprocessing.apr DCProcess.Network.Connection.returnDetail5"
+	S:	"dcprocessing.apr DCProcess.Network.classifyConnections"
 )
 
 (Choice.1025
@@ -6011,8 +6011,8 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.1026
-	Help:	"Activates DCProcess.Network.Connection.returnDetail5"
-	Label:	"&2 DCProcess.Network.Connection.returnDetail5"
+	Help:	"Activates DCProcess.Network.classifyConnections"
+	Label:	"&2 DCProcess.Network.classifyConnections"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
@@ -6493,7 +6493,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
-	Label:	"&Rename 'DCProcess.Network.Connection.returnDetail5'..."
+	Label:	"&Rename 'Script.saveAllScripts'..."
 	Click:	"Project.Rename"
 	Shortcut:	"Keys.Ctrl+R"
 )
@@ -6502,7 +6502,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
-	Label:	"&Delete 'DCProcess.Network.Connection.returnDetail5'..."
+	Label:	"&Delete 'Script.saveAllScripts'..."
 	Click:	"Project.Delete"
 	Shortcut:	"Keys.Del"
 )
