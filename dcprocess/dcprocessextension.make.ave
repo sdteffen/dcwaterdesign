@@ -1,8 +1,8 @@
 ' DCProcessExtension.make
 
-' (c) 2000 - 2005 DORSCH Consult
+' (c) 2000 - 2006 DORSCH Consult
 
-strVersion = msgbox.input("Enter version","Make DC Processing Extension","1.2.7")
+strVersion = msgbox.input("Enter version","Make DC Processing Extension","1.2.8")
 if (strVersion=nil)then
   exit
 end

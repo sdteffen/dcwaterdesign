@@ -1,0 +1,59 @@
+' DCProcess.extendPolylines
+
+' extend all selected polylines in a theme
+
+' (c) 2002, 2004, 2006 DORSCH Consult
+
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+ftbLine = lstThemes.get(0).getFTab
+
+fldLineShape = ftbLine.findField("Shape")
+
+numToGo = ftbLine.getNumRecords
+numComplete = 0
+av.showStopButton
+
+bmpSelection = ftbLine.getSelection.clone
+bmpSelection.setAll
+
+strLength = MsgBox.input("Please input the extension length of the lines in map units", "DC Processing", "2")
+if(strLength.isNumber.not)then
+  MsgBox.error("Input was not a number.","DC Processing")
+  exit
+end
+numExtensionLength = strLength.asNumber
+for each recLine in bmpSelection
+  pllLine = ftbLine.returnValue(fldLineShape, recLine)
+  if((pllLine <> nil)and(pllLine.isNull.not)and(pllLine.isEmpty.not))then
+    ' determine scale factor
+    numLength = pllLine.returnLength
+    numScaleFactor = (numLength+numExtensionLength)/numLength
+
+    lstPoints = pllLine.asList.get(0)
+    pntEnd = lstPoints.get(lstPoints.count-1)
+    
+    cX = pntEnd.getX 
+    cY = pntEnd.getY 
+    moveX = 0 - cX 
+    moveY = 0 - cY
+  
+   trsScale = Transform2D.Make 
+   trsScale.Move(moveX@moveY) 
+   trsScale.Scale(Point.make(numScaleFactor,numScaleFactor)) 
+   trsScale.Move(cX@cY)
+  
+   'Apply the transformation to the polygon 
+   pllLine = pllLine.transform(trsScale)
+
+    ftbLine.setValue(fldLineShape, recLine, pllLine)
+    
+  end
+  
+  numComplete = numComplete + 1
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    exit
+  end
+end
+
+av.clearStatus

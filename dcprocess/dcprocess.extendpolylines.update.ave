@@ -1,0 +1,19 @@
+' DCProcess.extendPolylines.update
+
+' (c) 2004, 2006 DORSCH Consult
+
+' Enable the "Extend Polylines" menu when two Polyline themes are
+' activated and one of them (the Profile theme) is editable
+
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+blnEnabled = false
+if(lstThemes.count = 1)then
+  self.setEnabled(false)
+  if((lstThemes.get(0).getFTab.getShapeClass.getClassName = "Polyline")and
+     (lstThemes.get(0).getFTab.isEditable))then
+    blnEnabled = true
+  end
+end
+
+self.setEnabled(blnEnabled)

@@ -1,3 +1,13 @@
+2006-05-01  Steffen Macke <sdteffen@gmail.com>
+
+	* dcprocessextension.make.ave:
+	* build.xml:
+	* dcprocessing.nsi: Updated for 1.2.8 release
+	* doc/en/dcprocessing.xml: Updated for 1.2.8 release; Added index;
+	switch from DocBook article to book
+	* dcprocess.extendpolylines.ave:
+	* dcprocess.extendpolylines.update.ave: New function to scale polylines
+	
 2006-04-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcprocess.network.classifyconnections.ave:
