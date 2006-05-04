@@ -18,6 +18,9 @@ bmpSelection = ftbLine.getSelection.clone
 bmpSelection.setAll
 
 strLength = MsgBox.input("Please input the extension length of the lines in map units", "DC Processing", "2")
+if(strLength = nil)then
+  exit
+end
 if(strLength.isNumber.not)then
   MsgBox.error("Input was not a number.","DC Processing")
   exit

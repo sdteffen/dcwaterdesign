@@ -13,14 +13,16 @@ blnNode = false
 blnValve = false
 if(lstThemes.count = 3)then
   for each thmTheme in lstThemes
-    if(thmTheme.getFTab.getShapeClass.getClassName = "Polyline")then
-      blnLine = true
-    else 
-      if(thmTheme.getFTab.getShapeClass.getClassName = "Point")then
-        if(thmTheme.getFTab.isEditable)then
-          blnNode = true
-        else
-          blnValve = true
+    if(thmTheme.is(FTheme))then
+      if(thmTheme.getFTab.getShapeClass.getClassName = "Polyline")then
+        blnLine = true
+      else 
+        if(thmTheme.getFTab.getShapeClass.getClassName = "Point")then
+          if(thmTheme.getFTab.isEditable)then
+            blnNode = true
+          else
+            blnValve = true
+          end
         end
       end
     end

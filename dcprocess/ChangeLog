@@ -1,3 +1,11 @@
+2006-05-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.extendpolylines.ave:
+	* dcprocess.extendpolylines.update.ave:
+	* dcprocess.network.classifyconnections.update.ave: improved robustness
+	of update scripts, cancel handling; fixed bug #1481601
+	* dcprocessextension.make.ave: version number is 1.2.8+cvs now
+
 2006-05-01  Steffen Macke <sdteffen@gmail.com>
 
 	* dcprocessextension.make.ave:

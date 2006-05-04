@@ -10,7 +10,7 @@ lstThemes = viewActive.getActiveThemes
 blnEnabled = false
 if(lstThemes.count = 1)then
   self.setEnabled(false)
-  if((lstThemes.get(0).getFTab.getShapeClass.getClassName = "Polyline")and
+  if((lstThemes.get(0).is(FTheme))and(lstThemes.get(0).getFTab.getShapeClass.getClassName = "Polyline")and
      (lstThemes.get(0).getFTab.isEditable))then
     blnEnabled = true
   end

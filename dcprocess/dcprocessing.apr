@@ -91,21 +91,21 @@
 	GUI:	289
 	GUI:	575
 	GUI:	978
-	GUI:	1089
-	WorkDir:	1159
+	GUI:	1088
+	WorkDir:	1157
 	WinX:	-4
 	WinY:	-3
 	WinW:	1688
 	WinH:	1023
 	SerialNumber:	"595821685479"
-	SelColor:	1160
+	SelColor:	1158
+	GUINames:	1159
+	GUINames:	1160
 	GUINames:	1161
 	GUINames:	1162
 	GUINames:	1163
 	GUINames:	1164
 	GUINames:	1165
-	GUINames:	1166
-	GUINames:	1167
 	TocWidthScale:	1.00000000000000
 )
 
@@ -615,18 +615,19 @@ if (blnIsString) then\n    stringID = numID.asString\n    vtbUnique.setValue (fl
 	Win:	71
 	CSMgr:	72
 	DocExts:	73
-	Source:	"' DCProcess.extendPolylines\n\n' extend all selected polylines in a theme\n\n' (c) 2002, 2004, 2006 DORSCH Consult\n\nviewActive = av.getActiveDoc\nlstThemes = viewActive.getActiveThemes\nftbLine = lstThemes.get(0).getFTab\n\nfldLineShape = ftbLine.findField(\"Shape\")\n\nnumToGo = ftbLine.getNumRecords\nnumComplete = 0\nav.showStopButton\n\nbmpSelection = ftbLine.getSelection.clone\nbmpSelection.setAll\n\nstrLength = MsgBox.input(\"Please input the extension length of the lines in map units\", \"DC Processing\", \"2\")\nif(strLength.
-isNumber.not)then\n  MsgBox.error(\"Input was not a number.\",\"DC Processing\")\n  exit\nend\nnumExtensionLength = strLength.asNumber\nfor each recLine in bmpSelection\n  pllLine = ftbLine.returnValue(fldLineShape, recLine)\n  if((pllLine <> nil)and(pllLine.isNull.not)and(pllLine.isEmpty.not))then\n    ' determine scale factor\n    numLength = pllLine.returnLength\n    numScaleFactor = (numLength+numExtensionLength)/numLength\n\n    lstPoints = pllLine.asList.get(0)\n    pntEnd = lstPoints.get(lstPoints.count-1)\n    \n    c
-X = pntEnd.getX \n    cY = pntEnd.getY \n    moveX = 0 - cX \n    moveY = 0 - cY\n  \n   trsScale = Transform2D.Make \n   trsScale.Move(moveX@moveY) \n   trsScale.Scale(Point.make(numScaleFactor,numScaleFactor)) \n   trsScale.Move(cX@cY)\n  \n   'Apply the transformation to the polygon \n   pllLine = pllLine.transform(trsScale)\n\n    ftbLine.setValue(fldLineShape, recLine, pllLine)\n    \n  end\n  \n  numComplete = numComplete + 1\n  if(av.setStatus((numComplete/numToGo)*100).not)then\n    exit\n  end\nend\n\nav.clearStatus\n"
+	Source:	"' DCProcess.extendPolylines\n\n' extend all selected polylines in a theme\n\n' (c) 2002, 2004, 2006 DORSCH Consult\n\nviewActive = av.getActiveDoc\nlstThemes = viewActive.getActiveThemes\nftbLine = lstThemes.get(0).getFTab\n\nfldLineShape = ftbLine.findField(\"Shape\")\n\nnumToGo = ftbLine.getNumRecords\nnumComplete = 0\nav.showStopButton\n\nbmpSelection = ftbLine.getSelection.clone\nbmpSelection.setAll\n\nstrLength = MsgBox.input(\"Please input the extension length of the lines in map units\", \"DC Processing\", \"2\")\nif(strLength 
+= nil)then\n  exit\nend\nif(strLength.isNumber.not)then\n  MsgBox.error(\"Input was not a number.\",\"DC Processing\")\n  exit\nend\nnumExtensionLength = strLength.asNumber\nfor each recLine in bmpSelection\n  pllLine = ftbLine.returnValue(fldLineShape, recLine)\n  if((pllLine <> nil)and(pllLine.isNull.not)and(pllLine.isEmpty.not))then\n    ' determine scale factor\n    numLength = pllLine.returnLength\n    numScaleFactor = (numLength+numExtensionLength)/numLength\n\n    lstPoints = pllLine.asList.get(0)\n    pntEnd = lstPoint
+s.get(lstPoints.count-1)\n    \n    cX = pntEnd.getX \n    cY = pntEnd.getY \n    moveX = 0 - cX \n    moveY = 0 - cY\n  \n   trsScale = Transform2D.Make \n   trsScale.Move(moveX@moveY) \n   trsScale.Scale(Point.make(numScaleFactor,numScaleFactor)) \n   trsScale.Move(cX@cY)\n  \n   'Apply the transformation to the polygon \n   pllLine = pllLine.transform(trsScale)\n\n    ftbLine.setValue(fldLineShape, recLine, pllLine)\n    \n  end\n  \n  numComplete = numComplete + 1\n  if(av.setStatus((numComplete/numToGo)*100).not)then\n    
+exit\n  end\nend\n\nav.clearStatus\n"
 	FontSize:	1
 )
 
 (DocWin.71
 	Owner:	70
-	X:	437
-	Y:	299
-	W:	751
-	H:	475
+	X:	-4
+	Y:	-4
+	W:	1690
+	H:	911
 )
 
 (CSMgr.72
@@ -644,8 +645,8 @@ X = pntEnd.getX \n    cY = pntEnd.getY \n    moveX = 0 - cX \n    moveY = 0 - cY
 	Win:	75
 	CSMgr:	76
 	DocExts:	77
-	Source:	"' DCProcess.extendPolylines.update\n\n' (c) 2004, 2006 DORSCH Consult\n\n' Enable the \"Extend Polylines\" menu when two Polyline themes are\n' activated and one of them (the Profile theme) is editable\n\nviewActive = av.getActiveDoc\nlstThemes = viewActive.getActiveThemes\nblnEnabled = false\nif(lstThemes.count = 1)then\n  self.setEnabled(false)\n  if((lstThemes.get(0).getFTab.getShapeClass.getClassName = \"Polyline\")and\n     (lstThemes.get(0).getFTab.isEditable))then\n    blnEnabled = true\n  end\nend\n\nself.setEnabled(blnE
-nabled)\n"
+	Source:	"' DCProcess.extendPolylines.update\n\n' (c) 2004, 2006 DORSCH Consult\n\n' Enable the \"Extend Polylines\" menu when two Polyline themes are\n' activated and one of them (the Profile theme) is editable\n\nviewActive = av.getActiveDoc\nlstThemes = viewActive.getActiveThemes\nblnEnabled = false\nif(lstThemes.count = 1)then\n  self.setEnabled(false)\n  if((lstThemes.get(0).is(FTheme))and(lstThemes.get(0).getFTab.getShapeClass.getClassName = \"Polyline\")and\n     (lstThemes.get(0).getFTab.isEditable))then\n    blnEnabled = true
+\n  end\nend\n\nself.setEnabled(blnEnabled)\n"
 	FontSize:	1
 )
 
@@ -1019,17 +1020,17 @@ indField(\"ConnProof\")\n    if(fldConnProof <> nil)then\n      System.echo(\"Co
 	Win:	123
 	CSMgr:	124
 	DocExts:	125
-	Source:	"' DCProcess.Network.classifyConnections.update\n\n' (c) 2004 DORSCH Consult\n\n' Enable the Classify Connection menu when one Polyline and two\n' Point themes are activated, the Polyline theme contains the\n' diameter field and one point theme is editable\n\nviewActive = av.getActiveDoc\nlstThemes = viewActive.getActiveThemes\nblnLine = false\nblnNode = false\nblnValve = false\nif(lstThemes.count = 3)then\n  for each thmTheme in lstThemes\n    if(thmTheme.getFTab.getShapeClass.getClassName = \"Polyline\")then\n      blnLine 
-= true\n    else \n      if(thmTheme.getFTab.getShapeClass.getClassName = \"Point\")then\n        if(thmTheme.getFTab.isEditable)then\n          blnNode = true\n        else\n          blnValve = true\n        end\n      end\n    end\n  end\nend\n  \nif(blnLine and blnNode and blnValve)then\n  self.setEnabled(true)\nelse\n  self.setEnabled(false)\nend\n\n"
+	Source:	"' DCProcess.Network.classifyConnections.update\n\n' (c) 2004 DORSCH Consult\n\n' Enable the Classify Connection menu when one Polyline and two\n' Point themes are activated, the Polyline theme contains the\n' diameter field and one point theme is editable\n\nviewActive = av.getActiveDoc\nlstThemes = viewActive.getActiveThemes\nblnLine = false\nblnNode = false\nblnValve = false\nif(lstThemes.count = 3)then\n  for each thmTheme in lstThemes\n    if(thmTheme.is(FTheme))then\n      if(thmTheme.getFTab.getShapeClass.getClassNam
+e = \"Polyline\")then\n        blnLine = true\n      else \n        if(thmTheme.getFTab.getShapeClass.getClassName = \"Point\")then\n          if(thmTheme.getFTab.isEditable)then\n            blnNode = true\n          else\n            blnValve = true\n          end\n        end\n      end\n    end\n  end\nend\n  \nif(blnLine and blnNode and blnValve)then\n  self.setEnabled(true)\nelse\n  self.setEnabled(false)\nend\n\n"
 	FontSize:	1
 )
 
 (DocWin.123
 	Owner:	122
-	X:	1068
-	Y:	710
-	W:	534
-	H:	355
+	X:	-4
+	Y:	-4
+	W:	1690
+	H:	911
 )
 
 (CSMgr.124
@@ -1573,9 +1574,8 @@ nd\n  end\n  \n  numComplete = numComplete + 1\n  if(av.setStatus((numComplete/n
 
 (DocWin.195
 	Owner:	194
-	Open:	1
-	X:	167
-	Y:	100
+	X:	-235
+	Y:	143
 	W:	1610
 	H:	1075
 )
@@ -2149,10 +2149,10 @@ et(2), 999)\nend\n\nav.getProject.findGUI(\"Project\").setModified(true)\n"
 	Win:	271
 	CSMgr:	272
 	DocExts:	273
-	Source:	"' DCProcessExtension.make\n\n' (c) 2000 - 2006 DORSCH Consult\n\nstrVersion = msgbox.input(\"Enter version\",\"Make DC Processing Extension\",\"1.2.8\")\nif (strVersion=nil)then\n  exit\nend\nnumVersion=strVersion.asTokens(\".\").get(0).asNumber\nstrFileNameVersion = strVersion.asTokens(\".\").get(0)+\"_\"+strVersion.asTokens(\".\").get(1)\n\nmyExt = Extension.Make((\"$AVEXT\\dcprocessing.avx\").AsFileName,\n              \"DC Processing\",\n              av.GetProject.FindScript(\"DCProcessExtension.install\"),\n              av.GetProject.
-FindScript(\"DCProcessExtension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename})\n\n'add GUI elements\n'0\nmyExt.add( av.GetProject.FindGUI(\"View\").GetMenuBar.findByLabel(\"DC Processing\"))\n\n'1\nmyExt.add(av.getProject.findGUI(\"Project\").getMenuBar.findByLabel(\"DC Processing\"))\n\n'2\nmyExt.add(av.getProject.findGUI(\"Table\").getMenuBar.findByLabel(\"DC Processing\"))\n\n'add the scripts\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCProcess\".count+1)=\"DCProcess.\"))then\n    myExt.ad
-d(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Processing Extension \"+strVersion+NL+\"(c) 2000 - 2005 DORSCH Consult.\"+NL+\n\"This extension helps to process and convert various formats of data.\"+NL+Date.now.asString)\nmyExt.SetExtVersion(numVersion)\nmyExt.setUnloadScript(av.findScript(\"DCProcessExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCProcessExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcprocessing.avx\")\nWFileName = FileName.make(\"$AVEXT/dcprocessing.tmp\")\nRFile = Line
-File.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n  if ( buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
+	Source:	"' DCProcessExtension.make\n\n' (c) 2000 - 2006 DORSCH Consult\n\nstrVersion = msgbox.input(\"Enter version\",\"Make DC Processing Extension\",\"1.2.8+cvs\")\nif (strVersion=nil)then\n  exit\nend\nnumVersion=strVersion.asTokens(\".\").get(0).asNumber\nstrFileNameVersion = strVersion.asTokens(\".\").get(0)+\"_\"+strVersion.asTokens(\".\").get(1)\n\nmyExt = Extension.Make((\"$AVEXT\\dcprocessing.avx\").AsFileName,\n              \"DC Processing\",\n              av.GetProject.FindScript(\"DCProcessExtension.install\"),\n              av.GetProj
+ect.FindScript(\"DCProcessExtension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename})\n\n'add GUI elements\n'0\nmyExt.add( av.GetProject.FindGUI(\"View\").GetMenuBar.findByLabel(\"DC Processing\"))\n\n'1\nmyExt.add(av.getProject.findGUI(\"Project\").getMenuBar.findByLabel(\"DC Processing\"))\n\n'2\nmyExt.add(av.getProject.findGUI(\"Table\").getMenuBar.findByLabel(\"DC Processing\"))\n\n'add the scripts\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCProcess\".count+1)=\"DCProcess.\"))then\n    myEx
+t.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Processing Extension \"+strVersion+NL+\"(c) 2000 - 2005 DORSCH Consult.\"+NL+\n\"This extension helps to process and convert various formats of data.\"+NL+Date.now.asString)\nmyExt.SetExtVersion(numVersion)\nmyExt.setUnloadScript(av.findScript(\"DCProcessExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCProcessExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcprocessing.avx\")\nWFileName = FileName.make(\"$AVEXT/dcprocessing.tmp\")\nRFile = 
+LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n  if ( buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
 	SearchStr:	"Sewer"
 	FontSize:	1
 )
@@ -2161,8 +2161,8 @@ File.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PE
 	Owner:	270
 	X:	-4
 	Y:	-4
-	W:	1610
-	H:	1075
+	W:	1690
+	H:	911
 )
 
 (CSMgr.272
@@ -5631,9 +5631,9 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Modified:	1
 	Visible:	1
 	MenuBar:	979
-	ButnBar:	1042
-	Popups:	1086
-	ToolBar:	1087
+	ButnBar:	1041
+	Popups:	1085
+	ToolBar:	1086
 	NewScript:	"Script.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Script.Action"
@@ -5641,7 +5641,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Script.ActionUpdate"
 	Title:	"Scripts"
-	Icon:	1088
+	Icon:	1087
 )
 
 (MenuBar.979
@@ -5649,7 +5649,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Child:	993
 	Child:	1009
 	Child:	1026
-	Child:	1037
+	Child:	1036
 )
 
 (PMenu.980
@@ -5786,7 +5786,6 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.997
-	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -6025,7 +6024,6 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Child:	1032
 	Child:	1034
 	Child:	1035
-	Child:	1036
 	Label:	"&Window"
 )
 
@@ -6070,7 +6068,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (AVStr.1033
-	S:	"dcprocessing.apr DCProcess.PllTheme.splitByPllTheme Script.saveAllScripts"
+	S:	"dcprocessing.apr DCProcessExtension.make"
 )
 
 (Choice.1034
@@ -6081,29 +6079,22 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.1035
-	Help:	"Activates DCProcess.PllTheme.splitByPllTheme"
-	Label:	"&2 DCProcess.PllTheme.splitByPllTheme"
+	Help:	"Activates DCProcessExtension.make"
+	Label:	"&2 DCProcessExtension.make"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1036
-	Help:	"Activates Script.saveAllScripts"
-	Label:	"&3 Script.saveAllScripts"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1037
+(PMenu.1036
 	InternalName:	"Help"
+	Child:	1037
 	Child:	1038
 	Child:	1039
 	Child:	1040
-	Child:	1041
 	Label:	"&Help"
 )
 
-(Choice.1038
+(Choice.1037
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -6111,7 +6102,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1039
+(Choice.1038
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help"
@@ -6119,10 +6110,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1040
+(Space.1039
 )
 
-(Choice.1041
+(Choice.1040
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -6130,330 +6121,331 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1042
-	Child:	1043
+(ButnBar.1041
+	Child:	1042
+	Child:	1044
 	Child:	1045
-	Child:	1046
-	Child:	1048
-	Child:	1050
+	Child:	1047
+	Child:	1049
+	Child:	1051
 	Child:	1052
-	Child:	1053
+	Child:	1054
 	Child:	1055
-	Child:	1056
-	Child:	1058
+	Child:	1057
+	Child:	1059
 	Child:	1060
-	Child:	1061
-	Child:	1063
-	Child:	1065
-	Child:	1067
-	Child:	1069
+	Child:	1062
+	Child:	1064
+	Child:	1066
+	Child:	1068
+	Child:	1070
 	Child:	1071
-	Child:	1072
-	Child:	1074
-	Child:	1076
+	Child:	1073
+	Child:	1075
+	Child:	1077
 	Child:	1078
-	Child:	1079
-	Child:	1081
+	Child:	1080
+	Child:	1082
 	Child:	1083
-	Child:	1084
 )
 
-(Butn.1043
+(Butn.1042
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1044
+	Icon:	1043
 	Click:	"Project.Save"
 )
 
-(AVIcon.1044
+(AVIcon.1043
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1045
+(Space.1044
 )
 
-(Butn.1046
+(Butn.1045
 	Disabled:	1
 	Help:	"Cut//Cuts the selection and puts it into the clipboard"
 	HelpTopic:	"Cut"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1047
+	Icon:	1046
 	Click:	"Script.Cut"
 )
 
-(AVIcon.1047
+(AVIcon.1046
 	Name:	"Cut"
 	Res:	"Icons.Cut"
 
 )
 
-(Butn.1048
+(Butn.1047
 	Disabled:	1
 	Help:	"Copy//Copies the selection and puts it into the clipboard"
 	HelpTopic:	"Copy"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1049
+	Icon:	1048
 	Click:	"Script.Copy"
 )
 
-(AVIcon.1049
+(AVIcon.1048
 	Name:	"Copy"
 	Res:	"Icons.Copy"
 
 )
 
-(Butn.1050
+(Butn.1049
 	Help:	"Paste//Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
-	Icon:	1051
+	Icon:	1050
 	Click:	"Script.Paste"
 )
 
-(AVIcon.1051
+(AVIcon.1050
 	Name:	"Paste"
 	Res:	"Icons.Paste"
 
 )
 
-(Space.1052
+(Space.1051
 )
 
-(Butn.1053
+(Butn.1052
 	Help:	"Undo//Undoes the last modification to the script editor text"
 	HelpTopic:	"Undo__Script_"
-	Icon:	1054
+	Icon:	1053
 	Click:	"Script.Undo"
 )
 
-(AVIcon.1054
+(AVIcon.1053
 	Name:	"Undo"
 	Res:	"Icons.Undo"
 
 )
 
-(Space.1055
+(Space.1054
 )
 
-(Butn.1056
+(Butn.1055
 	Help:	"Shift Lines Left//Shifts selected lines or current line two spaces to the left"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1057
+	Icon:	1056
 	Click:	"Script.ShiftLeft"
 )
 
-(AVIcon.1057
+(AVIcon.1056
 	Name:	"ShiftLeft"
 	Res:	"Icons.ShiftLeft"
 
 )
 
-(Butn.1058
+(Butn.1057
 	Help:	"Shift Lines Right//Shifts selected lines or current line two spaces to the right"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1059
+	Icon:	1058
 	Click:	"Script.ShiftRight"
 )
 
-(AVIcon.1059
+(AVIcon.1058
 	Name:	"ShiftRight"
 	Res:	"Icons.ShiftRight"
 
 )
 
-(Space.1060
+(Space.1059
 )
 
-(Butn.1061
+(Butn.1060
 	Disabled:	1
 	Help:	"Compile//Compiles the script"
 	HelpTopic:	"Compile"
 	Update:	"Script.CompileUpdate"
-	Icon:	1062
+	Icon:	1061
 	Click:	"Script.Compile"
 )
 
-(AVIcon.1062
+(AVIcon.1061
 	Name:	"Check"
 	Res:	"Icons.Check"
 
 )
 
-(Butn.1063
+(Butn.1062
 	Help:	"Run//Runs the compiled script"
 	HelpTopic:	"Run"
 	Update:	"Script.RunUpdate"
-	Icon:	1064
+	Icon:	1063
 	Click:	"Script.Run"
 )
 
-(AVIcon.1064
+(AVIcon.1063
 	Name:	"Run"
 	Res:	"Icons.Run"
 
 )
 
-(Butn.1065
+(Butn.1064
 	Help:	"Step//Executes one request or object reference in the compiled script"
 	HelpTopic:	"Step"
 	Update:	"Script.RunUpdate"
-	Icon:	1066
+	Icon:	1065
 	Click:	"Script.Step"
 )
 
-(AVIcon.1066
+(AVIcon.1065
 	Name:	"Footprints"
 	Res:	"Icons.Footprints"
 
 )
 
-(Butn.1067
+(Butn.1066
 	Help:	"Toggle Breakpoint//Toggles a breakpoint on or off at the current cursor position"
 	HelpTopic:	"Toggle_Breakpoint"
 	Update:	"Script.RunUpdate"
-	Icon:	1068
+	Icon:	1067
 	Click:	"Script.ToggleBreak"
 )
 
-(AVIcon.1068
+(AVIcon.1067
 	Name:	"Hand"
 	Res:	"Icons.Hand"
 
 )
 
-(Butn.1069
+(Butn.1068
 	Help:	"Examine Variables//Displays the current value of local and global variables"
 	HelpTopic:	"Examine_Variables"
 	Update:	"Script.RunUpdate"
-	Icon:	1070
+	Icon:	1069
 	Click:	"Script.ShowVariables"
 )
 
-(AVIcon.1070
+(AVIcon.1069
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1071
+(Space.1070
 )
 
-(Butn.1072
+(Butn.1071
 	Help:	"Load System Script//Inserts the source code of a system script"
 	HelpTopic:	"Load_System_Script"
-	Icon:	1073
+	Icon:	1072
 	Click:	"Script.SystemLoad"
 )
 
-(AVIcon.1073
+(AVIcon.1072
 	Name:	"LoadScript"
 	Res:	"Icons.LoadScript"
 
 )
 
-(Butn.1074
+(Butn.1073
 	Help:	"Load Text File//Inserts the contents of a text file"
 	HelpTopic:	"Load_Text_File"
-	Icon:	1075
+	Icon:	1074
 	Click:	"Script.FileLoad"
 )
 
-(AVIcon.1075
+(AVIcon.1074
 	Name:	"Open"
 	Res:	"Icons.Open"
 
 )
 
-(Butn.1076
+(Butn.1075
 	Help:	"Write Text File//Writes the entire script or the selected text to a text file"
 	HelpTopic:	"Write_Text_File"
-	Icon:	1077
+	Icon:	1076
 	Click:	"Script.FileWrite"
 )
 
-(AVIcon.1077
+(AVIcon.1076
 	Name:	"Write"
 	Res:	"Icons.Write"
 
 )
 
-(Space.1078
+(Space.1077
 )
 
-(Butn.1079
+(Butn.1078
 	Help:	"Script Help//Searches for help using the current selection"
 	HelpTopic:	"Getting_help_about_script_components"
-	Icon:	1080
+	Icon:	1079
 	Click:	"Script.Help"
 )
 
-(AVIcon.1080
+(AVIcon.1079
 	Name:	"Help"
 	Res:	"Icons.Help"
 
 )
 
-(Butn.1081
+(Butn.1080
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1082
+	Icon:	1081
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1082
+(AVIcon.1081
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Space.1083
+(Space.1082
 )
 
-(Butn.1084
-	Icon:	1085
+(Butn.1083
+	Icon:	1084
 	Click:	"DCProcessExtension.make"
 )
 
-(AVIcon.1085
+(AVIcon.1084
 	Name:	"QueryBuilder"
 	Res:	"Icons.QueryBuilder"
 
 )
 
-(PopupSet.1086
+(PopupSet.1085
 )
 
-(ToolBar.1087
+(ToolBar.1086
 )
 
-(AVIcon.1088
+(AVIcon.1087
 	Name:	"Icon"
 	Res:	"SEd.Icon"
 
 )
 
-(DocGUI.1089
+(DocGUI.1088
 	Name:	"Project"
 	Type:	"Project"
 	Modified:	1
-	MenuBar:	1090
-	ButnBar:	1132
-	Popups:	1138
-	ToolBar:	1139
-	Icon:	1140
+	MenuBar:	1089
+	ButnBar:	1130
+	Popups:	1136
+	ToolBar:	1137
+	Icon:	1138
 )
 
-(MenuBar.1090
-	Child:	1091
-	Child:	1102
-	Child:	1112
-	Child:	1122
-	Child:	1127
+(MenuBar.1089
+	Child:	1090
+	Child:	1101
+	Child:	1111
+	Child:	1120
+	Child:	1125
 )
 
-(PMenu.1091
+(PMenu.1090
 	InternalName:	"File"
+	Child:	1091
 	Child:	1092
 	Child:	1093
 	Child:	1094
@@ -6463,11 +6455,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Child:	1098
 	Child:	1099
 	Child:	1100
-	Child:	1101
 	Label:	"&File"
 )
 
-(Choice.1092
+(Choice.1091
 	Help:	"Creates a new project"
 	HelpTopic:	"New_Project"
 	Label:	"&New Project"
@@ -6475,7 +6466,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.Ctrl+N"
 )
 
-(Choice.1093
+(Choice.1092
 	Help:	"Opens an existing project"
 	HelpTopic:	"Open_Project"
 	Label:	"&Open Project..."
@@ -6483,7 +6474,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1094
+(Choice.1093
 	Help:	"Closes the project window"
 	HelpTopic:	"Close_Project"
 	Label:	"&Close Project"
@@ -6491,10 +6482,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1095
+(Space.1094
 )
 
-(Choice.1096
+(Choice.1095
 	Help:	"Saves the current project"
 	HelpTopic:	"Save_Project"
 	Label:	"&Save Project"
@@ -6502,7 +6493,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.Ctrl+S"
 )
 
-(Choice.1097
+(Choice.1096
 	Help:	"Saves the current project with a new name"
 	HelpTopic:	"Save_Project_As"
 	Label:	"Save Project &As..."
@@ -6510,10 +6501,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1098
+(Space.1097
 )
 
-(Choice.1099
+(Choice.1098
 	Help:	"Displays the Extensions dialog"
 	HelpTopic:	"Extensions"
 	Label:	"&Extensions..."
@@ -6521,10 +6512,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1100
+(Space.1099
 )
 
-(Choice.1101
+(Choice.1100
 	Help:	"Exits ArcView"
 	HelpTopic:	"Exit"
 	Label:	"E&xit"
@@ -6532,8 +6523,9 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1102
+(PMenu.1101
 	InternalName:	"Project"
+	Child:	1102
 	Child:	1103
 	Child:	1104
 	Child:	1105
@@ -6542,11 +6534,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Child:	1108
 	Child:	1109
 	Child:	1110
-	Child:	1111
 	Label:	"&Project"
 )
 
-(Choice.1103
+(Choice.1102
 	Help:	"Displays the dialog box to edit properties of the project"
 	HelpTopic:	"Project_Properties"
 	Label:	"&Properties..."
@@ -6554,7 +6545,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1104
+(Choice.1103
 	Help:	"Customizes the active project"
 	HelpTopic:	"Customize"
 	Update:	"Project.CustomizeUpdate"
@@ -6563,10 +6554,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1105
+(Space.1104
 )
 
-(Choice.1106
+(Choice.1105
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
@@ -6575,7 +6566,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.Ctrl+R"
 )
 
-(Choice.1107
+(Choice.1106
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
@@ -6584,10 +6575,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.Del"
 )
 
-(Space.1108
+(Space.1107
 )
 
-(Choice.1109
+(Choice.1108
 	Help:	"Adds a table to the project"
 	HelpTopic:	"Add_Table"
 	Update:	"Project.AddTableUpdate"
@@ -6596,7 +6587,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1110
+(Choice.1109
 	Help:	"Creates a new project component from an external source"
 	HelpTopic:	"Import"
 	Update:	"Project.ImportUpdate"
@@ -6605,7 +6596,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1111
+(Choice.1110
 	Help:	"Opens the SQL Connection manager"
 	HelpTopic:	"SQL_Connect"
 	Update:	"Project.HasSQL"
@@ -6614,20 +6605,19 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1112
+(PMenu.1111
 	InternalName:	"Window"
+	Child:	1112
 	Child:	1113
 	Child:	1114
 	Child:	1115
 	Child:	1116
 	Child:	1117
-	Child:	1118
-	Child:	1120
-	Child:	1121
+	Child:	1119
 	Label:	"&Window"
 )
 
-(Choice.1113
+(Choice.1112
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -6635,7 +6625,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1114
+(Choice.1113
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -6643,7 +6633,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1115
+(Choice.1114
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -6651,10 +6641,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1116
+(Space.1115
 )
 
-(Choice.1117
+(Choice.1116
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -6662,39 +6652,32 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.1118
-	ObjectTag:	1119
+(Space.1117
+	ObjectTag:	1118
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.1119
-	S:	"dcprocessing.apr DCProcess.PllTheme.splitByPllTheme"
+(AVStr.1118
+	S:	"dcprocessing.apr"
 )
 
-(Choice.1120
+(Choice.1119
 	Help:	"Activates dcprocessing.apr"
 	Label:	"&1 dcprocessing.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1121
-	Help:	"Activates DCProcess.PllTheme.splitByPllTheme"
-	Label:	"&2 DCProcess.PllTheme.splitByPllTheme"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1122
+(PMenu.1120
 	InternalName:	"Help"
+	Child:	1121
+	Child:	1122
 	Child:	1123
 	Child:	1124
-	Child:	1125
-	Child:	1126
 	Label:	"&Help"
 )
 
-(Choice.1123
+(Choice.1121
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -6702,7 +6685,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1124
+(Choice.1122
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -6710,10 +6693,10 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(Space.1125
+(Space.1123
 )
 
-(Choice.1126
+(Choice.1124
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -6721,124 +6704,124 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1127
+(PMenu.1125
+	Child:	1126
+	Child:	1127
 	Child:	1128
 	Child:	1129
-	Child:	1130
-	Child:	1131
 	Label:	"DC Processing"
 )
 
-(Choice.1128
+(Choice.1126
 	Help:	"Export a Project and all Data to one folder. Use relative paths."
 	Label:	"Create Portable Project"
 	Click:	"DCProcess.Project.makePortable"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1129
+(Choice.1127
 	Help:	"Convert all Coverages in a Folder to Shapefiles//Convert all Coverages in a Folder to Shapefiles"
 	Label:	"Coverages to Shapefiles"
 	Click:	"DCProcess.batchConvertCoveragesToShapefiles"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1130
+(Choice.1128
 	Help:	"Recursive copy of a projection file to all shapefiles in a folder."
 	Label:	"Copy Projection Files"
 	Click:	"DCProcess.recursiveCopyPrjFiles"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1131
+(Choice.1129
 	Help:	"Open the DC Processing extension help in CHM format."
 	Label:	"Help"
 	Click:	"DCProcess.Help.openCHM"
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1132
+(ButnBar.1130
 	Update:	"Project.UpdateButtons"
+	Child:	1131
 	Child:	1133
-	Child:	1135
-	Child:	1136
+	Child:	1134
 )
 
-(Butn.1133
+(Butn.1131
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1134
+	Icon:	1132
 	Click:	"Project.Save"
 )
 
-(AVIcon.1134
+(AVIcon.1132
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1135
+(Space.1133
 )
 
-(Butn.1136
+(Butn.1134
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1137
+	Icon:	1135
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1137
+(AVIcon.1135
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(PopupSet.1138
+(PopupSet.1136
 )
 
-(ToolBar.1139
+(ToolBar.1137
 )
 
-(AVIcon.1140
+(AVIcon.1138
 	Name:	"Icon"
 	Res:	"Project.Icon"
 
 )
 
-(FN.1159
+(FN.1157
 	Path:	"$HOME"
 )
 
-(TClr.1160
+(TClr.1158
 	Red:	0xffff
 	Green:	0xffff
 )
 
-(AVStr.1161
+(AVStr.1159
 	S:	"View"
 )
 
-(AVStr.1162
+(AVStr.1160
 	S:	"Table"
 )
 
-(AVStr.1163
+(AVStr.1161
 	S:	"Chart"
 )
 
-(AVStr.1164
+(AVStr.1162
 	S:	"Layout"
 )
 
-(AVStr.1165
+(AVStr.1163
 	S:	"Script"
 )
 
-(AVStr.1166
+(AVStr.1164
 	S:	"Project"
 )
 
-(AVStr.1167
+(AVStr.1165
 	S:	"Appl"
 )
 
