@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE article 
+<!DOCTYPE book 
   PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
   []
 >
-<article lang="en">
-  <articleinfo>
+<book lang="en">
+  <bookinfo>
     <title>DC Water Design Extension Manual</title> 
     <copyright>
-      <year>2001-2005</year>
+      <year>2001-2006</year>
       <holder>DORSCH Consult</holder>
     </copyright>
     <author>
@@ -25,9 +25,13 @@
 	Back-Cover Texts. A copy of the license is available from the
 	Free Software Foundation (<ulink url="http://www.gnu.org" />).
 	</para></legalnotice>
-  </articleinfo>
+  </bookinfo>
+  <article id="general">
+    <title>General</title>
+    <indexterm><primary>General</primary></indexterm>
   <sect1 id="introduction">
     <title>Introduction</title>
+    <indexterm><primary>Introduction</primary></indexterm>
     <para>This Manual describes the DC Water Design Extension Version 2.12.2+cvs.</para>
     <para>This Document uses Terminology from ArcView and EPANET. 
       Refer to the respective documentation for in-depth explanations.</para>
@@ -53,6 +57,7 @@
  
     <sect2 id="news">
       <title>What's New?</title>
+        <indexterm><primary>news</primary></indexterm>
         <sect3 id="news_2_12_3">
 	  <title>Version 2.12.3</title>
 	  <itemizedlist>
@@ -67,7 +72,10 @@
 	    <listitem><para>Fixed bug in &quot;Split Model&quot; and 
 	    &quot;Extract Model&quot; that could
 	      lead to feature duplication when elements are moved
-	      from zone to zone in split models.</para></listitem>  
+	      from zone to zone in split models.</para></listitem>
+	    <listitem><para>A Thiessen Polygon tutorial (<xref 
+	      linkend="thiessen_tutorial" />)
+	      has been added to the documentation.</para></listitem>  
 	  </itemizedlist>
 	</sect3>
         <sect3 id="news_2_12_2">
@@ -322,11 +330,15 @@
   </sect1>  
   <sect1 id="concepts">
     <title>Concepts</title>
+    <indexterm><primary>concepts</primary></indexterm>
     <para>This section introduces some concepts which are 
       fundamental in order to understand how the extension works.</para>
     
     <sect2 id="traces">
       <title>Network Traces</title>
+      <indexterm><primary>trace</primary></indexterm>
+      <indexterm><primary>network</primary>
+        <secondary>trace</secondary></indexterm>
       <para>Network Traces can be useful to solve problems related 
 	to the network geometry. For example, it's possible to 
 	check the connectivity of the network features in a 
@@ -337,6 +349,9 @@
     </sect2> 
     <sect2 id="virtual_lines">
       <title>Virtual Lines</title>
+      <indexterm><primary>virtual line</primary></indexterm>
+      <indexterm><primary>pipe/node duality</primary></indexterm>
+      <indexterm><primary>validity</primary></indexterm>
       <para>In the EPANET hydraulic model, pumps and valves are 
 	represented as lines. From the hydraulic modeling point 
 	of view this makes sense, as the orientation of the 
@@ -444,7 +459,7 @@
     </sect2>  
     <sect2 id="byte_codes">
       <title>Byte Codes</title>
-    
+      <indexterm><primary>byte code</primary></indexterm>
       <para>Byte codes make it possible to store fields of yes-no 
         information in 'normal' text. Every byte in the 
         number having the value &quot;1&quot; is considered set, every byte 
@@ -507,17 +522,25 @@
     </sect2>
     
     <sect2 id="snapping">
-      <title>Snapping</title>  
+      <title>Snapping</title>
+      <indexterm><primary>snapping</primary></indexterm>
+      <indexterm><primary>digitzing</primary>
+        <secondary>snapping</secondary></indexterm>
       <para>The editing tools of the DC Water Design Extension use 
         a snapping tolerance equal to 3 screen pixels.</para>
     </sect2>
   </sect1>  
   <sect1 id="installation">
     <title>Installation</title>
+    <indexterm><primary>installation</primary></indexterm>
+    <indexterm><primary>sample</primary></indexterm>
+    <indexterm><primary>example</primary></indexterm>
+    <indexterm><primary>data</primary>
+      <secondary>sample</secondary></indexterm>
     <para>Description of the DC Water Design Extension Installation.</para>
     <sect2 id="how_to_obtain">
       <title>How to Obtain the DC Water Design Extension</title>
-    
+      <indexterm><primary>website</primary></indexterm>
       <para>The DC Water Design Extension can be 
 	obtained from the website 
 	<ulink url="http://dcwaterdesign.sourceforge.net"
@@ -542,7 +565,7 @@
     </sect2>
     <sect2>
       <title>Requirements</title>
-    
+      <indexterm><primary>requirements</primary></indexterm>
       <para>The following software packages are required in order to use the
         DC Water Design extension:
 	<itemizedlist>
@@ -563,7 +586,8 @@
 	compile them for your platform.</para></note>
     </sect2>
     <sect2>
-      <title>Setup</title>    
+      <title>Setup</title>
+      <indexterm><primary>setup</primary></indexterm>
       <para>To install the DC Water Design Extension, you've got to 
       run the installer executable. After accepting the 
       license (s. <xref linkend="copyright_dcwaterdesign" />), you'll be 
@@ -586,7 +610,7 @@
   
   <sect1 id="quick_start_guide">
     <title>Quick Start Guide</title>
-    
+    <indexterm><primary>quick start</primary></indexterm>
     <para>
       <orderedlist>
         <listitem><para>Load the Extension.</para></listitem>
@@ -618,9 +642,13 @@
       </orderedlist>
     </para>
   </sect1>
-  
+  </article>
+  <article id="reference">
+    <title>Reference</title>
+    <indexterm><primary>reference</primary></indexterm>
   <sect1 id="usage">
     <title>Usage</title>
+    <indexterm><primary>usage</primary></indexterm>
     <para>How to use the DC Water Design Extension.</para>
     <sect2 id="general_usage">
       <title>General Usage</title> 
@@ -628,8 +656,8 @@
         <orderedlist>
 	  <listitem><para>Start ArcView</para></listitem>
 	  <listitem><para>Open the Extensions Dialog 
-	    (<guimenu>File</guimenu>-&gt;<guimenuitem>Extensions 
-	    ...</guimenuitem>)</para></listitem>
+	    (<menuchoice><guimenu>File</guimenu><guimenuitem>Extensions 
+	    ...</guimenuitem></menuchoice>)</para></listitem>
 	  <listitem><para>Select the DC Water Design Extension (Put a 
 	    checkmark in the box on the left side).</para></listitem>
 	  <listitem><para>After the Extension is loaded, the Setup Dialog 
@@ -640,12 +668,15 @@
     
     <sect2 id="project_menus">
       <title>Project Menus</title>
+      <indexterm><primary>menu</primary>
+        <secondary>Project GUI</secondary></indexterm>
       <para>The DC Water Design Extension extends the Project GUI 
         by adding a new Menu, called DC Water Design Extension. 
         The Menu contains the following choices:</para>
       
       <sect3 id="setup_dialog">
         <title>Setup</title> 
+	<indexterm><primary>setup dialog</primary></indexterm>
 	<para>Shows the Setup Dialog.</para>
 	
 	<para>The Setup Dialog includes an option to choose the 
@@ -681,7 +712,8 @@
       </sect3>
 	<sect3>
 	  <title>EPANET Tables</title>
-      
+          <indexterm><primary>tables</primary>
+	    <secondary>EPANET</secondary></indexterm>
 	  <para>Displays the EPANET Tables Dialog.</para> 
 	  
 	  <para>The Tables in the dialog are used to to store 
@@ -695,7 +727,8 @@
       
 	<sect3>
 	  <title>Result Tables</title> 
-      
+          <indexterm><primary>tables</primary>
+	    <secondary>result</secondary></indexterm>
 	  <para>Opens the Result Tables Dialog.</para> 
 	  
 	  <para>The Result Tables are used to store the results of a 
@@ -710,6 +743,8 @@
         </sect3>
 	<sect3 id="split_model">
 	  <title>Split Model</title>
+	  <indexterm><primary>split</primary>
+	    <secondary>model</secondary></indexterm>
 	  <para>Allows to split a model into different ones.</para>
 	  <para>The values of the <structfield>Zone</structfield> field will
 	    be used to determine to which model a network element belongs</para>
@@ -722,6 +757,8 @@
 	</sect3>
 	<sect3 id="merge_model">
 	  <title>Merge Model</title>
+	  <indexterm><primary>merge</primary>
+	    <secondary>model</secondary></indexterm>
 	  <para>Merge a model that was split by <xref linkend="split_model" />.
 	    </para>
 	  <para>Because &quot;Merge Model&quot; is using the zone names from the
@@ -734,6 +771,7 @@
 	</sect3>
 	<sect3 id="extract_model">
 	  <title>Extract Model</title>
+	  <indexterm><primary>extract model</primary></indexterm>
 	  <para>Extract separate models from the current one based on
 	    the <structfield>ByteCode</structfield> content.</para>
 	  <para>Splits the currently registered themes into several parts.
@@ -759,6 +797,7 @@
 	</sect3>
 	<sect3 id="about">
 	  <title>About</title>
+	  <indexterm><primary>license</primary></indexterm>
 	  <para>Displays information about the DC Water Design 
 	    Extension License. See section <xref linkend=
 	    "copyright_dcwaterdesign" /> 
@@ -768,7 +807,8 @@
       
     <sect2 id="view_menus">
       <title>View Menus</title>
-    
+      <indexterm><primary>menu</primary>
+        <secondary>View GUI</secondary></indexterm>
       <para>The DC Water Design Extension extends the ArcView View 
 	GUI with the following elements:</para>
       <para>
@@ -787,7 +827,7 @@
       
       <sect3 id="write_epanet_file">
         <title>Write EPANET File</title> 
-    
+        <indexterm><primary>INP file</primary></indexterm>
         <para>Exports the hydraulic model to an EPANET input file.</para>
     
 	<para>The model has to be complete, running "Make EPANET Model" 
@@ -809,7 +849,7 @@
 
       <sect3 id="run_epanet_calculation">
         <title>Run EPANET Calculation</title> 
-    
+        <indexterm><primary>run calculation</primary></indexterm>
 	<para>Exports the hydraulic model to an EPANET input file, 
 	runs the analysis and loads the results into ArcView.</para>
 	
@@ -825,7 +865,10 @@
       
       <sect3 id="import_binary_result_file">
 	<title>Import Binary Result File</title>
-      
+        <indexterm><primary>import</primary>
+	  <secondary>results</secondary></indexterm>
+	<indexterm><primary>files</primary>
+	  <secondary>BIN files</secondary></indexterm>
 	<para>Loads binary results of an EPANET calculation into ArcView.</para>
 	
 	<para>The binary results need to result of from an analysis 
@@ -837,13 +880,15 @@
       
       <sect3 id="import_epanet_inp_file">
 	<title>Import EPANET Inp File</title>
+	<indexterm><primary>import</primary>
+	  <secondary>INP file</secondary></indexterm>
 	<para>Imports an EPANET model from an EPANET INP file.</para>
 	<para>The EPANET INP format is an ASCII format (it can be 
 	  easily edited by any text editor) that is documented in 
 	  the EPANET toolkit. The windows version of EPANET can 
-	  export models to this format (<guimenu>File</guimenu> -&gt; 
-	  <guimenuitem>Export</guimenuitem> -&gt; 
-	  <guimenuitem>Network ...</guimenuitem>).</para>
+	  export models to this format (<menuchoice><guimenu>File</guimenu> 
+	  <guimenuitem>Export</guimenuitem> 
+	  <guimenuitem>Network ...</guimenuitem></menuchoice>).</para>
 	<caution><para>Currently the function will not import the full EPANET
 	  model. Be sure to check whether the imported results fit your needs.
 	  </para></caution>
@@ -853,7 +898,7 @@
       
       <sect3 id="check_epanet_model">
         <title>Check EPANET Model</title>
-    
+        <indexterm><primary>check</primary></indexterm>
 	<para>Performs a number of checks on the hydraulic model.</para>
 	
 	<para>The checks include the following:
@@ -870,7 +915,9 @@
       </sect3>
       <sect3 id="load_results_for_step">
         <title>Load Results for Step ...</title> 
-    
+        <indexterm><primary>time step</primary></indexterm>
+	<indexterm><primary>load</primary>
+	  <secondary>results</secondary></indexterm>
 	<para>Loads the results of an EPANET hydraulic analysis to ArcView.</para>
 	
 	<para>The hydraulic analysis has to be run from ArcView in 
@@ -879,7 +926,9 @@
       </sect3>
       <sect3 id="make_epanet_model">
         <title>Make EPANET Model</title> 
-    
+	<indexterm><primary>make model</primary></indexterm>
+	<indexterm><primary>create model</primary></indexterm>
+	<indexterm><primary>model</primary></indexterm>
 	<para>Creates the line-node structure required by EPANET.</para>
 	
 	<para>This function fills the fields node1 and node2 in the 
@@ -903,7 +952,7 @@
       </sect3>
       <sect3 id="epanet_themes_dialog">
         <title>EPANET Themes</title> 
-    
+        <indexterm><primary>EPANET Themes</primary></indexterm>
 	<para>Opens the EPANET Themes Dialog.</para>
 	
 	<para>Use the Dialog to select the themes you want to use in 
@@ -920,7 +969,8 @@
       </sect3>
       <sect3 id="epanet_tables_dialog">
         <title>EPANET Tables</title> 
-    
+        <indexterm><primary>tables</primary>
+	  <secondary>EPANET</secondary></indexterm>
 	<para>Displays the EPANET Tables Dialog.</para> 
 	
 	<para>The Tables in the dialog are used to to store 
@@ -933,7 +983,8 @@
       </sect3>
       <sect3>
         <title>Valve Control</title>
-    
+	<indexterm><primary>valve</primary></indexterm>
+	<indexterm><primary>control</primary></indexterm>
 	<para>Allows to set valve states according to EPANET Controls.</para>
 	
 	<para>If a controls table is registered with the Extension 
@@ -945,7 +996,7 @@
       </sect3>
       <sect3>
 	<title>Make House Connections</title> 
-      
+        <indexterm><primary>house connection</primary></indexterm>
 	<para>Creates a straight pipe between tanks and junctions 
 	which share an id.</para>
 	
@@ -966,7 +1017,7 @@
       </sect3>	  
       <sect3>
         <title>Create Supply Strings</title> 
-	
+	<indexterm><primary>supply string</primary></indexterm>
 	<para>Calculates a coded text that shows when a node is 
 	supplied with water.</para>
 	
@@ -989,7 +1040,8 @@
       </sect3>
       <sect3>
         <title>Calculate Pipe Length For Junctions</title> 
-    
+        <indexterm><primary>junction</primary></indexterm>
+	<indexterm><primary>pipe length</primary></indexterm>
 	<para>This function calculates the length of the pipes 
 	connected to a junction.</para>
 	
@@ -1002,7 +1054,8 @@
       </sect3>
       <sect3>
         <title>Clip Themes by Bitcode</title> 
-    
+        <indexterm><primary>bytecode</primary></indexterm>
+	<indexterm><primary>clip</primary></indexterm>
 	<para>Creates new themes with features which have the same 
 	bit set in a bit code.</para>
 	
@@ -1019,7 +1072,8 @@
     
       <sect3 id="create_zones_from_controls">
         <title>Create Zones from Controls</title>
-    
+        <indexterm><primary>zone</primary></indexterm>
+	<indexterm><primary>controls</primary></indexterm>
 	<para>Creates a sequence (string) of 0 and 1 for describing 
 	  if the pipe is connected to a reservoir at over a 
 	  sequence of hours.</para> 
@@ -1052,7 +1106,7 @@
       </sect3>
       <sect3>
         <title>Create Missing Fields</title>
-    
+        <indexterm><primary>fields</primary></indexterm>
 	<para>Creates fields required by the data model if they are 
 	  missing in the EPANET themes. </para>
 	
@@ -1062,20 +1116,22 @@
     
       <sect3>
         <title>Create Missing Junctions</title>
-    
+        <indexterm><primary>missing junctions</primary></indexterm>
+	<indexterm><primary>junction</primary></indexterm>
 	<para>Creates all the Junctions that are necessary to have an 
 	  EPANET Model with the correct topology (a node at every 
 	  end of a pipe).</para>
       </sect3>
       <sect3>
         <title>Skeletonize Model</title>
+	<indexterm><primary>skeleton</primary></indexterm>
 	<para>Merges all pipeline sections that share a common 
 	  attribute. You will be prompted to select a field for 
 	  the attribute comparison. Removes unnecessary nodes.</para>
       </sect3>
       <sect3>
         <title>About DC Water Design Extension</title>
-    
+        <indexterm><primary>license</primary></indexterm>
 	<para>Displays information about the DC Water Design 
 	  Extension License. See section[sec:dcwatdes-license] for the license 
 	  details.</para>
@@ -1083,10 +1139,12 @@
     </sect2>
     <sect2 id="view_tools">
       <title>View Tools</title>
+      <indexterm><primary>tools</primary>
+        <secondary>View GUI</secondary></indexterm>
       <para>Tools that are added to the View GUI.</para>
       <sect3 id="flip_polylines">
         <title>Flip Polylines</title> 
-    
+	<indexterm><primary>flip</primary></indexterm>
 	<para>This tool allows to flip the digitizing direction of lines.</para>
 	
 	<para>The theme containing the lines to be flipped has to be 
@@ -1098,7 +1156,7 @@
       </sect3>
       <sect3>
         <title>Move Nodes</title> 
-    
+        <indexterm><primary>move</primary></indexterm>
 	<para>A tool to move network nodes including rubber-banding.</para>
 	
 	<para>With this tool it's possible to move network nodes 
@@ -1111,7 +1169,8 @@
       </sect3>
       <sect3>
         <title>Split Pipe (Add Junction)</title> 
-    
+        <indexterm><primary>split</primary>
+	  <secondary>pipe</secondary></indexterm>
 	<para>Tool that allows to split a pipe into two pipes. Adds a 
 	  new junction at the split point.</para>
 	  
@@ -1124,7 +1183,9 @@
       </sect3>	  
       <sect3>
         <title>Edit Pipe Vertices</title> 
-    
+        <indexterm><primary>vertex</primary></indexterm>
+	<indexterm><primary>edit</primary>
+	  <secondary>vertex</secondary></indexterm>
 	<para>Allows to re-shape pipes.</para>
 	
 	<para>Vertices determine the route of a pipe. The tool makes 
@@ -1146,8 +1207,8 @@
 	pipe length.</para>
       </sect3>
       <sect3>
-        <title>Change Node Class</title> 
-    
+        <title>Change Node Class</title>
+        <indexterm><primary>change node class</primary></indexterm>
 	<para>Tool to convert nodes from one class to another.</para>
 	
 	<para>The Change Node Class tool allows to convert e.g. a 
@@ -1161,7 +1222,7 @@
       </sect3>
       <sect3>	
         <title>Delete Feature</title>
-    
+        <indexterm><primary>delete</primary></indexterm>
 	<para>A tool to delete network features.</para>
 	
 	<para>Allows one-click deletion of network features. The user 
@@ -1173,7 +1234,9 @@
       </sect3>
       <sect3>
         <title>Digitize Junction</title> 
-    
+        <indexterm><primary>digitize</primary>
+	  <secondary>junction</secondary></indexterm>
+	<indexterm><primary>junction</primary></indexterm>  
 	<para>The Digitize Junction tool is used to digitize 
 	junctions.</para> 
 	
@@ -1182,7 +1245,9 @@
       </sect3>
       <sect3>
         <title>Digitize Pipe</title> 
-    
+	<indexterm><primary>digitize</primary>
+	  <secondary>pipe</secondary></indexterm>
+	<indexterm><primary>pipe</primary></indexterm>  
 	<para>The Digitize Pipe tool is used to digitize pipes.</para> 
 	
 	<para>The pipes are added to the pipe theme selected in the 
@@ -1192,7 +1257,9 @@
       </sect3>
       <sect3>
         <title>Digitize Tank</title> 
-    
+        <indexterm><primary>tank</primary></indexterm>
+	<indexterm><primary>digitize</primary>
+	  <secondary>tank</secondary></indexterm>
 	<para>The Digitize Tank tool is used to digitize tanks.</para> 
 	
 	<para>The tanks are added to the tank theme selected in the 
@@ -1200,7 +1267,8 @@
       </sect3>
       <sect3>
         <title>Digitize Valve</title> 
-    
+        <indexterm><primary>digitize</primary>
+	  <secondary>valve</secondary></indexterm>
 	<para>The Digitize Valve tool is used to digitize valves.</para> 
 	
 	<para>The valves are added to the valve theme selected in the 
@@ -1209,7 +1277,9 @@
       </sect3>
       <sect3>
         <title>Digitize Reservoir</title> 
-    
+	<indexterm><primary>digitize</primary>
+	  <secondary>reservoir</secondary></indexterm>
+	<indexterm><primary>reservoir</primary></indexterm>  
 	<para>The Digitize Reservoir tool is used to digitize 
 	  reservoirs.</para> 
 	
@@ -1220,7 +1290,9 @@
       </sect3>
       <sect3>
 	<title>Digitize Pump</title>
-      
+        <indexterm><primary>pump</primary></indexterm>
+	<indexterm><primary>digitize</primary>
+	  <secondary>pump</secondary></indexterm>
         <para>The Digitize Pump tool is used to digitize pumps.</para> 
     
 	<para>The pumps are added to the pump theme selected in the 
@@ -1230,6 +1302,8 @@
     </sect2>
     <sect2 id="view_context_menus">
       <title>View Context Menus</title>
+      <indexterm><primary>menu</primary>
+        <secondary>View GUI Context</secondary></indexterm>
       <para>The context menu items described in this section are available if 
         the right mouse button is pressed over a theme that has been registered 
 	with the DC Water Design Extension (See <xref linkend=
@@ -1249,7 +1323,7 @@
       </sect3>
       <sect3 id="edit_pipe_table_entry">	  
 	<title>Edit Pipe Table Entry</title>
-      
+        <indexterm><primary>edit</primary></indexterm>
 	<para>Pop-up menu item allowing to edit the attributes of a pipe.</para>
 	
 	<para>Right-clicking on a pipe and selecting this menu item 
@@ -1260,6 +1334,8 @@
       </sect3>
       <sect3 id="select_connected_pipes">
         <title>Select Connected Pipes</title>
+	<indexterm><primary>connected pipes</primary></indexterm>
+	<indexterm><primary>pipe</primary></indexterm>
 	<para>Pop-up menu item that allows to trace the pipes 
 	  connected to the selected pipe.</para>
 	<para>Right-clicking on a pipe and selecting this menu item 
@@ -1278,6 +1354,7 @@
       </sect3>
       <sect3 id="select_connected_pipes_interactively">
         <title>Select Connected Pipes Interactively</title>
+	<indexterm><primary>interactive</primary></indexterm>
 	<para>Interactively traces connected pipes.</para>
 	<para>See <xref linkend="select_connected_pipes" /> for more 
 	  information on network traces.
@@ -1285,7 +1362,7 @@
       </sect3>
       <sect3 id="show_node_table_entry">
 	<title>Show Node Table Entry</title>
-      
+        <indexterm><primary>node</primary></indexterm>
 	<para>Pop-up menu item that shows the attributes of a node.</para>
 	
 	<para>Right-clicking on a node and selecting this menu item 
@@ -1317,13 +1394,16 @@
     </sect2>
     <sect2 id="table_buttons">
       <title>Table Buttons</title>
+      <indexterm><primary>button</primary>
+        <secondary>Table GUI</secondary></indexterm>
       <para>Table buttons that are added by the extension.</para>
       <sect3 id="bytecode_calculator">
         <title>Bytecode Calculator</title>
-	
+	<indexterm><primary>calculator</primary></indexterm>
+	<indexterm><primary>bytecode</primary></indexterm>
 	<para>The Bytecode Calculator is accessible from the button 
 	  bar of the table GUI. It is disabled unless the table 
-	  is editable and a numerical field is selected. 
+	  is editable and a numerical field is selected.</para>
 	  <itemizedlist>
 	    <listitem><para>Upon clicking on the Bytecode Calculator button, the 
 	      user is prompted to select the bits he wants to set.
@@ -1340,11 +1420,11 @@
 	   </itemizedlist>
 	   <para>See <xref linkend="byte_codes" /> for details regarding byte 
 	     codes.</para>
-	</para>
       </sect3>
     </sect2>
     <sect2 id="commandline">
       <title>Commandline Tools</title>
+      <indexterm><primary>commandline</primary></indexterm>
       <para>Several commandline tools that are available together
         with the DC Water Design Extension.</para>
       <para>If you do not know what a commandline tool is, you may want to skip
@@ -1353,6 +1433,7 @@
         independent of the DC Water Design Extension.</para>
       <sect3 id="inp2shp">
         <title>inp2shp</title>
+	<indexterm><primary>inp2shp</primary></indexterm>
 	<para>Converts EPANET INP files to a group of shapefiles that conform
 	  to the EPANET/ArcView data model.</para>
 	<para>Used by the EPANET INP import function (<xref linkend=
@@ -1360,6 +1441,7 @@
       </sect3>
       <sect3 id="epanet2mysql">
         <title>epanet2mysql</title>
+	<indexterm><primary>epanet2mysql</primary></indexterm>
 	<para>Convert binary EPANET result files to comma separated ASCII 
 	  files.</para>
 	<para>Used by several functions (<xref linkend="run_epanet_calculation" 
@@ -1371,6 +1453,7 @@
   
   <sect1 id="analysis">
     <title>Analysis</title>
+    <indexterm><primary>analysis</primary></indexterm>
     <para>How the results can be analyzed.</para>
     <para>How to import the results to R:</para>
     <programlisting
@@ -1379,7 +1462,8 @@
   
   <sect1 id="faq">
     <title>Frequently Asked Questions</title>
-    
+    <indexterm><primary>Troubleshooting</primary></indexterm>
+    <indexterm><primary>frequently asked questions</primary></indexterm>
     <sect2>
       <title>Why is there no graphical user interface to the 
         DCWatDes.Bitcode.* functions?</title>
@@ -1400,6 +1484,8 @@
     </sect2>
     <sect2>
       <title>How do I recalculate the pipe length for all the pipes?</title>
+      <indexterm><primary>automated pipe length calculation</primary></indexterm>
+      <indexterm><primary>pipe length</primary></indexterm>
       <para>
         <itemizedlist>
 	  <listitem><para>Open the attribute table of the pipe theme.</para></listitem>
@@ -1422,7 +1508,7 @@
     <sect2>
       <title>I get strange errors when I try to create the EPANET 
         model. What can I do?</title>
-    
+      <indexterm><primary>error</primary></indexterm>
       <para>Try the following:
 	<itemizedlist>
 	  <listitem><para>Try "Check EPANET model". This should help you to 
@@ -1436,7 +1522,7 @@
     </sect2>
     <sect2>
       <title>I made a mistake. Why is undo not working?</title>
-    
+      <indexterm><primary>undo</primary></indexterm>
       <important><para>Undo support had to be taken out for the sake of 
 	editing multiple themes at the same time. Make frequent backups.
 	</para></important>
@@ -1446,7 +1532,9 @@
     
     <sect2>
       <title>How do I add rule-based controls?</title>
-    
+      <indexterm><primary>rule-based controls</primary></indexterm>
+      <indexterm><primary>controls</primary>
+        <secondary>rule-based</secondary></indexterm>
       <para>If you have a text file for simple controls, add lines 
       like the following to it:
       
@@ -1459,7 +1547,8 @@
     
     <sect2>
       <title>How do I add the initial status of a pump?</title>
-    
+      <indexterm><primary>pump</primary>
+        <secondary>initial status</secondary></indexterm>
       <para>Just add it to the properties field of the pump like in 
 	the following example:
 	<programlisting>
@@ -1468,6 +1557,7 @@
     </sect2>
     <sect2 id="bug_report">
       <title>I found a bug in the Extension. What should I do?</title>
+      <indexterm><primary>bug</primary></indexterm>
       <para>Please send your bug reports to 
         <email>dcwaterdesign-info@lists.sourceforge.net</email> or
 	use the bug tracker on the website.</para>
@@ -1475,6 +1565,8 @@
     <sect2 id="maximum_field_length">
       <title>How Can I Select All Rows where DC_ID is Longer than
         13 Characters?</title>
+      <indexterm><primary>field</primary>
+        <secondary>length</secondary></indexterm>
       <para>
         <itemizedlist>
           <listitem><para>Click on the <guibutton>Query</guibutton> button.
@@ -1488,6 +1580,7 @@
     </sect2>
     <sect2 id="find_spaces">
       <title>How Can I Select All Rows where DC_ID Contains Spaces?</title>
+      <indexterm><primary>space</primary></indexterm>
       <itemizedlist>
           <listitem><para>Click on the <guibutton>Query</guibutton> button.
 	    </para></listitem>
@@ -1500,6 +1593,7 @@
     </sect2>
     <sect2 id="make_fails">
       <title>Running &quot;Make EPANET Model&quot; Fails. What can I do?</title>
+      <indexterm><primary>error</primary></indexterm>
       <para>Closely analyse the selected records.</para>
       <para>Try to increase the snapping radius (<xref linkend="setup_dialog" 
         />).</para>
@@ -1507,11 +1601,12 @@
   </sect1>
   <sect1 id="development">
     <title>Development</title>
+    <indexterm><primary>development</primary></indexterm>
     <para>This section contains information that is relevant to developers.
       Most probably you only want to read this if you are a programmer.</para>
     <sect2 id="api">
       <title>API Documentation</title>
-      
+      <indexterm><primary>API</primary></indexterm>
       <para>This section documents extension scripts that could be 
       used from the field calculator or in queries. In 
       Addition, the script responsible for the extension 
@@ -1520,7 +1615,8 @@
       
       <sect3 id="dcwatdes.bitcode.or">
 	<title>DCWatDes.Bitcode.or</title> 
-      
+        <indexterm><primary>bitcode</primary></indexterm>
+	<indexterm><primary>DCWatDes.Bitcode.or</primary></indexterm>
 	<para>DCWatDes.Bitcode.or performs a bytewise or operation on string 
 	  numbers.
 	<programlisting>
@@ -1541,7 +1637,7 @@
       </sect3>
       <sect3 id="dcwatdes.bitcode.xor">
 	<title>DCWatDes.Bitcode.xor</title> 
-      
+        <indexterm><primary>DCWatDes.Bitcode.xor</primary></indexterm>
 	<para>DCWatDes.Bitcode.xor performs a bytewise xor operation on string 
 	  numbers.
 	<programlisting>
@@ -1563,6 +1659,7 @@
       </sect3>
       <sect3 id="dcwatdes.bitcode.and">
 	<title>DCWatDes.Bitcode.and</title>
+	<indexterm><primary>DCWatDes.Bitcode.and</primary></indexterm>
 	<para>DCWatDes.Bitcode.and
 	  performs a bytewise and operation on string numbers
 	<programlisting>
@@ -1583,7 +1680,7 @@
       </sect3>
       <sect3 id="dcwatdes.bitcode.issetasnumber">
 	<title>DCWatDes.Bitcode.isSetAsNumber</title>
-      
+        <indexterm><primary>DCWatDes.Bitcode.isSetAsNumber</primary></indexterm>
 	<para>DCWatDes.Bitcode.isSetAsNumber returns whether the n-th byte of a 
 	  string is set or not
 	<programlisting>
@@ -1613,7 +1710,8 @@
       </sect3>
       <sect3>
 	<title>DCWatDes.i18n.createDictionaries</title>
-      
+        <indexterm><primary>DCWatDes.i18n.createDictionaries</primary></indexterm>
+	<indexterm><primary>internationalization</primary></indexterm>
 	<para>Creates the Localization dictionaries of the Extension</para>
 	
 	<para>In order to add another Dictionary, you'll first have 
@@ -1637,7 +1735,8 @@
       </sect3>
       <sect3>
 	<title>DCWatDes.Model.Epanet.Valves.controlByTime</title>
-      
+        <indexterm><primary>DCWatDes.Model.Epanet.Valves.controlByTime</primary>
+	</indexterm>
 	<para>Updates the valves status field, reflecting the status 
 	at a given time.</para>
 	
@@ -1658,9 +1757,11 @@
     </sect2>
     <sect2 id="procedures">
       <title>Procedures</title>
+      <indexterm><primary>procedures</primary></indexterm>
       <para>Procedures in the development process.</para>
       <sect3 id="release_process">
         <title>Release Process</title>
+	<indexterm><primary>release process</primary></indexterm>
 	<para>Steps that should be followed in the release process.</para>
 	<para><itemizedlist>
 	  <listitem><para>Update the version number in 
@@ -1688,6 +1789,8 @@
   </sect1>
   <sect1 id="copyright">
     <title>Copyright</title>
+    <indexterm><primary>copyright</primary></indexterm>
+    <indexterm><primary>license</primary></indexterm>
     <para>Copyright information for the various components of the
       DC Water Design Extension.</para>
     <sect2 id="copyright_dcwaterdesign">
@@ -1713,6 +1816,7 @@
     
     <sect2 id="copyright_apache">
       <title>Apache Software</title>
+      <indexterm><primary>Apache</primary></indexterm>
       <para>testXSLT (Xalan C++) Copyright (C) 2000 Apache Software 
         Foundation. All rights reserved.</para>
       <para>Visit http://xml.apache.org for the details and/or sources.</para>
@@ -1731,7 +1835,7 @@
     
   <sect1 id="av_epanet_data_model">
     <title>ArcView/EPANET Data Model</title>
-    
+    <indexterm><primary>data model</primary></indexterm>
     <para>This section describes the 
     ArcView/EPANET Data Model. Note that the units will 
     change if EPANET is not set to use liters per second 
@@ -1740,7 +1844,7 @@
     
     <sect2>
       <title>Identity</title>
-    
+      <indexterm><primary>Identity</primary></indexterm>
       <para>Inherited by Feature</para>
       <para>Inherited by Pattern</para>
       <para>Inherited by Curve</para>
@@ -1751,7 +1855,7 @@
     </sect2>
   <sect2>
     <title>Node</title>
-      
+      <indexterm><primary>Node</primary></indexterm>
       <para>Inherits from Feature</para>
       <para>Inherited by Junction</para>
       <para>Inherited by Tank</para>
@@ -1778,7 +1882,7 @@
     </sect2>
       
     <sect2><title>Junction</title>
-	
+    <indexterm><primary>Junction</primary></indexterm>	
     <para>Inherits from Node</para>
     <itemizedlist>    
       <listitem><para>Demand: float Base demand flow in liters per second.</para></listitem>
@@ -1793,7 +1897,7 @@
 	    units at 1 m pressure drop. E.g. 1l/s at 1m pressure drop.</para></listitem></itemizedlist>
     </sect2>
     <sect2><title>Tank</title>
-	  
+      <indexterm><primary>Tank</primary></indexterm>	  
       <para>Inherits from Node</para>
       <itemizedlist>
 	<listitem><para>Initiallevel: float Initial water level above the 
@@ -1816,7 +1920,7 @@
     </sect2>
     
     <sect2><title>Pump</title>
-    
+      <indexterm><primary>Pump</primary></indexterm>
       <para>Inherits from VirtualLine</para>
       <itemizedlist>   
 	<listitem><para>Properties: string EPANET properties of the pump. 
@@ -1836,7 +1940,7 @@
     </sect2>
     <sect2>
       <title>Valve</title>
-	  
+      <indexterm><primary>Valve</primary></indexterm>	  
       <para>Inherits from VirtualLine</para>
       <itemizedlist>    
 	<listitem><para>Diameter: integer Diameter of the valve in mm.</para></listitem>
@@ -1899,7 +2003,7 @@
       </itemizedlist>
     </sect2>
     <sect2><title>Pipe</title>
-    
+    <indexterm><primary>Pipe</primary></indexterm>
     <para>Inherits from Feature</para>
     <itemizedlist>	
       <listitem><para>Shape: Polyline Spatial data.</para></listitem>
@@ -1940,7 +2044,7 @@
   </sect2>
   <sect2>
     <title>Reservoir</title>
-    
+    <indexterm><primary>Reservoir</primary></indexterm>
     <para>Inherits from Node</para>
 	
     <itemizedlist>
@@ -1951,7 +2055,7 @@
     </itemizedlist>
   </sect2>  
   <sect2><title>Feature</title>
-      
+    <indexterm><primary>Feature</primary></indexterm>  
     <para>Inherited by Node</para>
 	
     <para>Inherited by Pipe</para>
@@ -1973,7 +2077,7 @@
     </itemizedlist>
   </sect2>  
   <sect2><title>Pattern</title>
-    
+    <indexterm><primary>Pattern</primary></indexterm>
     <para>Inherits from Identity</para>
     <itemizedlist>    
     <listitem><para>multiplier: float The multiplier that describes how 
@@ -2043,6 +2147,7 @@
     </sect2>
     <sect2>
       <title>Report</title>
+      <indexterm><primary>Report</primary></indexterm>
       <itemizedlist>      
 	<listitem><para>Pagesize: integer The number of lines on one page of 
 	      the output report. The default is 0 meaning that no 
@@ -2117,7 +2222,7 @@
     </sect2>    
     <sect2>
       <title>Times</title>
-    
+      <indexterm><primary>Times</primary></indexterm>
       <para>Times can be specified in SECONDS(SEC), MINUTES (MIN), 
 	HOURS or DAYS. Just enter the unit name after the 
 	value. The default time unit is hours.</para>
@@ -2169,7 +2274,7 @@
     
     <sect2>
       <title>VirtualLine</title>
-	
+      <indexterm><primary>VirtualLine</primary></indexterm>	
       <para>Inherited by Pump</para>
 	  
       <para>Inherited by Valve</para>
@@ -2186,7 +2291,7 @@
     </sect2>
 	  
     <sect2><title>Curve</title>
-	  
+      <indexterm><primary>Curve</primary></indexterm>	  
       <para>Inherits from Identity</para>
       <itemizedlist>  
 	  <listitem><para>dc_x: float X value.</para></listitem>
@@ -2194,5 +2299,119 @@
 	  <listitem><para>dc_y: float Y value.</para></listitem>
       </itemizedlist>
     </sect2>
+  </sect1>
+</article>
+<article id="tutorials">
+  <title>Tutorials</title>
+  <indexterm><primary>tutorial</primary></indexterm>
+  <para>Tutorial related to hydraulic analysis with th DC Water Design
+    Extension.</para>
+  <sect1 id="thiessen_tutorial">
+    <title>Demand Calculation using Thiessen Polygons</title>
+    <indexterm><primary>Thiessen</primary></indexterm>
+    <indexterm><primary>Voronoi</primary></indexterm>
+    <indexterm><primary>demand</primary></indexterm>
+    <para>This tutorial shows how to calculate node demands using
+      Thiessen polygons.</para>
+    <para>Thiessen polygons are also called Voronoi diagrams.</para>
+    <note><para>The following requires the 
+      &quot;Create Thiessen Polygons&quot; extension which is available 
+      from <ulink url="http://arcscripts.esri.com" 
+      >http://arcscripts.esri.com</ulink>.</para></note>
+    <para>You will need a sufficiently developed network model ot apply the
+      steps below. Especially the contents of the field <structfield
+      >dc_id</structfield> in the <classname>Junction</classname> theme
+      have to be unique. The example below will also require a supply zone
+      marked in a polygon theme. If your data does not fulfil these 
+      requirements (yet),
+      you can use the DC Water Design Extension sample data. See
+      <xref linkend="how_to_obtain" /> for details where to obtain
+      the sample data.</para>
+    <para>Assumptions and design parameters:</para>
+    <simplelist>
+      <member>The map unit is meter.</member>
+      <member>The population density is 200 p/ha.</member>
+      <member>The average demand is 100 lcd.</member>
+      <member>The flow (demand) unit is l/s.</member>
+    </simplelist>  
+    <tip><para>It is also possible to use a buffer around the points instead of
+      a polygon theme of the supply zone. However this is not covered
+      in the example below.</para></tip>
+    <example id="thiessen_example">
+      <title>Demand Calculation</title>
+    <para>Load the &quot;Create Thiessen Polygons&quot; extension.</para>
+    <para>Add the <classname>Junction</classname> and supply zone themes to 
+      the current view (Unless they have been added to it already).</para>
+    <para>Activate the <classname>Junction</classname> theme.</para>
+    <para>Click on the <guibutton>Thiessen Polygons</guibutton> button.</para>
+    <para>Select point field for polygon ID link: In the <guilabel>Build Thiessen 
+      Polygons</guilabel> dialog, select <structfield>dc_id</structfield> in 
+      the list. Click <guibutton>OK</guibutton>.</para>
+    <para>Select polygon theme for boundary: In the <guilabel>Build
+      Thiessen Polygons</guilabel> dialog, select your supply zone theme.
+      Click <guibutton>OK</guibutton>.</para>
+    <para>In the <guilabel>Output Theme File</guilabel> dialog, select location
+      and filename of the Thiessen polygon shapefile. Click 
+      <guibutton>OK</guibutton>.</para>  
+    <para>The new Thiessen polygon theme will be added to the current view.
+      </para>
+    <para>Move the Thiessen polygon theme below the junction theme, but above
+      other polygon themes such as the supply zone. Note that the Thiessen 
+      polygon theme covers the same area as the supply zone theme. There is
+      one Thiessen polygon for every <classname>Junction</classname>.</para>
+    <para>Activate the Thiessen polygon theme.</para>
+    <para>Open the Thiessen polygon theme table: Select <menuchoice>
+      <guimenu>Theme</guimenu><guimenuitem>Table...</guimenuitem></menuchoice>
+      in the menu.</para>
+    <para>Select the <structfield>dc_id</structfield> field.</para>
+    <para>Select <menuchoice><guimenu>Field</guimenu>
+      <guimenuitem>Summarize...</guimenuitem></menuchoice> from the menu.</para>
+    <para>In the <guilabel>Summary Table Definition</guilabel> dialog, select
+      <guilabel>Area</guilabel> in the field list.</para>
+    <para>In the &quot;Summarize by&quot; list, select <guilabel>Sum</guilabel>.
+      </para>
+    <para>Click on the <guibutton>Add</guibutton> button.</para>
+    <para>Click on the <guibutton>OK</guibutton> button.</para>
+    <para>A new summary table is created (<filename>sumX.dbf</filename> where
+      X is a number).</para>
+    <para>Select the <structfield>dc_id</structfield> field in the summary table.
+      </para>
+    <para>Go back to the view, e.g. by selecting <menuchoice>
+      <guimenu>Window</guimenu><guimenuitem>View1</guimenuitem></menuchoice>
+      from the menu.</para>
+    <para>Activate the <classname>Junction</classname> theme.</para>
+    <para>Open the <classname>Junction</classname> theme table:
+      Select <menuchoice><guimenu>Theme</guimenu>
+      <guimenuitem>Table...</guimenuitem></menuchoice> from the menu.</para>
+    <para>Select the <structfield>dc_id</structfield> field.</para>
+    <para>Join the summary table: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Join</guimenuitem></menuchoice> from the menu.</para>
+    <para>Start editing the table: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Start Editing</guimenuitem></menuchoice> from the menu.</para>
+    <para>Select the <structfield>demand</structfield> field.</para>
+    <para>Open the field calculator: Select <menuchoice><guimenu>Field</guimenu>
+      <guimenuitem>Calculate...</guimenuitem></menuchoice> from the menu.</para>
+    <para>In the <guilabel>[demand]</guilabel> field enter the formula to
+     calculate the demand:</para>
+     <programlisting>[Sum_Area]*100*200/10000/24/60/60</programlisting>
+    <para>Click <guibutton>OK</guibutton>.</para>
+    <para>The nodal demand is now calculated.</para>
+    <para>Remove all joins: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Remove All Joins</guimenuitem></menuchoice> from the menu.
+      </para>
+    <para>Stop editing: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Stop editing</guimenuitem></menuchoice>.</para>
+    <para>Save the edits: Click <guibutton>Yes</guibutton>.</para>  
+    </example>
+    
+    <indexterm><primary>shpvoronoi</primary></indexterm>
+    <tip><para>If you have a very large number of Thiessen polygons
+      to create, the <command>shpvoronoi</command> commandline tool
+      will provide better performance than the &quot;Create
+      Thiessen Polygons&quot; extension.</para></tip>
   </sect1>  
 </article>
+<index>
+  <title>Index</title>
+</index>
+</book>

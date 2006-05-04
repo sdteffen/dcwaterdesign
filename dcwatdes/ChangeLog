@@ -1,4 +1,9 @@
-2005-04-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+2006-05-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Added Thiessen polygon tutorial; Switched
+	from DocBook article to book; added index
+
+2006-04-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.loadresultsforstep.ave: Remove index on timestep
 	to avoid rare loading problems
