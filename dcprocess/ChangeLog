@@ -1,3 +1,7 @@
+2006-05-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.extendpolylines.ave: Only work on selected lines
+
 2006-05-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcprocess.extendpolylines.ave:

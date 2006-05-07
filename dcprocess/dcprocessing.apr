@@ -615,10 +615,10 @@ if (blnIsString) then\n    stringID = numID.asString\n    vtbUnique.setValue (fl
 	Win:	71
 	CSMgr:	72
 	DocExts:	73
-	Source:	"' DCProcess.extendPolylines\n\n' extend all selected polylines in a theme\n\n' (c) 2002, 2004, 2006 DORSCH Consult\n\nviewActive = av.getActiveDoc\nlstThemes = viewActive.getActiveThemes\nftbLine = lstThemes.get(0).getFTab\n\nfldLineShape = ftbLine.findField(\"Shape\")\n\nnumToGo = ftbLine.getNumRecords\nnumComplete = 0\nav.showStopButton\n\nbmpSelection = ftbLine.getSelection.clone\nbmpSelection.setAll\n\nstrLength = MsgBox.input(\"Please input the extension length of the lines in map units\", \"DC Processing\", \"2\")\nif(strLength 
-= nil)then\n  exit\nend\nif(strLength.isNumber.not)then\n  MsgBox.error(\"Input was not a number.\",\"DC Processing\")\n  exit\nend\nnumExtensionLength = strLength.asNumber\nfor each recLine in bmpSelection\n  pllLine = ftbLine.returnValue(fldLineShape, recLine)\n  if((pllLine <> nil)and(pllLine.isNull.not)and(pllLine.isEmpty.not))then\n    ' determine scale factor\n    numLength = pllLine.returnLength\n    numScaleFactor = (numLength+numExtensionLength)/numLength\n\n    lstPoints = pllLine.asList.get(0)\n    pntEnd = lstPoint
-s.get(lstPoints.count-1)\n    \n    cX = pntEnd.getX \n    cY = pntEnd.getY \n    moveX = 0 - cX \n    moveY = 0 - cY\n  \n   trsScale = Transform2D.Make \n   trsScale.Move(moveX@moveY) \n   trsScale.Scale(Point.make(numScaleFactor,numScaleFactor)) \n   trsScale.Move(cX@cY)\n  \n   'Apply the transformation to the polygon \n   pllLine = pllLine.transform(trsScale)\n\n    ftbLine.setValue(fldLineShape, recLine, pllLine)\n    \n  end\n  \n  numComplete = numComplete + 1\n  if(av.setStatus((numComplete/numToGo)*100).not)then\n    
-exit\n  end\nend\n\nav.clearStatus\n"
+	Source:	"' DCProcess.extendPolylines\n\n' extend all selected polylines in a theme\n\n' (c) 2002, 2004, 2006 DORSCH Consult\n\nviewActive = av.getActiveDoc\nlstThemes = viewActive.getActiveThemes\nftbLine = lstThemes.get(0).getFTab\n\nfldLineShape = ftbLine.findField(\"Shape\")\n\nnumToGo = ftbLine.getNumRecords\nnumComplete = 0\nav.showStopButton\n\nbmpSelection = ftbLine.getSelection.clone\n\nstrLength = MsgBox.input(\"Please input the extension length of the lines in map units\", \"DC Processing\", \"2\")\nif(strLength = nil)then\n  exit\nen
+d\nif(strLength.isNumber.not)then\n  MsgBox.error(\"Input was not a number.\",\"DC Processing\")\n  exit\nend\nnumExtensionLength = strLength.asNumber\nfor each recLine in bmpSelection\n  pllLine = ftbLine.returnValue(fldLineShape, recLine)\n  if((pllLine <> nil)and(pllLine.isNull.not)and(pllLine.isEmpty.not))then\n    ' determine scale factor\n    numLength = pllLine.returnLength\n    numScaleFactor = (numLength+numExtensionLength)/numLength\n\n    lstPoints = pllLine.asList.get(0)\n    pntEnd = lstPoints.get(lstPoints.coun
+t-1)\n    \n    cX = pntEnd.getX \n    cY = pntEnd.getY \n    moveX = 0 - cX \n    moveY = 0 - cY\n  \n   trsScale = Transform2D.Make \n   trsScale.Move(moveX@moveY) \n   trsScale.Scale(Point.make(numScaleFactor,numScaleFactor)) \n   trsScale.Move(cX@cY)\n  \n   'Apply the transformation to the polygon \n   pllLine = pllLine.transform(trsScale)\n\n    ftbLine.setValue(fldLineShape, recLine, pllLine)\n    \n  end\n  \n  numComplete = numComplete + 1\n  if(av.setStatus((numComplete/numToGo)*100).not)then\n    exit\n  end\nend\n\nav.c
+learStatus\n"
 	FontSize:	1
 )
 
@@ -5786,6 +5786,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.997
+	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -6068,7 +6069,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (AVStr.1033
-	S:	"dcprocessing.apr DCProcessExtension.make"
+	S:	"dcprocessing.apr DCProcess.extendPolylines"
 )
 
 (Choice.1034
@@ -6079,8 +6080,8 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.1035
-	Help:	"Activates DCProcessExtension.make"
-	Label:	"&2 DCProcessExtension.make"
+	Help:	"Activates DCProcess.extendPolylines"
+	Label:	"&2 DCProcess.extendPolylines"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
