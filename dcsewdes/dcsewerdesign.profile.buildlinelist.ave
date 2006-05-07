@@ -2,7 +2,7 @@
 
 ' Order a sequence of line segments according to the line direction
 
-' (c) 2005 DORSCH Consult
+' (c) 2005, 2006 DORSCH Consult
 
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public
@@ -36,6 +36,9 @@ fldLineShape = ftbLine.findField("Shape")
 ' Get one selected line
 bmpSelectedLines = ftbLine.getSelection.clone
 if(bmpSelectedLines.count < 2)then
+  if(bmpSelectedLines.count = 1)then
+    return {bmpSelectedLines.getNextSet(-1)}
+  end
   MsgBox.info("Please select the Lines for which the Profile should be created","DC Sewer Design")
   exit
 end

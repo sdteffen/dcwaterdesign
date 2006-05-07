@@ -1,6 +1,5 @@
 /3.2
 (ODB.1
-	Dependencies:	"$AVEXT/script_tools_jen.avx\n$AVEXT/cadview.avx\n$AVEXT/geoproc.avx\n"
 	FirstRootClassName:	"Project"
 	Roots:	2
 	Version:	32
@@ -59,32 +58,29 @@
 	Doc:	174
 	Doc:	178
 	Doc:	182
+	ActiveDoc:	182
 	Buttons:	186
 	Buttons:	187
 	Buttons:	188
-	Dependencies:	189
-	Dependencies:	190
-	Dependencies:	191
-	Scripts:	192
-	Prefs:	193
-	GUI:	676
-	GUI:	984
-	GUI:	1403
-	GUI:	1578
-	WorkDir:	1834
+	Scripts:	189
+	Prefs:	190
+	GUI:	195
+	GUI:	475
+	GUI:	875
+	GUI:	986
+	WorkDir:	1051
 	WinY:	1
 	WinW:	1680
 	WinH:	1015
 	SerialNumber:	"835011100145"
-	SelColor:	1835
-	GUINames:	1836
-	GUINames:	1837
-	GUINames:	1838
-	GUINames:	1839
-	GUINames:	1840
-	GUINames:	1841
-	GUINames:	1842
-	GUINames:	1843
+	SelColor:	1052
+	GUINames:	1053
+	GUINames:	1054
+	GUINames:	1055
+	GUINames:	1056
+	GUINames:	1057
+	GUINames:	1058
+	GUINames:	1059
 	TocWidthScale:	1.00000000000000
 )
 
@@ -353,12 +349,13 @@ tring, pntIDLocation)\n'      gtxIDLabel.setAngle(90)\n      viewProfile.getGrap
 e.make({{1000@((numFirstDatumLine*10)+1000), (1000)@((numLastDatumLine*10)+1000)}})\n  recDatum = ftbProfile.addRecord\n  ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  pllDatum = Polyline.make({{(1000+numTotalLength)@((numFirstDatumLine*10)+1000), (1000+numTotalLength)@((numLastDatumLine*10)+1000)}})\n  recDatum = ftbProfile.addRecord\n  ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)\n  ftbProfile.setValue(fldProfileStyle, recPro
 file, \"normal\")\nend\n\nftbProfile.setEditable(false)\nthmProfile = FTheme.make(ftbProfile)\nviewProfile.addTheme(thmProfile)\nlgdProfile = thmProfile.getLegend\nlgdProfile.setLegendType(#LEGEND_TYPE_UNIQUE)\nlgdProfile.unique(thmProfile, \"style\")\nfor each symUnique in lgdProfile.getSymbols\n  symUnique.setColor(Color.getBlack)\nend\nlgdProfile.getSymbols.get(0).setSize(1)\nthmProfile.updateLegend\n\n' Add manholes with given legend if \"Manhole.Legend\" was given in configuration file\nif(strManholeLegend <> nil)then\n  av.
 run(\"DCSewerDesign.ComplexProfile.addManholeLegend\", {viewProfile, ftbManhole, strManholeLegend, lstProfileManholes, fldManholeInvertLevel, ftbLine, lstProfileLines})\nend\n\nav.clearStatus\nthmProfile.setVisible(true) \nrctExtent = viewProfile.returnExtent\nviewProfile.getDisplay.setExtent(rctExtent.Scale(1.1))\n\nav.getProject.setModified(true)  "
-	SearchStr:	"get"
+	SearchStr:	"please select"
 	FontSize:	1
 )
 
 (DocWin.31
 	Owner:	30
+	Open:	1
 	W:	837
 	H:	400
 )
@@ -1042,16 +1039,16 @@ Status((numDone/numToGo)*100).not)then\n    ' User hit the stop button\n    exit
 	Win:	119
 	CSMgr:	120
 	DocExts:	121
-	Source:	"' DCSewerDesign.Profile.buildLineList\n\n' Order a sequence of line segments according to the line direction\n\n' (c) 2005 DORSCH Consult\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied 
-warranty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\nftbLine = self.get(0)\nfldLineDcId = self.get(1)\n\nif(ftbLine.is(FTab).not)then\n  System.echo(\"DCSewerDesign.Profile.builLineList() ERROR: First argument is not an FTab\"
-)\n  exit  \nend\n\nif(fldLineDcId.is(Field).not)then\n  System.echo(\"DCSewerDesign.Profile.builLineList() ERROR: Second argument is not a Field.\")\n  exit\nend\n\nfldLineShape = ftbLine.findField(\"Shape\")\n\n' Get one selected line\nbmpSelectedLines = ftbLine.getSelection.clone\nif(bmpSelectedLines.count < 2)then\n  MsgBox.info(\"Please select the Lines for which the Profile should be created\",\"DC Sewer Design\")\n  exit\nend\nrecTrace = bmpSelectedLines.getNextSet(-1)\nlstConnectedLines=av.run(\"DCSewerDesign.Line.findConnect
-edLines\",{ftbLine,recTrace})\nlstConnectedSelected = List.make\nfor each recConnected in lstConnectedLines\n  if(bmpSelectedLines.get(recConnected))then\n    lstConnectedSelected.add(recConnected)\n  end\nend\n\nav.showStopButton\nnumSelected = bmpSelectedLines.count\n\n' trace to end section (of selection)\nnumFreezePrevent = 0\nlstTried = List.make\nwhile(lstConnectedSelected.count = 2)\n    if((recTrace = lstConnectedSelected.get(0))or(lstTried.findByValue(recTrace)<>(-1)))then\n    recTrace = lstConnectedSelected.get(1
-)\n  else\n    recTrace = lstConnectedSelected.get(0)\n  end\n  if(lstConnectedSelected.findByValue(recTrace) = -1)then\n    lstConnectedSelected.add(recTrace)\n  end\n  lstConnectedSelected = List.make\n  strControl = \"\"\n  lstConnectedLines=av.run(\"DCSewerDesign.Line.findConnectedLines\",{ftbLine,recTrace})\n  if(Number.makeRandom(0,1) > 0.5)then\n    lstConnectedLines.sort(true)\n  else\n    lstConnectedLines.sort(false)\n  end\n  for each recConnected in lstConnectedLines\n    if((bmpSelectedLines.get(recConnected)and(l
-stConnectedSelected.find(recConnected) = -1)))then\n      lstConnectedSelected.add(recConnected)\n      lstTried.add(recConnected)\n      strControl = strControl ++ftbLine.returnValue(fldLineDcId, recConnected).asString\n    end\n  end\n  numFreezePrevent = numFreezePrevent+1\n  if(numFreezePrevent = 10000)then\n    System.echo(strControl)\n    MsgBox.info(\"Went into endless loop. Check the Topology.\", \"DC Sewer Design\")\n    exit\n  end\n  if(av.setStatus(0).not)then\n    exit\n  end\nend\nif(lstConnectedSelected.count>2)
-then\n  MsgBox.info(\"Can't draw Profile for forks. Please check the selection.\",\"DC Sewer Design\")\n  exit\nend\n\n' bounce: start the real trace to other end of selection\n\nlstProfileLines = List.make\nlstProfileLines.add(recTrace)\n\nrecTrace = lstConnectedSelected.get(0)\nlstConnectedLines=av.run(\"DCSewerDesign.Line.findConnectedLines\",{ftbLine,recTrace})\nlstConnectedSelected = List.make\nfor each recConnected in lstConnectedLines\n  if(bmpSelectedLines.get(recConnected))then\n    lstConnectedSelected.add(recConnecte
-d)\n  end\nend\nlstProfileLines.add(recTrace)\n\nwhile(lstConnectedSelected.count = 2)\n  if(lstProfileLines.findByValue(lstConnectedSelected.get(0)) <> -1)then\n    recTrace = lstConnectedSelected.get(1)\n  else\n    recTrace = lstConnectedSelected.get(0)\n  end\n  lstProfileLines.add(recTrace)\n  lstConnectedLines=av.run(\"DCSewerDesign.Line.findConnectedLines\",{ftbLine,recTrace})\n  lstConnectedSelected = List.make\n  for each recConnected in lstConnectedLines\n    if(bmpSelectedLines.get(recConnected))then\n      lstCon
-nectedSelected.add(recConnected)\n    end\n  end\n  if(av.setStatus(lstProfileLines.count/numSelected*100).not)then\n    exit\n  end\nend\nif(lstConnectedSelected.count>2)then\n  MsgBox.info(\"Can't draw profile for forks. Please check the selection.\",\"DC Sewer - Complex Profile\")\n  exit\nend\nif(lstProfileLines.count <> bmpSelectedLines.count)then\n  MsgBox.info(\"Selected lines are not fully connected. Please check.\",\"DC Sewer - Complex Profile\")\n  exit\nend\n\nftbLine.setSelection(bmpSelectedLines)\n\n' Reverse list if ne
-cessary\n\npllLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(0))\npllSecondLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(1))\nif(pllSecondLine.distance(pllLine.along(100)) > 0.1)then\n   lstProfileLines = av.run(\"DCSewerDesign.List.flip\", lstProfileLines)\nend\n\nreturn lstProfileLines"
+	Source:	"' DCSewerDesign.Profile.buildLineList\n\n' Order a sequence of line segments according to the line direction\n\n' (c) 2005, 2006 DORSCH Consult\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the im
+plied warranty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\nftbLine = self.get(0)\nfldLineDcId = self.get(1)\n\nif(ftbLine.is(FTab).not)then\n  System.echo(\"DCSewerDesign.Profile.builLineList() ERROR: First argument is not an
+ FTab\")\n  exit  \nend\n\nif(fldLineDcId.is(Field).not)then\n  System.echo(\"DCSewerDesign.Profile.builLineList() ERROR: Second argument is not a Field.\")\n  exit\nend\n\nfldLineShape = ftbLine.findField(\"Shape\")\n\n' Get one selected line\nbmpSelectedLines = ftbLine.getSelection.clone\nif(bmpSelectedLines.count < 2)then\n  if(bmpSelectedLines.count = 1)then\n    return {bmpSelectedLines.getNextSet(-1)}\n  end\n  MsgBox.info(\"Please select the Lines for which the Profile should be created\",\"DC Sewer Design\")\n  exit\nend\nrecTr
+ace = bmpSelectedLines.getNextSet(-1)\nlstConnectedLines=av.run(\"DCSewerDesign.Line.findConnectedLines\",{ftbLine,recTrace})\nlstConnectedSelected = List.make\nfor each recConnected in lstConnectedLines\n  if(bmpSelectedLines.get(recConnected))then\n    lstConnectedSelected.add(recConnected)\n  end\nend\n\nav.showStopButton\nnumSelected = bmpSelectedLines.count\n\n' trace to end section (of selection)\nnumFreezePrevent = 0\nlstTried = List.make\nwhile(lstConnectedSelected.count = 2)\n    if((recTrace = lstConnectedSelected.
+get(0))or(lstTried.findByValue(recTrace)<>(-1)))then\n    recTrace = lstConnectedSelected.get(1)\n  else\n    recTrace = lstConnectedSelected.get(0)\n  end\n  if(lstConnectedSelected.findByValue(recTrace) = -1)then\n    lstConnectedSelected.add(recTrace)\n  end\n  lstConnectedSelected = List.make\n  strControl = \"\"\n  lstConnectedLines=av.run(\"DCSewerDesign.Line.findConnectedLines\",{ftbLine,recTrace})\n  if(Number.makeRandom(0,1) > 0.5)then\n    lstConnectedLines.sort(true)\n  else\n    lstConnectedLines.sort(false)\n  en
+d\n  for each recConnected in lstConnectedLines\n    if((bmpSelectedLines.get(recConnected)and(lstConnectedSelected.find(recConnected) = -1)))then\n      lstConnectedSelected.add(recConnected)\n      lstTried.add(recConnected)\n      strControl = strControl ++ftbLine.returnValue(fldLineDcId, recConnected).asString\n    end\n  end\n  numFreezePrevent = numFreezePrevent+1\n  if(numFreezePrevent = 10000)then\n    System.echo(strControl)\n    MsgBox.info(\"Went into endless loop. Check the Topology.\", \"DC Sewer Design\")\n  
+  exit\n  end\n  if(av.setStatus(0).not)then\n    exit\n  end\nend\nif(lstConnectedSelected.count>2)then\n  MsgBox.info(\"Can't draw Profile for forks. Please check the selection.\",\"DC Sewer Design\")\n  exit\nend\n\n' bounce: start the real trace to other end of selection\n\nlstProfileLines = List.make\nlstProfileLines.add(recTrace)\n\nrecTrace = lstConnectedSelected.get(0)\nlstConnectedLines=av.run(\"DCSewerDesign.Line.findConnectedLines\",{ftbLine,recTrace})\nlstConnectedSelected = List.make\nfor each recConnected in lstConnec
+tedLines\n  if(bmpSelectedLines.get(recConnected))then\n    lstConnectedSelected.add(recConnected)\n  end\nend\nlstProfileLines.add(recTrace)\n\nwhile(lstConnectedSelected.count = 2)\n  if(lstProfileLines.findByValue(lstConnectedSelected.get(0)) <> -1)then\n    recTrace = lstConnectedSelected.get(1)\n  else\n    recTrace = lstConnectedSelected.get(0)\n  end\n  lstProfileLines.add(recTrace)\n  lstConnectedLines=av.run(\"DCSewerDesign.Line.findConnectedLines\",{ftbLine,recTrace})\n  lstConnectedSelected = List.make\n  for each
+ recConnected in lstConnectedLines\n    if(bmpSelectedLines.get(recConnected))then\n      lstConnectedSelected.add(recConnected)\n    end\n  end\n  if(av.setStatus(lstProfileLines.count/numSelected*100).not)then\n    exit\n  end\nend\nif(lstConnectedSelected.count>2)then\n  MsgBox.info(\"Can't draw profile for forks. Please check the selection.\",\"DC Sewer - Complex Profile\")\n  exit\nend\nif(lstProfileLines.count <> bmpSelectedLines.count)then\n  MsgBox.info(\"Selected lines are not fully connected. Please check.\",\"DC Sewe
+r - Complex Profile\")\n  exit\nend\n\nftbLine.setSelection(bmpSelectedLines)\n\n' Reverse list if necessary\n\npllLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(0))\npllSecondLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(1))\nif(pllSecondLine.distance(pllLine.along(100)) > 0.1)then\n   lstProfileLines = av.run(\"DCSewerDesign.List.flip\", lstProfileLines)\nend\n\nreturn lstProfileLines"
 	FontSize:	1
 )
 
@@ -1089,9 +1086,10 @@ Manholes\",{ftbLine,ftbManhole,lstProfileLines.get(1)}).clone\nfor each recManho
 
 (DocWin.123
 	Owner:	122
-	X:	837
-	W:	837
-	H:	400
+	X:	-4
+	Y:	-4
+	W:	1682
+	H:	903
 )
 
 (CSMgr.124
@@ -1470,7 +1468,6 @@ setCanUnloadScript(av.findScript(\"DCSewerDesignExtension.canUnload\"))\nmyExt.C
 
 (DocWin.171
 	Owner:	170
-	Open:	1
 	X:	-4
 	Y:	-4
 	W:	1682
@@ -1546,19 +1543,20 @@ lf.get(1))\n\nmbTable = av.getProject.findGUI(\"Table\").getMenuBar\nmbTable.rem
 	Win:	183
 	CSMgr:	184
 	DocExts:	185
-	Source:	"' Script.saveAllScripts\n\n' (c) 2004 DORSCH Consult\n\n' If the scripts are to be saved elsewhere, change the following line... \n\nstrSaveDir = \"c:\\wc\\cvs-ssh.sourceforge.net\\dcwaterdesign\\dcsewdes\"\n\nif (File.exists(strSaveDir.asFilename).Not) then\n  MsgBox.Error(\"Working directory:\"++strSaveDir++\"does not exist\", \"\")\n  exit \nend\n\nlstScripts = List.make\n\n' find all scripts\n\nfor each docObj in av.getProject.getDocs\n  if (docObj.is(SEd)) then\n    lstScripts.Add(docObj)\n  end\nend\n\n' Loop over all scripts, write to
- files\n\nblnOverwrite = nil\nnumWritten = 0\n	\nlstScriptsToWrite = List.make\n\nfor each sedScript in lstScripts\n\n  strSaveDir2 = strSaveDir.clone\n  strScriptName = sedScript.asString ' .substitute(\".\",\",\")\n   \n  flnScript = FileName.merge(strSaveDir2, strScriptName)\n  ' System.echo(flnScript.getFullName)\n  flnScript.setName(strScriptName+\".ave\")\n  if (flnScript.isFile) then\n    if(blnOverwrite = nil)then\n      blnOverwrite = MsgBox.YesNo(\"Overwrite files?\", \"Saving Scripts\", false)\n      if(blnOverwrite.not)the
-n\n        continue \n      end\n    end\n      \n    ' check if file has been changed\n    txfScript = TextFile.make(flnScript, #FILE_PERM_READ)\n    strFileSource = txfScript.read(txfScript.getSize)\n    blnChanged = false\n    if(strFileSource <> sedScript.getSource)then\n      blnChanged = true\n    end\n    txfScript.close\n    if(blnChanged)then\n    '  File.delete(flnScript)\n    else\n     continue\n    end\n  end \n  \n  txfScript = TextFile.make(flnScript, #FILE_PERM_WRITE)\n  if (txfScript <> nil) then\n    txfScript.
-write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  else\n    MsgBox.warning(\"Unable to open file for writing:\"++flnScript.getFullName,\"Saving Scripts\")\n  end\nend\nMsgBox.info(numWritten.asString++\"Scripts were written.\", \"Saving Scripts\")\n"
+	Source:	"' Script.saveAllScripts\n\n' (c) 2004 DORSCH Consult\n\n' If the scripts are to be saved elsewhere, change the following line... \n\nstrSaveDir = \"c:\\wc\\svn.sourceforge.net\\dcwaterdesign\\dcsewdes\"\n\nif (File.exists(strSaveDir.asFilename).Not) then\n  MsgBox.Error(\"Working directory:\"++strSaveDir++\"does not exist\", \"\")\n  exit \nend\n\nlstScripts = List.make\n\n' find all scripts\n\nfor each docObj in av.getProject.getDocs\n  if (docObj.is(SEd)) then\n    lstScripts.Add(docObj)\n  end\nend\n\n' Loop over all scripts, write to fil
+es\n\nblnOverwrite = nil\nnumWritten = 0\n	\nlstScriptsToWrite = List.make\n\nfor each sedScript in lstScripts\n\n  strSaveDir2 = strSaveDir.clone\n  strScriptName = sedScript.asString ' .substitute(\".\",\",\")\n   \n  flnScript = FileName.merge(strSaveDir2, strScriptName)\n  ' System.echo(flnScript.getFullName)\n  flnScript.setName(strScriptName+\".ave\")\n  if (flnScript.isFile) then\n    if(blnOverwrite = nil)then\n      blnOverwrite = MsgBox.YesNo(\"Overwrite files?\", \"Saving Scripts\", false)\n      if(blnOverwrite.not)then\n  
+      continue \n      end\n    end\n      \n    ' check if file has been changed\n    txfScript = TextFile.make(flnScript, #FILE_PERM_READ)\n    strFileSource = txfScript.read(txfScript.getSize)\n    blnChanged = false\n    if(strFileSource <> sedScript.getSource)then\n      blnChanged = true\n    end\n    txfScript.close\n    if(blnChanged)then\n    '  File.delete(flnScript)\n    else\n     continue\n    end\n  end \n  \n  txfScript = TextFile.make(flnScript, #FILE_PERM_WRITE)\n  if (txfScript <> nil) then\n    txfScript.writ
+e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  else\n    MsgBox.warning(\"Unable to open file for writing:\"++flnScript.getFullName,\"Saving Scripts\")\n  end\nend\nMsgBox.info(numWritten.asString++\"Scripts were written.\", \"Saving Scripts\")\n"
 	FontSize:	1
 )
 
 (DocWin.183
 	Owner:	182
+	Open:	1
 	X:	-4
 	Y:	-4
-	W:	1610
-	H:	1075
+	W:	1682
+	H:	903
 )
 
 (CSMgr.184
@@ -1589,82 +1587,40 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Click:	"Script.Action"
 )
 
-(FN.189
-	Path:	"$AVEXT/script_tools_jen.avx"
+(NameDict.189
 )
 
-(FN.190
-	Path:	"$AVEXT/cadview.avx"
+(NameDict.190
+	Obj:	191
+	Obj:	192
 )
 
-(FN.191
-	Path:	"$AVEXT/geoproc.avx"
-)
-
-(NameDict.192
-)
-
-(NameDict.193
-	Obj:	194
-	Obj:	195
-	Obj:	196
-	Obj:	671
-)
-
-(AVDict.194
+(AVDict.191
 	InternalName:	"Table of Contents Defaults Dialog"
 )
 
-(AVDict.195
-	InternalName:	"Dialog Designer"
-)
-
-(AVDict.196
+(AVDict.192
 	InternalName:	"_Thor_"
-	Key:	197
-	Value:	198
+	Key:	193
+	Value:	194
 )
 
-(AVStr.197
+(AVStr.193
 	S:	"DLOGS"
 )
 
-(NameDict.198
+(NameDict.194
 )
 
-(AVDict.671
-	InternalName:	"Geoprocessing"
-	Key:	672
-	Key:	673
-	Value:	674
-	Value:	675
-)
-
-(AVStr.672
-	S:	"Loaded"
-)
-
-(AVStr.673
-	S:	"Version"
-)
-
-(Bool.674
-	Truth:	1
-)
-
-(Numb.675
-	N:	3.10000000000000
-)
-
-(DocGUI.676
+(DocGUI.195
 	Name:	"View"
 	Type:	"View"
 	Modified:	1
 	Visible:	1
-	MenuBar:	677
-	ButnBar:	835
-	Popups:	884
-	ToolBar:	906
+	MenuBar:	196
+	ButnBar:	330
+	Popups:	375
+	ToolBar:	397
 	NewScript:	"View.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Doc.Action"
@@ -1672,43 +1628,42 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Doc.ActionUpdate"
 	Title:	"Views"
-	Icon:	983
+	Icon:	474
 )
 
-(MenuBar.677
-	Child:	678
-	Child:	696
-	Child:	716
-	Child:	745
-	Child:	763
-	Child:	791
-	Child:	809
-	Child:	821
-	Child:	826
+(MenuBar.196
+	Child:	197
+	Child:	214
+	Child:	234
+	Child:	257
+	Child:	275
+	Child:	298
+	Child:	314
+	Child:	325
 )
 
-(PMenu.678
+(PMenu.197
 	InternalName:	"File"
-	Child:	679
-	Child:	680
-	Child:	681
-	Child:	682
-	Child:	683
-	Child:	684
-	Child:	686
-	Child:	687
-	Child:	688
-	Child:	689
-	Child:	690
-	Child:	691
-	Child:	692
-	Child:	693
-	Child:	694
-	Child:	695
+	Child:	198
+	Child:	199
+	Child:	200
+	Child:	201
+	Child:	202
+	Child:	203
+	Child:	204
+	Child:	205
+	Child:	206
+	Child:	207
+	Child:	208
+	Child:	209
+	Child:	210
+	Child:	211
+	Child:	212
+	Child:	213
 	Label:	"&File"
 )
 
-(Choice.679
+(Choice.198
 	Help:	"Closes the active component"
 	HelpTopic:	"Close"
 	Label:	"&Close"
@@ -1716,7 +1671,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.680
+(Choice.199
 	Help:	"Closes all components"
 	HelpTopic:	"Close_All"
 	Label:	"Close &All"
@@ -1724,10 +1679,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.681
+(Space.200
 )
 
-(Choice.682
+(Choice.201
 	Help:	"Allows you to specify the current working directory"
 	HelpTopic:	"Set_Working_Directory"
 	Label:	"Set &Working Directory..."
@@ -1735,7 +1690,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.683
+(Choice.202
 	Help:	"Saves the current project"
 	HelpTopic:	"Save_Project"
 	Label:	"&Save Project"
@@ -1743,7 +1698,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+S"
 )
 
-(Choice.684
+(Choice.203
 	Help:	"Saves the current project with a new name"
 	HelpTopic:	"Save_Project_As"
 	Label:	"Save Project As..."
@@ -1751,10 +1706,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.686
+(Space.204
 )
 
-(Choice.687
+(Choice.205
 	Help:	"Displays the Extensions dialog"
 	HelpTopic:	"Extensions"
 	Label:	"Extensions..."
@@ -1762,10 +1717,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.688
+(Space.206
 )
 
-(Choice.689
+(Choice.207
 	Help:	"Prints the view"
 	HelpTopic:	"Print"
 	Label:	"&Print..."
@@ -1773,7 +1728,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.690
+(Choice.208
 	Help:	"Edits the printer and the printing options"
 	HelpTopic:	"Print_Setup"
 	Label:	"P&rint Setup..."
@@ -1781,7 +1736,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.691
+(Choice.209
 	Help:	"Exports the view"
 	HelpTopic:	"Export"
 	Update:	"View.HasThemesUpdate"
@@ -1790,10 +1745,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.692
+(Space.210
 )
 
-(Choice.693
+(Choice.211
 	Help:	"Displays the dialog box to delete, edit, and copy data sources"
 	HelpTopic:	"Manage_Sources"
 	Label:	"&Manage Data Sources..."
@@ -1801,10 +1756,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.694
+(Space.212
 )
 
-(Choice.695
+(Choice.213
 	Help:	"Exits ArcView"
 	HelpTopic:	"Exit"
 	Label:	"E&xit"
@@ -1812,31 +1767,31 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.696
+(PMenu.214
 	InternalName:	"Edit"
-	Child:	697
-	Child:	698
-	Child:	699
-	Child:	700
-	Child:	701
-	Child:	702
-	Child:	703
-	Child:	704
-	Child:	705
-	Child:	706
-	Child:	707
-	Child:	708
-	Child:	709
-	Child:	710
-	Child:	711
-	Child:	712
-	Child:	713
-	Child:	714
-	Child:	715
+	Child:	215
+	Child:	216
+	Child:	217
+	Child:	218
+	Child:	219
+	Child:	220
+	Child:	221
+	Child:	222
+	Child:	223
+	Child:	224
+	Child:	225
+	Child:	226
+	Child:	227
+	Child:	228
+	Child:	229
+	Child:	230
+	Child:	231
+	Child:	232
+	Child:	233
 	Label:	"&Edit"
 )
 
-(Choice.697
+(Choice.215
 	Help:	"Cuts the active themes to the clipboard"
 	HelpTopic:	"Cut_Themes"
 	Update:	"View.ActiveDeletableThemesUpdate"
@@ -1845,7 +1800,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.698
+(Choice.216
 	Help:	"Copies the active themes to the clipboard"
 	HelpTopic:	"Copy_Themes"
 	Update:	"View.ActiveThemesUpdate"
@@ -1854,7 +1809,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.699
+(Choice.217
 	Help:	"Removes the active themes from the view"
 	HelpTopic:	"Delete_Themes"
 	Update:	"View.ActiveDeletableThemesUpdate"
@@ -1863,10 +1818,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.700
+(Space.218
 )
 
-(Choice.701
+(Choice.219
 	Disabled:	1
 	Help:	"Undo the last edit to graphics on a view"
 	HelpTopic:	"Undo_Graphic_Edit_on_a_view"
@@ -1876,7 +1831,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+Z"
 )
 
-(Choice.702
+(Choice.220
 	Disabled:	1
 	Invisible:	1
 	Help:	"Redo the last edit operation on a theme that was undone"
@@ -1887,10 +1842,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+Y"
 )
 
-(Space.703
+(Space.221
 )
 
-(Choice.704
+(Choice.222
 	Disabled:	1
 	Help:	"Cuts the selected graphics to the clipboard"
 	HelpTopic:	"Cut_Graphics"
@@ -1900,7 +1855,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+X"
 )
 
-(Choice.705
+(Choice.223
 	Disabled:	1
 	Help:	"Copies the selected graphics to the clipboard"
 	HelpTopic:	"Copy_Graphics"
@@ -1910,7 +1865,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+C"
 )
 
-(Choice.706
+(Choice.224
 	Disabled:	1
 	Help:	"Removes the selected graphics from the view"
 	HelpTopic:	"Delete_Graphics"
@@ -1920,10 +1875,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Del"
 )
 
-(Space.707
+(Space.225
 )
 
-(Choice.708
+(Choice.226
 	Disabled:	1
 	Help:	"Combines the selected polygons"
 	HelpTopic:	"Combine_Graphics"
@@ -1933,7 +1888,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.709
+(Choice.227
 	Disabled:	1
 	Help:	"Unions the selected graphics to create a new graphic"
 	HelpTopic:	"Union_Graphics"
@@ -1943,7 +1898,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.710
+(Choice.228
 	Disabled:	1
 	Help:	"Subtracts one selected polygon from the other selected polygon"
 	HelpTopic:	"Subtract_Graphics"
@@ -1953,7 +1908,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.711
+(Choice.229
 	Disabled:	1
 	Help:	"Creates a new polygon from the area  of overlap between the selected polygons"
 	HelpTopic:	"Intersect_Graphics"
@@ -1963,10 +1918,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.712
+(Space.230
 )
 
-(Choice.713
+(Choice.231
 	Help:	"Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
 	Update:	"View.PasteUpdate"
@@ -1975,10 +1930,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+V"
 )
 
-(Space.714
+(Space.232
 )
 
-(Choice.715
+(Choice.233
 	Disabled:	1
 	Help:	"Selects all graphics in the view"
 	HelpTopic:	"Select_All_Graphics"
@@ -1988,35 +1943,34 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.716
+(PMenu.234
 	InternalName:	"View"
-	Child:	717
-	Child:	718
-	Child:	719
-	Child:	720
-	Child:	721
-	Child:	722
-	Child:	723
-	Child:	724
-	Child:	725
-	Child:	731
-	Child:	732
-	Child:	733
-	Child:	734
-	Child:	735
-	Child:	736
-	Child:	737
-	Child:	738
-	Child:	739
-	Child:	740
-	Child:	741
-	Child:	742
-	Child:	743
-	Child:	744
+	Child:	235
+	Child:	236
+	Child:	237
+	Child:	238
+	Child:	239
+	Child:	240
+	Child:	241
+	Child:	242
+	Child:	243
+	Child:	244
+	Child:	245
+	Child:	246
+	Child:	247
+	Child:	248
+	Child:	249
+	Child:	250
+	Child:	251
+	Child:	252
+	Child:	253
+	Child:	254
+	Child:	255
+	Child:	256
 	Label:	"&View"
 )
 
-(Choice.717
+(Choice.235
 	Help:	"Displays the dialog box to edit properties of the view"
 	HelpTopic:	"View_Properties"
 	Label:	"&Properties..."
@@ -2024,10 +1978,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.718
+(Space.236
 )
 
-(Choice.719
+(Choice.237
 	Help:	"Inserts themes into the view"
 	HelpTopic:	"Add_Theme"
 	Label:	"&Add Theme..."
@@ -2035,7 +1989,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+T"
 )
 
-(Choice.720
+(Choice.238
 	Disabled:	1
 	Help:	"Displays a dialog box to create a geocoded theme"
 	HelpTopic:	"Geocode_Addresses"
@@ -2045,7 +1999,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.721
+(Choice.239
 	Help:	"Displays a dialog box to create an XY or dynamic segmentation event-based theme "
 	HelpTopic:	"Add_Event_Theme"
 	Update:	"View.AddEventUpdate"
@@ -2054,7 +2008,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.722
+(Choice.240
 	Help:	"Creates a new theme"
 	HelpTopic:	"New_Theme"
 	Label:	"&New Theme..."
@@ -2062,7 +2016,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.723
+(Choice.241
 	Help:	"Makes all themes visible"
 	HelpTopic:	"Themes_On_Themes_Off"
 	Update:	"View.HasThemesUpdate"
@@ -2071,7 +2025,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.724
+(Choice.242
 	Help:	"Makes all themes invisible"
 	HelpTopic:	"Themes_On_Themes_Off"
 	Update:	"View.HasThemesUpdate"
@@ -2080,10 +2034,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.725
+(Space.243
 )
 
-(Choice.731
+(Choice.244
 	Help:	"Create a Layout from the View"
 	HelpTopic:	"Layout_menu_choice"
 	Update:	"View.HasThemesUpdate"
@@ -2092,10 +2046,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.732
+(Space.245
 )
 
-(Choice.733
+(Choice.246
 	Help:	"Shows a dialog where you can change the style of the TOC"
 	HelpTopic:	"TOC_Defaults"
 	Update:	"TocDefs.ShowUpdate"
@@ -2104,10 +2058,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.734
+(Space.247
 )
 
-(Choice.735
+(Choice.248
 	Help:	"Zooms to the extent of all themes"
 	HelpTopic:	"Zoom_to_Full_Extent"
 	Update:	"View.HasDataUpdate"
@@ -2116,7 +2070,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.736
+(Choice.249
 	Help:	"Zooms in on the center of the display"
 	HelpTopic:	"Zoom_In"
 	Update:	"View.HasDataUpdate"
@@ -2125,7 +2079,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.737
+(Choice.250
 	Help:	"Zooms out from the center of the display"
 	HelpTopic:	"Zoom_Out"
 	Update:	"View.HasDataUpdate"
@@ -2134,7 +2088,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.738
+(Choice.251
 	Help:	"Zooms to the extent of active themes"
 	HelpTopic:	"Zoom_to_Active_Theme"
 	Update:	"View.ActiveThemesUpdate"
@@ -2143,7 +2097,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.739
+(Choice.252
 	Help:	"Zooms to the extent of the selected features"
 	HelpTopic:	"Zoom_to_Selected"
 	Update:	"View.SelectableThemesUpdate"
@@ -2152,7 +2106,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.740
+(Choice.253
 	Help:	"Goes back to the previous extent you were viewing"
 	HelpTopic:	"Zoom_Previous"
 	Update:	"View.UndoZoomUpdate"
@@ -2161,10 +2115,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.741
+(Space.254
 )
 
-(Choice.742
+(Choice.255
 	Help:	"Finds features in the active themes using the text you enter"
 	HelpTopic:	"Find"
 	Update:	"View.TabularThemesUpdate"
@@ -2173,7 +2127,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+F"
 )
 
-(Choice.743
+(Choice.256
 	Disabled:	1
 	Help:	"Locates an address in the active, matchable theme"
 	HelpTopic:	"Locate_Address"
@@ -2183,71 +2137,60 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.744
-	InternalName:	"GeoProc"
-	Help:	"Opens the GeoProcessing Wizard"
-	HelpTopic:	"geoproc_choice"
-	Tag:	"GeoProcessing"
-	Update:	"GeoProc.Main.Show Update"
-	Label:	"GeoProcessing Wizard..."
-	Click:	"GeoProc.Show"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.745
-	Child:	746
-	Child:	747
-	Child:	748
-	Child:	749
-	Child:	750
-	Child:	751
-	Child:	752
-	Child:	753
-	Child:	754
-	Child:	755
-	Child:	756
-	Child:	757
-	Child:	758
-	Child:	759
-	Child:	760
-	Child:	761
-	Child:	762
+(PMenu.257
+	Child:	258
+	Child:	259
+	Child:	260
+	Child:	261
+	Child:	262
+	Child:	263
+	Child:	264
+	Child:	265
+	Child:	266
+	Child:	267
+	Child:	268
+	Child:	269
+	Child:	270
+	Child:	271
+	Child:	272
+	Child:	273
+	Child:	274
 	Label:	"DC Sewer"
 )
 
-(Choice.746
+(Choice.258
 	Label:	"Create Excel calculation"
 	Click:	"DCSewerDesign.createXlsSewerCalculation"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.747
+(Choice.259
 	Help:	"calculates the population connected to every sewer section with a network trace"
 	Label:	"Accumulate Population"
 	Click:	"DCSewerDesign.accumulatePopulation"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.748
+(Choice.260
 	Help:	"accumulates the maximum branch length for a tree of sewer lines"
 	Label:	"Accumulate Branch Length"
 	Click:	"DCSewerDesign.accumulateBranchLength"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.749
+(Choice.261
 	Label:	"Calculate Minimum Elevation Differences"
 	Click:	"DCSewerDesign.calculateMinimumElevationDifferences"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.750
+(Choice.262
 	Label:	"Flip Lines to Flow Direction"
 	Click:	"DCSewerDesign.flipLinesToFlowDirection"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.751
+(Choice.263
 	Disabled:	1
 	Help:	"Calculates the Maximum Manhole Elevations for each line based on minimum cover and a given gradient."
 	Update:	"DCSewerDesign.calculateMaximumManholeElevations.update"
@@ -2256,40 +2199,40 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.752
+(Choice.264
 	Label:	"Enforce Drainage"
 	Click:	"DCSewerDesign.enforceDrainage"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.753
+(Choice.265
 	Label:	"Export Basys Ascii File"
 	Click:	"DCSewerDesign.exportBasysFile"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.754
+(Choice.266
 	Help:	"checks if the Lines contain only two vertexes"
 	Label:	"Validate Lines"
 	Click:	"DCSewerDesign.Lines.validate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.755
+(Choice.267
 	Help:	"Create a profile (L-Section) for the selected lines.//Create a profile for the selected lines."
 	Label:	"Create Profile"
 	Click:	"DCSewerDesign.ComplexProfile.create"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.756
+(Choice.268
 	Help:	"Select the profile configuration file"
 	Label:	"Select Profile Configuration"
 	Click:	"DCSewerDesign.ComplexProfile.selectConfigurationFile"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.757
+(Choice.269
 	Disabled:	1
 	Update:	"DCSewerDesign.Profile.linkToLayout.update"
 	Label:	"Link Profile to Layout"
@@ -2297,67 +2240,67 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.758
+(Choice.270
 	Help:	"transfer Manhole Data Fields to Upstream/Downstream Fields in the Line Table"
 	Label:	"Manhole Data  to Line"
 	Click:	"DCSewerDesign.Lines.takeoverManholeData"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.759
+(Choice.271
 	Help:	"transfer data from the line theme to the manhole theme"
 	Label:	"Line Data to Manholes"
 	Click:	"DCSewerDesign.Manholes.takeoverLineData"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.760
+(Choice.272
 	Label:	"Create Dbf Sewer Calculation"
 	Click:	"DCSewerDesign.createDbfSewerCalculation"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.761
+(Choice.273
 	Label:	"Assign Minimum Values from Points to Lines using Buffer"
 	Click:	"DCSewerDesign.Lines.takeoverMinimumValuesFromBuffer"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.762
+(Choice.274
 	Help:	"DC Sewer Design Extension Help//DC Sewer Design Extension Help"
 	Label:	"Help"
 	Click:	"DCSewerDesign.Help.openCHM"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.763
+(PMenu.275
 	InternalName:	"Theme"
-	Child:	764
-	Child:	765
-	Child:	766
-	Child:	767
-	Child:	768
-	Child:	769
-	Child:	770
-	Child:	771
-	Child:	772
-	Child:	773
-	Child:	774
-	Child:	776
-	Child:	777
-	Child:	778
-	Child:	779
-	Child:	780
-	Child:	781
-	Child:	782
-	Child:	783
-	Child:	784
-	Child:	785
-	Child:	786
+	Child:	276
+	Child:	277
+	Child:	278
+	Child:	279
+	Child:	280
+	Child:	281
+	Child:	282
+	Child:	283
+	Child:	284
+	Child:	285
+	Child:	286
+	Child:	287
+	Child:	288
+	Child:	289
+	Child:	290
+	Child:	291
+	Child:	292
+	Child:	293
+	Child:	294
+	Child:	295
+	Child:	296
+	Child:	297
 	Label:	"&Theme"
 )
 
-(Choice.764
+(Choice.276
 	Help:	"Displays the dialog box to edit properties of the active theme"
 	HelpTopic:	"Theme_Properties"
 	Update:	"View.ActiveThemesUpdate"
@@ -2366,10 +2309,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.765
+(Space.277
 )
 
-(Choice.766
+(Choice.278
 	Help:	"Starts or stops editing of shapefile"
 	HelpTopic:	"Start_Stop_Editing_in_a_view"
 	Update:	"View.ToggleEditingUpdate"
@@ -2378,7 +2321,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.767
+(Choice.279
 	Disabled:	1
 	Help:	"Save edits to the source shapefile"
 	HelpTopic:	"Save_edits_theme"
@@ -2388,7 +2331,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.768
+(Choice.280
 	Disabled:	1
 	Help:	"Saves edits to a new shapefile"
 	HelpTopic:	"Save_edits_as_theme"
@@ -2398,7 +2341,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.769
+(Choice.281
 	Help:	"Converts a theme to a shapefile"
 	HelpTopic:	"Convert_to_Shapefile"
 	Update:	"View.ExportUpdate"
@@ -2407,10 +2350,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.770
+(Space.282
 )
 
-(Choice.771
+(Choice.283
 	Help:	"Displays the legends of the active themes"
 	HelpTopic:	"Edit_Legend"
 	Update:	"View.ActiveThemesUpdate"
@@ -2419,7 +2362,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.772
+(Choice.284
 	Help:	"Shows or hides the active themes' legends"
 	HelpTopic:	"Hide_show_Legend"
 	Update:	"View.ActiveThemesUpdate"
@@ -2428,10 +2371,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.773
+(Space.285
 )
 
-(Choice.774
+(Choice.286
 	Disabled:	1
 	Help:	"Displays the Re-match dialog for re-matching addresses"
 	HelpTopic:	"Re_match_Addresses"
@@ -2441,10 +2384,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.776
+(Space.287
 )
 
-(Choice.777
+(Choice.288
 	Help:	"Labels features in active, visible themes"
 	HelpTopic:	"Auto_label"
 	Update:	"View.LabelThemesUpdate"
@@ -2453,7 +2396,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+L"
 )
 
-(Choice.778
+(Choice.289
 	Disabled:	1
 	Help:	"Removes any labels from active themes"
 	HelpTopic:	"Remove_Labels"
@@ -2463,7 +2406,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+R"
 )
 
-(Choice.779
+(Choice.290
 	Disabled:	1
 	Help:	"Removes the overlapping labels from active themes, if they are still green."
 	HelpTopic:	"Remove_Overlapping_Labels"
@@ -2473,7 +2416,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.780
+(Choice.291
 	Disabled:	1
 	Help:	"Converts selected overlapping labels to symbol of selected good label"
 	HelpTopic:	"Convert_Overlapping_Labels"
@@ -2483,10 +2426,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+O"
 )
 
-(Space.781
+(Space.292
 )
 
-(Choice.782
+(Choice.293
 	Help:	"Opens the tables of the active themes"
 	HelpTopic:	"Open_Theme_Table"
 	Update:	"View.TabularThemesUpdate"
@@ -2495,7 +2438,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.783
+(Choice.294
 	Help:	"Displays the Query Builder to select features with a logical expression"
 	HelpTopic:	"Query_Builder"
 	Update:	"View.AttributeThemesUpdate"
@@ -2504,7 +2447,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+Q"
 )
 
-(Choice.784
+(Choice.295
 	Help:	"Selects features in the active themes using another theme's features"
 	HelpTopic:	"Select_By_Theme"
 	Update:	"View.SelectableThemesUpdate"
@@ -2513,7 +2456,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.785
+(Choice.296
 	Help:	"Creates buffers around features"
 	HelpTopic:	"Create_Buffer_Choice"
 	Update:	"WizardBuffer.OpenDialogUpdate"
@@ -2522,7 +2465,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.786
+(Choice.297
 	Help:	"Unselects the selected features of all active themes"
 	HelpTopic:	"Clear_Selected_Features"
 	Update:	"View.AttributeThemesUpdate"
@@ -2531,27 +2474,27 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.791
+(PMenu.298
 	InternalName:	"Graphics"
-	Child:	792
-	Child:	793
-	Child:	794
-	Child:	795
-	Child:	796
-	Child:	797
-	Child:	798
-	Child:	799
-	Child:	800
-	Child:	803
-	Child:	804
-	Child:	805
-	Child:	806
-	Child:	807
-	Child:	808
+	Child:	299
+	Child:	300
+	Child:	301
+	Child:	302
+	Child:	303
+	Child:	304
+	Child:	305
+	Child:	306
+	Child:	307
+	Child:	308
+	Child:	309
+	Child:	310
+	Child:	311
+	Child:	312
+	Child:	313
 	Label:	"&Graphics"
 )
 
-(Choice.792
+(Choice.299
 	Disabled:	1
 	Help:	"Displays the property editor for the selected graphic"
 	HelpTopic:	"Graphic_Properties"
@@ -2561,10 +2504,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.793
+(Space.300
 )
 
-(Choice.794
+(Choice.301
 	Help:	"Shows a dialog where you can set the default values for the label and text tools"
 	HelpTopic:	"Default_settings_for_text_and_label_tools"
 	Label:	"&Text and Label Defaults..."
@@ -2572,10 +2515,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.795
+(Space.302
 )
 
-(Choice.796
+(Choice.303
 	Disabled:	1
 	Help:	"Displays a dialog box to adjust size and position of selected graphic"
 	HelpTopic:	"Size_and_Position"
@@ -2585,7 +2528,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.797
+(Choice.304
 	Disabled:	1
 	Help:	"Aligns the selected graphics"
 	HelpTopic:	"Align"
@@ -2595,10 +2538,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+A"
 )
 
-(Space.798
+(Space.305
 )
 
-(Choice.799
+(Choice.306
 	Disabled:	1
 	Help:	"Moves selected graphics in front of other graphics"
 	HelpTopic:	"Bring_to_Front_on_a_view"
@@ -2608,7 +2551,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.800
+(Choice.307
 	Disabled:	1
 	Help:	"Moves selected graphics behind other graphics"
 	HelpTopic:	"Send_to_Back_on_a_view"
@@ -2618,7 +2561,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.803
+(Choice.308
 	Disabled:	1
 	Help:	"Groups selected graphics"
 	HelpTopic:	"Group_on_a_view"
@@ -2628,7 +2571,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+G"
 )
 
-(Choice.804
+(Choice.309
 	Disabled:	1
 	Help:	"Ungroups selected graphics"
 	HelpTopic:	"Ungroup_on_a_view"
@@ -2638,10 +2581,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+U"
 )
 
-(Space.805
+(Space.310
 )
 
-(Choice.806
+(Choice.311
 	Disabled:	1
 	Help:	"Associates selected graphics with active themes"
 	HelpTopic:	"Attach_Graphics"
@@ -2651,7 +2594,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.807
+(Choice.312
 	Disabled:	1
 	Help:	"Removes association between graphics and active themes"
 	HelpTopic:	"Detach_Graphics"
@@ -2661,24 +2604,24 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.808
+(Space.313
 )
 
-(PMenu.809
+(PMenu.314
 	InternalName:	"Window"
-	Child:	810
-	Child:	811
-	Child:	812
-	Child:	813
-	Child:	814
-	Child:	816
-	Child:	818
-	Child:	819
-	Child:	820
+	Child:	315
+	Child:	316
+	Child:	317
+	Child:	318
+	Child:	319
+	Child:	320
+	Child:	322
+	Child:	323
+	Child:	324
 	Label:	"&Window"
 )
 
-(Choice.810
+(Choice.315
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -2686,7 +2629,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.811
+(Choice.316
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -2694,7 +2637,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.812
+(Choice.317
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -2702,10 +2645,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.813
+(Space.318
 )
 
-(Choice.814
+(Choice.319
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -2713,46 +2656,46 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.816
-	ObjectTag:	817
+(Space.320
+	ObjectTag:	321
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.817
+(AVStr.321
 	S:	"dcsewerdesign.apr DCSewerDesign.NetworkCalculator.calculate View1"
 )
 
-(Choice.818
+(Choice.322
 	Help:	"Activates dcsewerdesign.apr"
 	Label:	"&1 dcsewerdesign.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.819
+(Choice.323
 	Help:	"Activates DCSewerDesign.NetworkCalculator.calculate"
 	Label:	"&2 DCSewerDesign.NetworkCalculator.calculate"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.820
+(Choice.324
 	Help:	"Activates View1"
 	Label:	"&3 View1"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.821
+(PMenu.325
 	InternalName:	"Help"
-	Child:	822
-	Child:	823
-	Child:	824
-	Child:	825
+	Child:	326
+	Child:	327
+	Child:	328
+	Child:	329
 	Label:	"&Help"
 )
 
-(Choice.822
+(Choice.326
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -2760,7 +2703,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.823
+(Choice.327
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -2768,10 +2711,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.824
+(Space.328
 )
 
-(Choice.825
+(Choice.329
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -2779,328 +2722,2265 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.826
-	Label:	"More Tools"
+(ButnBar.330
+	Child:	331
+	Child:	333
+	Child:	334
+	Child:	336
+	Child:	337
+	Child:	339
+	Child:	341
+	Child:	343
+	Child:	344
+	Child:	346
+	Child:	348
+	Child:	350
+	Child:	351
+	Child:	353
+	Child:	355
+	Child:	357
+	Child:	359
+	Child:	361
+	Child:	363
+	Child:	364
+	Child:	366
+	Child:	368
+	Child:	369
+	Child:	371
+	Child:	373
 )
 
-(ButnBar.835
-	Child:	836
-	Child:	838
-	Child:	839
-	Child:	841
-	Child:	842
-	Child:	844
-	Child:	846
-	Child:	848
-	Child:	849
-	Child:	851
-	Child:	853
-	Child:	855
-	Child:	856
-	Child:	858
-	Child:	860
-	Child:	862
-	Child:	864
-	Child:	866
-	Child:	868
-	Child:	873
-	Child:	875
-	Child:	877
-	Child:	878
-	Child:	880
-	Child:	882
-)
-
-(Butn.836
+(Butn.331
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	837
+	Icon:	332
 	Click:	"Project.Save"
 )
 
-(AVIcon.837
+(AVIcon.332
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.838
+(Space.333
 )
 
-(Butn.839
+(Butn.334
 	Help:	"Add Theme//Inserts themes into the view"
 	HelpTopic:	"Add_Theme"
-	Icon:	840
+	Icon:	335
 	Click:	"View.Add"
 )
 
-(AVIcon.840
+(AVIcon.335
 	Name:	"AddTheme"
 	Res:	"Icons.AddTheme"
 
 )
 
-(Space.841
+(Space.336
 )
 
-(Butn.842
+(Butn.337
 	Help:	"Theme Properties//Displays the dialog box to edit properties of the active theme"
 	HelpTopic:	"Theme_Properties"
 	Update:	"View.ActiveThemesUpdate"
-	Icon:	843
+	Icon:	338
 	Click:	"View.ThemeProperties"
 )
 
-(AVIcon.843
+(AVIcon.338
 	Name:	"Props"
 	Res:	"Icons.Props"
 
 )
 
-(Butn.844
+(Butn.339
 	Help:	"Edit Legend//Displays the legends of the active themes"
 	HelpTopic:	"Edit_Legend"
 	Update:	"View.ActiveThemesUpdate"
-	Icon:	845
+	Icon:	340
 	Click:	"View.EditLegendClick"
 )
 
-(AVIcon.845
+(AVIcon.340
 	Name:	"Legend"
 	Res:	"Icons.Legend"
 
 )
 
-(Butn.846
+(Butn.341
 	Help:	"Open Theme Table//Opens the tables of the active themes"
 	HelpTopic:	"Open_Theme_Table"
 	Update:	"View.TabularThemesUpdate"
-	Icon:	847
+	Icon:	342
 	Click:	"View.ShowTable"
 )
 
-(AVIcon.847
+(AVIcon.342
 	Name:	"Table"
 	Res:	"Icons.Table"
 
 )
 
-(Space.848
+(Space.343
 )
 
-(Butn.849
+(Butn.344
 	Help:	"Find//Finds features in the active themes using the text you enter"
 	HelpTopic:	"Find"
 	Update:	"View.TabularThemesUpdate"
-	Icon:	850
+	Icon:	345
 	Click:	"View.Find"
 )
 
-(AVIcon.850
+(AVIcon.345
 	Name:	"Find"
 	Res:	"Icons.Find"
 
 )
 
-(Butn.851
+(Butn.346
 	Disabled:	1
 	Help:	"Locate Address//Locates an address in the active, matchable theme"
 	HelpTopic:	"Locate_Address"
 	Update:	"View.LocateUpdate"
-	Icon:	852
+	Icon:	347
 	Click:	"View.Locate"
 )
 
-(AVIcon.852
+(AVIcon.347
 	Name:	"AddMatch"
 	Res:	"Icons.AddMatch"
 
 )
 
-(Butn.853
+(Butn.348
 	Help:	"Query Builder//Displays the Query Builder to select features with a logical expression"
 	HelpTopic:	"Query_Builder"
 	Update:	"View.AttributeThemesUpdate"
-	Icon:	854
+	Icon:	349
 	Click:	"View.Query"
 )
 
-(AVIcon.854
+(AVIcon.349
 	Name:	"QueryBuilder"
 	Res:	"Icons.QueryBuilder"
 
 )
 
-(Space.855
+(Space.350
 )
 
-(Butn.856
+(Butn.351
 	Help:	"Zoom to Full Extent//Zooms to the extent of all themes"
 	HelpTopic:	"Zoom_to_Full_Extent"
 	Update:	"View.HasDataUpdate"
-	Icon:	857
+	Icon:	352
 	Click:	"View.ZoomFullExtent"
 )
 
-(AVIcon.857
+(AVIcon.352
 	Name:	"ZoomView"
 	Res:	"Icons.ZoomView"
 
 )
 
-(Butn.858
+(Butn.353
 	Help:	"Zoom to Active Theme(s)//Zooms to the extent of active themes"
 	HelpTopic:	"Zoom_to_Active_Theme"
 	Update:	"View.ActiveThemesUpdate"
-	Icon:	859
+	Icon:	354
 	Click:	"View.ZoomToThemes"
 )
 
-(AVIcon.859
+(AVIcon.354
 	Name:	"ZoomTheme"
 	Res:	"Icons.ZoomTheme"
 
 )
 
-(Butn.860
+(Butn.355
 	Help:	"Zoom to Selected//Zooms to the extent of the selected features"
 	HelpTopic:	"Zoom_to_Selected"
 	Update:	"View.SelectableThemesUpdate"
-	Icon:	861
+	Icon:	356
 	Click:	"View.ZoomToSelected"
 )
 
-(AVIcon.861
+(AVIcon.356
 	Name:	"ZoomToSelected"
 	Res:	"Icons.ZoomToSelected"
 
 )
 
-(Butn.862
+(Butn.357
 	Help:	"Zoom In//Zooms in on the center of the display"
 	HelpTopic:	"Zoom_In"
 	Update:	"View.HasDataUpdate"
-	Icon:	863
+	Icon:	358
 	Click:	"View.ZoomIn"
 )
 
-(AVIcon.863
+(AVIcon.358
 	Name:	"ZoomIn"
 	Res:	"Icons.ZoomIn"
 
 )
 
-(Butn.864
+(Butn.359
 	Help:	"Zoom Out//Zooms out from the center of the display"
 	HelpTopic:	"Zoom_Out"
 	Update:	"View.HasDataUpdate"
-	Icon:	865
+	Icon:	360
 	Click:	"View.ZoomOut"
 )
 
-(AVIcon.865
+(AVIcon.360
 	Name:	"ZoomOut"
 	Res:	"Icons.ZoomOut"
 
 )
 
-(Butn.866
+(Butn.361
 	Help:	"Zoom to Previous Extent//Goes back to the previous extent you were viewing"
 	HelpTopic:	"Zoom_Previous"
 	Update:	"View.UndoZoomUpdate"
-	Icon:	867
+	Icon:	362
 	Click:	"View.UndoZoom"
 )
 
-(AVIcon.867
+(AVIcon.362
 	Name:	"ZoomPrevious"
 	Res:	"Icons.ZoomPrevious"
 
 )
 
-(Space.868
+(Space.363
 )
 
-(Butn.873
+(Butn.364
 	Disabled:	1
 	Help:	"Select Features Using Graphic//Selects features in active themes using selected graphics"
 	HelpTopic:	"Select_Features_Using_Graphic"
 	Update:	"View.SpatialSelectUpdate"
-	Icon:	874
+	Icon:	365
 	Click:	"View.SpatialSelect"
 )
 
-(AVIcon.874
+(AVIcon.365
 	Name:	"SpatialSelect"
 	Res:	"Icons.SpatialSelect"
 
 )
 
-(Butn.875
+(Butn.366
 	Help:	"Clear Selected Features//Unselects the selected features of all active themes"
 	HelpTopic:	"Clear_Selected_Features"
 	Update:	"View.AttributeThemesUpdate"
-	Icon:	876
+	Icon:	367
 	Click:	"View.ClearSelect"
 )
 
-(AVIcon.876
+(AVIcon.367
 	Name:	"SelectNone"
 	Res:	"Icons.SelectNone"
 
 )
 
-(Space.877
+(Space.368
 )
 
-(Butn.878
+(Butn.369
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	879
+	Icon:	370
 	Click:	"Help.Tool"
 )
 
-(AVIcon.879
+(AVIcon.370
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.880
+(Butn.371
 	Help:	"Create Profile//Create a longitudinal section of the selected lines"
-	Icon:	881
+	Icon:	372
 	Click:	"DCSewerDesign.ComplexProfile.create"
 )
 
-(AVIcon.881
+(AVIcon.372
 	Name:	"Profile"
 	Res:	"Icons.Profile"
 
 )
 
-(Butn.882
+(Butn.373
 	Help:	"Calculate Constant Gradient//Calculate a constant gradient over the selected lines"
 	Update:	"DCSewerDesign.Profile.ConstantGradient.update"
-	Icon:	883
+	Icon:	374
 	Click:	"DCSewerDesign.Profile.ConstantGradient.calculate"
 )
 
-(AVIcon.883
+(AVIcon.374
 	Name:	"SelectLine"
 	Res:	"Icons.SelectLine"
 
 )
 
-(PopupSet.884
-	Child:	885
+(PopupSet.375
+	Child:	376
 )
 
-(Popup.885
+(Popup.376
+	Child:	377
+	Child:	378
+	Child:	379
+	Child:	380
+	Child:	381
+	Child:	382
+	Child:	383
+	Child:	384
+	Child:	385
+	Child:	386
+	Child:	387
+	Child:	388
+	Child:	389
+	Child:	390
+	Child:	391
+	Child:	392
+	Child:	393
+	Child:	394
+	Child:	395
+	Child:	396
+	Label:	"Menu"
+)
+
+(Choice.377
+	Disabled:	1
+	Invisible:	1
+	Help:	"Deletes the last entered point on the line or polygon being drawn"
+	Update:	"View.DelLastPointUpdate"
+	Label:	"Delete Last Point"
+	Click:	"View.DeleteLastPoint"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.378
+	Disabled:	1
+	Help:	"Undo the last edit to features in a theme"
+	HelpTopic:	"Undo_Feature_Edit_on_a_view"
+	Update:	"View.UndoEditUpdate"
+	Label:	"Undo Feature Edit"
+	Click:	"View.UndoEdit"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.379
+	Disabled:	1
+	Help:	"Redo the last edit operation on a theme that was undone"
+	Update:	"View.RedoEditUpdate"
+	Label:	"Redo Feature Edit"
+	Click:	"View.RedoEdit"
+	Shortcut:	"Keys.None"
+)
+
+(Space.380
+)
+
+(Choice.381
+	Help:	"Turns general snapping on"
+	Update:	"View.ToggleGeneralSnapUpdate"
+	Label:	"Enable General Snapping"
+	Click:	"View.ToggleGeneralSnap"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.382
+	Help:	"Turns interactive snapping on"
+	Update:	"View.ToggleInteractiveSnapUpdate"
+	Label:	"Enable Interactive Snapping"
+	Click:	"View.ToggleInteractiveSnap"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.383
+	Help:	"Turns snap tolerance cursor off"
+	Update:	"View.ToggleTolCursorUpdate"
+	Label:	"Hide Snap Tolerance Cursor"
+	Click:	"View.ToggleTolCursor"
+	Shortcut:	"Keys.None"
+)
+
+(Space.384
+)
+
+(Choice.385
+	Disabled:	1
+	Invisible:	1
+	Help:	"Snaps the next entered point to the nearest vertex within the user tolerance"
+	Update:	"View.InteractiveSnapUpdate"
+	Label:	"Snap to Vertex"
+	Click:	"View.SnapToVertex"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.386
+	Disabled:	1
+	Invisible:	1
+	Help:	"Snaps the next entered point to the nearest line segment"
+	Update:	"View.InteractiveSnapUpdate"
+	Label:	"Snap to Boundary"
+	Click:	"View.SnapToBoundary"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.387
+	Disabled:	1
+	Invisible:	1
+	Help:	"Snaps the next entered point to the nearest node common to two or more features"
+	Update:	"View.InteractiveSnapUpdate"
+	Label:	"Snap to Intersection"
+	Click:	"View.SnapToIntersection"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.388
+	Disabled:	1
+	Invisible:	1
+	Help:	"Snaps the next entered point to the nearest endpoint of an existing line"
+	Update:	"View.SnapToEndPointUpdate"
+	Label:	"Snap to Endpoint"
+	Click:	"View.SnapToEndPoint"
+	Shortcut:	"Keys.None"
+)
+
+(Space.389
+)
+
+(Choice.390
+	Help:	"Unselects the selected features in all active themes"
+	Update:	"View.AttributeThemesUpdate"
+	Label:	"Clear Selection"
+	Click:	"View.ClearSelect"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.391
+	Help:	"Zooms in at point where you click to bring up popup menu"
+	Update:	"View.HasDataUpdate"
+	Label:	"Zoom In"
+	Click:	"View.PopupZoomIn"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.392
+	Help:	"Zooms out from point where you click to bring up popup menu"
+	Update:	"View.HasDataUpdate"
+	Label:	"Zoom Out"
+	Click:	"View.PopupZoomOut"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.393
+	Help:	"Zooms to the extent of the selected features"
+	Update:	"View.SelectableThemesUpdate"
+	Label:	"Zoom to Selected"
+	Click:	"View.ZoomToSelected"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.394
+	Help:	"Centers display on point where you click to bring up popup"
+	Update:	"View.HasDataUpdate"
+	Label:	"Pan"
+	Click:	"View.PopupPan"
+	Shortcut:	"Keys.None"
+)
+
+(Space.395
+)
+
+(Choice.396
+	Help:	"Opens the shape properties window for editing vertex locations"
+	Update:	"ShapeWin.PopUp Update"
+	Label:	"Shape Properties"
+	Click:	"ShapeWin.PopUp Open"
+	Shortcut:	"Keys.None"
+)
+
+(ToolBar.397
+	Child:	398
+	Child:	400
+	Child:	402
+	Child:	404
+	Child:	406
+	Child:	408
+	Child:	410
+	Child:	412
+	Child:	414
+	Child:	416
+	Child:	418
+	Child:	437
+	Child:	450
+	Child:	469
+)
+
+(Tool.398
+	Help:	"Identify//Provides information about a feature"
+	HelpTopic:	"Identify_tool"
+	Update:	"View.IdentifyUpdate"
+	Icon:	399
+	Cursor:	"Cursors.ID"
+	Apply:	"View.Identify"
+)
+
+(AVIcon.399
+	Name:	"ID"
+	Res:	"Icons.ID"
+
+)
+
+(Tool.400
+	Help:	"Pointer//Selects, moves, and resizes graphics"
+	HelpTopic:	"Pointer_tool"
+	Update:	"View.HasDataUpdate"
+	Icon:	401
+	Cursor:	"Cursors.Select"
+	Apply:	"View.Select"
+	Click:	"View.SelectTool"
+)
+
+(AVIcon.401
+	Name:	"Select"
+	Res:	"Icons.Select"
+
+)
+
+(Tool.402
+	Disabled:	1
+	Help:	"Vertex Edit//Adds, moves, and deletes vertices of features and graphics"
+	HelpTopic:	"Vertex_Edit_tool"
+	Update:	"View.SelectToEditUpdate"
+	Icon:	403
+	Cursor:	"Cursors.SelectEdit"
+	Apply:	"View.SelectToEdit"
+	Click:	"View.SelectToEditTool"
+)
+
+(AVIcon.403
+	Name:	"SelectEdit"
+	Res:	"Icons.SelectEdit"
+
+)
+
+(Tool.404
+	Help:	"Select Feature//Selects features in the active themes by pointing or dragging"
+	HelpTopic:	"Select_Feature_tool"
+	Update:	"View.SelectableThemesUpdate"
+	Icon:	405
+	Cursor:	"Cursors.Default"
+	Apply:	"View.SelectPoint"
+)
+
+(AVIcon.405
+	Name:	"FeatureSelect"
+	Res:	"Icons.FeatureSelect"
+
+)
+
+(Tool.406
+	Help:	"Zoom In//Zooms in at a point you click or zooms in on a rectangle you drag"
+	HelpTopic:	"Zoom_In_tool"
+	Update:	"View.HasDataUpdate"
+	Icon:	407
+	Cursor:	"Cursors.ZoomIn"
+	Apply:	"View.ZoomInTool"
+)
+
+(AVIcon.407
+	Name:	"ZoomInTool"
+	Res:	"Icons.ZoomInTool"
+
+)
+
+(Tool.408
+	Help:	"Zoom Out//Zooms out from a point you click or zooms out to include a rectangle you drag"
+	HelpTopic:	"Zoom_Out_tool"
+	Update:	"View.HasDataUpdate"
+	Icon:	409
+	Cursor:	"Cursors.ZoomOut"
+	Apply:	"View.ZoomOutTool"
+)
+
+(AVIcon.409
+	Name:	"ZoomOutTool"
+	Res:	"Icons.ZoomOutTool"
+
+)
+
+(Tool.410
+	Help:	"Pan//Drags the display in the direction you move the cursor"
+	HelpTopic:	"Pan_tool"
+	Update:	"View.HasDataUpdate"
+	Icon:	411
+	Cursor:	"Cursors.Pan"
+	Apply:	"View.Pan"
+)
+
+(AVIcon.411
+	Name:	"Pan"
+	Res:	"Icons.Pan"
+
+)
+
+(Tool.412
+	Help:	"Measure//Measures distance"
+	HelpTopic:	"Measure_tool"
+	Update:	"View.HasDataUpdate"
+	Icon:	413
+	Cursor:	"Cursors.Measure"
+	Apply:	"View.Measure"
+)
+
+(AVIcon.413
+	Name:	"Measure"
+	Res:	"Icons.Measure"
+
+)
+
+(Tool.414
+	Disabled:	1
+	Help:	"Hot Link//Follows a hot link in the active themes"
+	HelpTopic:	"Hot_Link_tool"
+	Update:	"View.HotLinkUpdate"
+	Icon:	415
+	Cursor:	"Cursors.Media"
+	Apply:	"View.HotLink"
+)
+
+(AVIcon.415
+	Name:	"Media"
+	Res:	"Icons.Media"
+
+)
+
+(Tool.416
+	Disabled:	1
+	Help:	"Area of Interest//Sets the view's Area Of Interest for library-based themes"
+	HelpTopic:	"Area_Of_Interest_tool"
+	Update:	"View.AOIToolUpdate"
+	Icon:	417
+	Cursor:	"Cursors.Default"
+	Apply:	"View.AOITool"
+)
+
+(AVIcon.417
+	Name:	"AOI"
+	Res:	"Icons.AOI"
+
+)
+
+(ToolMenu.418
+	Help:	"Label//Labels a feature in the active theme with data from its table"
+	HelpTopic:	"Label_Tool"
+	Update:	"View.LabelToolUpdate"
+	Icon:	419
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.LabelTool"
+	Child:	420
+	Child:	421
+	Child:	423
+	Child:	425
+	Child:	427
+	Child:	429
+	Child:	431
+	Child:	433
+	Child:	435
+)
+
+(AVIcon.419
+	Name:	"Tag"
+	Res:	"Icons.Tag"
+
+)
+
+(Tool.420
+	Help:	"Label//Labels a feature in the active theme with data from its table"
+	HelpTopic:	"Label_Tool"
+	Update:	"View.LabelToolUpdate"
+	Icon:	419
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.LabelTool"
+)
+
+(Tool.421
+	Help:	"Callout Label//Click on a feature and drag in the direction you want the label to appear"
+	HelpTopic:	"Label_Tool"
+	Update:	"View.CalloutUpdate"
+	Icon:	422
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.CalloutLabelTool"
+)
+
+(AVIcon.422
+	Name:	"CallOutLabel1"
+	Res:	"Icons.CallOutLabel1"
+
+)
+
+(Tool.423
+	Help:	"Bullet Leader Label//Click on a feature and drag in the direction you want the label to appear"
+	HelpTopic:	"Label_Tool"
+	Update:	"View.CalloutUpdate"
+	Icon:	424
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.BulletLeaderLabelTool"
+)
+
+(AVIcon.424
+	Name:	"CallOutLabel2"
+	Res:	"Icons.CallOutLabel2"
+
+)
+
+(Tool.425
+	Help:	"Banner Label//Click on a feature you want to label"
+	HelpTopic:	"Label_Tool"
+	Update:	"View.CalloutUpdate"
+	Icon:	426
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.ShadowBoxLabelTool"
+)
+
+(AVIcon.426
+	Name:	"CallOutLabel3"
+	Res:	"Icons.CallOutLabel3"
+
+)
+
+(Tool.427
+	Help:	"U.S. Interstate//Click where you want to place a highway shield"
+	HelpTopic:	"Label_Tool"
+	Update:	"View.CalloutUpdate"
+	Icon:	428
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.Highway1 Apply"
+)
+
+(AVIcon.428
+	Name:	"BW US Interstate"
+	Res:	"Icons.BW US Interstate"
+
+)
+
+(Tool.429
+	Help:	"U.S. Route//Click where you want to place a highway shield"
+	HelpTopic:	"Label_Tool"
+	Update:	"View.CalloutUpdate"
+	Icon:	430
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.Highway2 Apply"
+)
+
+(AVIcon.430
+	Name:	"USRoute"
+	Res:	"Icons.USRoute"
+
+)
+
+(Tool.431
+	Help:	"Generic State Hwy//Click where you want to place a highway shield"
+	HelpTopic:	"Label_Tool"
+	Update:	"View.CalloutUpdate"
+	Icon:	432
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.Highway3 Apply"
+)
+
+(AVIcon.432
+	Name:	"GenericStateHighway"
+	Res:	"Icons.GenericStateHighway"
+
+)
+
+(Tool.433
+	Help:	"Generic Square Hwy//Click where you want to place a highway shield"
+	HelpTopic:	"Label_Tool"
+	Update:	"View.CalloutUpdate"
+	Icon:	434
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.Highway4 Apply"
+)
+
+(AVIcon.434
+	Name:	"GenericHighway1"
+	Res:	"Icons.GenericHighway1"
+
+)
+
+(Tool.435
+	Help:	"Generic Oval Hwy//Click where you want to place a highway shield"
+	Update:	"View.CalloutUpdate"
+	Icon:	436
+	Cursor:	"Cursors.Tag"
+	Apply:	"View.Highway5 Apply"
+)
+
+(AVIcon.436
+	Name:	"GenericHighway2"
+	Res:	"Icons.GenericHighway2"
+
+)
+
+(ToolMenu.437
+	Help:	"Text//Creates text on the display"
+	HelpTopic:	"Text_tool"
+	Update:	"View.TextToolUpdate"
+	Icon:	438
+	Cursor:	"Cursors.Text"
+	Apply:	"View.TextTool"
+	Click:	"SymWin.DisplayFontPanel"
+	Child:	439
+	Child:	440
+	Child:	442
+	Child:	444
+	Child:	446
+	Child:	448
+)
+
+(AVIcon.438
+	Name:	"Text"
+	Res:	"Icons.Text"
+
+)
+
+(Tool.439
+	Help:	"Text//Creates text on the display"
+	HelpTopic:	"Text_tool"
+	Update:	"View.TextToolUpdate"
+	Icon:	438
+	Cursor:	"Cursors.Text"
+	Apply:	"View.TextTool"
+	Click:	"SymWin.DisplayFontPanel"
+)
+
+(Tool.440
+	Help:	"Callout Text//Click and drag to where you want your text to appear, then enter the text"
+	HelpTopic:	"Text_tool"
+	Update:	"View.TextToolUpdate"
+	Icon:	441
+	Cursor:	"Cursors.Bullseye"
+	Apply:	"View.CalloutTextTool"
+)
+
+(AVIcon.441
+	Name:	"CallOutText1"
+	Res:	"Icons.CallOutText1"
+
+)
+
+(Tool.442
+	Help:	"Bullet Leader Text//Click and drag to where you want your text to appear, then enter the text"
+	HelpTopic:	"Text_tool"
+	Update:	"View.TextToolUpdate"
+	Icon:	443
+	Cursor:	"Cursors.Bullseye"
+	Apply:	"View.BulletLeaderTextTool"
+)
+
+(AVIcon.443
+	Name:	"CallOutText2"
+	Res:	"Icons.CallOutText2"
+
+)
+
+(Tool.444
+	Help:	"Banner Text//Click where you want your label to appear and enter your text"
+	HelpTopic:	"Text_tool"
+	Update:	"View.TextToolUpdate"
+	Icon:	445
+	Cursor:	"Cursors.Bullseye"
+	Apply:	"View.ShadowBoxTextTool"
+)
+
+(AVIcon.445
+	Name:	"CallOutText3"
+	Res:	"Icons.CallOutText3"
+
+)
+
+(Tool.446
+	Help:	"Drop-Shadow Text//Click where you want your text to appear and enter your text"
+	HelpTopic:	"Text_tool"
+	Update:	"View.TextToolUpdate"
+	Icon:	447
+	Cursor:	"Cursors.Target"
+	Apply:	"View.CreateDropShadowText"
+)
+
+(AVIcon.447
+	Name:	"DropShadowText"
+	Res:	"Icons.DropShadowText"
+
+)
+
+(Tool.448
+	Help:	"Spline Text//Adds text that is aligned to a splined baseline"
+	HelpTopic:	"Text_tool"
+	Update:	"View.TextToolUpdate"
+	Icon:	449
+	Cursor:	"Cursors.Bullseye"
+	Apply:	"View.SplineText"
+)
+
+(AVIcon.449
+	Name:	"TextAligned"
+	Res:	"Icons.TextAligned"
+
+)
+
+(ToolMenu.450
+	Help:	"Draw Point//Creates a point on the display"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.PointToolUpdate"
+	Icon:	451
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.PointTool"
+	Click:	"SymWin.DisplayMarkerPanel"
+	Child:	452
+	Child:	453
+	Child:	455
+	Child:	457
+	Child:	459
+	Child:	461
+	Child:	463
+	Child:	465
+	Child:	467
+)
+
+(AVIcon.451
+	Name:	"Point"
+	Res:	"Icons.Point"
+
+)
+
+(Tool.452
+	Help:	"Draw Point//Creates a point on the display"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.PointToolUpdate"
+	Icon:	451
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.PointTool"
+	Click:	"SymWin.DisplayMarkerPanel"
+)
+
+(Tool.453
+	Help:	"Draw Straight Line//Creates a line on the display"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.GraphicToolUpdate"
+	Icon:	454
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.LineTool"
+	Click:	"SymWin.DisplayPenPanel"
+)
+
+(AVIcon.454
+	Name:	"SelectLine"
+	Res:	"Icons.SelectLine"
+
+)
+
+(Tool.455
+	Help:	"Draw Line//Creates a line with two or more points on the display"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.PolyLineToolUpdate"
+	Icon:	456
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.PolyLineTool"
+	Click:	"SymWin.DisplayPenPanel"
+)
+
+(AVIcon.456
+	Name:	"Lines"
+	Res:	"Icons.Lines"
+
+)
+
+(Tool.457
+	Help:	"Draw Rectangle//Creates a rectangle on the display"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.PolyToolUpdate"
+	Icon:	458
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.RectTool"
+	Click:	"SymWin.DisplayFillPanel"
+)
+
+(AVIcon.458
+	Name:	"Rect"
+	Res:	"Icons.Rect"
+
+)
+
+(Tool.459
+	Help:	"Draw Circle//Creates a circle on the display"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.PolyToolUpdate"
+	Icon:	460
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.CircleTool"
+	Click:	"SymWin.DisplayFillPanel"
+)
+
+(AVIcon.460
+	Name:	"Disk"
+	Res:	"Icons.Disk"
+
+)
+
+(Tool.461
+	Help:	"Draw Polygon//Creates a polygon on the display"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.PolyToolUpdate"
+	Icon:	462
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.PolyTool"
+	Click:	"SymWin.DisplayFillPanel"
+)
+
+(AVIcon.462
+	Name:	"Poly"
+	Res:	"Icons.Poly"
+
+)
+
+(Tool.463
+	Disabled:	1
+	Help:	"Draw Line to Split Feature//Creates a line to split line features"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.SplitLineToolUpdate"
+	Icon:	464
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.SplitTool"
+)
+
+(AVIcon.464
+	Name:	"SplitLine"
+	Res:	"Icons.SplitLine"
+
+)
+
+(Tool.465
+	Disabled:	1
+	Help:	"Draw Line to Split Polygon//Creates a line to split polygon features"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.SplitPolyToolUpdate"
+	Icon:	466
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.SplitTool"
+)
+
+(AVIcon.466
+	Name:	"SplitPoly"
+	Res:	"Icons.SplitPoly"
+
+)
+
+(Tool.467
+	Disabled:	1
+	Help:	"Draw Line to Append Polygon//Appends a new polygon adjacent to other polygons"
+	HelpTopic:	"Draw_tool"
+	Update:	"View.AutoCompleteUpdate"
+	Icon:	468
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"View.AutoCompleteTool"
+)
+
+(AVIcon.468
+	Name:	"AutoComplete"
+	Res:	"Icons.AutoComplete"
+
+)
+
+(ToolMenu.469
+	Disabled:	1
+	Invisible:	1
+	Help:	"Snap//Sets the general snapping tolerance for the editable theme"
+	HelpTopic:	"Snap_tools"
+	Update:	"View.SnapToolUpdate"
+	Icon:	470
+	Cursor:	"Cursors.Default"
+	Apply:	"View.SnapTool"
+	Child:	471
+	Child:	472
+)
+
+(AVIcon.470
+	Name:	"SnapTool"
+	Res:	"Icons.SnapTool"
+
+)
+
+(Tool.471
+	Disabled:	1
+	Invisible:	1
+	Help:	"Snap//Sets the general snapping tolerance for the editable theme"
+	HelpTopic:	"Snap_tools"
+	Update:	"View.SnapToolUpdate"
+	Icon:	470
+	Cursor:	"Cursors.Default"
+	Apply:	"View.SnapTool"
+)
+
+(Tool.472
+	Disabled:	1
+	Invisible:	1
+	Help:	"Snap//Sets the interactive snapping tolerance for the editable theme"
+	HelpTopic:	"Snap_tools"
+	Update:	"View.InteractiveSnapToolUpdate"
+	Icon:	473
+	Cursor:	"Cursors.Default"
+	Apply:	"View.InteractiveSnapTool"
+)
+
+(AVIcon.473
+	Name:	"SnapFeatureTool"
+	Res:	"Icons.SnapFeatureTool"
+
+)
+
+(AVIcon.474
+	Name:	"Icon"
+	Res:	"View.Icon"
+
+)
+
+(DocGUI.475
+	Name:	"Table"
+	Type:	"Table"
+	Modified:	1
+	Visible:	1
+	MenuBar:	476
+	ButnBar:	554
+	Popups:	597
+	ToolBar:	598
+	NewScript:	"Table.New"
+	OpenScript:	"Doc.Open"
+	ActionScript:	"Table.Action"
+	NewUpdateScript:	"Doc.NewUpdate"
+	OpenUpdateScript:	"Doc.OpenUpdate"
+	ActionUpdateScript:	"Table.ActionUpdate"
+	Title:	"Tables"
+	Icon:	605
+)
+
+(MenuBar.476
+	Child:	477
+	Child:	491
+	Child:	507
+	Child:	525
+	Child:	534
+	Child:	546
+	Child:	551
+)
+
+(PMenu.477
+	InternalName:	"File"
+	Child:	478
+	Child:	479
+	Child:	480
+	Child:	481
+	Child:	482
+	Child:	483
+	Child:	484
+	Child:	485
+	Child:	486
+	Child:	487
+	Child:	488
+	Child:	489
+	Child:	490
+	Label:	"&File"
+)
+
+(Choice.478
+	Help:	"Closes the active component"
+	HelpTopic:	"Close"
+	Label:	"&Close"
+	Click:	"Project.CloseDoc"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.479
+	Help:	"Closes all components"
+	HelpTopic:	"Close_All"
+	Label:	"Close &All"
+	Click:	"Project.CloseAll"
+	Shortcut:	"Keys.None"
+)
+
+(Space.480
+)
+
+(Choice.481
+	Help:	"Saves the current project"
+	HelpTopic:	"Save_Project"
+	Label:	"&Save Project"
+	Click:	"Project.Save"
+	Shortcut:	"Keys.Ctrl+S"
+)
+
+(Choice.482
+	Help:	"Saves the current project with a new name"
+	HelpTopic:	"Save_Project_As"
+	Label:	"Save Project As..."
+	Click:	"Project.SaveAs"
+	Shortcut:	"Keys.None"
+)
+
+(Space.483
+)
+
+(Choice.484
+	Help:	"Displays the Extensions Dialog"
+	HelpTopic:	"Extensions"
+	Label:	"Extensions..."
+	Click:	"Appl.GetExtensionWin"
+	Shortcut:	"Keys.None"
+)
+
+(Space.485
+)
+
+(Choice.486
+	Help:	"Prints the table"
+	HelpTopic:	"Print"
+	Label:	"&Print..."
+	Click:	"Doc.Print"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.487
+	Help:	"Edits the printer and the printing options"
+	HelpTopic:	"Print_Setup"
+	Update:	"PrintSetupUpdate"
+	Label:	"P&rint Setup..."
+	Click:	"Project.PrintSetup"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.488
+	Help:	"Exports the current table to a dBASE, INFO, or text file"
+	HelpTopic:	"Export_Table"
+	Update:	"Table.ExportUpdate"
+	Label:	"&Export..."
+	Click:	"Table.Export"
+	Shortcut:	"Keys.None"
+)
+
+(Space.489
+)
+
+(Choice.490
+	Help:	"Exits ArcView"
+	HelpTopic:	"Exit"
+	Label:	"E&xit"
+	Click:	"Project.Exit"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.491
+	InternalName:	"Edit"
+	Child:	492
+	Child:	493
+	Child:	494
+	Child:	495
+	Child:	496
+	Child:	497
+	Child:	498
+	Child:	499
+	Child:	500
+	Child:	501
+	Child:	502
+	Child:	503
+	Child:	504
+	Child:	505
+	Child:	506
+	Label:	"&Edit"
+)
+
+(Choice.492
+	Disabled:	1
+	Help:	"Cuts the selected cell to the clipboard"
+	HelpTopic:	"Cut"
+	Update:	"Table.CutUpdate"
+	Label:	"Cu&t"
+	Click:	"Table.Cut"
+	Shortcut:	"Keys.Ctrl+X"
+)
+
+(Choice.493
+	Disabled:	1
+	Help:	"Copies the selected cell to the clipboard"
+	HelpTopic:	"Copy"
+	Update:	"Table.CutUpdate"
+	Label:	"&Copy"
+	Click:	"Table.Copy"
+	Shortcut:	"Keys.Ctrl+C"
+)
+
+(Choice.494
+	Disabled:	1
+	Help:	"Inserts the contents of the Clipboard into the active cell"
+	HelpTopic:	"Paste"
+	Update:	"Table.CutUpdate"
+	Label:	"&Paste"
+	Click:	"Table.Paste"
+	Shortcut:	"Keys.Ctrl+V"
+)
+
+(Space.495
+)
+
+(Choice.496
+	Disabled:	1
+	Help:	"Undo the last edit operation on the Table"
+	HelpTopic:	"Undo_Edit_on_a_table"
+	Update:	"Table.UndoEditUpdate"
+	Label:	"&Undo Edit"
+	Click:	"Table.UndoEdit"
+	Shortcut:	"Keys.Ctrl+Z"
+)
+
+(Choice.497
+	Disabled:	1
+	Help:	"Redo the last undone operation on the Table"
+	HelpTopic:	"Redo_Edit_on_a_table"
+	Update:	"Table.RedoEditUpdate"
+	Label:	"Red&o Edit"
+	Click:	"Table.RedoEdit"
+	Shortcut:	"Keys.Ctrl+Y"
+)
+
+(Space.498
+)
+
+(Choice.499
+	Disabled:	1
+	Help:	"Adds a new field to the table"
+	HelpTopic:	"Add_Field"
+	Update:	"Table.AddFieldUpdate"
+	Label:	"Add &Field..."
+	Click:	"Table.AddField"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.500
+	Disabled:	1
+	Help:	"Adds a new record at the bottom of the table"
+	HelpTopic:	"Add_Record"
+	Update:	"Table.AddRecordUpdate"
+	Label:	"Add &Record"
+	Click:	"Table.AddRecord"
+	Shortcut:	"Keys.Ctrl+A"
+)
+
+(Choice.501
+	Disabled:	1
+	Help:	"Deletes the active field from the table"
+	HelpTopic:	"Delete_Field"
+	Update:	"Table.DeleteFieldUpdate"
+	Label:	"&Delete Field"
+	Click:	"Table.DeleteField"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.502
+	Disabled:	1
+	Help:	"Deletes the selected records from the table"
+	HelpTopic:	"Delete_Records"
+	Update:	"Table.DeleteRecordsUpdate"
+	Label:	"D&elete Records"
+	Click:	"Table.DeleteRecords"
+	Shortcut:	"Keys.None"
+)
+
+(Space.503
+)
+
+(Choice.504
+	Help:	"Selects all records in the table"
+	HelpTopic:	"Select_All"
+	Label:	"Select &All"
+	Click:	"Table.SelectAll"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.505
+	Help:	"Unselects all records in the table"
+	HelpTopic:	"Select_None_in_a_table"
+	Label:	"Select &None"
+	Click:	"Table.UnselectAll"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.506
+	Help:	"Toggles selected and unselected records in the table"
+	HelpTopic:	"Switch_Selection"
+	Label:	"&Switch Selection"
+	Click:	"Table.SwitchSelection"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.507
+	InternalName:	"Table"
+	Child:	508
+	Child:	509
+	Child:	510
+	Child:	511
+	Child:	512
+	Child:	513
+	Child:	514
+	Child:	515
+	Child:	516
+	Child:	517
+	Child:	518
+	Child:	519
+	Child:	520
+	Child:	521
+	Child:	522
+	Child:	523
+	Child:	524
+	Label:	"&Table"
+)
+
+(Choice.508
+	Help:	"Displays the dialog box to edit properties of the table"
+	HelpTopic:	"Table_Properties"
+	Label:	"&Properties..."
+	Click:	"Table.Properties"
+	Shortcut:	"Keys.None"
+)
+
+(Space.509
+)
+
+(Choice.510
+	Help:	"Creates a chart from the table"
+	HelpTopic:	"Create_Chart"
+	Update:	"Table.ChartUpdate"
+	Label:	"&Chart..."
+	Click:	"Table.Chart"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.511
+	Help:	"Starts or stops editing of table values"
+	HelpTopic:	"Start_Stop_Editing"
+	Update:	"Table.ToggleEditingUpdate"
+	Label:	"Start &Editing"
+	Click:	"Table.ToggleEditing"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.512
+	Disabled:	1
+	Help:	"Saves edits to the source file"
+	HelpTopic:	"Save_edits_table"
+	Update:	"Table.SaveEditsUpdate"
+	Label:	"Save Ed&its"
+	Click:	"Table.SaveEdits"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.513
+	Disabled:	1
+	Help:	"Save edits to a new source file"
+	HelpTopic:	"Save_edits_as_table"
+	Update:	"Table.SaveEditsUpdate"
+	Label:	"Save E&dits As..."
+	Click:	"Table.SaveEditsAs"
+	Shortcut:	"Keys.None"
+)
+
+(Space.514
+)
+
+(Choice.515
+	Help:	"Finds the row in the table using the text you enter"
+	HelpTopic:	"Find"
+	Label:	"&Find..."
+	Click:	"Table.Find"
+	Shortcut:	"Keys.Ctrl+F"
+)
+
+(Choice.516
+	Help:	"Displays the Query Builder to select records with a logical expression"
+	HelpTopic:	"Query_Builder"
+	Label:	"&Query..."
+	Click:	"Table.Query"
+	Shortcut:	"Keys.Ctrl+Q"
+)
+
+(Choice.517
+	Disabled:	1
+	Help:	"Promotes selected rows to the top of the table"
+	HelpTopic:	"Promote"
+	Update:	"Table.PromoteUpdate"
+	Label:	"Pr&omote"
+	Click:	"Table.Promote"
+	Shortcut:	"Keys.None"
+)
+
+(Space.518
+)
+
+(Choice.519
+	Disabled:	1
+	Help:	"Appends the fields of another table to the active table based on a common field"
+	HelpTopic:	"Join"
+	Update:	"Table.JoinUpdate"
+	Label:	"&Join"
+	Click:	"Table.Join"
+	Shortcut:	"Keys.Ctrl+J"
+)
+
+(Choice.520
+	Disabled:	1
+	Help:	"Removes any fields joined to the table"
+	HelpTopic:	"Remove_All_Joins"
+	Update:	"Table.HasJoinsUpdate"
+	Label:	"&Remove All Joins"
+	Click:	"Table.RemoveAllJoins"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.521
+	Disabled:	1
+	Help:	"Associates the selection of the active table with another table"
+	HelpTopic:	"Link"
+	Update:	"Table.LinkUpdate"
+	Label:	"&Link"
+	Click:	"Table.Link"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.522
+	Disabled:	1
+	Help:	"Removes the association between the active table and its linked tables"
+	HelpTopic:	"Remove_All_Links"
+	Update:	"Table.HasLinksUpdate"
+	Label:	"Re&move All Links"
+	Click:	"Table.RemoveAllLinks"
+	Shortcut:	"Keys.None"
+)
+
+(Space.523
+)
+
+(Choice.524
+	Help:	"Refreshes the table"
+	HelpTopic:	"Refresh"
+	Label:	"Refres&h"
+	Click:	"Table.Refresh"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.525
+	InternalName:	"Field"
+	Child:	526
+	Child:	527
+	Child:	528
+	Child:	529
+	Child:	530
+	Child:	531
+	Child:	532
+	Child:	533
+	Label:	"F&ield"
+)
+
+(Choice.526
+	Help:	"Sorts rows in ascending order (A-Z), (0-9)"
+	HelpTopic:	"Sort_table"
+	Update:	"Table.SortUpdate"
+	Label:	"Sort &Ascending"
+	Click:	"Table.SortAscending"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.527
+	Help:	"Sorts rows in descending order (Z-A), (9-0)"
+	HelpTopic:	"Sort_table"
+	Update:	"Table.SortUpdate"
+	Label:	"Sort &Descending"
+	Click:	"Table.SortDescending"
+	Shortcut:	"Keys.None"
+)
+
+(Space.528
+)
+
+(Choice.529
+	Help:	"Creates or removes an index on the active field"
+	HelpTopic:	"Create_Remove_Index"
+	Update:	"Table.IndexUpdate"
+	Label:	"Create &Index"
+	Click:	"Table.Index"
+	Shortcut:	"Keys.None"
+)
+
+(Space.530
+)
+
+(Choice.531
+	Help:	"Creates a summary table grouped by the active field"
+	HelpTopic:	"Summarize"
+	Update:	"Table.SortUpdate"
+	Label:	"&Summarize..."
+	Click:	"Table.Summarize"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.532
+	Disabled:	1
+	Help:	"Calculates the value of a field"
+	HelpTopic:	"Calculate"
+	Update:	"Table.CalculateUpdate"
+	Label:	"&Calculate..."
+	Click:	"Table.Calculate"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.533
+	Help:	"Generates a report of statistics for data in the active, numeric field"
+	HelpTopic:	"Statistics"
+	Update:	"Table.StatisticsUpdate"
+	Label:	"S&tatistics..."
+	Click:	"Table.Statistics"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.534
+	InternalName:	"Window"
+	Child:	535
+	Child:	536
+	Child:	537
+	Child:	538
+	Child:	539
+	Child:	540
+	Child:	542
+	Child:	543
+	Child:	544
+	Child:	545
+	Label:	"&Window"
+)
+
+(Choice.535
+	Help:	"Arranges windows as non-overlapping tiles"
+	HelpTopic:	"Tile"
+	Label:	"&Tile"
+	Click:	"Project.Tile"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.536
+	Help:	"Arranges windows"
+	HelpTopic:	"Cascade"
+	Label:	"&Cascade"
+	Click:	"Project.Cascade"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.537
+	Help:	"Arranges iconified windows"
+	HelpTopic:	"Arrange_Icons"
+	Label:	"&Arrange Icons"
+	Click:	"Project.ArrangeIcons"
+	Shortcut:	"Keys.None"
+)
+
+(Space.538
+)
+
+(Choice.539
+	Help:	"Shows the symbol window"
+	HelpTopic:	"Show_Symbol_Window"
+	Label:	"Show Symbol Window..."
+	Click:	"Project.ShowHideSymWin"
+	Shortcut:	"Keys.Ctrl+P"
+)
+
+(Space.540
+	ObjectTag:	541
+	Update:	"WindowMenuUpdate"
+)
+
+(AVStr.541
+	S:	"dcsewerdesign.apr Attributes of Line.shp DCSewerDesign.NetworkCalculator.calculate View1"
+)
+
+(Choice.542
+	Help:	"Activates dcsewerdesign.apr"
+	Label:	"&1 dcsewerdesign.apr"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.543
+	Help:	"Activates Attributes of Line.shp"
+	Label:	"&2 Attributes of Line.shp"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.544
+	Help:	"Activates DCSewerDesign.NetworkCalculator.calculate"
+	Label:	"&3 DCSewerDesign.NetworkCalculator.calculate"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.545
+	Help:	"Activates View1"
+	Label:	"&4 View1"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.546
+	InternalName:	"Help"
+	Child:	547
+	Child:	548
+	Child:	549
+	Child:	550
+	Label:	"&Help"
+)
+
+(Choice.547
+	Help:	"Displays the dialog for browsing and searching ArcView's help system"
+	HelpTopic:	"Help_on_Help_Topics"
+	Label:	"Help &Topics..."
+	Click:	"Project.HelpTopics"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.548
+	Help:	"Provides instructions for how to obtain help from ArcView"
+	HelpTopic:	"Help_on_How_to_Get_Help"
+	Label:	"&How to Get Help..."
+	Click:	"Project.HelpHelp"
+	Shortcut:	"Keys.None"
+)
+
+(Space.549
+)
+
+(Choice.550
+	Help:	"Provides information about ArcView"
+	HelpTopic:	"About"
+	Label:	"&About ArcView..."
+	Click:	"Project.About"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.551
+	Help:	"DC Sewer Design Extension Menu"
+	Child:	552
+	Child:	553
+	Label:	"&DC Sewer"
+)
+
+(Choice.552
+	Disabled:	1
+	Help:	"Calculate table column values using upstream and downstream lines"
+	Update:	"DCSewerDesign.NetworkCalculator.update"
+	Label:	"Network &Calculator"
+	Click:	"DCSewerDesign.NetworkCalculator.calculate"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.553
+	Help:	"DC Sewer Design Extension Help//DC Sewer Design Extension Help"
+	Label:	"Help"
+	Click:	"DCSewerDesign.Help.openCHM"
+	Shortcut:	"Keys.None"
+)
+
+(ButnBar.554
+	Child:	555
+	Child:	557
+	Child:	558
+	Child:	560
+	Child:	562
+	Child:	564
+	Child:	565
+	Child:	567
+	Child:	569
+	Child:	571
+	Child:	572
+	Child:	574
+	Child:	575
+	Child:	577
+	Child:	579
+	Child:	581
+	Child:	582
+	Child:	584
+	Child:	585
+	Child:	587
+	Child:	589
+	Child:	590
+	Child:	592
+	Child:	594
+	Child:	595
+)
+
+(Butn.555
+	Help:	"Save Project//Saves the current project"
+	HelpTopic:	"Save_Project"
+	Icon:	556
+	Click:	"Project.Save"
+)
+
+(AVIcon.556
+	Name:	"Save"
+	Res:	"Icons.Save"
+
+)
+
+(Space.557
+)
+
+(Butn.558
+	Disabled:	1
+	Help:	"Cut//Cuts the selected cell to the clipboard"
+	HelpTopic:	"Cut"
+	Update:	"Table.CutUpdate"
+	Icon:	559
+	Click:	"Table.Cut"
+)
+
+(AVIcon.559
+	Name:	"Cut"
+	Res:	"Icons.Cut"
+
+)
+
+(Butn.560
+	Disabled:	1
+	Help:	"Copy//Copies the selected cell to the clipboard"
+	HelpTopic:	"Copy"
+	Update:	"Table.CutUpdate"
+	Icon:	561
+	Click:	"Table.Copy"
+)
+
+(AVIcon.561
+	Name:	"Copy"
+	Res:	"Icons.Copy"
+
+)
+
+(Butn.562
+	Disabled:	1
+	Help:	"Paste//Inserts the contents of the Clipboard into the active cell"
+	HelpTopic:	"Paste"
+	Update:	"Table.CutUpdate"
+	Icon:	563
+	Click:	"Table.Paste"
+)
+
+(AVIcon.563
+	Name:	"Paste"
+	Res:	"Icons.Paste"
+
+)
+
+(Space.564
+)
+
+(Butn.565
+	Help:	"Select All//Selects all records in the table"
+	HelpTopic:	"Select_All"
+	Icon:	566
+	Click:	"Table.SelectAll"
+)
+
+(AVIcon.566
+	Name:	"SelectAll"
+	Res:	"Icons.SelectAll"
+
+)
+
+(Butn.567
+	Help:	"Select None//Unselects all records in the table"
+	HelpTopic:	"Select_None_in_a_table"
+	Icon:	568
+	Click:	"Table.UnselectAll"
+)
+
+(AVIcon.568
+	Name:	"SelectNone"
+	Res:	"Icons.SelectNone"
+
+)
+
+(Butn.569
+	Help:	"Switch Selection//Toggles selected and unselected records in the table"
+	HelpTopic:	"Switch_Selection"
+	Icon:	570
+	Click:	"Table.SwitchSelection"
+)
+
+(AVIcon.570
+	Name:	"SwitchSelect"
+	Res:	"Icons.SwitchSelect"
+
+)
+
+(Space.571
+)
+
+(Butn.572
+	Help:	"Create Chart//Creates a chart from the table"
+	HelpTopic:	"Create_Chart"
+	Update:	"Table.ChartUpdate"
+	Icon:	573
+	Click:	"Table.Chart"
+)
+
+(AVIcon.573
+	Name:	"MakeChart"
+	Res:	"Icons.MakeChart"
+
+)
+
+(Space.574
+)
+
+(Butn.575
+	Help:	"Find//Finds the row in the table using the text you enter"
+	HelpTopic:	"Find"
+	Icon:	576
+	Click:	"Table.Find"
+)
+
+(AVIcon.576
+	Name:	"Find"
+	Res:	"Icons.Find"
+
+)
+
+(Butn.577
+	Help:	"Query Builder//Displays the Query Builder to select records with a logical expression"
+	HelpTopic:	"Query_Builder"
+	Icon:	578
+	Click:	"Table.Query"
+)
+
+(AVIcon.578
+	Name:	"QueryBuilder"
+	Res:	"Icons.QueryBuilder"
+
+)
+
+(Butn.579
+	Disabled:	1
+	Help:	"Promote//Promotes selected rows to the top of the table"
+	HelpTopic:	"Promote"
+	Update:	"Table.PromoteUpdate"
+	Icon:	580
+	Click:	"Table.Promote"
+)
+
+(AVIcon.580
+	Name:	"Promote"
+	Res:	"Icons.Promote"
+
+)
+
+(Space.581
+)
+
+(Butn.582
+	Disabled:	1
+	Help:	"Join//Appends the fields of another table to the active table based on a common field"
+	HelpTopic:	"Join"
+	Update:	"Table.JoinUpdate"
+	Icon:	583
+	Click:	"Table.Join"
+)
+
+(AVIcon.583
+	Name:	"Join"
+	Res:	"Icons.Join"
+
+)
+
+(Space.584
+)
+
+(Butn.585
+	Help:	"Summarize//Creates a summary table grouped by the active field"
+	HelpTopic:	"Summarize"
+	Update:	"Table.SortUpdate"
+	Icon:	586
+	Click:	"Table.Summarize"
+)
+
+(AVIcon.586
+	Name:	"Summarize"
+	Res:	"Icons.Summarize"
+
+)
+
+(Butn.587
+	Disabled:	1
+	Help:	"Calculate//Calculates the value of a field"
+	HelpTopic:	"Calculate"
+	Update:	"Table.CalculateUpdate"
+	Icon:	588
+	Click:	"Table.Calculate"
+)
+
+(AVIcon.588
+	Name:	"Calculator"
+	Res:	"Icons.Calculator"
+
+)
+
+(Space.589
+)
+
+(Butn.590
+	Help:	"Sort Ascending//Sorts rows in ascending order (A-Z), (0-9)"
+	HelpTopic:	"Sort_table"
+	Update:	"Table.SortUpdate"
+	Icon:	591
+	Click:	"Table.SortAscending"
+)
+
+(AVIcon.591
+	Name:	"SortAscending"
+	Res:	"Icons.SortAscending"
+
+)
+
+(Butn.592
+	Help:	"Sort Descending//Sorts rows in descending order (Z-A), (9-0)"
+	HelpTopic:	"Sort_table"
+	Update:	"Table.SortUpdate"
+	Icon:	593
+	Click:	"Table.SortDescending"
+)
+
+(AVIcon.593
+	Name:	"SortDescending"
+	Res:	"Icons.SortDescending"
+
+)
+
+(Space.594
+)
+
+(Butn.595
+	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
+	HelpTopic:	"Help_button"
+	Icon:	596
+	Click:	"Help.Tool"
+)
+
+(AVIcon.596
+	Name:	"HelpTool"
+	Res:	"Icons.HelpTool"
+
+)
+
+(PopupSet.597
+)
+
+(ToolBar.598
+	Child:	599
+	Child:	601
+	Child:	603
+)
+
+(Tool.599
+	Help:	"Select//Selects records in the table"
+	HelpTopic:	"Select_tool"
+	Icon:	600
+	Cursor:	"Cursors.Default"
+	Apply:	"Table.Select"
+	Click:	"Table.StopEditing"
+)
+
+(AVIcon.600
+	Name:	"Select"
+	Res:	"Icons.Select"
+
+)
+
+(Tool.601
+	Disabled:	1
+	Help:	"Edit//Changes cell values"
+	HelpTopic:	"Edit_tool"
+	Update:	"Table.IsEditableUpdate"
+	Icon:	602
+	Cursor:	"Cursors.Finger"
+	Apply:	"Table.Edit"
+)
+
+(AVIcon.602
+	Name:	"Edit"
+	Res:	"Icons.Edit"
+
+)
+
+(Tool.603
+	Help:	"Identify//Provides information about a record"
+	HelpTopic:	"Identify_tool"
+	Icon:	604
+	Cursor:	"Cursors.ID"
+	Apply:	"Table.Identify"
+	Click:	"Table.StopEditing"
+)
+
+(AVIcon.604
+	Name:	"ID"
+	Res:	"Icons.ID"
+
+)
+
+(AVIcon.605
+	Name:	"Icon"
+	Res:	"Table.Icon"
+
+)
+
+(DocGUI.875
+	Name:	"Script"
+	Type:	"SEd"
+	Modified:	1
+	Visible:	1
+	MenuBar:	876
+	ButnBar:	939
+	Popups:	983
+	ToolBar:	984
+	NewScript:	"Script.New"
+	OpenScript:	"Doc.Open"
+	ActionScript:	"Script.Action"
+	NewUpdateScript:	"Doc.NewUpdate"
+	OpenUpdateScript:	"Doc.OpenUpdate"
+	ActionUpdateScript:	"Script.ActionUpdate"
+	Title:	"Scripts"
+	Icon:	985
+)
+
+(MenuBar.876
+	Child:	877
+	Child:	890
+	Child:	906
+	Child:	923
+	Child:	934
+)
+
+(PMenu.877
+	InternalName:	"File"
+	Child:	878
+	Child:	879
+	Child:	880
+	Child:	881
+	Child:	882
+	Child:	883
+	Child:	884
+	Child:	885
 	Child:	886
 	Child:	887
 	Child:	888
 	Child:	889
-	Child:	890
+	Label:	"&File"
+)
+
+(Choice.878
+	Help:	"Closes the active component"
+	HelpTopic:	"Close"
+	Label:	"&Close"
+	Click:	"Project.CloseDoc"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.879
+	Help:	"Closes all components"
+	HelpTopic:	"Close_All"
+	Label:	"Close &All"
+	Click:	"Project.CloseAll"
+	Shortcut:	"Keys.None"
+)
+
+(Space.880
+)
+
+(Choice.881
+	Help:	"Saves the current project"
+	HelpTopic:	"Save_Project"
+	Label:	"&Save Project"
+	Click:	"Project.Save"
+	Shortcut:	"Keys.Ctrl+S"
+)
+
+(Choice.882
+	Help:	"Saves the current project with a new name"
+	HelpTopic:	"Save_Project_As"
+	Label:	"Save Project As..."
+	Click:	"Project.SaveAs"
+	Shortcut:	"Keys.None"
+)
+
+(Space.883
+)
+
+(Choice.884
+	Help:	"Displays the Extensions Dialog"
+	HelpTopic:	"Extensions"
+	Label:	"Extensions..."
+	Click:	"Appl.GetExtensionWin"
+	Shortcut:	"Keys.None"
+)
+
+(Space.885
+)
+
+(Choice.886
+	Help:	"Prints the script"
+	HelpTopic:	"Print"
+	Label:	"&Print..."
+	Click:	"Doc.Print"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.887
+	Help:	"Edits the printer and the printing options"
+	HelpTopic:	"Print_Setup"
+	Update:	"PrintSetupUpdate"
+	Label:	"P&rint Setup..."
+	Click:	"Project.PrintSetup"
+	Shortcut:	"Keys.None"
+)
+
+(Space.888
+)
+
+(Choice.889
+	Help:	"Exits ArcView"
+	HelpTopic:	"Exit"
+	Label:	"E&xit"
+	Click:	"Project.Exit"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.890
+	InternalName:	"Edit"
 	Child:	891
 	Child:	892
 	Child:	893
@@ -3116,1952 +4996,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Child:	903
 	Child:	904
 	Child:	905
-	Label:	"Menu"
-)
-
-(Choice.886
-	Disabled:	1
-	Invisible:	1
-	Help:	"Deletes the last entered point on the line or polygon being drawn"
-	Update:	"View.DelLastPointUpdate"
-	Label:	"Delete Last Point"
-	Click:	"View.DeleteLastPoint"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.887
-	Disabled:	1
-	Help:	"Undo the last edit to features in a theme"
-	HelpTopic:	"Undo_Feature_Edit_on_a_view"
-	Update:	"View.UndoEditUpdate"
-	Label:	"Undo Feature Edit"
-	Click:	"View.UndoEdit"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.888
-	Disabled:	1
-	Help:	"Redo the last edit operation on a theme that was undone"
-	Update:	"View.RedoEditUpdate"
-	Label:	"Redo Feature Edit"
-	Click:	"View.RedoEdit"
-	Shortcut:	"Keys.None"
-)
-
-(Space.889
-)
-
-(Choice.890
-	Help:	"Turns general snapping on"
-	Update:	"View.ToggleGeneralSnapUpdate"
-	Label:	"Enable General Snapping"
-	Click:	"View.ToggleGeneralSnap"
-	Shortcut:	"Keys.None"
+	Label:	"&Edit"
 )
 
 (Choice.891
-	Help:	"Turns interactive snapping on"
-	Update:	"View.ToggleInteractiveSnapUpdate"
-	Label:	"Enable Interactive Snapping"
-	Click:	"View.ToggleInteractiveSnap"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.892
-	Help:	"Turns snap tolerance cursor off"
-	Update:	"View.ToggleTolCursorUpdate"
-	Label:	"Hide Snap Tolerance Cursor"
-	Click:	"View.ToggleTolCursor"
-	Shortcut:	"Keys.None"
-)
-
-(Space.893
-)
-
-(Choice.894
-	Disabled:	1
-	Invisible:	1
-	Help:	"Snaps the next entered point to the nearest vertex within the user tolerance"
-	Update:	"View.InteractiveSnapUpdate"
-	Label:	"Snap to Vertex"
-	Click:	"View.SnapToVertex"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.895
-	Disabled:	1
-	Invisible:	1
-	Help:	"Snaps the next entered point to the nearest line segment"
-	Update:	"View.InteractiveSnapUpdate"
-	Label:	"Snap to Boundary"
-	Click:	"View.SnapToBoundary"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.896
-	Disabled:	1
-	Invisible:	1
-	Help:	"Snaps the next entered point to the nearest node common to two or more features"
-	Update:	"View.InteractiveSnapUpdate"
-	Label:	"Snap to Intersection"
-	Click:	"View.SnapToIntersection"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.897
-	Disabled:	1
-	Invisible:	1
-	Help:	"Snaps the next entered point to the nearest endpoint of an existing line"
-	Update:	"View.SnapToEndPointUpdate"
-	Label:	"Snap to Endpoint"
-	Click:	"View.SnapToEndPoint"
-	Shortcut:	"Keys.None"
-)
-
-(Space.898
-)
-
-(Choice.899
-	Help:	"Unselects the selected features in all active themes"
-	Update:	"View.AttributeThemesUpdate"
-	Label:	"Clear Selection"
-	Click:	"View.ClearSelect"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.900
-	Help:	"Zooms in at point where you click to bring up popup menu"
-	Update:	"View.HasDataUpdate"
-	Label:	"Zoom In"
-	Click:	"View.PopupZoomIn"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.901
-	Help:	"Zooms out from point where you click to bring up popup menu"
-	Update:	"View.HasDataUpdate"
-	Label:	"Zoom Out"
-	Click:	"View.PopupZoomOut"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.902
-	Help:	"Zooms to the extent of the selected features"
-	Update:	"View.SelectableThemesUpdate"
-	Label:	"Zoom to Selected"
-	Click:	"View.ZoomToSelected"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.903
-	Help:	"Centers display on point where you click to bring up popup"
-	Update:	"View.HasDataUpdate"
-	Label:	"Pan"
-	Click:	"View.PopupPan"
-	Shortcut:	"Keys.None"
-)
-
-(Space.904
-)
-
-(Choice.905
-	Help:	"Opens the shape properties window for editing vertex locations"
-	Update:	"ShapeWin.PopUp Update"
-	Label:	"Shape Properties"
-	Click:	"ShapeWin.PopUp Open"
-	Shortcut:	"Keys.None"
-)
-
-(ToolBar.906
-	Child:	907
-	Child:	909
-	Child:	911
-	Child:	913
-	Child:	915
-	Child:	917
-	Child:	919
-	Child:	921
-	Child:	923
-	Child:	925
-	Child:	927
-	Child:	946
-	Child:	959
-	Child:	978
-)
-
-(Tool.907
-	Help:	"Identify//Provides information about a feature"
-	HelpTopic:	"Identify_tool"
-	Update:	"View.IdentifyUpdate"
-	Icon:	908
-	Cursor:	"Cursors.ID"
-	Apply:	"View.Identify"
-)
-
-(AVIcon.908
-	Name:	"ID"
-	Res:	"Icons.ID"
-
-)
-
-(Tool.909
-	Help:	"Pointer//Selects, moves, and resizes graphics"
-	HelpTopic:	"Pointer_tool"
-	Update:	"View.HasDataUpdate"
-	Icon:	910
-	Cursor:	"Cursors.Select"
-	Apply:	"View.Select"
-	Click:	"View.SelectTool"
-)
-
-(AVIcon.910
-	Name:	"Select"
-	Res:	"Icons.Select"
-
-)
-
-(Tool.911
-	Disabled:	1
-	Help:	"Vertex Edit//Adds, moves, and deletes vertices of features and graphics"
-	HelpTopic:	"Vertex_Edit_tool"
-	Update:	"View.SelectToEditUpdate"
-	Icon:	912
-	Cursor:	"Cursors.SelectEdit"
-	Apply:	"View.SelectToEdit"
-	Click:	"View.SelectToEditTool"
-)
-
-(AVIcon.912
-	Name:	"SelectEdit"
-	Res:	"Icons.SelectEdit"
-
-)
-
-(Tool.913
-	Help:	"Select Feature//Selects features in the active themes by pointing or dragging"
-	HelpTopic:	"Select_Feature_tool"
-	Update:	"View.SelectableThemesUpdate"
-	Icon:	914
-	Cursor:	"Cursors.Default"
-	Apply:	"View.SelectPoint"
-)
-
-(AVIcon.914
-	Name:	"FeatureSelect"
-	Res:	"Icons.FeatureSelect"
-
-)
-
-(Tool.915
-	Help:	"Zoom In//Zooms in at a point you click or zooms in on a rectangle you drag"
-	HelpTopic:	"Zoom_In_tool"
-	Update:	"View.HasDataUpdate"
-	Icon:	916
-	Cursor:	"Cursors.ZoomIn"
-	Apply:	"View.ZoomInTool"
-)
-
-(AVIcon.916
-	Name:	"ZoomInTool"
-	Res:	"Icons.ZoomInTool"
-
-)
-
-(Tool.917
-	Help:	"Zoom Out//Zooms out from a point you click or zooms out to include a rectangle you drag"
-	HelpTopic:	"Zoom_Out_tool"
-	Update:	"View.HasDataUpdate"
-	Icon:	918
-	Cursor:	"Cursors.ZoomOut"
-	Apply:	"View.ZoomOutTool"
-)
-
-(AVIcon.918
-	Name:	"ZoomOutTool"
-	Res:	"Icons.ZoomOutTool"
-
-)
-
-(Tool.919
-	Help:	"Pan//Drags the display in the direction you move the cursor"
-	HelpTopic:	"Pan_tool"
-	Update:	"View.HasDataUpdate"
-	Icon:	920
-	Cursor:	"Cursors.Pan"
-	Apply:	"View.Pan"
-)
-
-(AVIcon.920
-	Name:	"Pan"
-	Res:	"Icons.Pan"
-
-)
-
-(Tool.921
-	Help:	"Measure//Measures distance"
-	HelpTopic:	"Measure_tool"
-	Update:	"View.HasDataUpdate"
-	Icon:	922
-	Cursor:	"Cursors.Measure"
-	Apply:	"View.Measure"
-)
-
-(AVIcon.922
-	Name:	"Measure"
-	Res:	"Icons.Measure"
-
-)
-
-(Tool.923
-	Disabled:	1
-	Help:	"Hot Link//Follows a hot link in the active themes"
-	HelpTopic:	"Hot_Link_tool"
-	Update:	"View.HotLinkUpdate"
-	Icon:	924
-	Cursor:	"Cursors.Media"
-	Apply:	"View.HotLink"
-)
-
-(AVIcon.924
-	Name:	"Media"
-	Res:	"Icons.Media"
-
-)
-
-(Tool.925
-	Disabled:	1
-	Help:	"Area of Interest//Sets the view's Area Of Interest for library-based themes"
-	HelpTopic:	"Area_Of_Interest_tool"
-	Update:	"View.AOIToolUpdate"
-	Icon:	926
-	Cursor:	"Cursors.Default"
-	Apply:	"View.AOITool"
-)
-
-(AVIcon.926
-	Name:	"AOI"
-	Res:	"Icons.AOI"
-
-)
-
-(ToolMenu.927
-	Help:	"Label//Labels a feature in the active theme with data from its table"
-	HelpTopic:	"Label_Tool"
-	Update:	"View.LabelToolUpdate"
-	Icon:	928
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.LabelTool"
-	Child:	929
-	Child:	930
-	Child:	932
-	Child:	934
-	Child:	936
-	Child:	938
-	Child:	940
-	Child:	942
-	Child:	944
-)
-
-(AVIcon.928
-	Name:	"Tag"
-	Res:	"Icons.Tag"
-
-)
-
-(Tool.929
-	Help:	"Label//Labels a feature in the active theme with data from its table"
-	HelpTopic:	"Label_Tool"
-	Update:	"View.LabelToolUpdate"
-	Icon:	928
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.LabelTool"
-)
-
-(Tool.930
-	Help:	"Callout Label//Click on a feature and drag in the direction you want the label to appear"
-	HelpTopic:	"Label_Tool"
-	Update:	"View.CalloutUpdate"
-	Icon:	931
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.CalloutLabelTool"
-)
-
-(AVIcon.931
-	Name:	"CallOutLabel1"
-	Res:	"Icons.CallOutLabel1"
-
-)
-
-(Tool.932
-	Help:	"Bullet Leader Label//Click on a feature and drag in the direction you want the label to appear"
-	HelpTopic:	"Label_Tool"
-	Update:	"View.CalloutUpdate"
-	Icon:	933
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.BulletLeaderLabelTool"
-)
-
-(AVIcon.933
-	Name:	"CallOutLabel2"
-	Res:	"Icons.CallOutLabel2"
-
-)
-
-(Tool.934
-	Help:	"Banner Label//Click on a feature you want to label"
-	HelpTopic:	"Label_Tool"
-	Update:	"View.CalloutUpdate"
-	Icon:	935
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.ShadowBoxLabelTool"
-)
-
-(AVIcon.935
-	Name:	"CallOutLabel3"
-	Res:	"Icons.CallOutLabel3"
-
-)
-
-(Tool.936
-	Help:	"U.S. Interstate//Click where you want to place a highway shield"
-	HelpTopic:	"Label_Tool"
-	Update:	"View.CalloutUpdate"
-	Icon:	937
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.Highway1 Apply"
-)
-
-(AVIcon.937
-	Name:	"BW US Interstate"
-	Res:	"Icons.BW US Interstate"
-
-)
-
-(Tool.938
-	Help:	"U.S. Route//Click where you want to place a highway shield"
-	HelpTopic:	"Label_Tool"
-	Update:	"View.CalloutUpdate"
-	Icon:	939
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.Highway2 Apply"
-)
-
-(AVIcon.939
-	Name:	"USRoute"
-	Res:	"Icons.USRoute"
-
-)
-
-(Tool.940
-	Help:	"Generic State Hwy//Click where you want to place a highway shield"
-	HelpTopic:	"Label_Tool"
-	Update:	"View.CalloutUpdate"
-	Icon:	941
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.Highway3 Apply"
-)
-
-(AVIcon.941
-	Name:	"GenericStateHighway"
-	Res:	"Icons.GenericStateHighway"
-
-)
-
-(Tool.942
-	Help:	"Generic Square Hwy//Click where you want to place a highway shield"
-	HelpTopic:	"Label_Tool"
-	Update:	"View.CalloutUpdate"
-	Icon:	943
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.Highway4 Apply"
-)
-
-(AVIcon.943
-	Name:	"GenericHighway1"
-	Res:	"Icons.GenericHighway1"
-
-)
-
-(Tool.944
-	Help:	"Generic Oval Hwy//Click where you want to place a highway shield"
-	Update:	"View.CalloutUpdate"
-	Icon:	945
-	Cursor:	"Cursors.Tag"
-	Apply:	"View.Highway5 Apply"
-)
-
-(AVIcon.945
-	Name:	"GenericHighway2"
-	Res:	"Icons.GenericHighway2"
-
-)
-
-(ToolMenu.946
-	Help:	"Text//Creates text on the display"
-	HelpTopic:	"Text_tool"
-	Update:	"View.TextToolUpdate"
-	Icon:	947
-	Cursor:	"Cursors.Text"
-	Apply:	"View.TextTool"
-	Click:	"SymWin.DisplayFontPanel"
-	Child:	948
-	Child:	949
-	Child:	951
-	Child:	953
-	Child:	955
-	Child:	957
-)
-
-(AVIcon.947
-	Name:	"Text"
-	Res:	"Icons.Text"
-
-)
-
-(Tool.948
-	Help:	"Text//Creates text on the display"
-	HelpTopic:	"Text_tool"
-	Update:	"View.TextToolUpdate"
-	Icon:	947
-	Cursor:	"Cursors.Text"
-	Apply:	"View.TextTool"
-	Click:	"SymWin.DisplayFontPanel"
-)
-
-(Tool.949
-	Help:	"Callout Text//Click and drag to where you want your text to appear, then enter the text"
-	HelpTopic:	"Text_tool"
-	Update:	"View.TextToolUpdate"
-	Icon:	950
-	Cursor:	"Cursors.Bullseye"
-	Apply:	"View.CalloutTextTool"
-)
-
-(AVIcon.950
-	Name:	"CallOutText1"
-	Res:	"Icons.CallOutText1"
-
-)
-
-(Tool.951
-	Help:	"Bullet Leader Text//Click and drag to where you want your text to appear, then enter the text"
-	HelpTopic:	"Text_tool"
-	Update:	"View.TextToolUpdate"
-	Icon:	952
-	Cursor:	"Cursors.Bullseye"
-	Apply:	"View.BulletLeaderTextTool"
-)
-
-(AVIcon.952
-	Name:	"CallOutText2"
-	Res:	"Icons.CallOutText2"
-
-)
-
-(Tool.953
-	Help:	"Banner Text//Click where you want your label to appear and enter your text"
-	HelpTopic:	"Text_tool"
-	Update:	"View.TextToolUpdate"
-	Icon:	954
-	Cursor:	"Cursors.Bullseye"
-	Apply:	"View.ShadowBoxTextTool"
-)
-
-(AVIcon.954
-	Name:	"CallOutText3"
-	Res:	"Icons.CallOutText3"
-
-)
-
-(Tool.955
-	Help:	"Drop-Shadow Text//Click where you want your text to appear and enter your text"
-	HelpTopic:	"Text_tool"
-	Update:	"View.TextToolUpdate"
-	Icon:	956
-	Cursor:	"Cursors.Target"
-	Apply:	"View.CreateDropShadowText"
-)
-
-(AVIcon.956
-	Name:	"DropShadowText"
-	Res:	"Icons.DropShadowText"
-
-)
-
-(Tool.957
-	Help:	"Spline Text//Adds text that is aligned to a splined baseline"
-	HelpTopic:	"Text_tool"
-	Update:	"View.TextToolUpdate"
-	Icon:	958
-	Cursor:	"Cursors.Bullseye"
-	Apply:	"View.SplineText"
-)
-
-(AVIcon.958
-	Name:	"TextAligned"
-	Res:	"Icons.TextAligned"
-
-)
-
-(ToolMenu.959
-	Help:	"Draw Point//Creates a point on the display"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.PointToolUpdate"
-	Icon:	960
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.PointTool"
-	Click:	"SymWin.DisplayMarkerPanel"
-	Child:	961
-	Child:	962
-	Child:	964
-	Child:	966
-	Child:	968
-	Child:	970
-	Child:	972
-	Child:	974
-	Child:	976
-)
-
-(AVIcon.960
-	Name:	"Point"
-	Res:	"Icons.Point"
-
-)
-
-(Tool.961
-	Help:	"Draw Point//Creates a point on the display"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.PointToolUpdate"
-	Icon:	960
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.PointTool"
-	Click:	"SymWin.DisplayMarkerPanel"
-)
-
-(Tool.962
-	Help:	"Draw Straight Line//Creates a line on the display"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.GraphicToolUpdate"
-	Icon:	963
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.LineTool"
-	Click:	"SymWin.DisplayPenPanel"
-)
-
-(AVIcon.963
-	Name:	"SelectLine"
-	Res:	"Icons.SelectLine"
-
-)
-
-(Tool.964
-	Help:	"Draw Line//Creates a line with two or more points on the display"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.PolyLineToolUpdate"
-	Icon:	965
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.PolyLineTool"
-	Click:	"SymWin.DisplayPenPanel"
-)
-
-(AVIcon.965
-	Name:	"Lines"
-	Res:	"Icons.Lines"
-
-)
-
-(Tool.966
-	Help:	"Draw Rectangle//Creates a rectangle on the display"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.PolyToolUpdate"
-	Icon:	967
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.RectTool"
-	Click:	"SymWin.DisplayFillPanel"
-)
-
-(AVIcon.967
-	Name:	"Rect"
-	Res:	"Icons.Rect"
-
-)
-
-(Tool.968
-	Help:	"Draw Circle//Creates a circle on the display"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.PolyToolUpdate"
-	Icon:	969
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.CircleTool"
-	Click:	"SymWin.DisplayFillPanel"
-)
-
-(AVIcon.969
-	Name:	"Disk"
-	Res:	"Icons.Disk"
-
-)
-
-(Tool.970
-	Help:	"Draw Polygon//Creates a polygon on the display"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.PolyToolUpdate"
-	Icon:	971
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.PolyTool"
-	Click:	"SymWin.DisplayFillPanel"
-)
-
-(AVIcon.971
-	Name:	"Poly"
-	Res:	"Icons.Poly"
-
-)
-
-(Tool.972
-	Disabled:	1
-	Help:	"Draw Line to Split Feature//Creates a line to split line features"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.SplitLineToolUpdate"
-	Icon:	973
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.SplitTool"
-)
-
-(AVIcon.973
-	Name:	"SplitLine"
-	Res:	"Icons.SplitLine"
-
-)
-
-(Tool.974
-	Disabled:	1
-	Help:	"Draw Line to Split Polygon//Creates a line to split polygon features"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.SplitPolyToolUpdate"
-	Icon:	975
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.SplitTool"
-)
-
-(AVIcon.975
-	Name:	"SplitPoly"
-	Res:	"Icons.SplitPoly"
-
-)
-
-(Tool.976
-	Disabled:	1
-	Help:	"Draw Line to Append Polygon//Appends a new polygon adjacent to other polygons"
-	HelpTopic:	"Draw_tool"
-	Update:	"View.AutoCompleteUpdate"
-	Icon:	977
-	Cursor:	"Cursors.CrossHair"
-	Apply:	"View.AutoCompleteTool"
-)
-
-(AVIcon.977
-	Name:	"AutoComplete"
-	Res:	"Icons.AutoComplete"
-
-)
-
-(ToolMenu.978
-	Disabled:	1
-	Invisible:	1
-	Help:	"Snap//Sets the general snapping tolerance for the editable theme"
-	HelpTopic:	"Snap_tools"
-	Update:	"View.SnapToolUpdate"
-	Icon:	979
-	Cursor:	"Cursors.Default"
-	Apply:	"View.SnapTool"
-	Child:	980
-	Child:	981
-)
-
-(AVIcon.979
-	Name:	"SnapTool"
-	Res:	"Icons.SnapTool"
-
-)
-
-(Tool.980
-	Disabled:	1
-	Invisible:	1
-	Help:	"Snap//Sets the general snapping tolerance for the editable theme"
-	HelpTopic:	"Snap_tools"
-	Update:	"View.SnapToolUpdate"
-	Icon:	979
-	Cursor:	"Cursors.Default"
-	Apply:	"View.SnapTool"
-)
-
-(Tool.981
-	Disabled:	1
-	Invisible:	1
-	Help:	"Snap//Sets the interactive snapping tolerance for the editable theme"
-	HelpTopic:	"Snap_tools"
-	Update:	"View.InteractiveSnapToolUpdate"
-	Icon:	982
-	Cursor:	"Cursors.Default"
-	Apply:	"View.InteractiveSnapTool"
-)
-
-(AVIcon.982
-	Name:	"SnapFeatureTool"
-	Res:	"Icons.SnapFeatureTool"
-
-)
-
-(AVIcon.983
-	Name:	"Icon"
-	Res:	"View.Icon"
-
-)
-
-(DocGUI.984
-	Name:	"Table"
-	Type:	"Table"
-	Modified:	1
-	Visible:	1
-	MenuBar:	985
-	ButnBar:	1072
-	Popups:	1121
-	ToolBar:	1122
-	NewScript:	"Table.New"
-	OpenScript:	"Doc.Open"
-	ActionScript:	"Table.Action"
-	NewUpdateScript:	"Doc.NewUpdate"
-	OpenUpdateScript:	"Doc.OpenUpdate"
-	ActionUpdateScript:	"Table.ActionUpdate"
-	Title:	"Tables"
-	Icon:	1129
-)
-
-(MenuBar.985
-	Child:	986
-	Child:	1001
-	Child:	1020
-	Child:	1042
-	Child:	1052
-	Child:	1064
-	Child:	1069
-)
-
-(PMenu.986
-	InternalName:	"File"
-	Child:	987
-	Child:	988
-	Child:	989
-	Child:	990
-	Child:	991
-	Child:	993
-	Child:	994
-	Child:	995
-	Child:	996
-	Child:	997
-	Child:	998
-	Child:	999
-	Child:	1000
-	Label:	"&File"
-)
-
-(Choice.987
-	Help:	"Closes the active component"
-	HelpTopic:	"Close"
-	Label:	"&Close"
-	Click:	"Project.CloseDoc"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.988
-	Help:	"Closes all components"
-	HelpTopic:	"Close_All"
-	Label:	"Close &All"
-	Click:	"Project.CloseAll"
-	Shortcut:	"Keys.None"
-)
-
-(Space.989
-)
-
-(Choice.990
-	Help:	"Saves the current project"
-	HelpTopic:	"Save_Project"
-	Label:	"&Save Project"
-	Click:	"Project.Save"
-	Shortcut:	"Keys.Ctrl+S"
-)
-
-(Choice.991
-	Help:	"Saves the current project with a new name"
-	HelpTopic:	"Save_Project_As"
-	Label:	"Save Project As..."
-	Click:	"Project.SaveAs"
-	Shortcut:	"Keys.None"
-)
-
-(Space.993
-)
-
-(Choice.994
-	Help:	"Displays the Extensions Dialog"
-	HelpTopic:	"Extensions"
-	Label:	"Extensions..."
-	Click:	"Appl.GetExtensionWin"
-	Shortcut:	"Keys.None"
-)
-
-(Space.995
-)
-
-(Choice.996
-	Help:	"Prints the table"
-	HelpTopic:	"Print"
-	Label:	"&Print..."
-	Click:	"Doc.Print"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.997
-	Help:	"Edits the printer and the printing options"
-	HelpTopic:	"Print_Setup"
-	Update:	"PrintSetupUpdate"
-	Label:	"P&rint Setup..."
-	Click:	"Project.PrintSetup"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.998
-	Help:	"Exports the current table to a dBASE, INFO, or text file"
-	HelpTopic:	"Export_Table"
-	Update:	"Table.ExportUpdate"
-	Label:	"&Export..."
-	Click:	"Table.Export"
-	Shortcut:	"Keys.None"
-)
-
-(Space.999
-)
-
-(Choice.1000
-	Help:	"Exits ArcView"
-	HelpTopic:	"Exit"
-	Label:	"E&xit"
-	Click:	"Project.Exit"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1001
-	InternalName:	"Edit"
-	Child:	1002
-	Child:	1003
-	Child:	1004
-	Child:	1005
-	Child:	1006
-	Child:	1007
-	Child:	1008
-	Child:	1009
-	Child:	1010
-	Child:	1011
-	Child:	1012
-	Child:	1013
-	Child:	1014
-	Child:	1015
-	Child:	1016
-	Label:	"&Edit"
-)
-
-(Choice.1002
-	Disabled:	1
-	Help:	"Cuts the selected cell to the clipboard"
-	HelpTopic:	"Cut"
-	Update:	"Table.CutUpdate"
-	Label:	"Cu&t"
-	Click:	"Table.Cut"
-	Shortcut:	"Keys.Ctrl+X"
-)
-
-(Choice.1003
-	Disabled:	1
-	Help:	"Copies the selected cell to the clipboard"
-	HelpTopic:	"Copy"
-	Update:	"Table.CutUpdate"
-	Label:	"&Copy"
-	Click:	"Table.Copy"
-	Shortcut:	"Keys.Ctrl+C"
-)
-
-(Choice.1004
-	Disabled:	1
-	Help:	"Inserts the contents of the Clipboard into the active cell"
-	HelpTopic:	"Paste"
-	Update:	"Table.CutUpdate"
-	Label:	"&Paste"
-	Click:	"Table.Paste"
-	Shortcut:	"Keys.Ctrl+V"
-)
-
-(Space.1005
-)
-
-(Choice.1006
-	Disabled:	1
-	Help:	"Undo the last edit operation on the Table"
-	HelpTopic:	"Undo_Edit_on_a_table"
-	Update:	"Table.UndoEditUpdate"
-	Label:	"&Undo Edit"
-	Click:	"Table.UndoEdit"
-	Shortcut:	"Keys.Ctrl+Z"
-)
-
-(Choice.1007
-	Disabled:	1
-	Help:	"Redo the last undone operation on the Table"
-	HelpTopic:	"Redo_Edit_on_a_table"
-	Update:	"Table.RedoEditUpdate"
-	Label:	"Red&o Edit"
-	Click:	"Table.RedoEdit"
-	Shortcut:	"Keys.Ctrl+Y"
-)
-
-(Space.1008
-)
-
-(Choice.1009
-	Disabled:	1
-	Help:	"Adds a new field to the table"
-	HelpTopic:	"Add_Field"
-	Update:	"Table.AddFieldUpdate"
-	Label:	"Add &Field..."
-	Click:	"Table.AddField"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1010
-	Disabled:	1
-	Help:	"Adds a new record at the bottom of the table"
-	HelpTopic:	"Add_Record"
-	Update:	"Table.AddRecordUpdate"
-	Label:	"Add &Record"
-	Click:	"Table.AddRecord"
-	Shortcut:	"Keys.Ctrl+A"
-)
-
-(Choice.1011
-	Disabled:	1
-	Help:	"Deletes the active field from the table"
-	HelpTopic:	"Delete_Field"
-	Update:	"Table.DeleteFieldUpdate"
-	Label:	"&Delete Field"
-	Click:	"Table.DeleteField"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1012
-	Disabled:	1
-	Help:	"Deletes the selected records from the table"
-	HelpTopic:	"Delete_Records"
-	Update:	"Table.DeleteRecordsUpdate"
-	Label:	"D&elete Records"
-	Click:	"Table.DeleteRecords"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1013
-)
-
-(Choice.1014
-	Help:	"Selects all records in the table"
-	HelpTopic:	"Select_All"
-	Label:	"Select &All"
-	Click:	"Table.SelectAll"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1015
-	Help:	"Unselects all records in the table"
-	HelpTopic:	"Select_None_in_a_table"
-	Label:	"Select &None"
-	Click:	"Table.UnselectAll"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1016
-	Help:	"Toggles selected and unselected records in the table"
-	HelpTopic:	"Switch_Selection"
-	Label:	"&Switch Selection"
-	Click:	"Table.SwitchSelection"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1020
-	InternalName:	"Table"
-	Child:	1021
-	Child:	1022
-	Child:	1023
-	Child:	1024
-	Child:	1025
-	Child:	1026
-	Child:	1027
-	Child:	1028
-	Child:	1029
-	Child:	1030
-	Child:	1031
-	Child:	1032
-	Child:	1033
-	Child:	1034
-	Child:	1035
-	Child:	1036
-	Child:	1037
-	Label:	"&Table"
-)
-
-(Choice.1021
-	Help:	"Displays the dialog box to edit properties of the table"
-	HelpTopic:	"Table_Properties"
-	Label:	"&Properties..."
-	Click:	"Table.Properties"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1022
-)
-
-(Choice.1023
-	Help:	"Creates a chart from the table"
-	HelpTopic:	"Create_Chart"
-	Update:	"Table.ChartUpdate"
-	Label:	"&Chart..."
-	Click:	"Table.Chart"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1024
-	Help:	"Starts or stops editing of table values"
-	HelpTopic:	"Start_Stop_Editing"
-	Update:	"Table.ToggleEditingUpdate"
-	Label:	"Start &Editing"
-	Click:	"Table.ToggleEditing"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1025
-	Disabled:	1
-	Help:	"Saves edits to the source file"
-	HelpTopic:	"Save_edits_table"
-	Update:	"Table.SaveEditsUpdate"
-	Label:	"Save Ed&its"
-	Click:	"Table.SaveEdits"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1026
-	Disabled:	1
-	Help:	"Save edits to a new source file"
-	HelpTopic:	"Save_edits_as_table"
-	Update:	"Table.SaveEditsUpdate"
-	Label:	"Save E&dits As..."
-	Click:	"Table.SaveEditsAs"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1027
-)
-
-(Choice.1028
-	Help:	"Finds the row in the table using the text you enter"
-	HelpTopic:	"Find"
-	Label:	"&Find..."
-	Click:	"Table.Find"
-	Shortcut:	"Keys.Ctrl+F"
-)
-
-(Choice.1029
-	Help:	"Displays the Query Builder to select records with a logical expression"
-	HelpTopic:	"Query_Builder"
-	Label:	"&Query..."
-	Click:	"Table.Query"
-	Shortcut:	"Keys.Ctrl+Q"
-)
-
-(Choice.1030
-	Disabled:	1
-	Help:	"Promotes selected rows to the top of the table"
-	HelpTopic:	"Promote"
-	Update:	"Table.PromoteUpdate"
-	Label:	"Pr&omote"
-	Click:	"Table.Promote"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1031
-)
-
-(Choice.1032
-	Disabled:	1
-	Help:	"Appends the fields of another table to the active table based on a common field"
-	HelpTopic:	"Join"
-	Update:	"Table.JoinUpdate"
-	Label:	"&Join"
-	Click:	"Table.Join"
-	Shortcut:	"Keys.Ctrl+J"
-)
-
-(Choice.1033
-	Disabled:	1
-	Help:	"Removes any fields joined to the table"
-	HelpTopic:	"Remove_All_Joins"
-	Update:	"Table.HasJoinsUpdate"
-	Label:	"&Remove All Joins"
-	Click:	"Table.RemoveAllJoins"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1034
-	Disabled:	1
-	Help:	"Associates the selection of the active table with another table"
-	HelpTopic:	"Link"
-	Update:	"Table.LinkUpdate"
-	Label:	"&Link"
-	Click:	"Table.Link"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1035
-	Disabled:	1
-	Help:	"Removes the association between the active table and its linked tables"
-	HelpTopic:	"Remove_All_Links"
-	Update:	"Table.HasLinksUpdate"
-	Label:	"Re&move All Links"
-	Click:	"Table.RemoveAllLinks"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1036
-)
-
-(Choice.1037
-	Help:	"Refreshes the table"
-	HelpTopic:	"Refresh"
-	Label:	"Refres&h"
-	Click:	"Table.Refresh"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1042
-	InternalName:	"Field"
-	Child:	1043
-	Child:	1044
-	Child:	1045
-	Child:	1046
-	Child:	1047
-	Child:	1048
-	Child:	1049
-	Child:	1050
-	Label:	"F&ield"
-)
-
-(Choice.1043
-	Help:	"Sorts rows in ascending order (A-Z), (0-9)"
-	HelpTopic:	"Sort_table"
-	Update:	"Table.SortUpdate"
-	Label:	"Sort &Ascending"
-	Click:	"Table.SortAscending"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1044
-	Help:	"Sorts rows in descending order (Z-A), (9-0)"
-	HelpTopic:	"Sort_table"
-	Update:	"Table.SortUpdate"
-	Label:	"Sort &Descending"
-	Click:	"Table.SortDescending"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1045
-)
-
-(Choice.1046
-	Help:	"Creates or removes an index on the active field"
-	HelpTopic:	"Create_Remove_Index"
-	Update:	"Table.IndexUpdate"
-	Label:	"Create &Index"
-	Click:	"Table.Index"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1047
-)
-
-(Choice.1048
-	Help:	"Creates a summary table grouped by the active field"
-	HelpTopic:	"Summarize"
-	Update:	"Table.SortUpdate"
-	Label:	"&Summarize..."
-	Click:	"Table.Summarize"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1049
-	Disabled:	1
-	Help:	"Calculates the value of a field"
-	HelpTopic:	"Calculate"
-	Update:	"Table.CalculateUpdate"
-	Label:	"&Calculate..."
-	Click:	"Table.Calculate"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1050
-	Help:	"Generates a report of statistics for data in the active, numeric field"
-	HelpTopic:	"Statistics"
-	Update:	"Table.StatisticsUpdate"
-	Label:	"S&tatistics..."
-	Click:	"Table.Statistics"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1052
-	InternalName:	"Window"
-	Child:	1053
-	Child:	1054
-	Child:	1055
-	Child:	1056
-	Child:	1057
-	Child:	1058
-	Child:	1060
-	Child:	1061
-	Child:	1062
-	Child:	1063
-	Label:	"&Window"
-)
-
-(Choice.1053
-	Help:	"Arranges windows as non-overlapping tiles"
-	HelpTopic:	"Tile"
-	Label:	"&Tile"
-	Click:	"Project.Tile"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1054
-	Help:	"Arranges windows"
-	HelpTopic:	"Cascade"
-	Label:	"&Cascade"
-	Click:	"Project.Cascade"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1055
-	Help:	"Arranges iconified windows"
-	HelpTopic:	"Arrange_Icons"
-	Label:	"&Arrange Icons"
-	Click:	"Project.ArrangeIcons"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1056
-)
-
-(Choice.1057
-	Help:	"Shows the symbol window"
-	HelpTopic:	"Show_Symbol_Window"
-	Label:	"Show Symbol Window..."
-	Click:	"Project.ShowHideSymWin"
-	Shortcut:	"Keys.Ctrl+P"
-)
-
-(Space.1058
-	ObjectTag:	1059
-	Update:	"WindowMenuUpdate"
-)
-
-(AVStr.1059
-	S:	"dcsewerdesign.apr Attributes of Line.shp DCSewerDesign.NetworkCalculator.calculate View1"
-)
-
-(Choice.1060
-	Help:	"Activates dcsewerdesign.apr"
-	Label:	"&1 dcsewerdesign.apr"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1061
-	Help:	"Activates Attributes of Line.shp"
-	Label:	"&2 Attributes of Line.shp"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1062
-	Help:	"Activates DCSewerDesign.NetworkCalculator.calculate"
-	Label:	"&3 DCSewerDesign.NetworkCalculator.calculate"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1063
-	Help:	"Activates View1"
-	Label:	"&4 View1"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1064
-	InternalName:	"Help"
-	Child:	1065
-	Child:	1066
-	Child:	1067
-	Child:	1068
-	Label:	"&Help"
-)
-
-(Choice.1065
-	Help:	"Displays the dialog for browsing and searching ArcView's help system"
-	HelpTopic:	"Help_on_Help_Topics"
-	Label:	"Help &Topics..."
-	Click:	"Project.HelpTopics"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1066
-	Help:	"Provides instructions for how to obtain help from ArcView"
-	HelpTopic:	"Help_on_How_to_Get_Help"
-	Label:	"&How to Get Help..."
-	Click:	"Project.HelpHelp"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1067
-)
-
-(Choice.1068
-	Help:	"Provides information about ArcView"
-	HelpTopic:	"About"
-	Label:	"&About ArcView..."
-	Click:	"Project.About"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1069
-	Help:	"DC Sewer Design Extension Menu"
-	Child:	1070
-	Child:	1071
-	Label:	"&DC Sewer"
-)
-
-(Choice.1070
-	Disabled:	1
-	Help:	"Calculate table column values using upstream and downstream lines"
-	Update:	"DCSewerDesign.NetworkCalculator.update"
-	Label:	"Network &Calculator"
-	Click:	"DCSewerDesign.NetworkCalculator.calculate"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1071
-	Help:	"DC Sewer Design Extension Help//DC Sewer Design Extension Help"
-	Label:	"Help"
-	Click:	"DCSewerDesign.Help.openCHM"
-	Shortcut:	"Keys.None"
-)
-
-(ButnBar.1072
-	Child:	1073
-	Child:	1075
-	Child:	1076
-	Child:	1078
-	Child:	1080
-	Child:	1082
-	Child:	1083
-	Child:	1085
-	Child:	1087
-	Child:	1089
-	Child:	1090
-	Child:	1092
-	Child:	1093
-	Child:	1095
-	Child:	1097
-	Child:	1099
-	Child:	1100
-	Child:	1102
-	Child:	1105
-	Child:	1107
-	Child:	1109
-	Child:	1110
-	Child:	1112
-	Child:	1114
-	Child:	1119
-)
-
-(Butn.1073
-	Help:	"Save Project//Saves the current project"
-	HelpTopic:	"Save_Project"
-	Icon:	1074
-	Click:	"Project.Save"
-)
-
-(AVIcon.1074
-	Name:	"Save"
-	Res:	"Icons.Save"
-
-)
-
-(Space.1075
-)
-
-(Butn.1076
-	Disabled:	1
-	Help:	"Cut//Cuts the selected cell to the clipboard"
-	HelpTopic:	"Cut"
-	Update:	"Table.CutUpdate"
-	Icon:	1077
-	Click:	"Table.Cut"
-)
-
-(AVIcon.1077
-	Name:	"Cut"
-	Res:	"Icons.Cut"
-
-)
-
-(Butn.1078
-	Disabled:	1
-	Help:	"Copy//Copies the selected cell to the clipboard"
-	HelpTopic:	"Copy"
-	Update:	"Table.CutUpdate"
-	Icon:	1079
-	Click:	"Table.Copy"
-)
-
-(AVIcon.1079
-	Name:	"Copy"
-	Res:	"Icons.Copy"
-
-)
-
-(Butn.1080
-	Disabled:	1
-	Help:	"Paste//Inserts the contents of the Clipboard into the active cell"
-	HelpTopic:	"Paste"
-	Update:	"Table.CutUpdate"
-	Icon:	1081
-	Click:	"Table.Paste"
-)
-
-(AVIcon.1081
-	Name:	"Paste"
-	Res:	"Icons.Paste"
-
-)
-
-(Space.1082
-)
-
-(Butn.1083
-	Help:	"Select All//Selects all records in the table"
-	HelpTopic:	"Select_All"
-	Icon:	1084
-	Click:	"Table.SelectAll"
-)
-
-(AVIcon.1084
-	Name:	"SelectAll"
-	Res:	"Icons.SelectAll"
-
-)
-
-(Butn.1085
-	Help:	"Select None//Unselects all records in the table"
-	HelpTopic:	"Select_None_in_a_table"
-	Icon:	1086
-	Click:	"Table.UnselectAll"
-)
-
-(AVIcon.1086
-	Name:	"SelectNone"
-	Res:	"Icons.SelectNone"
-
-)
-
-(Butn.1087
-	Help:	"Switch Selection//Toggles selected and unselected records in the table"
-	HelpTopic:	"Switch_Selection"
-	Icon:	1088
-	Click:	"Table.SwitchSelection"
-)
-
-(AVIcon.1088
-	Name:	"SwitchSelect"
-	Res:	"Icons.SwitchSelect"
-
-)
-
-(Space.1089
-)
-
-(Butn.1090
-	Help:	"Create Chart//Creates a chart from the table"
-	HelpTopic:	"Create_Chart"
-	Update:	"Table.ChartUpdate"
-	Icon:	1091
-	Click:	"Table.Chart"
-)
-
-(AVIcon.1091
-	Name:	"MakeChart"
-	Res:	"Icons.MakeChart"
-
-)
-
-(Space.1092
-)
-
-(Butn.1093
-	Help:	"Find//Finds the row in the table using the text you enter"
-	HelpTopic:	"Find"
-	Icon:	1094
-	Click:	"Table.Find"
-)
-
-(AVIcon.1094
-	Name:	"Find"
-	Res:	"Icons.Find"
-
-)
-
-(Butn.1095
-	Help:	"Query Builder//Displays the Query Builder to select records with a logical expression"
-	HelpTopic:	"Query_Builder"
-	Icon:	1096
-	Click:	"Table.Query"
-)
-
-(AVIcon.1096
-	Name:	"QueryBuilder"
-	Res:	"Icons.QueryBuilder"
-
-)
-
-(Butn.1097
-	Disabled:	1
-	Help:	"Promote//Promotes selected rows to the top of the table"
-	HelpTopic:	"Promote"
-	Update:	"Table.PromoteUpdate"
-	Icon:	1098
-	Click:	"Table.Promote"
-)
-
-(AVIcon.1098
-	Name:	"Promote"
-	Res:	"Icons.Promote"
-
-)
-
-(Space.1099
-)
-
-(Butn.1100
-	Disabled:	1
-	Help:	"Join//Appends the fields of another table to the active table based on a common field"
-	HelpTopic:	"Join"
-	Update:	"Table.JoinUpdate"
-	Icon:	1101
-	Click:	"Table.Join"
-)
-
-(AVIcon.1101
-	Name:	"Join"
-	Res:	"Icons.Join"
-
-)
-
-(Space.1102
-)
-
-(Butn.1105
-	Help:	"Summarize//Creates a summary table grouped by the active field"
-	HelpTopic:	"Summarize"
-	Update:	"Table.SortUpdate"
-	Icon:	1106
-	Click:	"Table.Summarize"
-)
-
-(AVIcon.1106
-	Name:	"Summarize"
-	Res:	"Icons.Summarize"
-
-)
-
-(Butn.1107
-	Disabled:	1
-	Help:	"Calculate//Calculates the value of a field"
-	HelpTopic:	"Calculate"
-	Update:	"Table.CalculateUpdate"
-	Icon:	1108
-	Click:	"Table.Calculate"
-)
-
-(AVIcon.1108
-	Name:	"Calculator"
-	Res:	"Icons.Calculator"
-
-)
-
-(Space.1109
-)
-
-(Butn.1110
-	Help:	"Sort Ascending//Sorts rows in ascending order (A-Z), (0-9)"
-	HelpTopic:	"Sort_table"
-	Update:	"Table.SortUpdate"
-	Icon:	1111
-	Click:	"Table.SortAscending"
-)
-
-(AVIcon.1111
-	Name:	"SortAscending"
-	Res:	"Icons.SortAscending"
-
-)
-
-(Butn.1112
-	Help:	"Sort Descending//Sorts rows in descending order (Z-A), (9-0)"
-	HelpTopic:	"Sort_table"
-	Update:	"Table.SortUpdate"
-	Icon:	1113
-	Click:	"Table.SortDescending"
-)
-
-(AVIcon.1113
-	Name:	"SortDescending"
-	Res:	"Icons.SortDescending"
-
-)
-
-(Space.1114
-)
-
-(Butn.1119
-	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
-	HelpTopic:	"Help_button"
-	Icon:	1120
-	Click:	"Help.Tool"
-)
-
-(AVIcon.1120
-	Name:	"HelpTool"
-	Res:	"Icons.HelpTool"
-
-)
-
-(PopupSet.1121
-)
-
-(ToolBar.1122
-	Child:	1123
-	Child:	1125
-	Child:	1127
-)
-
-(Tool.1123
-	Help:	"Select//Selects records in the table"
-	HelpTopic:	"Select_tool"
-	Icon:	1124
-	Cursor:	"Cursors.Default"
-	Apply:	"Table.Select"
-	Click:	"Table.StopEditing"
-)
-
-(AVIcon.1124
-	Name:	"Select"
-	Res:	"Icons.Select"
-
-)
-
-(Tool.1125
-	Disabled:	1
-	Help:	"Edit//Changes cell values"
-	HelpTopic:	"Edit_tool"
-	Update:	"Table.IsEditableUpdate"
-	Icon:	1126
-	Cursor:	"Cursors.Finger"
-	Apply:	"Table.Edit"
-)
-
-(AVIcon.1126
-	Name:	"Edit"
-	Res:	"Icons.Edit"
-
-)
-
-(Tool.1127
-	Help:	"Identify//Provides information about a record"
-	HelpTopic:	"Identify_tool"
-	Icon:	1128
-	Cursor:	"Cursors.ID"
-	Apply:	"Table.Identify"
-	Click:	"Table.StopEditing"
-)
-
-(AVIcon.1128
-	Name:	"ID"
-	Res:	"Icons.ID"
-
-)
-
-(AVIcon.1129
-	Name:	"Icon"
-	Res:	"Table.Icon"
-
-)
-
-(DocGUI.1403
-	Name:	"Script"
-	Type:	"SEd"
-	Modified:	1
-	Visible:	1
-	MenuBar:	1404
-	ButnBar:	1509
-	Popups:	1575
-	ToolBar:	1576
-	NewScript:	"Script.New"
-	OpenScript:	"Doc.Open"
-	ActionScript:	"Script.Action"
-	NewUpdateScript:	"Doc.NewUpdate"
-	OpenUpdateScript:	"Doc.OpenUpdate"
-	ActionUpdateScript:	"Script.ActionUpdate"
-	Title:	"Scripts"
-	Icon:	1577
-)
-
-(MenuBar.1404
-	Child:	1405
-	Child:	1419
-	Child:	1439
-	Child:	1456
-	Child:	1466
-	Child:	1472
-)
-
-(PMenu.1405
-	InternalName:	"File"
-	Child:	1406
-	Child:	1407
-	Child:	1408
-	Child:	1409
-	Child:	1410
-	Child:	1412
-	Child:	1413
-	Child:	1414
-	Child:	1415
-	Child:	1416
-	Child:	1417
-	Child:	1418
-	Label:	"&File"
-)
-
-(Choice.1406
-	Help:	"Closes the active component"
-	HelpTopic:	"Close"
-	Label:	"&Close"
-	Click:	"Project.CloseDoc"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1407
-	Help:	"Closes all components"
-	HelpTopic:	"Close_All"
-	Label:	"Close &All"
-	Click:	"Project.CloseAll"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1408
-)
-
-(Choice.1409
-	Help:	"Saves the current project"
-	HelpTopic:	"Save_Project"
-	Label:	"&Save Project"
-	Click:	"Project.Save"
-	Shortcut:	"Keys.Ctrl+S"
-)
-
-(Choice.1410
-	Help:	"Saves the current project with a new name"
-	HelpTopic:	"Save_Project_As"
-	Label:	"Save Project As..."
-	Click:	"Project.SaveAs"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1412
-)
-
-(Choice.1413
-	Help:	"Displays the Extensions Dialog"
-	HelpTopic:	"Extensions"
-	Label:	"Extensions..."
-	Click:	"Appl.GetExtensionWin"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1414
-)
-
-(Choice.1415
-	Help:	"Prints the script"
-	HelpTopic:	"Print"
-	Label:	"&Print..."
-	Click:	"Doc.Print"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1416
-	Help:	"Edits the printer and the printing options"
-	HelpTopic:	"Print_Setup"
-	Update:	"PrintSetupUpdate"
-	Label:	"P&rint Setup..."
-	Click:	"Project.PrintSetup"
-	Shortcut:	"Keys.None"
-)
-
-(Space.1417
-)
-
-(Choice.1418
-	Help:	"Exits ArcView"
-	HelpTopic:	"Exit"
-	Label:	"E&xit"
-	Click:	"Project.Exit"
-	Shortcut:	"Keys.None"
-)
-
-(PMenu.1419
-	InternalName:	"Edit"
-	Child:	1420
-	Child:	1421
-	Child:	1422
-	Child:	1423
-	Child:	1424
-	Child:	1425
-	Child:	1426
-	Child:	1427
-	Child:	1428
-	Child:	1429
-	Child:	1430
-	Child:	1431
-	Child:	1432
-	Child:	1433
-	Child:	1434
-	Label:	"&Edit"
-)
-
-(Choice.1420
 	Help:	"Undoes the last change"
 	HelpTopic:	"Undo__Script_"
 	Label:	"&Undo"
@@ -5069,10 +5007,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+Z"
 )
 
-(Space.1421
+(Space.892
 )
 
-(Choice.1422
+(Choice.893
 	Help:	"Finds the selected or specified string"
 	HelpTopic:	"Script_Find"
 	Label:	"&Find..."
@@ -5080,7 +5018,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+F"
 )
 
-(Choice.1423
+(Choice.894
 	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
@@ -5090,7 +5028,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.F3"
 )
 
-(Choice.1424
+(Choice.895
 	Help:	"Replaces the selected or specifed string"
 	HelpTopic:	"Script_Replace"
 	Label:	"Rep&lace..."
@@ -5098,10 +5036,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1425
+(Space.896
 )
 
-(Choice.1426
+(Choice.897
 	Disabled:	1
 	Help:	"Cuts the selection and puts it into the clipboard"
 	HelpTopic:	"Cut"
@@ -5111,7 +5049,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+X"
 )
 
-(Choice.1427
+(Choice.898
 	Disabled:	1
 	Help:	"Copies the selection and puts it into the clipboard"
 	HelpTopic:	"Copy"
@@ -5121,7 +5059,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+C"
 )
 
-(Choice.1428
+(Choice.899
 	Help:	"Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
 	Label:	"&Paste"
@@ -5129,10 +5067,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+V"
 )
 
-(Space.1429
+(Space.900
 )
 
-(Choice.1430
+(Choice.901
 	Help:	"Selects all text in the script editor"
 	HelpTopic:	"Select_All_in_a_script"
 	Label:	"Select &All"
@@ -5140,7 +5078,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+A"
 )
 
-(Choice.1431
+(Choice.902
 	Help:	"Deletes text from the cursor to the left margin"
 	HelpTopic:	"Delete_Left"
 	Label:	"&Delete Left"
@@ -5148,10 +5086,11 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+U"
 )
 
-(Space.1432
+(Space.903
 )
 
-(Choice.1433
+(Choice.904
+	Disabled:	1
 	Help:	"Comments selected text"
 	HelpTopic:	"Comment"
 	Update:	"Script.HasSelUpdate"
@@ -5160,7 +5099,8 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+Q"
 )
 
-(Choice.1434
+(Choice.905
+	Disabled:	1
 	Help:	"Uncomments selected text"
 	HelpTopic:	"Remove_Comment"
 	Update:	"Script.HasSelUpdate"
@@ -5169,28 +5109,28 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+W"
 )
 
-(PMenu.1439
+(PMenu.906
 	InternalName:	"Script"
-	Child:	1440
-	Child:	1441
-	Child:	1442
-	Child:	1443
-	Child:	1444
-	Child:	1445
-	Child:	1446
-	Child:	1447
-	Child:	1448
-	Child:	1449
-	Child:	1450
-	Child:	1451
-	Child:	1452
-	Child:	1453
-	Child:	1454
-	Child:	1455
+	Child:	907
+	Child:	908
+	Child:	909
+	Child:	910
+	Child:	911
+	Child:	912
+	Child:	913
+	Child:	914
+	Child:	915
+	Child:	916
+	Child:	917
+	Child:	918
+	Child:	919
+	Child:	920
+	Child:	921
+	Child:	922
 	Label:	"&Script"
 )
 
-(Choice.1440
+(Choice.907
 	Help:	"Displays the dialog box to edit properties of the script"
 	HelpTopic:	"Script_Properties"
 	Label:	"&Properties..."
@@ -5198,10 +5138,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1441
+(Space.908
 )
 
-(Choice.1442
+(Choice.909
 	Disabled:	1
 	Help:	"Compiles the script"
 	HelpTopic:	"Compile"
@@ -5211,7 +5151,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1443
+(Choice.910
 	Help:	"Executes one request or object reference in the compiled script"
 	HelpTopic:	"Step"
 	Update:	"Script.RunUpdate"
@@ -5220,7 +5160,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.F8"
 )
 
-(Choice.1444
+(Choice.911
 	Help:	"Runs the compiled script"
 	HelpTopic:	"Run"
 	Update:	"Script.RunUpdate"
@@ -5229,10 +5169,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.F5"
 )
 
-(Space.1445
+(Space.912
 )
 
-(Choice.1446
+(Choice.913
 	Help:	"Toggles a breakpoint on or off at the current cursor position"
 	HelpTopic:	"Toggle_Breakpoint"
 	Update:	"Script.RunUpdate"
@@ -5241,7 +5181,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1447
+(Choice.914
 	Help:	"Clears all breakpoints"
 	HelpTopic:	"Clear_All_Breakpoints"
 	Update:	"Script.RunUpdate"
@@ -5250,7 +5190,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1448
+(Choice.915
 	Help:	"Displays the current value of local and global variables"
 	HelpTopic:	"Examine_Variables"
 	Update:	"Script.RunUpdate"
@@ -5259,10 +5199,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+E"
 )
 
-(Space.1449
+(Space.916
 )
 
-(Choice.1450
+(Choice.917
 	Help:	"Inserts the source code of a system script"
 	HelpTopic:	"Load_System_Script"
 	Label:	"&Load System Script..."
@@ -5270,7 +5210,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1451
+(Choice.918
 	Help:	"Inserts the contents of a text file"
 	HelpTopic:	"Load_Text_File"
 	Label:	"Load &Text File..."
@@ -5278,7 +5218,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1452
+(Choice.919
 	Help:	"Writes the entire script or the selected text to a text file"
 	HelpTopic:	"Write_Text_File"
 	Label:	"&Write Text File..."
@@ -5286,10 +5226,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1453
+(Space.920
 )
 
-(Choice.1454
+(Choice.921
 	Help:	"Embeds the script in the project and deletes its window"
 	HelpTopic:	"Embed_Script"
 	Update:	"Script.RunUpdate"
@@ -5298,7 +5238,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1455
+(Choice.922
 	Disabled:	1
 	Help:	"Removes specified script from embedded scripts and puts it in a SEd"
 	HelpTopic:	"Script_Unembed"
@@ -5308,20 +5248,21 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1456
+(PMenu.923
 	InternalName:	"Window"
-	Child:	1457
-	Child:	1458
-	Child:	1459
-	Child:	1460
-	Child:	1461
-	Child:	1462
-	Child:	1464
-	Child:	1465
+	Child:	924
+	Child:	925
+	Child:	926
+	Child:	927
+	Child:	928
+	Child:	929
+	Child:	931
+	Child:	932
+	Child:	933
 	Label:	"&Window"
 )
 
-(Choice.1457
+(Choice.924
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -5329,7 +5270,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1458
+(Choice.925
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -5337,7 +5278,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1459
+(Choice.926
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -5345,10 +5286,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1460
+(Space.927
 )
 
-(Choice.1461
+(Choice.928
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -5356,39 +5297,46 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.1462
-	ObjectTag:	1463
+(Space.929
+	ObjectTag:	930
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.1463
-	S:	"dcsewerdesign.apr DCSewerDesignExtension.make"
+(AVStr.930
+	S:	"dcsewerdesign.apr DCSewerDesign.ComplexProfile.create Script.saveAllScripts"
 )
 
-(Choice.1464
+(Choice.931
 	Help:	"Activates dcsewerdesign.apr"
 	Label:	"&1 dcsewerdesign.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1465
-	Help:	"Activates DCSewerDesignExtension.make"
-	Label:	"&2 DCSewerDesignExtension.make"
+(Choice.932
+	Help:	"Activates DCSewerDesign.ComplexProfile.create"
+	Label:	"&2 DCSewerDesign.ComplexProfile.create"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1466
+(Choice.933
+	Help:	"Activates Script.saveAllScripts"
+	Label:	"&3 Script.saveAllScripts"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.934
 	InternalName:	"Help"
-	Child:	1467
-	Child:	1468
-	Child:	1469
-	Child:	1471
+	Child:	935
+	Child:	936
+	Child:	937
+	Child:	938
 	Label:	"&Help"
 )
 
-(Choice.1467
+(Choice.935
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -5396,7 +5344,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1468
+(Choice.936
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help"
@@ -5404,10 +5352,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1469
+(Space.937
 )
 
-(Choice.1471
+(Choice.938
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -5415,348 +5363,343 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1472
-	Label:	"Script &Tools"
+(ButnBar.939
+	Child:	940
+	Child:	942
+	Child:	943
+	Child:	945
+	Child:	947
+	Child:	949
+	Child:	950
+	Child:	952
+	Child:	953
+	Child:	955
+	Child:	957
+	Child:	958
+	Child:	960
+	Child:	962
+	Child:	964
+	Child:	966
+	Child:	968
+	Child:	969
+	Child:	971
+	Child:	973
+	Child:	975
+	Child:	976
+	Child:	978
+	Child:	980
+	Child:	981
 )
 
-(ButnBar.1509
-	Child:	1510
-	Child:	1512
-	Child:	1513
-	Child:	1515
-	Child:	1517
-	Child:	1519
-	Child:	1520
-	Child:	1522
-	Child:	1523
-	Child:	1525
-	Child:	1527
-	Child:	1528
-	Child:	1530
-	Child:	1532
-	Child:	1534
-	Child:	1536
-	Child:	1538
-	Child:	1539
-	Child:	1541
-	Child:	1543
-	Child:	1545
-	Child:	1546
-	Child:	1548
-	Child:	1550
-	Child:	1551
-)
-
-(Butn.1510
+(Butn.940
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1511
+	Icon:	941
 	Click:	"Project.Save"
 )
 
-(AVIcon.1511
+(AVIcon.941
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1512
+(Space.942
 )
 
-(Butn.1513
+(Butn.943
 	Disabled:	1
 	Help:	"Cut//Cuts the selection and puts it into the clipboard"
 	HelpTopic:	"Cut"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1514
+	Icon:	944
 	Click:	"Script.Cut"
 )
 
-(AVIcon.1514
+(AVIcon.944
 	Name:	"Cut"
 	Res:	"Icons.Cut"
 
 )
 
-(Butn.1515
+(Butn.945
 	Disabled:	1
 	Help:	"Copy//Copies the selection and puts it into the clipboard"
 	HelpTopic:	"Copy"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1516
+	Icon:	946
 	Click:	"Script.Copy"
 )
 
-(AVIcon.1516
+(AVIcon.946
 	Name:	"Copy"
 	Res:	"Icons.Copy"
 
 )
 
-(Butn.1517
+(Butn.947
 	Help:	"Paste//Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
-	Icon:	1518
+	Icon:	948
 	Click:	"Script.Paste"
 )
 
-(AVIcon.1518
+(AVIcon.948
 	Name:	"Paste"
 	Res:	"Icons.Paste"
 
 )
 
-(Space.1519
+(Space.949
 )
 
-(Butn.1520
+(Butn.950
 	Help:	"Undo//Undoes the last modification to the script editor text"
 	HelpTopic:	"Undo__Script_"
-	Icon:	1521
+	Icon:	951
 	Click:	"Script.Undo"
 )
 
-(AVIcon.1521
+(AVIcon.951
 	Name:	"Undo"
 	Res:	"Icons.Undo"
 
 )
 
-(Space.1522
+(Space.952
 )
 
-(Butn.1523
+(Butn.953
 	Help:	"Shift Lines Left//Shifts selected lines or current line two spaces to the left"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1524
+	Icon:	954
 	Click:	"Script.ShiftLeft"
 )
 
-(AVIcon.1524
+(AVIcon.954
 	Name:	"ShiftLeft"
 	Res:	"Icons.ShiftLeft"
 
 )
 
-(Butn.1525
+(Butn.955
 	Help:	"Shift Lines Right//Shifts selected lines or current line two spaces to the right"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1526
+	Icon:	956
 	Click:	"Script.ShiftRight"
 )
 
-(AVIcon.1526
+(AVIcon.956
 	Name:	"ShiftRight"
 	Res:	"Icons.ShiftRight"
 
 )
 
-(Space.1527
+(Space.957
 )
 
-(Butn.1528
+(Butn.958
 	Disabled:	1
 	Help:	"Compile//Compiles the script"
 	HelpTopic:	"Compile"
 	Update:	"Script.CompileUpdate"
-	Icon:	1529
+	Icon:	959
 	Click:	"Script.Compile"
 )
 
-(AVIcon.1529
+(AVIcon.959
 	Name:	"Check"
 	Res:	"Icons.Check"
 
 )
 
-(Butn.1530
+(Butn.960
 	Help:	"Run//Runs the compiled script"
 	HelpTopic:	"Run"
 	Update:	"Script.RunUpdate"
-	Icon:	1531
+	Icon:	961
 	Click:	"Script.Run"
 )
 
-(AVIcon.1531
+(AVIcon.961
 	Name:	"Run"
 	Res:	"Icons.Run"
 
 )
 
-(Butn.1532
+(Butn.962
 	Help:	"Step//Executes one request or object reference in the compiled script"
 	HelpTopic:	"Step"
 	Update:	"Script.RunUpdate"
-	Icon:	1533
+	Icon:	963
 	Click:	"Script.Step"
 )
 
-(AVIcon.1533
+(AVIcon.963
 	Name:	"Footprints"
 	Res:	"Icons.Footprints"
 
 )
 
-(Butn.1534
+(Butn.964
 	Help:	"Toggle Breakpoint//Toggles a breakpoint on or off at the current cursor position"
 	HelpTopic:	"Toggle_Breakpoint"
 	Update:	"Script.RunUpdate"
-	Icon:	1535
+	Icon:	965
 	Click:	"Script.ToggleBreak"
 )
 
-(AVIcon.1535
+(AVIcon.965
 	Name:	"Hand"
 	Res:	"Icons.Hand"
 
 )
 
-(Butn.1536
+(Butn.966
 	Help:	"Examine Variables//Displays the current value of local and global variables"
 	HelpTopic:	"Examine_Variables"
 	Update:	"Script.RunUpdate"
-	Icon:	1537
+	Icon:	967
 	Click:	"Script.ShowVariables"
 )
 
-(AVIcon.1537
+(AVIcon.967
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1538
+(Space.968
 )
 
-(Butn.1539
+(Butn.969
 	Help:	"Load System Script//Inserts the source code of a system script"
 	HelpTopic:	"Load_System_Script"
-	Icon:	1540
+	Icon:	970
 	Click:	"Script.SystemLoad"
 )
 
-(AVIcon.1540
+(AVIcon.970
 	Name:	"LoadScript"
 	Res:	"Icons.LoadScript"
 
 )
 
-(Butn.1541
+(Butn.971
 	Help:	"Load Text File//Inserts the contents of a text file"
 	HelpTopic:	"Load_Text_File"
-	Icon:	1542
+	Icon:	972
 	Click:	"Script.FileLoad"
 )
 
-(AVIcon.1542
+(AVIcon.972
 	Name:	"Open"
 	Res:	"Icons.Open"
 
 )
 
-(Butn.1543
+(Butn.973
 	Help:	"Write Text File//Writes the entire script or the selected text to a text file"
 	HelpTopic:	"Write_Text_File"
-	Icon:	1544
+	Icon:	974
 	Click:	"Script.FileWrite"
 )
 
-(AVIcon.1544
+(AVIcon.974
 	Name:	"Write"
 	Res:	"Icons.Write"
 
 )
 
-(Space.1545
+(Space.975
 )
 
-(Butn.1546
+(Butn.976
 	Help:	"Script Help//Searches for help using the current selection"
 	HelpTopic:	"Getting_help_about_script_components"
-	Icon:	1547
+	Icon:	977
 	Click:	"Script.Help"
 )
 
-(AVIcon.1547
+(AVIcon.977
 	Name:	"Help"
 	Res:	"Icons.Help"
 
 )
 
-(Butn.1548
+(Butn.978
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1549
+	Icon:	979
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1549
+(AVIcon.979
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Space.1550
+(Space.980
 )
 
-(Butn.1551
-	Icon:	1552
+(Butn.981
+	Icon:	982
 	Click:	"DCSewerDesignExtension.make"
 )
 
-(AVIcon.1552
+(AVIcon.982
 	Name:	"DiamondRed"
 	Res:	"Icons.DiamondRed"
 
 )
 
-(PopupSet.1575
+(PopupSet.983
 )
 
-(ToolBar.1576
+(ToolBar.984
 )
 
-(AVIcon.1577
+(AVIcon.985
 	Name:	"Icon"
 	Res:	"SEd.Icon"
 
 )
 
-(DocGUI.1578
+(DocGUI.986
 	Name:	"Project"
 	Type:	"Project"
 	Modified:	1
-	MenuBar:	1579
-	ButnBar:	1627
-	Popups:	1637
-	ToolBar:	1638
-	Icon:	1639
+	MenuBar:	987
+	ButnBar:	1024
+	Popups:	1030
+	ToolBar:	1031
+	Icon:	1032
 )
 
-(MenuBar.1579
-	Child:	1580
-	Child:	1595
-	Child:	1609
-	Child:	1619
-	Child:	1624
+(MenuBar.987
+	Child:	988
+	Child:	999
+	Child:	1009
+	Child:	1019
 )
 
-(PMenu.1580
+(PMenu.988
 	InternalName:	"File"
-	Child:	1581
-	Child:	1582
-	Child:	1583
-	Child:	1584
-	Child:	1585
-	Child:	1586
-	Child:	1589
-	Child:	1592
-	Child:	1593
-	Child:	1594
+	Child:	989
+	Child:	990
+	Child:	991
+	Child:	992
+	Child:	993
+	Child:	994
+	Child:	995
+	Child:	996
+	Child:	997
+	Child:	998
 	Label:	"&File"
 )
 
-(Choice.1581
+(Choice.989
 	Help:	"Creates a new project"
 	HelpTopic:	"New_Project"
 	Label:	"&New Project"
@@ -5764,7 +5707,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+N"
 )
 
-(Choice.1582
+(Choice.990
 	Help:	"Opens an existing project"
 	HelpTopic:	"Open_Project"
 	Label:	"&Open Project..."
@@ -5772,7 +5715,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1583
+(Choice.991
 	Help:	"Closes the project window"
 	HelpTopic:	"Close_Project"
 	Label:	"&Close Project"
@@ -5780,10 +5723,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1584
+(Space.992
 )
 
-(Choice.1585
+(Choice.993
 	Help:	"Saves the current project"
 	HelpTopic:	"Save_Project"
 	Label:	"&Save Project"
@@ -5791,7 +5734,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+S"
 )
 
-(Choice.1586
+(Choice.994
 	Help:	"Saves the current project with a new name"
 	HelpTopic:	"Save_Project_As"
 	Label:	"Save Project &As..."
@@ -5799,10 +5742,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1589
+(Space.995
 )
 
-(Choice.1592
+(Choice.996
 	Help:	"Displays the Extensions dialog"
 	HelpTopic:	"Extensions"
 	Label:	"&Extensions..."
@@ -5810,10 +5753,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1593
+(Space.997
 )
 
-(Choice.1594
+(Choice.998
 	Help:	"Exits ArcView"
 	HelpTopic:	"Exit"
 	Label:	"E&xit"
@@ -5821,22 +5764,21 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1595
+(PMenu.999
 	InternalName:	"Project"
-	Child:	1596
-	Child:	1597
-	Child:	1598
-	Child:	1599
-	Child:	1600
-	Child:	1601
-	Child:	1602
-	Child:	1603
-	Child:	1604
-	Child:	1605
+	Child:	1000
+	Child:	1001
+	Child:	1002
+	Child:	1003
+	Child:	1004
+	Child:	1005
+	Child:	1006
+	Child:	1007
+	Child:	1008
 	Label:	"&Project"
 )
 
-(Choice.1596
+(Choice.1000
 	Help:	"Displays the dialog box to edit properties of the project"
 	HelpTopic:	"Project_Properties"
 	Label:	"&Properties..."
@@ -5844,7 +5786,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1597
+(Choice.1001
 	Help:	"Customizes the active project"
 	HelpTopic:	"Customize"
 	Update:	"Project.CustomizeUpdate"
@@ -5853,10 +5795,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1598
+(Space.1002
 )
 
-(Choice.1599
+(Choice.1003
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
@@ -5865,16 +5807,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+R"
 )
 
-(Choice.1600
-	InternalName:	"C&Copy Document"
-	Tag:	"Jennessent"
-	Update:	"Jennessent.CopyDocUpdate"
-	Label:	"C&opy 'Script.saveAllScripts'..."
-	Click:	"Jennessent.CopyDoc"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1601
+(Choice.1004
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
@@ -5883,10 +5816,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Del"
 )
 
-(Space.1602
+(Space.1005
 )
 
-(Choice.1603
+(Choice.1006
 	Help:	"Adds a table to the project"
 	HelpTopic:	"Add_Table"
 	Update:	"Project.AddTableUpdate"
@@ -5895,7 +5828,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1604
+(Choice.1007
 	Help:	"Creates a new project component from an external source"
 	HelpTopic:	"Import"
 	Update:	"Project.ImportUpdate"
@@ -5904,7 +5837,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1605
+(Choice.1008
 	Help:	"Opens the SQL Connection manager"
 	HelpTopic:	"SQL_Connect"
 	Update:	"Project.HasSQL"
@@ -5913,20 +5846,20 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1609
+(PMenu.1009
 	InternalName:	"Window"
-	Child:	1610
-	Child:	1611
-	Child:	1612
-	Child:	1613
-	Child:	1614
-	Child:	1615
-	Child:	1617
-	Child:	1618
+	Child:	1010
+	Child:	1011
+	Child:	1012
+	Child:	1013
+	Child:	1014
+	Child:	1015
+	Child:	1017
+	Child:	1018
 	Label:	"&Window"
 )
 
-(Choice.1610
+(Choice.1010
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -5934,7 +5867,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1611
+(Choice.1011
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -5942,7 +5875,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1612
+(Choice.1012
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -5950,10 +5883,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1613
+(Space.1013
 )
 
-(Choice.1614
+(Choice.1014
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -5961,39 +5894,39 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.1615
-	ObjectTag:	1616
+(Space.1015
+	ObjectTag:	1016
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.1616
-	S:	"dcsewerdesign.apr DCSewerDesignExtension.make"
+(AVStr.1016
+	S:	"dcsewerdesign.apr DCSewerDesign.ComplexProfile.create"
 )
 
-(Choice.1617
+(Choice.1017
 	Help:	"Activates dcsewerdesign.apr"
 	Label:	"&1 dcsewerdesign.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1618
-	Help:	"Activates DCSewerDesignExtension.make"
-	Label:	"&2 DCSewerDesignExtension.make"
+(Choice.1018
+	Help:	"Activates DCSewerDesign.ComplexProfile.create"
+	Label:	"&2 DCSewerDesign.ComplexProfile.create"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1619
+(PMenu.1019
 	InternalName:	"Help"
-	Child:	1620
-	Child:	1621
-	Child:	1622
-	Child:	1623
+	Child:	1020
+	Child:	1021
+	Child:	1022
+	Child:	1023
 	Label:	"&Help"
 )
 
-(Choice.1620
+(Choice.1020
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -6001,7 +5934,7 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1621
+(Choice.1021
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -6009,10 +5942,10 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(Space.1622
+(Space.1022
 )
 
-(Choice.1623
+(Choice.1023
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -6020,96 +5953,88 @@ write(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1624
-	Label:	"Script/Dialog Tools"
-)
-
-(ButnBar.1627
+(ButnBar.1024
 	Update:	"Project.UpdateButtons"
-	Child:	1628
-	Child:	1630
-	Child:	1631
+	Child:	1025
+	Child:	1027
+	Child:	1028
 )
 
-(Butn.1628
+(Butn.1025
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1629
+	Icon:	1026
 	Click:	"Project.Save"
 )
 
-(AVIcon.1629
+(AVIcon.1026
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1630
+(Space.1027
 )
 
-(Butn.1631
+(Butn.1028
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1632
+	Icon:	1029
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1632
+(AVIcon.1029
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(PopupSet.1637
+(PopupSet.1030
 )
 
-(ToolBar.1638
+(ToolBar.1031
 )
 
-(AVIcon.1639
+(AVIcon.1032
 	Name:	"Icon"
 	Res:	"Project.Icon"
 
 )
 
-(FN.1834
+(FN.1051
 	Path:	"$HOME"
 )
 
-(TClr.1835
+(TClr.1052
 	Red:	0xffff
 	Green:	0xffff
 )
 
-(AVStr.1836
+(AVStr.1053
 	S:	"View"
 )
 
-(AVStr.1837
+(AVStr.1054
 	S:	"Table"
 )
 
-(AVStr.1838
+(AVStr.1055
 	S:	"Chart"
 )
 
-(AVStr.1839
+(AVStr.1056
 	S:	"Layout"
 )
 
-(AVStr.1840
+(AVStr.1057
 	S:	"Script"
 )
 
-(AVStr.1841
+(AVStr.1058
 	S:	"Project"
 )
 
-(AVStr.1842
+(AVStr.1059
 	S:	"Appl"
-)
-
-(AVStr.1843
-	S:	"DialogEditor"
 )
 
