@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE article 
+<!DOCTYPE book 
   PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
   []
 >
-<article lang="en">
-<articleinfo>
+<book lang="en">
+<bookinfo>
  <title>DC Sewer Design Extension Manual</title>
     <copyright>
-      <year>2004, 2005</year>
+      <year>2004 - 2006</year>
       <holder>DORSCH Consult</holder>
     </copyright>
     <author>
@@ -53,11 +53,15 @@
 	Free Software Foundation (<ulink url="http://www.gnu.org" />).
 	</para></legalnotice>
     <pubdate>$Date$</pubdate>
- </articleinfo>
+ </bookinfo>
+<article id="general">
+  <title>General</title>
+  <indexterm><primary>general</primary></indexterm>
 <sect1 id="introduction">
   <title>Introduction</title>
+  <indexterm><primary>introduction</primary></indexterm>
   <para>This document describes the design process for simple sewer networks
-    using version 2.0.8 of the DC Sewer Design extension for ArcView 3.*.
+    using version 2.0.9 of the DC Sewer Design extension for ArcView 3.*.
     </para>
   <para>It also covers the creation of profiles (longitudinal sections) for 
     water and sewer networks.</para>
@@ -71,8 +75,18 @@
     a combination.</para>
   <sect2 id="news">
     <title>What's New?</title>
+    <indexterm><primary>news</primary></indexterm>
     <para>A summary of changes in different versions of the DC Sewer Design
       Extension.</para>
+    <sect3 id="version_2_0_9">
+      <title>Version 2.0.9</title>
+      <itemizedlist>
+        <listitem><para>&quot;Create Profile&quot; works now for line
+	  selections where the direction is not continous.</para></listitem>
+        <listitem><para>Bug fixes</para></listitem>
+	<listitem><para>Improved documentation</para></listitem>
+      </itemizedlist>
+    </sect3>
     <sect3 id="version_2_0_8">
       <title>Version 2.0.8</title>
       <para><itemizedlist>
@@ -134,11 +148,13 @@
   </sect2>
   <sect2 id="requirements">
     <title>Requirements</title>
+    <indexterm><primary>requirements</primary></indexterm>
     <para>ArcView version 3.* is required to use the DC Sewer Design 
       Extension.</para>
   </sect2>
   <sect2 id="license">
     <title>License</title>
+    <indexterm><primary>license</primary></indexterm>
     <para>The <citetitle>DC Sewer Design Extension</citetitle> is
       released under the the terms of the GNU Lesser General Public License 
       (<citetitle>LGPL</citetitle>).</para>
@@ -149,6 +165,9 @@
   <para>Important Concepts used in the extension.</para>
   <sect2 id="equations">
     <title>Equations</title>
+    <indexterm><primary>equation</primary></indexterm>
+    <indexterm><primary>Prandtl</primary></indexterm>
+    <indexterm><primary>Colebrook</primary></indexterm>
     <para>The calculation uses the Prandtl/Colebrook Equation to calculate the 
       Fullboard Velocity. (According to ATV Working Paper A 110)
       ((QT/QV)^0.305-0.0024*QT/QV)*QV is used as an approximation formula for 
@@ -159,6 +178,8 @@
       
   <sect2>
     <title>Peak Factors</title>
+    <indexterm><primary>factor</primary></indexterm>
+    <indexterm><primary>peak factor</primary></indexterm>
     <para>The Extension offers several possibilities for the peak factors:
       The Baumann formula: Pdom = min(2.5, 1+14/(4+SQRT(P)) ) with Pdom as the 
       ratio of peak to average daily flow and P the population figure in thousands.
@@ -170,6 +191,8 @@
   
   <sect2>
     <title>How the Sewer Network is Modeled</title>
+    <indexterm><primary>topology</primary></indexterm>
+    <indexterm><primary>model</primary></indexterm>
     <para>The Extension models the Sewer Network in a very simplistic way. 
       Therefore it has to be carefully evaluated if the calculation
       fulfills the given needs. All the necessary information will be kept along 
@@ -197,6 +220,7 @@
 
 <sect1 id="installation">
   <title>Installation</title>
+  <indexterm><primary>installation</primary></indexterm>
   <para>Install the extension using the setup program. Alternatively,
     detach the extension file (<filename>dcsewdes.avx</filename>) in the 
     ArcView extensions folder. The extension folder is usually 
@@ -205,13 +229,19 @@
   <para>For more information on extensions, see your ArcView 
     documentation.</para>
 </sect1>
-
+</article>
+<article id="reference">
+  <title>Reference</title>
+  <indexterm><primary>reference</primary></indexterm>
 <sect1 id="usage">
   <title>Usage</title>
+  <indexterm><primary>usage</primary></indexterm>
   <para>How to use the DC Sewer Design Extension functions.</para>
   
   <sect2 id="extension_loading">
     <title>Extension Loading</title>
+    <indexterm><primary>extension</primary></indexterm>
+    <indexterm><primary>loading</primary></indexterm>
     <para>Before an extension can be used in ArcView, it needs to be 
       loaded.</para>
     <para>Please follow the steps below:
@@ -237,6 +267,9 @@
     Sewer</guimenu> in the View GUI.</para>
   <sect3 id="flip_lines_to_flow_direction">
     <title>Flip Lines to Flow Direction</title>
+    <indexterm><primary>line</primary></indexterm>
+    <indexterm><primary>direction</primary></indexterm>
+    <indexterm><primary>flow direction</primary></indexterm>
     <para>This is the first thing you should do before you start the 
       calculations. Just select "Flip Lines to Flow Direction" from the menu 
       and input the
@@ -256,6 +289,8 @@
       script should report zero flips after the second run.</para></tip>
   </sect3>
   <sect3 id="accumulate_population"><title>Accumulate Population</title>
+    <indexterm><primary>population</primary></indexterm>
+    <indexterm><primary>calculation</primary></indexterm>
     <para>Note: This will recalculate the Accumulated Population field!
       You will be asked for a theme to work on and the fields "Accumulated 
       Population" and "Population".
@@ -275,6 +310,9 @@
   </sect3>
   <sect3 id="accumulate_branch_length">
     <title>Accumulate Branch Length</title>
+    <indexterm><primary>length</primary></indexterm>
+    <indexterm><primary>calculation</primary></indexterm>
+    <indexterm><primary>line</primary></indexterm>
     <para>Note: This will recalculate the Accumulated Branch Length field!
     You will be asked for a theme to work on and the fields "Accumulated Branch Length" and "Branch Length"
     For each line, the AccumulatedBranchLength will be the maxium upstream branch length plus the branch length 
@@ -289,6 +327,7 @@
   </sect3>
   <sect3 id="sewer_calculation">
     <title>Create Dbf Sewer Calculation</title>
+    <indexterm><primary>calculation</primary></indexterm>
     <para>To use the Menu item <guimenuitem>Create Dbf Sewer 
       Calculation</guimenuitem>, you'll need a configuration file, that tells 
       the extension which fields it should use. Create a plain text file on 
@@ -323,6 +362,8 @@
   </sect3>
   <sect3 id="calculate_minimum_elevation_differences">
     <title>Calculate the Minimum Elevation Differences</title>
+    <indexterm><primary>line</primary></indexterm>
+    <indexterm><primary>elevation</primary></indexterm>
     <para>Have a numerical field for the Elevations available. Set the unknown Elevations to zero. You need at least one
     known Elevation. ( You might set it to 1 if you want to run the Analysis without any given Elevation.)
      Choose "calculate Minimum Elevation differences" from the "DC Sewer" menu. 
@@ -334,6 +375,8 @@
   </sect3>
   <sect3 id="calculate_maximum_manhole_elevations">
     <title>Calculate the Maximum Manhole Elevations</title>
+    <indexterm><primary>manhole</primary></indexterm>
+    <indexterm><primary>invert level</primary></indexterm>
     <para>Calculates the maximum manhole elevations taking the minimum cover
       along the section into consideration.</para>
     <para>Requires the following themes:
@@ -412,6 +455,7 @@
   </sect3>
   <sect3 id="enforce_drainage">
     <title>Enforce Drainage</title>
+    <indexterm><primary>drainage</primary></indexterm>
     <para>Taking the results from <xref linkend=
       "calculate_maximum_manhole_elevations" />, this function traces
       downstream and ensures that upstream sections are able to dewater to
@@ -431,6 +475,8 @@ Diameter=Diameter</programlisting></para>
   </sect3>
   <sect3 id="validate_lines">
     <title>Validate Lines</title>
+    <indexterm><primary>validation</primary></indexterm>
+    <indexterm><primary>line</primary></indexterm>
     <para>The &quot;Validate Lines&quot; function from the menu checks if all 
       the lines only contain two vertexes. Also it checks if the length is
       greater or equal one map unit. All invalid features are returned in the 
@@ -439,6 +485,8 @@ Diameter=Diameter</programlisting></para>
   </sect3>
   <sect3 id="create_profile">
     <title>Create Profile (L-Section)</title>
+    <indexterm><primary>profile</primary></indexterm>
+    <indexterm><primary>longitudinal section</primary></indexterm>
     <para>The <guimenuitem>Create Profile</guimenuitem> function from the 
       <guimenu>DC Sewer</guimenu> menu creates a 
       longitudinal section for the lines selected in a theme.</para>
@@ -542,11 +590,16 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
   
     <sect3 id="select_profile_configuration">
       <title>Select Profile Configuration</title>
+      <indexterm><primary>configuration</primary></indexterm>
+      <indexterm><primary>profile</primary></indexterm>
       <para>Select the configuration file to be used by <xref linkend=
 	"create_profile" /></para>
     </sect3>
     <sect3 id="link_profile_to_layout">
       <title>Link Profile to Layout</title>
+      <indexterm><primary>profile</primary></indexterm>
+      <indexterm><primary>link</primary></indexterm>
+      <indexterm><primary>layout</primary></indexterm>
       <para>Create a link between a profile drawn in a profile view created
         by <xref linkend="create_profile" /> and the lines in the layout.</para>
       <para>The link is established via the &quot;dc_id&quot; field.</para>
@@ -584,6 +637,10 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
     </sect3>
     <sect3 id="manhole_data_to_line">
       <title>Manhole Data to Line</title>
+      <indexterm><primary>data transfer</primary></indexterm>
+      <indexterm><primary>manhole</primary></indexterm>
+      <indexterm><primary>line</primary></indexterm>
+      <indexterm><primary>node</primary></indexterm>
       <para>Transfers data from manholes to line. A source field has to be
         specified in the manhole table. In the line table, an upstream and
 	a downstream field have to be specified.</para>
@@ -594,6 +651,10 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
     </sect3>
     <sect3 id="line_data_to_manholes">
       <title>Line Data to Manholes</title>
+      <indexterm><primary>data transfer</primary></indexterm>
+      <indexterm><primary>line</primary></indexterm>
+      <indexterm><primary>manhole</primary></indexterm>
+      <indexterm><primary>node</primary></indexterm>
        <para>Transfers data from a line to the upstream and downstream. The
          downstream and upstream source field have to be specified in the
 	 line table together with the target field in the manhole table. Where
@@ -612,10 +673,14 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
       View GUI.</para>
     <sect3 id="button_create_profile">
       <title>Create Profile</title>
+      <indexterm><primary>profile</primary></indexterm>
       <para>See <xref linkend="create_profile" />.</para>
     </sect3>
     <sect3 id="constant_gradient">
       <title>Interpolate Constant Gradient</title>
+      <indexterm><primary>interpolate</primary></indexterm>
+      <indexterm><primary>gradient</primary></indexterm>
+      <indexterm><primary>constant gradient</primary></indexterm>
       <para>Interpolate a constant gradient for a series of lines where the
         upstream value and the downstream level are given.</para>
       <orderedlist>
@@ -643,10 +708,13 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
   </sect2>
   <sect2 id="table_menu_functions">
     <title>Table Menu Functions</title>
+    <indexterm><primary>Table GUI</primary></indexterm>
     <para>The following functions are available from the <guimenu>DC 
     Sewer</guimenu> in the Table GUI.</para>
     <sect3 id="network_calculator">
       <title>Network Calculator</title>
+      <indexterm><primary>calculate</primary></indexterm>
+      <indexterm><primary>network calculator</primary></indexterm>
       <para>The network calculator allows to perform calculations like the
         standard ArcView field calculator that also use values of upstream
 	and downstream lines.</para>
@@ -679,6 +747,8 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
   </sect2>
   <sect2 id="gravity_sewer">
     <title>Gravity Sewers</title>
+    <indexterm><primary>gravity sewer</primary></indexterm>
+    <indexterm><primary>design</primary></indexterm>
     <para>Building a simple gravity sewer network from scratch:
       Received "Routes" as Autocad Files. Cleanup, Snapping in ArcInfo, 
       ArcView.</para>
@@ -711,6 +781,8 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
   </sect2>
   <sect2 id="vacuum_sewers">
     <title>Vacuum Sewers</title>
+    <indexterm><primary>vacuum network</primary></indexterm>
+    <indexterm><primary>design</primary></indexterm>
     <para>Simple design process for vacuum sewers according to ATV A 116.</para>
     <itemizedlist>
       <listitem><para>Obtain population distribution, create polygon shapefile 
@@ -738,6 +810,9 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
   </sect2>
   <sect2 id="water_network_profiles">
     <title>Water Network Profiles</title>
+    <indexterm><primary>profile</primary></indexterm>
+    <indexterm><primary>water network</primary></indexterm>
+    <indexterm><primary>longitudinal section</primary></indexterm>
     <para>How to generate profile drawings for the water network.</para>
     <important><para>Create a copy of the themes you used for hydraulic
       modeling as these files will be modified.</para></important> 
@@ -808,6 +883,9 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
   </sect2>
   <sect2 id="water_network_profiles_2">
     <title>Water Network Profiles (Alternative)</title>
+    <indexterm><primary>profile</primary></indexterm>
+    <indexterm><primary>water network</primary></indexterm>
+    <indexterm><primary>longitudinal section</primary></indexterm>
     <para>Proposed approach for creating longitudinal sections of
       a water distribution network or any other pressurized
       system.</para>
@@ -922,6 +1000,8 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
   </sect2>
   <sect2 id="excavation_calculation">
     <title>Excavation Calculation</title>
+    <indexterm><primary>excavation</primary></indexterm>
+    <indexterm><primary>calculation</primary></indexterm>
     <para>How to calculate the necessary excavation volumes.</para>
     <para>This example assumes that your line theme contains the following
       fields:
@@ -944,8 +1024,12 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
   </sect2>
  <sect2 id="faq">
     <title>Frequently Asked Questions (FAQ)</title>
+    <indexterm><primary>FAQ</primary></indexterm>
+    <indexterm><primary>questions</primary></indexterm>
     <sect3 id="dem_import">
     <title>How to import a Digital Elevation Model (DEM) into ArcView</title>
+    <indexterm><primary>DEM</primary></indexterm>
+    <indexterm><primary>import</primary></indexterm>
     <para>Assuming the DEM you want to import to ArcView is a
     	*.dem file, in your project go to FILE - IMPORT DATA
     	SOURCE. Choose the data type &quot;USGS DEM&quot;. Browse for
@@ -957,5 +1041,24 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
 	ADD THEME - DATA SOURCE = &quot;Grid data source&quot;.</para>
     <note><para>Spatial Analyst is required for this procedure!</para></note>
     </sect3>
-  </sect2></sect1>
+  </sect2>
+  </sect1>
+  <!--sect1 id="tutorial">
+    <title>Tutorials</title>
+    <sect2 id="overflow">
+      <title>Overflow in Gravity Network</title>
+      <para>This extends the simple gravity network calculation (<xref 
+        linkend="gravity_sewer" />) with overflows
+        for those lines which exceed their capacity.</para>
+      <para>This tutorial assumes that the number of persons is stored in the field 
+        <structfield>p</structfield> of the line table. The maximum flow
+	of the line shall be stored in the field <structfield>pmax</structfield>.
+	</para>
+      <para>After </para>	
+    </sect2>
+  </sect1 -->
 </article>
+  <index>
+    <title>Index</title>
+  </index>  
+</book>

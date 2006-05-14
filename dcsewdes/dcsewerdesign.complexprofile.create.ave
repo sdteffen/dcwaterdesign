@@ -4,7 +4,7 @@
 
 ' called from the DC Sewer menu
 
-' (c) 2000 - 2005 DORSCH Consult
+' (c) 2000 - 2006 DORSCH Consult
 
 ' TODO: remove dc_id dependency
 
@@ -107,7 +107,7 @@ end
 ftbManhole = thmManhole.GetFTab 
 
 lstProfileLines = av.run("DCSewerDesign.Profile.buildLineList", {ftbLine, fldLineDcId})
-lstProfileManholes =av.run("DCSewerDesign.Profile.buildNodeList", {ftbLine, ftbManhole, lstProfileLines})
+lstProfileManholes = av.run("DCSewerDesign.Profile.buildNodeList", {ftbLine, ftbManhole, lstProfileLines})
 
 lstFreeLineFields = List.make
 lstFreeManholeFields = List.make
@@ -349,10 +349,20 @@ for each i in 0..(lstProfileLines.count-1)
   numLineDiameter = ftbLine.returnValue(fldLineDiameter, recLine)
   numUpstreamManholeDiameter = ftbManhole.returnValue(fldManholeDiameter, recUpstreamManhole)
   numDownstreamManholeDiameter = ftbManhole.returnValue(fldManholeDiameter, recDownstreamManhole)
-  numUpstreamInvertLevel = ftbLine.returnValue(fldLineUpstreamInvert, recLine)
-  numDownstreamInvertLevel = ftbLine.returnValue(fldLineDownstreamInvert, recLine)
-  numMinInvertElevation = numMinInvertElevation.min(numUpstreamInvertLevel.min(numDownstreamInvertLevel)).clone
+  ' Flip line if necessary
   pllLine = ftbLine.returnValue(fldLineShape, recLine)
+  pntUpstreamManhole = ftbManhole.returnValue(fldManholeShape, recUpstreamManhole)
+  pntDownstreamManhole = ftbManhole.returnValue(fldManholeShape, recDownstreamManhole)
+  pntFirstNode = pllLine.along(0)
+  if(pntFirstNode.distance(pntUpstreamManhole) < pntFirstNode.distance(pntDownstreamManhole))then
+    numUpstreamInvertLevel = ftbLine.returnValue(fldLineUpstreamInvert, recLine)
+    numDownstreamInvertLevel = ftbLine.returnValue(fldLineDownstreamInvert, recLine)
+  else
+    numUpstreamInvertLevel = ftbLine.returnValue(fldLineDownstreamInvert, recLine)
+    numDownstreamInvertLevel = ftbLine.returnValue(fldLineUpstreamInvert, recLine)
+  end
+  numMinInvertElevation = numMinInvertElevation.min(numUpstreamInvertLevel.min(numDownstreamInvertLevel)).clone
+
   numLineLength = pllLine.returnLength
   pntUpstreamInvert = Point.make(numX+(numUpstreamManholeDiameter/2000), numY+(numUpstreamInvertLevel*10))
   pntDownstreamInvert=Point.make(numX+numLineLength-(numDownstreamManholeDiameter/2000), numY+(numDownstreamInvertLevel*10))
