@@ -1,6 +1,6 @@
 ' DCWatDes.Model.Epanet.writeInpFile
 
-' (c) 2000 - 2002 DORSCH Consult
+' (c) 2000 - 2002,2006 DORSCH Consult
 ' saves an Epanet Input file
 
 ' This library is free software; you can redistribute it and/or
@@ -691,5 +691,94 @@ if(av.run("DCWatDes.File.waitFor", {flnInp, numTimeout}).not)then
   MsgBox.info("XSLT Transformation failed. Check your data.","DC Water Design Extension")
   exit
 end
+
+' Write OptiDesigner file
+fln_Opti = fln_Xml.clone
+fln_Opti.setExtension("od")
+lnf_Opti = LineFile.make(fln_Opti, #FILE_PERM_WRITE)
+dicEconomic = Dictionary.make(20)
+dicEconomic.add(100, "DO1 DO3 DO4 DO5 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15")
+dicEconomic.add(150, "DO1 DO4 DO5 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15")
+dicEconomic.add(200, "DO1 DO5 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15")
+dicEconomic.add(250, "DO1 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15")
+dicEconomic.add(300, "DO1 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15")
+dicEconomic.add(400, "DO1 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15")
+dicEconomic.add(500, "DO1 DO9 DO10 DO11 DO12 DO13 DO14 DO15")
+dicEconomic.add(600, "DO1 DO10 DO11 DO12 DO13 DO14 DO15")
+dicEconomic.add(700, "DO1 DO11 DO12 DO13 DO14 DO15")
+dicEconomic.add(800, "DO1 DO12 DO13 DO14 DO15")
+dicEconomic.add(900, "DO1 DO13 DO14 DO15")
+dicEconomic.add(1000, "DO1 DO14 DO15")
+dicEconomic.add(1200, "DO1 DO15")
+dicEconomic.add(1400, "")
+lstKeys = dicEconomic.returnKeys
+lstKeys.sort(true)
+
+lnf_Opti.writeElt("[INP_FILE]")
+lnf_Opti.writeElt(flnInp.getBaseName.quote)
+lnf_Opti.writeElt("[DESIGN_OPTION]")
+lnf_Opti.writeElt("DO1 0 0 0 0") 
+lnf_Opti.writeElt("DO2 1484  100  1.5 100")
+lnf_Opti.writeElt("DO3 1764  150  1.5 150")
+lnf_Opti.writeElt("DO4 2337  200  1.5 200")
+lnf_Opti.writeElt("DO5 2150  250  1.5 250")
+lnf_Opti.writeElt("DO6 3347  300  1.5 300")
+lnf_Opti.writeElt("DO7 5100  400  1.5 400")
+lnf_Opti.writeElt("DO8 5964  500  0.2 500")
+lnf_Opti.writeElt("DO9 7000  600  0.2 600")
+lnf_Opti.writeElt("DO10 9000  700  0.2 700")
+lnf_Opti.writeElt("DO11 10879 800 0.2 800")
+lnf_Opti.writeElt("DO12 12500 900 0.2 900")
+lnf_Opti.writeElt("DO13 14816 1000 0.2 1000")
+lnf_Opti.writeElt("DO14 19281 1200 0.2 1200")
+lnf_Opti.writeElt("DO15 24274  1400  0.2 1400")
+lnf_Opti.writeElt("[DESIGN_JUNCTIONS]")
+thmFeature = dicThemes.get("Junctions")
+if(thmFeature <> nil)then
+  ftbFeatures = thmFeature.getFTab
+  fldID = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeatures, "dc_id"})
+  fldDemand = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeatures, "demand"})
+  fldElevation = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeatures, "elevation"}) 
+  for each rec in ftbFeatures
+    numDemand = ftbFeatures.returnValue(fldDemand, rec)
+    numElevation = ftbFeatures.returnValue(fldElevation, rec)
+    if((numDemand > 0)and(numElevation >= 400)and(numElevation <= 425))then
+      strID = ftbFeatures.returnValue(fldID, rec)
+      lnf_Opti.writeElt(strID+" 17.5 100")
+    end
+  end
+end
+lnf_Opti.writeElt("[DESIGN_PIPES]")
+thmFeature = dicThemes.get("Pipes")
+if(thmFeature <> nil)then
+  ftbFeatures = thmFeature.getFTab
+  fldID = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeatures, "dc_id"})
+  fldDiameter = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbFeatures, "diameter"})
+  for each rec in ftbFeatures
+    strID = ftbFeatures.returnValue(fldID, rec)
+    numDiameter = ftbFeatures.returnValue(fldDiameter, rec)
+    strDesignOptions = ""
+    for each numKey in lstKeys
+      if(numKey >= numDiameter)then
+        strDesignOptions = dicEconomic.get(numKey)
+        break
+      end
+    end
+    lnf_Opti.writeElt(strID+" 0 2 "+strDesignOptions)
+  end
+end
+lnf_Opti.writeElt("[DESIGN_SOURCES]")
+lnf_Opti.writeElt("")
+lnf_Opti.writeElt("[GA_OPTIONS]")
+lnf_Opti.writeElt("PRESSURE_PENALTY             200000") 
+lnf_Opti.writeElt("WARNING_PENALTY              500000")
+lnf_Opti.writeElt("VELOCITY_PENALTY             100000") 
+lnf_Opti.writeElt("SOURCES_PENALTY              200000") 
+lnf_Opti.writeElt("POPULATION     100") 
+lnf_Opti.writeElt("GENERATIONS    500") 
+lnf_Opti.writeElt("PRESSURE_TOLERANCE           0.05") 
+lnf_Opti.writeElt("VELOCITY_TOLERANCE           0.05") 
+lnf_Opti.writeElt("GENERATIONS_NO_CHANGE        50") 
+lnf_Opti.close
 
 return fln_Xml

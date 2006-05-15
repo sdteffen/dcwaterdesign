@@ -76,6 +76,11 @@
 	    <listitem><para>A Thiessen Polygon tutorial (<xref 
 	      linkend="thiessen_tutorial" />)
 	      has been added to the documentation.</para></listitem>  
+	    <listitem><para>Experimental writing of OptiDesigner files (<xref 
+	      linkend="write_epanet_file" />).</para></listitem>
+	    <listitem><para>New function to select economic diameters based
+	      on the velocity result (<xref linkend="set_economic_diameter" 
+	      />).</para></listitem>
 	  </itemizedlist>
 	</sect3>
         <sect3 id="news_2_12_2">
@@ -845,6 +850,11 @@
 	  <note><para>The resulting EPANET input file has the extension 
 	    *.inp. The *.xml-file is just an intermediate format 
 	    (temporary file).</para></note>
+	  <note><para>The function is writing experimental OptiDesigner files 
+	    (<filename>*.od</filename>) along with the INP files.
+	    OptiDesigner is a tool to optimize the design of
+	    water networks: <ulink url="http://www.optiwater.com"
+	    >www.optiwater.com</ulink></para></note>  
       </sect3>
 
       <sect3 id="run_epanet_calculation">
@@ -1359,6 +1369,13 @@
 	<para>See <xref linkend="select_connected_pipes" /> for more 
 	  information on network traces.
 	  </para>
+      </sect3>
+      <sect3 id="set_economic_diameter">
+        <title>Set Economic Diameter</title>
+	<indexterm><primary>economic</primary></indexterm>
+	<indexterm><primary>diameter</primary></indexterm>
+	<para>Select the pipe diameter from a list. The economic diameter
+	  will be selected by default based on the velocity result.</para>
       </sect3>
       <sect3 id="show_node_table_entry">
 	<title>Show Node Table Entry</title>

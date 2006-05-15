@@ -1,3 +1,10 @@
+2006-05-15  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile.ave: Added experimental writing
+	of OptiDesigner files
+	* doc/en/dcwaterdesign.xml: Mentioning experimental OptiDesigner
+	files, set economic diameter function
+
 2006-05-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml: Added Thiessen polygon tutorial; Switched
