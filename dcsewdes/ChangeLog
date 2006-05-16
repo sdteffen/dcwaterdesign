@@ -1,3 +1,11 @@
+2006-05-16  Steffen Macke <sdteffen@gmail.com>
+
+	* dcsewerdesignextension.make.ave: version number is 2.0.9+svn now
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.accumulatepopulation.ave: Added possibility to
+	specify optional fields for maximum accumulated population and 
+	difference
+	
 2006-05-13  Steffen Macke <sdteffen@gmail.com>
 
 	* dcsewerdesign.profile.buildnodelist.ave: Allow a single line 

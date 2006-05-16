@@ -6,7 +6,7 @@
 ' will be accumulated in the AccumulatedPopulation field.
 ' Note: The lines have to be flipped to the AccumulatedPopulation direction!
 
-' (c) 2000 - 2004 DORSCH Consult
+' (c) 2000 - 2004, 2006 DORSCH Consult
  
 'information about the configuration file
   MsgBox.info("The Lines have to be flipped to the Flow direction!","DC Sewer Design")
@@ -41,6 +41,15 @@
   if(fldPopulation = nil)then
     exit
   end
+
+  fldMaxAccumulated = MsgBox.choice(lstNumberFields, "Select the optional field for the maximum accumulated value.","DC Sewer Design")
+  if(fldMaxAccumulated <> nil)then
+    fldDifference = MsgBox.choice(lstNumberFields, "Select the optional field for the difference between maximum accumulated value and actual one."+NL+
+      "This field will be overwritten.","DC Sewer Design")
+    if(fldDifference <> nil)then
+      fldDifference = ftbLine.findField(fldDifference.getName)
+    end  
+  end  
  
  fldShape = ftbLine.findField("Shape")
    
@@ -104,6 +113,18 @@ numPreventEndlessLoop = bmpCalculate.count
       numPopulation = ftbLine.returnValue(fldPopulation, recLine)
       numAccumulatedPopulation = numAccumulatedPopulation + numPopulation
       numAccumulatedPopulation = numAccumulatedPopulation.max(0.001)
+      ' Compare against maximum value, if necessary
+      if(fldMaxAccumulated <> nil)then
+        numMaxAccumulated = ftbLine.returnValue(fldMaxAccumulated, recLine)
+        if((numMaxAccumulated > 0)and(numAccumulatedPopulation > numMaxAccumulated))then
+          ' Write difference if necessary
+          if(fldDifference <> nil)then
+            numDifference = numAccumulatedPopulation - numMaxAccumulated
+            ftbLine.setValue(fldDifference, recLine, numDifference)
+          end
+          numAccumulatedPopulation = numMaxAccumulated
+        end
+      end
       ftbLine.setValue(fldAccumulatedPopulation, recLine, numAccumulatedPopulation)             
       bmpCompleted.clear(recLine)      
       'update status display

@@ -305,6 +305,14 @@
       section. At the end of the script, the accumulated population is checked
       against the sum of the population. The values should be equal. If not, a 
       warning message is issued.</para>
+    <para>Optionally a field containing values for the maximum accumulated 
+      population can be specified. If this field is specified, for each line
+      the accumulated population is reduced to this maximum value if necessary.
+      It is possible to write out the difference between the two values to 
+      another field (optional).</para>
+    <note><para>Specifying a maximum accumulated population field is
+      very likely to trigger warnings about the sum of the population not
+      matching the maximum accumulated population.</para></note>  
     <note><para>Note that the accumulated population field should be a number
       field with at least 3 digits precision.</para></note>
   </sect3>
