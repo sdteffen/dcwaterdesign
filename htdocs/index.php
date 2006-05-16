@@ -158,10 +158,9 @@
 
                     <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#333333">
             <B><A HREF="http://www.dorsch.de">DORSCH Consult</A></B>
-	    <p><b><a href="dcsewerdesign.php">DC Sewer Design Extension</a></b>
+	    <p><b><a href="dcsewerdesign.php">DC Sewer Design Extension</a></b></p>
+	    <p><b><a href="dcprocessing.php">DC Processing Extension</a></b></p>
                         <P>
-
-
 
                         <B><A HREf="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html">EPANET</A>:</B>
 

@@ -9,7 +9,6 @@
   <body>
     <div class="dcmms">
       <h1>DC Sewer Design Extension</h1>
-      <p>The DC Sewer Design Extension is currently available from the CVS.</p>
       
       <p>The DC Sewer Design Extension is released under the the terms of the <a 
 	href="http://www.gnu.org/copyleft/lesser.html">GNU Lesser General 
