@@ -1,3 +1,9 @@
+2006-05-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml:
+	* doc/en/dcwaterdesign.xml:
+	* installer/dc_water_design_extension.nsi: Version number is 2.12.3 now
+
 2006-05-15  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.writeinpfile.ave: Added experimental writing
