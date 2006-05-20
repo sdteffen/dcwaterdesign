@@ -131,6 +131,7 @@ end
   if((fldPipeID=nil)or(fldDiameter=nil)or(fldGradient=nil)or(fldRoughness=nil)
   or(fldPopulation=nil)or(strLitersPerDayAndPerson=nil))then
     MsgBox.error("Field matching not successful. Check your table and configuration file.","DC Sewer Design")
+    dicPreferences.remove("strDbfCalculationConfig")
     exit
   end
 
