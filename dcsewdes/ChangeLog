@@ -1,3 +1,8 @@
+2006-05-23  Steffen Macke <sdteffen@gmail.com>
+
+	* dcsewerdesign.profile.constantgradient.calculate.ave: Started with
+	implementation of RFE #1492504 (Direct gradient input) 
+	
 2006-05-19  Steffen Macke <sdteffen@gmail.com>
 
 	* dcsewerdesign.createdbfsewercalculation.ave: Forget configuration file

@@ -2,7 +2,7 @@
 
 ' Calculate a constant gradient for a sequence of line segments
 
-' (c) 2000 - 2005 DORSCH Consult
+' (c) 2000 - 2006 DORSCH Consult
 
 ' This library is free software; you can redistribute it and/or
 ' modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,20 @@
 extSewer = Extension.find("DC Sewer Design")
 
 blnDebug = false
- 
+
+' Obtain the gradient
+
+strGradient = MsgBox.input("Please enter the gradient. Select cancel to interpolate between two points.", "DC Sewer Design", "")
+numGradient = nil
+blnFromUpstream = true
+if((strGradient <> nil)and(strGradient.isNumber))then
+   numGradient = strGradient.asNumber
+   blnFromUpstream = MsgBox.yesNoCancel("Start interpolation upstream? 'No' will start downstream.", "DC Sewer Design", true)
+   if(blnFromUpstream = nil)then
+     exit
+   end
+end
+
 ' get the line table
 
 viewActive = av.getActiveDoc
@@ -123,7 +136,10 @@ if(blnDebug)then
   System.echo("Last Downstream: "+numLastDownstream.asString)
   System.echo("Total Length: "+numTotalLength.asString)
 end
-numGradient = (numFirstUpstream - numLastDownstream)/numTotalLength
+
+if(numGradient = nil)then
+  numGradient = (numFirstUpstream - numLastDownstream)/numTotalLength
+end
 
 
 ' Request approval
