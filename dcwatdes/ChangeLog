@@ -1,3 +1,7 @@
+2006-05-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Added elevation calculation tutorial.
+
 2006-05-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* installer/dc.ico: Updated icon

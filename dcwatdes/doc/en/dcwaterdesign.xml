@@ -58,6 +58,14 @@
     <sect2 id="news">
       <title>What's New?</title>
         <indexterm><primary>news</primary></indexterm>
+        <sect3 id="news_2_12_4">
+          <title>Version 2.12.4</title>
+         <itemizedlist>
+           <listitem><para>An Elevation calculation tutorial
+             has been added to the extension (<xref 
+             linkend="elevation_tutorial" />).</para></listitem>
+          </itemizedlist>
+        </sect3>  
         <sect3 id="news_2_12_3">
 	  <title>Version 2.12.3</title>
 	  <itemizedlist>
@@ -2420,13 +2428,79 @@
       <guimenuitem>Stop editing</guimenuitem></menuchoice>.</para>
     <para>Save the edits: Click <guibutton>Yes</guibutton>.</para>  
     </example>
-    
     <indexterm><primary>shpvoronoi</primary></indexterm>
     <tip><para>If you have a very large number of Thiessen polygons
       to create, the <command>shpvoronoi</command> commandline tool
       will provide better performance than the &quot;Create
       Thiessen Polygons&quot; extension.</para></tip>
-  </sect1>  
+  </sect1>
+  <sect1 id="elevation_tutorial">
+    <title>Elevation Assignment from Spot Heights</title>
+    <indexterm><primary>spot height</primary></indexterm>
+    <indexterm><primary>elevation</primary></indexterm>
+    <para>This tutorial shows how to assign junction elevations from the
+      nearest spot height.</para>
+    <para>This approach is suitable as long as the spot heights are dense 
+      enough. In case the spot heights are very sparse, an approach that
+      involves interpolation should be choosen.</para>
+    <note><para>The following requires the &quot;Geoprocessing 
+     Extension&quot;  which is part of ArcView.</para></note>
+    <para>Assumptions:</para>  
+    <simplelist>
+      <member>The elevations are stored in the <structfield>Elevation</structfield>
+        field of the <classname>Spotheight</classname> theme.</member>
+      <member>The elevations should be calculated for the <structfield
+        >Elevation</structfield>  field of the <classname>Junction</classname>
+        theme.</member>
+    </simplelist>
+    <example id="elevation_example">
+      <title>Elevation Assignment</title>
+      <para>Load the &quot;Geoprocessing Extension&quot;.</para>
+      <para>Add the <classname>Junction</classname> and <classname
+        >Spotheight</classname> themes to the current view (Unless they
+        have been added already).</para>
+      <para>Select <menuchoice><guimenu>View</guimenu>
+        <guimenuitem>GeoProcessing Wizard...</guimenuitem></menuchoice>
+        from the menu.</para>  
+      <para>In the GeoProcessing Wizard, select &quot;<guilabel
+        >Assign data by location (Spatial Join)</guilabel>&quot; and click
+        <guibutton>Next &gt;&gt;</guibutton>.</para>  
+      <para></para>
+      <para>Select <filename>Junction.shp</filename> as the theme to
+        assign data to.</para>
+      <para>Select <filename>Spotheight.shp</filename> as the theme
+        to assign data from.</para>
+      <para>Verify that the data will be assigned whether it is 
+        nearest.</para>
+      <para>Click on the <guibutton>Finish</guibutton> button.</para>
+      <para>Activate the <classname>Junction</classname> theme.</para>
+      <para>Open the <classname>Junction</classname> table:
+        Select <menuchoice><guimenu>Theme</guimenu><guimenuitem
+        >Table...</guimenuitem></menuchoice> from the menu.</para>
+      <para>Open the table properties: Select <menuchoice><guimenu
+        >Table</guimenu><guimenuitem>Properties...</guimenuitem></menuchoice>
+        from the menu.</para>  
+      <para>In the field list, scroll down to the last <structfield
+        >Elevation</structfield> field.</para>
+      <para>Enter &quot;E&quot; (without quotes) as an alias for the
+        <structfield>Elevation</structfield> field.</para>
+      <para>Click the <guibutton>OK</guibutton> button.</para>
+      <para>Start editing the table: Select <menuchoice><guimenu
+        >Table</guimenu><guimenuitem>Start Editing</guimenuitem></menuchoice>
+        from the menu.</para>
+      <para>Select the <structfield>Elevation</structfield> field.</para>
+      <para>Open the field calculator: Select <menuchoice>
+        <guimenu>Field</guimenu><guimenuitem>Calculate...</guimenuitem>
+        </menuchoice> from the menu.</para>
+      <para>Doubleclick on the &quot;E&quot; field or directly enter the
+        following formula:</para>
+      <programlisting>[e]</programlisting>
+      <para>Click on the <guibutton>OK</guibutton> button.</para>
+      <para>Stop editing: Select <menuchoice><guimenu>Table</guimenu>
+        <guimenuitem>Stop editing</guimenuitem></menuchoice>.</para>
+      <para>Save the edits: Click <guibutton>Yes</guibutton>.</para>  
+    </example>  
+  </sect1>
 </article>
 <index>
   <title>Index</title>
