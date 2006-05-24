@@ -1,3 +1,9 @@
+2006-05-24  Steffen Macke <sdteffen@gmail.com>
+
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.profile.constantgradient.calculate.ave: Implemented
+	RFE #1492504 (Direct gradient input)
+
 2006-05-23  Steffen Macke <sdteffen@gmail.com>
 
 	* dcsewerdesign.profile.constantgradient.calculate.ave: Started with

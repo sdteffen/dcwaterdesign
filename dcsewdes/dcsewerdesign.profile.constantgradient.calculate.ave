@@ -96,17 +96,20 @@ if((fldUpstream = nil) or (fldDownstream = nil) or (fldGradient = nil))then
   strGradient = fldGradient.getName
   dicPreferences.set("strGradientField", strGradient)
 end
+
 if(blnDebug)then
   System.echo(fldUpstream.getName)
   System.echo(fldDownstream.getName)
 end
+
 fldUpstream = ftbLine.findField(fldUpstream.getName)
 fldDownstream = ftbLine.findField(fldDownstream.getName)
 fldGradient = ftbLine.findField(fldGradient.getName)
 
 lstProfileLines = av.run("DCSewerDesign.Profile.buildLineList", {ftbLine, fldLineDcId})
-for each recLine in lstProfileLines
-  if(blnDebug)then
+
+if(blnDebug)then
+  for each recLine in lstProfileLines
     System.echo(ftbLine.returnValue(fldLineDcId, recLine)+ftbLine.returnValue(fldUpstream, recLine).asString)
   end
 end
@@ -136,8 +139,8 @@ if(blnDebug)then
   System.echo("Last Downstream: "+numLastDownstream.asString)
   System.echo("Total Length: "+numTotalLength.asString)
 end
-
-if(numGradient = nil)then
+  
+if(numGradient = nil)then  
   numGradient = (numFirstUpstream - numLastDownstream)/numTotalLength
 end
 
@@ -165,21 +168,47 @@ if(numGradient.isNull)then
   MsgBox.error("Gradient is Null", "DC Sewer Design")
   exit
 end
-numElevation = numFirstUpstream
-numI = 0
-for each recLine in lstProfileLines
-  ftbLine.setValue(fldUpstream, recLine, numElevation)
-  ftbLine.setValue(fldGradient, recLine, numGradient)
-  numSegmentLength = lstSegmentLength.get(numI)
-  numElevation = numElevation - (numSegmentLength*numGradient)
-  if(blnDebug)then
-    System.echo(numElevation.asString)
-  end  
-  ftbLine.setValue(fldDownstream, recLine, numElevation)
-  numI = numI + 1
-end
 
-' Control Result
-if((numElevation-numLastDownstream).abs > (numLastDownstream/1000))then
-  System.echo("DCSewerDesign.Profile.ConstantGradient.calculate(): More than 1/1000 difference in control.")
+numI = 0
+
+if(blnFromUpstream)then
+  numElevation = numFirstUpstream
+  for each recLine in lstProfileLines
+    ftbLine.setValue(fldUpstream, recLine, numElevation)
+    ftbLine.setValue(fldGradient, recLine, numGradient)
+    numSegmentLength = lstSegmentLength.get(numI)
+    numElevation = numElevation - (numSegmentLength*numGradient)
+    if(blnDebug)then
+      System.echo(numElevation.asString)
+    end  
+    ftbLine.setValue(fldDownstream, recLine, numElevation)
+    numI = numI + 1
+  end
+  
+  ' Control Result
+
+  if((numElevation-numLastDownstream).abs > (numLastDownstream/1000))then
+    System.echo("DCSewerDesign.Profile.ConstantGradient.calculate(): More than 1/1000 difference in control.")
+  end
+else
+  numElevation = numLastDownstream
+  lstProfileLines = av.run("DCSewerDesign.List.flip", lstProfileLines)
+  lstSegmentLength = av.run("DCSewerDesign.List.flip", lstSegmentLength)
+  for each recLine in lstProfileLines
+    ftbLine.setValue(fldDownstream, recLine, numElevation)
+    ftbLine.setValue(fldGradient, recLine, numGradient)
+    numSegmentLength = lstSegmentLength.get(numI)
+    numElevation = numElevation + (numSegmentLength*numGradient)
+    if(blnDebug)then
+      System.echo(numElevation.asString)
+    end  
+    ftbLine.setValue(fldUpstream, recLine, numElevation)
+    numI = numI + 1
+  end
+  
+  ' Control Result
+
+  if((numElevation-numFirstUpstream).abs > (numFirstUpstream/1000))then
+    System.echo("DCSewerDesign.Profile.ConstantGradient.calculate(): More than 1/1000 difference in control.")
+  end
 end

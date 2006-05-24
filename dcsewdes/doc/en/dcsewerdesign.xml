@@ -78,6 +78,13 @@
     <indexterm><primary>news</primary></indexterm>
     <para>A summary of changes in different versions of the DC Sewer Design
       Extension.</para>
+    <sect3 id="version_2_0_10">
+      <title>Version 2.0.10</title>
+      <itemizedlist>
+        <listitem><para>&quot;Calculate Constant Gradient&quot;</para>
+	  now allows to directly specify a gradient.</listitem>
+      </itemizedlist>
+    </sect3>
     <sect3 id="version_2_0_9">
       <title>Version 2.0.9</title>
       <itemizedlist>
@@ -689,24 +696,77 @@ CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting><
       <indexterm><primary>interpolate</primary></indexterm>
       <indexterm><primary>gradient</primary></indexterm>
       <indexterm><primary>constant gradient</primary></indexterm>
-      <para>Interpolate a constant gradient for a series of lines where the
-        upstream value and the downstream level are given.</para>
-      <orderedlist>
-        <listitem><para>Start editing a line theme that has
-	  two numeric fields for the upstream and downstream values.</para></listitem>
-	<listitem><para>Using the table, enter a value into the upstream
-	  field for the pipe that is most upstream.</para></listitem>
-	<listitem><para>Using the table, enter a value into the downstream field
-	  for the pipe that is most downstream.</para></listitem>
-	<listitem><para>Select the connected sequence of pipes.</para>
-	  <note><para>Branches are not allowed in the selection.</para></note></listitem>
-	<listitem><para>Click on the <guibutton>Calculate Constant 
-	  Gradient</guibutton> button.</para></listitem>
-	<listitem><para>Select the upstream field from the list.</para></listitem>
-	<listitem><para>Select the downstream field from the list.</para></listitem>
-	<listitem><para>Review the fields, line selection and gradient.</para>
-	  <para>Click on the <guibutton>Yes</guibutton> button.</para></listitem>
-      </orderedlist>
+      <para>Interpolate a constant gradient for a series of lines matching one
+        of the following conditions:</para>
+      <simplelist>
+        <member>Upstream and downstream levels are known.</member>
+	<member>Upstream value and gradient are known.</member>
+	<member>Downstream value and gradient are known.</member>
+      </simplelist>	
+      <example id="example_constant_gradient_two_points">
+        <title>Constant Gradient From Two Points</title>
+	<orderedlist>
+	  <listitem><para>Start editing a line theme that has
+	    three numeric fields for the upstream, downstream and gradient 
+	    values.</para></listitem>
+	  <listitem><para>Using the table, enter a value into the upstream
+	    field for the pipe that is most upstream.</para></listitem>
+	  <listitem><para>Using the table, enter a value into the downstream field
+	    for the pipe that is most downstream.</para></listitem>
+	  <listitem><para>Select the connected sequence of pipes.</para>
+	    <note><para>Branches are not allowed in the selection.</para></note></listitem>
+	  <listitem><para>Click on the <guibutton>Calculate Constant 
+	    Gradient</guibutton> button.</para></listitem>
+	  <listitem><para>When asked for the gradient, click the <guibutton
+	    >Cancel</guibutton> button.</para></listitem>
+	  <listitem><para>Select the upstream field from the list.</para></listitem>
+	  <listitem><para>Select the downstream field from the list.</para></listitem>
+	  <listitem><para>Review the fields, line selection and gradient.</para>
+	    <para>Click on the <guibutton>Yes</guibutton> button.</para></listitem>
+	</orderedlist>
+      </example>
+      <example id="example_constant_gradient_from_upstream">
+        <title>Constant Gradient From Upstream</title>
+	<orderedlist>
+	  <listitem><para>Start editing a line theme that has
+	    three numeric fields for the upstream, downstream and gradient 
+	    values.</para></listitem>
+	  <listitem><para>Using the table, enter a value into the upstream
+	    field for the pipe that is most upstream.</para></listitem>
+	  <listitem><para>Select the connected sequence of pipes.</para>
+	    <note><para>Branches are not allowed in the selection.</para></note></listitem>
+	  <listitem><para>Click on the <guibutton>Calculate Constant 
+	    Gradient</guibutton> button.</para></listitem>
+	  <listitem><para>Enter the gradient.</para></listitem>
+	  <listitem><para>Click the <guibutton>OK</guibutton> button.</para
+	    ></listitem>
+	  <listitem><para>Select the upstream field from the list.</para></listitem>
+	  <listitem><para>Select the downstream field from the list.</para></listitem>
+	  <listitem><para>Review the fields, line selection and gradient.</para>
+	    <para>Click on the <guibutton>Yes</guibutton> button.</para></listitem>
+	</orderedlist>
+      </example>
+      <example id="example_constant_gradient_from_downstream">
+        <title>Constant Gradient From Downstream</title>
+	<orderedlist>
+	  <listitem><para>Start editing a line theme that has
+	    three numeric fields for the upstream, downstream and gradient 
+	    values.</para></listitem>
+	  <listitem><para>Using the table, enter a value into the downstream field
+	    for the pipe that is most downstream.</para></listitem>
+	  <listitem><para>Select the connected sequence of pipes.</para>
+	    <note><para>Branches are not allowed in the selection.</para></note></listitem>
+	  <listitem><para>Click on the <guibutton>Calculate Constant 
+	    Gradient</guibutton> button.</para></listitem>
+	  <listitem><para>Enter the gradient.</para></listitem>
+	  <listitem><para>Click the <guibutton>OK</guibutton> button.</para
+	    ></listitem>  
+	  <listitem><para>Select the upstream field from the list.</para></listitem>
+	  <listitem><para>Select the downstream field from the list.</para></listitem>
+	  <listitem><para>Review the fields, line selection and gradient.</para>
+	    <para>Click on the <guibutton>Yes</guibutton> button.</para></listitem>
+	</orderedlist>
+      </example>
       <para>The function uses the digitizing direction. All lines should
         point into the same direction.</para>
       <note><para>The upstream and downstream fields only have to be selected
