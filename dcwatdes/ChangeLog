@@ -1,3 +1,9 @@
+2006-05-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: 
+	* dcwatdes.view.digitizepipe.ave: Added DN80
+	* dcwatdesextension.make.ave: Version is 2.12.3+svn now
+
 2006-05-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml: Added elevation calculation tutorial.

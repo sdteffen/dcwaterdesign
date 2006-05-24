@@ -144,7 +144,6 @@
 	Doc:	857
 	Doc:	869
 	Doc:	873
-	ActiveDoc:	820
 	Buttons:	877
 	Buttons:	878
 	Buttons:	879
@@ -157,15 +156,14 @@
 	GUI:	1283
 	GUI:	1685
 	GUI:	1799
-	GUI:	1904
-	WorkDir:	2061
+	GUI:	1905
+	WorkDir:	2062
 	WinX:	-4
 	WinY:	-3
 	WinW:	1688
 	WinH:	1023
 	SerialNumber:	"752171190022"
-	SelColor:	2062
-	GUINames:	2063
+	SelColor:	2063
 	GUINames:	2064
 	GUINames:	2065
 	GUINames:	2066
@@ -174,6 +172,7 @@
 	GUINames:	2069
 	GUINames:	2070
 	GUINames:	2071
+	GUINames:	2072
 	TocWidthScale:	1.00000000000000
 )
 
@@ -5689,12 +5688,13 @@ ULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\
 wJunctions.add(pntEnd.clone)\n    end\n  end\n  \n  if(numSnapped <> 2)then\n    blnKeep = MsgBox.yesNo((2-numSnapped).asString +\" Endnode(s) unsnapped. \"+(2-numSnapped).asString+\" Junction(s) will be automatically added. Keep pipe?\",\"DC Water Design\", true)\n    if(blnKeep.not)then\n      return nil\n    end\n  end\n  \n  ftbJunctions = dicFTabs.get(\"Junctions\")\n  if((ftbPipes <> nil)and(ftbJunctions<>nil))then\n    'add dynamic junctions\n    ftbJunctions.setEditable(true)\n    fldSubtype = av.run(\"DCWatDes.ExpandedAli
 asVTab.findField\", {ftbJunctions, \"dcSubtype\"})\n    fldJunctionID = ftbJunctions.findField(\"dc_id\")\n    fldShape = ftbJunctions.findField(\"Shape\")\n    for each pntJunction in lstNewJunctions\n      recJunction = ftbJunctions.addRecord\n      ftbJunctions.setValue(fldShape, recJunction, pntJunction)\n      if(fldSubtype <> nil)then\n        ftbJunctions.setValue(fldSubtype, recJunction, 101)\n      end\n      if(fldJunctionID <> nil)then\n        ftbJunctions.setValue(fldJunctionID, recJunction, \"j\"+ftbJunctions.ge
 tNumRecords.asString)\n      end\n    end\n    ftbJunctions.setEditable(false)\n    \n    ' create new pipe\n    ftbPipes.setEditable(true)\n    fldShape = ftbPipes.findField(\"Shape\")\n    recPipe = ftbPipes.addRecord\n    ftbPipes.setValue(fldShape, recPipe, Polyline.make(lstPllPoints))\n    av.getProject.setModified(true)\n    ftbPipes.getSelection.clearAll\n    ftbPipes.getSelection.set(recPipe)\n    ftbPipes.updateSelection\n    fldPipeID = ftbPipes.findField(\"dc_id\")\n    if(fldPipeID <> nil)then\n      ftbPipes.setVa
-lue(fldPipeID, recPipe, \"l\"+ftbPipes.getNumRecords.asString)\n    end\n    ' keep network alive\n     \n    av.run(\"DCWatDes.Model.Epanet.Pipe.updateNodeFields\", recPipe)\n    \n    ' Enter diameter\n    lstDiameters = {100,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}\n    objDiameter = MsgBox.ListAsString(lstDiameters, \"Please enter the pipe diameter:\", \"DC Water Design\")\n    if(objDiameter <> nil)then\n      fldDiameter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbPipes, \"diameter\"})\n      if(fl
-dDiameter <> nil)then\n        ftbPipes.setValue(fldDiameter, recPipe, objDiameter)\n      end\n    end\n    \n    ftbPipes.setEditable(false)\n  end\nend  \n"
+lue(fldPipeID, recPipe, \"l\"+ftbPipes.getNumRecords.asString)\n    end\n    ' keep network alive\n     \n    av.run(\"DCWatDes.Model.Epanet.Pipe.updateNodeFields\", recPipe)\n    \n    ' Enter diameter\n    lstDiameters = {80,100,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}\n    objDiameter = MsgBox.ListAsString(lstDiameters, \"Please enter the pipe diameter:\", \"DC Water Design\")\n    if(objDiameter <> nil)then\n      fldDiameter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbPipes, \"diameter\"})\n      if
+(fldDiameter <> nil)then\n        ftbPipes.setValue(fldDiameter, recPipe, objDiameter)\n      end\n    end\n    \n    ftbPipes.setEditable(false)\n  end\nend  \n"
 )
 
 (DocWin.713
 	Owner:	712
+	Open:	1
 	X:	841
 	W:	841
 	H:	808
@@ -6178,11 +6178,11 @@ on(bmpSelection)\n              ftbPipes.updateSelection\n              pntPipeC
 	DocExts:	783
 	Source:	"' DCWatDes.View.Popup.Pipes.setEconomicDiameter\n\n' (c) 2006 DORSCH Consult\n' Select an economic pipe diameter and roughness according to result_flow\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without ev
 en the implied warranty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\ndicThemes = av.run(\"DCWatDes.Model.Epanet.returnThemeDictionary\",nil)\nthmPipes = dicThemes.get(\"Pipes\")\nif(thmPipes = nil)then\n  return nil\nend\n\nftbPipe
-s = thmPipes.getFTab\ndicEconomic = Dictionary.make(20)\ndicEconomic.add(6.3,100)\ndicEconomic.add(15.0,150)\ndicEconomic.add(28.3,200)\ndicEconomic.add(46.6,250)\ndicEconomic.add(70.7,300)\ndicEconomic.add(138,400)\ndicEconomic.add(236,500)\ndicEconomic.add(368,600)\ndicEconomic.add(539,700)\ndicEconomic.add(779,800)\ndicEconomic.add(1050,900)\ndicEconomic.add(1375,1000)\ndicEconomic.add(1806,1100)\ndicEconomic.add(2262,1200)\ndicEconomic.add(3079,1400)\nlstKeys = dicEconomic.returnKeys\nlstKeys.sort(true)\n\nfldDiameter = av
-.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"Diameter\"})\nfldResultFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"result_flow\"})\nfldRoughness = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"Roughness\"})\nfldLifecycleStatus = ftbPipes.findField(\"lifecycles\")\n\npntMouse = self.getControlSet.getObjectTag\n\nif(pntMouse.is(Point))then\n  lstPipes = thmPipes.findByPoint(pntMouse)\n  if (lstPipes.count = 0 ) then\n    MsgBox.info(\"No Pipe selected\", \"DC Water Design\")\n    exit\n  e
-nd\n  ftbPipes.setEditable(true)  \n  for each recPipe in lstPipes\n    numResultFlow = ftbPipes.returnValue(fldResultFlow, recPipe).abs\n    numCurrentDiameter = ftbPipes.returnValue(fldDiameter, recPipe)\n    numBiggerKey = 6.3\n    for each numKey in lstKeys\n      if(numKey > numResultFlow)then\n        numBiggerKey = numKey\n        break\n      end\n    end\n    numDiameter = dicEconomic.get(numBiggerKey)\n    lstDiameters = {100,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}\n    lstDiameters.shuffle(lstD
-iameters.get(lstDiameters.findByValue(numDiameter)),0)\n    numDiameter = MsgBox.ListAsString(lstDiameters, \"Please enter the pipe diameter (currently \"+numCurrentDiameter.asString+\"):\", \"DC Water Design\")\n    if(numDiameter <> nil)then\n      ftbPipes.setValue(fldDiameter, recPipe, numDiameter)\n      numRoughness = 1.5\n      if(numDiameter >= 500)then\n        numRoughness = 0.2\n      end\n      ftbPipes.setValue(fldRoughness, recPipe, numRoughness)\n      ' Automatically mark reinforcement pipes\n      if(fldLi
-fecycleStatus <> nil)then\n        numLifecycleStatus = ftbPipes.returnValue(fldLifecycleStatus, recPipe)\n        if(numLifecycleStatus < 6)then\n          ftbPipes.setValue(fldLifecycleStatus, recPipe, 7)\n        end\n      end\n    end\n  end\n  ftbPipes.setEditable(false)\nend\n"
+s = thmPipes.getFTab\ndicEconomic = Dictionary.make(20)\ndicEconomic.add(4.0,80)\ndicEconomic.add(6.3,100)\ndicEconomic.add(15.0,150)\ndicEconomic.add(28.3,200)\ndicEconomic.add(46.6,250)\ndicEconomic.add(70.7,300)\ndicEconomic.add(138,400)\ndicEconomic.add(236,500)\ndicEconomic.add(368,600)\ndicEconomic.add(539,700)\ndicEconomic.add(779,800)\ndicEconomic.add(1050,900)\ndicEconomic.add(1375,1000)\ndicEconomic.add(1806,1100)\ndicEconomic.add(2262,1200)\ndicEconomic.add(3079,1400)\nlstKeys = dicEconomic.returnKeys\nlstKeys.sort
+(true)\n\nfldDiameter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"Diameter\"})\nfldResultFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"result_flow\"})\nfldRoughness = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"Roughness\"})\nfldLifecycleStatus = ftbPipes.findField(\"lifecycles\")\n\npntMouse = self.getControlSet.getObjectTag\n\nif(pntMouse.is(Point))then\n  lstPipes = thmPipes.findByPoint(pntMouse)\n  if (lstPipes.count = 0 ) then\n    MsgBox.info(\"No Pipe selected\", \"DC Wat
+er Design\")\n    exit\n  end\n  ftbPipes.setEditable(true)  \n  for each recPipe in lstPipes\n    numResultFlow = ftbPipes.returnValue(fldResultFlow, recPipe).abs\n    numCurrentDiameter = ftbPipes.returnValue(fldDiameter, recPipe)\n    numBiggerKey = 6.3\n    for each numKey in lstKeys\n      if(numKey > numResultFlow)then\n        numBiggerKey = numKey\n        break\n      end\n    end\n    numDiameter = dicEconomic.get(numBiggerKey)\n    lstDiameters = {80,100,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}\n  
+  lstDiameters.shuffle(lstDiameters.get(lstDiameters.findByValue(numDiameter)),0)\n    numDiameter = MsgBox.ListAsString(lstDiameters, \"Please enter the pipe diameter (currently \"+numCurrentDiameter.asString+\"):\", \"DC Water Design\")\n    if(numDiameter <> nil)then\n      ftbPipes.setValue(fldDiameter, recPipe, numDiameter)\n      numRoughness = 1.5\n      if(numDiameter >= 500)then\n        numRoughness = 0.2\n      end\n      ftbPipes.setValue(fldRoughness, recPipe, numRoughness)\n      ' Automatically mark reinfor
+cement pipes\n      if(fldLifecycleStatus <> nil)then\n        numLifecycleStatus = ftbPipes.returnValue(fldLifecycleStatus, recPipe)\n        if(numLifecycleStatus < 6)then\n          ftbPipes.setValue(fldLifecycleStatus, recPipe, 7)\n        end\n      end\n    end\n  end\n  ftbPipes.setEditable(false)\nend\n"
 )
 
 (DocWin.781
@@ -6484,16 +6484,15 @@ Extension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename, \"$AVE
 CWatDes.View.Popup.Pipes\") )\n'4\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.Nodes\"))\n'5\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"BOQ.make\"))\n'6\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.classifyHouseConnections\"))\n\n'7\ndlgSetup = av.findDialog(\"DCWatDes.Dialog.Setup\")\ndlgSetup.setServer(nil)\nmyExt.add(dlgSetup)\n\n'8\nmyExt.add(av.getProject.findGUI(\"Project\").getMenuBar.findByLabel(\"DC Water Design\"))\n\n
 '9\ndlgEpanetTables = av.findDialog(\"DCWatDes.Dialog.EpanetTables\")\ndlgEpanetTables.setServer(nil)\nmyExt.add(dlgEpanetTables)\n\n'10\ndlgEpanetThemes = av.findDialog(\"DCWatDes.Dialog.EpanetThemes\")\ndlgEpanetThemes.setServer(nil)\nmyExt.add(dlgEpanetThemes)\n\n'11\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetThemes.open\"))\n\n' 12 Flip Tool\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.flipPolyline\"))\n\n' 13 \ndlgResultTables = av.findDialog(
 \"DCWatDes.Dialog.ResultTables\")\ndlgResultTables.setServer(nil)\nmyExt.add(dlgResultTables)\n\n' 14 Node Digitizing\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.digitizeNode\"))\n\n' 15 Epanet Tables Button\nmyExt.add(av.getProject.findGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetTables.open\"))\n\n' 16 Bitcode Calculator Button\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.calculateBitcode\"))\n\n' 17 PipesAndNodes View Popup\nmyExt.a
-dd( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.12.3\"+NL+\"(c) 1998 - 2006 DORSCH Consult.\"+NL+\n\"Thi
-s extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(2123)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadEl
-t\n  if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
+dd( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.12.3+svn\"+NL+\"(c) 1998 - 2006 DORSCH Consult.\"+NL+\n
+\"This extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(2123)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.Re
+adElt\n  if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
 	SearchStr:	"06"
 	FontSize:	2
 )
 
 (DocWin.821
 	Owner:	820
-	Open:	1
 	X:	-4
 	Y:	-4
 	W:	1690
@@ -6915,27 +6914,27 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 
 (NameDict.884
 	Obj:	885
-	Obj:	886
+	Obj:	888
 	Obj:	889
 	Obj:	892
 )
 
 (AVDict.885
-	InternalName:	"Table of Contents Defaults Dialog"
-)
-
-(AVDict.886
 	InternalName:	"Dialog Designer"
-	Key:	887
-	Value:	888
+	Key:	886
+	Value:	887
 )
 
-(AVStr.887
+(AVStr.886
 	S:	"IsVisible"
 )
 
-(Bool.888
+(Bool.887
 	Truth:	1
+)
+
+(AVDict.888
+	InternalName:	"Table of Contents Defaults Dialog"
 )
 
 (AVDict.889
@@ -11501,6 +11500,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1704
+	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -11796,7 +11796,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVStr.1742
-	S:	"dcwatdes2.apr DCWatDesExtension.make"
+	S:	"dcwatdes2.apr DCWatDes.View.digitizePipe"
 )
 
 (Choice.1743
@@ -11807,8 +11807,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1744
-	Help:	"Activates DCWatDesExtension.make"
-	Label:	"&2 DCWatDesExtension.make"
+	Help:	"Activates DCWatDes.View.digitizePipe"
+	Label:	"&2 DCWatDes.View.digitizePipe"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
@@ -12171,10 +12171,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Type:	"Project"
 	Modified:	1
 	MenuBar:	1800
-	ButnBar:	1876
-	Popups:	1883
-	ToolBar:	1884
-	Icon:	1885
+	ButnBar:	1877
+	Popups:	1884
+	ToolBar:	1885
+	Icon:	1886
 )
 
 (MenuBar.1800
@@ -12182,7 +12182,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1813
 	Child:	1853
 	Child:	1862
-	Child:	1871
+	Child:	1872
 )
 
 (PMenu.1801
@@ -12363,7 +12363,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
-	Label:	"&Rename 'DCWatDesExtension.make'..."
+	Label:	"&Rename 'Script.saveAllScripts'..."
 	Click:	"Project.Rename"
 	Shortcut:	"Keys.Ctrl+R"
 )
@@ -12372,7 +12372,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
-	Label:	"&Delete 'DCWatDesExtension.make'..."
+	Label:	"&Delete 'Script.saveAllScripts'..."
 	Click:	"Project.Delete"
 	Shortcut:	"Keys.Del"
 )
@@ -12578,6 +12578,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1867
 	Child:	1868
 	Child:	1870
+	Child:	1871
 	Label:	"&Window"
 )
 
@@ -12622,7 +12623,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVStr.1869
-	S:	"dcwatdes2.apr"
+	S:	"dcwatdes2.apr DCWatDes.View.digitizePipe"
 )
 
 (Choice.1870
@@ -12632,16 +12633,23 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1871
+(Choice.1871
+	Help:	"Activates DCWatDes.View.digitizePipe"
+	Label:	"&2 DCWatDes.View.digitizePipe"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.1872
 	InternalName:	"Help"
-	Child:	1872
 	Child:	1873
 	Child:	1874
 	Child:	1875
+	Child:	1876
 	Label:	"&Help"
 )
 
-(Choice.1872
+(Choice.1873
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12649,7 +12657,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1873
+(Choice.1874
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12657,10 +12665,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1874
+(Space.1875
 )
 
-(Choice.1875
+(Choice.1876
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12668,69 +12676,69 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1876
+(ButnBar.1877
 	Update:	"Project.UpdateButtons"
-	Child:	1877
-	Child:	1879
+	Child:	1878
 	Child:	1880
-	Child:	1882
+	Child:	1881
+	Child:	1883
 )
 
-(Butn.1877
+(Butn.1878
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1878
+	Icon:	1879
 	Click:	"Project.Save"
 )
 
-(AVIcon.1878
+(AVIcon.1879
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1879
+(Space.1880
 )
 
-(Butn.1880
+(Butn.1881
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1881
+	Icon:	1882
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1881
+(AVIcon.1882
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.1882
+(Butn.1883
 	Icon:	1135
 	Click:	"DCWatDesExtension.make"
 )
 
-(PopupSet.1883
+(PopupSet.1884
 )
 
-(ToolBar.1884
+(ToolBar.1885
 )
 
-(AVIcon.1885
+(AVIcon.1886
 	Name:	"Icon"
 	Res:	"Project.Icon"
 
 )
 
-(DocGUI.1904
+(DocGUI.1905
 	Name:	"Overview"
 	DocBaseName:	"Overview for "
 	Type:	"View"
 	Modified:	1
-	MenuBar:	1905
-	ButnBar:	1915
-	Popups:	1921
-	ToolBar:	1940
+	MenuBar:	1906
+	ButnBar:	1916
+	Popups:	1922
+	ToolBar:	1941
 	NewScript:	"View.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Doc.Action"
@@ -12738,23 +12746,23 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Doc.ActionUpdate"
 	Title:	"Overviews"
-	Icon:	1943
+	Icon:	1944
 )
 
-(MenuBar.1905
-	Child:	1906
-	Child:	1910
-)
-
-(PMenu.1906
-	InternalName:	"Edit"
+(MenuBar.1906
 	Child:	1907
+	Child:	1911
+)
+
+(PMenu.1907
+	InternalName:	"Edit"
 	Child:	1908
 	Child:	1909
+	Child:	1910
 	Label:	"&Edit"
 )
 
-(Choice.1907
+(Choice.1908
 	Help:	"Displays the TOC so you can delete or changed themes."
 	Update:	"OverView.DisplayTOCUpdate"
 	Label:	"Display TOC"
@@ -12762,7 +12770,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1908
+(Choice.1909
 	Disabled:	1
 	Help:	"Removes the active themes from the view"
 	HelpTopic:	"Delete_Themes"
@@ -12772,19 +12780,19 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1909
+(Space.1910
 )
 
-(PMenu.1910
+(PMenu.1911
 	InternalName:	"Help"
-	Child:	1911
 	Child:	1912
 	Child:	1913
 	Child:	1914
+	Child:	1915
 	Label:	"&Help"
 )
 
-(Choice.1911
+(Choice.1912
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12792,7 +12800,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1912
+(Choice.1913
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12800,10 +12808,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1913
+(Space.1914
 )
 
-(Choice.1914
+(Choice.1915
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12811,47 +12819,46 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1915
-	Child:	1916
-	Child:	1918
+(ButnBar.1916
+	Child:	1917
 	Child:	1919
+	Child:	1920
 )
 
-(Butn.1916
+(Butn.1917
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1917
+	Icon:	1918
 	Click:	"Project.Save"
 )
 
-(AVIcon.1917
+(AVIcon.1918
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1918
+(Space.1919
 )
 
-(Butn.1919
+(Butn.1920
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1920
+	Icon:	1921
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1920
+(AVIcon.1921
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(PopupSet.1921
-	Child:	1922
+(PopupSet.1922
+	Child:	1923
 )
 
-(Popup.1922
-	Child:	1923
+(Popup.1923
 	Child:	1924
 	Child:	1925
 	Child:	1926
@@ -12868,10 +12875,11 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1937
 	Child:	1938
 	Child:	1939
+	Child:	1940
 	Label:	"Menu"
 )
 
-(Choice.1923
+(Choice.1924
 	Disabled:	1
 	Invisible:	1
 	Help:	"Deletes the last entered point on the line or polygon being drawn"
@@ -12881,7 +12889,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1924
+(Choice.1925
 	Help:	"Undo the last edit to graphics on a view"
 	HelpTopic:	"Undo_Graphic_Edit_on_a_view"
 	Update:	"View.UndoEditUpdate"
@@ -12890,7 +12898,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1925
+(Choice.1926
 	Disabled:	1
 	Invisible:	1
 	Help:	"Redo the last edit operation on a theme that was undone"
@@ -12900,10 +12908,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1926
+(Space.1927
 )
 
-(Choice.1927
+(Choice.1928
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns general snapping on"
@@ -12913,7 +12921,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1928
+(Choice.1929
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns interactive snapping on"
@@ -12923,10 +12931,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1929
+(Space.1930
 )
 
-(Choice.1930
+(Choice.1931
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest vertex within the user tolerance"
@@ -12936,7 +12944,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1931
+(Choice.1932
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest line segment"
@@ -12946,7 +12954,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1932
+(Choice.1933
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest node common to two or more features"
@@ -12956,7 +12964,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1933
+(Choice.1934
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest endpoint of an existing line"
@@ -12966,10 +12974,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1934
+(Space.1935
 )
 
-(Choice.1935
+(Choice.1936
 	Help:	"Unselects the selected features in all active themes"
 	Update:	"View.AttributeThemesUpdate"
 	Label:	"Clear Selection"
@@ -12977,7 +12985,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1936
+(Choice.1937
 	Help:	"Zooms in at point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom In"
@@ -12985,7 +12993,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1937
+(Choice.1938
 	Help:	"Zooms out from point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom Out"
@@ -12993,7 +13001,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1938
+(Choice.1939
 	Help:	"Zooms to the extent of the selected features"
 	Update:	"View.SelectableThemesUpdate"
 	Label:	"Zoom to Selected"
@@ -13001,7 +13009,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1939
+(Choice.1940
 	Help:	"Centers display on point where you click to bring up popup"
 	Update:	"View.HasDataUpdate"
 	Label:	"Pan"
@@ -13009,74 +13017,74 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ToolBar.1940
-	Child:	1941
+(ToolBar.1941
+	Child:	1942
 )
 
-(Tool.1941
+(Tool.1942
 	Help:	"Pointer//Selects, moves, and resizes graphics"
 	HelpTopic:	"Pointer_tool"
 	Update:	"View.HasDataUpdate"
-	Icon:	1942
+	Icon:	1943
 	Cursor:	"Cursors.Select"
 	Apply:	"Overview.ResizeBox"
 	Click:	"View.SelectTool"
 )
 
-(AVIcon.1942
+(AVIcon.1943
 	Name:	"Select"
 	Res:	"Icons.Select"
 
 )
 
-(AVIcon.1943
+(AVIcon.1944
 	Name:	"O"
 	Res:	"Icons.O"
 
 )
 
-(FN.2061
+(FN.2062
 	Path:	"$HOME"
 )
 
-(TClr.2062
+(TClr.2063
 	Red:	0xffff
 	Green:	0xffff
 )
 
-(AVStr.2063
+(AVStr.2064
 	S:	"View"
 )
 
-(AVStr.2064
+(AVStr.2065
 	S:	"Table"
 )
 
-(AVStr.2065
+(AVStr.2066
 	S:	"Chart"
 )
 
-(AVStr.2066
+(AVStr.2067
 	S:	"Layout"
 )
 
-(AVStr.2067
+(AVStr.2068
 	S:	"Script"
 )
 
-(AVStr.2068
+(AVStr.2069
 	S:	"Project"
 )
 
-(AVStr.2069
+(AVStr.2070
 	S:	"Appl"
 )
 
-(AVStr.2070
+(AVStr.2071
 	S:	"Overview"
 )
 
-(AVStr.2071
+(AVStr.2072
 	S:	"DialogEditor"
 )
 
