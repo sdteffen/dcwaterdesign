@@ -904,9 +904,30 @@
 	<para>The EPANET INP format is an ASCII format (it can be 
 	  easily edited by any text editor) that is documented in 
 	  the EPANET toolkit. The windows version of EPANET can 
-	  export models to this format (<menuchoice><guimenu>File</guimenu> 
+	  export models to this format. To export an INP file from EPANET, 
+	  choose <menuchoice><guimenu>File</guimenu> 
 	  <guimenuitem>Export</guimenuitem> 
-	  <guimenuitem>Network ...</guimenuitem></menuchoice>).</para>
+	  <guimenuitem>Network ...</guimenuitem></menuchoice>) from the menu.</para>
+	<para>After selecting <menuchoice><guimenu>DC Water Design</guimenu>
+	  <guimenuitem>Import EPANET Inp File</guimenuitem></menuchoice> from
+	  the menu, you have to do the following:</para>
+	<simplelist>
+	  <member>Select the location for the new 
+	    <classname>Junction</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Pipe</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Pump</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Reservoir</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Tank</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Valve</classname> shapefile to be created.</member>
+	  <member>Select the EPANET INP file to be imported.</member>
+	</simplelist>
+	<para>If there are errors, they will be reported in a separate 
+	  window.</para>
 	<caution><para>Currently the function will not import the full EPANET
 	  model. Be sure to check whether the imported results fit your needs.
 	  </para></caution>
