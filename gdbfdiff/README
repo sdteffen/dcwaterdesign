@@ -1,0 +1,4 @@
+Gdbfdiff is a tool to compare the structure of two DBF files using
+WinMerge.
+
+You need GTK+ to run giconv.
