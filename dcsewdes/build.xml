@@ -7,7 +7,7 @@
   <property name="md5sum" value="c:\wc\cvs.gnome.org\bin\md5sum.exe" />
   
   <!-- Custom DC Sewer Design stylesheets -->
-  <property name="dcsewerdesign_version" value="2.0.9" />
+  <property name="dcsewerdesign_version" value="2.0.10" />
   
   <target name="DCSewDesDistribution" id="DC_Sewer_DesignDistribution">
     <tar destfile="dcsewerdesign-src-${dcsewerdesign_version}.tar">

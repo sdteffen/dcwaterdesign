@@ -58,6 +58,7 @@
 	Doc:	174
 	Doc:	178
 	Doc:	182
+	ActiveDoc:	182
 	Buttons:	186
 	Buttons:	187
 	Buttons:	188
@@ -66,30 +67,30 @@
 	GUI:	195
 	GUI:	475
 	GUI:	875
-	GUI:	985
-	WorkDir:	1049
-	WinY:	1
-	WinW:	1680
-	WinH:	1015
+	GUI:	987
+	WorkDir:	1053
+	WinX:	-4
+	WinY:	-3
+	WinW:	1529
+	WinH:	1023
 	SerialNumber:	"835011100145"
-	SelColor:	1050
-	GUINames:	1051
-	GUINames:	1052
-	GUINames:	1053
-	GUINames:	1054
+	SelColor:	1054
 	GUINames:	1055
 	GUINames:	1056
 	GUINames:	1057
+	GUINames:	1058
+	GUINames:	1059
+	GUINames:	1060
+	GUINames:	1061
 	TocWidthScale:	1.00000000000000
 )
 
 (DocWin.3
 	Owner:	2
 	Open:	1
-	X:	-4
-	Y:	-4
-	W:	1682
-	H:	903
+	X:	761
+	W:	761
+	H:	451
 )
 
 (CSMgr.4
@@ -319,47 +320,46 @@ ftbManhole = thmManhole.GetFTab \n\nlstProfileLines = av.run(\"DCSewerDesign.Pro
 fConfiguration = LineFile.make(strConfigurationFile.asFilename, #FILE_PERM_READ)\nstrLine=lnfConfiguration.readElt\nwhile (not (strLine=nil ))\n  lstConfTokens = strLine.asTokens(\"=\")\n  if(lstConfTokens.count=2)then\n    strScriptFieldName = lstConfTokens.get(0).trim.lcase\n    strTableFieldName = lstConfTokens.get(1).trim.lcase\n    if(strScriptFieldName = \"manhole.id\")then\n      fldManholeID=ftbManhole.findField(strTableFieldName)\n    end\n    if(strScriptFieldName = \"manhole.diameter\")then\n      fldManholeDiame
 ter=ftbManhole.findField(strTableFieldName)\n    end\n    if(strScriptFieldName = \"manhole.invertlevel\")then\n      fldManholeInvertLevel=ftbManhole.findField(strTableFieldName)\n    end\n    if(strScriptFieldName = \"manhole.elevation\")then\n      fldManholeElevation=ftbManhole.findField(strTableFieldName)\n    end\n    if(strScriptFieldName = \"line.diameter\")then\n      fldLineDiameter = ftbLine.findField(strTableFieldName)\n    end\n    if(strScriptFieldName = \"line.id\")then\n      fldLineID = ftbLine.findField(strTa
 bleFieldName)\n    end\n    if(strScriptFieldName = \"line.upstreaminvert\")then\n      fldLineUpstreamInvert = ftbLine.findField(strTableFieldName)\n    end\n    if(strScriptFieldName = \"line.downstreaminvert\")then\n      fldLineDownstreamInvert = ftbLine.findField(strTableFieldName)\n    end\n    if((strScriptFieldName = \"datuminterval\")and(strTableFieldName.isnumber))then\n      intDatumInterval = strTableFieldName.asNumber.truncate\n    end\n    for each lstFreeField in lstFreeFields\n      if(strScriptFieldName = ls
-tFreeField.get(0))then\n        lstFieldTokens = strTableFieldName.asTokens(\"@\")\n        if(lstFieldTokens.count = 5)then\n          strJustificationToken = lstFieldTokens.get(4)\n          intJustification = #TEXTCOMPOSER_JUST_LEFT\n          if(strJustificationToken = \"center\")then\n            intJustification = #TEXTCOMPOSER_JUST_CENTER\n          elseif(strJustificationToken = \"right\")then\n            intJustification = #TEXTCOMPOSER_JUST_RIGHT\n          end\n          lstFree = {lstFieldTokens.get(0),lstFiel
-dTokens.get(1).asNumber,\n            lstConfTokens.get(1).asTokens(\"@\").get(2), lstFieldTokens.get(3).asNumber, intJustification.clone}\n          lstFreeField.get(1).add(lstFree)      \n        end\n      end \n    end\n  end\n  strLine = lnfConfiguration.readElt\nend\nlnfConfiguration.close\n\n' Check configuration\nif(fldManholeID = nil)then\n  MsgBox.error(\"Error: Field Manhole.ID was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldManholeDiameter = nil)then\n  MsgBox.error(\"Error: Field Manhole.Diameter was not fou
-nd.\",\"DC Sewer Design\")\n  exit\nend\nif(fldManholeInvertLevel = nil)then\n  MsgBox.error(\"Error: Field Manhole.InvertLevel was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldManholeElevation = nil)then\n  MsgBox.error(\"Error: Field Manhole.Elevation was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldLineID = nil)then\n  MsgBox.error(\"Error: Field Line.ID was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldLineDiameter = nil)then\n  MsgBox.error(\"Error: Field Line.Diameter was not found.\",\"DC Sewer Design\")\n  ex
-it\nend\nif(fldLineUpstreamInvert = nil)then\n  MsgBox.error(\"Error: Field Line.UpstreamInvert was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldLineDownstreamInvert = nil)then\n  MsgBox.error(\"Error: Field Line.DownstreamInvert was not found.\",\"DC Sewer Design\")\n  exit\nend\n\nfldManholeShape = ftbManhole.findField(\"Shape\")\nfldLineShape = ftbLine.findField(\"Shape\")\n\nflnProfile = av.getProject.getWorkDir.makeTmp(\"profile\",\"shp\")\nftbProfile = FTab.makeNew(flnProfile,PolyLine)\n\nftbProfile.setEditable(true)\nfldProf
-ileShape = ftbProfile.findField(\"Shape\")\nftbProfile.addFields({Field.make(\"id\", #FIELD_DECIMAL, 4, 0),\n  Field.make(\"style\",#FIELD_CHAR,16,0),\n  Field.make(\"dc_id\", #FIELD_CHAR, 16, 0)})\nfldProfileStyle = ftbProfile.findField(\"style\")\nfldProfileDcId = ftbProfile.findField(\"dc_id\")\n\npntManhole = ftbManhole.returnValue(fldManholeShape, lstProfileManholes.get(0))\npllLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(0))\nif(pntManhole.distance(pllLine.along(0)) > 0.1)then\n   lstProfileManholes = av.ru
-n(\"DCSewerDesign.List.flip\", lstProfileManholes)\n   lstProfileLines = av.run(\"DCSewerDesign.List.flip\", lstProfileLines)\nend\n\n' create the profile view\nstrFirstManhole = ftbManhole.returnValue(fldManholeID, lstProfileManholes.get(0)).asString\nstrLastManhole = ftbManhole.returnValue(fldManholeID, lstProfileManholes.get(lstProfileManholes.count-1)).asString\nstrViewName = \"Profile\"++strFirstManhole++\"-\"++strLastManhole\nlstViews = av.getProject.getDocsWithGUI(av.findGUI(\"View\"))\nfor each viewCheck in lstViews\n 
- if(viewCheck.getName = strViewName)then\n    blnOverwrite = MsgBox.yesNo(\"A view named'\"+strViewName+\"' already exists.\"+NL+\"Overwrite it?\", \"DC Sewer Design\", true)\n    if(blnOverwrite)then\n      av.getProject.removeDoc(av.getProject.findDoc(strViewName))      \n    else\n      exit\n    end\n  end\nend\nviewProfile = View.make\nviewProfile.setName(strViewName)\nviewProfile.getWin.activate\n\nviewProfile.setUnits(#UNITS_LINEAR_METERS)\nviewProfile.getDisplay.setDistanceUnits(#UNITS_LINEAR_METERS)\nviewProfile.getDispl
-ay.zoomToScale(1000)\n\n' draw manholes\n\nnumX = 1000.0\nnumY = 1000.0\nfor each i in 0..(lstProfileManholes.count-1)\n  recProfile = ftbProfile.addRecord\n  recManhole = lstProfileManholes.get(i)\n  numDiameter = ftbManhole.returnValue(fldManholeDiameter, recManhole)\n  numInvertLevel = ftbManhole.returnValue(fldManholeInvertLevel, recManhole)\n  numElevation = ftbManhole.returnValue(fldManholeElevation, recManhole)\n  pntLowerLeft = Point.make(numX-(numDiameter/2000), numY+(numInvertLevel*10))\n  pntUpperLeft = Point
-.make(numX-(numDiameter/2000), numY+(numElevation*10))\n  pntUpperRight = Point.make(numX+(numDiameter/2000), numY+(numElevation*10))\n  pntLowerRight = Point.make(numX+(numDiameter/2000), numY+(numInvertLevel*10))\n  pllManhole = Polyline.make({{pntLowerLeft,pntUpperLeft,pntUpperRight, pntLowerRight, pntLowerLeft}})\n  ftbProfile.setValue(fldProfileShape, recProfile, pllManhole)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n      \n  ' Draw connecting lines\n  if((i <> 0)and(i<>(lstProfileManholes.c
-ount-1)))then\n    pntManhole = ftbManhole.returnValue(fldManholeShape, recManhole)\n    ftbLine.selectByPoint(pntManhole, 0.001, #VTAB_SELTYPE_NEW)\n    lstConnected = List.make\n    for each recLine in ftbLine.getSelection\n      if(lstProfileLines.findByValue(recLine) = (-1))then\n        numLineInvert = ftbLine.returnValue(fldLineDownstreamInvert, recLine)\n        numLineDiameter = ftbLine.returnValue(fldLineDiameter, recLine)\n        blnAdded = false\n        for each lstConnection in lstConnected\n          i
-f((numLineDiameter = lstConnection.get(1) and (numLineInvert = lstConnection.get(2))))then\n            lstConnection.set(0, lstConnection.get(0)+1)\n            blnAdded = true\n          end\n        end\n        if(blnAdded = false)then\n          lstConnected.add({1,numLineDiameter,numLineInvert})\n        end\n        shpCircle = Circle.make(Point.make(numX, numY+(numLineInvert*10)+(numLineDiameter/200)), numLineDiameter/200)\n        plgnCircle = shpCircle.asPolygon\n        pllCircle = plgnCircle.asPolyline\n  
-      recCircle = ftbProfile.addRecord\n        ftbProfile.setValue(fldProfileShape, recCircle, pllCircle)\n        ftbProfile.setValue(fldProfileStyle, recCircle, \"normal\")\n      end\n    end\n    numHeight = 0\n    for each lstConnection in lstConnected\n      numConnections = lstConnection.get(0)\n      numLineDiameter = lstConnection.get(1)\n      numLineInvert = lstConnection.get(2)\n      pntConnection = Point.make(numX, numY+(numLineInvert*10)+(numLineDiameter/100))\n      pllMark = Line.make(pntConnection, pn
-tConnection.clone.move(0, 35)).asPolyLine\n      pllMark = pllMark.returnUnion(Line.make(pntConnection, pntConnection.clone.move(-3, 4)).asPolyLine)\n      pllMark = pllMark.returnUnion(Line.make(pntConnection, pntConnection.clone.move(3, 4)).asPolyLine)\n      recProfile = ftbProfile.addRecord\n      ftbProfile.setValue(fldProfileShape, recProfile, pllMark)\n      ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n      pntIDLocation = Point.make(numX, numY+10+(numElevation*10)+numHeight)\n      numPosit
-ion = numX\n      strConnectionText = \"DN \"+numLineDiameter.asString+NL+numLineInvert.asString\n      if(numConnections <> 1)then\n        strConnectionText = numConnections.asString++strConnectionText\n      end\n      gtxIDLabel = GraphicText.make(strConnectionText, pntIDLocation)\n      gtxIDLabel.setAngle(90)\n      viewProfile.getGraphics.add(gtxIDLabel)\n      tpsID = TextPositioner.make(Point)\n      tpsID.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n      tpsID.SetVAlign(#TEXTPOSITIONER_VALIGN_TOP)\n      tpsID.C
-alculate(pntIDLocation, gtxIDLabel.GetExtent, 1, nil)\n      numHeight = numHeight + gtxIDLabel.getExtent.getY + 3\n      gtxIDLabel.SetOrigin(tpsID.GetOrigin)\n      for each symText in gtxIDLabel.returnSymbols\n        viewProfile.getDisplay.hookupSymbol(symText)\n      end\n    end\n  end\n  \n  if(i < lstProfileLines.count)then\n    numX = numX + ftbLine.returnValue(fldLineShape,lstProfileLines.get(i)).returnLength\n  end\nend\n\n' draw lines\n\nnumMinInvertElevation = 9999\nnumMaxGroundElevation = -9999\n\nnumX = 1000.0\n
-for each i in 0..(lstProfileLines.count-1)\n  recProfile = ftbProfile.addRecord\n  recLine = lstProfileLines.get(i)\n  recUpstreamManhole = lstProfileManholes.get(i)\n  recDownstreamManhole = lstProfileManholes.get(i+1)\n  numLineDiameter = ftbLine.returnValue(fldLineDiameter, recLine)\n  numUpstreamManholeDiameter = ftbManhole.returnValue(fldManholeDiameter, recUpstreamManhole)\n  numDownstreamManholeDiameter = ftbManhole.returnValue(fldManholeDiameter, recDownstreamManhole)\n  ' Flip line if necessary\n  pllLine =
- ftbLine.returnValue(fldLineShape, recLine)\n  pntUpstreamManhole = ftbManhole.returnValue(fldManholeShape, recUpstreamManhole)\n  pntDownstreamManhole = ftbManhole.returnValue(fldManholeShape, recDownstreamManhole)\n  pntFirstNode = pllLine.along(0)\n  if(pntFirstNode.distance(pntUpstreamManhole) < pntFirstNode.distance(pntDownstreamManhole))then\n    numUpstreamInvertLevel = ftbLine.returnValue(fldLineUpstreamInvert, recLine)\n    numDownstreamInvertLevel = ftbLine.returnValue(fldLineDownstreamInvert, recLine)\n
-  else\n    numUpstreamInvertLevel = ftbLine.returnValue(fldLineDownstreamInvert, recLine)\n    numDownstreamInvertLevel = ftbLine.returnValue(fldLineUpstreamInvert, recLine)\n  end\n  numMinInvertElevation = numMinInvertElevation.min(numUpstreamInvertLevel.min(numDownstreamInvertLevel)).clone\n\n  numLineLength = pllLine.returnLength\n  pntUpstreamInvert = Point.make(numX+(numUpstreamManholeDiameter/2000), numY+(numUpstreamInvertLevel*10))\n  pntDownstreamInvert=Point.make(numX+numLineLength-(numDownstreamManholeD
-iameter/2000), numY+(numDownstreamInvertLevel*10))\n  pllInvert = Polyline.make({{pntUpstreamInvert, pntDownstreamInvert}})\n  ftbProfile.setValue(fldProfileShape, recProfile, pllInvert)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n\n  recProfile = ftbProfile.addRecord\n  pntUpstreamUpperLevel = pntUpstreamInvert+Point.make(0,numLineDiameter/100)\n  pntDownstreamUpperLevel = pntDownstreamInvert+Point.make(0,numLineDiameter/100)\n  pllUpper = Polyline.make({{pntUpstreamUpperLevel, pntDownstreamUpperL
-evel}})\n  ftbProfile.setValue(fldProfileShape, recProfile, pllUpper)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n\n  recProfile = ftbProfile.addRecord\n  numUpstreamElevation = ftbManhole.returnValue(fldManholeElevation, recUpstreamManhole)\n  numDownstreamElevation = ftbManhole.returnValue(fldManholeElevation, recDownstreamManhole)\n  numMaxGroundElevation = numMaxGroundElevation.max(numUpstreamElevation.max(numDownstreamElevation)).clone\n  pntUpstreamElevation = Point.make(numX+(numUpstreamManh
-oleDiameter/2000), numY+(numUpstreamElevation*10))\n  pntDownstreamElevation = Point.make(numX+numLineLength-(numDownstreamManholeDiameter/2000), numY+(numDownstreamElevation*10))\n  pllElevation = Polyline.make({{pntUpstreamElevation, pntDownstreamElevation}})\n  ftbProfile.setValue(fldProfileShape, recProfile, pllElevation)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n  strDcId = ftbLine.returnValue(fldLineDcId, recLine)\n  ftbProfile.setValue(fldProfileDcId, recProfile, strDcId)\n  \n  numX = num
-X + numLineLength\nend\n\n' Draw manhole center lines\nnumX = 1000.0\nfor each i in 0..(lstProfileManholes.count-1)\n  recManhole = lstProfileManholes.get(i)\n  numElevation = ftbManhole.returnValue(fldManholeElevation, recManhole)\n  recProfile = ftbProfile.addRecord\n  pntCenterlineStart = Point.make(numX, numY+(numElevation*10))\n  pntCenterlineEnd = Point.make(numX, numY+(numMinInvertElevation*10)-12-numAdjustment)\n  pllManholeCenterline = Polyline.make({{pntCenterlineStart, pntCenterlineEnd}})\n  ftbProfile.setVa
-lue(fldProfileShape, recProfile, pllManholeCenterline)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  if(i < lstProfileLines.count)then\n    numX = numX + ftbLine.returnValue(fldLineShape,lstProfileLines.get(i)).returnLength\n  end\n \nend\n\nnumTotalLength = numX - 1000.0\nnumX = 1000.0\nnumY = numY + (numMinInvertElevation*10)-12-numAdjustment\n\nfor each lstFreeField in lstFreeManholeFields\n  fldFree = ftbManhole.findField(lstFreeField.get(0))\n  if(fldFree <> nil)then\n    numY = av.run(\"DCSewerDesi
-gn.Profile.ManholeDataBox.create\", {ftbProfile, ftbLine, ftbManhole, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileManholes, lstProfileLines, lstFreeField.get(1), true, lstFreeField.get(3), lstFreeField.get(4)})\n  else\n    System.echo(\"Could not find field \"+lstFreeField.get(0)+\" in manhole table.\")\n  end\nend\n\nfor each lstFreeField in lstFreeLineFields\n  fldFree = ftbLine.findField(lstFreeField.get(0))\n  if(fldFree <> nil)then\n    numY = av.run(\"DCSewerDesign.Profile.LineDataBox.create\"
-, {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3), lstFreeField.get(4)})\n  else\n    System.echo(\"Could not find field \"+lstFreeField.get(0)+\" in line table.\")\n  end\nend\n\nfor each lstFreeField in lstFreeCumulativeLineFields\n  fldFree = ftbLine.findField(lstFreeField.get(0))\n  if(fldFree <> nil)then\n    numY = av.run(\"DCSewerDesign.Profile.CumulativeLineDataBox.create\", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldF
-ree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3), lstFreeField.get(4)})\n  else\n    System.echo(\"Could not find field \"+lstFreeField.get(0)+\" in line table.\")\n  end\nend\n \n' draw bounding box\n\nnumBoundingBoxTop = 1000 + (numMinInvertElevation*10)-8-numAdjustment  \npntBoundingBoxOrigin = Point.make(1000-60, numY)\npntBoundingBoxSize = Point.make(numTotalLength+60+20, numBoundingBoxTop-numY-4)\npllBoundingBox = Rect.make(pntBoundingBoxOrigin, pntBoundingBoxSize).asPolygon.asPolyl
-ine\nrecProfile = ftbProfile.addRecord\nftbProfile.setValue(fldProfileShape, recProfile, pllBoundingBox)\nftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n\n' draw datum lines if necessary\nif((intDatumInterval.asString <> \"nil\")and(numMinInvertElevation < numMaxGroundElevation))then\n  numFirstDatumLine = ((numMinInvertElevation/intDatumInterval).truncate)*intDatumInterval\n  numLastDatumLine = (((numMaxGroundElevation/intDatumInterval).truncate)*intDatumInterval)+intDatumInterval\n  for each numDatumLine 
-in numFirstDatumLine..numLastDatumLine by intDatumInterval\n    ' The next line should use numY instead of 1000\n    pllDatum = Polyline.make({{1000@((numDatumLine*10)+1000), (1000+numTotalLength)@((numDatumLine*10)+1000)}})\n    recDatum = ftbProfile.addRecord\n    ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)\n    ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  \n    ' Datum Label\n    pntIDLocation = Point.make(999, (numDatumLine*10)+1000)\n    gtxIDLabel = GraphicText.make(numDatumLine.a
-sString, pntIDLocation)\n'      gtxIDLabel.setAngle(90)\n      viewProfile.getGraphics.add(gtxIDLabel)\n      tpsID = TextPositioner.make(Point)\n      tpsID.SetHAlign(#TEXTPOSITIONER_HALIGN_LEFT)\n      tpsID.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n      tpsID.Calculate(pntIDLocation, gtxIDLabel.GetExtent, 1, nil)\n      gtxIDLabel.SetOrigin(tpsID.GetOrigin)\n      for each symText in gtxIDLabel.returnSymbols\n        viewProfile.getDisplay.hookupSymbol(symText)\n      end\n  end \n  ' draw side lines\n  pllDatum = Polyl
-ine.make({{1000@((numFirstDatumLine*10)+1000), (1000)@((numLastDatumLine*10)+1000)}})\n  recDatum = ftbProfile.addRecord\n  ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  pllDatum = Polyline.make({{(1000+numTotalLength)@((numFirstDatumLine*10)+1000), (1000+numTotalLength)@((numLastDatumLine*10)+1000)}})\n  recDatum = ftbProfile.addRecord\n  ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)\n  ftbProfile.setValue(fldProfileStyle, recP
-rofile, \"normal\")\nend\n\nftbProfile.setEditable(false)\nthmProfile = FTheme.make(ftbProfile)\nviewProfile.addTheme(thmProfile)\nlgdProfile = thmProfile.getLegend\nlgdProfile.setLegendType(#LEGEND_TYPE_UNIQUE)\nlgdProfile.unique(thmProfile, \"style\")\nfor each symUnique in lgdProfile.getSymbols\n  symUnique.setColor(Color.getBlack)\nend\nlgdProfile.getSymbols.get(0).setSize(1)\nthmProfile.updateLegend\n\n' Add manholes with given legend if \"Manhole.Legend\" was given in configuration file\nif(strManholeLegend <> nil)then\n  a
-v.run(\"DCSewerDesign.ComplexProfile.addManholeLegend\", {viewProfile, ftbManhole, strManholeLegend, lstProfileManholes, fldManholeInvertLevel, ftbLine, lstProfileLines})\nend\n\nav.clearStatus\nthmProfile.setVisible(true) \nrctExtent = viewProfile.returnExtent\nviewProfile.getDisplay.setExtent(rctExtent.Scale(1.1))\n\nav.getProject.setModified(true)  "
-	SearchStr:	".get"
+tFreeField.get(0))then\n        lstFieldTokens = strTableFieldName.asTokens(\"@\")\n        if(lstFieldTokens.count = 6)then\n          strJustificationToken = lstFieldTokens.get(4)\n          intJustification = #TEXTCOMPOSER_JUST_LEFT\n          if(strJustificationToken = \"center\")then\n            intJustification = #TEXTCOMPOSER_JUST_CENTER\n          elseif(strJustificationToken = \"right\")then\n            intJustification = #TEXTCOMPOSER_JUST_RIGHT\n          end\n          lstFree = {lstFieldTokens.get(0),lstFiel
+dTokens.get(1).asNumber,\n            lstConfTokens.get(1).asTokens(\"@\").get(2), lstFieldTokens.get(3).asNumber, intJustification.clone, lstFieldTokens.get(5).asNumber}\n          lstFreeField.get(1).add(lstFree)      \n        end\n      end \n    end\n  end\n  strLine = lnfConfiguration.readElt\nend\nlnfConfiguration.close\n\n' Check configuration\nif(fldManholeID = nil)then\n  MsgBox.error(\"Error: Field Manhole.ID was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldManholeDiameter = nil)then\n  MsgBox.error(\"Error: Fi
+eld Manhole.Diameter was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldManholeInvertLevel = nil)then\n  MsgBox.error(\"Error: Field Manhole.InvertLevel was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldManholeElevation = nil)then\n  MsgBox.error(\"Error: Field Manhole.Elevation was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldLineID = nil)then\n  MsgBox.error(\"Error: Field Line.ID was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldLineDiameter = nil)then\n  MsgBox.error(\"Error: Field Line.Diameter was not
+ found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldLineUpstreamInvert = nil)then\n  MsgBox.error(\"Error: Field Line.UpstreamInvert was not found.\",\"DC Sewer Design\")\n  exit\nend\nif(fldLineDownstreamInvert = nil)then\n  MsgBox.error(\"Error: Field Line.DownstreamInvert was not found.\",\"DC Sewer Design\")\n  exit\nend\n\nfldManholeShape = ftbManhole.findField(\"Shape\")\nfldLineShape = ftbLine.findField(\"Shape\")\n\nflnProfile = av.getProject.getWorkDir.makeTmp(\"profile\",\"shp\")\nftbProfile = FTab.makeNew(flnProfile,PolyLine)\n\nftbP
+rofile.setEditable(true)\nfldProfileShape = ftbProfile.findField(\"Shape\")\nftbProfile.addFields({Field.make(\"id\", #FIELD_DECIMAL, 4, 0),\n  Field.make(\"style\",#FIELD_CHAR,16,0),\n  Field.make(\"dc_id\", #FIELD_CHAR, 16, 0)})\nfldProfileStyle = ftbProfile.findField(\"style\")\nfldProfileDcId = ftbProfile.findField(\"dc_id\")\n\npntManhole = ftbManhole.returnValue(fldManholeShape, lstProfileManholes.get(0))\npllLine = ftbLine.returnValue(fldLineShape, lstProfileLines.get(0))\nif(pntManhole.distance(pllLine.along(0)) > 0.1)th
+en\n   lstProfileManholes = av.run(\"DCSewerDesign.List.flip\", lstProfileManholes)\n   lstProfileLines = av.run(\"DCSewerDesign.List.flip\", lstProfileLines)\nend\n\n' create the profile view\nstrFirstManhole = ftbManhole.returnValue(fldManholeID, lstProfileManholes.get(0)).asString\nstrLastManhole = ftbManhole.returnValue(fldManholeID, lstProfileManholes.get(lstProfileManholes.count-1)).asString\nstrViewName = \"Profile\"++strFirstManhole++\"-\"++strLastManhole\nlstViews = av.getProject.getDocsWithGUI(av.findGUI(\"View\"))\n
+for each viewCheck in lstViews\n  if(viewCheck.getName = strViewName)then\n    blnOverwrite = MsgBox.yesNo(\"A view named'\"+strViewName+\"' already exists.\"+NL+\"Overwrite it?\", \"DC Sewer Design\", true)\n    if(blnOverwrite)then\n      av.getProject.removeDoc(av.getProject.findDoc(strViewName))      \n    else\n      exit\n    end\n  end\nend\nviewProfile = View.make\nviewProfile.setName(strViewName)\nviewProfile.getWin.activate\n\nviewProfile.setUnits(#UNITS_LINEAR_METERS)\nviewProfile.getDisplay.setDistanceUnits(#UNITS_LIN
+EAR_METERS)\nviewProfile.getDisplay.zoomToScale(1000)\n\n' draw manholes\n\nnumX = 1000.0\nnumY = 1000.0\nfor each i in 0..(lstProfileManholes.count-1)\n  recProfile = ftbProfile.addRecord\n  recManhole = lstProfileManholes.get(i)\n  numDiameter = ftbManhole.returnValue(fldManholeDiameter, recManhole)\n  numInvertLevel = ftbManhole.returnValue(fldManholeInvertLevel, recManhole)\n  numElevation = ftbManhole.returnValue(fldManholeElevation, recManhole)\n  pntLowerLeft = Point.make(numX-(numDiameter/2000), numY+(numInvertL
+evel*10))\n  pntUpperLeft = Point.make(numX-(numDiameter/2000), numY+(numElevation*10))\n  pntUpperRight = Point.make(numX+(numDiameter/2000), numY+(numElevation*10))\n  pntLowerRight = Point.make(numX+(numDiameter/2000), numY+(numInvertLevel*10))\n  pllManhole = Polyline.make({{pntLowerLeft,pntUpperLeft,pntUpperRight, pntLowerRight, pntLowerLeft}})\n  ftbProfile.setValue(fldProfileShape, recProfile, pllManhole)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n      \n  ' Draw connecting lines\n  if((i <
+> 0)and(i<>(lstProfileManholes.count-1)))then\n    pntManhole = ftbManhole.returnValue(fldManholeShape, recManhole)\n    ftbLine.selectByPoint(pntManhole, 0.001, #VTAB_SELTYPE_NEW)\n    lstConnected = List.make\n    for each recLine in ftbLine.getSelection\n      if(lstProfileLines.findByValue(recLine) = (-1))then\n        numLineInvert = ftbLine.returnValue(fldLineDownstreamInvert, recLine)\n        numLineDiameter = ftbLine.returnValue(fldLineDiameter, recLine)\n        blnAdded = false\n        for each lstConnec
+tion in lstConnected\n          if((numLineDiameter = lstConnection.get(1) and (numLineInvert = lstConnection.get(2))))then\n            lstConnection.set(0, lstConnection.get(0)+1)\n            blnAdded = true\n          end\n        end\n        if(blnAdded = false)then\n          lstConnected.add({1,numLineDiameter,numLineInvert})\n        end\n        shpCircle = Circle.make(Point.make(numX, numY+(numLineInvert*10)+(numLineDiameter/200)), numLineDiameter/200)\n        plgnCircle = shpCircle.asPolygon\n        pllC
+ircle = plgnCircle.asPolyline\n        recCircle = ftbProfile.addRecord\n        ftbProfile.setValue(fldProfileShape, recCircle, pllCircle)\n        ftbProfile.setValue(fldProfileStyle, recCircle, \"normal\")\n      end\n    end\n    numHeight = 0\n    for each lstConnection in lstConnected\n      numConnections = lstConnection.get(0)\n      numLineDiameter = lstConnection.get(1)\n      numLineInvert = lstConnection.get(2)\n      pntConnection = Point.make(numX, numY+(numLineInvert*10)+(numLineDiameter/100))\n      pllMa
+rk = Line.make(pntConnection, pntConnection.clone.move(0, 35)).asPolyLine\n      pllMark = pllMark.returnUnion(Line.make(pntConnection, pntConnection.clone.move(-3, 4)).asPolyLine)\n      pllMark = pllMark.returnUnion(Line.make(pntConnection, pntConnection.clone.move(3, 4)).asPolyLine)\n      recProfile = ftbProfile.addRecord\n      ftbProfile.setValue(fldProfileShape, recProfile, pllMark)\n      ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n      pntIDLocation = Point.make(numX, numY+10+(numElevati
+on*10)+numHeight)\n      numPosition = numX\n      strConnectionText = \"DN \"+numLineDiameter.asString+NL+numLineInvert.asString\n      if(numConnections <> 1)then\n        strConnectionText = numConnections.asString++strConnectionText\n      end\n      gtxIDLabel = GraphicText.make(strConnectionText, pntIDLocation)\n      gtxIDLabel.setAngle(90)\n      viewProfile.getGraphics.add(gtxIDLabel)\n      tpsID = TextPositioner.make(Point)\n      tpsID.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n      tpsID.SetVAlign(#TEXTPOSI
+TIONER_VALIGN_TOP)\n      tpsID.Calculate(pntIDLocation, gtxIDLabel.GetExtent, 1, nil)\n      numHeight = numHeight + gtxIDLabel.getExtent.getY + 3\n      gtxIDLabel.SetOrigin(tpsID.GetOrigin)\n      for each symText in gtxIDLabel.returnSymbols\n        viewProfile.getDisplay.hookupSymbol(symText)\n      end\n    end\n  end\n  \n  if(i < lstProfileLines.count)then\n    numX = numX + ftbLine.returnValue(fldLineShape,lstProfileLines.get(i)).returnLength\n  end\nend\n\n' draw lines\n\nnumMinInvertElevation = 9999\nnumMaxGroundE
+levation = -9999\n\nnumX = 1000.0\nfor each i in 0..(lstProfileLines.count-1)\n  recProfile = ftbProfile.addRecord\n  recLine = lstProfileLines.get(i)\n  recUpstreamManhole = lstProfileManholes.get(i)\n  recDownstreamManhole = lstProfileManholes.get(i+1)\n  numLineDiameter = ftbLine.returnValue(fldLineDiameter, recLine)\n  numUpstreamManholeDiameter = ftbManhole.returnValue(fldManholeDiameter, recUpstreamManhole)\n  numDownstreamManholeDiameter = ftbManhole.returnValue(fldManholeDiameter, recDownstreamManhole)\n  ' Fl
+ip line if necessary\n  pllLine = ftbLine.returnValue(fldLineShape, recLine)\n  pntUpstreamManhole = ftbManhole.returnValue(fldManholeShape, recUpstreamManhole)\n  pntDownstreamManhole = ftbManhole.returnValue(fldManholeShape, recDownstreamManhole)\n  pntFirstNode = pllLine.along(0)\n  if(pntFirstNode.distance(pntUpstreamManhole) < pntFirstNode.distance(pntDownstreamManhole))then\n    numUpstreamInvertLevel = ftbLine.returnValue(fldLineUpstreamInvert, recLine)\n    numDownstreamInvertLevel = ftbLine.returnValue(fl
+dLineDownstreamInvert, recLine)\n  else\n    numUpstreamInvertLevel = ftbLine.returnValue(fldLineDownstreamInvert, recLine)\n    numDownstreamInvertLevel = ftbLine.returnValue(fldLineUpstreamInvert, recLine)\n  end\n  numMinInvertElevation = numMinInvertElevation.min(numUpstreamInvertLevel.min(numDownstreamInvertLevel)).clone\n\n  numLineLength = pllLine.returnLength\n  pntUpstreamInvert = Point.make(numX+(numUpstreamManholeDiameter/2000), numY+(numUpstreamInvertLevel*10))\n  pntDownstreamInvert=Point.make(numX+numL
+ineLength-(numDownstreamManholeDiameter/2000), numY+(numDownstreamInvertLevel*10))\n  pllInvert = Polyline.make({{pntUpstreamInvert, pntDownstreamInvert}})\n  ftbProfile.setValue(fldProfileShape, recProfile, pllInvert)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n\n  recProfile = ftbProfile.addRecord\n  pntUpstreamUpperLevel = pntUpstreamInvert+Point.make(0,numLineDiameter/100)\n  pntDownstreamUpperLevel = pntDownstreamInvert+Point.make(0,numLineDiameter/100)\n  pllUpper = Polyline.make({{pntUpstrea
+mUpperLevel, pntDownstreamUpperLevel}})\n  ftbProfile.setValue(fldProfileShape, recProfile, pllUpper)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n\n  recProfile = ftbProfile.addRecord\n  numUpstreamElevation = ftbManhole.returnValue(fldManholeElevation, recUpstreamManhole)\n  numDownstreamElevation = ftbManhole.returnValue(fldManholeElevation, recDownstreamManhole)\n  numMaxGroundElevation = numMaxGroundElevation.max(numUpstreamElevation.max(numDownstreamElevation)).clone\n  pntUpstreamElevation = 
+Point.make(numX+(numUpstreamManholeDiameter/2000), numY+(numUpstreamElevation*10))\n  pntDownstreamElevation = Point.make(numX+numLineLength-(numDownstreamManholeDiameter/2000), numY+(numDownstreamElevation*10))\n  pllElevation = Polyline.make({{pntUpstreamElevation, pntDownstreamElevation}})\n  ftbProfile.setValue(fldProfileShape, recProfile, pllElevation)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n  strDcId = ftbLine.returnValue(fldLineDcId, recLine)\n  ftbProfile.setValue(fldProfileDcId, recP
+rofile, strDcId)\n  \n  numX = numX + numLineLength\nend\n\n' Draw manhole center lines\nnumX = 1000.0\nfor each i in 0..(lstProfileManholes.count-1)\n  recManhole = lstProfileManholes.get(i)\n  numElevation = ftbManhole.returnValue(fldManholeElevation, recManhole)\n  recProfile = ftbProfile.addRecord\n  pntCenterlineStart = Point.make(numX, numY+(numElevation*10))\n  pntCenterlineEnd = Point.make(numX, numY+(numMinInvertElevation*10)-12-numAdjustment)\n  pllManholeCenterline = Polyline.make({{pntCenterlineStart, pntCen
+terlineEnd}})\n  ftbProfile.setValue(fldProfileShape, recProfile, pllManholeCenterline)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  if(i < lstProfileLines.count)then\n    numX = numX + ftbLine.returnValue(fldLineShape,lstProfileLines.get(i)).returnLength\n  end\n \nend\n\nnumTotalLength = numX - 1000.0\nnumX = 1000.0\nnumY = numY + (numMinInvertElevation*10)-12-numAdjustment\n\nfor each lstFreeField in lstFreeManholeFields\n  fldFree = ftbManhole.findField(lstFreeField.get(0))\n  if(fldFree <> nil)the
+n\n    numY = av.run(\"DCSewerDesign.Profile.ManholeDataBox.create\", {ftbProfile, ftbLine, ftbManhole, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileManholes, lstProfileLines, lstFreeField.get(1), true, lstFreeField.get(3), lstFreeField.get(4), lstFreeField.get(5)})\n  else\n    System.echo(\"Could not find field \"+lstFreeField.get(0)+\" in manhole table.\")\n  end\nend\n\nfor each lstFreeField in lstFreeLineFields\n  fldFree = ftbLine.findField(lstFreeField.get(0))\n  if(fldFree <> nil)then\n    num
+Y = av.run(\"DCSewerDesign.Profile.LineDataBox.create\", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3), lstFreeField.get(4), lstFreeField.get(5)})\n  else\n    System.echo(\"Could not find field \"+lstFreeField.get(0)+\" in line table.\")\n  end\nend\n\nfor each lstFreeField in lstFreeCumulativeLineFields\n  fldFree = ftbLine.findField(lstFreeField.get(0))\n  if(fldFree <> nil)then\n    numY = av.run(\"DCSewerDesign.Profile.Cumulative
+LineDataBox.create\", {ftbProfile, ftbLine, viewProfile, 1000.0, numY, fldFree, lstFreeField.get(2), lstProfileLines, lstFreeField.get(1),lstFreeField.get(3), lstFreeField.get(4), lstFreeField.get(5)})\n  else\n    System.echo(\"Could not find field \"+lstFreeField.get(0)+\" in line table.\")\n  end\nend\n \n' draw bounding box\n\nnumBoundingBoxTop = 1000 + (numMinInvertElevation*10)-8-numAdjustment  \npntBoundingBoxOrigin = Point.make(1000-60, numY)\npntBoundingBoxSize = Point.make(numTotalLength+60+20, numBoundingBoxTop
+-numY-4)\npllBoundingBox = Rect.make(pntBoundingBoxOrigin, pntBoundingBoxSize).asPolygon.asPolyline\nrecProfile = ftbProfile.addRecord\nftbProfile.setValue(fldProfileShape, recProfile, pllBoundingBox)\nftbProfile.setValue(fldProfileStyle, recProfile, \"bold\")\n\n' draw datum lines if necessary\nif((intDatumInterval.asString <> \"nil\")and(numMinInvertElevation < numMaxGroundElevation))then\n  numFirstDatumLine = ((numMinInvertElevation/intDatumInterval).truncate)*intDatumInterval\n  numLastDatumLine = (((numMaxGroundEl
+evation/intDatumInterval).truncate)*intDatumInterval)+intDatumInterval\n  for each numDatumLine in numFirstDatumLine..numLastDatumLine by intDatumInterval\n    ' The next line should use numY instead of 1000\n    pllDatum = Polyline.make({{1000@((numDatumLine*10)+1000), (1000+numTotalLength)@((numDatumLine*10)+1000)}})\n    recDatum = ftbProfile.addRecord\n    ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)\n    ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  \n    ' Datum Label\n    pntIDLoca
+tion = Point.make(999, (numDatumLine*10)+1000)\n    gtxIDLabel = GraphicText.make(numDatumLine.asString, pntIDLocation)\n'      gtxIDLabel.setAngle(90)\n      viewProfile.getGraphics.add(gtxIDLabel)\n      tpsID = TextPositioner.make(Point)\n      tpsID.SetHAlign(#TEXTPOSITIONER_HALIGN_LEFT)\n      tpsID.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n      tpsID.Calculate(pntIDLocation, gtxIDLabel.GetExtent, 1, nil)\n      gtxIDLabel.SetOrigin(tpsID.GetOrigin)\n      for each symText in gtxIDLabel.returnSymbols\n        viewP
+rofile.getDisplay.hookupSymbol(symText)\n      end\n  end \n  ' draw side lines\n  pllDatum = Polyline.make({{1000@((numFirstDatumLine*10)+1000), (1000)@((numLastDatumLine*10)+1000)}})\n  recDatum = ftbProfile.addRecord\n  ftbProfile.setValue(fldProfileShape, recDatum, pllDatum)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  pllDatum = Polyline.make({{(1000+numTotalLength)@((numFirstDatumLine*10)+1000), (1000+numTotalLength)@((numLastDatumLine*10)+1000)}})\n  recDatum = ftbProfile.addRecord\n  ftbPr
+ofile.setValue(fldProfileShape, recDatum, pllDatum)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\nend\n\nftbProfile.setEditable(false)\nthmProfile = FTheme.make(ftbProfile)\nviewProfile.addTheme(thmProfile)\nlgdProfile = thmProfile.getLegend\nlgdProfile.setLegendType(#LEGEND_TYPE_UNIQUE)\nlgdProfile.unique(thmProfile, \"style\")\nfor each symUnique in lgdProfile.getSymbols\n  symUnique.setColor(Color.getBlack)\nend\nlgdProfile.getSymbols.get(0).setSize(1)\nthmProfile.updateLegend\n\n' Add manholes with given
+ legend if \"Manhole.Legend\" was given in configuration file\nif(strManholeLegend <> nil)then\n  av.run(\"DCSewerDesign.ComplexProfile.addManholeLegend\", {viewProfile, ftbManhole, strManholeLegend, lstProfileManholes, fldManholeInvertLevel, ftbLine, lstProfileLines})\nend\n\nav.clearStatus\nthmProfile.setVisible(true) \nrctExtent = viewProfile.returnExtent\nviewProfile.getDisplay.setExtent(rctExtent.Scale(1.1))\n\nav.getProject.setModified(true)  "
+	SearchStr:	"lstFree"
 	FontSize:	1
 )
 
 (DocWin.31
 	Owner:	30
-	X:	-4
-	Y:	-4
-	W:	1682
+	Open:	1
+	W:	761
 	H:	903
 )
 
@@ -1181,19 +1181,19 @@ etFTab\n  if(ftbTheme <> nil)then\n    if(ftbTheme.getShapeClass.getClassName = 
 	Win:	135
 	CSMgr:	136
 	DocExts:	137
-	Source:	"' DCSewerDesign.Profile.CumulativeLineDataBox.create\n\n' arguments: Profile FTab, Line FTab, active View, X-Coordinate, \n'            Y-Coordinate, Data Fieldname, Label String, Line Record List,\n'            Int Precision, Int Height\n\n' returns the new Y-Coordinate\n\n' (c) 2000 - 2004 DORSCH Consult\n\n' Parameter\nif(self.count <> 11)then\n  System.echo(\"DCSewerDesign.Profile.CumulativeLineDataBox.create: ERROR: Expected 11 arguments\")\n  exit\nend\nftbProfile = self.get(0)\nftbLine = self.get(1)\nviewActive = self.
-get(2)\nnumX = self.get(3)\nnumY = self.get(4)\nfldData = self.get(5)\nstrLabel = self.get(6)\nlstLineRecords = self.get(7)\nnumPrecision = self.get(8)\nnumHeight = self.get(9)\nnumJustification = self.get(10)\n\nnumI = 0\nfor each objArgument in self\n  if(objArgument.asString=\"nil\")then\n    System.echo(\"DCSewerDesign.ProfileCumulativeLineDataBox.create: Argument\"++numI.asString++\"=nil\")\n  end\n  numI = numI+1\nend\n\nstrFormat = \"dd\"\nif(numPrecision > 0)then\n  strFormat = \"d.\"\n  for each i in 1..numPrecision\n     strForm
-at = strFormat+\"d\"\n  end\nend\n\nfldProfileShape = ftbProfile.findField(\"Shape\")\nfldLineShape = ftbLine.findField(\"Shape\")\nfldProfileStyle = ftbProfile.findField(\"style\")\n\n' label the box\n\ngtxLabel = GraphicText.make(strLabel,Point.make(0,0))\nviewActive.getGraphics.add(gtxLabel)\n'numHeight = gtxLabel.getExtent.getY+1\ntpsLabel = TextPositioner.make(Point)\ntpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\ntpsLabel.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\npntLabelLocation = Point.make(numX-58, numY-(numHeight/2)+1)\ntp
-sLabel.calculate(pntLabelLocation, gtxLabel.GetExtent, 1, nil)\ngtxLabel.SetOrigin(tpsLabel.GetOrigin)\nfor each symText in gtxLabel.returnSymbols\n  viewActive.getDisplay.hookupSymbol(symText)\nend\n\nrecProfile = ftbProfile.addRecord\npntVerticalLineStart = Point.make(numX, numY)\npntVerticalLineEnd = Point.make(numX, numY-numHeight)\npllVerticalLine = Polyline.make({{pntVerticalLineStart, pntVerticalLineEnd}})\nftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\nftbProfile.setValue(fldProfileStyle, r
-ecProfile, \"normal\")\n\nstrPreviousText = \" \"\nnumCumulativeLength = 0\n\n' draw data texts\nnumWidth = 0\nfor each i in 0..(lstLineRecords.count-1)\n  recLine = lstLineRecords.get(i)\n  numLength = ftbLine.returnValue(fldLineShape, recLine).returnLength\n  if(fldData.isTypeShape)then\n    strText = ftbLine.returnValue(fldData, recLine).returnLength.setFormat(strFormat).asString\n  else\n    strText = ftbLine.returnValue(fldData, recLine)\n    if(strText.is(Number))then\n      strText = strText.setFormat(strFormat).asStri
-ng\n    end\n  end\n  if((strText = nil)or(strText=\"\"))then\n    strText = \" \"\n  end\n  if((strText <> strPreviousText) and(i<>0))then\n    pntTextLocation = Point.make(numX+numWidth-(numCumulativeLength/2),numY-(numHeight/2)+1)\n    if(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      pntTextLocation = Point.make(numX,numY-(numHeight/2)+1)\n    end\n    gtxText = GraphicText.make(st
-rPreviousText, pntTextLocation)\n    viewActive.getGraphics.add(gtxText)\n    tpsText = TextPositioner.make(Point)\n    tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n    if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      tpsTex
-t.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)\n    end\n    tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)\n    gtxText.setOrigin(tpsText.getOrigin)\n    for each symText in gtxText.returnSymbols\n      viewActive.getDisplay.hookupSymbol(symText)\n    end\n    recProfile = ftbProfile.addRecord\n    pllVerticalLine.move(numCumulativeLength, 0)\n    ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\n    ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n    numCumulativeLength = 0\n  en
-d\n  numWidth = numWidth + numLength\n  numCumulativeLength = numCumulativeLength + numLength\n  strPreviousText = strText\nend\n\nif(strPreviousText <> \" \")then\n  pntTextLocation = Point.make(numX+numWidth-(numCumulativeLength/2),numY-(numHeight/2)+1)\n    if(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      pntTextLocation = Point.make(numX,numY-(numHeight/2)+1)\n    end\n\n    gtxT
-ext = GraphicText.make(strPreviousText, pntTextLocation)\n    viewActive.getGraphics.add(gtxText)\n    tpsText = TextPositioner.make(Point)\n    tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n     if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\n    elseif(numJustification = #TEXTCOMPOSER_JU
-ST_RIGHT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)\n    end\n    tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)\n    gtxText.setOrigin(tpsText.getOrigin)\n    for each symText in gtxText.returnSymbols\n      viewActive.getDisplay.hookupSymbol(symText)\n    end\nend\n\n'draw the box\npntBoxOrigin = Point.make(numX-60, numY-numHeight)\npntBoxSize = Point.make(numWidth+60+20, numHeight)\npllFrame = Rect.make(pntBoxOrigin, pntBoxSize).asPolygon.asPolyline\nrecProfile = ftbProfile.addRecord\nftb
-Profile.setValue(fldProfileShape, recProfile, pllFrame)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\nreturn numY-numHeight\n"
-	SearchStr:	"isTypeShape"
+	Source:	"' DCSewerDesign.Profile.CumulativeLineDataBox.create\n\n' arguments: Profile FTab, Line FTab, active View, X-Coordinate, \n'            Y-Coordinate, Data Fieldname, Label String, Line Record List,\n'            Int Precision, Int Height, int Angle\n\n' returns the new Y-Coordinate\n\n' (c) 2000 - 2004 DORSCH Consult\n' Copyright (c) 2006 DC Water and Environment\n\n' Parameter\nif(self.count <> 12)then\n  System.echo(\"DCSewerDesign.Profile.CumulativeLineDataBox.create: ERROR: Expected 12 arguments\")\n  exit\nend\nftbProfi
+le = self.get(0)\nftbLine = self.get(1)\nviewActive = self.get(2)\nnumX = self.get(3)\nnumY = self.get(4)\nfldData = self.get(5)\nstrLabel = self.get(6)\nlstLineRecords = self.get(7)\nnumPrecision = self.get(8)\nnumHeight = self.get(9)\nnumJustification = self.get(10)\nnumAngle = self.get(11)\n\nnumI = 0\nfor each objArgument in self\n  if(objArgument.asString=\"nil\")then\n    System.echo(\"DCSewerDesign.ProfileCumulativeLineDataBox.create: Argument\"++numI.asString++\"=nil\")\n  end\n  numI = numI+1\nend\n\nstrFormat = \"dd\"\nif(numP
+recision > 0)then\n  strFormat = \"d.\"\n  for each i in 1..numPrecision\n     strFormat = strFormat+\"d\"\n  end\nend\n\nfldProfileShape = ftbProfile.findField(\"Shape\")\nfldLineShape = ftbLine.findField(\"Shape\")\nfldProfileStyle = ftbProfile.findField(\"style\")\n\n' label the box\n\ngtxLabel = GraphicText.make(strLabel,Point.make(0,0))\nviewActive.getGraphics.add(gtxLabel)\n'numHeight = gtxLabel.getExtent.getY+1\ntpsLabel = TextPositioner.make(Point)\ntpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\ntpsLabel.SetVAlign(#TEXTPOSI
+TIONER_VALIGN_ON)\npntLabelLocation = Point.make(numX-58, numY-(numHeight/2)+1)\ntpsLabel.calculate(pntLabelLocation, gtxLabel.GetExtent, 1, nil)\ngtxLabel.SetOrigin(tpsLabel.GetOrigin)\nfor each symText in gtxLabel.returnSymbols\n  viewActive.getDisplay.hookupSymbol(symText)\nend\n\nrecProfile = ftbProfile.addRecord\npntVerticalLineStart = Point.make(numX, numY)\npntVerticalLineEnd = Point.make(numX, numY-numHeight)\npllVerticalLine = Polyline.make({{pntVerticalLineStart, pntVerticalLineEnd}})\nftbProfile.setValue(fld
+ProfileShape, recProfile, pllVerticalLine)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\nstrPreviousText = \" \"\nnumCumulativeLength = 0\n\n' draw data texts\nnumWidth = 0\nfor each i in 0..(lstLineRecords.count-1)\n  recLine = lstLineRecords.get(i)\n  numLength = ftbLine.returnValue(fldLineShape, recLine).returnLength\n  if(fldData.isTypeShape)then\n    strText = ftbLine.returnValue(fldData, recLine).returnLength.setFormat(strFormat).asString\n  else\n    strText = ftbLine.returnValue(fldData, recLine)\n 
+   if(strText.is(Number))then\n      strText = strText.setFormat(strFormat).asString\n    end\n  end\n  if((strText = nil)or(strText=\"\"))then\n    strText = \" \"\n  end\n  if((strText <> strPreviousText) and(i<>0))then\n    pntTextLocation = Point.make(numX+numWidth-(numCumulativeLength/2),numY-(numHeight/2)+1)\n    if(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      pntTextLocation 
+= Point.make(numX,numY-(numHeight/2)+1)\n    end\n    gtxText = GraphicText.make(strPreviousText, pntTextLocation)\n    gtxText.setAngle(numAngle)\n    viewActive.getGraphics.add(gtxText)\n    tpsText = TextPositioner.make(Point)\n    tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n    if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      tpsText.
+setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)\n    end\n    tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)\n    gtxText.setOrigin(tpsText.getOrigin)\n    for each symText in gtxText.returnSymbols\n      viewActive.getDisplay.hookupSymbol(symText)\n    end\n    recProfile = ftbProfile.addRecord\n    pllVerticalLine.move(numCumulativeLength, 0)\n    ftbProfile.setValue(fldProfileShape, recProfile, 
+pllVerticalLine)\n    ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n    numCumulativeLength = 0\n  end\n  numWidth = numWidth + numLength\n  numCumulativeLength = numCumulativeLength + numLength\n  strPreviousText = strText\nend\n\nif(strPreviousText <> \" \")then\n  pntTextLocation = Point.make(numX+numWidth-(numCumulativeLength/2),numY-(numHeight/2)+1)\n    if(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)\n    elseif(numJustificatio
+n = #TEXTCOMPOSER_JUST_LEFT)then\n      pntTextLocation = Point.make(numX,numY-(numHeight/2)+1)\n    end\n\n    gtxText = GraphicText.make(strPreviousText, pntTextLocation)\n    gtxText.setAngle(numAngle)\n    viewActive.getGraphics.add(gtxText)\n    tpsText = TextPositioner.make(Point)\n    tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n     if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    elseif(numJu
+stification = #TEXTCOMPOSER_JUST_LEFT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)\n    end\n    tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)\n    gtxText.setOrigin(tpsText.getOrigin)\n    for each symText in gtxText.returnSymbols\n      viewActive.getDisplay.hookupSymbol(symText)\n    end\nend\n\n'draw the box\npntBoxOrigin = Point.make(numX-60, numY-numHeight)\npntBoxSize = 
+Point.make(numWidth+60+20, numHeight)\npllFrame = Rect.make(pntBoxOrigin, pntBoxSize).asPolygon.asPolyline\nrecProfile = ftbProfile.addRecord\nftbProfile.setValue(fldProfileShape, recProfile, pllFrame)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\nreturn numY-numHeight\n"
+	SearchStr:	"angle"
 	FontSize:	1
 )
 
@@ -1201,7 +1201,7 @@ Profile.setValue(fldProfileShape, recProfile, pllFrame)\nftbProfile.setValue(fld
 	Owner:	134
 	X:	-4
 	Y:	-4
-	W:	1690
+	W:	1531
 	H:	911
 )
 
@@ -1220,17 +1220,18 @@ Profile.setValue(fldProfileShape, recProfile, pllFrame)\nftbProfile.setValue(fld
 	Win:	139
 	CSMgr:	140
 	DocExts:	141
-	Source:	"' DCSewerDesign.Profile.LineDataBox.create\n\n' arguments: Profile FTab, Line FTab, active View, X-Coordinate, \n'            Y-Coordinate, Data Fieldname, Label String, Line Record List,\n'            Int Precision, Int Height\n\n' returns the new Y-Coordinate\n\n' (c) 2000 DORSCH Consult\n\n' Parameter\nif(self.count <> 11)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: ERROR: Expected 11 arguments, got \"+self.count.asString)\n  exit\nend\nftbProfile = self.get(0)\nif(ftbProfile.is(FTab).not)then\n  System.
-echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 0 is not an FTab\")\n  exit\nend\nftbLine = self.get(1)\nif(ftbLine.is(FTab).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 1 is not an FTab\")\n  exit\nend\nviewActive = self.get(2)\nif(viewActive.is(View).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 2 is not a View\")\n  exit\nend\nnumX = self.get(3)\nif(numX.is(Number).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 3 is not a Nu
-mber\")\n  exit\nend\nnumY = self.get(4)\nif(numY.is(Number).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 4 is not a Number\")\n  exit\nend\nfldData = self.get(5)\nif(fldData.is(Field).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 5 is not a Field\")\n  exit\nend\nstrLabel = self.get(6)\nif(strLabel.is(String).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 6 is not a String\")\n  exit\nend\nlstLineRecords = self.get(7)\nif(lstLineRecords.is(
-List).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 7 is not a Number\")\n  exit\nend\nnumPrecision = self.get(8)\nif(numPrecision.is(Number).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 8 is not a Number\")\n  exit\nend\nnumHeight = self.get(9)\nif(numHeight.is(Number).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 9 is not a Number\")\nend\nnumJustification = self.get(10)\nif(numJustification.is(EnumerationElt).not)then\n  System.echo
-(\"DCSewerDesign.Profile.LineDataBox.create: Argument 10 is not a EnumerationElt but a \"+numJustification.getClass.getClassName)\nend\n\nstrFormat = \"dd\"\nif(numPrecision > 0)then\n  strFormat = \"d.\"\n  for each i in 1..numPrecision\n     strFormat = strFormat+\"d\"\n  end\nend\n\nfldProfileShape = ftbProfile.findField(\"Shape\")\nfldLineShape = ftbLine.findField(\"Shape\")\nfldProfileStyle = ftbProfile.findField(\"style\")\n\n' label the box\n\ngtxLabel = GraphicText.make(strLabel,Point.make(0,0))\nviewActive.getGraphics.add(gtxLabe
-l)\n'numHeight = gtxLabel.getExtent.getY+1\ntpsLabel = TextPositioner.make(Point)\ntpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\ntpsLabel.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\npntLabelLocation = Point.make(numX-58, numY-(numHeight/2)+1)\ntpsLabel.calculate(pntLabelLocation, gtxLabel.GetExtent, 1, nil)\ngtxLabel.SetOrigin(tpsLabel.GetOrigin)\nfor each symText in gtxLabel.returnSymbols\n  viewActive.getDisplay.hookupSymbol(symText)\nend\n\nrecProfile = ftbProfile.addRecord\npntVerticalLineStart = Point.make(numX, numY
-)\npntVerticalLineEnd = Point.make(numX, numY-numHeight)\npllVerticalLine = Polyline.make({{pntVerticalLineStart, pntVerticalLineEnd}})\nftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\n' draw data texts\nnumWidth = 0\nfor each i in 0..(lstLineRecords.count-1)\n  recLine = lstLineRecords.get(i)\n  numLength = ftbLine.returnValue(fldLineShape, recLine).returnLength\n  if(fldData.isTypeShape)then\n    strText = ftbLine.returnValue(fldData, re
-cLine).returnLength.setFormat(strFormat).asString\n  else\n    strText = ftbLine.returnValue(fldData, recLine)\n    if(strText.is(Number))then\n      strText = strText.setFormat(strFormat).asString\n    end\n  end\n  pntTextLocation = Point.make(numX+numWidth+(numLength/2), numY-(numHeight/2)+1)\n  if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n    pntTextLocation = Point.make(numX+numWidth, numY-(numHeight/2)+1)\n  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n    pntTextLocation = Point.make(numX+num
-Width+(numLength), numY-(numHeight/2)+1)\n  end\n  gtxText = GraphicText.make(strText, pntTextLocation)\n  viewActive.getGraphics.add(gtxText)\n  tpsText = TextPositioner.make(Point)\n  if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then\n    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n  elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\n  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)\n  end\n 
- tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_ON)\n  gtxText.setAlignment(numJustification)\n  tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)\n  gtxText.setOrigin(tpsText.getOrigin)\n  for each symText in gtxText.returnSymbols\n    viewActive.getDisplay.hookupSymbol(symText)\n  end\n  recProfile = ftbProfile.addRecord\n  pllVerticalLine.move(numLength, 0)\n  ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  numWidth = numWidth 
-+ numLength\nend\n\n'draw the box\npntBoxOrigin = Point.make(numX-60, numY-numHeight)\npntBoxSize = Point.make(numWidth+60+20, numHeight)\npllFrame = Rect.make(pntBoxOrigin, pntBoxSize).asPolygon.asPolyline\nrecProfile = ftbProfile.addRecord\nftbProfile.setValue(fldProfileShape, recProfile, pllFrame)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\nreturn numY-numHeight\n"
+	Source:	"' DCSewerDesign.Profile.LineDataBox.create\n\n' arguments: Profile FTab, Line FTab, active View, X-Coordinate, \n'            Y-Coordinate, Data Fieldname, Label String, Line Record List,\n'            Int Precision, Int Height, Int Angle\n\n' returns the new Y-Coordinate\n\n' (c) 2000 DORSCH Consult\n' Copyright (c) 2006 DC Water and Environment\n\n' Parameter\nif(self.count <> 12)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: ERROR: Expected 12 arguments, got \"+self.count.asString)\n  exit\nend\nftbProfil
+e = self.get(0)\nif(ftbProfile.is(FTab).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 0 is not an FTab\")\n  exit\nend\nftbLine = self.get(1)\nif(ftbLine.is(FTab).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 1 is not an FTab\")\n  exit\nend\nviewActive = self.get(2)\nif(viewActive.is(View).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 2 is not a View\")\n  exit\nend\nnumX = self.get(3)\nif(numX.is(Number).not)then\n  System.echo(\"DCSewer
+Design.Profile.LineDataBox.create: Argument 3 is not a Number\")\n  exit\nend\nnumY = self.get(4)\nif(numY.is(Number).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 4 is not a Number\")\n  exit\nend\nfldData = self.get(5)\nif(fldData.is(Field).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 5 is not a Field\")\n  exit\nend\nstrLabel = self.get(6)\nif(strLabel.is(String).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 6 is not a String\")\n  ex
+it\nend\nlstLineRecords = self.get(7)\nif(lstLineRecords.is(List).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 7 is not a Number\")\n  exit\nend\nnumPrecision = self.get(8)\nif(numPrecision.is(Number).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 8 is not a Number\")\n  exit\nend\nnumHeight = self.get(9)\nif(numHeight.is(Number).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 9 is not a Number\")\nend\nnumJustification = self.get(10)\nif(n
+umJustification.is(EnumerationElt).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 10 is not a EnumerationElt but a \"+numJustification.getClass.getClassName)\nend\nnumAngle = self.get(11)\nif(numAngle.is(Number).not)then\n  System.echo(\"DCSewerDesign.Profile.LineDataBox.create: Argument 11 is not a Number\")\nend\n\nstrFormat = \"dd\"\nif(numPrecision > 0)then\n  strFormat = \"d.\"\n  for each i in 1..numPrecision\n     strFormat = strFormat+\"d\"\n  end\nend\n\nfldProfileShape = ftbProfile.findField(\"
+Shape\")\nfldLineShape = ftbLine.findField(\"Shape\")\nfldProfileStyle = ftbProfile.findField(\"style\")\n\n' label the box\n\ngtxLabel = GraphicText.make(strLabel,Point.make(0,0))\nviewActive.getGraphics.add(gtxLabel)\n'numHeight = gtxLabel.getExtent.getY+1\ntpsLabel = TextPositioner.make(Point)\ntpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\ntpsLabel.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\npntLabelLocation = Point.make(numX-58, numY-(numHeight/2)+1)\ntpsLabel.calculate(pntLabelLocation, gtxLabel.GetExtent, 1, nil)\ngtxLabe
+l.SetOrigin(tpsLabel.GetOrigin)\nfor each symText in gtxLabel.returnSymbols\n  viewActive.getDisplay.hookupSymbol(symText)\nend\n\nrecProfile = ftbProfile.addRecord\npntVerticalLineStart = Point.make(numX, numY)\npntVerticalLineEnd = Point.make(numX, numY-numHeight)\npllVerticalLine = Polyline.make({{pntVerticalLineStart, pntVerticalLineEnd}})\nftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\n' draw data texts\nnumWidth = 0\nfor each i in 0..
+(lstLineRecords.count-1)\n  recLine = lstLineRecords.get(i)\n  numLength = ftbLine.returnValue(fldLineShape, recLine).returnLength\n  if(fldData.isTypeShape)then\n    strText = ftbLine.returnValue(fldData, recLine).returnLength.setFormat(strFormat).asString\n  else\n    strText = ftbLine.returnValue(fldData, recLine)\n    if(strText.is(Number))then\n      strText = strText.setFormat(strFormat).asString\n    end\n  end\n  pntTextLocation = Point.make(numX+numWidth+(numLength/2), numY-(numHeight/2)+1)\n  if(numJustificat
+ion = #TEXTCOMPOSER_JUST_LEFT)then\n    pntTextLocation = Point.make(numX+numWidth, numY-(numHeight/2)+1)\n  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n    pntTextLocation = Point.make(numX+numWidth+(numLength), numY-(numHeight/2)+1)\n  end\n  gtxText = GraphicText.make(strText, pntTextLocation)\n  gtxText.setAngle(numAngle)\n  viewActive.getGraphics.add(gtxText)\n  tpsText = TextPositioner.make(Point)\n  if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then\n    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_
+CENTER)\n  elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\n  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)\n  end\n  tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_ON)\n  gtxText.setAlignment(numJustification)\n  tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)\n  gtxText.setOrigin(tpsText.getOrigin)\n  for each symText in gtxText.returnSymbols\n    viewActive.getDisplay.hookupSymbol(symTex
+t)\n  end\n  recProfile = ftbProfile.addRecord\n  pllVerticalLine.move(numLength, 0)\n  ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  numWidth = numWidth + numLength\nend\n\n'draw the box\npntBoxOrigin = Point.make(numX-60, numY-numHeight)\npntBoxSize = Point.make(numWidth+60+20, numHeight)\npllFrame = Rect.make(pntBoxOrigin, pntBoxSize).asPolygon.asPolyline\nrecProfile = ftbProfile.addRecord\nftbProfile.setValue(fldProfileShape, recProf
+ile, pllFrame)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\nreturn numY-numHeight\n"
 	SearchStr:	"format"
 	FontSize:	1
 )
@@ -1239,7 +1240,7 @@ Width+(numLength), numY-(numHeight/2)+1)\n  end\n  gtxText = GraphicText.make(st
 	Owner:	138
 	X:	-4
 	Y:	-4
-	W:	1690
+	W:	1531
 	H:	911
 )
 
@@ -1317,26 +1318,27 @@ s.get(1).getFTab.isEditable)or(lstThemes.get(0).getFTab.isEditable)))then\n    b
 	Win:	151
 	CSMgr:	152
 	DocExts:	153
-	Source:	"' DCSewerDesign.Profile.ManholeDataBox.create\n\n' arguments: Profile FTab, Line FTab, Manhole FTab, active View, X-Coordinate, \n'            Y-Coordinate, Data Fieldname, Label String, Manhole\n'             Record List, Line Record List,\n'            int Precision, boolean verticalText, number Height\n' returns the new Y-Coordinate\n\n' (c) 2000 - 2004 DORSCH Consult\n\n' Parameter\nif(self.count <> 14)then\n  System.echo(\"DCSewerDesign.Profile.ManholeDataBox.create: ERROR: Expected 14 arguments\")\n  exit\nend\nftbPro
-file = self.get(0)\nftbLine = self.get(1)\nftbManhole = self.get(2)\nviewActive = self.get(3)\nnumX = self.get(4)\nnumY = self.get(5)\nfldData = self.get(6)\nstrLabel = self.get(7)\nlstManholeRecords = self.get(8)\nlstLineRecords = self.get(9)\nnumPrecision = self.get(10)\nblnVerticalText = self.get(11)\nnumHeight = self.get(12)\nnumJustification = self.get(13)\n\nfldProfileShape = ftbProfile.findField(\"Shape\")\nfldLineShape = ftbLine.findField(\"Shape\")\nfldProfileStyle = ftbProfile.findField(\"style\")\n\n' label the box\n\ngtxL
-abel = GraphicText.make(strLabel,Point.make(0,0))\nviewActive.getGraphics.add(gtxLabel)\nif(numHeight = nil)then\n  numHeight = (gtxLabel.getExtent.getY*(numPrecision))\nend\ntpsLabel = TextPositioner.make(Point)\ntpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\ntpsLabel.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\npntLabelLocation = Point.make(numX-58, numY-(numHeight/2)+1)\ntpsLabel.calculate(pntLabelLocation, gtxLabel.GetExtent, 1, nil)\ngtxLabel.SetOrigin(tpsLabel.GetOrigin)\nfor each symText in gtxLabel.returnSymbols\n 
- viewActive.getDisplay.hookupSymbol(symText)\nend\n\nrecProfile = ftbProfile.addRecord\npntVerticalLineStart = Point.make(numX, numY)\npntVerticalLineEnd = Point.make(numX, numY-numHeight)\npllVerticalLine = Polyline.make({{pntVerticalLineStart, pntVerticalLineEnd}})\n'ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\nstrFormat = \"dd\"\nif(numPrecision > 0)then\n  strFormat = \"d.\"\n  for each i in 1..numPrecision\n     strFormat = strFormat+\"d\"
-\n  end\nend\n\n' draw data texts\nnumWidth = 0\nfor each i in 0..(lstManholeRecords.count-1)\n  recManhole = lstManholeRecords.get(i)\n  if(i < lstLineRecords.count) then\n    recLine = lstLineRecords.get(i)\n  end\n  numLength = ftbLine.returnValue(fldLineShape, recLine).returnLength\n  strText = ftbManhole.returnValue(fldData, recManhole)\n  if(strText.is(Number))then\n    strText = strText.setFormat(strFormat).asString\n  end\n  if(blnVerticalText)then\n    pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2))\n
-    if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      pntTextLocation = Point.make(numX+numWidth, numY-numHeight)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      pntTextLocation = Point.make(numX+numWidth, numY)\n    end\n  else\n    pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)\n    \n  end  \n  gtxText = GraphicText.make(strText, pntTextLocation)\n  if(blnVerticalText)then\n    gtxText.setAngle(90)\n  end\n  viewActive.getGraphics.add(gtxText)\n  tpsText = TextPositioner.m
-ake(Point)\n  if(blnVerticalText)then\n    tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n    if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n      tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_TOP)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n      tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_BOTTOM)\n    end\n  else\n    tpsText.SetHAlign(#TEX
-TPOSITIONER_HALIGN_CENTER)\n    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n  end\n  tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)\n  gtxText.setOrigin(tpsText.getOrigin)\n  if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n    gtxText.setAlignment(#TEXTCOMPOSER_JUST_RIGHT)\n  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n    gtxText.setAlignment(#TEXTCOMPOSER_JUST_LEFT)\n  else\n    gtxText.setAlignment(#TEXTCOMPOSER_JUST_CENTER)\n  end\n  for each symText in gtxText.returnSymbols\n    vi
-ewActive.getDisplay.hookupSymbol(symText)\n  end\n  recProfile = ftbProfile.addRecord\n  pllVerticalLine.move(numLength, 0)\n  'ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  if(i< lstLineRecords.count)then\n    numWidth = numWidth + numLength\n  end\nend\n\n'draw the dividing line\npntLineOrigin = Point.make(numX-60, numY)\npntLineEnd = pntLineOrigin.clone.move(numWidth+60+20, 0)\npllFrame = Line.make(pntLineOrigin, pntLineEnd).asPolylin
-e\n\nrecProfile = ftbProfile.addRecord\nftbProfile.setValue(fldProfileShape, recProfile, pllFrame)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\n\nreturn numY-numHeight\n"
-	SearchStr:	"ftbLine"
+	Source:	"' DCSewerDesign.Profile.ManholeDataBox.create\n\n' arguments: Profile FTab, Line FTab, Manhole FTab, active View, X-Coordinate, \n'            Y-Coordinate, Data Fieldname, Label String, Manhole\n'             Record List, Line Record List,\n'            int Precision, boolean verticalText, number Height, number Angle\n' returns the new Y-Coordinate\n\n' (c) 2000 - 2004 DORSCH Consult\n' Copyright (c) 2006 DC Water and Environment\n\n' Parameter\nif(self.count <> 15)then\n  System.echo(\"DCSewerDesign.Profile.ManholeData
+Box.create: ERROR: Expected 15 arguments\")\n  exit\nend\nftbProfile = self.get(0)\nftbLine = self.get(1)\nftbManhole = self.get(2)\nviewActive = self.get(3)\nnumX = self.get(4)\nnumY = self.get(5)\nfldData = self.get(6)\nstrLabel = self.get(7)\nlstManholeRecords = self.get(8)\nlstLineRecords = self.get(9)\nnumPrecision = self.get(10)\nblnVerticalText = self.get(11)\nnumHeight = self.get(12)\nnumJustification = self.get(13)\nnumAngle = self.get(14)\n\nfldProfileShape = ftbProfile.findField(\"Shape\")\nfldLineShape = ftbLine.findF
+ield(\"Shape\")\nfldProfileStyle = ftbProfile.findField(\"style\")\n\n' label the box\n\ngtxLabel = GraphicText.make(strLabel,Point.make(0,0))\nviewActive.getGraphics.add(gtxLabel)\nif(numHeight = nil)then\n  numHeight = (gtxLabel.getExtent.getY*(numPrecision))\nend\ntpsLabel = TextPositioner.make(Point)\ntpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)\ntpsLabel.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\npntLabelLocation = Point.make(numX-58, numY-(numHeight/2)+1)\ntpsLabel.calculate(pntLabelLocation, gtxLabel.GetExtent, 1, nil)
+\ngtxLabel.SetOrigin(tpsLabel.GetOrigin)\nfor each symText in gtxLabel.returnSymbols\n  viewActive.getDisplay.hookupSymbol(symText)\nend\n\nrecProfile = ftbProfile.addRecord\npntVerticalLineStart = Point.make(numX, numY)\npntVerticalLineEnd = Point.make(numX, numY-numHeight)\npllVerticalLine = Polyline.make({{pntVerticalLineStart, pntVerticalLineEnd}})\n'ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\nstrFormat = \"dd\"\nif(numPrecision > 0)th
+en\n  strFormat = \"d.\"\n  for each i in 1..numPrecision\n     strFormat = strFormat+\"d\"\n  end\nend\n\n' draw data texts\nnumWidth = 0\nfor each i in 0..(lstManholeRecords.count-1)\n  recManhole = lstManholeRecords.get(i)\n  if(i < lstLineRecords.count) then\n    recLine = lstLineRecords.get(i)\n  end\n  numLength = ftbLine.returnValue(fldLineShape, recLine).returnLength\n  strText = ftbManhole.returnValue(fldData, recManhole)\n  if(strText.is(Number))then\n    strText = strText.setFormat(strFormat).asString\n  end\n  if(blnV
+erticalText)then\n    pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2))\n    if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      pntTextLocation = Point.make(numX+numWidth, numY-numHeight)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      pntTextLocation = Point.make(numX+numWidth, numY)\n    end\n  else\n    pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)\n    \n  end  \n  gtxText = GraphicText.make(strText, pntTextLocation)\n  if(blnVerticalText)then\n    gtxText.s
+etAngle(numAngle)\n  end\n  viewActive.getGraphics.add(gtxText)\n  tpsText = TextPositioner.make(Point)\n  if(blnVerticalText)then\n    tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n    if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n      tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_TOP)\n    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n      
+tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_BOTTOM)\n    end\n  else\n    tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)\n    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)\n  end\n  tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)\n  gtxText.setOrigin(tpsText.getOrigin)\n  if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then\n    gtxText.setAlignment(#TEXTCOMPOSER_JUST_RIGHT)\n  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then\n    gtxText.setAlignment(#TEXTCOMPOSER_JUST_LEFT)\n  else\n    gtxText.setAli
+gnment(#TEXTCOMPOSER_JUST_CENTER)\n  end\n  for each symText in gtxText.returnSymbols\n    viewActive.getDisplay.hookupSymbol(symText)\n  end\n  recProfile = ftbProfile.addRecord\n  pllVerticalLine.move(numLength, 0)\n  'ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)\n  ftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n  if(i< lstLineRecords.count)then\n    numWidth = numWidth + numLength\n  end\nend\n\n'draw the dividing line\npntLineOrigin = Point.make(numX-60, numY)\npntLineEnd = pntLineOrig
+in.clone.move(numWidth+60+20, 0)\npllFrame = Line.make(pntLineOrigin, pntLineEnd).asPolyline\n\nrecProfile = ftbProfile.addRecord\nftbProfile.setValue(fldProfileShape, recProfile, pllFrame)\nftbProfile.setValue(fldProfileStyle, recProfile, \"normal\")\n\n\nreturn numY-numHeight\n"
+	SearchStr:	"angle"
 	FontSize:	1
 )
 
 (DocWin.151
 	Owner:	150
-	X:	-4
-	Y:	-4
-	W:	1690
-	H:	911
+	Open:	1
+	X:	761
+	Y:	451
+	W:	761
+	H:	451
 )
 
 (CSMgr.152
@@ -1465,10 +1467,10 @@ dGUI(\"Table\").setModified(true)"
 	Win:	171
 	CSMgr:	172
 	DocExts:	173
-	Source:	"' DCSewerDesignExtension.make\n\nstrVersion = msgbox.input(\"Enter version\",\"Make DC Sewer Design Extension\",\"2.0.9+svn\")\nif (strVersion=nil)then\n  exit\nend\nnumVersion=strVersion.asTokens(\".\").get(1).asNumber\nstrFileNameVersion = strVersion.asTokens(\".\").get(0)+\"_\"+strVersion.asTokens(\".\").get(1)\n\nmyExt = Extension.Make((\"$AVEXT\\dcsewdes.avx\").AsFileName,\n              \"DC Sewer Design\",\n              av.GetProject.FindScript(\"DCSewerDesignExtension.install\"),\n              av.GetProject.FindScript(\"DCSewerDes
-ignExtension.uninstall\"),\n              {})\n\n\n'0\nmyExt.Add( av.GetProject.FindGUI(\"View\").GetMenuBar.findByLabel(\"DC Sewer\"))\n\n'1\nmyExt.Add( av.GetProject.FindGUI(\"View\").GetButtonBar.findByScript(\"DCSewerDesign.ComplexProfile.create\"))\n\n'2\nmyExt.add(av.getProject.findGUI(\"Table\").getMenuBar.findByLabel(\"DC Sewer\"))\n\n'3\nmyExt.add(av.getProject.findGUI(\"View\").getButtonBar.findByScript(\"DCSewerDesign.Profile.ConstantGradient.calculate\"))\n\n' Add to the extension the scripts that are attached to the menu items
-\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCSewerDesign\".count+1)=\"DCSewerDesign.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Sewer Design Extension \"+strVersion+NL+\"(c) 2000-2005 DORSCH Consult.\"+NL+\n\"This extension is helpful to design sewer networks\")\nmyExt.SetExtVersion(numVersion)\nmyExt.setUnloadScript(av.findScript(\"DCSewerDesignExtension.unload\"))\nmy
-Ext.setCanUnloadScript(av.findScript(\"DCSewerDesignExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcsewdes.avx\")\nWFileName = FileName.make(\"$AVEXT/dcsewdes.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n  if ( buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
+	Source:	"' DCSewerDesignExtension.make\n\nstrVersion = msgbox.input(\"Enter version\",\"Make DC Sewer Design Extension\",\"2.0.10\")\nif (strVersion=nil)then\n  exit\nend\nnumVersion=strVersion.asTokens(\".\").get(1).asNumber\nstrFileNameVersion = strVersion.asTokens(\".\").get(0)+\"_\"+strVersion.asTokens(\".\").get(1)\n\nmyExt = Extension.Make((\"$AVEXT\\dcsewdes.avx\").AsFileName,\n              \"DC Sewer Design\",\n              av.GetProject.FindScript(\"DCSewerDesignExtension.install\"),\n              av.GetProject.FindScript(\"DCSewerDesign
+Extension.uninstall\"),\n              {})\n\n\n'0\nmyExt.Add( av.GetProject.FindGUI(\"View\").GetMenuBar.findByLabel(\"DC Sewer\"))\n\n'1\nmyExt.Add( av.GetProject.FindGUI(\"View\").GetButtonBar.findByScript(\"DCSewerDesign.ComplexProfile.create\"))\n\n'2\nmyExt.add(av.getProject.findGUI(\"Table\").getMenuBar.findByLabel(\"DC Sewer\"))\n\n'3\nmyExt.add(av.getProject.findGUI(\"View\").getButtonBar.findByScript(\"DCSewerDesign.Profile.ConstantGradient.calculate\"))\n\n' Add to the extension the scripts that are attached to the menu items\n' 
+The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCSewerDesign\".count+1)=\"DCSewerDesign.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Sewer Design Extension \"+strVersion+NL+\"(c) 2000-2005 DORSCH Consult.\"+NL+\n\"This extension is helpful to design sewer networks\")\nmyExt.SetExtVersion(numVersion)\nmyExt.setUnloadScript(av.findScript(\"DCSewerDesignExtension.unload\"))\nmyExt
+.setCanUnloadScript(av.findScript(\"DCSewerDesignExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcsewdes.avx\")\nWFileName = FileName.make(\"$AVEXT/dcsewdes.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n  if ( buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
 	FontSize:	1
 )
 
@@ -1476,8 +1478,8 @@ Ext.setCanUnloadScript(av.findScript(\"DCSewerDesignExtension.canUnload\"))\nmyE
 	Owner:	170
 	X:	-4
 	Y:	-4
-	W:	1682
-	H:	903
+	W:	1531
+	H:	911
 )
 
 (CSMgr.172
@@ -1558,10 +1560,11 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 
 (DocWin.183
 	Owner:	182
+	Open:	1
 	X:	-4
 	Y:	-4
-	W:	1682
-	H:	903
+	W:	1531
+	H:	911
 )
 
 (CSMgr.184
@@ -4869,9 +4872,9 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Modified:	1
 	Visible:	1
 	MenuBar:	876
-	ButnBar:	938
-	Popups:	982
-	ToolBar:	983
+	ButnBar:	940
+	Popups:	984
+	ToolBar:	985
 	NewScript:	"Script.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Script.Action"
@@ -4879,7 +4882,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Script.ActionUpdate"
 	Title:	"Scripts"
-	Icon:	984
+	Icon:	986
 )
 
 (MenuBar.876
@@ -4887,7 +4890,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Child:	890
 	Child:	906
 	Child:	923
-	Child:	933
+	Child:	935
 )
 
 (PMenu.877
@@ -5263,6 +5266,8 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Child:	929
 	Child:	931
 	Child:	932
+	Child:	933
+	Child:	934
 	Label:	"&Window"
 )
 
@@ -5307,7 +5312,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 )
 
 (AVStr.930
-	S:	"dcsewerdesign.apr DCSewerDesign.Profile.buildLineList"
+	S:	"dcsewerdesign.apr DCSewerDesign.ComplexProfile.create DCSewerDesign.Profile.ManholeDataBox.create Script.saveAllScripts"
 )
 
 (Choice.931
@@ -5318,22 +5323,36 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 )
 
 (Choice.932
-	Help:	"Activates DCSewerDesign.Profile.buildLineList"
-	Label:	"&2 DCSewerDesign.Profile.buildLineList"
+	Help:	"Activates DCSewerDesign.ComplexProfile.create"
+	Label:	"&2 DCSewerDesign.ComplexProfile.create"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.933
-	InternalName:	"Help"
-	Child:	934
-	Child:	935
-	Child:	936
-	Child:	937
-	Label:	"&Help"
+(Choice.933
+	Help:	"Activates DCSewerDesign.Profile.ManholeDataBox.create"
+	Label:	"&3 DCSewerDesign.Profile.ManholeDataBox.create"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
 )
 
 (Choice.934
+	Help:	"Activates Script.saveAllScripts"
+	Label:	"&4 Script.saveAllScripts"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.935
+	InternalName:	"Help"
+	Child:	936
+	Child:	937
+	Child:	938
+	Child:	939
+	Label:	"&Help"
+)
+
+(Choice.936
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -5341,7 +5360,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Choice.935
+(Choice.937
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help"
@@ -5349,10 +5368,10 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Space.936
+(Space.938
 )
 
-(Choice.937
+(Choice.939
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -5360,331 +5379,329 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.938
-	Child:	939
+(ButnBar.940
 	Child:	941
-	Child:	942
+	Child:	943
 	Child:	944
 	Child:	946
 	Child:	948
-	Child:	949
+	Child:	950
 	Child:	951
-	Child:	952
+	Child:	953
 	Child:	954
 	Child:	956
-	Child:	957
+	Child:	958
 	Child:	959
 	Child:	961
 	Child:	963
 	Child:	965
 	Child:	967
-	Child:	968
+	Child:	969
 	Child:	970
 	Child:	972
 	Child:	974
-	Child:	975
+	Child:	976
 	Child:	977
 	Child:	979
-	Child:	980
+	Child:	981
+	Child:	982
 )
 
-(Butn.939
+(Butn.941
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	940
+	Icon:	942
 	Click:	"Project.Save"
 )
 
-(AVIcon.940
+(AVIcon.942
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.941
+(Space.943
 )
 
-(Butn.942
+(Butn.944
 	Disabled:	1
 	Help:	"Cut//Cuts the selection and puts it into the clipboard"
 	HelpTopic:	"Cut"
 	Update:	"Script.HasSelUpdate"
-	Icon:	943
+	Icon:	945
 	Click:	"Script.Cut"
 )
 
-(AVIcon.943
+(AVIcon.945
 	Name:	"Cut"
 	Res:	"Icons.Cut"
 
 )
 
-(Butn.944
+(Butn.946
 	Disabled:	1
 	Help:	"Copy//Copies the selection and puts it into the clipboard"
 	HelpTopic:	"Copy"
 	Update:	"Script.HasSelUpdate"
-	Icon:	945
+	Icon:	947
 	Click:	"Script.Copy"
 )
 
-(AVIcon.945
+(AVIcon.947
 	Name:	"Copy"
 	Res:	"Icons.Copy"
 
 )
 
-(Butn.946
+(Butn.948
 	Help:	"Paste//Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
-	Icon:	947
+	Icon:	949
 	Click:	"Script.Paste"
 )
 
-(AVIcon.947
+(AVIcon.949
 	Name:	"Paste"
 	Res:	"Icons.Paste"
 
 )
 
-(Space.948
+(Space.950
 )
 
-(Butn.949
+(Butn.951
 	Help:	"Undo//Undoes the last modification to the script editor text"
 	HelpTopic:	"Undo__Script_"
-	Icon:	950
+	Icon:	952
 	Click:	"Script.Undo"
 )
 
-(AVIcon.950
+(AVIcon.952
 	Name:	"Undo"
 	Res:	"Icons.Undo"
 
 )
 
-(Space.951
+(Space.953
 )
 
-(Butn.952
+(Butn.954
 	Help:	"Shift Lines Left//Shifts selected lines or current line two spaces to the left"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	953
+	Icon:	955
 	Click:	"Script.ShiftLeft"
 )
 
-(AVIcon.953
+(AVIcon.955
 	Name:	"ShiftLeft"
 	Res:	"Icons.ShiftLeft"
 
 )
 
-(Butn.954
+(Butn.956
 	Help:	"Shift Lines Right//Shifts selected lines or current line two spaces to the right"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	955
+	Icon:	957
 	Click:	"Script.ShiftRight"
 )
 
-(AVIcon.955
+(AVIcon.957
 	Name:	"ShiftRight"
 	Res:	"Icons.ShiftRight"
 
 )
 
-(Space.956
+(Space.958
 )
 
-(Butn.957
+(Butn.959
 	Disabled:	1
 	Help:	"Compile//Compiles the script"
 	HelpTopic:	"Compile"
 	Update:	"Script.CompileUpdate"
-	Icon:	958
+	Icon:	960
 	Click:	"Script.Compile"
 )
 
-(AVIcon.958
+(AVIcon.960
 	Name:	"Check"
 	Res:	"Icons.Check"
 
 )
 
-(Butn.959
+(Butn.961
 	Help:	"Run//Runs the compiled script"
 	HelpTopic:	"Run"
 	Update:	"Script.RunUpdate"
-	Icon:	960
+	Icon:	962
 	Click:	"Script.Run"
 )
 
-(AVIcon.960
+(AVIcon.962
 	Name:	"Run"
 	Res:	"Icons.Run"
 
 )
 
-(Butn.961
+(Butn.963
 	Help:	"Step//Executes one request or object reference in the compiled script"
 	HelpTopic:	"Step"
 	Update:	"Script.RunUpdate"
-	Icon:	962
+	Icon:	964
 	Click:	"Script.Step"
 )
 
-(AVIcon.962
+(AVIcon.964
 	Name:	"Footprints"
 	Res:	"Icons.Footprints"
 
 )
 
-(Butn.963
+(Butn.965
 	Help:	"Toggle Breakpoint//Toggles a breakpoint on or off at the current cursor position"
 	HelpTopic:	"Toggle_Breakpoint"
 	Update:	"Script.RunUpdate"
-	Icon:	964
+	Icon:	966
 	Click:	"Script.ToggleBreak"
 )
 
-(AVIcon.964
+(AVIcon.966
 	Name:	"Hand"
 	Res:	"Icons.Hand"
 
 )
 
-(Butn.965
+(Butn.967
 	Help:	"Examine Variables//Displays the current value of local and global variables"
 	HelpTopic:	"Examine_Variables"
 	Update:	"Script.RunUpdate"
-	Icon:	966
+	Icon:	968
 	Click:	"Script.ShowVariables"
 )
 
-(AVIcon.966
+(AVIcon.968
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.967
+(Space.969
 )
 
-(Butn.968
+(Butn.970
 	Help:	"Load System Script//Inserts the source code of a system script"
 	HelpTopic:	"Load_System_Script"
-	Icon:	969
+	Icon:	971
 	Click:	"Script.SystemLoad"
 )
 
-(AVIcon.969
+(AVIcon.971
 	Name:	"LoadScript"
 	Res:	"Icons.LoadScript"
 
 )
 
-(Butn.970
+(Butn.972
 	Help:	"Load Text File//Inserts the contents of a text file"
 	HelpTopic:	"Load_Text_File"
-	Icon:	971
+	Icon:	973
 	Click:	"Script.FileLoad"
 )
 
-(AVIcon.971
+(AVIcon.973
 	Name:	"Open"
 	Res:	"Icons.Open"
 
 )
 
-(Butn.972
+(Butn.974
 	Help:	"Write Text File//Writes the entire script or the selected text to a text file"
 	HelpTopic:	"Write_Text_File"
-	Icon:	973
+	Icon:	975
 	Click:	"Script.FileWrite"
 )
 
-(AVIcon.973
+(AVIcon.975
 	Name:	"Write"
 	Res:	"Icons.Write"
 
 )
 
-(Space.974
+(Space.976
 )
 
-(Butn.975
+(Butn.977
 	Help:	"Script Help//Searches for help using the current selection"
 	HelpTopic:	"Getting_help_about_script_components"
-	Icon:	976
+	Icon:	978
 	Click:	"Script.Help"
 )
 
-(AVIcon.976
+(AVIcon.978
 	Name:	"Help"
 	Res:	"Icons.Help"
 
 )
 
-(Butn.977
+(Butn.979
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	978
+	Icon:	980
 	Click:	"Help.Tool"
 )
 
-(AVIcon.978
+(AVIcon.980
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Space.979
+(Space.981
 )
 
-(Butn.980
-	Icon:	981
+(Butn.982
+	Icon:	983
 	Click:	"DCSewerDesignExtension.make"
 )
 
-(AVIcon.981
+(AVIcon.983
 	Name:	"DiamondRed"
 	Res:	"Icons.DiamondRed"
 
 )
 
-(PopupSet.982
+(PopupSet.984
 )
 
-(ToolBar.983
+(ToolBar.985
 )
 
-(AVIcon.984
+(AVIcon.986
 	Name:	"Icon"
 	Res:	"SEd.Icon"
 
 )
 
-(DocGUI.985
+(DocGUI.987
 	Name:	"Project"
 	Type:	"Project"
 	Modified:	1
-	MenuBar:	986
-	ButnBar:	1022
-	Popups:	1028
-	ToolBar:	1029
-	Icon:	1030
+	MenuBar:	988
+	ButnBar:	1026
+	Popups:	1032
+	ToolBar:	1033
+	Icon:	1034
 )
 
-(MenuBar.986
-	Child:	987
-	Child:	998
-	Child:	1008
-	Child:	1017
-)
-
-(PMenu.987
-	InternalName:	"File"
-	Child:	988
+(MenuBar.988
 	Child:	989
+	Child:	1000
+	Child:	1010
+	Child:	1021
+)
+
+(PMenu.989
+	InternalName:	"File"
 	Child:	990
 	Child:	991
 	Child:	992
@@ -5693,10 +5710,12 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Child:	995
 	Child:	996
 	Child:	997
+	Child:	998
+	Child:	999
 	Label:	"&File"
 )
 
-(Choice.988
+(Choice.990
 	Help:	"Creates a new project"
 	HelpTopic:	"New_Project"
 	Label:	"&New Project"
@@ -5704,7 +5723,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.Ctrl+N"
 )
 
-(Choice.989
+(Choice.991
 	Help:	"Opens an existing project"
 	HelpTopic:	"Open_Project"
 	Label:	"&Open Project..."
@@ -5712,7 +5731,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Choice.990
+(Choice.992
 	Help:	"Closes the project window"
 	HelpTopic:	"Close_Project"
 	Label:	"&Close Project"
@@ -5720,10 +5739,10 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Space.991
+(Space.993
 )
 
-(Choice.992
+(Choice.994
 	Help:	"Saves the current project"
 	HelpTopic:	"Save_Project"
 	Label:	"&Save Project"
@@ -5731,7 +5750,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.Ctrl+S"
 )
 
-(Choice.993
+(Choice.995
 	Help:	"Saves the current project with a new name"
 	HelpTopic:	"Save_Project_As"
 	Label:	"Save Project &As..."
@@ -5739,10 +5758,10 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Space.994
+(Space.996
 )
 
-(Choice.995
+(Choice.997
 	Help:	"Displays the Extensions dialog"
 	HelpTopic:	"Extensions"
 	Label:	"&Extensions..."
@@ -5750,10 +5769,10 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Space.996
+(Space.998
 )
 
-(Choice.997
+(Choice.999
 	Help:	"Exits ArcView"
 	HelpTopic:	"Exit"
 	Label:	"E&xit"
@@ -5761,10 +5780,8 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.998
+(PMenu.1000
 	InternalName:	"Project"
-	Child:	999
-	Child:	1000
 	Child:	1001
 	Child:	1002
 	Child:	1003
@@ -5772,10 +5789,12 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Child:	1005
 	Child:	1006
 	Child:	1007
+	Child:	1008
+	Child:	1009
 	Label:	"&Project"
 )
 
-(Choice.999
+(Choice.1001
 	Help:	"Displays the dialog box to edit properties of the project"
 	HelpTopic:	"Project_Properties"
 	Label:	"&Properties..."
@@ -5783,7 +5802,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1000
+(Choice.1002
 	Help:	"Customizes the active project"
 	HelpTopic:	"Customize"
 	Update:	"Project.CustomizeUpdate"
@@ -5792,10 +5811,10 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Space.1001
+(Space.1003
 )
 
-(Choice.1002
+(Choice.1004
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
@@ -5804,7 +5823,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.Ctrl+R"
 )
 
-(Choice.1003
+(Choice.1005
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
@@ -5813,10 +5832,10 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.Del"
 )
 
-(Space.1004
+(Space.1006
 )
 
-(Choice.1005
+(Choice.1007
 	Help:	"Adds a table to the project"
 	HelpTopic:	"Add_Table"
 	Update:	"Project.AddTableUpdate"
@@ -5825,7 +5844,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1006
+(Choice.1008
 	Help:	"Creates a new project component from an external source"
 	HelpTopic:	"Import"
 	Update:	"Project.ImportUpdate"
@@ -5834,7 +5853,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1007
+(Choice.1009
 	Help:	"Opens the SQL Connection manager"
 	HelpTopic:	"SQL_Connect"
 	Update:	"Project.HasSQL"
@@ -5843,19 +5862,21 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1008
+(PMenu.1010
 	InternalName:	"Window"
-	Child:	1009
-	Child:	1010
 	Child:	1011
 	Child:	1012
 	Child:	1013
 	Child:	1014
+	Child:	1015
 	Child:	1016
+	Child:	1018
+	Child:	1019
+	Child:	1020
 	Label:	"&Window"
 )
 
-(Choice.1009
+(Choice.1011
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -5863,7 +5884,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1010
+(Choice.1012
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -5871,7 +5892,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1011
+(Choice.1013
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -5879,10 +5900,10 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Space.1012
+(Space.1014
 )
 
-(Choice.1013
+(Choice.1015
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -5890,32 +5911,46 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.1014
-	ObjectTag:	1015
+(Space.1016
+	ObjectTag:	1017
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.1015
-	S:	"dcsewerdesign.apr"
+(AVStr.1017
+	S:	"dcsewerdesign.apr DCSewerDesign.ComplexProfile.create DCSewerDesign.Profile.ManholeDataBox.create"
 )
 
-(Choice.1016
+(Choice.1018
 	Help:	"Activates dcsewerdesign.apr"
 	Label:	"&1 dcsewerdesign.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1017
+(Choice.1019
+	Help:	"Activates DCSewerDesign.ComplexProfile.create"
+	Label:	"&2 DCSewerDesign.ComplexProfile.create"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.1020
+	Help:	"Activates DCSewerDesign.Profile.ManholeDataBox.create"
+	Label:	"&3 DCSewerDesign.Profile.ManholeDataBox.create"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.1021
 	InternalName:	"Help"
-	Child:	1018
-	Child:	1019
-	Child:	1020
-	Child:	1021
+	Child:	1022
+	Child:	1023
+	Child:	1024
+	Child:	1025
 	Label:	"&Help"
 )
 
-(Choice.1018
+(Choice.1022
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -5923,7 +5958,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1019
+(Choice.1023
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -5931,10 +5966,10 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(Space.1020
+(Space.1024
 )
 
-(Choice.1021
+(Choice.1025
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -5942,88 +5977,88 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1022
+(ButnBar.1026
 	Update:	"Project.UpdateButtons"
-	Child:	1023
-	Child:	1025
-	Child:	1026
+	Child:	1027
+	Child:	1029
+	Child:	1030
 )
 
-(Butn.1023
+(Butn.1027
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1024
+	Icon:	1028
 	Click:	"Project.Save"
 )
 
-(AVIcon.1024
+(AVIcon.1028
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1025
+(Space.1029
 )
 
-(Butn.1026
+(Butn.1030
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1027
+	Icon:	1031
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1027
+(AVIcon.1031
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(PopupSet.1028
+(PopupSet.1032
 )
 
-(ToolBar.1029
+(ToolBar.1033
 )
 
-(AVIcon.1030
+(AVIcon.1034
 	Name:	"Icon"
 	Res:	"Project.Icon"
 
 )
 
-(FN.1049
+(FN.1053
 	Path:	"$HOME"
 )
 
-(TClr.1050
+(TClr.1054
 	Red:	0xffff
 	Green:	0xffff
 )
 
-(AVStr.1051
+(AVStr.1055
 	S:	"View"
 )
 
-(AVStr.1052
+(AVStr.1056
 	S:	"Table"
 )
 
-(AVStr.1053
+(AVStr.1057
 	S:	"Chart"
 )
 
-(AVStr.1054
+(AVStr.1058
 	S:	"Layout"
 )
 
-(AVStr.1055
+(AVStr.1059
 	S:	"Script"
 )
 
-(AVStr.1056
+(AVStr.1060
 	S:	"Project"
 )
 
-(AVStr.1057
+(AVStr.1061
 	S:	"Appl"
 )
 

@@ -61,7 +61,7 @@
   <title>Introduction</title>
   <indexterm><primary>introduction</primary></indexterm>
   <para>This document describes the design process for simple sewer networks
-    using version 2.0.9 of the DC Sewer Design extension for ArcView 3.*.
+    using version 2.0.10 of the DC Sewer Design extension for ArcView 3.*.
     </para>
   <para>It also covers the creation of profiles (longitudinal sections) for 
     water and sewer networks.</para>
@@ -81,8 +81,11 @@
     <sect3 id="version_2_0_10">
       <title>Version 2.0.10</title>
       <itemizedlist>
-        <listitem><para>&quot;Calculate Constant Gradient&quot;</para>
-	  now allows to directly specify a gradient.</listitem>
+        <listitem><para>&quot;Calculate Constant Gradient&quot;
+	  now allows to directly specify a gradient.</para></listitem>
+	<listitem><para>&quot;Create Profile&quot; allows now to rotate
+	  text in data boxes. Configuration files need to be updated
+	  for the new format.</para></listitem>
       </itemizedlist>
     </sect3>
     <sect3 id="version_2_0_9">
@@ -549,19 +552,27 @@ Line.Theme=???</programlisting></para>
       </itemizedlist></para>
     <para>The following is an example of the data box configuration syntax:
       <programlisting>
-CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Center</programlisting></para>
+CumulativeLineData=diameter@1@Diameter Nominal in mm@30@Center@0</programlisting></para>
     <para>Where CumulativeLineData is the data box type, diameter is the field
-      name in the line table, 0 is the number of decimal digits, 
+      name in the line table, 1 is the number of decimal digits, 
       &quot;Diameter Nominal in mm&quot; is the data box label, 30 is the
-      height of the data box and &quot;Center&quot; is the text justification
-      in the data box.</para>
-    <para>The text justification should be one of the following:
-      <itemizedlist>
-        <listitem><para>Left</para></listitem>
-	<listitem><para>Center</para></listitem>
-	<listitem><para>Right</para></listitem>
-      </itemizedlist>
-    </para>
+      height of the data box, &quot;Center&quot; is the text justification
+      in the data box and 0 is the rotation angle.</para>
+    <para>The text justification should be one of the following:</para>
+    <itemizedlist>
+      <listitem><para>Left</para></listitem>
+      <listitem><para>Center</para></listitem>
+      <listitem><para>Right</para></listitem>
+    </itemizedlist>
+    <para>The text justification for CumulativeLineData and LineData boxes
+      is the horizontal justification. For ManholeData boxes, it is
+      the vertical justification.</para>
+    <para>The rotation angle should usually be one of the following:</para>
+    <itemizedlist>
+      <listitem><para><emphasis>0</emphasis> For horizontal text.</para></listitem>
+      <listitem><para><emphasis>90</emphasis> For vertical text. Recommended 
+        for ManholeData boxes.</para></listitem>
+    </itemizedlist>
     <para>Different data boxes should be combined to obtain the desired 
       output.</para>
     <para>Adding the following line will add datum lines at a 5m interval:
