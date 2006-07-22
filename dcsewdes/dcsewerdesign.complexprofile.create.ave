@@ -164,7 +164,7 @@ while (not (strLine=nil ))
             intJustification = #TEXTCOMPOSER_JUST_RIGHT
           end
           lstFree = {lstFieldTokens.get(0),lstFieldTokens.get(1).asNumber,
-            lstConfTokens.get(1).asTokens("@").get(2), lstFieldTokens.get(3).asNumber, intJustification.clone, lstFieldTokens.get(5).asNumber}
+            lstConfTokens.get(1).asTokens("@").get(2).substitute("+NL+",NL), lstFieldTokens.get(3).asNumber, intJustification.clone, lstFieldTokens.get(5).asNumber}
           lstFreeField.get(1).add(lstFree)      
         end
       end 

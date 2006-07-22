@@ -1,3 +1,12 @@
+2006-07-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave:
+	* sample/profileconfiguration.txt:
+	* doc/en/dcsewerdesign.xml: Allowing linebreaks using "+NL+" for the
+	data box title blocks; implements RFE #1526517
+	* dcsewerdesignextension.make.ave: 
+	* dcsewerdesign.nsi: Version number is 2.0.10+svn
+
 2006-07-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.complexprofile.create.ave:

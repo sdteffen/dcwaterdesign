@@ -78,6 +78,13 @@
     <indexterm><primary>news</primary></indexterm>
     <para>A summary of changes in different versions of the DC Sewer Design
       Extension.</para>
+    <sect3 id="version_2_0_11">
+      <title>Version 2.0.11</title>
+      <itemizedlist>
+        <listitem><para>&quot;Create Profile&quot; allows now linebreaks
+	  in the data box titles using &quot;+NL+&quot;</para></listitem>
+      </itemizedlist>
+    </sect3>
     <sect3 id="version_2_0_10">
       <title>Version 2.0.10</title>
       <itemizedlist>
@@ -606,7 +613,9 @@ CumulativeLineData=diameter@1@Diameter Nominal in mm@30@Center@0</programlisting
       elevations when used in a &quot;ManholeData&quot; box:<programlisting>
       [upstream]+NL+[downstream]</programlisting></para>
       <para>Note that the combined field with the newlines will not be displayed
-        properly in the ArcView table.</para></tip>  
+        properly in the ArcView table.</para></tip>
+    <tip><para>To introduce a newline in a data box title, use &quot;+NL+&quot;.
+      </para></tip>
     <caution><para>This function requires a field &quot;dc_id&quot; with unique
       values in the manhole and line themes. It is recommended to use
       this field for the &quot;Manhole.ID&quot; and &quot;Line.ID&quot;
