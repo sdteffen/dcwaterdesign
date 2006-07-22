@@ -58,7 +58,6 @@
 	Doc:	174
 	Doc:	178
 	Doc:	182
-	ActiveDoc:	170
 	Buttons:	186
 	Buttons:	187
 	Buttons:	188
@@ -1476,7 +1475,6 @@ yExt.setCanUnloadScript(av.findScript(\"DCSewerDesignExtension.canUnload\"))\nmy
 
 (DocWin.171
 	Owner:	170
-	Open:	1
 	X:	-4
 	Y:	-4
 	W:	1531
@@ -5818,7 +5816,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
-	Label:	"&Rename 'DCSewerDesignExtension.make'..."
+	Label:	"&Rename 'Script.saveAllScripts'..."
 	Click:	"Project.Rename"
 	Shortcut:	"Keys.Ctrl+R"
 )
@@ -5827,7 +5825,7 @@ e(sedScript.getSource, sedScript.getSource.count)\n    txfScript.close\n    numW
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
-	Label:	"&Delete 'DCSewerDesignExtension.make'..."
+	Label:	"&Delete 'Script.saveAllScripts'..."
 	Click:	"Project.Delete"
 	Shortcut:	"Keys.Del"
 )
