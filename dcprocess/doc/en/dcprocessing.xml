@@ -43,13 +43,20 @@
     released under the
     terms of the GNU Lesser General License (LGPL) - the full source code
     is available (Open Source).</para>
-  <para>This manual describes version 1.2.8 of the <citetitle>DC Processing 
+  <para>This manual describes version 1.2.9 of the <citetitle>DC Processing 
     Extension</citetitle>.</para>
   <sect2 id="news">
     <title>What's New?</title>
     <indexterm><primary>news</primary></indexterm>
     <para>A summary of changes in the different versions of the DC Processing
       Extension.</para>
+    <sect3 id="version_1_2_9">
+      <title>Version 1.2.9</title>
+      <itemizedlist>
+        <listitem><para>Critical bugfix for the &quot;Create Points from 
+	  Grid&quot; function (Thanks to Thomas).</para></listitem>
+      </itemizedlist>
+    </sect3>
     <sect3 id="version_1_2_8">
       <title>Version 1.2.8</title>
       <itemizedlist>

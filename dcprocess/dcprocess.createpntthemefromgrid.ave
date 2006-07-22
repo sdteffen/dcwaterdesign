@@ -2,6 +2,7 @@
 
 ' convert a Grid Theme into a Point Theme (Center Points)
 ' (c) 2004 DORSCH Consult
+' (c) 2006 DC Water and Environment
 
   viewActive = av.GetActiveDoc 
   
@@ -14,11 +15,9 @@
   
   lstXY = grdGrid.getNumRowsAndCols
   
-  numX = lstXY.get(0)
-  numY = lstXY.get(1)
+  numX = lstXY.get(1)
+  numY = lstXY.get(0)
   
- System.echo(numX.asSTring+" "+numY.asString)
-
   numCellX = grdGrid.getCellSize
   
   rectExtent = grdGrid.getExtent

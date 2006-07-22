@@ -93,10 +93,10 @@
 	GUI:	978
 	GUI:	1088
 	WorkDir:	1157
-	WinX:	-4
-	WinY:	-3
-	WinW:	1688
-	WinH:	1023
+	WinX:	1
+	WinY:	2
+	WinW:	1678
+	WinH:	1013
 	SerialNumber:	"595821685479"
 	SelColor:	1158
 	GUINames:	1159
@@ -114,8 +114,8 @@
 	Open:	1
 	X:	-4
 	Y:	-4
-	W:	1690
-	H:	911
+	W:	1680
+	H:	901
 )
 
 (CSMgr.4
@@ -409,18 +409,20 @@ Line.returnValue(fldLineID,recLine))\n\n   av.setStatus((numCounter/numTotal)*10
 	Win:	43
 	CSMgr:	44
 	DocExts:	45
-	Source:	"' DCProcess.createPntThemeFromGrid\n\n' convert a Grid Theme into a Point Theme (Center Points)\n' (c) 2004 DORSCH Consult\n\n  viewActive = av.GetActiveDoc \n  \n  themeList = viewActive.GetThemes \n  GridTheme = Msgbox.Choice (themeList, \"Select a Grid Theme to extract the Points from.\", \"Select a Theme\") \n  \n  thmGrid = viewActive.FindTheme(GridTheme.AsString) \n  \n  grdGrid = thmGrid.GetGrid\n  \n  lstXY = grdGrid.getNumRowsAndCols\n  \n  numX = lstXY.get(0)\n  numY = lstXY.get(1)\n  \n System.echo(numX.asSTring+\" \"+nu
-mY.asString)\n\n  numCellX = grdGrid.getCellSize\n  \n  rectExtent = grdGrid.getExtent\n  minX = rectExtent.getLeft+(numCellX/2)\n  minY = rectExtent.getBottom+(numCellX/2)\n  \n  prjProjection = viewActive.GetProjection \n\n  \n  numCounter = 0 \n  numTotal = numX*numY\n  av.showStopButton  \n \n  'make a new theme \n  \n  clsShape = Point\n  def = av.GetProject.MakeFileName(\"theme\", \"shp\") \n  def = FileDialog.Put(def, \"*.shp\", \"New Point Theme\") \n  \n  if (def <> nil) then \n    fld = nil\n    ftbPoint = FTab.MakeNew(def, cls
-Shape) \n    fldValue = Field.make(\"Value\", #FIELD_DECIMAL, 16,8)\n    if(fldValue <> nil)then\n      fld = fldValue.clone\n    end\n\n\n    fldShape = ftbPoint.findField(\"Shape\")\n  \n    \n    ftbPoint.setEditable(TRUE)\n  \n  end \n  \n  if(fld <> nil)then\n      ftbPoint.AddFields({fld}) \n  end\n  \n  for each i in (0..(numX-1))\n    for each j in (0..(numY-1))\n      x = minX + (i*numCellX)\n      y = minY + (j*numCellX)\n      pntCenter = Point.make(x,y)\n      recPoint = ftbPoint.addRecord\n      ftbPoint.setValue(fldShape
-, recPoint, pntCenter)\n      ftbPoint.setValue(fld, recPoint, grdGrid.pointValue(pntCenter, prjProjection))\n      numCounter = numCounter+1      \n    end\n    if(av.setStatus((numCounter/numTotal)*100).not)then\n      exit\n    end\n\n  end\n  \n'cleaning up\nthmPoint = FTheme.Make(ftbPoint) \nviewActive.AddTheme(thmPoint) \nav.GetProject.SetModified(true) \nftbPoint.setEditable(FALSE)\nthmPoint.setVisible(TRUE)\nav.clearStatus\n"
+	Source:	"' DCProcess.createPntThemeFromGrid\n\n' convert a Grid Theme into a Point Theme (Center Points)\n' (c) 2004 DORSCH Consult\n' (c) 2006 DC Water and Environment\n\n  viewActive = av.GetActiveDoc \n  \n  themeList = viewActive.GetThemes \n  GridTheme = Msgbox.Choice (themeList, \"Select a Grid Theme to extract the Points from.\", \"Select a Theme\") \n  \n  thmGrid = viewActive.FindTheme(GridTheme.AsString) \n  \n  grdGrid = thmGrid.GetGrid\n  \n  lstXY = grdGrid.getNumRowsAndCols\n  \n  numX = lstXY.get(1)\n  numY = lstXY.get(0)\n
+  \n  numCellX = grdGrid.getCellSize\n  \n  rectExtent = grdGrid.getExtent\n  minX = rectExtent.getLeft+(numCellX/2)\n  minY = rectExtent.getBottom+(numCellX/2)\n  \n  prjProjection = viewActive.GetProjection \n\n  \n  numCounter = 0 \n  numTotal = numX*numY\n  av.showStopButton  \n \n  'make a new theme \n  \n  clsShape = Point\n  def = av.GetProject.MakeFileName(\"theme\", \"shp\") \n  def = FileDialog.Put(def, \"*.shp\", \"New Point Theme\") \n  \n  if (def <> nil) then \n    fld = nil\n    ftbPoint = FTab.MakeNew(def, clsShape) \n   
+ fldValue = Field.make(\"Value\", #FIELD_DECIMAL, 16,8)\n    if(fldValue <> nil)then\n      fld = fldValue.clone\n    end\n\n\n    fldShape = ftbPoint.findField(\"Shape\")\n  \n    \n    ftbPoint.setEditable(TRUE)\n  \n  end \n  \n  if(fld <> nil)then\n      ftbPoint.AddFields({fld}) \n  end\n  \n  for each i in (0..(numX-1))\n    for each j in (0..(numY-1))\n      x = minX + (i*numCellX)\n      y = minY + (j*numCellX)\n      pntCenter = Point.make(x,y)\n      recPoint = ftbPoint.addRecord\n      ftbPoint.setValue(fldShape, recPoint,
+ pntCenter)\n      ftbPoint.setValue(fld, recPoint, grdGrid.pointValue(pntCenter, prjProjection))\n      numCounter = numCounter+1      \n    end\n    if(av.setStatus((numCounter/numTotal)*100).not)then\n      exit\n    end\n\n  end\n  \n'cleaning up\nthmPoint = FTheme.Make(ftbPoint) \nviewActive.AddTheme(thmPoint) \nav.GetProject.SetModified(true) \nftbPoint.setEditable(FALSE)\nthmPoint.setVisible(TRUE)\nav.clearStatus\n"
 	SearchStr:	"Section"
 	FontSize:	1
 )
 
 (DocWin.43
 	Owner:	42
-	W:	643
-	H:	923
+	X:	-4
+	Y:	-4
+	W:	1680
+	H:	901
 )
 
 (CSMgr.44
@@ -2149,10 +2151,10 @@ et(2), 999)\nend\n\nav.getProject.findGUI(\"Project\").setModified(true)\n"
 	Win:	271
 	CSMgr:	272
 	DocExts:	273
-	Source:	"' DCProcessExtension.make\n\n' (c) 2000 - 2006 DORSCH Consult\n\nstrVersion = msgbox.input(\"Enter version\",\"Make DC Processing Extension\",\"1.2.8+cvs\")\nif (strVersion=nil)then\n  exit\nend\nnumVersion=strVersion.asTokens(\".\").get(0).asNumber\nstrFileNameVersion = strVersion.asTokens(\".\").get(0)+\"_\"+strVersion.asTokens(\".\").get(1)\n\nmyExt = Extension.Make((\"$AVEXT\\dcprocessing.avx\").AsFileName,\n              \"DC Processing\",\n              av.GetProject.FindScript(\"DCProcessExtension.install\"),\n              av.GetProj
-ect.FindScript(\"DCProcessExtension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename})\n\n'add GUI elements\n'0\nmyExt.add( av.GetProject.FindGUI(\"View\").GetMenuBar.findByLabel(\"DC Processing\"))\n\n'1\nmyExt.add(av.getProject.findGUI(\"Project\").getMenuBar.findByLabel(\"DC Processing\"))\n\n'2\nmyExt.add(av.getProject.findGUI(\"Table\").getMenuBar.findByLabel(\"DC Processing\"))\n\n'add the scripts\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCProcess\".count+1)=\"DCProcess.\"))then\n    myEx
-t.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Processing Extension \"+strVersion+NL+\"(c) 2000 - 2005 DORSCH Consult.\"+NL+\n\"This extension helps to process and convert various formats of data.\"+NL+Date.now.asString)\nmyExt.SetExtVersion(numVersion)\nmyExt.setUnloadScript(av.findScript(\"DCProcessExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCProcessExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcprocessing.avx\")\nWFileName = FileName.make(\"$AVEXT/dcprocessing.tmp\")\nRFile = 
-LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n  if ( buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
+	Source:	"' DCProcessExtension.make\n\n' (c) 2000 - 2006 DORSCH Consult\n\nstrVersion = msgbox.input(\"Enter version\",\"Make DC Processing Extension\",\"1.2.9\")\nif (strVersion=nil)then\n  exit\nend\nnumVersion=strVersion.asTokens(\".\").get(0).asNumber\nstrFileNameVersion = strVersion.asTokens(\".\").get(0)+\"_\"+strVersion.asTokens(\".\").get(1)\n\nmyExt = Extension.Make((\"$AVEXT\\dcprocessing.avx\").AsFileName,\n              \"DC Processing\",\n              av.GetProject.FindScript(\"DCProcessExtension.install\"),\n              av.GetProject.
+FindScript(\"DCProcessExtension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename})\n\n'add GUI elements\n'0\nmyExt.add( av.GetProject.FindGUI(\"View\").GetMenuBar.findByLabel(\"DC Processing\"))\n\n'1\nmyExt.add(av.getProject.findGUI(\"Project\").getMenuBar.findByLabel(\"DC Processing\"))\n\n'2\nmyExt.add(av.getProject.findGUI(\"Table\").getMenuBar.findByLabel(\"DC Processing\"))\n\n'add the scripts\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCProcess\".count+1)=\"DCProcess.\"))then\n    myExt.ad
+d(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Processing Extension \"+strVersion+NL+\"(c) 2000 - 2005 DORSCH Consult.\"+NL+\n\"This extension helps to process and convert various formats of data.\"+NL+Date.now.asString)\nmyExt.SetExtVersion(numVersion)\nmyExt.setUnloadScript(av.findScript(\"DCProcessExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCProcessExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcprocessing.avx\")\nWFileName = FileName.make(\"$AVEXT/dcprocessing.tmp\")\nRFile = Line
+File.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n  if ( buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
 	SearchStr:	"Sewer"
 	FontSize:	1
 )
@@ -2161,8 +2163,8 @@ LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FIL
 	Owner:	270
 	X:	-4
 	Y:	-4
-	W:	1690
-	H:	911
+	W:	1680
+	H:	901
 )
 
 (CSMgr.272
@@ -5786,7 +5788,6 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.997
-	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -6069,7 +6070,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (AVStr.1033
-	S:	"dcprocessing.apr DCProcess.extendPolylines"
+	S:	"dcprocessing.apr DCProcessExtension.make"
 )
 
 (Choice.1034
@@ -6080,8 +6081,8 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.1035
-	Help:	"Activates DCProcess.extendPolylines"
-	Label:	"&2 DCProcess.extendPolylines"
+	Help:	"Activates DCProcessExtension.make"
+	Label:	"&2 DCProcessExtension.make"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )

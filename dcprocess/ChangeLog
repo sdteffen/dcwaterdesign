@@ -1,3 +1,11 @@
+2006-07-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml:
+	* dcprocessing.xml:
+	* dcprocessextension.make.ave: The version number is 1.2.9 now
+	* doc/en/dcprocessing.xml:
+	* dcprocess.createpntthemefromgrid.ave: Fixed critical bug #1526864
+	
 2006-05-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcprocess.extendpolylines.ave: Only work on selected lines
