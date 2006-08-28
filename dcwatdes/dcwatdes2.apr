@@ -155,16 +155,15 @@
 	GUI:	897
 	GUI:	1283
 	GUI:	1685
-	GUI:	1799
-	GUI:	1905
-	WorkDir:	2062
+	GUI:	1800
+	GUI:	1906
+	WorkDir:	2063
 	WinX:	-4
 	WinY:	-3
-	WinW:	1688
+	WinW:	1534
 	WinH:	1023
 	SerialNumber:	"752171190022"
-	SelColor:	2063
-	GUINames:	2064
+	SelColor:	2064
 	GUINames:	2065
 	GUINames:	2066
 	GUINames:	2067
@@ -173,6 +172,7 @@
 	GUINames:	2070
 	GUINames:	2071
 	GUINames:	2072
+	GUINames:	2073
 	TocWidthScale:	1.00000000000000
 )
 
@@ -181,7 +181,7 @@
 	Open:	1
 	X:	-4
 	Y:	-4
-	W:	1690
+	W:	1536
 	H:	911
 )
 
@@ -4918,49 +4918,49 @@ ape\")\n\nlstSections = {{\"Pumps\",{\"dc_id\", \"elevation\", \"properties\"}},
     strSection = strSection.lcase\n    for each rec in ftbSection\n      pntFirstNode = ftbSection.returnValue(fldPointShape, rec)\n      strFirstNodeID = ftbSection.returnValue(fldID, rec).asString\n      strSecondNodeID = strFirstNodeID+\"dn\"\n      ftbPipes.selectByPoint(pntFirstNode, numSnappingRadius, #VTAB_SELTYPE_NEW) \n      bmpPipes = ftbPipes.getSelection\n      'second run is necessary because selectByPoint returns also Pipes that\n      'cross the point rather than start at it\n      recConnected = nil\n  
     for each recPipe in bmpPipes\n        pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)\n        lstPipeNodes = pllPipe.connect.asList.get(0)\n        pntStart = lstPipeNodes.get(0)\n        'pntEnd = lstPipeNodes.get(lstPipeNodes.count-1)\n        numDistanceStart = pntStart.distance(pntFirstNode)\n        'numDistanceEnd = pntEnd.distance(pntFirstNode)\n        if( numDistanceStart < numSnappingRadius) then\n          recConnected = recPipe\n          break\n        end\n      end\n      if(recConnected = nil
 )then      \n        bmpMischiefFeatures.set(rec)\n      else\n      \n      'actually create pump or valve\n      \n        lstExplodedPipe = pllPipe.explode\n        pllFirstSection = Line.make(pntFirstNode, lstExplodedPipe.get(0).asList.get(0).get(1)).asPolyline\n        numLength = pllFirstSection.returnLength\n\n        if(numLength > 1.00)then\n          pntSecondNode = pllFirstSection.along(100/numLength)\n        else\n          pntSecondNode = pllFirstSection.along(50)\n        end\n        strAttributes=\"\"\n     
-   for each fld in lstFields\n          strAttribute = ftbSection.returnValue(fld, rec).asString\n          if((strSection=\"Valves\")and(fld.getAlias.lcase = \"setting\")\n            and(strAttribute.contains(\"closed\")))then\n            strAttribute = \"closed\"\n          end  \n          strAttributes = strAttributes++fld.getAlias.lcase+\"=\"+strAttribute.quote\n        end\n        strAttributes = strAttributes++\"node1=\"+strFirstNodeID.quote\n        strAttributes = strAttributes++\"node2=\"+strSecondNodeID.quote\n      
-  if(strSectionSingular=\"pump\")then\n          lnf_Xml.writeElt(\"<\"+strSectionSingular.lcase++strAttributes+\">\"+strFirstNodeID+\"</\"+strSectionSingular.lcase+\">\")\n        else\n          strType = ftbSection.returnValue(ftbSection.findField(\"type\"), rec).asString.ucase\n          if((strType <> \"CV\")and(strType <> \"SOV\"))then\n            lnf_Xml.writeElt(\"<\"+strSectionSingular.lcase++\"type=\"+strType.quote++strAttributes+\">\"+strFirstNodeID+\"</\"+strSectionSingular.lcase+\">\")\n          else\n            strAttribut
-es = strAttributes.substitute(\"setting=\", \"status=\")\n            lstDynamicPipes.add(\"<pipe\"++strAttributes++\"roughness=\"+\"0.1\".quote++\"length=\"+\"1\".quote+\">\"+strFirstNodeID+\"</pipe>\")\n          end\n        end\n        ' create dynamic junctions\n        \n        strDynamicJunction = \"<junction elevation=\"+ftbSection.returnValue(fldElevation, rec).asString.quote\n        strDynamicJunction = strDynamicJunction++\"demand=\"+\"0\".quote++\"pattern=\"+\"\".quote\n        strDynamicJunction = strDynamicJunction+\">\"+strFir
-stNodeID+\"</junction>\"\n        lstDynamicJunctions.add(strDynamicJunction)\n        strDynamicJunction = \"<junction elevation=\"+ftbSection.returnValue(fldElevation, rec).asString.quote\n        strDynamicJunction = strDynamicJunction++\"demand=\"+\"0\".quote++\"pattern=\"+\"\".quote\n        strDynamicJunction = strDynamicJunction+\">\"+strSecondNodeID+\"</junction>\"\n        lstDynamicJunctions.add(strDynamicJunction)\n        \n        ' create dynamic coordinates\n        strDynamicCoordinate = \"<node x=\"++pntFirstNode.ge
-tX.setFormatPrecision(10).asString.quote\n        strDynamicCoordinate = strDynamicCoordinate++\"y=\"+pntFirstNode.getY.setFormatPrecision(10).asString.quote\n        strDynamicCoordinate = strDynamicCoordinate+\">\"+strFirstNodeID+\"</node>\"\n        lstDynamicCoordinates.add(strDynamicCoordinate)\n        strDynamicCoordinate = \"<node x=\"++pntSecondNode.getX.setFormatPrecision(10).asString.quote\n        strDynamicCoordinate = strDynamicCoordinate++\"y=\"+pntSecondNode.getY.setFormatPrecision(10).asString.quote\n     
-   strDynamicCoordinate = strDynamicCoordinate+\">\"+strSecondNodeID+\"</node>\"\n        lstDynamicCoordinates.add(strDynamicCoordinate)\n      end\n    end\n    ftbSection.setSelection(bmpMischiefFeatures)\n    ftbSection.updateSelection\n    if(bmpMischiefFeatures.getNextSet(-1) <> -1)then\n      blnErrorOccured = true\n      MsgBox.warning(\"Some \"+strSection+\" are not properly connected. Check the selection.\", \"DC Water Design Extension\")\n    end\n  end\n  lnf_Xml.writeElt(\"</\"+strSection.lcase+\">\")\nend\n\n' write out 
-dynamic Junctions\n\nlnf_Xml.writeElt(\"<junctions>\")\nfor each strDynamicJunction in lstDynamicJunctions\n  lnf_Xml.writeElt(strDynamicJunction)\nend\nlnf_Xml.writeElt(\"</junctions>\")\n\n' write out dynamic Coordinates\n\nlnf_Xml.writeElt(\"<coordinates>\")\nfor each strDynamicCoordinate in lstDynamicCoordinates\n  lnf_Xml.writeElt(strDynamicCoordinate)\nend\nlnf_Xml.writeElt(\"</coordinates>\")\n\n' write Pipes section\n\nlnf_Xml.writeElt(\"<pipes>\")\n\n' write out Shutoff Valves and Check Valves\n\nfor each strDynamicPipe in lstDyn
-amicPipes\n  lnf_Xml.writeElt(strDynamicPipe)\nend\n\nthmPipes = dicThemes.get(\"Pipes\")\nif(thmPipes <> nil)then\n  ftbPipes = thmPipes.getFTab\n  \n  ' check for the fields\n  \n  lstPipeAttributes = {\"dc_id\", \"node1\", \"node2\", \"length\", \"diameter\", \"roughness\", \"minorloss\", \"status\"}\n  lstFields = List.make\n  blnFieldsMissing = false\n  for each strAttribute in lstPipeAttributes\n    fldAttribute = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbPipes, strAttribute})\n    if(fldAttribute <> nil)then\n      lstFields
-.add(fldAttribute)\n    else\n      MsgBox.error(\"Field '\"+strAttribute+\"' is missing in the Pipes table.\"+NL+\"Can't export Epanet Model.\"+NL+\"Please set the proper Alias.\",\"DC Water Design Extension\")\n      blnFieldsMissing = true\n    end\n  end\n  if(blnFieldsMissing)then\n    lnf_Xml.close\n    exit\n  end\n  fldID = lstFields.get(0)\n  lstFields.remove(0)\n  numRecords = ftbPipes.getNumRecords\n  numWritten = 0\n  for each rec in ftbPipes\n    numWritten = numWritten+1\n    strAttributes=\"\"\n    for each fld in lstFie
-lds\n        strAttribute = ftbPipes.returnValue(fld, rec).asString\n        strAttributes = strAttributes++fld.getAlias.lcase+\"=\"+strAttribute.quote\n    end\n    strID = ftbPipes.returnValue(fldID, rec).asString\n    lnf_Xml.writeElt(\"<pipe\"++strAttributes+\">\"+strID+\"</pipe>\")\n    av.setStatus(numWritten/numRecords*50)\n  end\nelse\n  MsgBox.error(\"Can't locate Pipes Theme. Unable to export Epanet model.\",\"DC Water Design Extension\")\n  lnf_Xml.close\n  exit\nend\nlnf_Xml.writeElt(\"</pipes>\")\n\n' write Junctions secti
-on\n\nlnf_Xml.writeElt(\"<junctions>\")\nthmJunctions = dicThemes.get(\"Junctions\")\nif(thmJunctions <> nil)then\n  ftbJunctions = thmJunctions.getFTab\n  \n  ' check for the fields\n  \n  lstJunctionAttributes = {\"dc_id\", \"elevation\", \"demand\", \"pattern\"}\n  lstFields = List.make\n  blnFieldsMissing = false\n  for each strAttribute in lstJunctionAttributes\n    fldAttribute = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbJunctions,strAttribute})\n    if(fldAttribute <> nil)then\n      lstFields.add(fldAttribute)\n      
-fldAttribute.setAlias(fldAttribute.getAlias.lcase)\n    else\n      MsgBox.error(\"Field '\"+strAttribute+\"' is missing in the Junctions table.\"+NL+\"Can't export Epanet Model.\"+NL+\"Please set the proper Alias.\",\"DC Water Design Extension\")\n      blnFieldsMissing = true\n    end\n  end\n  if(blnFieldsMissing)then\n    lnf_Xml.close\n    exit\n  end\n  fldID = lstFields.get(0)\n  lstFields.remove(0)\n  numRecords = ftbJunctions.getNumRecords\n  numWritten = 0\n  for each rec in ftbJunctions\n    numWritten = numWritten+1\n   
- strAttributes=\"\"\n    for each fld in lstFields\n        strAttribute = ftbJunctions.returnValue(fld, rec).asString\n        strAttributes = strAttributes++fld.getAlias+\"=\"+strAttribute.quote\n    end\n    strID = ftbJunctions.returnValue(fldID, rec).asString\n    lnf_Xml.writeElt(\"<junction\"++strAttributes+\">\"+strID+\"</junction>\")\n    av.setStatus(numWritten/numRecords*50+50)\n  end\nelse\n  MsgBox.error(\"Can't locate Junctions Theme. Unable to export Epanet model.\",\"DC Water Design Extension\")\n  lnf_Xml.close\n  e
-xit\nend\nlnf_Xml.writeElt(\"</junctions>\")\n\n' write emitters section\nlnf_Xml.writeElt(\"<emitters>\")\nif(thmJunctions <> nil)then\n  fldEmitter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbJunctions, \"emittercoefficient\"})\n  for each rec in ftbJunctions\n    numEmitter = ftbJunctions.returnValue(fldEmitter, rec)\n    if((numEmitter.isNull.not) and (numEmitter <> 0))then\n      strID = ftbJunctions.returnValue(fldID, rec).asString\n      lnf_Xml.writeElt(\"<emitter flowcoefficient=\"+numEmitter.asString.quote+\"
->\"+strID+\"</emitter>\")\n    end\n  end\nend\nlnf_Xml.writeElt(\"</emitters>\")\n\n' write Reservoir and Tank data\n\nfor each lstSection in { {\"Reservoirs\",{\"dc_id\", \"head\",\"pattern\"}},\n                              {\"Tanks\",{\"dc_id\", \"elevation\", \"initiallevel\", \"minimumlevel\",\"maximumlevel\",\"diameter\",\"minimumvolume\",\"volumecurve\"}}}\n  strSection = lstSection.get(0)\n  lstAttributes = lstSection.get(1)\n  lnf_Xml.writeElt(\"<\"+strSection.lcase+\">\")\n  thmSection = dicThemes.get(strSection)\n  if(thmSection <> nil)then\n 
-   ftbSection = thmSection.getFTab\n  \n    ' check for the fields\n  \n    lstFields = List.make\n    blnFieldsMissing = false\n    for each strAttribute in lstAttributes\n      fldAttribute = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbSection, strAttribute})\n      if(fldAttribute <> nil)then\n        lstFields.add(fldAttribute)\n        fldAttribute.setAlias(fldAttribute.getAlias.lcase)\n      else\n        MsgBox.error(\"Field '\"+strAttribute+\"' is missing in the \"+strSection+\" table.\"+NL+\"Can't export Epane
-t Model.\"+NL+\"Please set the proper Alias.\",\"DC Water Design Extension\")\n        blnFieldsMissing = true\n      end\n    end\n    if(blnFieldsMissing)then\n      lnf_Xml.close\n      exit\n    end\n    fldID = lstFields.get(0)\n    lstFields.remove(0)\n    strSectionSingular = strSection.substitute(\"rs\",\"r\").substitute(\"ks\",\"k\").lcase\n    for each rec in ftbSection\n      strAttributes=\"\"\n      for each fld in lstFields\n          strAttribute = ftbSection.returnValue(fld, rec).asString\n          strAttributes = strAt
-tributes++fld.getAlias+\"=\"+strAttribute.quote\n      end\n      strID = ftbSection.returnValue(fldID, rec).asString\n      lnf_Xml.writeElt(\"<\"+strSectionSingular++strAttributes+\">\"+strID+\"</\"+strSectionSingular+\">\")\n    end\n  end\nlnf_Xml.writeElt(\"</\"+strSection.lcase+\">\")\n  \nend\n\n' write Spatial Data\nif(blnExportSpatial)then\n  lnf_Xml.writeElt(\"<coordinates>\") \n  for each strFeature in { \"Junctions\", \"Reservoirs\", \"Tanks\"}\n    thmFeature = dicThemes.get(strFeature)\n    if(thmFeature <> nil)then\n      ftbFeat
-ures = thmFeature.getFTab\n      fldNodeShape = ftbFeatures.findField(\"Shape\")\n      fldID = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"dc_id\"})\n      for each rec in ftbFeatures\n        pntNode = ftbFeatures.returnValue(fldNodeShape, rec)\n        strCoordinate = \"<node x=\"+pntNode.getX.setFormatPrecision(10).asString.quote\n        strCoordinate = strCoordinate++\"y=\"+pntNode.getY.setFormatPrecision(10).asString.quote\n        strCoordinate = strCoordinate+\">\"+ftbFeatures.returnValue(fldID, 
-rec).asString+\"</node>\"+NL\n        lnf_Xml.writeElt(strCoordinate)\n      end\n    end\n  end\n  lnf_Xml.writeElt(\"</coordinates>\")\n  \n  ' writeVertices\n\n  lnf_Xml.writeElt(\"<vertices>\")\n  fldPipeShape = ftbPipes.findField(\"Shape\")\n  fldID = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes,\"dc_id\"})\n  \n  for each rec in ftbPipes\n    pllPipe = ftbPipes.returnValue(fldPipeShape, rec)\n    lstVertices = pllPipe.connect.asList.get(0)\n    strID = ftbPipes.returnValue(fldID, rec).asString\n    if(lstVertices.cou
-nt > 2)then\n      for each i in 1..(lstVertices.count-2)\n        pntVertex = lstVertices.get(i) \n        strVertex = \"<link x=\"+pntVertex.getX.setFormatPrecision(10).asString.quote\n        strVertex = strVertex++\"y=\"+pntVertex.getY.setFormatPrecision(10).asString.quote\n        strVertex = strVertex+\">\"+strID+\"</link>\"+NL\n        lnf_Xml.writeElt(strVertex)\n      end\n    end\n  end\n  lnf_Xml.writeElt(\"</vertices>\")\n\n\n' write backdrop file?\nif(viewActive.getVisibleThemes.count > dicThemes.count)then\n  rectOldE
-xtent = nil\n  if(MsgBox.yesNo(\"Write Backdrop Map?\", \"DC Water Design\",true))then\n    \n  ' turn off model themes so that they don't show up the in the backdrop\n  \n    for each thmModel in dicThemes\n      if (thmModel.isVisible) then\n        thmModel.setVisible(false)\n      end\n    end\n  \n    ' redraw view\n    rectOldExtent = viewActive.getDisplay.returnVisExtent\n    viewActive.getDisplay.setExtent(viewActive.returnExtent)\n    viewActive.invalidate\n    av.processAllInvals\n  \n    strUnits = \"\"\n    strResoluti
-on = dicPreferences.get(\"strBackdropResolution\")\n    if((strResolution = nil)or(strResolution.isNumber.not))then\n      numResolution = 96\n    else\n      numResolution = strResolution.asNumber\n      if(numResolution < 1)then\n        numResolution = 96\n      end\n    end\n  \n    ' Set UNITS for the Background\n    if (viewActive.getUnits = #UNITS_LINEAR_FEET) then\n      strUnits = \"FEET\"\n    elseif (viewActive.getUnits = #UNITS_LINEAR_METERS) then\n      strUnits = \"METERS\"\n    elseif (viewActive.getUnits = #UNIT
-S_LINEAR_DEGREES) then\n      strUnits = \"DEGREES\"\n    end\n    ' If none of the above then take our chances with \"NONE\":\n    if (strUnits = \"\") then \n      strUnits = \"NONE\"\n    end\n    \n    VE = viewActive.getDisplay.returnVisExtent   ' Visable extent as rect\n    X1 = VE.GetLeft.setFormatPrecision(10)\n    Y1 = VE.GetBottom.setFormatPrecision(10)\n    X2 = VE.GetRight.setFormatPrecision(10)\n    Y2 = VE.GetTop.setFormatPrecision(10)\n  \n    lnf_Xml.writeElt(\"<backdrop>\")\n    lnf_Xml.writeElt(\"<dimensions>\"+X1.S
-etFormat(\"d.dd\").asString++Y1.SetFormat(\"d.dd\").asString++X2.SetFormat(\"d.dd\").asString++Y2.SetFormat(\"d.dd\").asString+\"</dimensions>\")\n    lnf_Xml.writeElt(\"<units>\"+strUnits+\"</units>\")\n    strScreenDump = fln_Xml.asString\n    ' remove File Extension\n    flnScreenDump = strScreenDump.left(strScreenDump.count - 4).asFileName \n    flnCheck = flnScreenDump.clone\n    flnCheck.setExtension(\"bmp\")\n    if(File.exists(flnCheck))then\n      File.delete(flnCheck)\n    end\n    flnScreenDump = viewActive.exportToFile(f
-lnScreenDump,\"Windows Bitmap\",{numResolution, true})\n    lnf_Xml.writeElt(\"<file>\"+flnCheck.asString+\"</file>\")\n    lnf_Xml.writeElt(\"</backdrop>\")\n    end\n    \n    ' turn on model themes again\n    for each thmModel in dicThemes\n      thmModel.SetVisible(true)\n    end\n  \n    'redraw view\n    if(rectOldExtent <> nil)then\n      viewActive.getDisplay.setExtent(rectOldExtent)\n      viewActive.invalidate\n    end    \n  end\nend\n\n' write out settings from tables\nfor each lstSetting in {{\"Options\", strOptions}, {\"Ti
-mes\", strTimes}, {\"Report\", strReport}}\n  strTable = lstSetting.get(1)\n  strTag = lstSetting.get(0)\n  tableEN = nil\n  for each aTable in av.getProject.getDocsWithGui(av.findGui(\"Table\"))\n    if(aTable.getName = strTable)then\n      tableEN = aTable\n      break\n    end\n  end\n  if(tableEN <> nil)then\n    av.run(\"XmlParser.Table.writeToLineFile\", {tableEN, lnf_Xml, strTag.lcase})\n  else \n    MsgBox.info(\"DCWatDes.Model.runEpanet: Table\"++strTable++\"not found.\"+NL+\"Epanet will use default settings.\",\"DC Water De
-sign Extension\")\n  end\nend\n\n' write out controls section\n\nlnf_Xml.writeElt(\"<controls>\")\ntableControls = nil\nstrControlTableName = dicPreferences.get(\"strControls\")\nfor each docTable in av.getProject.getDocsWithGui(av.findGui(\"Table\"))\n  if(docTable.getName = strControlTableName)then\n    tableControls = docTable\n    break\n  end\nend\nif(tableControls <> nil)then\n  vtbControls = tableControls.getVTab\n  fldFirst=vtbControls.getFields.get(0)\n  for each recControl in vtbControls\n    strControl = vtbControls.retur
-nValue(fldFirst, recControl).asString.quote\n    for each strBreaksXML in  {\"&\",\"<\"}\n      if(strControl.contains(strBreaksXML))then\n        System.echo(\"ERROR: \"+strBreaksXML+\" not allowed in controls table, it will be dropped.\")\n        strControl = strControl.substitute(strBreaksXML,\"\")\n      end\n    end\n    strControl = \"<control whattodoif=\"+strControl+\"/>\"\n    lnf_Xml.writeElt(strControl)\n  end\nend\nlnf_Xml.writeElt(\"</controls>\")\n\n' write Curves and Patterns\nfor each lstSection in { {\"Curves\",{\"dc_id\",
- \"dc_x\",\"dc_y\"}},\n                         {\"Patterns\",{\"dc_id\", \"multiplier\"}}}\n  strSection = lstSection.get(0)\n  lstAttributes = lstSection.get(1)\n  lnf_Xml.writeElt(\"<\"+strSection.lcase+\">\")\n  strSectionTable = dicPreferences.get(\"str\"+strSection)\n  if(strSectionTable <> nil)then\n    lstTables = av.getProject.getDocsWithGui(av.findGui(\"Table\"))\n    vtbSection = nil\n    for each tableInDoc in lstTables\n      if(strSectionTable = tableInDoc.getName)then\n        vtbSection = tableInDoc.getVTab\n        brea
-k\n      end    \n    end\n    if(vtbSection = nil)then\n      Msgbox.error(\"Couldn't find \"+strSection+\" table.\", \"DC Water Design Extension\")\n      lnf_Xml.close\n      av.clearStatus\n      exit\n    end  \n    ' check for the fields\n  \n    lstFields = List.make\n    blnFieldsMissing = false\n    for each strAttribute in lstAttributes\n      fldAttribute = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {vtbSection, strAttribute})\n      if(fldAttribute <> nil)then\n        lstFields.add(fldAttribute)\n        fldAttri
-bute.setAlias(fldAttribute.getAlias.lcase)\n      else\n        MsgBox.error(\"Field '\"+strAttribute+\"' is missing in the \"+strSection+\" table.\"+NL+\"Can't export Epanet Model.\"+NL+\"Please set the proper Alias.\",\"DC Water Design Extension\")\n        blnFieldsMissing = true\n      end\n    end\n    if(blnFieldsMissing)then\n      lnf_Xml.close\n      exit\n    end\n    fldID = lstFields.get(0)\n    lstFields.remove(0)\n    strSectionSingular = strSection.substitute(\"es\",\"e\").substitute(\"ns\",\"n\").lcase\n    for each rec in 
-vtbSection\n      strAttributes=\"\"\n      for each fld in lstFields\n          strAttribute = vtbSection.returnValue(fld, rec).asString\n          strAttributes = strAttributes++fld.getAlias+\"=\"+strAttribute.quote\n      end\n      strID = vtbSection.returnValue(fldID, rec).asString\n      lnf_Xml.writeElt(\"<\"+strSectionSingular++strAttributes+\">\"+strID+\"</\"+strSectionSingular+\">\")\n    end\n  end\n  lnf_Xml.writeElt(\"</\"+strSection.lcase+\">\")\nend\n\nlnf_Xml.writeElt(\"</network>\")\nlnf_Xml.close\nav.clearStatus\n\nstrXml= 
-fln_Xml.getFullName\nstrBasePath=strXml.left(strXml.count-3)\n\nflnInp = (strBasePath+\"inp\").asFilename\n\n'clean up\nFile.delete(flnInp)\n\nstrCmd = strSabCmd+\" -text -xsl \"+strXslt+\" -in \"+strXml+\" -out \"+strBasePath+\"inp\"\nav.run(\"DCWatDes.System.call\", strCmd)\n\nstrTimeout = dicPreferences.get(\"strCommandTimeout\")\nif((strTimeout <> nil)and(strTimeout.isNumber))then\n  numTimeout = strTimeout.asNumber\nelse\n  numTimeout = 30  \nend\n\n\nif(av.run(\"DCWatDes.File.waitFor\", {flnInp, numTimeout}).not)then\n  MsgBox.info(\"XSL
-T Transformation failed. Check your data.\",\"DC Water Design Extension\")\n  exit\nend\n\n' Write OptiDesigner file\nfln_Opti = fln_Xml.clone\nfln_Opti.setExtension(\"od\")\nlnf_Opti = LineFile.make(fln_Opti, #FILE_PERM_WRITE)\ndicEconomic = Dictionary.make(20)\ndicEconomic.add(100, \"DO1 DO3 DO4 DO5 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(150, \"DO1 DO4 DO5 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(200, \"DO1 DO5 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(
-250, \"DO1 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(300, \"DO1 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(400, \"DO1 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(500, \"DO1 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(600, \"DO1 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(700, \"DO1 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(800, \"DO1 DO12 DO13 DO14 DO15\")\ndicEconomic.add(900, \"DO1 DO13 DO14 DO15\")\ndicEconomic.add(1000, \"DO1 DO14 DO15\")\ndicEconomic.add
-(1200, \"DO1 DO15\")\ndicEconomic.add(1400, \"\")\nlstKeys = dicEconomic.returnKeys\nlstKeys.sort(true)\n\nlnf_Opti.writeElt(\"[INP_FILE]\")\nlnf_Opti.writeElt(flnInp.getBaseName.quote)\nlnf_Opti.writeElt(\"[DESIGN_OPTION]\")\nlnf_Opti.writeElt(\"DO1 0 0 0 0\") \nlnf_Opti.writeElt(\"DO2 1484  100  1.5 100\")\nlnf_Opti.writeElt(\"DO3 1764  150  1.5 150\")\nlnf_Opti.writeElt(\"DO4 2337  200  1.5 200\")\nlnf_Opti.writeElt(\"DO5 2150  250  1.5 250\")\nlnf_Opti.writeElt(\"DO6 3347  300  1.5 300\")\nlnf_Opti.writeElt(\"DO7 5100  400  1.5 400\")\nlnf
-_Opti.writeElt(\"DO8 5964  500  0.2 500\")\nlnf_Opti.writeElt(\"DO9 7000  600  0.2 600\")\nlnf_Opti.writeElt(\"DO10 9000  700  0.2 700\")\nlnf_Opti.writeElt(\"DO11 10879 800 0.2 800\")\nlnf_Opti.writeElt(\"DO12 12500 900 0.2 900\")\nlnf_Opti.writeElt(\"DO13 14816 1000 0.2 1000\")\nlnf_Opti.writeElt(\"DO14 19281 1200 0.2 1200\")\nlnf_Opti.writeElt(\"DO15 24274  1400  0.2 1400\")\nlnf_Opti.writeElt(\"[DESIGN_JUNCTIONS]\")\nthmFeature = dicThemes.get(\"Junctions\")\nif(thmFeature <> nil)then\n  ftbFeatures = thmFeature.getFTab\n  fldID = av.
-run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"dc_id\"})\n  fldDemand = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"demand\"})\n  fldElevation = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"elevation\"}) \n  for each rec in ftbFeatures\n    numDemand = ftbFeatures.returnValue(fldDemand, rec)\n    numElevation = ftbFeatures.returnValue(fldElevation, rec)\n    if((numDemand > 0)and(numElevation >= 400)and(numElevation <= 425))then\n      strID = ftbFeatures.returnValue(fld
-ID, rec)\n      lnf_Opti.writeElt(strID+\" 17.5 100\")\n    end\n  end\nend\nlnf_Opti.writeElt(\"[DESIGN_PIPES]\")\nthmFeature = dicThemes.get(\"Pipes\")\nif(thmFeature <> nil)then\n  ftbFeatures = thmFeature.getFTab\n  fldID = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"dc_id\"})\n  fldDiameter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"diameter\"})\n  for each rec in ftbFeatures\n    strID = ftbFeatures.returnValue(fldID, rec)\n    numDiameter = ftbFeatures.returnValue(fldDiameter, rec)\n
-    strDesignOptions = \"\"\n    for each numKey in lstKeys\n      if(numKey >= numDiameter)then\n        strDesignOptions = dicEconomic.get(numKey)\n        break\n      end\n    end\n    lnf_Opti.writeElt(strID+\" 0 2 \"+strDesignOptions)\n  end\nend\nlnf_Opti.writeElt(\"[DESIGN_SOURCES]\")\nlnf_Opti.writeElt(\"\")\nlnf_Opti.writeElt(\"[GA_OPTIONS]\")\nlnf_Opti.writeElt(\"PRESSURE_PENALTY             200000\") \nlnf_Opti.writeElt(\"WARNING_PENALTY              500000\")\nlnf_Opti.writeElt(\"VELOCITY_PENALTY             100000\") \nlnf_O
-pti.writeElt(\"SOURCES_PENALTY              200000\") \nlnf_Opti.writeElt(\"POPULATION     100\") \nlnf_Opti.writeElt(\"GENERATIONS    500\") \nlnf_Opti.writeElt(\"PRESSURE_TOLERANCE           0.05\") \nlnf_Opti.writeElt(\"VELOCITY_TOLERANCE           0.05\") \nlnf_Opti.writeElt(\"GENERATIONS_NO_CHANGE        50\") \nlnf_Opti.close\n\nreturn fln_Xml\n"
-	SearchStr:	"od"
+   for each fld in lstFields\n          strAttribute = ftbSection.returnValue(fld, rec).asString\n          if((strSection=\"Valves\")and(fld.getAlias.lcase = \"setting\")\n            and(strAttribute.contains(\"closed\")))then\n            strAttribute = \"closed\"\n          end\n          strAttributes = strAttributes++fld.getAlias.lcase+\"=\"+strAttribute.quote\n        end\n        strAttributes = strAttributes++\"node1=\"+strFirstNodeID.quote\n        strAttributes = strAttributes++\"node2=\"+strSecondNodeID.quote\n        
+if(strSectionSingular=\"pump\")then\n          lnf_Xml.writeElt(\"<\"+strSectionSingular.lcase++strAttributes+\">\"+strFirstNodeID+\"</\"+strSectionSingular.lcase+\">\")\n        else\n          strType = ftbSection.returnValue(ftbSection.findField(\"type\"), rec).asString.ucase\n          if((strType <> \"CV\")and(strType <> \"SOV\"))then\n            lnf_Xml.writeElt(\"<\"+strSectionSingular.lcase++\"type=\"+strType.quote++strAttributes+\">\"+strFirstNodeID+\"</\"+strSectionSingular.lcase+\">\")\n          else\n            strAttributes
+ = strAttributes.substitute(\"setting=\", \"status=\")\n            lstDynamicPipes.add(\"<pipe\"++strAttributes++\"roughness=\"+\"0.1\".quote++\"length=\"+\"1\".quote+\">\"+strFirstNodeID+\"</pipe>\")\n          end\n        end\n        ' create dynamic junctions\n        \n        strDynamicJunction = \"<junction elevation=\"+ftbSection.returnValue(fldElevation, rec).asString.quote\n        strDynamicJunction = strDynamicJunction++\"demand=\"+\"0\".quote++\"pattern=\"+\"\".quote\n        strDynamicJunction = strDynamicJunction+\">\"+strFirst
+NodeID+\"</junction>\"\n        lstDynamicJunctions.add(strDynamicJunction)\n        strDynamicJunction = \"<junction elevation=\"+ftbSection.returnValue(fldElevation, rec).asString.quote\n        strDynamicJunction = strDynamicJunction++\"demand=\"+\"0\".quote++\"pattern=\"+\"\".quote\n        strDynamicJunction = strDynamicJunction+\">\"+strSecondNodeID+\"</junction>\"\n        lstDynamicJunctions.add(strDynamicJunction)\n        \n        ' create dynamic coordinates\n        strDynamicCoordinate = \"<node x=\"++pntFirstNode.getX
+.setFormatPrecision(10).asString.quote\n        strDynamicCoordinate = strDynamicCoordinate++\"y=\"+pntFirstNode.getY.setFormatPrecision(10).asString.quote\n        strDynamicCoordinate = strDynamicCoordinate+\">\"+strFirstNodeID+\"</node>\"\n        lstDynamicCoordinates.add(strDynamicCoordinate)\n        strDynamicCoordinate = \"<node x=\"++pntSecondNode.getX.setFormatPrecision(10).asString.quote\n        strDynamicCoordinate = strDynamicCoordinate++\"y=\"+pntSecondNode.getY.setFormatPrecision(10).asString.quote\n       
+ strDynamicCoordinate = strDynamicCoordinate+\">\"+strSecondNodeID+\"</node>\"\n        lstDynamicCoordinates.add(strDynamicCoordinate)\n      end\n    end\n    ftbSection.setSelection(bmpMischiefFeatures)\n    ftbSection.updateSelection\n    if(bmpMischiefFeatures.getNextSet(-1) <> -1)then\n      blnErrorOccured = true\n      MsgBox.warning(\"Some \"+strSection+\" are not properly connected. Check the selection.\", \"DC Water Design Extension\")\n    end\n  end\n  lnf_Xml.writeElt(\"</\"+strSection.lcase+\">\")\nend\n\n' write out dy
+namic Junctions\n\nlnf_Xml.writeElt(\"<junctions>\")\nfor each strDynamicJunction in lstDynamicJunctions\n  lnf_Xml.writeElt(strDynamicJunction)\nend\nlnf_Xml.writeElt(\"</junctions>\")\n\n' write out dynamic Coordinates\n\nlnf_Xml.writeElt(\"<coordinates>\")\nfor each strDynamicCoordinate in lstDynamicCoordinates\n  lnf_Xml.writeElt(strDynamicCoordinate)\nend\nlnf_Xml.writeElt(\"</coordinates>\")\n\n' write Pipes section\n\nlnf_Xml.writeElt(\"<pipes>\")\n\n' write out Shutoff Valves and Check Valves\n\nfor each strDynamicPipe in lstDynam
+icPipes\n  lnf_Xml.writeElt(strDynamicPipe)\nend\n\nthmPipes = dicThemes.get(\"Pipes\")\nif(thmPipes <> nil)then\n  ftbPipes = thmPipes.getFTab\n  \n  ' check for the fields\n  \n  lstPipeAttributes = {\"dc_id\", \"node1\", \"node2\", \"length\", \"diameter\", \"roughness\", \"minorloss\", \"status\"}\n  lstFields = List.make\n  blnFieldsMissing = false\n  for each strAttribute in lstPipeAttributes\n    fldAttribute = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbPipes, strAttribute})\n    if(fldAttribute <> nil)then\n      lstFields.a
+dd(fldAttribute)\n    else\n      MsgBox.error(\"Field '\"+strAttribute+\"' is missing in the Pipes table.\"+NL+\"Can't export Epanet Model.\"+NL+\"Please set the proper Alias.\",\"DC Water Design Extension\")\n      blnFieldsMissing = true\n    end\n  end\n  if(blnFieldsMissing)then\n    lnf_Xml.close\n    exit\n  end\n  fldID = lstFields.get(0)\n  lstFields.remove(0)\n  numRecords = ftbPipes.getNumRecords\n  numWritten = 0\n  for each rec in ftbPipes\n    numWritten = numWritten+1\n    strAttributes=\"\"\n    for each fld in lstField
+s\n        strAttribute = ftbPipes.returnValue(fld, rec).asString\n        if((\"status\" = fld.getAlias.lcase)and(strAttribute.lcase.contains(\"closed\")))then\n          strAttribute = \"closed\"\n        end\n        strAttributes = strAttributes++fld.getAlias.lcase+\"=\"+strAttribute.quote\n    end\n    strID = ftbPipes.returnValue(fldID, rec).asString\n    lnf_Xml.writeElt(\"<pipe\"++strAttributes+\">\"+strID+\"</pipe>\")\n    av.setStatus(numWritten/numRecords*50)\n  end\nelse\n  MsgBox.error(\"Can't locate Pipes Theme. Unable 
+to export Epanet model.\",\"DC Water Design Extension\")\n  lnf_Xml.close\n  exit\nend\nlnf_Xml.writeElt(\"</pipes>\")\n\n' write Junctions section\n\nlnf_Xml.writeElt(\"<junctions>\")\nthmJunctions = dicThemes.get(\"Junctions\")\nif(thmJunctions <> nil)then\n  ftbJunctions = thmJunctions.getFTab\n  \n  ' check for the fields\n  \n  lstJunctionAttributes = {\"dc_id\", \"elevation\", \"demand\", \"pattern\"}\n  lstFields = List.make\n  blnFieldsMissing = false\n  for each strAttribute in lstJunctionAttributes\n    fldAttribute = av.run(\"DCWatD
+es.ExpandedAliasVTab.findField\", {ftbJunctions,strAttribute})\n    if(fldAttribute <> nil)then\n      lstFields.add(fldAttribute)\n      fldAttribute.setAlias(fldAttribute.getAlias.lcase)\n    else\n      MsgBox.error(\"Field '\"+strAttribute+\"' is missing in the Junctions table.\"+NL+\"Can't export Epanet Model.\"+NL+\"Please set the proper Alias.\",\"DC Water Design Extension\")\n      blnFieldsMissing = true\n    end\n  end\n  if(blnFieldsMissing)then\n    lnf_Xml.close\n    exit\n  end\n  fldID = lstFields.get(0)\n  lstFields
+.remove(0)\n  numRecords = ftbJunctions.getNumRecords\n  numWritten = 0\n  for each rec in ftbJunctions\n    numWritten = numWritten+1\n    strAttributes=\"\"\n    for each fld in lstFields\n        strAttribute = ftbJunctions.returnValue(fld, rec).asString\n        strAttributes = strAttributes++fld.getAlias+\"=\"+strAttribute.quote\n    end\n    strID = ftbJunctions.returnValue(fldID, rec).asString\n    lnf_Xml.writeElt(\"<junction\"++strAttributes+\">\"+strID+\"</junction>\")\n    av.setStatus(numWritten/numRecords*50+50)\n  e
+nd\nelse\n  MsgBox.error(\"Can't locate Junctions Theme. Unable to export Epanet model.\",\"DC Water Design Extension\")\n  lnf_Xml.close\n  exit\nend\nlnf_Xml.writeElt(\"</junctions>\")\n\n' write emitters section\nlnf_Xml.writeElt(\"<emitters>\")\nif(thmJunctions <> nil)then\n  fldEmitter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbJunctions, \"emittercoefficient\"})\n  for each rec in ftbJunctions\n    numEmitter = ftbJunctions.returnValue(fldEmitter, rec)\n    if((numEmitter.isNull.not) and (numEmitter <> 0))then\n    
+  strID = ftbJunctions.returnValue(fldID, rec).asString\n      lnf_Xml.writeElt(\"<emitter flowcoefficient=\"+numEmitter.asString.quote+\">\"+strID+\"</emitter>\")\n    end\n  end\nend\nlnf_Xml.writeElt(\"</emitters>\")\n\n' write Reservoir and Tank data\n\nfor each lstSection in { {\"Reservoirs\",{\"dc_id\", \"head\",\"pattern\"}},\n                              {\"Tanks\",{\"dc_id\", \"elevation\", \"initiallevel\", \"minimumlevel\",\"maximumlevel\",\"diameter\",\"minimumvolume\",\"volumecurve\"}}}\n  strSection = lstSection.get(0)\n  lstAttributes =
+ lstSection.get(1)\n  lnf_Xml.writeElt(\"<\"+strSection.lcase+\">\")\n  thmSection = dicThemes.get(strSection)\n  if(thmSection <> nil)then\n    ftbSection = thmSection.getFTab\n  \n    ' check for the fields\n  \n    lstFields = List.make\n    blnFieldsMissing = false\n    for each strAttribute in lstAttributes\n      fldAttribute = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbSection, strAttribute})\n      if(fldAttribute <> nil)then\n        lstFields.add(fldAttribute)\n        fldAttribute.setAlias(fldAttribute.get
+Alias.lcase)\n      else\n        MsgBox.error(\"Field '\"+strAttribute+\"' is missing in the \"+strSection+\" table.\"+NL+\"Can't export Epanet Model.\"+NL+\"Please set the proper Alias.\",\"DC Water Design Extension\")\n        blnFieldsMissing = true\n      end\n    end\n    if(blnFieldsMissing)then\n      lnf_Xml.close\n      exit\n    end\n    fldID = lstFields.get(0)\n    lstFields.remove(0)\n    strSectionSingular = strSection.substitute(\"rs\",\"r\").substitute(\"ks\",\"k\").lcase\n    for each rec in ftbSection\n      strAttributes
+=\"\"\n      for each fld in lstFields\n          strAttribute = ftbSection.returnValue(fld, rec).asString\n          strAttributes = strAttributes++fld.getAlias+\"=\"+strAttribute.quote\n      end\n      strID = ftbSection.returnValue(fldID, rec).asString\n      lnf_Xml.writeElt(\"<\"+strSectionSingular++strAttributes+\">\"+strID+\"</\"+strSectionSingular+\">\")\n    end\n  end\nlnf_Xml.writeElt(\"</\"+strSection.lcase+\">\")\n  \nend\n\n' write Spatial Data\nif(blnExportSpatial)then\n  lnf_Xml.writeElt(\"<coordinates>\") \n  for each strF
+eature in { \"Junctions\", \"Reservoirs\", \"Tanks\"}\n    thmFeature = dicThemes.get(strFeature)\n    if(thmFeature <> nil)then\n      ftbFeatures = thmFeature.getFTab\n      fldNodeShape = ftbFeatures.findField(\"Shape\")\n      fldID = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"dc_id\"})\n      for each rec in ftbFeatures\n        pntNode = ftbFeatures.returnValue(fldNodeShape, rec)\n        strCoordinate = \"<node x=\"+pntNode.getX.setFormatPrecision(10).asString.quote\n        strCoordinate = strCoordin
+ate++\"y=\"+pntNode.getY.setFormatPrecision(10).asString.quote\n        strCoordinate = strCoordinate+\">\"+ftbFeatures.returnValue(fldID, rec).asString+\"</node>\"+NL\n        lnf_Xml.writeElt(strCoordinate)\n      end\n    end\n  end\n  lnf_Xml.writeElt(\"</coordinates>\")\n  \n  ' writeVertices\n\n  lnf_Xml.writeElt(\"<vertices>\")\n  fldPipeShape = ftbPipes.findField(\"Shape\")\n  fldID = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes,\"dc_id\"})\n  \n  for each rec in ftbPipes\n    pllPipe = ftbPipes.returnValue(fldPipeSh
+ape, rec)\n    lstVertices = pllPipe.connect.asList.get(0)\n    strID = ftbPipes.returnValue(fldID, rec).asString\n    if(lstVertices.count > 2)then\n      for each i in 1..(lstVertices.count-2)\n        pntVertex = lstVertices.get(i) \n        strVertex = \"<link x=\"+pntVertex.getX.setFormatPrecision(10).asString.quote\n        strVertex = strVertex++\"y=\"+pntVertex.getY.setFormatPrecision(10).asString.quote\n        strVertex = strVertex+\">\"+strID+\"</link>\"+NL\n        lnf_Xml.writeElt(strVertex)\n      end\n    end\n 
+ end\n  lnf_Xml.writeElt(\"</vertices>\")\n\n\n' write backdrop file?\nif(viewActive.getVisibleThemes.count > dicThemes.count)then\n  rectOldExtent = nil\n  if(MsgBox.yesNo(\"Write Backdrop Map?\", \"DC Water Design\",true))then\n    \n  ' turn off model themes so that they don't show up the in the backdrop\n  \n    for each thmModel in dicThemes\n      if (thmModel.isVisible) then\n        thmModel.setVisible(false)\n      end\n    end\n  \n    ' redraw view\n    rectOldExtent = viewActive.getDisplay.returnVisExtent\n    viewActiv
+e.getDisplay.setExtent(viewActive.returnExtent)\n    viewActive.invalidate\n    av.processAllInvals\n  \n    strUnits = \"\"\n    strResolution = dicPreferences.get(\"strBackdropResolution\")\n    if((strResolution = nil)or(strResolution.isNumber.not))then\n      numResolution = 96\n    else\n      numResolution = strResolution.asNumber\n      if(numResolution < 1)then\n        numResolution = 96\n      end\n    end\n  \n    ' Set UNITS for the Background\n    if (viewActive.getUnits = #UNITS_LINEAR_FEET) then\n      strUnits =
+ \"FEET\"\n    elseif (viewActive.getUnits = #UNITS_LINEAR_METERS) then\n      strUnits = \"METERS\"\n    elseif (viewActive.getUnits = #UNITS_LINEAR_DEGREES) then\n      strUnits = \"DEGREES\"\n    end\n    ' If none of the above then take our chances with \"NONE\":\n    if (strUnits = \"\") then \n      strUnits = \"NONE\"\n    end\n    \n    VE = viewActive.getDisplay.returnVisExtent   ' Visable extent as rect\n    X1 = VE.GetLeft.setFormatPrecision(10)\n    Y1 = VE.GetBottom.setFormatPrecision(10)\n    X2 = VE.GetRight.setFormat
+Precision(10)\n    Y2 = VE.GetTop.setFormatPrecision(10)\n  \n    lnf_Xml.writeElt(\"<backdrop>\")\n    lnf_Xml.writeElt(\"<dimensions>\"+X1.SetFormat(\"d.dd\").asString++Y1.SetFormat(\"d.dd\").asString++X2.SetFormat(\"d.dd\").asString++Y2.SetFormat(\"d.dd\").asString+\"</dimensions>\")\n    lnf_Xml.writeElt(\"<units>\"+strUnits+\"</units>\")\n    strScreenDump = fln_Xml.asString\n    ' remove File Extension\n    flnScreenDump = strScreenDump.left(strScreenDump.count - 4).asFileName \n    flnCheck = flnScreenDump.clone\n    flnCheck.s
+etExtension(\"bmp\")\n    if(File.exists(flnCheck))then\n      File.delete(flnCheck)\n    end\n    flnScreenDump = viewActive.exportToFile(flnScreenDump,\"Windows Bitmap\",{numResolution, true})\n    lnf_Xml.writeElt(\"<file>\"+flnCheck.asString+\"</file>\")\n    lnf_Xml.writeElt(\"</backdrop>\")\n    end\n    \n    ' turn on model themes again\n    for each thmModel in dicThemes\n      thmModel.SetVisible(true)\n    end\n  \n    'redraw view\n    if(rectOldExtent <> nil)then\n      viewActive.getDisplay.setExtent(rectOldExtent)\n   
+   viewActive.invalidate\n    end    \n  end\nend\n\n' write out settings from tables\nfor each lstSetting in {{\"Options\", strOptions}, {\"Times\", strTimes}, {\"Report\", strReport}}\n  strTable = lstSetting.get(1)\n  strTag = lstSetting.get(0)\n  tableEN = nil\n  for each aTable in av.getProject.getDocsWithGui(av.findGui(\"Table\"))\n    if(aTable.getName = strTable)then\n      tableEN = aTable\n      break\n    end\n  end\n  if(tableEN <> nil)then\n    av.run(\"XmlParser.Table.writeToLineFile\", {tableEN, lnf_Xml, strTag.lcase})
+\n  else \n    MsgBox.info(\"DCWatDes.Model.runEpanet: Table\"++strTable++\"not found.\"+NL+\"Epanet will use default settings.\",\"DC Water Design Extension\")\n  end\nend\n\n' write out controls section\n\nlnf_Xml.writeElt(\"<controls>\")\ntableControls = nil\nstrControlTableName = dicPreferences.get(\"strControls\")\nfor each docTable in av.getProject.getDocsWithGui(av.findGui(\"Table\"))\n  if(docTable.getName = strControlTableName)then\n    tableControls = docTable\n    break\n  end\nend\nif(tableControls <> nil)then\n  vtbControls =
+ tableControls.getVTab\n  fldFirst=vtbControls.getFields.get(0)\n  for each recControl in vtbControls\n    strControl = vtbControls.returnValue(fldFirst, recControl).asString.quote\n    for each strBreaksXML in  {\"&\",\"<\"}\n      if(strControl.contains(strBreaksXML))then\n        System.echo(\"ERROR: \"+strBreaksXML+\" not allowed in controls table, it will be dropped.\")\n        strControl = strControl.substitute(strBreaksXML,\"\")\n      end\n    end\n    strControl = \"<control whattodoif=\"+strControl+\"/>\"\n    lnf_Xml.wr
+iteElt(strControl)\n  end\nend\nlnf_Xml.writeElt(\"</controls>\")\n\n' write Curves and Patterns\nfor each lstSection in { {\"Curves\",{\"dc_id\", \"dc_x\",\"dc_y\"}},\n                         {\"Patterns\",{\"dc_id\", \"multiplier\"}}}\n  strSection = lstSection.get(0)\n  lstAttributes = lstSection.get(1)\n  lnf_Xml.writeElt(\"<\"+strSection.lcase+\">\")\n  strSectionTable = dicPreferences.get(\"str\"+strSection)\n  if(strSectionTable <> nil)then\n    lstTables = av.getProject.getDocsWithGui(av.findGui(\"Table\"))\n    vtbSection = nil\n    fo
+r each tableInDoc in lstTables\n      if(strSectionTable = tableInDoc.getName)then\n        vtbSection = tableInDoc.getVTab\n        break\n      end    \n    end\n    if(vtbSection = nil)then\n      Msgbox.error(\"Couldn't find \"+strSection+\" table.\", \"DC Water Design Extension\")\n      lnf_Xml.close\n      av.clearStatus\n      exit\n    end  \n    ' check for the fields\n  \n    lstFields = List.make\n    blnFieldsMissing = false\n    for each strAttribute in lstAttributes\n      fldAttribute = av.run(\"DCWatDes.ExpandedAl
+iasVTab.findField\", {vtbSection, strAttribute})\n      if(fldAttribute <> nil)then\n        lstFields.add(fldAttribute)\n        fldAttribute.setAlias(fldAttribute.getAlias.lcase)\n      else\n        MsgBox.error(\"Field '\"+strAttribute+\"' is missing in the \"+strSection+\" table.\"+NL+\"Can't export Epanet Model.\"+NL+\"Please set the proper Alias.\",\"DC Water Design Extension\")\n        blnFieldsMissing = true\n      end\n    end\n    if(blnFieldsMissing)then\n      lnf_Xml.close\n      exit\n    end\n    fldID = lstFields.g
+et(0)\n    lstFields.remove(0)\n    strSectionSingular = strSection.substitute(\"es\",\"e\").substitute(\"ns\",\"n\").lcase\n    for each rec in vtbSection\n      strAttributes=\"\"\n      for each fld in lstFields\n          strAttribute = vtbSection.returnValue(fld, rec).asString\n          strAttributes = strAttributes++fld.getAlias+\"=\"+strAttribute.quote\n      end\n      strID = vtbSection.returnValue(fldID, rec).asString\n      lnf_Xml.writeElt(\"<\"+strSectionSingular++strAttributes+\">\"+strID+\"</\"+strSectionSingular+\">\")\n
+    end\n  end\n  lnf_Xml.writeElt(\"</\"+strSection.lcase+\">\")\nend\n\nlnf_Xml.writeElt(\"</network>\")\nlnf_Xml.close\nav.clearStatus\n\nstrXml= fln_Xml.getFullName\nstrBasePath=strXml.left(strXml.count-3)\n\nflnInp = (strBasePath+\"inp\").asFilename\n\n'clean up\nFile.delete(flnInp)\n\nstrCmd = strSabCmd+\" -text -xsl \"+strXslt+\" -in \"+strXml+\" -out \"+strBasePath+\"inp\"\nav.run(\"DCWatDes.System.call\", strCmd)\n\nstrTimeout = dicPreferences.get(\"strCommandTimeout\")\nif((strTimeout <> nil)and(strTimeout.isNumber))then\n  numTimeout = s
+trTimeout.asNumber\nelse\n  numTimeout = 30  \nend\n\n\nif(av.run(\"DCWatDes.File.waitFor\", {flnInp, numTimeout}).not)then\n  MsgBox.info(\"XSLT Transformation failed. Check your data.\",\"DC Water Design Extension\")\n  exit\nend\n\n' Write OptiDesigner file\nfln_Opti = fln_Xml.clone\nfln_Opti.setExtension(\"od\")\nlnf_Opti = LineFile.make(fln_Opti, #FILE_PERM_WRITE)\ndicEconomic = Dictionary.make(20)\ndicEconomic.add(100, \"DO1 DO3 DO4 DO5 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(150, \"DO1 DO4 DO5 DO6 DO7 
+DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(200, \"DO1 DO5 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(250, \"DO1 DO6 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(300, \"DO1 DO7 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(400, \"DO1 DO8 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(500, \"DO1 DO9 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(600, \"DO1 DO10 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic.add(700, \"DO1 DO11 DO12 DO13 DO14 DO15\")\ndicEconomic
+.add(800, \"DO1 DO12 DO13 DO14 DO15\")\ndicEconomic.add(900, \"DO1 DO13 DO14 DO15\")\ndicEconomic.add(1000, \"DO1 DO14 DO15\")\ndicEconomic.add(1200, \"DO1 DO15\")\ndicEconomic.add(1400, \"\")\nlstKeys = dicEconomic.returnKeys\nlstKeys.sort(true)\n\nlnf_Opti.writeElt(\"[INP_FILE]\")\nlnf_Opti.writeElt(flnInp.getBaseName.quote)\nlnf_Opti.writeElt(\"[DESIGN_OPTION]\")\nlnf_Opti.writeElt(\"DO1 0 0 0 0\") \nlnf_Opti.writeElt(\"DO2 1484  100  1.5 100\")\nlnf_Opti.writeElt(\"DO3 1764  150  1.5 150\")\nlnf_Opti.writeElt(\"DO4 2337  200  1.5 200\")\nl
+nf_Opti.writeElt(\"DO5 2150  250  1.5 250\")\nlnf_Opti.writeElt(\"DO6 3347  300  1.5 300\")\nlnf_Opti.writeElt(\"DO7 5100  400  1.5 400\")\nlnf_Opti.writeElt(\"DO8 5964  500  0.2 500\")\nlnf_Opti.writeElt(\"DO9 7000  600  0.2 600\")\nlnf_Opti.writeElt(\"DO10 9000  700  0.2 700\")\nlnf_Opti.writeElt(\"DO11 10879 800 0.2 800\")\nlnf_Opti.writeElt(\"DO12 12500 900 0.2 900\")\nlnf_Opti.writeElt(\"DO13 14816 1000 0.2 1000\")\nlnf_Opti.writeElt(\"DO14 19281 1200 0.2 1200\")\nlnf_Opti.writeElt(\"DO15 24274  1400  0.2 1400\")\nlnf_Opti.writeElt(\"[
+DESIGN_JUNCTIONS]\")\nthmFeature = dicThemes.get(\"Junctions\")\nif(thmFeature <> nil)then\n  ftbFeatures = thmFeature.getFTab\n  fldID = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"dc_id\"})\n  fldDemand = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"demand\"})\n  fldElevation = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"elevation\"}) \n  for each rec in ftbFeatures\n    numDemand = ftbFeatures.returnValue(fldDemand, rec)\n    numElevation = ftbFeatures.returnValue(fl
+dElevation, rec)\n    if((numDemand > 0)and(numElevation >= 400)and(numElevation <= 425))then\n      strID = ftbFeatures.returnValue(fldID, rec)\n      lnf_Opti.writeElt(strID+\" 17.5 100\")\n    end\n  end\nend\nlnf_Opti.writeElt(\"[DESIGN_PIPES]\")\nthmFeature = dicThemes.get(\"Pipes\")\nif(thmFeature <> nil)then\n  ftbFeatures = thmFeature.getFTab\n  fldID = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"dc_id\"})\n  fldDiameter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbFeatures, \"diameter\"})\n  fo
+r each rec in ftbFeatures\n    strID = ftbFeatures.returnValue(fldID, rec)\n    numDiameter = ftbFeatures.returnValue(fldDiameter, rec)\n    strDesignOptions = \"\"\n    for each numKey in lstKeys\n      if(numKey >= numDiameter)then\n        strDesignOptions = dicEconomic.get(numKey)\n        break\n      end\n    end\n    lnf_Opti.writeElt(strID+\" 0 2 \"+strDesignOptions)\n  end\nend\nlnf_Opti.writeElt(\"[DESIGN_SOURCES]\")\nlnf_Opti.writeElt(\"\")\nlnf_Opti.writeElt(\"[GA_OPTIONS]\")\nlnf_Opti.writeElt(\"PRESSURE_PENALTY         
+    200000\") \nlnf_Opti.writeElt(\"WARNING_PENALTY              500000\")\nlnf_Opti.writeElt(\"VELOCITY_PENALTY             100000\") \nlnf_Opti.writeElt(\"SOURCES_PENALTY              200000\") \nlnf_Opti.writeElt(\"POPULATION     100\") \nlnf_Opti.writeElt(\"GENERATIONS    500\") \nlnf_Opti.writeElt(\"PRESSURE_TOLERANCE           0.05\") \nlnf_Opti.writeElt(\"VELOCITY_TOLERANCE           0.05\") \nlnf_Opti.writeElt(\"GENERATIONS_NO_CHANGE        50\") \nlnf_Opti.close\n\nreturn fln_Xml\n"
+	SearchStr:	"contains"
 	FontSize:	1
 )
 
@@ -4968,7 +4968,7 @@ pti.writeElt(\"SOURCES_PENALTY              200000\") \nlnf_Opti.writeElt(\"POPU
 	Owner:	616
 	X:	-4
 	Y:	-4
-	W:	1690
+	W:	1536
 	H:	911
 )
 
@@ -6914,27 +6914,27 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 
 (NameDict.884
 	Obj:	885
-	Obj:	888
+	Obj:	886
 	Obj:	889
 	Obj:	892
 )
 
 (AVDict.885
-	InternalName:	"Dialog Designer"
-	Key:	886
-	Value:	887
+	InternalName:	"Table of Contents Defaults Dialog"
 )
 
-(AVStr.886
+(AVDict.886
+	InternalName:	"Dialog Designer"
+	Key:	887
+	Value:	888
+)
+
+(AVStr.887
 	S:	"IsVisible"
 )
 
-(Bool.887
+(Bool.888
 	Truth:	1
-)
-
-(AVDict.888
-	InternalName:	"Table of Contents Defaults Dialog"
 )
 
 (AVDict.889
@@ -11345,9 +11345,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Modified:	1
 	Visible:	1
 	MenuBar:	1686
-	ButnBar:	1750
-	Popups:	1796
-	ToolBar:	1797
+	ButnBar:	1751
+	Popups:	1797
+	ToolBar:	1798
 	NewScript:	"Script.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Script.Action"
@@ -11355,7 +11355,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Script.ActionUpdate"
 	Title:	"Scripts"
-	Icon:	1798
+	Icon:	1799
 )
 
 (MenuBar.1686
@@ -11363,7 +11363,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1700
 	Child:	1716
 	Child:	1735
-	Child:	1745
+	Child:	1746
 )
 
 (PMenu.1687
@@ -11500,7 +11500,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1704
-	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -11752,6 +11751,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1741
 	Child:	1743
 	Child:	1744
+	Child:	1745
 	Label:	"&Window"
 )
 
@@ -11796,7 +11796,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVStr.1742
-	S:	"dcwatdes2.apr DCWatDes.View.digitizePipe"
+	S:	"dcwatdes2.apr DCWatDes.Model.Epanet.writeInpFile DCWatDes.View.digitizePipe"
 )
 
 (Choice.1743
@@ -11807,22 +11807,29 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1744
-	Help:	"Activates DCWatDes.View.digitizePipe"
-	Label:	"&2 DCWatDes.View.digitizePipe"
+	Help:	"Activates DCWatDes.Model.Epanet.writeInpFile"
+	Label:	"&2 DCWatDes.Model.Epanet.writeInpFile"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1745
+(Choice.1745
+	Help:	"Activates DCWatDes.View.digitizePipe"
+	Label:	"&3 DCWatDes.View.digitizePipe"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.1746
 	InternalName:	"Help"
-	Child:	1746
 	Child:	1747
 	Child:	1748
 	Child:	1749
+	Child:	1750
 	Label:	"&Help"
 )
 
-(Choice.1746
+(Choice.1747
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -11830,7 +11837,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1747
+(Choice.1748
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help"
@@ -11838,10 +11845,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1748
+(Space.1749
 )
 
-(Choice.1749
+(Choice.1750
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -11849,358 +11856,358 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1750
-	Child:	1751
-	Child:	1753
-	Child:	1755
-	Child:	1757
-	Child:	1759
+(ButnBar.1751
+	Child:	1752
+	Child:	1754
+	Child:	1756
+	Child:	1758
 	Child:	1760
-	Child:	1762
+	Child:	1761
 	Child:	1763
-	Child:	1765
-	Child:	1767
+	Child:	1764
+	Child:	1766
 	Child:	1768
-	Child:	1770
-	Child:	1772
-	Child:	1774
-	Child:	1776
-	Child:	1778
+	Child:	1769
+	Child:	1771
+	Child:	1773
+	Child:	1775
+	Child:	1777
 	Child:	1779
-	Child:	1781
-	Child:	1783
-	Child:	1785
+	Child:	1780
+	Child:	1782
+	Child:	1784
 	Child:	1786
-	Child:	1788
-	Child:	1790
-	Child:	1792
+	Child:	1787
+	Child:	1789
+	Child:	1791
 	Child:	1793
 	Child:	1794
+	Child:	1795
 )
 
-(Butn.1751
+(Butn.1752
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1752
+	Icon:	1753
 	Click:	"Project.Save"
 )
 
-(AVIcon.1752
+(AVIcon.1753
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Butn.1753
+(Butn.1754
 	Disabled:	1
 	Help:	"Cut//Cuts the selection and puts it into the clipboard"
 	HelpTopic:	"Cut"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1754
+	Icon:	1755
 	Click:	"Script.Cut"
 )
 
-(AVIcon.1754
+(AVIcon.1755
 	Name:	"Cut"
 	Res:	"Icons.Cut"
 
 )
 
-(Butn.1755
+(Butn.1756
 	Disabled:	1
 	Help:	"Copy//Copies the selection and puts it into the clipboard"
 	HelpTopic:	"Copy"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1756
+	Icon:	1757
 	Click:	"Script.Copy"
 )
 
-(AVIcon.1756
+(AVIcon.1757
 	Name:	"Copy"
 	Res:	"Icons.Copy"
 
 )
 
-(Butn.1757
+(Butn.1758
 	Help:	"Paste//Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
-	Icon:	1758
+	Icon:	1759
 	Click:	"Script.Paste"
 )
 
-(AVIcon.1758
+(AVIcon.1759
 	Name:	"Paste"
 	Res:	"Icons.Paste"
 
 )
 
-(Space.1759
+(Space.1760
 )
 
-(Butn.1760
+(Butn.1761
 	Help:	"Undo//Undoes the last modification to the script editor text"
 	HelpTopic:	"Undo__Script_"
-	Icon:	1761
+	Icon:	1762
 	Click:	"Script.Undo"
 )
 
-(AVIcon.1761
+(AVIcon.1762
 	Name:	"Undo"
 	Res:	"Icons.Undo"
 
 )
 
-(Space.1762
+(Space.1763
 )
 
-(Butn.1763
+(Butn.1764
 	Help:	"Shift Lines Left//Shifts selected lines or current line two spaces to the left"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1764
+	Icon:	1765
 	Click:	"Script.ShiftLeft"
 )
 
-(AVIcon.1764
+(AVIcon.1765
 	Name:	"ShiftLeft"
 	Res:	"Icons.ShiftLeft"
 
 )
 
-(Butn.1765
+(Butn.1766
 	Help:	"Shift Lines Right//Shifts selected lines or current line two spaces to the right"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1766
+	Icon:	1767
 	Click:	"Script.ShiftRight"
 )
 
-(AVIcon.1766
+(AVIcon.1767
 	Name:	"ShiftRight"
 	Res:	"Icons.ShiftRight"
 
 )
 
-(Space.1767
+(Space.1768
 )
 
-(Butn.1768
+(Butn.1769
 	Disabled:	1
 	Help:	"Compile//Compiles the script"
 	HelpTopic:	"Compile"
 	Update:	"Script.CompileUpdate"
-	Icon:	1769
+	Icon:	1770
 	Click:	"Script.Compile"
 )
 
-(AVIcon.1769
+(AVIcon.1770
 	Name:	"Check"
 	Res:	"Icons.Check"
 
 )
 
-(Butn.1770
+(Butn.1771
 	Help:	"Run//Runs the compiled script"
 	HelpTopic:	"Run"
 	Update:	"Script.RunUpdate"
-	Icon:	1771
+	Icon:	1772
 	Click:	"Script.Run"
 )
 
-(AVIcon.1771
+(AVIcon.1772
 	Name:	"Run"
 	Res:	"Icons.Run"
 
 )
 
-(Butn.1772
+(Butn.1773
 	Help:	"Step//Executes one request or object reference in the compiled script"
 	HelpTopic:	"Step"
 	Update:	"Script.RunUpdate"
-	Icon:	1773
+	Icon:	1774
 	Click:	"Script.Step"
 )
 
-(AVIcon.1773
+(AVIcon.1774
 	Name:	"Footprints"
 	Res:	"Icons.Footprints"
 
 )
 
-(Butn.1774
+(Butn.1775
 	Help:	"Toggle Breakpoint//Toggles a breakpoint on or off at the current cursor position"
 	HelpTopic:	"Toggle_Breakpoint"
 	Update:	"Script.RunUpdate"
-	Icon:	1775
+	Icon:	1776
 	Click:	"Script.ToggleBreak"
 )
 
-(AVIcon.1775
+(AVIcon.1776
 	Name:	"Hand"
 	Res:	"Icons.Hand"
 
 )
 
-(Butn.1776
+(Butn.1777
 	Help:	"Examine Variables//Displays the current value of local and global variables"
 	HelpTopic:	"Examine_Variables"
 	Update:	"Script.RunUpdate"
-	Icon:	1777
+	Icon:	1778
 	Click:	"Script.ShowVariables"
 )
 
-(AVIcon.1777
+(AVIcon.1778
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1778
+(Space.1779
 )
 
-(Butn.1779
+(Butn.1780
 	Help:	"Load System Script//Inserts the source code of a system script"
 	HelpTopic:	"Load_System_Script"
-	Icon:	1780
+	Icon:	1781
 	Click:	"Script.SystemLoad"
 )
 
-(AVIcon.1780
+(AVIcon.1781
 	Name:	"LoadScript"
 	Res:	"Icons.LoadScript"
 
 )
 
-(Butn.1781
+(Butn.1782
 	Help:	"Load Text File//Inserts the contents of a text file"
 	HelpTopic:	"Load_Text_File"
-	Icon:	1782
+	Icon:	1783
 	Click:	"Script.FileLoad"
 )
 
-(AVIcon.1782
+(AVIcon.1783
 	Name:	"Open"
 	Res:	"Icons.Open"
 
 )
 
-(Butn.1783
+(Butn.1784
 	Help:	"Write Text File//Writes the entire script or the selected text to a text file"
 	HelpTopic:	"Write_Text_File"
-	Icon:	1784
+	Icon:	1785
 	Click:	"Script.FileWrite"
 )
 
-(AVIcon.1784
+(AVIcon.1785
 	Name:	"Write"
 	Res:	"Icons.Write"
 
 )
 
-(Space.1785
+(Space.1786
 )
 
-(Butn.1786
+(Butn.1787
 	Help:	"Script Help//Searches for help using the current selection"
 	HelpTopic:	"Getting_help_about_script_components"
-	Icon:	1787
+	Icon:	1788
 	Click:	"Script.Help"
 )
 
-(AVIcon.1787
+(AVIcon.1788
 	Name:	"Help"
 	Res:	"Icons.Help"
 
 )
 
-(Butn.1788
+(Butn.1789
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1789
+	Icon:	1790
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1789
+(AVIcon.1790
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.1790
-	Icon:	1791
+(Butn.1791
+	Icon:	1792
 	Click:	"Programming.findInAllScripts"
 )
 
-(AVIcon.1791
+(AVIcon.1792
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1792
+(Space.1793
 )
 
-(Butn.1793
+(Butn.1794
 	Icon:	1135
 	Click:	"DCWatDesExtension.make"
 )
 
-(Butn.1794
-	Icon:	1795
+(Butn.1795
+	Icon:	1796
 	Click:	"Script.setNameFromFirstComment"
 )
 
-(AVIcon.1795
+(AVIcon.1796
 	Name:	"Yen"
 	Res:	"Icons.Yen"
 
 )
 
-(PopupSet.1796
+(PopupSet.1797
 )
 
-(ToolBar.1797
+(ToolBar.1798
 )
 
-(AVIcon.1798
+(AVIcon.1799
 	Name:	"Icon"
 	Res:	"SEd.Icon"
 
 )
 
-(DocGUI.1799
+(DocGUI.1800
 	Name:	"Project"
 	Type:	"Project"
 	Modified:	1
-	MenuBar:	1800
-	ButnBar:	1877
-	Popups:	1884
-	ToolBar:	1885
-	Icon:	1886
+	MenuBar:	1801
+	ButnBar:	1878
+	Popups:	1885
+	ToolBar:	1886
+	Icon:	1887
 )
 
-(MenuBar.1800
-	Child:	1801
-	Child:	1813
-	Child:	1853
-	Child:	1862
-	Child:	1872
-)
-
-(PMenu.1801
-	InternalName:	"File"
+(MenuBar.1801
 	Child:	1802
+	Child:	1814
+	Child:	1854
+	Child:	1863
+	Child:	1873
+)
+
+(PMenu.1802
+	InternalName:	"File"
 	Child:	1803
 	Child:	1804
 	Child:	1805
 	Child:	1806
 	Child:	1807
-	Child:	1809
+	Child:	1808
 	Child:	1810
 	Child:	1811
 	Child:	1812
+	Child:	1813
 	Label:	"&File"
 )
 
-(Choice.1802
+(Choice.1803
 	Help:	"Creates a new project"
 	HelpTopic:	"New_Project"
 	Label:	"&New Project"
@@ -12208,7 +12215,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+N"
 )
 
-(Choice.1803
+(Choice.1804
 	Help:	"Opens an existing project"
 	HelpTopic:	"Open_Project"
 	Label:	"&Open Project..."
@@ -12216,7 +12223,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1804
+(Choice.1805
 	Help:	"Closes the project window"
 	HelpTopic:	"Close_Project"
 	Label:	"&Close Project"
@@ -12224,10 +12231,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1805
+(Space.1806
 )
 
-(Choice.1806
+(Choice.1807
 	Help:	"Saves the current project"
 	HelpTopic:	"Save_Project"
 	Label:	"&Save Project"
@@ -12235,7 +12242,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+S"
 )
 
-(Choice.1807
+(Choice.1808
 	Help:	"Saves the current project with a new name"
 	HelpTopic:	"Save_Project_As"
 	Label:	"Save Project &As..."
@@ -12243,10 +12250,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1809
+(Space.1810
 )
 
-(Choice.1810
+(Choice.1811
 	Help:	"Displays the Extensions dialog"
 	HelpTopic:	"Extensions"
 	Label:	"&Extensions..."
@@ -12254,10 +12261,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1811
+(Space.1812
 )
 
-(Choice.1812
+(Choice.1813
 	Help:	"Exits ArcView"
 	HelpTopic:	"Exit"
 	Label:	"E&xit"
@@ -12265,9 +12272,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1813
+(PMenu.1814
 	InternalName:	"Project"
-	Child:	1814
 	Child:	1815
 	Child:	1816
 	Child:	1817
@@ -12306,7 +12312,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1850
 	Child:	1851
 	Child:	1852
-	Child:	1823
+	Child:	1853
+	Child:	1824
+	Child:	1853
 	Child:	1852
 	Child:	1851
 	Child:	1850
@@ -12335,11 +12343,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1827
 	Child:	1826
 	Child:	1825
-	Child:	1824
 	Label:	"&Project"
 )
 
-(Choice.1814
+(Choice.1815
 	Help:	"Displays the dialog box to edit properties of the project"
 	HelpTopic:	"Project_Properties"
 	Label:	"&Properties..."
@@ -12347,7 +12354,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1815
+(Choice.1816
 	Help:	"Customizes the active project"
 	HelpTopic:	"Customize"
 	Update:	"Project.CustomizeUpdate"
@@ -12356,10 +12363,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1816
+(Space.1817
 )
 
-(Choice.1817
+(Choice.1818
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
@@ -12368,7 +12375,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+R"
 )
 
-(Choice.1818
+(Choice.1819
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
@@ -12377,10 +12384,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Del"
 )
 
-(Space.1819
+(Space.1820
 )
 
-(Choice.1820
+(Choice.1821
 	Help:	"Adds a table to the project"
 	HelpTopic:	"Add_Table"
 	Update:	"Project.AddTableUpdate"
@@ -12389,7 +12396,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1821
+(Choice.1822
 	Help:	"Creates a new project component from an external source"
 	HelpTopic:	"Import"
 	Update:	"Project.ImportUpdate"
@@ -12398,16 +12405,13 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1822
+(Choice.1823
 	Help:	"Opens the SQL Connection manager"
 	HelpTopic:	"SQL_Connect"
 	Update:	"Project.HasSQL"
 	Label:	"&SQL Connect..."
 	Click:	"Project.SQLConnect"
 	Shortcut:	"Keys.None"
-)
-
-(Space.1823
 )
 
 (Space.1824
@@ -12497,8 +12501,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 (Space.1852
 )
 
-(PMenu.1853
-	Child:	1854
+(Space.1853
+)
+
+(PMenu.1854
 	Child:	1855
 	Child:	1856
 	Child:	1857
@@ -12506,31 +12512,32 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1859
 	Child:	1860
 	Child:	1861
+	Child:	1862
 	Label:	"DC Water Design"
 )
 
-(Choice.1854
+(Choice.1855
 	Tag:	"Setup"
 	Label:	"Setup"
 	Click:	"DCWatDes.Dialog.Setup.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1855
+(Choice.1856
 	Tag:	"Epanet Tables"
 	Label:	"Epanet Tables"
 	Click:	"DCWatDes.Dialog.EpanetTables.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1856
+(Choice.1857
 	Tag:	"Result Tables"
 	Label:	"Result Tables"
 	Click:	"DCWatDes.Dialog.ResultTables.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1857
+(Choice.1858
 	Help:	"Split the currently selected model based on the Zone field."
 	Tag:	"Split Model"
 	Label:	"Split Model"
@@ -12538,7 +12545,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1858
+(Choice.1859
 	Help:	"Merge the currently selected model based on the zone field value"
 	Tag:	"Merge Model"
 	Label:	"Merge Model"
@@ -12546,7 +12553,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1859
+(Choice.1860
 	Help:	"Extract a model based on the bytecode value."
 	Tag:	"Extract Model"
 	Label:	"Extract Model"
@@ -12554,7 +12561,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1860
+(Choice.1861
 	Help:	"Open the DC Water Design Extension Help"
 	Tag:	"Help"
 	Label:	"Help"
@@ -12562,27 +12569,27 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1861
+(Choice.1862
 	Tag:	"About"
 	Label:	"About"
 	Click:	"DCWatDes.about"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1862
+(PMenu.1863
 	InternalName:	"Window"
-	Child:	1863
 	Child:	1864
 	Child:	1865
 	Child:	1866
 	Child:	1867
 	Child:	1868
-	Child:	1870
+	Child:	1869
 	Child:	1871
+	Child:	1872
 	Label:	"&Window"
 )
 
-(Choice.1863
+(Choice.1864
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -12590,7 +12597,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1864
+(Choice.1865
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -12598,7 +12605,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1865
+(Choice.1866
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -12606,10 +12613,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1866
+(Space.1867
 )
 
-(Choice.1867
+(Choice.1868
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -12617,39 +12624,39 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.1868
-	ObjectTag:	1869
+(Space.1869
+	ObjectTag:	1870
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.1869
+(AVStr.1870
 	S:	"dcwatdes2.apr DCWatDes.View.digitizePipe"
 )
 
-(Choice.1870
+(Choice.1871
 	Help:	"Activates dcwatdes2.apr"
 	Label:	"&1 dcwatdes2.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1871
+(Choice.1872
 	Help:	"Activates DCWatDes.View.digitizePipe"
 	Label:	"&2 DCWatDes.View.digitizePipe"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1872
+(PMenu.1873
 	InternalName:	"Help"
-	Child:	1873
 	Child:	1874
 	Child:	1875
 	Child:	1876
+	Child:	1877
 	Label:	"&Help"
 )
 
-(Choice.1873
+(Choice.1874
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12657,7 +12664,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1874
+(Choice.1875
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12665,10 +12672,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1875
+(Space.1876
 )
 
-(Choice.1876
+(Choice.1877
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12676,69 +12683,69 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1877
+(ButnBar.1878
 	Update:	"Project.UpdateButtons"
-	Child:	1878
-	Child:	1880
+	Child:	1879
 	Child:	1881
-	Child:	1883
+	Child:	1882
+	Child:	1884
 )
 
-(Butn.1878
+(Butn.1879
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1879
+	Icon:	1880
 	Click:	"Project.Save"
 )
 
-(AVIcon.1879
+(AVIcon.1880
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1880
+(Space.1881
 )
 
-(Butn.1881
+(Butn.1882
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1882
+	Icon:	1883
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1882
+(AVIcon.1883
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.1883
+(Butn.1884
 	Icon:	1135
 	Click:	"DCWatDesExtension.make"
 )
 
-(PopupSet.1884
+(PopupSet.1885
 )
 
-(ToolBar.1885
+(ToolBar.1886
 )
 
-(AVIcon.1886
+(AVIcon.1887
 	Name:	"Icon"
 	Res:	"Project.Icon"
 
 )
 
-(DocGUI.1905
+(DocGUI.1906
 	Name:	"Overview"
 	DocBaseName:	"Overview for "
 	Type:	"View"
 	Modified:	1
-	MenuBar:	1906
-	ButnBar:	1916
-	Popups:	1922
-	ToolBar:	1941
+	MenuBar:	1907
+	ButnBar:	1917
+	Popups:	1923
+	ToolBar:	1942
 	NewScript:	"View.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Doc.Action"
@@ -12746,23 +12753,23 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Doc.ActionUpdate"
 	Title:	"Overviews"
-	Icon:	1944
+	Icon:	1945
 )
 
-(MenuBar.1906
-	Child:	1907
-	Child:	1911
-)
-
-(PMenu.1907
-	InternalName:	"Edit"
+(MenuBar.1907
 	Child:	1908
+	Child:	1912
+)
+
+(PMenu.1908
+	InternalName:	"Edit"
 	Child:	1909
 	Child:	1910
+	Child:	1911
 	Label:	"&Edit"
 )
 
-(Choice.1908
+(Choice.1909
 	Help:	"Displays the TOC so you can delete or changed themes."
 	Update:	"OverView.DisplayTOCUpdate"
 	Label:	"Display TOC"
@@ -12770,7 +12777,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1909
+(Choice.1910
 	Disabled:	1
 	Help:	"Removes the active themes from the view"
 	HelpTopic:	"Delete_Themes"
@@ -12780,19 +12787,19 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1910
+(Space.1911
 )
 
-(PMenu.1911
+(PMenu.1912
 	InternalName:	"Help"
-	Child:	1912
 	Child:	1913
 	Child:	1914
 	Child:	1915
+	Child:	1916
 	Label:	"&Help"
 )
 
-(Choice.1912
+(Choice.1913
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12800,7 +12807,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1913
+(Choice.1914
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12808,10 +12815,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1914
+(Space.1915
 )
 
-(Choice.1915
+(Choice.1916
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12819,47 +12826,46 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1916
-	Child:	1917
-	Child:	1919
+(ButnBar.1917
+	Child:	1918
 	Child:	1920
+	Child:	1921
 )
 
-(Butn.1917
+(Butn.1918
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1918
+	Icon:	1919
 	Click:	"Project.Save"
 )
 
-(AVIcon.1918
+(AVIcon.1919
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1919
+(Space.1920
 )
 
-(Butn.1920
+(Butn.1921
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1921
+	Icon:	1922
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1921
+(AVIcon.1922
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(PopupSet.1922
-	Child:	1923
+(PopupSet.1923
+	Child:	1924
 )
 
-(Popup.1923
-	Child:	1924
+(Popup.1924
 	Child:	1925
 	Child:	1926
 	Child:	1927
@@ -12876,10 +12882,11 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1938
 	Child:	1939
 	Child:	1940
+	Child:	1941
 	Label:	"Menu"
 )
 
-(Choice.1924
+(Choice.1925
 	Disabled:	1
 	Invisible:	1
 	Help:	"Deletes the last entered point on the line or polygon being drawn"
@@ -12889,7 +12896,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1925
+(Choice.1926
 	Help:	"Undo the last edit to graphics on a view"
 	HelpTopic:	"Undo_Graphic_Edit_on_a_view"
 	Update:	"View.UndoEditUpdate"
@@ -12898,7 +12905,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1926
+(Choice.1927
 	Disabled:	1
 	Invisible:	1
 	Help:	"Redo the last edit operation on a theme that was undone"
@@ -12908,10 +12915,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1927
+(Space.1928
 )
 
-(Choice.1928
+(Choice.1929
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns general snapping on"
@@ -12921,7 +12928,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1929
+(Choice.1930
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns interactive snapping on"
@@ -12931,10 +12938,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1930
+(Space.1931
 )
 
-(Choice.1931
+(Choice.1932
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest vertex within the user tolerance"
@@ -12944,7 +12951,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1932
+(Choice.1933
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest line segment"
@@ -12954,7 +12961,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1933
+(Choice.1934
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest node common to two or more features"
@@ -12964,7 +12971,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1934
+(Choice.1935
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest endpoint of an existing line"
@@ -12974,10 +12981,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1935
+(Space.1936
 )
 
-(Choice.1936
+(Choice.1937
 	Help:	"Unselects the selected features in all active themes"
 	Update:	"View.AttributeThemesUpdate"
 	Label:	"Clear Selection"
@@ -12985,7 +12992,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1937
+(Choice.1938
 	Help:	"Zooms in at point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom In"
@@ -12993,7 +13000,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1938
+(Choice.1939
 	Help:	"Zooms out from point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom Out"
@@ -13001,7 +13008,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1939
+(Choice.1940
 	Help:	"Zooms to the extent of the selected features"
 	Update:	"View.SelectableThemesUpdate"
 	Label:	"Zoom to Selected"
@@ -13009,7 +13016,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1940
+(Choice.1941
 	Help:	"Centers display on point where you click to bring up popup"
 	Update:	"View.HasDataUpdate"
 	Label:	"Pan"
@@ -13017,74 +13024,74 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ToolBar.1941
-	Child:	1942
+(ToolBar.1942
+	Child:	1943
 )
 
-(Tool.1942
+(Tool.1943
 	Help:	"Pointer//Selects, moves, and resizes graphics"
 	HelpTopic:	"Pointer_tool"
 	Update:	"View.HasDataUpdate"
-	Icon:	1943
+	Icon:	1944
 	Cursor:	"Cursors.Select"
 	Apply:	"Overview.ResizeBox"
 	Click:	"View.SelectTool"
 )
 
-(AVIcon.1943
+(AVIcon.1944
 	Name:	"Select"
 	Res:	"Icons.Select"
 
 )
 
-(AVIcon.1944
+(AVIcon.1945
 	Name:	"O"
 	Res:	"Icons.O"
 
 )
 
-(FN.2062
+(FN.2063
 	Path:	"$HOME"
 )
 
-(TClr.2063
+(TClr.2064
 	Red:	0xffff
 	Green:	0xffff
 )
 
-(AVStr.2064
+(AVStr.2065
 	S:	"View"
 )
 
-(AVStr.2065
+(AVStr.2066
 	S:	"Table"
 )
 
-(AVStr.2066
+(AVStr.2067
 	S:	"Chart"
 )
 
-(AVStr.2067
+(AVStr.2068
 	S:	"Layout"
 )
 
-(AVStr.2068
+(AVStr.2069
 	S:	"Script"
 )
 
-(AVStr.2069
+(AVStr.2070
 	S:	"Project"
 )
 
-(AVStr.2070
+(AVStr.2071
 	S:	"Appl"
 )
 
-(AVStr.2071
+(AVStr.2072
 	S:	"Overview"
 )
 
-(AVStr.2072
+(AVStr.2073
 	S:	"DialogEditor"
 )
 

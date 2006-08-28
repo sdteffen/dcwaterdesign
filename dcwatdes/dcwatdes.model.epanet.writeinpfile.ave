@@ -215,7 +215,7 @@ for each lstSection in lstSections
           if((strSection="Valves")and(fld.getAlias.lcase = "setting")
             and(strAttribute.contains("closed")))then
             strAttribute = "closed"
-          end  
+          end
           strAttributes = strAttributes++fld.getAlias.lcase+"="+strAttribute.quote
         end
         strAttributes = strAttributes++"node1="+strFirstNodeID.quote
@@ -320,6 +320,9 @@ if(thmPipes <> nil)then
     strAttributes=""
     for each fld in lstFields
         strAttribute = ftbPipes.returnValue(fld, rec).asString
+        if(("status" = fld.getAlias.lcase)and(strAttribute.lcase.contains("closed")))then
+          strAttribute = "closed"
+        end
         strAttributes = strAttributes++fld.getAlias.lcase+"="+strAttribute.quote
     end
     strID = ftbPipes.returnValue(fldID, rec).asString

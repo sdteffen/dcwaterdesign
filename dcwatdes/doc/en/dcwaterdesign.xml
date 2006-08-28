@@ -64,6 +64,10 @@
            <listitem><para>An Elevation calculation tutorial
              has been added to the extension (<xref 
              linkend="elevation_tutorial" />).</para></listitem>
+           <listitem><para>When writing EPANET INP files, the <structfield
+             >Status</structfield> field of a <classname>Pipe</classname> that
+             contains &quot;closed&quot; will be set to &quot;closed&quot;.
+             </para></listitem>  
           </itemizedlist>
         </sect3>  
         <sect3 id="news_2_12_3">
@@ -841,6 +845,9 @@
       <sect3 id="write_epanet_file">
         <title>Write EPANET File</title> 
         <indexterm><primary>INP file</primary></indexterm>
+        <indexterm><primary>status</primary></indexterm>
+        <indexterm><primary>setting</primary></indexterm>
+        <indexterm><primary>closed</primary></indexterm>
         <para>Exports the hydraulic model to an EPANET input file.</para>
     
 	<para>The model has to be complete, running "Make EPANET Model" 
@@ -854,7 +861,10 @@
 	  setup dialog (see <xref linkend="project_menus" />). A backdrop will only 
 	  be written, if the view contains visible themes in 
 	  addition to the EPANET themes.</para>
-	
+	<para>If the <structfield>Status</structfield> field of a <classname
+	  >Pipe</classname> or the <structfield>Setting</structfield> field of
+	  a <classname>Valve</classname> contains &quot;closed&quot;, it will be
+	  set to &quot;closed&quot;.</para>
 	  <note><para>The resulting EPANET input file has the extension 
 	    *.inp. The *.xml-file is just an intermediate format 
 	    (temporary file).</para></note>

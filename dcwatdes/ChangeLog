@@ -1,3 +1,9 @@
+2006-08-28  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.model.epanet.writeinpfile.ave: Set value of pipe.status to
+	"closed" when it contains "closed". Implements RFE #1547032
+	
 2006-05-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml: More comprehensive INP file import
