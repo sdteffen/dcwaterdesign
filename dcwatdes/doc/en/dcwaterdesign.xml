@@ -26,8 +26,8 @@
 	Free Software Foundation (<ulink url="http://www.gnu.org" />).
 	</para></legalnotice>
   </bookinfo>
-  <article id="general">
-    <title>General</title>
+  <chapter id="general">
+    <title>DC Water Design Extension - General Information</title>
     <indexterm><primary>General</primary></indexterm>
   <sect1 id="introduction">
     <title>Introduction</title>
@@ -659,9 +659,9 @@
       </orderedlist>
     </para>
   </sect1>
-  </article>
-  <article id="reference">
-    <title>Reference</title>
+  </chapter>
+  <chapter id="reference">
+    <title>DC Water Design Extension Reference</title>
     <indexterm><primary>reference</primary></indexterm>
   <sect1 id="usage">
     <title>Usage</title>
@@ -2356,9 +2356,9 @@
       </itemizedlist>
     </sect2>
   </sect1>
-</article>
-<article id="tutorials">
-  <title>Tutorials</title>
+</chapter>
+<chapter id="tutorials">
+  <title>DC Water Design Extension Tutorials</title>
   <indexterm><primary>tutorial</primary></indexterm>
   <para>Tutorial related to hydraulic analysis with th DC Water Design
     Extension.</para>
@@ -2532,8 +2532,161 @@
       <para>Save the edits: Click <guibutton>Yes</guibutton>.</para>  
     </example>  
   </sect1>
-</article>
-<index>
-  <title>Index</title>
-</index>
+    <sect1 id="calculate_dc_id_tutorial">
+      <title>Automated DC_ID Calculation</title>
+      <indexterm><primary>dc_id</primary></indexterm>
+      <indexterm><primary>DC Processing Extension</primary></indexterm>
+      <para>Use the &quot;Create Unique ID&quot; function of the DC
+        Processing Extension to fill the dc_id field.</para>
+      <para>In addition, you should use the ArcView field calculator to prepend the
+        numeric IDs with a prefix:</para>
+      <example>
+        <title>Prefixing numeric Junction IDs with &quot;JU&quot;</title>
+        <orderedlist>
+          <listitem><para>Open the Junction table if it is not yet open.
+            </para></listitem>
+          <listitem><para>Select <menuchoice><guimenu>Table</guimenu>
+            <guimenuitem>Start Editing</guimenuitem></menuchoice> from the menu 
+            (if necessary).</para></listitem>
+          <listitem><para>Select the <structfield>dc_id</structfield> 
+            field.</para></listitem>
+          <listitem><para>Select <menuchoice><guimenu>Field</guimenu>
+            <guimenuitem>Calculate...</guimenuitem></menuchoice> from the menu.
+            </para></listitem>
+          <listitem><para>Enter the following formula:</para>
+            <programlisting>&quot;JU&quot;+[dc_id]</programlisting></listitem>
+          <listitem><para>Select <menuchoice><guimenu>Table</guimenu>
+            <guimenuitem>Stop Editing</guimenuitem></menuchoice> from the
+            menu.</para></listitem>
+        </orderedlist> 
+      </example>
+    </sect1>
+    <sect1 id="quality_control_tutorial">
+      <title>Quality Control</title>
+      <indexterm><primary>quality</primary></indexterm>
+      <para>Basic quality control steps. These should applied e.g. when
+        ArcView reports problems like &quot;Segmentation violation&quot;.</para>
+      <sect2 id="find_duplicate_shapes">
+        <title>Find Duplicate Shapes</title>
+        <indexterm><primary>Find Duplicate Shapes</primary></indexterm>
+        <para>Duplicate shapes often cause problems because they disturb the
+          line-node topology. The &quot;Find Duplicate Shapes&quot;
+          Extension can be used to identify and eliminate duplicate shapes.</para>
+        <para>The &quot;Find Duplicate Shapes&quot; Extension is available from
+          <ulink url="http://www.jennessent.com">http://www.jennessent.com</ulink>.
+          </para>
+        <example>
+          <title>Find duplicate pipes</title>
+          <orderedlist>
+            <listitem><para>Load the &quot;Find Duplicate Shapes&quot; 
+              Extension</para></listitem>
+            <listitem><para>Open a view</para></listitem>
+            <listitem><para>Add the pipes theme to the view.</para></listitem>
+            <listitem><para>Click the <guibutton>Identify Duplicate 
+              Features</guibutton> button.</para></listitem>
+            <listitem><para>Select the pipes theme from the list.</para></listitem>
+            <listitem><para>Select <structfield>dc_id</structfield> as the ID field.
+              </para></listitem>
+            <listitem><para>Click the <guibutton>OK</guibutton> button.</para></listitem>
+            <listitem><para>Select &quot;Shapes are identical&quot;</para></listitem>
+            <listitem><para>Click the <guibutton>OK</guibutton> button.</para></listitem>
+            <listitem><para>The extension can add a new field 
+              (<structfield>Set_ID</structfield>) identifying sets
+              of duplicate shapes. This can be used to delete duplicates. When
+              asked if such a field should be added, click 
+              <guibutton>Yes</guibutton>.</para></listitem>
+            <listitem><para>Review the generated report. If there are duplicates, 
+              activate the pipes 
+              theme.</para></listitem>
+            <listitem><para>Select <menuchoice><guimenu>Theme</guimenu>
+              <guimenuitem>Table...</guimenuitem></menuchoice> from the 
+              table.</para></listitem>
+             <listitem><para>Select <menuchoice><guimenu>Table</guimenu>
+              <guimenuitem>Start Editing</guimenuitem></menuchoice> from
+              the menu.</para></listitem>  
+            <listitem><para>Select the <structfield>Set_ID</structfield> 
+              field.</para></listitem>  
+            <listitem><para>Select <menuchoice><guimenu>Field</guimenu>
+              <guimenuitem>Sort Descending</guimenuitem></menuchoice> from
+              the menu.</para></listitem>
+            <listitem><para>Review the duplicate records. Delete duplicates
+              in such a way that each Set_ID only appears once.</para></listitem>
+            <listitem><para>Select <menuchoice><guimenu>Table</guimenu>
+              <guimenuitem>Stop Editing</guimenuitem></menuchoice> from the menu.
+              </para></listitem>  
+          </orderedlist>    
+        </example>  
+      </sect2>
+      <sect2 id="null_values">
+        <title>NULL Values</title>
+        <indexterm><primary>NULL</primary></indexterm>
+        <para>NULL values often cause problems and should be avoided wherever
+          possible.</para>
+        <para>Shape fields as well as other fields in the table can contain
+          NULL values. The following example shows how to delete NULL shapes,
+          however, identifying NULL values in other fields follows the same
+          pattern.</para>    
+        <example>
+          <title>Delete NULL shapes</title>
+          <orderedlist>
+            <listitem><para>Open the table of the shapefile to check.
+              </para></listitem>
+            <listitem><para>Select the <menuchoice><guimenu>Table</guimenu>
+              <guimenuitem>Query...</guimenuitem></menuchoice> from the menu.
+              </para></listitem>
+            <listitem><para>Enter the following formula:</para>
+              <programlisting>[Shape].isNull</programlisting></listitem>
+            <listitem><para>Click the <guibutton>New Set</guibutton> button.
+              </para></listitem>
+            <listitem><para>Close the query dialog</para></listitem>
+            <listitem><para>If records have been selected, promote them by
+              selecting <menuchoice><guimenu>Table</guimenu>
+              <guimenuitem>Promote</guimenuitem></menuchoice> from the menu.
+              </para></listitem>
+            <listitem><para>Review diameter and length to see if important
+              pipes have been lost. Delete those records with NULL shapes.
+              </para></listitem>   
+          </orderedlist>
+        </example>  
+      </sect2>
+      <sect2 id="corrupted_shapefiles">
+        <title>Corrupted Shapefiles</title>
+        <indexterm><primary>shapefile</primary>
+          <secondary>corruption</secondary></indexterm>
+        <indexterm><primary>Segmentation Violation</primary></indexterm>
+        <para>Corrupted shapefiles will cause errors upon opening or editing
+          in ArcView. The <command>Shapechk</command> command can be used to
+          fix those shapefiles.</para>
+        <para>Shapechk is available on the internet:
+          <ulink url="http://www.geocities.com/SiliconValley/Haven/2295/shapechk.zip"
+          >http://www.geocities.com/SiliconValley/Haven/2295/shapechk.zip</ulink>.</para>
+        <example>
+          <title>Fix pipes.shp corruption</title>
+          <orderedlist>
+            <listitem><para>Start <command>Shapechk</command>.</para></listitem>
+            <listitem><para>Click on the <guibutton>Shapefile</guibutton> 
+              button.</para></listitem>
+            <listitem><para>Select the shapefile you want to check.</para></listitem>
+            <listitem><para>Click the <guibutton>Read header</guibutton> 
+              button.</para></listitem>
+            <listitem><para>Click the <guibutton>Build shx</guibutton> 
+              button.</para></listitem>
+            <listitem><para>If asked to delete the existing index files,
+              answer <guibutton>Yes</guibutton>. Remember to rebuild
+              the spatial index files using ArcView afterwards.</para></listitem>
+            <listitem><para>Click the <guibutton>Check DBF</guibutton> 
+              button. Read the generated report and follow the instructions.
+              </para><para>The following message indicates that there
+              are no problems:</para>
+              <computeroutput>DBF tallied exactly with .dbf header and 
+                shapefile</computeroutput>
+              </listitem>
+          </orderedlist>
+        </example>  
+      </sect2>  
+    </sect1>
+  </chapter>
+  <index>
+    <title>Index</title>
+  </index>
 </book>
