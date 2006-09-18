@@ -1,0 +1,39 @@
+# Project: gshpvoronoi
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = ../src/main.o ../src/callbacks.o ../src/interface.o ../src/support.o $(RES)
+LINKOBJ  = ../src/main.o ../src/callbacks.o ../src/interface.o ../src/support.o $(RES)
+LIBS =  -L"C:/Program Files/Common Files/GTK/2.0/LIB" -L"C:/Program Files/Common Files/GTK/2.0/LIB" -mwindows -L"$(GTK_BASEPATH)/lib" -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv  
+INCS =  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GTK-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GLIB-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/PANGO-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/CAIRO"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/ATK-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GTKGLEXT-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GTK-2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GLIB-2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GTKGLEXT-1.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/LIBGLADE-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/LIBXML2"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GTK-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GLIB-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/PANGO-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/CAIRO"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/ATK-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GTKGLEXT-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GTK-2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GLIB-2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GTKGLEXT-1.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/LIBGLADE-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/LIBXML2"  -I"." 
+CXXINCS =  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GTK-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GLIB-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/PANGO-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/CAIRO"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/ATK-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GTKGLEXT-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GTK-2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GLIB-2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GTKGLEXT-1.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/LIBGLADE-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/LIBXML2"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GTK-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GLIB-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/PANGO-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/CAIRO"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/ATK-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/GTKGLEXT-1.0"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GTK-2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GLIB-2.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/LIB/GTKGLEXT-1.0/INCLUDE"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/LIBGLADE-2.0"  -I"C:/Program Files/Common Files/GTK/2.0/INCLUDE/LIBXML2"  -I"." 
+BIN  = gshpvoronoi.exe
+CXXFLAGS = $(CXXINCS) -mms-bitfields -mwindows -DHAVE_CONFIG_H -I"$(GTK_BASEPATH)/include/gtk-2.0" -I"$(GTK_BASEPATH)/lib/gtk-2.0/include" -I"$(GTK_BASEPATH)/include/atk-1.0" -I"$(GTK_BASEPATH)/include/pango-1.0" -I"$(GTK_BASEPATH)/include/glib-2.0" -I"$(GTK_BASEPATH)/lib/glib-2.0/include" -I"$(GTK_BASEPATH)/include/cairo" -I"$(GTK_BASEPATH)/include" -DPACKAGE_PREFIX=\"\" -DPACKAGE_DATA_DIR=\"\" -DPACKAGE_LOCALE_DIR=\"\"  
+CFLAGS = $(INCS) -mms-bitfields -mwindows -DHAVE_CONFIG_H -I"$(GTK_BASEPATH)/include/gtk-2.0" -I"$(GTK_BASEPATH)/lib/gtk-2.0/include" -I"$(GTK_BASEPATH)/include/atk-1.0" -I"$(GTK_BASEPATH)/include/pango-1.0" -I"$(GTK_BASEPATH)/include/glib-2.0" -I"$(GTK_BASEPATH)/lib/glib-2.0/include" -I"$(GTK_BASEPATH)/include/cairo" -I"$(GTK_BASEPATH)/include" -DPACKAGE_PREFIX=\"\" -DPACKAGE_DATA_DIR=\"\" -DPACKAGE_LOCALE_DIR=\"\"  
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before gshpvoronoi.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o "gshpvoronoi.exe" $(LIBS)
+
+../src/main.o: ../src/main.c
+	$(CC) -c ../src/main.c -o ../src/main.o $(CFLAGS)
+
+../src/callbacks.o: ../src/callbacks.c
+	$(CC) -c ../src/callbacks.c -o ../src/callbacks.o $(CFLAGS)
+
+../src/interface.o: ../src/interface.c
+	$(CC) -c ../src/interface.c -o ../src/interface.o $(CFLAGS)
+
+../src/support.o: ../src/support.c
+	$(CC) -c ../src/support.c -o ../src/support.o $(CFLAGS)

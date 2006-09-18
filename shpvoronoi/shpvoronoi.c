@@ -111,7 +111,7 @@ int main( int argc, char **argv ) {
   /* parameter check */
   if(((argc != 3)||
     ((!str_is_shp(argv[1])||(!str_is_shp(argv[2])))))) {
-    printf("shpvoronoi 0.0.1 (c) 2005 Steffen Macke\n");
+    printf("shpvoronoi 0.1.0 (c) 2005 Steffen Macke\n");
     printf("usage: shpvoronoi input_shapefile voronoi_shapefile\n");
     exit(1);
   }
@@ -165,7 +165,7 @@ int main( int argc, char **argv ) {
   fclose(hTextFile);
   SHPClose(hPointSHP);
   DBFClose(hPointDBF);
-  system("qvoronoi.exe QJ o < shptriangle.node > shptriangle.off");
+  system("qvoronoi.exe o < shptriangle.node > shptriangle.off");
   
   hTextFile = fopen("shptriangle.off", "rt");
   if(hTextFile == NULL) {

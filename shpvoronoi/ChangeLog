@@ -1,3 +1,33 @@
+2006-09-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/gshpvoronoi.xml:
+	* doc/docbook_html.xsl:
+	* doc/docbook_htmlhelp.xsl:
+	* doc/docbook_pdf.xsl:
+	* doc/docbook.css:
+	* installer/win32/locale/english.nsh:
+	* installer/win32/dc.ico:
+	* installer/win32/dc-header.bmp:
+	* installer/win32/dc-intro.bmp:
+	* installer/win32/gshpvoronoi.nsi:
+	* installer/win32/langmacros.nsh:
+	* .project:
+	* ghspvoronoi.glade:
+	* NEWS:
+	* src/callbacks.c:
+	* src/callbacks.h:
+	* src/interface.c:
+	* src/interface.h:
+	* src/main.c:
+	* src/Makefile.am:
+	* src/support.c:
+	* src/support.h:
+	* msvc/config.h:
+	* msvc/gshpvoronoi.dsp:
+	* msvc/gshpvoronoi.dsw:
+	* devcpp/config.h:
+	* devcpp/Makefile.win: Added gshpvoronoi 0.1.0
+
 2006-02-01  Steffen Macke <sdteffen@gmail.com>
 
 	* shpdelaunay.c:
