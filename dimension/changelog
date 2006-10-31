@@ -1,0 +1,4 @@
+2006-10-31  Maher Abdel karim <maher_karim@dorsch.com.jo>
+
+	* etc/dimensioning_flyer.sla:add extension flyer.
+	* ext/dcdimens1_00.avx:add the extension binary.
