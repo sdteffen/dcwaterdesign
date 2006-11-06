@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <HTML>
   <HEAD>
-    <TITLE>DC Processing Extension</TITLE>
+    <TITLE>Imprint - DC Water Design Extension</TITLE>
     <link rel="stylesheet" href="dcwaterdesign.css" type="text/css"/>
 	<link rel="alternate" type="application/rss+xml" title="DC Water Design Extension News" href="http://sourceforge.net/export/rss2_projnews.php?group_id=21566&rss_fulltext=1" />
   </HEAD>
@@ -42,7 +42,7 @@
 
                 <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/project/stats/?group_id=21566&ugn=dcwaterdesign">Statistics</a></td>
+                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/project/stats/?group_id=21566">Statistics</a></td>
 
                 <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
@@ -51,51 +51,37 @@
 </table>
 
 </td></tr></table>
-
 <img src="images/notebook.jpg" alt="DC Water Design Extension" width="1000" height="160" border="0" />
 
-<div style="margin-left: 1em;" class="copy">
-<h1 class="headline">DC Processing Extension</h1>
-      
-      <p>The DC Processing Extension adds a number of processing and
-      convertion options to ArcView 3.x. 
-      It is released under the the terms of the <a 
-	href="http://www.gnu.org/copyleft/lesser.html" class="copylink">GNU Lesser General 
-	Public License</a> (LGPL).</p>
-	<p>The software is part of the <a href="index.php" class="copylink"
-	  >DC Water Design Extension</a> suite of tools.</p>
+<table border="0" cellpadding="0" cellspacing="0" width="98%" align="center">
 
-      <h2 class="subnavihead">Documentation</h2>
-      <p>A summary of features is available in the <a href=
-        "dcprocessing_flyer.pdf" class="copylink">flyer</a> (PDF).</p>
-      <p>The <a href="dcprocessing/doc/en/index.html" class="copylink">manual</a>.</p>
-      <h2 class="subnavihead">File Releases</h2>
-      <?php 
-    require_once 'rss_fetch.inc';
-    $url =
-      "http://sourceforge.net/export/rss2_projfiles.php?group_id=21566&rss_limit=10";
-    @$rss = fetch_rss($url);
-    if($rss) {
-      foreach($rss->items as $item ) { 
-	if(strpos($item["title"], "processing") > 0) { ?>
-          <h3 class="subnavihead"><?php echo str_replace("dcprocessing", "DC Processing Extension",
-	    $item["title"]); ?></h3>
-	  <p><?php echo $item["description"]; ?></p> <?php
-        }
-      } 
-    } else { ?>
-      <p class="important">RSS feed currently unavailable. Please check again
-        later.</p> <?php
-    } ?> 
-    
-    </div>
- <p class="copy" style="margin-left: 1em;">
-  Copyright (c) 2001 - 2006 DC Water and Environment<br /><a href="imprint.html">Imprint</a>
+        <tr valign="bottom">
+
+                <td  valign="bottom"><h1 class="headline">Imprint</h1></td>               
+
+        </tr>
+</table>
+
+<p class="copy" style="margin-left: 1em;">
+  DC Water and Environment<br />
+  Regional Office Amman<br />
+  P.O. Box 941308<br />
+  Amman 11194<br />
+  Jordan<br />
+  <br />
+  +962 (6) 58 511 36<br />
 </p>
-<table border="0" cellpadding="4" cellspacing="0" bgcolor="#ffffff" width="100%">
+<p class="copy" style="margin-left: 1em;">
+  Copyright (c) 2006 DC Water and Environment
+</p>
+<table border=0 cellpadding=4 cellspacing=0 bgcolor="#aaaaaa" WIDTH="100%">
+
 <tr>
+
 <td align="left" style="background-color: white; color: black;">
- <a href="http://sourceforge.net">
-<img src="http://sourceforge.net/sflogo.php?group_id=21566&type=1" width="88" height="31" border="0" alt="SourceForge Logo" /> </a>
+
+ <A href="http://sourceforge.net">
+
+<IMG src="http://sourceforge.net/sflogo.php?group_id=21566&type=1" width="88" height="31" border="0" alt="SourceForge Logo" /> </A>
 The DC Water Design Extension is kindly hosted by Sourceforge.net.
-</td></tr></table></body></html>
+</td></tr></table></BODY></HTML>

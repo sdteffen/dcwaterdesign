@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <HTML>
   <HEAD>
-    <TITLE>DC Processing Extension</TITLE>
+    <TITLE>DC Dimensioning Extension</TITLE>
     <link rel="stylesheet" href="dcwaterdesign.css" type="text/css"/>
 	<link rel="alternate" type="application/rss+xml" title="DC Water Design Extension News" href="http://sourceforge.net/export/rss2_projnews.php?group_id=21566&rss_fulltext=1" />
   </HEAD>
@@ -55,10 +55,10 @@
 <img src="images/notebook.jpg" alt="DC Water Design Extension" width="1000" height="160" border="0" />
 
 <div style="margin-left: 1em;" class="copy">
-<h1 class="headline">DC Processing Extension</h1>
+<h1 class="headline">DC Dimensioning Extension</h1>
       
-      <p>The DC Processing Extension adds a number of processing and
-      convertion options to ArcView 3.x. 
+      <p>The DC Dimensioning Extension adds the possibility to draw real
+      dimension lines as well as dimension sketches (not to scale) in ArcView 3.x. 
       It is released under the the terms of the <a 
 	href="http://www.gnu.org/copyleft/lesser.html" class="copylink">GNU Lesser General 
 	Public License</a> (LGPL).</p>
@@ -67,8 +67,7 @@
 
       <h2 class="subnavihead">Documentation</h2>
       <p>A summary of features is available in the <a href=
-        "dcprocessing_flyer.pdf" class="copylink">flyer</a> (PDF).</p>
-      <p>The <a href="dcprocessing/doc/en/index.html" class="copylink">manual</a>.</p>
+        "dcdimensioning_flyer.pdf" class="copylink">flyer</a> (PDF).</p>
       <h2 class="subnavihead">File Releases</h2>
       <?php 
     require_once 'rss_fetch.inc';
@@ -77,8 +76,8 @@
     @$rss = fetch_rss($url);
     if($rss) {
       foreach($rss->items as $item ) { 
-	if(strpos($item["title"], "processing") > 0) { ?>
-          <h3 class="subnavihead"><?php echo str_replace("dcprocessing", "DC Processing Extension",
+	if(strpos($item["title"], "dimension") > 0) { ?>
+          <h3 class="subnavihead"><?php echo str_replace("dcdimensioning", "DC Dimensioning Extension",
 	    $item["title"]); ?></h3>
 	  <p><?php echo $item["description"]; ?></p> <?php
         }

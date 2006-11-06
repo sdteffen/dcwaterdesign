@@ -1,106 +1,48 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-
 <HTML>
-
   <HEAD>
-
     <TITLE>DC Water Design Extension</TITLE>
     <link rel="stylesheet" href="dcwaterdesign.css" type="text/css"/>
-    <STYLE TYPE="text/css">
- 
-<!--
-
- .dc{
-
-   text-decoration: none;
-
-   font-family: verdana, arial, helvetica, sans-serif;
-
-   color: #eeeeee;
-
- }
-
- .header{
-
-   text-decoration: none;
-
-   color: #000;
-
- }
-
- .justified{
-
-}
-
-
-
- -->
-
-</style>
-
+	<link rel="alternate" type="application/rss+xml" title="DC Water Design Extension News" href="http://sourceforge.net/export/rss2_projnews.php?group_id=21566&rss_fulltext=1" />
   </HEAD>
-
-
-
-  <BODY bgcolor="#FFFFFF" text="#222222" LINK="#003767" ALINK="#c0c0c0" VLINK="#4185aa"
-
-      marginwidth=0 marginheight=0 topmargin=0 leftmargin=0>
-
-
-
-      <table border=0 cellpadding=4 cellspacing=0 bgcolor="#ffffff" WIDTH="100%">
+  <BODY bgcolor="#666657" text="#d1d1c9" LINK="#003767" ALINK="#c0c0c0" VLINK="#4185aa"
+      marginwidth="0" marginheight="0" topmargin="0" leftmargin="0">
+	  
+    <table border=0 cellpadding=4 cellspacing=0 bgcolor="#666657" WIDTH="100%">
 
 <tr>
 
-<td align="right">
+<td align="left" style="width: 240px;">
 
- <A href="http://www.dorsch.de">
+ <A href="http://http://wasser-umwelt.dorsch.de/en/index.php">
 
-<IMG src="http://www.dorsch.de/WEB/web_home_e.nsf/dcIndex.jpg" width="100" height="74" border="0" alt="DORSCH Consult"> </A>
+<img src="images/logo.gif" width="239" height="98" border="0" alt="DORSCH Consult"> </A>
 
-</td></tr></table>
-
-<table border="0" cellpadding="0" cellspacing="0" width="98%" align="center">
-
-        <tr valign="bottom">
-
-                <td rowspan="3"  valign="bottom"><h1><font face="Verdana, arial, sans-serif">DC Water Design Extension</font></h1></td>
-
-                <td height="47"> </td>
-
-        </tr>
-
-        <tr>
-
-                <td align="right" valign="middle"></td>
-
-        </tr>
-
-</table>
-
-<table border="0" cellpadding="0" cellspacing="0" width="98%" height="22" bgcolor="#eeeeee" align="center">
+</td>
+<td>
+<table border="0" cellpadding="0" cellspacing="0" width="98%" height="22" align="center">
 
         <tr height="22">
 
                 <td background="images/table_background.png" align="left" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><font face="Verdana, arial, sans-serif" size="1"><A CLASS="header" HREF="http://sourceforge.net/projects/dcwaterdesign">Project Summary</a></font></td>
+                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/projects/dcwaterdesign">Project Summary</a></td>
 
                 <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><font face="Verdana, arial, sans-serif" size="1"><A CLASS="header" HREF="http://sourceforge.net/cvs/?group_id=21566">CVS</a></font></td>
+                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="https://sourceforge.net/svn/?group_id=21566">SVN</a></td>
 
                 <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><font face="Verdana, arial, sans-serif" size="1"><A CLASS="header" HREF="http://sourceforge.net/project/showfiles.php?group_id=21566">Download</a></font></td>
+                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/project/showfiles.php?group_id=21566">Download</a></td>
 
                 <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><font face="Verdana, arial, sans-serif" size="1"><A CLASS="header" HREF="http://sourceforge.net/docman/?group_id=21566">Documentation</a></font></td>
+                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/docman/?group_id=21566">Documentation</a></td>
 
                 <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><font face="Verdana, arial, sans-serif" size="1"><A CLASS="header" HREF="http://sourceforge.net/project/stats/?group_id=21566">Statistics</a></font></td>
+                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/project/stats/?group_id=21566&ugn=dcwaterdesign">Statistics</a></td>
 
                 <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
@@ -108,13 +50,17 @@
 
 </table>
 
+</td></tr></table>
+
+<img src="images/notebook.jpg" alt="DC Water Design Extension" width="1000" height="160" border="0" />
+
+<h1 class="headline" style="margin-left: 1em;">DC Water Design Extension</h1>
+
+    
 
 
-    <P>
 
-
-
-    <TABLE BORDER=0 WIDTH="98%" ALIGN="center" CELLPADDING=5 CELLSPACING=0>
+    <TABLE BORDER=0 WIDTH="98%" ALIGN="center" CELLPADDING="5" CELLSPACING="0">
 
       <TR>
 
@@ -122,19 +68,17 @@
 
           <!-- Link box -->
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#000000">
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
   <TR>
 
     <TD WIDTH="100%">
 
-      <TABLE WIDTH="100%" BORDER=0 CELLPADDING=2 CELLSPACING=0 BGCOLOR="#0c3bf9">
+      <TABLE WIDTH="100%" BORDER="0" CELLPADDING="2" CELLSPACING="0" class="altcopy">
 
         <TR>
 
-                  <TD WIDTH="100%">
-
-            <FONT FACE="verdana, arial, helvetica, sans-serif" COLOR="#FFFFFF" SIZE=2><FONT COLOR="#EEEEEE">Links</FONT></FONT>
+                  <TD WIDTH="100%"><span class="headline">Links</span>
 
           </TD>
 
@@ -150,89 +94,87 @@
 
     <TD WIDTH="100%">
 
-      <TABLE WIDTH="100%" BORDER=0 CELLPADDING=2 CELLSPACING=0 BGCOLOR="#EEEEEE">
+      <TABLE WIDTH="100%" BORDER="0" CELLPADDING="2" CELLSPACING="0">
 
         <TR>
 
-                  <TD>
+                  <TD class="subnavihead">
 
-                    <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#333333">
-            <B><A HREF="http://www.dorsch.de">DORSCH Consult</A></B>
-	    <p><b><a href="dcsewerdesign.php">DC Sewer Design Extension</a></b></p>
-	    <p><b><a href="dcprocessing.php">DC Processing Extension</a></b></p>
-                        <P>
+                    
+	    <p><a href="dcsewerdesign.php">DC Sewer Design Extension</a></p>
+	    <p><a href="dcprocessing.php">DC Processing Extension</a></p>
+		<p><a href="dcdimensioning.php">DC Dimensioning Extension</a></p>
+		<p><a href="dccadcleaner.php">DC CAD Cleaner Extension</a></p>
+		
+                        
+                        <p><A HREf="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html">EPANET</A>:
+						<br />
+						<span class="copy">
 
-                        <B><A HREf="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html">EPANET</A>:</B>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html#Downloads">Downloads.</A><br />
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html#Description">Description.</A><br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html#Downloads">Downloads.</A><BR>
-
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html#Description">Description.</A><BR>
-
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html#Toolkit">Programmers Toolkit.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html#Toolkit">Programmers Toolkit.</A><br />
 
                         <A HREf="http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html">more...</A>
 
-                        </FONT>
+                        </span></p>
 
 
 
-                        <p><B><A HREf="http://www.esri.com">ESRI</A>:</B>
+                        <p><A HREf="http://www.esri.com">ESRI</A>:
+                        <br />
+                        <span class="copy">
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
-
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.esri.com/software/arcview/index.html">ArcView.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.esri.com/software/arcview/index.html">ArcView.</A><br />
 
                         <A HREf="http://www.esri.com">more...</A>
 
-                        </FONT>
+                        </span></p>
 
 
 
-                        <p><B><A HREf="http://www.gnu.org">GNU</A>:</B>
+                        <p><A HREf="http://www.gnu.org">GNU</A>:
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <br /><span class="copy">
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.gnu.org/copyleft/lesser.html">GNU Lesser General Public License.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://www.gnu.org/copyleft/lesser.html">GNU Lesser General Public License.</A><br />
 
                         <A HREf="http://www.gnu.org">more...</A>
 
-                        </FONT>
+                        </span></p>
 
 
 
-                        <p><B><A HREf="http://www.lysator.liu.se/~alla/dia">dia</A>:</B>
+                        <p><A HREf="http://www.lysator.liu.se/~alla/dia">dia</A>:
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <br /><span class="copy">
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://dia2code.sourceforge.net">dia2code.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://dia2code.sourceforge.net">dia2code.</A><br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://dia-installer.sourceforge.net">dia Win32 Installer.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://dia-installer.sourceforge.net">dia Win32 Installer.</A><br />
 
                         <A HREf="http://www.lysator.liu.se/~alla/dia">more...</A>
 
-                        </FONT>
+                        </span></p>
 
-                        <p><B><A HREf="http://xml.apache.org/xalan-c/index.html">Xalan</A></B>
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <p><A HREf="http://xml.apache.org/xalan-c/index.html">Xalan</A>
+                        </p>
 
-                        <p><B><A HREf="http://www.redhisp.upv.es/software/gisred/GISRed_eng.htm">GISRed</A></B>
+                        <p><A HREf="http://www.redhisp.upv.es/software/gisred/GISRed_eng.htm">GISRed</A></p>
 
-                        <p><B><A HREf="http://sourceforge.net">Sourceforge</A>:</B>
+                        <p><A HREf="http://sourceforge.net">Sourceforge</A>:
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <br /><span class="copy">
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/docman/display_doc.php?docid=753&group_id=1">Services.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/docman/display_doc.php?docid=753&group_id=1">Services.</A><br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/softwaremap/trove_list.php">Software map.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/softwaremap/trove_list.php">Software map.</A><br />
 
                         <A HREf="http://www.sourceforge.net">more...</A>
 
-                        </FONT>
-
-                       </FONT>
-                       </FONT>
+                        </span></p>
               </TD>
 
                 </TR>
@@ -255,21 +197,17 @@
 
         <TD VALIGN="top" WIDTH="60%">
 
-          <TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 ALIGN="center" BGCOLOR="#000000">
+          <TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0" ALIGN="center">
 
 <TR><TD>
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=0 CELLSPACING=0 ALIGN="center" BGCOLOR="#0c3bf9">
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0" ALIGN="center" class="altcopy">
 
   <TR>
 
-   <TD VALIGN="middle"><FONT FACE="Verdana, Arial, Helvetica, Sans-serif" SIZE="+1" COLOR="#FFFFFF"><B>Introduction</B></FONT></TD>
+   <TD VALIGN="middle"><span class="headline">News</span></TD>
 
-   <TD VALIGN="middle" ALIGN="right">
-
-        <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#333333"><FONT COLOR="#FFFFFF">Improving your hydraulic analysis.</FONT></FONT>
-
-    </TD>
+   <TD VALIGN="middle" ALIGN="right">Improving your hydraulic analysis.</TD>
 
 </TR>
 
@@ -282,28 +220,33 @@
  <?php require_once 'rss_fetch.inc';
 
     $url = "http://sourceforge.net/export/rss2_projfiles.php?group_id=21566&rss_limit=10";
-    $rss = fetch_rss($url);
-    foreach ($rss->items as $item ) { ?>
-	    <h3><?= str_replace("dcsewerdesign", "DC Sewer Design Extension", 
-	    str_replace("dcwaterdesign", "DC Water Design Extension", $item[title])); ?></h3>
-	    <p><?= $item["description"]; ?></p><?php
-    } ?>
+    @$rss = fetch_rss($url);
+	if($rss) {
+	    foreach ($rss->items as $item ) { ?>
+		    <h3><?php echo str_replace('dcdimensioning', 'DC Dimensioning Extension',
+			str_replace('dccadcleaner', 'DC CAD Cleaner Extension',
+			str_replace('dcprocessing', 'DC Processing Extension',
+			str_replace("dcsewerdesign", "DC Sewer Design Extension", 
+		    str_replace("dcwaterdesign", "DC Water Design Extension", $item[title]))))); ?></h3>
+		    <p><?php echo $item["description"]; ?></p><?php
+	    } 
+	} else { ?>
+      <p class="important">RSS feed currently unavailable. Please check again
+        later.</p> <?php
+	
+	}?>
 
         </TD>
 
         <TD VALIGN="top" WIDTH="25%">
 
-          <TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#000000">
+          <TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
 <TR><TD WIDTH="100%">
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#0c3bf9">
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0" class="altcopy">
 
-<TR><TD WIDTH="100%">
-
-<FONT FACE="verdana, arial, helvetica, sans-serif" COLOR="#FFFFFF" SIZE=2>Download</FONT>
-
-</TD></TR></TABLE>
+<TR><TD WIDTH="100%"><span class="headline">Download</span></TD></TR></TABLE>
 
 </TD></TR></TABLE>
 
@@ -313,17 +256,11 @@
 
         <TD>
 
-                <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#333333">
+              
 
-                <p><B>Sample Data:</B>
-
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
-
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/project/showfiles.php?group_id=21566&package_id=17283">Sample Data</A><BR>
-
-                        </FONT>
-        </FONT>
-
+                <p class="copy"><span class="subnavihead">Sample Data:</span>
+                        <br /><IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A 
+						HREF="http://sourceforge.net/project/showfiles.php?group_id=21566&package_id=17283">Sample Data</A><br />                       
     </TD>
 
 </TR>
@@ -331,61 +268,61 @@
 </TABLE>
 
 <P>
-          <TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#000000">
+          <TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
 <TR><TD WIDTH="100%">
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#0c3bf9">
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0" class="altcopy">
 
 <TR><TD WIDTH="100%">
 
-<FONT FACE="verdana, arial, helvetica, sans-serif" COLOR="#FFFFFF" SIZE=2>Documentation</FONT>
+<span class="headline">Documentation</span>
 
 </TD></TR></TABLE>
 
 </TD></TR></TABLE>
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0>
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
 <TR>
 
         <TD>
 
-                <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#000000">
+                
 
-                <p><b>Flyer:</b><br /><font face="Arial, Helvetica, Sans-Serif" size="2">
+                <p class="copy"><span class="subnavihead">Flyer:</span><br />
 		  <img src="images/point.png" border="0" alt="o" width="12" height="12" />
-		  <a href="dcwaterdesign_flyer.pdf">PDF</a></font></p>
+		  <a href="dcwaterdesign_flyer.pdf">PDF</a></p>
 
-                <p><B>Manual:</B>
+                <p class="copy"><span class="subnavihead">Manual:</span>
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/dcwaterdesign.pdf">PDF.</A><BR>
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/index.html">HTML.</A><BR>
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/dcwaterdesign.chm">CHM.</A><BR>
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/dcwaterdesign.xml">DocBook.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/dcwaterdesign.pdf">PDF.</A><br />
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/index.html">HTML.</A><br />
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/dcwaterdesign.chm">CHM.</A><br />
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/dcwaterdesign.xml">DocBook.</A><br />
                                 
 
-                        <A HREf="http://sourceforge.net/docman/?group_id=21566">more...</A>
+                        <A HREf="http://sourceforge.net/docman/?group_id=21566">more...</A></p>
 
-                        </FONT>
+              
 
 
 
-                        <p><B>Data Model:</B>
+                        <p class="copy"><span class="subnavihead">Data Model:</span>
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/dcwaterdesign/dcwatdes/doc/av_epanet_data_model.dia">dia.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://dcwaterdesign.svn.sourceforge.net/viewvc/*checkout*/dcwaterdesign/trunk/dcwatdes/doc/av_epanet_data_model.dia">dia.</A><br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/av_epanet_data_model.pdf">PDF.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="dcwatdes/doc/en/av_epanet_data_model.pdf">PDF.</A><br />
 
                         <A HREf="http://sourceforge.net/project/showfiles.php?group_id=21566">more...</A>
 
-                        </FONT>
+                        </p>
 
-                </FONT>
+         
 
         </TD>
 
@@ -394,62 +331,60 @@
 </TABLE>
 
 <P>
-          <TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#000000">
+          <TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
 <TR><TD WIDTH="100%">
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#0c3bf9">
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0" class="altcopy">
 
 <TR><TD WIDTH="100%">
 
-<FONT FACE="verdana, arial, helvetica, sans-serif" COLOR="#FFFFFF" SIZE=2>Project</FONT>
+<span class="headline">Project</span>
 
 </TD></TR></TABLE>
 
 </TD></TR></TABLE>
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0>
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
 <TR>
 
         <TD>
 
-                <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#000000">
+                
 
 
 
-                <p><B>Bugs:</B>
+                <p class="copy"><span class="subnavihead">Bugs:</span>
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?atid=372177&group_id=21566&func=browse">Browse bugs.</A><BR>
-<IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?func=add&group_id=21566&atid=372177">Submit new bug.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?atid=372177&group_id=21566&func=browse">Browse bugs.</A><br />
+<IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?func=add&group_id=21566&atid=372177">Submit new bug.</A><br />
 
-                        </FONT>
+                        </p>
 
 
 
-                        <p><B>Support:</B>
+                        <p class="copy"><span class="subnavihead">Support:</span>
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?group_id=21566&atid=372178">Browse support requests.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?group_id=21566&atid=372178">Browse support requests.</A><br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?func=add&group_id=21566&atid=372178">Submit new support request.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?func=add&group_id=21566&atid=372178">Submit new support request.</A><br />
 
-                        </FONT>
+                        </p>
 
-                       <p><B>Features:</B>
+                       <p class="copy"><span class="subnavihead">Features:</span>
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?atid=372180&group_id=21566&func=browse">Browse feature requests.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?atid=372180&group_id=21566&func=browse">Browse feature requests.</A><br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?func=add&group_id=21566&atid=372180">Submit new feature request.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/tracker/?func=add&group_id=21566&atid=372180">Submit new feature request.</A><br />
 
-                        </FONT>
-
-                </FONT>
+                        </p>
 
         </TD>
 
@@ -461,54 +396,44 @@
 
 
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#000000">
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
 <TR><TD WIDTH="100%">
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#0c3bf9">
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0" class="altcopy">
 
 <TR><TD WIDTH="100%">
 
-<FONT FACE="verdana, arial, helvetica, sans-serif" COLOR="#FFFFFF" SIZE=2>CVS</FONT>
+<span class="headline">SVN</span>
 
 </TD></TR></TABLE>
 
 </TD></TR></TABLE>
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0>
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
 <TR>
 
         <TD>
+                <p class="copy"><span class="subnavihead">TortoiseSVN Checkout Links:</span>
 
-                <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#000000">
+                        <br />
 
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="tsvn:https://svn.sourceforge.net/svnroot/dcwaterdesign/trunk/dcwatdes">Extension.</A><br />
 
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="tsvn:https://svn.sourceforge.net/svnroot/dcwaterdesign/trunk/htdocs">Website.</A><br />
 
-                <p><B>DC Water Design Extension:</B>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="tsvn:https://svn.sourceforge.net/svnroot/dcwaterdesign/trunk/calibration">Calibration.</A><br />
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="tsvn:https://svn.sourceforge.net/svnroot/dcwaterdesign/trunk/epanet2mysql">Epanet2mysql.</A><br />
+								<IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="tsvn:https://svn.sourceforge.net/svnroot/dcwaterdesign/trunk/dcgridcreation">DC Grid Creation.</A><br />
+								<IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="tsvn:https://svn.sourceforge.net/svnroot/dcwaterdesign/trunk/gdbfdiff">gDbfDiff.</A><br />
+								<IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="tsvn:https://svn.sourceforge.net/svnroot/dcwaterdesign/trunk/shpvoronoi">Shpvoronoi.</A><br />
+								<IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="tsvn:https://svn.sourceforge.net/svnroot/dcwaterdesign/trunk/systemcall">Systemcall.</A><br />
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/dcwaterdesign/dcwatdes/">Extension.</A><BR>
+                                <A HREf="http://sourceforge.net/svn/?group_id=21566">more...</A>
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/dcwaterdesign/dcwatdes/doc/">Documentation.</A><BR>
-
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/dcwaterdesign/htdocs/">Website.</A><BR>
-
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/dcwaterdesign/epanet2mysql/">epanet2mysql.</A><BR>
-
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/dcwaterdesign/calibration/">Calibration.</A><BR>
-
-                                <A HREf="http://sourceforge.net/cvs/?group_id=21566">more...</A>
-
-                        </FONT>
-
-
-
-
-
-                </FONT>
-
+                        </p>
         </TD>
 
 </TR>
@@ -521,21 +446,21 @@
 
 
 
- <TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#000000">
+ <TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
 <TR><TD WIDTH="100%">
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0 BGCOLOR="#0c3bf9">
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0" class="altcopy">
 
 <TR><TD WIDTH="100%">
 
-<FONT FACE="verdana, arial, helvetica, sans-serif" COLOR="#FFFFFF" SIZE=2>Statistics</FONT>
+<span class="headline">Statistics</span>
 
 </TD></TR></TABLE>
 
 </TD></TR></TABLE>
 
-<TABLE WIDTH="100%" BORDER=0 CELLPADDING=1 CELLSPACING=0>
+<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1" CELLSPACING="0">
 
 <TR>
 
@@ -543,9 +468,9 @@
 
                 <FONT FACE="verdana, arial, helvetica, sans-serif" SIZE=2 COLOR="#ffffff">
 
-                        <BR><FONT FACE="arial, Helvetica, Sans-Serif" SIZE=2>
+                        <br /><font size="2">
 
-                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/project/stats/?group_id=21566">Statistics.</A><BR>
+                                <IMG SRC="images/point.png" BORDER=0 ALT="o" WIDTH="12" HEIGHT="12"><A HREF="http://sourceforge.net/project/stats/?group_id=21566&ugn=dcwaterdesign">Statistics.</A><br />
 
 
 
@@ -577,16 +502,13 @@
 
 
 
-
-
-            <table border=0 cellpadding=4 cellspacing=0 bgcolor="#aaaaaa" WIDTH="100%">
-
+<p class="copy" style="margin-left: 1em;">
+  Copyright (c) 2001 - 2006 DC Water and Environment<br /><a href="imprint.html">Imprint</a>
+</p>
+<table border="0" cellpadding="4" cellspacing="0" bgcolor="#ffffff" width="100%">
 <tr>
-
-<td align="left">
-
- <A href="http://sourceforge.net">
-
-<IMG src="http://sourceforge.net/sflogo.php?group_id=21566&type=1" width="88" height="31" border="0" alt="SourceForge Logo"> </A>
-
-</td></tr></table></BODY></HTML>
+<td align="left" style="background-color: white; color: black;">
+ <a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=21566&type=1" width="88" height="31" border="0" alt="SourceForge Logo" /> </a>
+The DC Water Design Extension is kindly hosted by Sourceforge.net.
+</td></tr></table></body></html>
