@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <HTML>
   <HEAD>
-    <TITLE>DC Water Design Extension</TITLE>
+    <TITLE>DC Sewer Design Extension</TITLE>
     <link rel="stylesheet" href="dcwaterdesign.css" type="text/css"/>
 	<link rel="alternate" type="application/rss+xml" title="DC Water Design Extension News" href="http://sourceforge.net/export/rss2_projnews.php?group_id=21566&rss_fulltext=1" />
   </HEAD>
@@ -14,7 +14,7 @@
 
 <td align="left" style="width: 240px;">
 
- <A href="http://http://wasser-umwelt.dorsch.de/en/index.php">
+ <A href="http://wasser-umwelt.dorsch.de/en/index.php">
 
 <img src="images/logo.gif" width="239" height="98" border="0" alt="DORSCH Consult"> </A>
 
@@ -24,27 +24,27 @@
 
         <tr height="22">
 
-                <td background="images/table_background.png" align="left" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
+                <td  align="left" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/projects/dcwaterdesign">Project Summary</a></td>
+                <td  align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/projects/dcwaterdesign">Project Summary</a></td>
 
-                <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
+                <td  align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="https://sourceforge.net/svn/?group_id=21566">SVN</a></td>
+                <td  align="center" height="22"><A CLASS="header" HREF="https://sourceforge.net/svn/?group_id=21566">SVN</a></td>
 
-                <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
+                <td  align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/project/showfiles.php?group_id=21566">Download</a></td>
+                <td  align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/project/showfiles.php?group_id=21566">Download</a></td>
 
-                <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
+                <td  align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/docman/?group_id=21566">Documentation</a></td>
+                <td  align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/docman/?group_id=21566">Documentation</a></td>
 
-                <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
+                <td  align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
-                <td background="images/table_background.png" align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/project/stats/?group_id=21566&ugn=dcwaterdesign">Statistics</a></td>
+                <td  align="center" height="22"><A CLASS="header" HREF="http://sourceforge.net/project/stats/?group_id=21566&ugn=dcwaterdesign">Statistics</a></td>
 
-                <td background="images/table_background.png" align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
+                <td  align="center" height="22" width="5"><img src="images/line.png" width="1" border="0" height="22" ALT=""></td>
 
         </tr>
 
