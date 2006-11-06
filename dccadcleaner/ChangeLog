@@ -1,5 +1,8 @@
 2006-11-06  Steffen Macke <steffen_macke@dorsch.com.jo>
 
+	* .project: Added Eclipse project file
+	* doc/project.dtd:
+	* build.xml: Added files to build tarball 
 	* Initial public release of the extension on 
 	dcwaterdesign.sourceforge.net
 	

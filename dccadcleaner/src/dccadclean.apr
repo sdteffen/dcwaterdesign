@@ -25,7 +25,6 @@
 	Doc:	38
 	Doc:	42
 	Doc:	46
-	ActiveDoc:	46
 	Buttons:	50
 	Buttons:	51
 	Buttons:	52
@@ -355,7 +354,6 @@ en+1\n  else\n    MsgBox.warning(\"Unable to open file for writing:\"++flnScript
 
 (DocWin.47
 	Owner:	46
-	Open:	1
 	X:	-4
 	Y:	-4
 	W:	1410
@@ -399,26 +397,26 @@ en+1\n  else\n    MsgBox.warning(\"Unable to open file for writing:\"++flnScript
 
 (NameDict.55
 	Obj:	56
-	Obj:	57
+	Obj:	59
 	Obj:	60
 )
 
 (AVDict.56
-	InternalName:	"Table of Contents Defaults Dialog"
-)
-
-(AVDict.57
 	InternalName:	"Dialog Designer"
-	Key:	58
-	Value:	59
+	Key:	57
+	Value:	58
 )
 
-(AVStr.58
+(AVStr.57
 	S:	"IsVisible"
 )
 
-(Bool.59
+(Bool.58
 	Truth:	1
+)
+
+(AVDict.59
+	InternalName:	"Table of Contents Defaults Dialog"
 )
 
 (AVDict.60
