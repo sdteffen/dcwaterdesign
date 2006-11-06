@@ -1,0 +1,18 @@
+' DCCadClean.PolylineFTab.Selection.removeFeatures
+
+' removes all features that are in the selection
+
+' expects a FTab as the argument
+' returns nothing
+
+ftbLine = self
+
+if(ftbLine.is(FTab).not)then
+  System.echo("ERROR: DCCadClean.PolylineFTab.Selection.removeFeatures: Expecting Polyline FTab as argument.")
+  exit
+end
+
+ftbLine.setEditable(true)
+ftbLine.removeRecords(ftbLine.getSelection)
+ftbLine.refresh
+ftbLine.setEditable(false)

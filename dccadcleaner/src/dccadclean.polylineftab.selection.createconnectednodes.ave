@@ -1,0 +1,127 @@
+' DCCadClean.PolylineFTab.Selection.createConnectedNodes
+
+' removes all selected lines
+' creates nodes in the center of the lines
+' connects lines to the node if necessary
+
+' expects a Polyline FTab as the first argument
+' expects a boolean whether to create end nodes as the second argument
+' returns nothing
+
+
+if((self.is(List).not)or(self.count<>2)or(self.get(0).is(FTab).not)or(self.get(1).is(Boolean).not))then
+  System.echo("ERROR: DCCadClean.PolylineFTab.Selection.createConnectedNodes: Expecting Polyline FTab and boolean whether to create end nodes as arguments.")
+  exit
+end
+
+ftbLine = self.get(0)
+blnCreateEndNodes = self.get(1)
+
+numSnappingRadius = 0.5
+
+
+lstSelected = List.make
+
+fldLineShape = ftbLine.findField("Shape")
+
+' build list of selected Polylines including attributes
+
+lstFields = ftbLine.getFields.deepclone
+lstFields.remove(0)
+
+for each recSelected in ftbLine.getSelection
+  lstAttributes = List.make
+  for each fldAttribute in ftbLine.getFields
+    lstAttributes.add(ftbLine.returnValue(fldAttribute, recSelected))
+  end
+  lstSelected.add(lstAttributes)
+end
+
+' remove selected lines
+
+ftbLine.setEditable(true)
+ftbLine.removeRecords(ftbLine.getSelection)
+ftbLine.refresh
+ftbLine.setEditable(false)
+
+' create nodes in the center
+
+viewActive = av.GetActiveDoc
+
+flnPnt = av.getProject.makeFileName("pnttheme", "shp")
+
+flnPnt = FileDialog.put(flnPnt, "*.shp", "New Point Theme")
+
+if(flnPnt = nil)then
+  exit
+end
+
+ftbPoint = FTab.makeNew(flnPnt, Point)
+
+fldPointShape = ftbPoint.findField("Shape")
+
+
+ftbPoint.setEditable(true)
+ftbPoint.addFields(lstFields)
+
+for each lstAttributes in lstSelected
+  pllSelected = lstAttributes.get(0)
+  pntCenter = pllSelected.returnExtent.returnCenter
+  recPoint = ftbPoint.addRecord
+  ftbPoint.setValue(fldPointShape, recPoint, pntCenter)
+  for each i in 1 .. (lstFields.count)
+    fldPoint = ftbPoint.getFields.get(i)
+    fldLine = ftbLine.getFields.get(i)
+    ftbPoint.setValue(fldPoint, recPoint, lstAttributes.get(i))
+  end
+end
+ftbPoint.setEditable(false)
+
+' add Point Theme to View
+
+thmPoint = FTheme.make(ftbPoint)
+viewActive.addTheme(thmPoint)
+av.GetProject.setModified(true)
+thmPoint.setVisible(true)
+
+' extend connected lines if necessary
+
+ftbLine.setEditable(true)
+for each lstAttributes in lstSelected
+  pllSelected = lstAttributes.get(0)
+  pntCenter = pllSelected.returnExtent.returnCenter
+  plgnBuffer = pllSelected.returnBuffered(numSnappingRadius)
+  ftbLine.selectByPolygon(plgnBuffer, #VTAB_SELTYPE_NEW)
+  for each recCrossing in ftbLine.getSelection
+    pllCrossing = ftbLine.returnValue(fldLineShape, recCrossing)
+    lstCrossing = pllCrossing.clean.asList
+    if((lstCrossing.count>0)and(lstCrossing.get(0).count>0))then
+      lstStartEnd = {{0,0},{lstCrossing.count-1,lstCrossing.get(lstCrossing.count-1).count-1}}
+      blnConnected = false
+      for each lstEnd in lstStartEnd
+        numOuter = lstEnd.get(0)
+        numInner = lstEnd.get(1)
+        pntNode = lstCrossing.get(numOuter).get(numInner)
+        if(pntNode.intersects(plgnBuffer))then
+          if(blnCreateEndNodes)then
+            lstCrossing.get(numOuter).set(numInner, pntCenter)
+          else
+            if(numInner=0)then
+              lstCrossing.get(numOuter).insert(pntCenter)
+            else
+              lstCrossing.set(numOuter, lstCrossing.get(numOuter).add(pntCenter))
+            end
+          end
+          blnConnected = true
+        end
+      end
+      if(blnConnected)then
+        pllCrossing = Polyline.make(lstCrossing)
+        if(pllCrossing.isNull.not)then
+          ftbLine.setValue(fldLineShape, recCrossing, pllCrossing)
+        end
+      end
+    end
+  end
+end
+ftbLine.setEditable(false)

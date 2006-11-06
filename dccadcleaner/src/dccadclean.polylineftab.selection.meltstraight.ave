@@ -1,0 +1,65 @@
+' DCCadClean.PolylineFTab.Selection.meltStraight
+
+' straighens all features that are in the selection
+' (removes vertices)
+' then melts (merges the straight lines with connected lines
+
+' expects a Polyline FTab as the argument
+' returns nothing
+
+ftbLine = self
+
+if(ftbLine.is(FTab).not)then
+  System.echo("ERROR: DCCadClean.PolylineFTab.Selection.meltStraight: Expecting Polyline FTab as argument.")
+  exit
+end
+
+numSnappingRadius = 0.5
+
+av.run("DCCadClean.PolylineFTab.Selection.straighten", ftbLine)
+
+lstRecordsToCreate = List.make
+
+' copy attributes
+
+bmpDelete = ftbLine.getSelection.clone
+for each recSelected in ftbLine.getSelection
+  lstAttributes = List.make
+  for each fldAttribute in ftbLine.getFields
+    lstAttributes.add(ftbLine.returnValue(fldAttribute, recSelected))
+  end
+  lstRecordsToCreate.add(lstAttributes)
+end
+
+' merge 
+fldShape = ftbLine.findField("Shape")
+for each lstAttributes in lstRecordsToCreate
+  pllLine = lstAttributes.get(0)
+  plgnBuffer = Polygon.makeEmpty
+  for each i in {0,100}
+    plgnBuffer = plgnBuffer.returnUnion(pllLine.along(i).returnBuffered(numSnappingRadius))
+  end
+  ftbLine.selectByPolygon(plgnBuffer, #VTAB_SELTYPE_NEW)
+  pllMerged = Polyline.makeEmpty
+  for each recSelected in ftbLine.getSelection
+    pllLine = ftbLine.returnValue(fldShape, recSelected)
+    for each i in {0, 100}
+      if(pllLine.along(i).intersects(plgnBuffer))then
+        pllMerged = pllMerged.returnUnion(pllLine).clean
+      end
+    end
+  end
+  lstAttributes.set(0, pllMerged)  
+end
+' delete old records
+
+' create new records
+ftbLine.setEditable(true)
+lstFields = ftbLine.getFields
+for each lstAttributes in lstRecordsToCreate
+  recNew = ftbLine.addRecord
+  for each i in 0..(lstFields.count-1)
+    ftbLine.setValue(lstFields.get(i), recNew, lstAttributes.get(i))
+  end
+end
+ftbLine.setEditable(false)
