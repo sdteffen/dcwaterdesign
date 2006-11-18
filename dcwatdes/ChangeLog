@@ -1,3 +1,14 @@
+2006-11-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp/inp2shp.c: Improved attribute import of valves and pumps
+	(Improvements for bug #1469111); Usage change presumably fixes 
+	bug #1598930 - awaiting testing
+	* inp2shp/inp2shp.dev:
+	* inp2shp/inp2shp_private.h:
+	* inp2shp/inp2shp_private.rc:
+	* inp2shp/msvc/inp2shp.dsp:
+	* inp2shp/msvc/inp2shp.dsw: Added some IDE files
+
 2006-09-16  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/en/dcwaterdesign.xml: Switched from article to chapter;

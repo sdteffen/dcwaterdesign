@@ -1,7 +1,8 @@
 /**
  * inp2shp.c convert EPANET INP files to Shapefiles
  * 
- * (c) 2002, 2005 DORSCH Consult 
+ * (c) 2002, 2005 DORSCH Consult
+ * (c) 2006 DC Water and Environment
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -152,14 +153,14 @@ int main( int argc, char **argv ) {
   num_vertices = 0;
   
   /* parameter check */
-  if(((argc != 3)&&(argc !=9))||((argc == 9)&&
+  if((argc != 9)||
     ((!str_is_shp(argv[3])||(!str_is_shp(argv[4])||
      (!str_is_shp(argv[5])||(!str_is_shp(argv[6])||
-     (!str_is_shp(argv[7])||(!str_is_shp(argv[8])))))))))) {
-    printf("inp2shp 0.2.0 (c) 2002, 2005 DORSCH Consult\n");
-    printf("usage: inp2shp inpfile reportfile [junction_shapefile\
+     (!str_is_shp(argv[7])||(!str_is_shp(argv[8]))))))))) {
+    printf("inp2shp 0.2.1 (c) 2002, 2005, 2006 DC Water and Environment\n");
+    printf("usage: inp2shp inpfile reportfile junction_shapefile\
  pipe_shapefile pump_shapefile reservoir_shapefile tank_shapefile\
- valve_shapefile]\n");
+ valve_shapefile\n");
     exit(1);
   }
  
@@ -422,6 +423,7 @@ int write_pump(int index) {
   double x, y;
   int from_node, to_node;
   char string[16];
+  float d;
   
   ENgetlinkid(index, string);
   ENgetlinknodes(index, &from_node, &to_node);
@@ -431,6 +433,21 @@ int write_pump(int index) {
   SHPWriteObject(hPumpSHP, -1, shape);
   SHPDestroyObject(shape);
   DBFWriteStringAttribute(hPumpDBF, num_pumps, 0, string);
+  
+  ENgetlinkvalue(index, EN_INITSETTING, &d);
+  sprintf(Tok[0], "%f", d);
+  DBFWriteStringAttribute(hPumpDBF, num_pumps, 11, Tok[0]);
+  
+  ENgetlinkvalue(index, EN_STATUS, &d);
+  switch((int)d) {
+    case 0: 
+	  DBFWriteStringAttribute(hPumpDBF, num_pumps, 11, "closed");
+    break;
+    case 1: 
+	  DBFWriteStringAttribute(hPumpDBF, num_pumps, 11, "open");
+    break;
+  }
+
   num_pumps++;
   
   return 0;
@@ -445,6 +462,8 @@ int write_valve(int index) {
   double x, y;
   int from_node, to_node;
   char string[16];
+  float d;
+  int type;
   
   ENgetlinkid(index, string);
   ENgetlinknodes(index, &from_node, &to_node);
@@ -454,6 +473,36 @@ int write_valve(int index) {
   SHPWriteObject(hValveSHP, -1, shape);
   SHPDestroyObject(shape);
   DBFWriteStringAttribute(hValveDBF, num_valves, 0, string);
+  
+  ENgetlinkvalue(index, EN_DIAMETER, &d);
+  DBFWriteDoubleAttribute(hValveDBF, num_valves, 11, (double)d);
+  ENgetlinktype(index, &type);
+  switch(type) {
+    case EN_CVPIPE : 
+      DBFWriteStringAttribute(hValveDBF, num_valves, 12, "CV");
+    break;
+    case EN_PRV :
+      DBFWriteStringAttribute(hValveDBF, num_valves, 12, "PRV");
+    break;
+    case EN_PSV :
+      DBFWriteStringAttribute(hValveDBF, num_valves, 12, "PSV");
+    break;
+    case EN_PBV :
+      DBFWriteStringAttribute(hValveDBF, num_valves, 12, "PBV");
+    break;
+    case EN_TCV :
+      DBFWriteStringAttribute(hValveDBF, num_valves, 12, "TCV");
+    break;
+    case EN_GPV :
+      DBFWriteStringAttribute(hValveDBF, num_valves, 12, "GPV");
+    break;
+  }
+  ENgetlinkvalue(index, EN_INITSETTING, &d);
+  sprintf(Tok[0],"%f",d);
+  DBFWriteStringAttribute(hValveDBF, num_valves, 13, Tok[0]);
+  ENgetlinkvalue(index, EN_MINORLOSS, &d);
+  DBFWriteDoubleAttribute(hValveDBF, num_valves, 14, (double)d);
+  
   num_valves++;
   return 1;
 }
@@ -893,7 +942,6 @@ int create_pump_shapefile(char *filename) {
   DBFAddField(hPumpDBF, "result_pre", FTDouble, 16, 8);
   DBFAddField(hPumpDBF, "result_flo", FTDouble, 16, 8);
   DBFAddField(hPumpDBF, "result_vel", FTDouble, 16, 8);
-  /* DBFAddField(hPumpDBF, "result_hea", FTDouble, 16, 8); */
   DBFAddField(hPumpDBF, "properties", FTString, 200, 0);
   DBFAddField(hPumpDBF, "power_kw", FTInteger, 16,0);
   num_pumps = 0;
@@ -910,18 +958,17 @@ int create_valve_shapefile(char *filename) {
     fprintf(stderr, "FATAL ERROR: Unable to create file '%s'.\n", filename);
     exit_inp2shp(1);
   }
-  DBFAddField(hValveDBF, "dc_id", FTString, 16, 0);
+  DBFAddField(hValveDBF, "dc_id", FTString, 16, 0); /* 0 */
   DBFAddField(hValveDBF, "installati", FTString, 16, 0);
   DBFAddField(hValveDBF, "abandon_da", FTString, 16, 0);
   DBFAddField(hValveDBF, "dcsubtype", FTInteger, 16, 0);
   DBFAddField(hValveDBF, "bitcodezon", FTInteger, 20, 0);
-  DBFAddField(hValveDBF, "elevation", FTDouble, 16, 3);
+  DBFAddField(hValveDBF, "elevation", FTDouble, 16, 3); /* 5 */
   DBFAddField(hValveDBF, "result_dem", FTDouble, 16, 8);
   DBFAddField(hValveDBF, "result_hea", FTDouble, 16, 8);
   DBFAddField(hValveDBF, "result_pre", FTDouble, 16, 8);
   DBFAddField(hValveDBF, "result_flo", FTDouble, 16, 8);
-  DBFAddField(hValveDBF, "result_vel", FTDouble, 16, 8);
-  /* DBFAddField(hValveDBF, "result_hea", FTDouble, 16, 8); */
+  DBFAddField(hValveDBF, "result_vel", FTDouble, 16, 8); /* 10 */
   DBFAddField(hValveDBF, "diameter", FTInteger, 20, 0);
   DBFAddField(hValveDBF, "type", FTString, 16,0);
   DBFAddField(hValveDBF, "setting", FTString, 16, 0);
@@ -1129,7 +1176,7 @@ int str_is_shp(char *str) {
   int len;
   
   len = strlen(str);
-  if(strncasecmp(&str[len-4], ".shp", 4) == 0) {
+  if(strncmp(&str[len-4], ".shp", 4) == 0) {
     return 1;
   } else {
     return 0;
