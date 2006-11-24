@@ -11,3 +11,6 @@ http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html
 In addition, you have to apply the patches in the patch
 folder against the EPANET sources. For details,
 see http://sdteffen.de/hydraulik/epanet.html
+
+Tanks that don't have a ground surface defined will be converted
+into reservoirs. This is the standard EPANET behaviour.

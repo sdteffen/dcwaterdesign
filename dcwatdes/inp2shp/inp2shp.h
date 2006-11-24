@@ -19,35 +19,35 @@
 */
 
 #define MAXLINE 255
-#define   SEPSTR    " \t\n\r"  /* Token separator characters */
-#define   MAXTOKS   40       /* Max. items per line of input */
+#define   SEPSTR    " \t\n\r"	/* Token separator characters */
+#define   MAXTOKS   40		/* Max. items per line of input */
 #define UCHAR(x) (((x) >= 'a' && (x) <= 'z') ? ((x)&~32) : (x))
 /* #define DEBUG 1 */
 #define MAXNUMNODES 5000
 
-void remove_shp(char *shapefile);
-int str_is_shp(char *str);
-void initialize();
-void exit_inp2shp(int error);
-void write_remaining_pipe_shapes();
-void handle_virtual_line_nodes();
-void print_statistics();
-int write_virtual_lines();
-int write_pump(int index);
-int write_valve(int index);
-int write_node();
-int write_vertex();
-int write_junction(int index);
-int write_tank(int index);
-int write_reservoir(int index);
-int write_null_pipe();
-int write_pipe_shape();
-int create_junction_shapefile();
-int create_tank_shapefile(char *filename);
-int create_reservoir_shapefile(char *filename);
-int create_pump_shapefile(char *filename);
-int create_valve_shapefile(char *filename);
-int create_pipe_shapefile(char *filename);
-int  findmatch(char *line, char *keyword[]);
-int  match(char *str, char *substr);
-int  gettokens(char *s);
+void remove_shp (char *shapefile);
+int str_is_shp (char *str);
+void initialize ();
+void exit_inp2shp (int error);
+void write_remaining_pipe_shapes ();
+void handle_virtual_line_nodes ();
+void print_statistics ();
+int write_virtual_lines ();
+int write_pump (int index);
+int write_valve (int index);
+int write_node ();
+int write_vertex ();
+int write_junction (int index);
+int write_tank (int index);
+int write_reservoir (int index);
+int write_null_pipe ();
+int write_pipe_shape ();
+int create_junction_shapefile ();
+int create_tank_shapefile (char *filename);
+int create_reservoir_shapefile (char *filename);
+int create_pump_shapefile (char *filename);
+int create_valve_shapefile (char *filename);
+int create_pipe_shapefile (char *filename);
+int findmatch (char *line, char *keyword[]);
+int match (char *str, char *substr);
+int gettokens (char *s);

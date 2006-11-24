@@ -1,5 +1,6 @@
 2006-11-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
+	* inp2shp.c: Version number is now 0.2.2; more robust and complete import
 	* inp2shp/README: Added instructions regarding the EPANET toolkit patches
 	* inp2shp/inp2shp.c: adding more error checks; use patched epanet2.dll
 	* inp2shp_private.h:

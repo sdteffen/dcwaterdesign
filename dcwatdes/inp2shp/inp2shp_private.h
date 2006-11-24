@@ -5,11 +5,11 @@
 #define INP2SHP_PRIVATE_H
 
 /* VERSION DEFINITIONS */
-#define VER_STRING	"0.2.2.29"
+#define VER_STRING	"0.2.2.62"
 #define VER_MAJOR	0
 #define VER_MINOR	2
 #define VER_RELEASE	2
-#define VER_BUILD	29
+#define VER_BUILD	62
 #define COMPANY_NAME	"DC Water and Environment"
 #define FILE_VERSION	"0.2.2"
 #define FILE_DESCRIPTION	"inp2shp"
