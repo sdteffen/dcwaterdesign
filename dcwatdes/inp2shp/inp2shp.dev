@@ -1,7 +1,7 @@
 [Project]
 FileName=inp2shp.dev
 Name=inp2shp
-UnitCount=4
+UnitCount=6
 Type=1
 Ver=1
 ObjFiles=
@@ -52,19 +52,19 @@ BuildCmd=
 [VersionInfo]
 Major=0
 Minor=2
-Release=1
-Build=7
+Release=2
+Build=28
 LanguageID=1033
 CharsetID=1252
 CompanyName=DC Water and Environment
-FileVersion=
-FileDescription=Developed using the Dev-C++ IDE
+FileVersion=0.2.2
+FileDescription=inp2shp
 InternalName=
-LegalCopyright=GPL
+LegalCopyright=Copyrigh (c) 2002 - 2006 DC Water and Environment
 LegalTrademarks=
-OriginalFilename=
+OriginalFilename=inp2shp.exe
 ProductName=inp2shp
-ProductVersion=
+ProductVersion=0.2.2
 AutoIncBuildNr=1
 
 [Unit3]
@@ -81,6 +81,26 @@ BuildCmd=
 FileName=shpopen.c
 CompileCpp=0
 Folder=inp2shp
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit5]
+FileName=epanet2.h
+CompileCpp=0
+Folder=inp2shp
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit6]
+FileName=Makefile.epanet.h
+CompileCpp=0
+Folder=
 Compile=1
 Link=1
 Priority=1000

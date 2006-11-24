@@ -5,19 +5,19 @@
 #define INP2SHP_PRIVATE_H
 
 /* VERSION DEFINITIONS */
-#define VER_STRING	"0.2.1.7"
+#define VER_STRING	"0.2.2.29"
 #define VER_MAJOR	0
 #define VER_MINOR	2
-#define VER_RELEASE	1
-#define VER_BUILD	7
+#define VER_RELEASE	2
+#define VER_BUILD	29
 #define COMPANY_NAME	"DC Water and Environment"
-#define FILE_VERSION	""
-#define FILE_DESCRIPTION	"Developed using the Dev-C++ IDE"
+#define FILE_VERSION	"0.2.2"
+#define FILE_DESCRIPTION	"inp2shp"
 #define INTERNAL_NAME	""
-#define LEGAL_COPYRIGHT	"GPL"
+#define LEGAL_COPYRIGHT	"Copyrigh (c) 2002 - 2006 DC Water and Environment"
 #define LEGAL_TRADEMARKS	""
-#define ORIGINAL_FILENAME	""
+#define ORIGINAL_FILENAME	"inp2shp.exe"
 #define PRODUCT_NAME	"inp2shp"
-#define PRODUCT_VERSION	""
+#define PRODUCT_VERSION	"0.2.2"
 
 #endif /*INP2SHP_PRIVATE_H*/

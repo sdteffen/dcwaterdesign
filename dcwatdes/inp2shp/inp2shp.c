@@ -108,27 +108,27 @@ double node_y[MAXNUMNODES];
 /**
  * The name of the junction shapefile.
  */
-char *junctions_name = "junctions.shp"; 
+char *junctions_name = ""; 
 /**
  * The name of the pipes shapefile.
  */
-char *pipes_name = "pipes.shp";
+char *pipes_name = "";
 /**
  * The name of the tanks shapefile.
  */
-char *tanks_name = "tanks.shp";
+char *tanks_name = "";
 /**
  * The name of the reservoir shapefile.
  */
-char *reservoirs_name = "reservoirs.shp";
+char *reservoirs_name = "";
 /**
  * The name of the pump shapefile.
  */
-char *pumps_name = "pumps.shp";
+char *pumps_name = "";
 /**
  * The name of the valve shapefile.
  */
-char *valves_name = "valves.shp";
+char *valves_name = "";
 
 /**
  * Convert an EPANET INP file to a series of shape files.
@@ -151,13 +151,15 @@ int main( int argc, char **argv ) {
  
   strcpy(vertex_line_name, "");
   num_vertices = 0;
+
+  initialize();
   
   /* parameter check */
   if((argc != 9)||
     ((!str_is_shp(argv[3])||(!str_is_shp(argv[4])||
      (!str_is_shp(argv[5])||(!str_is_shp(argv[6])||
      (!str_is_shp(argv[7])||(!str_is_shp(argv[8]))))))))) {
-    printf("inp2shp 0.2.1 (c) 2002, 2005, 2006 DC Water and Environment\n");
+    printf("inp2shp 0.2.2 (c) 2002, 2005, 2006 DC Water and Environment\n");
     printf("usage: inp2shp inpfile reportfile junction_shapefile\
  pipe_shapefile pump_shapefile reservoir_shapefile tank_shapefile\
  valve_shapefile\n");
@@ -167,8 +169,7 @@ int main( int argc, char **argv ) {
   for(i=3; i<9; i++) {
     remove_shp(argv[i]);
   }
-  initialize();
-  
+
   /**
    * Open the files 
    */
@@ -179,14 +180,13 @@ int main( int argc, char **argv ) {
     ENclose();
     exit(error);
   }
-  if(argc == 9) {
-    junctions_name = argv[3];
-    pipes_name = argv[4];
-    pumps_name = argv[5];
-    reservoirs_name = argv[6];
-    tanks_name = argv[7];
-    valves_name = argv[8];
-  }
+  junctions_name = argv[3];
+  pipes_name = argv[4];
+  pumps_name = argv[5];
+  reservoirs_name = argv[6];
+  tanks_name = argv[7];
+  valves_name = argv[8];
+  
   create_junction_shapefile(junctions_name);
   create_pipe_shapefile(pipes_name);
   create_pump_shapefile(pumps_name);
@@ -198,7 +198,6 @@ int main( int argc, char **argv ) {
   while(fgets(line, MAXLINE, InFile) != NULL) {
     strcpy(wline,line);
     Ntokens = gettokens(wline);
-    /*printf("num tokens : %d\n", Ntokens);*/
     /* Skip blank lines and comments */
     if (Ntokens == 0) continue;
     if (*Tok[0] == ';') continue;
@@ -328,12 +327,17 @@ void write_remaining_pipe_shapes() {
   char *pipe_id;
   int pipe_index;
   int from_node, to_node;
+  int error;
   
   for(i=0; i<num_pipes; i++) {
     /**
      * \todo performance increase with SHPGetInfo 
      */
     shape = SHPReadObject(hPipeSHP, i);
+    if(NULL == shape) {
+            fprintf(stderr, "FATAL ERROR: Read pipe shape returned NULL in write_remaining_pipe_shapes().\n");
+            exit_inp2shp(1);
+    }
     x[0] = 0;
     y[0] = 0;
     x[1] = 0;
@@ -341,14 +345,28 @@ void write_remaining_pipe_shapes() {
     if(shape->nSHPType == SHPT_NULL) {
       SHPDestroyObject(shape);
       pipe_id = (char *) DBFReadStringAttribute(hPipeDBF, i, 0);
-      ENgetlinkindex(pipe_id, &pipe_index);
-      ENgetlinknodes(pipe_index, &from_node, &to_node);
+      error = ENgetlinkindex(pipe_id, &pipe_index);
+      if(0 != error) {
+        fprintf(stderr, "FATAL ERROR: ENgetlinkindex(\"%s\") returned error %d in write_remaining_pipe_shapes().\n",
+          pipe_id, error); 
+        exit_inp2shp(1);        
+      }
+      error = ENgetlinknodes(pipe_index, &from_node, &to_node);
+      if(0 != error) {
+        fprintf(stderr, "FATAL ERROR: ENgetlinknodes(%d) returned error %d in write_remaining_pipe_shapes().\n",
+          pipe_index, error); 
+        exit_inp2shp(1);        
+      }
       x[0] = node_x[from_node];
       y[0] = node_y[from_node];
       x[1] = node_x[to_node];
       y[1] = node_y[to_node];
       shape = SHPCreateSimpleObject( SHPT_ARC, 2, x, y, NULL );
-      SHPWriteObject(hPipeSHP, i, shape);
+      if(-1 == SHPWriteObject(hPipeSHP, i, shape)) {
+        SHPDestroyObject(shape);       
+        fprintf(stderr, "FATAL ERROR: SHPWriteObject failed in write_remaining_pipe_shapes().\n");
+        exit_inp2shp(1);
+      }
       SHPDestroyObject(shape);
     } else {
       SHPDestroyObject(shape);
@@ -365,15 +383,32 @@ void handle_virtual_line_nodes() {
    int from_node, to_node;
    int num_lines;
    int linktype;
+   int error;
    
-   ENgetcount(EN_LINKCOUNT, &num_lines);
+   error = ENgetcount(EN_LINKCOUNT, &num_lines);
+   if(0 != error) {
+        fprintf(stderr, "FATAL ERROR: ENgetcount(EN_LINKCOUNT) returned error %d in handle_virtual_line_nodes().\n",
+          error); 
+        exit_inp2shp(1);        
+   }
    for(i=0; i<num_lines; i++) {
-     ENgetlinktype(i+1, &linktype);
+     error = ENgetlinktype(i+1, &linktype);
+     if(0 != error) {
+        fprintf(stderr, "FATAL ERROR: ENgetlinktype(%d) returned error %d in handle_virtual_line_nodes().\n",
+          i+1, error); 
+        exit_inp2shp(1);        
+     }
      switch(linktype) {
        case EN_PIPE:
 	 case EN_CVPIPE:
        break;
-       default: ENgetlinknodes(i+1, &from_node, &to_node);
+       default: 
+         error = ENgetlinknodes(i+1, &from_node, &to_node);
+         if(0 != error) {
+            fprintf(stderr, "FATAL ERROR: ENgetlinknodes(%d) returned error %d in handle_virtual_line_nodes().\n",
+              i+1, error); 
+            exit_inp2shp(1);        
+         }
          if((to_node >= MAXNUMNODES)||(from_node >= MAXNUMNODES)) {
 	   fprintf(stderr, 
 	     "FATAL ERROR: Maximum number (%d) of nodes exceeded.\n", 
@@ -398,10 +433,21 @@ int write_virtual_lines() {
   int i;
   int num_lines;
   int linktype;
+  int error;
   
-  ENgetcount(EN_LINKCOUNT, &num_lines);    
+  error = ENgetcount(EN_LINKCOUNT, &num_lines);   
+  if(0 != error) {
+        fprintf(stderr, "FATAL ERROR: ENgetcount(EN_LINKCOUNT) returned error %d in write_virtual_lines().\n",
+          error); 
+        exit_inp2shp(1);        
+   } 
   for(i=0; i<num_lines; i++) {
-    ENgetlinktype(i+1, &linktype);
+    error = ENgetlinktype(i+1, &linktype);
+     if(0 != error) {
+        fprintf(stderr, "FATAL ERROR: ENgetlinktype(%d) returned error %d in write_virtual_lines().\n",
+          i+1, error); 
+        exit_inp2shp(1);        
+     }
     switch(linktype) {
       case EN_PIPE:
       case EN_CVPIPE:
@@ -418,35 +464,75 @@ int write_virtual_lines() {
   return 0;
 }
 
+/**
+ * Write a pump
+ * @param index int is the index of the pump in the list of pipes.
+ * @return 0 if there is no error.
+ */
 int write_pump(int index) {
   SHPObject *shape;
   double x, y;
   int from_node, to_node;
   char string[16];
+  char *status;
   float d;
+  float power;
+  int type;
+  int i;
+  int error;
   
-  ENgetlinkid(index, string);
-  ENgetlinknodes(index, &from_node, &to_node);
+  error = ENgetlinkid(index, string);
+  if(0 != error) {
+    fprintf(stderr, "FATAL ERROR: ENgetlinkid(%d) returned error %d in write_pump().\n",
+      index, error); 
+    exit_inp2shp(1);        
+  } 
+  error = ENgetlinknodes(index, &from_node, &to_node);
+  if(0 != error) {
+    fprintf(stderr, "FATAL ERROR: ENgetlinknodes(%d) returned error %d in write_pump().\n",
+      index, error); 
+    exit_inp2shp(1);        
+  } 
   x = node_x[from_node];
   y = node_y[from_node];
   shape = SHPCreateSimpleObject( SHPT_POINT, 1, &x, &y, NULL );
-  SHPWriteObject(hPumpSHP, -1, shape);
-  SHPDestroyObject(shape);
+  error = SHPWriteObject(hPumpSHP, -1, shape);
+  SHPDestroyObject(shape);       
+  if(-1 == error) {
+        fprintf(stderr, "FATAL ERROR: SHPWriteObject failed in write_pump().\n");
+        exit_inp2shp(1);
+      }
   DBFWriteStringAttribute(hPumpDBF, num_pumps, 0, string);
   
-  ENgetlinkvalue(index, EN_INITSETTING, &d);
-  sprintf(Tok[0], "%f", d);
-  DBFWriteStringAttribute(hPumpDBF, num_pumps, 11, Tok[0]);
-  
-  ENgetlinkvalue(index, EN_STATUS, &d);
-  switch((int)d) {
-    case 0: 
-	  DBFWriteStringAttribute(hPumpDBF, num_pumps, 11, "closed");
+  error = ENgetlinkvalue(index, EN_INITSETTING, &d);
+  if(0 != error) {
+    fprintf(stderr, "FATAL ERROR: ENgetlinkvalue(%d, EN_INITSETTING) returned error %d in write_pump().\n",
+      index, error); 
+    exit_inp2shp(1);        
+  } 
+  error = ENgetpumptype(index, &type);
+  if(0 != error) {
+    fprintf(stderr, "FATAL ERROR: ENgetpumptype(%d) returned error %d in write_pump().\n",
+      index, error); 
+    exit_inp2shp(1);        
+  } 
+  strcpy(Tok[0], "");
+  switch(type) {
+    case EN_CONST_HP:
+      for(i=0;i<15;i++) {
+        ENgetlinkvalue(index, i, &power);
+        printf("%i %f\n",i, power);
+                                       }
+      ENgetlinkvalue(index, EN_MINORLOSS, &power);
+      sprintf(Tok[0], "POWER %f SPEED %f", power, d);
     break;
-    case 1: 
-	  DBFWriteStringAttribute(hPumpDBF, num_pumps, 11, "open");
-    break;
+    case EN_CUSTOM:                 
+       ENgetheadcurve(index, string);
+       sprintf(Tok[0], "HEAD %s SPEED %f", string, d);
+    break;   
   }
+
+  DBFWriteStringAttribute(hPumpDBF, num_pumps, 11, Tok[0]);
 
   num_pumps++;
   
@@ -931,17 +1017,17 @@ int create_pump_shapefile(char *filename) {
     fprintf(stderr, "FATAL ERROR: Unable to create file '%s'.\n", filename);
     exit_inp2shp(1);
   }
-  DBFAddField(hPumpDBF, "dc_id", FTString, 16, 0);
+  DBFAddField(hPumpDBF, "dc_id", FTString, 16, 0); /* 0 */
   DBFAddField(hPumpDBF, "installati", FTString, 16, 0);
   DBFAddField(hPumpDBF, "abandon_da", FTString, 16, 0);
   DBFAddField(hPumpDBF, "dcsubtype", FTInteger, 16, 0);
   DBFAddField(hPumpDBF, "bitcodezon", FTInteger, 20, 0);
-  DBFAddField(hPumpDBF, "elevation", FTDouble, 16, 3);
+  DBFAddField(hPumpDBF, "elevation", FTDouble, 16, 3); /* 5 */
   DBFAddField(hPumpDBF, "result_dem", FTDouble, 16, 8);
   DBFAddField(hPumpDBF, "result_hea", FTDouble, 16, 8);
   DBFAddField(hPumpDBF, "result_pre", FTDouble, 16, 8);
   DBFAddField(hPumpDBF, "result_flo", FTDouble, 16, 8);
-  DBFAddField(hPumpDBF, "result_vel", FTDouble, 16, 8);
+  DBFAddField(hPumpDBF, "result_vel", FTDouble, 16, 8); /* 10 */
   DBFAddField(hPumpDBF, "properties", FTString, 200, 0);
   DBFAddField(hPumpDBF, "power_kw", FTInteger, 16,0);
   num_pumps = 0;
@@ -1198,7 +1284,7 @@ void remove_shp(char *shapefilename) {
   fprintf(stderr, "remove(\"%s\") returned %d.\n", shapefilename, returnvalue);
 #endif  
   len = strlen(shapefilename);
-  if(len < 255) { 
+  if((len < 255)&&(len > 3)) { 
     strncpy(filename, shapefilename, len-3);
     strncpy(&filename[len-3], "dbf", 4);
     returnvalue = remove(filename);

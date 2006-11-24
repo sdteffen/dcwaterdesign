@@ -7,3 +7,7 @@ http://gdal.velocet.ca/projects/shapelib/index.html
 
 The EPANET toolkit is available from:
 http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html
+
+In addition, you have to apply the patches in the patch
+folder against the EPANET sources. For details,
+see http://sdteffen.de/hydraulik/epanet.html

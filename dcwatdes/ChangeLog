@@ -1,3 +1,13 @@
+2006-11-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp/README: Added instructions regarding the EPANET toolkit patches
+	* inp2shp/inp2shp.c: adding more error checks; use patched epanet2.dll
+	* inp2shp_private.h:
+	* inp2shp_private.rc: minor changes
+	* inp2shp/patch/epanet_pump.diff:
+	* inp2shp/patch/epanet_toolkit_pump.diff: Patches against EPANET 2.0.10.0
+	to access pump and curve data through the toolkit
+	
 2006-11-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* inp2shp/inp2shp.c: Improved attribute import of valves and pumps
