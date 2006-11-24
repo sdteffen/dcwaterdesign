@@ -14,7 +14,7 @@
 #define FILE_VERSION	"0.2.2"
 #define FILE_DESCRIPTION	"inp2shp"
 #define INTERNAL_NAME	""
-#define LEGAL_COPYRIGHT	"Copyrigh (c) 2002 - 2006 DC Water and Environment"
+#define LEGAL_COPYRIGHT	"2002 - 2006 DC Water and Environment"
 #define LEGAL_TRADEMARKS	""
 #define ORIGINAL_FILENAME	"inp2shp.exe"
 #define PRODUCT_NAME	"inp2shp"

@@ -20,7 +20,7 @@ FILETYPE VFT_APP
 			 VALUE "FileVersion", "0.2.2"
 			 VALUE "FileDescription", "inp2shp"
 			 VALUE "InternalName", ""
-			 VALUE "LegalCopyright", "Copyrigh (c) 2002 - 2006 DC Water and Environment"
+			 VALUE "LegalCopyright", "2002 - 2006 DC Water and Environment"
 			 VALUE "LegalTrademarks", ""
 			 VALUE "OriginalFilename", "inp2shp.exe"
 			 VALUE "ProductName", "inp2shp"
