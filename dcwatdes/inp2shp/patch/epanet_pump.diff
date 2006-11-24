@@ -1,0 +1,114 @@
+--- epanet.c	Mon Jun 24 10:00:00 2002
++++ epanet.c	Fri Nov 24 09:55:50 2006
+@@ -9,6 +9,7 @@
+             10/25/00
+             3/1/01
+             11/19/01
++            11/24/06
+ AUTHOR:     L. Rossman
+             US EPA - NRMRL
+ 
+@@ -1493,12 +1494,13 @@
+          break;
+ 
+       case EN_MINORLOSS:
++         /*** Updated 11/24/06 ***/
++         *value = Link[index].Km;
+          if (Link[index].Type != PUMP)
+          {
+-            *value = Link[index].Km;
++          
+             *value *= (SQR(Link[index].Diam)*SQR(Link[index].Diam)/0.02517);
+          }
+-         else *value = 0.0;
+          break;
+ 
+       case EN_INITSTATUS:
+@@ -2790,6 +2792,57 @@
+       viewprog(progmsg);
+    }
+ #endif
++}
++
++/*** Updated 11/24/06 ***/
++int DLLEXPORT ENgetheadcurve(int index, char *id)
++/*----------------------------------------------------------------
++**  Input:   index = index of pump in list of links
++**  Output:  id = head curve ID
++**  Returns: error code                              
++**  Purpose: retrieves ID of a head curve for specific link index
++**
++**  NOTE: 'id' must be able to hold MAXID characters
++**----------------------------------------------------------------
++*/
++{
++   int i;
++   strcpy(id,"");
++   if (!Openflag) return(102);
++   for (i=1; i<=Npumps; i++)
++   {
++      if(Pump[i].Link = index) 
++      {
++         strcpy(id,Curve[Pump[i].Hcurve].ID);                   
++         return(0);
++      }
++   }
++   return(204);
++}
++
++/*** Updated 11/24/06 ***/
++int DLLEXPORT ENgetpumptype(int index, int *type)
++/*----------------------------------------------------------------
++**  Input:   index = index of pump in list of links
++**  Output:  type = PumpType
++**  Returns: error code                              
++**  Purpose: retrieves type of a pump for specific link index
++**
++**----------------------------------------------------------------
++*/
++{
++   int i;
++   *type=-1;
++   if (!Openflag) return(102);
++   for (i=1; i<=Npumps; i++)
++   {
++      if(Pump[i].Link = index) 
++      {
++         *type = Pump[i].Ptype;                   
++         return(0);
++      }
++   }
++   return(204);
+ }
+ 
+ /*************************** END OF EPANET.C ***************************/
+--- toolkit.h	Mon Jun 24 10:00:00 2002
++++ toolkit.h	Fri Nov 24 09:51:30 2006
+@@ -7,6 +7,7 @@
+ DATE:       5/8/00
+             10/25/00
+             3/1/01
++            11/24/06
+ AUTHOR:     L. Rossman
+             US EPA - NRMRL
+ 
+@@ -129,6 +130,10 @@
+ /*** Updated 3/1/01 ***/
+ #define EN_INITFLOW    10   /* Re-initialize flows flag  */
+ 
++/*** Updated 11/24/06 ***/
++#define EN_CONST_HP     0   /*    constant horsepower              */
++#define EN_POWER_FUNC   1   /*    power function                   */
++#define EN_CUSTOM       2   /*    user-defined custom curve        */
+ 
+ /* These are the external functions that comprise the DLL */
+ 
+@@ -198,4 +203,7 @@
+  int  DLLEXPORT ENsetoption(int, float);
+  int  DLLEXPORT ENsetstatusreport(int);
+  int  DLLEXPORT ENsetqualtype(int, char *, char *, char *);
+-
++ 
++ /*** Updated 11/24/06 ***/
++ int DLLEXPORT ENgetheadcurve(int, char *);
++ int DLLEXPORT ENgetpumptype(int, int *);

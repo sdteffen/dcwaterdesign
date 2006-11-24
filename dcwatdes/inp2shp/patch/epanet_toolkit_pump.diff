@@ -1,0 +1,31 @@
+--- C:/data/home/sdteffen/src/epanet.orig/epanet2.h	Fri Mar 02 10:00:00 2001
++++ C:/wc/svn.sourceforge.net/dcwaterdesign/dcwatdes/inp2shp/epanet2.h	Fri Nov 24 10:00:48 2006
+@@ -3,7 +3,7 @@
+ **
+ ** C/C++ header file for EPANET Programmers Toolkit
+ **
+-** Last updated on 3/1/01
++** Last updated on 11/24/06
+ */
+ 
+ #ifndef EPANET2_H
+@@ -113,6 +113,11 @@
+ #define EN_SAVE         1
+ #define EN_INITFLOW     10  /* Re-initialize flow flag   */
+ 
++/*** Updated 11/24/06 ***/
++#define EN_CONST_HP     0   /*    constant horsepower              */
++#define EN_POWER_FUNC   1   /*    power function                   */
++#define EN_CUSTOM       2   /*    user-defined custom curve        */
++#define EN_NOCURVE      3
+ 
+ /* These are the external functions that comprise the DLL */
+ 
+@@ -187,4 +192,7 @@
+ EXTERN int   CALLTYPE ENsetstatusreport(int);
+ EXTERN int   CALLTYPE ENsetqualtype(int, char *, char *, char *);
+ 
++/*** Updated 11/24/06 ***/
++EXTERN int   CALLTYPE ENgetheadcurve(int, char *);
++EXTERN int   CALLTYPE ENgetpumptype(int, int *);
+ #endif
