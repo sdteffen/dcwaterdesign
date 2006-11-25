@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
   xmlns:saxon="http://icl.com/saxon"
   extension-element-prefixes="saxon">
+  <xsl:param name="saxon.extensions" select="'1'"/>
   <xsl:param name="generate.index">1</xsl:param>
   <xsl:param name="preface.autolabel">0</xsl:param>
   <xsl:param name="part.autolabel">1</xsl:param>
@@ -77,7 +78,6 @@
   <xsl:param name="admon.style"></xsl:param>
   <xsl:param name="page.margin.inner">2.4cm</xsl:param>
   <xsl:param name="page.margin.outer">2.4cm</xsl:param>
-  <xsl:param name="callout.graphics">0</xsl:param>
   <xsl:param name="paper.type">A4</xsl:param>
   <xsl:param name="page.orientation">portrait</xsl:param>
   <xsl:param name="double.sided">0</xsl:param>

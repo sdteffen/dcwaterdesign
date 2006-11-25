@@ -151,7 +151,7 @@
 	    </itemizedlist>
 	  </para>  
 	</sect3>
-        <sect3>
+        <sect3 id="news_2_11">
 	  <title>Version 2.11</title>
 	  <para>
 	    <itemizedlist>
@@ -167,7 +167,7 @@
 	    </itemizedlist>
 	  </para>
 	</sect3>
-        <sect3>
+        <sect3 id="news_2_10">
 	  <title>Version 2.10</title>
 	  <para>
 	    <itemizedlist>
@@ -180,7 +180,7 @@
 	    </itemizedlist>
 	  </para>
 	</sect3>
-	<sect3>
+	<sect3 id="news_2_09">
 	  <title>Version 2.09</title>
           <para>
 	    <itemizedlist>
@@ -193,7 +193,7 @@
 	  </para>
 	</sect3>
       
-	<sect3>
+	<sect3 id="news_2_08">
 	  <title>Version 2.08</title>
           <para>
 	    <itemizedlist>
@@ -219,7 +219,7 @@
 	  </para>
 	</sect3>
       
-	<sect3>
+	<sect3 id="news_2_07">
 	  <title>Version 2.07</title>
           <para>
 	    <itemizedlist>
@@ -236,7 +236,7 @@
 	  </para>
 	</sect3>
 	
-	<sect3>
+	<sect3 id="news_2_06">
 	  <title>Version 2.06</title>
           <para>
 	    <itemizedlist>
@@ -249,7 +249,7 @@
 	  </para>
 	</sect3>
 	
-	<sect3>
+	<sect3 id="news_2_05">
 	  <title>Version 2.05</title>
 	  <para>
 	    <itemizedlist>
@@ -259,7 +259,7 @@
 	  </para>
 	</sect3>
       
-	<sect3>
+	<sect3 id="news_2_04">
 	  <title>Version 2.04</title>
           <para>
 	    <itemizedlist>
@@ -279,7 +279,7 @@
 	  </para>
 	</sect3>
       
-	<sect3>
+	<sect3 id="news_2_03">
 	  <title>Version 2.03</title>
 	  <para>
             <itemizedlist>
@@ -316,7 +316,7 @@
 	  </para>
 	</sect3>
       
-	<sect3>
+	<sect3 id="news_2_02">
 	  <title>Version 2.02</title>
           <para>
 	    <itemizedlist>
@@ -325,7 +325,7 @@
 	  </para>
 	</sect3>
       
-	<sect3>
+	<sect3 id="news_2_01">
 	  <title>Version 2.01</title>
 	  <para>
 	    <itemizedlist>
@@ -580,7 +580,7 @@
 	</itemizedlist>
       </para>
     </sect2>
-    <sect2>
+    <sect2 id="requirements">
       <title>Requirements</title>
       <indexterm><primary>requirements</primary></indexterm>
       <para>The following software packages are required in order to use the
@@ -602,7 +602,7 @@
 	system. They are platform independent, however you may have to
 	compile them for your platform.</para></note>
     </sect2>
-    <sect2>
+    <sect2 id="setup">
       <title>Setup</title>
       <indexterm><primary>setup</primary></indexterm>
       <para>To install the DC Water Design Extension, you've got to 
@@ -727,7 +727,7 @@
 	<tip><para>Deselect the <guilabel>Enforce Data Model</guilabel> checkbox
 	  when editing street or sewer networks.</para></tip>  
       </sect3>
-	<sect3>
+	<sect3 id="epanet_tables">
 	  <title>EPANET Tables</title>
           <indexterm><primary>tables</primary>
 	    <secondary>EPANET</secondary></indexterm>
@@ -742,7 +742,7 @@
 	  information on how to load tables into ArcView.</para>
 	</sect3>
       
-	<sect3>
+	<sect3 id="result_tables">
 	  <title>Result Tables</title> 
           <indexterm><primary>tables</primary>
 	    <secondary>result</secondary></indexterm>
@@ -1030,7 +1030,7 @@
 	ArcView. Refer to the ArcView documentation for 
 	information on how to load tables into ArcView.</para>
       </sect3>
-      <sect3>
+      <sect3 id="valve_controls">
         <title>Valve Control</title>
 	<indexterm><primary>valve</primary></indexterm>
 	<indexterm><primary>control</primary></indexterm>
@@ -1043,7 +1043,7 @@
 	  combination with Network Traces as the extension allows 
 	  to stop traces at closed valves.</para>
       </sect3>
-      <sect3>
+      <sect3 id="make_house_connections">
 	<title>Make House Connections</title> 
         <indexterm><primary>house connection</primary></indexterm>
 	<para>Creates a straight pipe between tanks and junctions 
@@ -1064,7 +1064,7 @@
 	<para>It might be taken out or completely rewritten in 
 	  future versions of the DC Water Design Extension.</para>
       </sect3>	  
-      <sect3>
+      <sect3 id="create_supply_strings">
         <title>Create Supply Strings</title> 
 	<indexterm><primary>supply string</primary></indexterm>
 	<para>Calculates a coded text that shows when a node is 
@@ -1087,7 +1087,7 @@
 	<para>It might be taken out or completely rewritten in 
 	  future versions of the DC Water Design Extension.</para>
       </sect3>
-      <sect3>
+      <sect3 id="calculate_pipe_length_for_junctions">
         <title>Calculate Pipe Length For Junctions</title> 
         <indexterm><primary>junction</primary></indexterm>
 	<indexterm><primary>pipe length</primary></indexterm>
@@ -1101,7 +1101,7 @@
 	  two. Thus every part of a pipe is assigned to the 
 	  nearest node.</para>
       </sect3>
-      <sect3>
+      <sect3 id="clip_themes_by_bitcode">
         <title>Clip Themes by Bitcode</title> 
         <indexterm><primary>bytecode</primary></indexterm>
 	<indexterm><primary>clip</primary></indexterm>
@@ -1153,7 +1153,7 @@
 	<para>Currently the function only supports networks that 
 	contain only shut off valves.</para>
       </sect3>
-      <sect3>
+      <sect3 id="create_missing_fields">
         <title>Create Missing Fields</title>
         <indexterm><primary>fields</primary></indexterm>
 	<para>Creates fields required by the data model if they are 
@@ -1163,7 +1163,7 @@
 	  with the EPANET data model.</para>
       </sect3>
     
-      <sect3>
+      <sect3 id="create_missing_junctions">
         <title>Create Missing Junctions</title>
         <indexterm><primary>missing junctions</primary></indexterm>
 	<indexterm><primary>junction</primary></indexterm>
@@ -1171,14 +1171,14 @@
 	  EPANET Model with the correct topology (a node at every 
 	  end of a pipe).</para>
       </sect3>
-      <sect3>
+      <sect3 id="skeletonize_model">
         <title>Skeletonize Model</title>
 	<indexterm><primary>skeleton</primary></indexterm>
 	<para>Merges all pipeline sections that share a common 
 	  attribute. You will be prompted to select a field for 
 	  the attribute comparison. Removes unnecessary nodes.</para>
       </sect3>
-      <sect3>
+      <sect3 id="about">
         <title>About DC Water Design Extension</title>
         <indexterm><primary>license</primary></indexterm>
 	<para>Displays information about the DC Water Design 
@@ -1203,7 +1203,7 @@
 	<tip><para>ArcView's symbology can be used to display the 
 	  digitizing direction with arrowheads.</para></tip>
       </sect3>
-      <sect3>
+      <sect3 id="move_nodes">
         <title>Move Nodes</title> 
         <indexterm><primary>move</primary></indexterm>
 	<para>A tool to move network nodes including rubber-banding.</para>
@@ -1216,7 +1216,7 @@
 	<para>The respective themes have to be registered with the 
 	  extension in the EPANET themes dialog.</para>
       </sect3>
-      <sect3>
+      <sect3 id="split_pipe">
         <title>Split Pipe (Add Junction)</title> 
         <indexterm><primary>split</primary>
 	  <secondary>pipe</secondary></indexterm>
@@ -1230,7 +1230,7 @@
 	<para>Pipe and junction themes have to be chosen in the 
 	  EPANET themes dialog.</para>
       </sect3>	  
-      <sect3>
+      <sect3 id="edit_pipe_vertices">
         <title>Edit Pipe Vertices</title> 
         <indexterm><primary>vertex</primary></indexterm>
 	<indexterm><primary>edit</primary>
@@ -1255,7 +1255,7 @@
 	of this manual if you have problems calculating the 
 	pipe length.</para>
       </sect3>
-      <sect3>
+      <sect3 id="change_node_class">
         <title>Change Node Class</title>
         <indexterm><primary>change node class</primary></indexterm>
 	<para>Tool to convert nodes from one class to another.</para>
@@ -1269,7 +1269,7 @@
 	<para>Obviously, the respective themes have to be registered 
 	  with the extension in the EPANET themes dialog.</para>
       </sect3>
-      <sect3>	
+      <sect3 id="delete_feature">	
         <title>Delete Feature</title>
         <indexterm><primary>delete</primary></indexterm>
 	<para>A tool to delete network features.</para>
@@ -1281,7 +1281,7 @@
 	<para>The themes containing features that should be deleted 
 	have to be selected in the EPANET Themes dialog.</para>
       </sect3>
-      <sect3>
+      <sect3 id="digitize_junction">
         <title>Digitize Junction</title> 
         <indexterm><primary>digitize</primary>
 	  <secondary>junction</secondary></indexterm>
@@ -1292,7 +1292,7 @@
 	<para>The junctions are added to the junction theme selected 
 	in the EPANET themes dialog.</para>
       </sect3>
-      <sect3>
+      <sect3 id="digitize_pipe">
         <title>Digitize Pipe</title> 
 	<indexterm><primary>digitize</primary>
 	  <secondary>pipe</secondary></indexterm>
@@ -1304,7 +1304,7 @@
 	integrity, the tool automatically adds junctions at the 
 	pipe end if the pipe end doesn't snap onto an existing node.</para>
       </sect3>
-      <sect3>
+      <sect3 id="digitize_tank">
         <title>Digitize Tank</title> 
         <indexterm><primary>tank</primary></indexterm>
 	<indexterm><primary>digitize</primary>
@@ -1314,7 +1314,7 @@
 	<para>The tanks are added to the tank theme selected in the 
 	  EPANET themes dialog.</para>
       </sect3>
-      <sect3>
+      <sect3 id="digitize_valve">
         <title>Digitize Valve</title> 
         <indexterm><primary>digitize</primary>
 	  <secondary>valve</secondary></indexterm>
@@ -1324,7 +1324,7 @@
 	  EPANET themes dialog. The tool is disabled if the valve 
 	  theme is not enabled in the EPANET themes dialog.</para>
       </sect3>
-      <sect3>
+      <sect3 id="digitize_reservoir">
         <title>Digitize Reservoir</title> 
 	<indexterm><primary>digitize</primary>
 	  <secondary>reservoir</secondary></indexterm>
@@ -1337,7 +1337,7 @@
 	  disabled if the reservoir theme is not enabled in the 
 	  EPANET themes dialog.</para>
       </sect3>
-      <sect3>
+      <sect3 id="digitize_pump">
 	<title>Digitize Pump</title>
         <indexterm><primary>pump</primary></indexterm>
 	<indexterm><primary>digitize</primary>
@@ -1493,7 +1493,59 @@
 	<para>Converts EPANET INP files to a group of shapefiles that conform
 	  to the EPANET/ArcView data model.</para>
 	<para>Used by the EPANET INP import function (<xref linkend=
-	  "import_epanet_inp_file" />).</para>  
+	  "import_epanet_inp_file" />).</para>
+	<para>The command is used as follows:</para>
+	<programlisting>inp2shp<co id="co_inp2shp" /> model.inp<co 
+	id="co_model.inp" /> model.txt<co id="co_model.txt" /> j.shp<co 
+	id="co_j.shp" /> p.shp<co id="co_p.shp" /> pu.shp<co id="co_pu.shp" 
+	/> r.shp<co id="co_r.shp" /> t.shp<co id="co_t.shp" /></programlisting>   
+	<calloutlist>
+          <callout arearefs="co_inp2shp">
+	    <para>The <command>inp2shp</command> program.</para>
+	  </callout>
+	  <callout arearefs="co_model.inp">
+	    <para>The INP file to be imported. Replace with the path to your
+	      INP file.</para>   
+	  </callout>
+	  <callout arearefs="co_model.txt">
+	    <para>A report file to be generated by the EPANET
+	      engine. The file might
+	      contain additional error message that can help to track down
+	      problems. Existing file will be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_j.shp">
+	    <para>The junction shapefile to be generated or overwritten. Replace
+	      with the path to save the junction shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_p.shp">
+	    <para>The pipe shapefile to be generated or overwritten. Replace
+	      with the path to save the pipe shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_pu.shp">
+	    <para>The pump shapefile to be generated or overwritten. Replace
+	      with the path to save the pump shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_r.shp">
+	    <para>The reservoir shapefile to be generated or overwritten. Replace
+	      with the path to save the reservoir shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_t.shp">
+	    <para>The tank shapefile to be generated or overwritten. Replace
+	      with the path to save the tank shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	</calloutlist>
+	<para>Shapefiles will only be generated for those network elements that
+	  are included in the INP file.</para>
+	<para>Virtual lines are processed as required (See 
+	  <xref linkend="virtual_lines" />).</para>  
+	<important><para>Make sure that <command>inp2shp.exe</command> and
+	  the patched <filename>epanet2.dll</filename> are in the PATH in
+	  order to execute the command.</para></important>     
       </sect3>
       <sect3 id="epanet2mysql">
         <title>epanet2mysql</title>
@@ -1520,7 +1572,7 @@
     <title>Frequently Asked Questions</title>
     <indexterm><primary>Troubleshooting</primary></indexterm>
     <indexterm><primary>frequently asked questions</primary></indexterm>
-    <sect2>
+    <sect2 id="faq_bitcode">
       <title>Why is there no graphical user interface to the 
         DCWatDes.Bitcode.* functions?</title>
       
@@ -1530,7 +1582,7 @@
 	calculator and the query. Examples are given in <xref linkend=
 	"api" />.</para>
     </sect2>
-    <sect2>
+    <sect2 id="faq_setup">
       <title>What is the Setup Dialog for?</title>
   
       <para>The Extension depends on several software packages. The 
@@ -1538,7 +1590,7 @@
 	software packages than the ones supplied with the 
 	Extension itself.</para> 
     </sect2>
-    <sect2>
+    <sect2 id="faq_pipe_length">
       <title>How do I recalculate the pipe length for all the pipes?</title>
       <indexterm><primary>automated pipe length calculation</primary></indexterm>
       <indexterm><primary>pipe length</primary></indexterm>
@@ -1561,7 +1613,7 @@
 	</itemizedlist>
       </para>
     </sect2>
-    <sect2>
+    <sect2 id="faq_strange_errors">
       <title>I get strange errors when I try to create the EPANET 
         model. What can I do?</title>
       <indexterm><primary>error</primary></indexterm>
@@ -1576,7 +1628,7 @@
 	</itemizedlist>
       </para>
     </sect2>
-    <sect2>
+    <sect2 id="faq_no_undo">
       <title>I made a mistake. Why is undo not working?</title>
       <indexterm><primary>undo</primary></indexterm>
       <important><para>Undo support had to be taken out for the sake of 
@@ -1586,7 +1638,7 @@
       <para>You've been warned.</para>
     </sect2>
     
-    <sect2>
+    <sect2 id="faq_rule_based_controls">
       <title>How do I add rule-based controls?</title>
       <indexterm><primary>rule-based controls</primary></indexterm>
       <indexterm><primary>controls</primary>
@@ -1601,7 +1653,7 @@
       THEN PUMP 355 STATUS IS CLOSED</programlisting></para>
     </sect2>
     
-    <sect2>
+    <sect2 id="faq_pump_status">
       <title>How do I add the initial status of a pump?</title>
       <indexterm><primary>pump</primary>
         <secondary>initial status</secondary></indexterm>
@@ -2678,8 +2730,8 @@
               button. Read the generated report and follow the instructions.
               </para><para>The following message indicates that there
               are no problems:</para>
-              <computeroutput>DBF tallied exactly with .dbf header and 
-                shapefile</computeroutput>
+              <para><computeroutput>DBF tallied exactly with .dbf header and 
+                shapefile</computeroutput></para>
               </listitem>
           </orderedlist>
         </example>  
