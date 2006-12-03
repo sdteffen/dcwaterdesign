@@ -1,3 +1,9 @@
+2006-12-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: changed articles to chapters in order to
+	have a unique numbering at the top level; added 3 section ids
+	* .project: Added Eclipse project file
+	
 2006-07-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcsewerdesign.complexprofile.create.ave:

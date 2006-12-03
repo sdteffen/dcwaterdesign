@@ -54,7 +54,7 @@
 	</para></legalnotice>
     <pubdate>$Date$</pubdate>
  </bookinfo>
-<article id="general">
+<chapter id="general">
   <title>General</title>
   <indexterm><primary>general</primary></indexterm>
 <sect1 id="introduction">
@@ -193,7 +193,7 @@
       are using the DBF calculation, please have a look at the source code.
       </para></sect2>
       
-  <sect2>
+  <sect2 id="peak_factors">
     <title>Peak Factors</title>
     <indexterm><primary>factor</primary></indexterm>
     <indexterm><primary>peak factor</primary></indexterm>
@@ -206,7 +206,7 @@
       specify a constant peak factor).</para>
   </sect2>
   
-  <sect2>
+  <sect2 id="sewer_network_model">
     <title>How the Sewer Network is Modeled</title>
     <indexterm><primary>topology</primary></indexterm>
     <indexterm><primary>model</primary></indexterm>
@@ -246,8 +246,8 @@
   <para>For more information on extensions, see your ArcView 
     documentation.</para>
 </sect1>
-</article>
-<article id="reference">
+</chapter>
+<chapter id="reference">
   <title>Reference</title>
   <indexterm><primary>reference</primary></indexterm>
 <sect1 id="usage">
@@ -1145,8 +1145,8 @@ CumulativeLineData=diameter@1@Diameter Nominal in mm@30@Center@0</programlisting
       <para>After </para>	
     </sect2>
   </sect1 -->
-</article>
-  <index>
+</chapter>
+  <index id="index">
     <title>Index</title>
   </index>  
 </book>
