@@ -1048,8 +1048,9 @@ CumulativeLineData=diameter@1@Diameter Nominal in mm@30@Center@0</programlisting
 	node.shp to the pipe.shp (Groelev_up, Groelev_dw).</para>
       <para>Now use the &quot;Calculate constant gradient&quot; function 
       (button in your view tool bar which shows a single line with a 
-      constant slope) as described in the sewer design extension manual 
-      under chapter 4.3.2. With this function the invert levels (upstream 
+      constant slope) as described in <xref linkend="constant_gradient" />. 
+      With this function 
+      the invert levels (upstream 
       and down stream) for a selected sequence of pipes will be calculated 
       and written into the chosen fields as well as the (constant) gradient.</para> 
       <note><para>Select the pipes from the view and choose &quot;Theme – Start 
