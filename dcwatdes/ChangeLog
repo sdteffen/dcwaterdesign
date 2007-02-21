@@ -1,3 +1,8 @@
+2007-02-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: Added some more diameters
+	< DN 1000, upon Martin's request. However, the flow rates are just made up.
+	
 2006-11-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* doc/docbook.xsl: Enabled saxon extensions, callout graphics

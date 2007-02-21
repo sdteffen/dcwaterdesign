@@ -25,7 +25,12 @@ end
 
 ftbPipes = thmPipes.getFTab
 dicEconomic = Dictionary.make(20)
+'TODO: Verify flow rates for diameters < DN 100
+dicEconomic.add(0.5,40)
+dicEconomic.add(1,50)
+dicEconomic.add(2,63)
 dicEconomic.add(4.0,80)
+dicEconomic.add(5.0,90)
 dicEconomic.add(6.3,100)
 dicEconomic.add(15.0,150)
 dicEconomic.add(28.3,200)
