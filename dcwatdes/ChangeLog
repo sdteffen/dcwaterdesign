@@ -1,5 +1,9 @@
 2007-02-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
+	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: Fixed yesterday's addition
+	
+2007-02-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
 	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: Added some more diameters
 	< DN 1000, upon Martin's request. However, the flow rates are just made up.
 	
