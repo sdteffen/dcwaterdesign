@@ -155,16 +155,15 @@
 	GUI:	897
 	GUI:	1283
 	GUI:	1685
-	GUI:	1799
-	GUI:	1904
-	WorkDir:	2063
+	GUI:	1800
+	GUI:	1907
+	WorkDir:	2064
 	WinX:	-4
 	WinY:	-3
-	WinW:	1292
-	WinH:	811
+	WinW:	1567
+	WinH:	1023
 	SerialNumber:	"752171190022"
-	SelColor:	2064
-	GUINames:	2065
+	SelColor:	2065
 	GUINames:	2066
 	GUINames:	2067
 	GUINames:	2068
@@ -173,6 +172,7 @@
 	GUINames:	2071
 	GUINames:	2072
 	GUINames:	2073
+	GUINames:	2074
 	TocWidthScale:	1.00000000000000
 )
 
@@ -181,8 +181,8 @@
 	Open:	1
 	X:	-4
 	Y:	-4
-	W:	1294
-	H:	694
+	W:	1536
+	H:	911
 )
 
 (CSMgr.4
@@ -470,8 +470,8 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 	Owner:	42
 	X:	-4
 	Y:	-4
-	W:	1294
-	H:	694
+	W:	1410
+	H:	910
 )
 
 (CSMgr.44
@@ -517,10 +517,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.50
-	Left:	1.61666666666667
-	Top:	4.80833333333333
-	Right:	4.70000000000000
-	Bottom:	4.18333333333333
+	Left:	1.61458333333333
+	Top:	6.60416666666667
+	Right:	4.69791666666667
+	Bottom:	5.97916666666667
 )
 
 (AVCBBox.51
@@ -546,10 +546,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.54
-	Left:	1.63333333333333
-	Top:	4.53333333333333
-	Right:	4.71666666666667
-	Bottom:	3.62500000000000
+	Left:	1.63541666666667
+	Top:	6.33333333333333
+	Right:	4.71875000000000
+	Bottom:	5.42708333333333
 )
 
 (AVCBBox.55
@@ -572,10 +572,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.57
-	Left:	1.64166666666667
-	Top:	4.24166666666667
-	Right:	4.73333333333333
-	Bottom:	3.50833333333333
+	Left:	1.64583333333333
+	Top:	6.04166666666667
+	Right:	4.72916666666667
+	Bottom:	5.31250000000000
 )
 
 (AVCBBox.58
@@ -598,10 +598,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.60
-	Left:	1.74166666666667
-	Top:	3.07500000000000
-	Right:	2.65833333333333
-	Bottom:	2.90000000000000
+	Left:	1.73958333333333
+	Top:	4.87500000000000
+	Right:	2.65625000000000
+	Bottom:	4.69791666666667
 )
 
 (LButn.61
@@ -621,10 +621,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.63
-	Left:	2.84166666666667
-	Top:	3.08333333333333
-	Right:	3.75833333333333
-	Bottom:	2.90000000000000
+	Left:	2.84375000000000
+	Top:	4.88541666666667
+	Right:	3.76041666666667
+	Bottom:	4.69791666666667
 )
 
 (LButn.64
@@ -644,10 +644,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.66
-	Left:	3.89166666666667
-	Top:	3.07500000000000
-	Right:	4.81666666666667
-	Bottom:	2.90000000000000
+	Left:	3.89583333333333
+	Top:	4.87500000000000
+	Right:	4.81250000000000
+	Bottom:	4.69791666666667
 )
 
 (LButn.67
@@ -668,9 +668,9 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 
 (RectD.69
 	Left:	1.62500000000000
-	Top:	3.95000000000000
+	Top:	5.75000000000000
 	Right:	4.70833333333333
-	Bottom:	3.21666666666667
+	Bottom:	5.02083333333333
 )
 
 (AVCBBox.70
@@ -697,10 +697,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.73
-	Left:	4.73333333333333
-	Top:	4.02500000000000
-	Right:	5.73333333333333
-	Bottom:	3.71666666666667
+	Left:	4.72916666666667
+	Top:	5.82291666666667
+	Right:	5.72916666666667
+	Bottom:	5.52083333333333
 )
 
 (AVCBox.74
@@ -721,10 +721,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.76
-	Left:	4.73333333333333
-	Top:	3.77500000000000
-	Right:	5.73333333333333
-	Bottom:	3.46666666666667
+	Left:	4.72916666666667
+	Top:	5.57291666666667
+	Right:	5.72916666666667
+	Bottom:	5.27083333333333
 )
 
 (AVCBox.77
@@ -745,10 +745,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.79
-	Left:	1.61666666666667
-	Top:	3.70000000000000
-	Right:	4.70000000000000
-	Bottom:	2.96666666666667
+	Left:	1.61458333333333
+	Top:	5.50000000000000
+	Right:	4.69791666666667
+	Bottom:	4.77083333333333
 )
 
 (AVCBBox.80
@@ -775,10 +775,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.83
-	Left:	1.61666666666667
-	Top:	3.43333333333333
-	Right:	4.70000000000000
-	Bottom:	2.70000000000000
+	Left:	1.61458333333333
+	Top:	5.22916666666667
+	Right:	4.69791666666667
+	Bottom:	4.50000000000000
 )
 
 (AVCBBox.84
@@ -805,10 +805,10 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (RectD.87
-	Left:	4.73333333333333
-	Top:	3.50000000000000
-	Right:	5.73333333333333
-	Bottom:	3.20000000000000
+	Left:	4.72916666666667
+	Top:	5.30208333333333
+	Right:	5.72916666666667
+	Bottom:	5.00000000000000
 )
 
 (AVCBox.88
@@ -821,19 +821,19 @@ NESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for
 )
 
 (PageDpy.89
-	Top:	5.50833333333333
-	Right:	10.72500000000000
+	Top:	9.21875000000000
+	Right:	14.61458333333333
 	ReportUnits:	1
 	Units:	1
 	Scale:	90
-	ZoomRight:	10.72500000000000
-	ZoomTop:	5.50833333333333
+	ZoomRight:	14.61458333333333
+	ZoomTop:	9.21875000000000
 	GridSpacingX:	0.10000000000000
 	GridSpacingY:	0.10000000000000
 )
 
 (Numb.90
-	N:	0.09324009324009
+	N:	0.06842480399145
 )
 
 (Numb.91
@@ -5688,16 +5688,17 @@ ULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\
 wJunctions.add(pntEnd.clone)\n    end\n  end\n  \n  if(numSnapped <> 2)then\n    blnKeep = MsgBox.yesNo((2-numSnapped).asString +\" Endnode(s) unsnapped. \"+(2-numSnapped).asString+\" Junction(s) will be automatically added. Keep pipe?\",\"DC Water Design\", true)\n    if(blnKeep.not)then\n      return nil\n    end\n  end\n  \n  ftbJunctions = dicFTabs.get(\"Junctions\")\n  if((ftbPipes <> nil)and(ftbJunctions<>nil))then\n    'add dynamic junctions\n    ftbJunctions.setEditable(true)\n    fldSubtype = av.run(\"DCWatDes.ExpandedAli
 asVTab.findField\", {ftbJunctions, \"dcSubtype\"})\n    fldJunctionID = ftbJunctions.findField(\"dc_id\")\n    fldShape = ftbJunctions.findField(\"Shape\")\n    for each pntJunction in lstNewJunctions\n      recJunction = ftbJunctions.addRecord\n      ftbJunctions.setValue(fldShape, recJunction, pntJunction)\n      if(fldSubtype <> nil)then\n        ftbJunctions.setValue(fldSubtype, recJunction, 101)\n      end\n      if(fldJunctionID <> nil)then\n        ftbJunctions.setValue(fldJunctionID, recJunction, \"j\"+ftbJunctions.ge
 tNumRecords.asString)\n      end\n    end\n    ftbJunctions.setEditable(false)\n    \n    ' create new pipe\n    ftbPipes.setEditable(true)\n    fldShape = ftbPipes.findField(\"Shape\")\n    recPipe = ftbPipes.addRecord\n    ftbPipes.setValue(fldShape, recPipe, Polyline.make(lstPllPoints))\n    av.getProject.setModified(true)\n    ftbPipes.getSelection.clearAll\n    ftbPipes.getSelection.set(recPipe)\n    ftbPipes.updateSelection\n    fldPipeID = ftbPipes.findField(\"dc_id\")\n    if(fldPipeID <> nil)then\n      ftbPipes.setVa
-lue(fldPipeID, recPipe, \"l\"+ftbPipes.getNumRecords.asString)\n    end\n    ' keep network alive\n     \n    av.run(\"DCWatDes.Model.Epanet.Pipe.updateNodeFields\", recPipe)\n    \n    ' Enter diameter\n    lstDiameters = {32,40,50,63,80,90,100,110,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}\n    objDiameter = MsgBox.ListAsString(lstDiameters, \"Please enter the pipe diameter:\", \"DC Water Design\")\n    if(objDiameter <> nil)then\n      fldDiameter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbPipes, \"d
-iameter\"})\n      if(fldDiameter <> nil)then\n        ftbPipes.setValue(fldDiameter, recPipe, objDiameter)\n      end\n    end\n    \n    ftbPipes.setEditable(false)\n  end\nend  \n"
+lue(fldPipeID, recPipe, \"l\"+ftbPipes.getNumRecords.asString)\n    end\n    ' keep network alive\n     \n    av.run(\"DCWatDes.Model.Epanet.Pipe.updateNodeFields\", recPipe)\n    \n    ' Enter diameter\n    lstDiameters = {40,50,63,80,90,100,110,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}\n    objDiameter = MsgBox.ListAsString(lstDiameters, \"Please enter the pipe diameter:\", \"DC Water Design\")\n    if(objDiameter <> nil)then\n      fldDiameter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\", {ftbPipes, \"diam
+eter\"})\n      if(fldDiameter <> nil)then\n        ftbPipes.setValue(fldDiameter, recPipe, objDiameter)\n      end\n    end\n    \n    ftbPipes.setEditable(false)\n  end\nend  \n"
 )
 
 (DocWin.713
 	Owner:	712
-	X:	-4
-	Y:	-4
-	W:	1294
-	H:	694
+	Open:	1
+	X:	404
+	Y:	40
+	W:	841
+	H:	808
 )
 
 (CSMgr.714
@@ -5720,10 +5721,10 @@ iameter\"})\n      if(fldDiameter <> nil)then\n        ftbPipes.setValue(fldDiam
 
 (DocWin.717
 	Owner:	716
-	X:	-4
-	Y:	-4
-	W:	1294
-	H:	694
+	X:	31
+	Y:	215
+	W:	620
+	H:	538
 )
 
 (CSMgr.718
@@ -6178,19 +6179,20 @@ on(bmpSelection)\n              ftbPipes.updateSelection\n              pntPipeC
 	DocExts:	783
 	Source:	"' DCWatDes.View.Popup.Pipes.setEconomicDiameter\n\n' (c) 2006 DORSCH Consult\n' Select an economic pipe diameter and roughness according to result_flow\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without ev
 en the implied warranty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\ndicThemes = av.run(\"DCWatDes.Model.Epanet.returnThemeDictionary\",nil)\nthmPipes = dicThemes.get(\"Pipes\")\nif(thmPipes = nil)then\n  return nil\nend\n\nftbPipe
-s = thmPipes.getFTab\ndicEconomic = Dictionary.make(20)\n'TODO: Verify flow rates for diameters < DN 100\ndicEconomic.add(0.5,40)\ndicEconomic.add(1,50)\ndicEconomic.add(2,63)\ndicEconomic.add(4.0,80)\ndicEconomic.add(5.0,90)\ndicEconomic.add(6.3,100)\ndicEconomic.add(15.0,150)\ndicEconomic.add(28.3,200)\ndicEconomic.add(46.6,250)\ndicEconomic.add(70.7,300)\ndicEconomic.add(138,400)\ndicEconomic.add(236,500)\ndicEconomic.add(368,600)\ndicEconomic.add(539,700)\ndicEconomic.add(779,800)\ndicEconomic.add(1050,900)\ndicEconomic.a
-dd(1375,1000)\ndicEconomic.add(1806,1100)\ndicEconomic.add(2262,1200)\ndicEconomic.add(3079,1400)\nlstKeys = dicEconomic.returnKeys\nlstKeys.sort(true)\n\nfldDiameter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"Diameter\"})\nfldResultFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"result_flow\"})\nfldRoughness = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"Roughness\"})\nfldLifecycleStatus = ftbPipes.findField(\"lifecycles\")\n\npntMouse = self.getControlSet.getObjectTag\n\nif(pnt
-Mouse.is(Point))then\n  lstPipes = thmPipes.findByPoint(pntMouse)\n  if (lstPipes.count = 0 ) then\n    MsgBox.info(\"No Pipe selected\", \"DC Water Design\")\n    exit\n  end\n  ftbPipes.setEditable(true)  \n  for each recPipe in lstPipes\n    numResultFlow = ftbPipes.returnValue(fldResultFlow, recPipe).abs\n    numCurrentDiameter = ftbPipes.returnValue(fldDiameter, recPipe)\n    numBiggerKey = 6.3\n    for each numKey in lstKeys\n      if(numKey > numResultFlow)then\n        numBiggerKey = numKey\n        break\n      end\n 
-   end\n    numDiameter = dicEconomic.get(numBiggerKey)\n    lstDiameters = {40,50,63,80,90,100,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}\n    lstDiameters.shuffle(lstDiameters.get(lstDiameters.findByValue(numDiameter)),0)\n    numDiameter = MsgBox.ListAsString(lstDiameters, \"Please enter the pipe diameter (currently \"+numCurrentDiameter.asString+\"):\", \"DC Water Design\")\n    if(numDiameter <> nil)then\n      ftbPipes.setValue(fldDiameter, recPipe, numDiameter)\n      numRoughness = 1.5\n      if(numD
-iameter >= 500)then\n        numRoughness = 0.2\n      end\n      ftbPipes.setValue(fldRoughness, recPipe, numRoughness)\n      ' Automatically mark reinforcement pipes\n      if(fldLifecycleStatus <> nil)then\n        numLifecycleStatus = ftbPipes.returnValue(fldLifecycleStatus, recPipe)\n        if(numLifecycleStatus < 6)then\n          ftbPipes.setValue(fldLifecycleStatus, recPipe, 7)\n        end\n      end\n    end\n  end\n  ftbPipes.setEditable(false)\nend\n"
+s = thmPipes.getFTab\ndicEconomic = Dictionary.make(20)\n'TODO: Verify flow rates for diameters < DN 100\ndicEconomic.add(0.5,40)\ndicEconomic.add(1,50)\ndicEconomic.add(2,63)\ndicEconomic.add(4.0,80)\ndicEconomic.add(5.0,90)\ndicEconomic.add(6.3,100)\ndicEconomic.add(8.0,110)\ndicEconomic.add(15.0,150)\ndicEconomic.add(28.3,200)\ndicEconomic.add(46.6,250)\ndicEconomic.add(70.7,300)\ndicEconomic.add(138,400)\ndicEconomic.add(236,500)\ndicEconomic.add(368,600)\ndicEconomic.add(539,700)\ndicEconomic.add(779,800)\ndicEconomic.ad
+d(1050,900)\ndicEconomic.add(1375,1000)\ndicEconomic.add(1806,1100)\ndicEconomic.add(2262,1200)\ndicEconomic.add(3079,1400)\nlstKeys = dicEconomic.returnKeys\nlstKeys.sort(true)\n\nfldDiameter = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"Diameter\"})\nfldResultFlow = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"result_flow\"})\nfldRoughness = av.run(\"DCWatDes.ExpandedAliasVTab.findField\",{ftbPipes, \"Roughness\"})\nfldLifecycleStatus = ftbPipes.findField(\"lifecycles\")\n\npntMouse = self.getContro
+lSet.getObjectTag\n\nif(pntMouse.is(Point))then\n  lstPipes = thmPipes.findByPoint(pntMouse)\n  if (lstPipes.count = 0 ) then\n    MsgBox.info(\"No Pipe selected\", \"DC Water Design\")\n    exit\n  end\n  ftbPipes.setEditable(true)  \n  for each recPipe in lstPipes\n    numResultFlow = ftbPipes.returnValue(fldResultFlow, recPipe).abs\n    numCurrentDiameter = ftbPipes.returnValue(fldDiameter, recPipe)\n    numBiggerKey = 6.3\n    for each numKey in lstKeys\n      if(numKey > numResultFlow)then\n        numBiggerKey = numKey\n
+        break\n      end\n    end\n    numDiameter = dicEconomic.get(numBiggerKey)\n    lstDiameters = {40,50,63,80,90,100,110,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}\n    lstDiameters.shuffle(lstDiameters.get(lstDiameters.findByValue(numDiameter)),0)\n    numDiameter = MsgBox.ListAsString(lstDiameters, \"Please enter the pipe diameter (currently \"+numCurrentDiameter.asString+\"):\", \"DC Water Design\")\n    if(numDiameter <> nil)then\n      ftbPipes.setValue(fldDiameter, recPipe, numDiameter)\n      num
+Roughness = 1.5\n      if(numDiameter >= 500)then\n        numRoughness = 0.2\n      end\n      ftbPipes.setValue(fldRoughness, recPipe, numRoughness)\n      ' Automatically mark reinforcement pipes\n      if(fldLifecycleStatus <> nil)then\n        numLifecycleStatus = ftbPipes.returnValue(fldLifecycleStatus, recPipe)\n        if(numLifecycleStatus < 6)then\n          ftbPipes.setValue(fldLifecycleStatus, recPipe, 7)\n        end\n      end\n    end\n  end\n  ftbPipes.setEditable(false)\nend\n"
 )
 
 (DocWin.781
 	Owner:	780
+	Open:	1
 	X:	-4
 	Y:	-4
-	W:	1294
-	H:	694
+	W:	1690
+	H:	911
 )
 
 (CSMgr.782
@@ -6495,8 +6497,8 @@ adElt\n  if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  
 	Owner:	820
 	X:	-4
 	Y:	-4
-	W:	1294
-	H:	694
+	W:	1690
+	H:	911
 )
 
 (CSMgr.822
@@ -6914,27 +6916,27 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 
 (NameDict.884
 	Obj:	885
-	Obj:	888
+	Obj:	886
 	Obj:	889
 	Obj:	892
 )
 
 (AVDict.885
-	InternalName:	"Dialog Designer"
-	Key:	886
-	Value:	887
+	InternalName:	"Table of Contents Defaults Dialog"
 )
 
-(AVStr.886
+(AVDict.886
+	InternalName:	"Dialog Designer"
+	Key:	887
+	Value:	888
+)
+
+(AVStr.887
 	S:	"IsVisible"
 )
 
-(Bool.887
+(Bool.888
 	Truth:	1
-)
-
-(AVDict.888
-	InternalName:	"Table of Contents Defaults Dialog"
 )
 
 (AVDict.889
@@ -7528,7 +7530,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 
 (Choice.960
 	InternalName:	"GeoProc"
-	Disabled:	1
 	Help:	"Opens the GeoProcessing Wizard"
 	HelpTopic:	"geoproc_choice"
 	Tag:	"GeoProcessing"
@@ -8134,12 +8135,12 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVStr.1034
-	S:	"dcwatdes2.apr View1"
+	S:	"dcwatdes1_14.apr View1"
 )
 
 (Choice.1035
-	Help:	"Activates dcwatdes2.apr"
-	Label:	"&1 dcwatdes2.apr"
+	Help:	"Activates dcwatdes1_14.apr"
+	Label:	"&1 dcwatdes1_14.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
@@ -9539,15 +9540,15 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (ToolMenu.1199
-	Help:	"Pipe//digitize Pipe"
-	Tag:	"Pipes"
-	Update:	"DCWatDes.View.DigitizePipeUpdate"
+	Help:	"Junction//digitize Junction"
+	Tag:	"Junctions"
+	Update:	"DCWatDes.View.DigitizeNodeUpdate"
 	Icon:	1200
 	Cursor:	"Cursors.CrossHair"
-	Apply:	"DCWatDes.View.digitizePipe"
-	Click:	"DCWatDes.View.DigitizePipeTool"
+	Apply:	"DCWatDes.View.digitizeNode"
+	Click:	"DCWatDes.View.DigitizeNodeTool"
 	Child:	1201
-	Child:	1203
+	Child:	1202
 	Child:	1204
 	Child:	1206
 	Child:	1208
@@ -9555,8 +9556,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVIcon.1200
-	Name:	"Line"
-	Res:	"Icons.Line"
+	Name:	"Point"
+	Res:	"Icons.Point"
 
 )
 
@@ -9564,26 +9565,26 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Help:	"Junction//digitize Junction"
 	Tag:	"Junctions"
 	Update:	"DCWatDes.View.DigitizeNodeUpdate"
-	Icon:	1202
+	Icon:	1200
 	Cursor:	"Cursors.CrossHair"
 	Apply:	"DCWatDes.View.digitizeNode"
 	Click:	"DCWatDes.View.DigitizeNodeTool"
 )
 
-(AVIcon.1202
-	Name:	"Point"
-	Res:	"Icons.Point"
-
-)
-
-(Tool.1203
+(Tool.1202
 	Help:	"Pipe//digitize Pipe"
 	Tag:	"Pipes"
 	Update:	"DCWatDes.View.DigitizePipeUpdate"
-	Icon:	1200
+	Icon:	1203
 	Cursor:	"Cursors.CrossHair"
 	Apply:	"DCWatDes.View.digitizePipe"
 	Click:	"DCWatDes.View.DigitizePipeTool"
+)
+
+(AVIcon.1203
+	Name:	"Line"
+	Res:	"Icons.Line"
+
 )
 
 (Tool.1204
@@ -11346,9 +11347,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Modified:	1
 	Visible:	1
 	MenuBar:	1686
-	ButnBar:	1750
-	Popups:	1796
-	ToolBar:	1797
+	ButnBar:	1751
+	Popups:	1797
+	ToolBar:	1798
 	NewScript:	"Script.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Script.Action"
@@ -11356,7 +11357,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Script.ActionUpdate"
 	Title:	"Scripts"
-	Icon:	1798
+	Icon:	1799
 )
 
 (MenuBar.1686
@@ -11364,7 +11365,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1700
 	Child:	1716
 	Child:	1735
-	Child:	1745
+	Child:	1746
 )
 
 (PMenu.1687
@@ -11501,6 +11502,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1704
+	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -11752,6 +11754,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1741
 	Child:	1743
 	Child:	1744
+	Child:	1745
 	Label:	"&Window"
 )
 
@@ -11796,7 +11799,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVStr.1742
-	S:	"dcwatdes2.apr DCWatDesExtension.make"
+	S:	"dcwatdes2.apr DCWatDes.View.digitizePipe DCWatDes.View.Popup.Pipes.setEconomicDiameter"
 )
 
 (Choice.1743
@@ -11807,22 +11810,29 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1744
-	Help:	"Activates DCWatDesExtension.make"
-	Label:	"&2 DCWatDesExtension.make"
+	Help:	"Activates DCWatDes.View.digitizePipe"
+	Label:	"&2 DCWatDes.View.digitizePipe"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1745
+(Choice.1745
+	Help:	"Activates DCWatDes.View.Popup.Pipes.setEconomicDiameter"
+	Label:	"&3 DCWatDes.View.Popup.Pipes.setEconomicDiameter"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.1746
 	InternalName:	"Help"
-	Child:	1746
 	Child:	1747
 	Child:	1748
 	Child:	1749
+	Child:	1750
 	Label:	"&Help"
 )
 
-(Choice.1746
+(Choice.1747
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -11830,7 +11840,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1747
+(Choice.1748
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help"
@@ -11838,10 +11848,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1748
+(Space.1749
 )
 
-(Choice.1749
+(Choice.1750
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -11849,358 +11859,358 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1750
-	Child:	1751
-	Child:	1753
-	Child:	1755
-	Child:	1757
-	Child:	1759
+(ButnBar.1751
+	Child:	1752
+	Child:	1754
+	Child:	1756
+	Child:	1758
 	Child:	1760
-	Child:	1762
+	Child:	1761
 	Child:	1763
-	Child:	1765
-	Child:	1767
+	Child:	1764
+	Child:	1766
 	Child:	1768
-	Child:	1770
-	Child:	1772
-	Child:	1774
-	Child:	1776
-	Child:	1778
+	Child:	1769
+	Child:	1771
+	Child:	1773
+	Child:	1775
+	Child:	1777
 	Child:	1779
-	Child:	1781
-	Child:	1783
-	Child:	1785
+	Child:	1780
+	Child:	1782
+	Child:	1784
 	Child:	1786
-	Child:	1788
-	Child:	1790
-	Child:	1792
+	Child:	1787
+	Child:	1789
+	Child:	1791
 	Child:	1793
 	Child:	1794
+	Child:	1795
 )
 
-(Butn.1751
+(Butn.1752
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1752
+	Icon:	1753
 	Click:	"Project.Save"
 )
 
-(AVIcon.1752
+(AVIcon.1753
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Butn.1753
+(Butn.1754
 	Disabled:	1
 	Help:	"Cut//Cuts the selection and puts it into the clipboard"
 	HelpTopic:	"Cut"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1754
+	Icon:	1755
 	Click:	"Script.Cut"
 )
 
-(AVIcon.1754
+(AVIcon.1755
 	Name:	"Cut"
 	Res:	"Icons.Cut"
 
 )
 
-(Butn.1755
+(Butn.1756
 	Disabled:	1
 	Help:	"Copy//Copies the selection and puts it into the clipboard"
 	HelpTopic:	"Copy"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1756
+	Icon:	1757
 	Click:	"Script.Copy"
 )
 
-(AVIcon.1756
+(AVIcon.1757
 	Name:	"Copy"
 	Res:	"Icons.Copy"
 
 )
 
-(Butn.1757
+(Butn.1758
 	Help:	"Paste//Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
-	Icon:	1758
+	Icon:	1759
 	Click:	"Script.Paste"
 )
 
-(AVIcon.1758
+(AVIcon.1759
 	Name:	"Paste"
 	Res:	"Icons.Paste"
 
 )
 
-(Space.1759
+(Space.1760
 )
 
-(Butn.1760
+(Butn.1761
 	Help:	"Undo//Undoes the last modification to the script editor text"
 	HelpTopic:	"Undo__Script_"
-	Icon:	1761
+	Icon:	1762
 	Click:	"Script.Undo"
 )
 
-(AVIcon.1761
+(AVIcon.1762
 	Name:	"Undo"
 	Res:	"Icons.Undo"
 
 )
 
-(Space.1762
+(Space.1763
 )
 
-(Butn.1763
+(Butn.1764
 	Help:	"Shift Lines Left//Shifts selected lines or current line two spaces to the left"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1764
+	Icon:	1765
 	Click:	"Script.ShiftLeft"
 )
 
-(AVIcon.1764
+(AVIcon.1765
 	Name:	"ShiftLeft"
 	Res:	"Icons.ShiftLeft"
 
 )
 
-(Butn.1765
+(Butn.1766
 	Help:	"Shift Lines Right//Shifts selected lines or current line two spaces to the right"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1766
+	Icon:	1767
 	Click:	"Script.ShiftRight"
 )
 
-(AVIcon.1766
+(AVIcon.1767
 	Name:	"ShiftRight"
 	Res:	"Icons.ShiftRight"
 
 )
 
-(Space.1767
+(Space.1768
 )
 
-(Butn.1768
+(Butn.1769
 	Disabled:	1
 	Help:	"Compile//Compiles the script"
 	HelpTopic:	"Compile"
 	Update:	"Script.CompileUpdate"
-	Icon:	1769
+	Icon:	1770
 	Click:	"Script.Compile"
 )
 
-(AVIcon.1769
+(AVIcon.1770
 	Name:	"Check"
 	Res:	"Icons.Check"
 
 )
 
-(Butn.1770
+(Butn.1771
 	Help:	"Run//Runs the compiled script"
 	HelpTopic:	"Run"
 	Update:	"Script.RunUpdate"
-	Icon:	1771
+	Icon:	1772
 	Click:	"Script.Run"
 )
 
-(AVIcon.1771
+(AVIcon.1772
 	Name:	"Run"
 	Res:	"Icons.Run"
 
 )
 
-(Butn.1772
+(Butn.1773
 	Help:	"Step//Executes one request or object reference in the compiled script"
 	HelpTopic:	"Step"
 	Update:	"Script.RunUpdate"
-	Icon:	1773
+	Icon:	1774
 	Click:	"Script.Step"
 )
 
-(AVIcon.1773
+(AVIcon.1774
 	Name:	"Footprints"
 	Res:	"Icons.Footprints"
 
 )
 
-(Butn.1774
+(Butn.1775
 	Help:	"Toggle Breakpoint//Toggles a breakpoint on or off at the current cursor position"
 	HelpTopic:	"Toggle_Breakpoint"
 	Update:	"Script.RunUpdate"
-	Icon:	1775
+	Icon:	1776
 	Click:	"Script.ToggleBreak"
 )
 
-(AVIcon.1775
+(AVIcon.1776
 	Name:	"Hand"
 	Res:	"Icons.Hand"
 
 )
 
-(Butn.1776
+(Butn.1777
 	Help:	"Examine Variables//Displays the current value of local and global variables"
 	HelpTopic:	"Examine_Variables"
 	Update:	"Script.RunUpdate"
-	Icon:	1777
+	Icon:	1778
 	Click:	"Script.ShowVariables"
 )
 
-(AVIcon.1777
+(AVIcon.1778
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1778
+(Space.1779
 )
 
-(Butn.1779
+(Butn.1780
 	Help:	"Load System Script//Inserts the source code of a system script"
 	HelpTopic:	"Load_System_Script"
-	Icon:	1780
+	Icon:	1781
 	Click:	"Script.SystemLoad"
 )
 
-(AVIcon.1780
+(AVIcon.1781
 	Name:	"LoadScript"
 	Res:	"Icons.LoadScript"
 
 )
 
-(Butn.1781
+(Butn.1782
 	Help:	"Load Text File//Inserts the contents of a text file"
 	HelpTopic:	"Load_Text_File"
-	Icon:	1782
+	Icon:	1783
 	Click:	"Script.FileLoad"
 )
 
-(AVIcon.1782
+(AVIcon.1783
 	Name:	"Open"
 	Res:	"Icons.Open"
 
 )
 
-(Butn.1783
+(Butn.1784
 	Help:	"Write Text File//Writes the entire script or the selected text to a text file"
 	HelpTopic:	"Write_Text_File"
-	Icon:	1784
+	Icon:	1785
 	Click:	"Script.FileWrite"
 )
 
-(AVIcon.1784
+(AVIcon.1785
 	Name:	"Write"
 	Res:	"Icons.Write"
 
 )
 
-(Space.1785
+(Space.1786
 )
 
-(Butn.1786
+(Butn.1787
 	Help:	"Script Help//Searches for help using the current selection"
 	HelpTopic:	"Getting_help_about_script_components"
-	Icon:	1787
+	Icon:	1788
 	Click:	"Script.Help"
 )
 
-(AVIcon.1787
+(AVIcon.1788
 	Name:	"Help"
 	Res:	"Icons.Help"
 
 )
 
-(Butn.1788
+(Butn.1789
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1789
+	Icon:	1790
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1789
+(AVIcon.1790
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.1790
-	Icon:	1791
+(Butn.1791
+	Icon:	1792
 	Click:	"Programming.findInAllScripts"
 )
 
-(AVIcon.1791
+(AVIcon.1792
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1792
+(Space.1793
 )
 
-(Butn.1793
+(Butn.1794
 	Icon:	1135
 	Click:	"DCWatDesExtension.make"
 )
 
-(Butn.1794
-	Icon:	1795
+(Butn.1795
+	Icon:	1796
 	Click:	"Script.setNameFromFirstComment"
 )
 
-(AVIcon.1795
+(AVIcon.1796
 	Name:	"Yen"
 	Res:	"Icons.Yen"
 
 )
 
-(PopupSet.1796
+(PopupSet.1797
 )
 
-(ToolBar.1797
+(ToolBar.1798
 )
 
-(AVIcon.1798
+(AVIcon.1799
 	Name:	"Icon"
 	Res:	"SEd.Icon"
 
 )
 
-(DocGUI.1799
+(DocGUI.1800
 	Name:	"Project"
 	Type:	"Project"
 	Modified:	1
-	MenuBar:	1800
-	ButnBar:	1876
-	Popups:	1883
-	ToolBar:	1884
-	Icon:	1885
+	MenuBar:	1801
+	ButnBar:	1879
+	Popups:	1886
+	ToolBar:	1887
+	Icon:	1888
 )
 
-(MenuBar.1800
-	Child:	1801
-	Child:	1813
-	Child:	1853
-	Child:	1862
-	Child:	1871
-)
-
-(PMenu.1801
-	InternalName:	"File"
+(MenuBar.1801
 	Child:	1802
+	Child:	1814
+	Child:	1854
+	Child:	1863
+	Child:	1874
+)
+
+(PMenu.1802
+	InternalName:	"File"
 	Child:	1803
 	Child:	1804
 	Child:	1805
 	Child:	1806
 	Child:	1807
-	Child:	1809
+	Child:	1808
 	Child:	1810
 	Child:	1811
 	Child:	1812
+	Child:	1813
 	Label:	"&File"
 )
 
-(Choice.1802
+(Choice.1803
 	Help:	"Creates a new project"
 	HelpTopic:	"New_Project"
 	Label:	"&New Project"
@@ -12208,7 +12218,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+N"
 )
 
-(Choice.1803
+(Choice.1804
 	Help:	"Opens an existing project"
 	HelpTopic:	"Open_Project"
 	Label:	"&Open Project..."
@@ -12216,7 +12226,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1804
+(Choice.1805
 	Help:	"Closes the project window"
 	HelpTopic:	"Close_Project"
 	Label:	"&Close Project"
@@ -12224,10 +12234,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1805
+(Space.1806
 )
 
-(Choice.1806
+(Choice.1807
 	Help:	"Saves the current project"
 	HelpTopic:	"Save_Project"
 	Label:	"&Save Project"
@@ -12235,7 +12245,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+S"
 )
 
-(Choice.1807
+(Choice.1808
 	Help:	"Saves the current project with a new name"
 	HelpTopic:	"Save_Project_As"
 	Label:	"Save Project &As..."
@@ -12243,10 +12253,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1809
+(Space.1810
 )
 
-(Choice.1810
+(Choice.1811
 	Help:	"Displays the Extensions dialog"
 	HelpTopic:	"Extensions"
 	Label:	"&Extensions..."
@@ -12254,10 +12264,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1811
+(Space.1812
 )
 
-(Choice.1812
+(Choice.1813
 	Help:	"Exits ArcView"
 	HelpTopic:	"Exit"
 	Label:	"E&xit"
@@ -12265,9 +12275,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1813
+(PMenu.1814
 	InternalName:	"Project"
-	Child:	1814
 	Child:	1815
 	Child:	1816
 	Child:	1817
@@ -12306,7 +12315,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1850
 	Child:	1851
 	Child:	1852
-	Child:	1823
+	Child:	1853
+	Child:	1824
+	Child:	1853
 	Child:	1852
 	Child:	1851
 	Child:	1850
@@ -12335,11 +12346,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1827
 	Child:	1826
 	Child:	1825
-	Child:	1824
 	Label:	"&Project"
 )
 
-(Choice.1814
+(Choice.1815
 	Help:	"Displays the dialog box to edit properties of the project"
 	HelpTopic:	"Project_Properties"
 	Label:	"&Properties..."
@@ -12347,7 +12357,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1815
+(Choice.1816
 	Help:	"Customizes the active project"
 	HelpTopic:	"Customize"
 	Update:	"Project.CustomizeUpdate"
@@ -12356,10 +12366,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1816
+(Space.1817
 )
 
-(Choice.1817
+(Choice.1818
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
@@ -12368,7 +12378,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+R"
 )
 
-(Choice.1818
+(Choice.1819
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
@@ -12377,10 +12387,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Del"
 )
 
-(Space.1819
+(Space.1820
 )
 
-(Choice.1820
+(Choice.1821
 	Help:	"Adds a table to the project"
 	HelpTopic:	"Add_Table"
 	Update:	"Project.AddTableUpdate"
@@ -12389,7 +12399,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1821
+(Choice.1822
 	Help:	"Creates a new project component from an external source"
 	HelpTopic:	"Import"
 	Update:	"Project.ImportUpdate"
@@ -12398,16 +12408,13 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1822
+(Choice.1823
 	Help:	"Opens the SQL Connection manager"
 	HelpTopic:	"SQL_Connect"
 	Update:	"Project.HasSQL"
 	Label:	"&SQL Connect..."
 	Click:	"Project.SQLConnect"
 	Shortcut:	"Keys.None"
-)
-
-(Space.1823
 )
 
 (Space.1824
@@ -12497,8 +12504,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 (Space.1852
 )
 
-(PMenu.1853
-	Child:	1854
+(Space.1853
+)
+
+(PMenu.1854
 	Child:	1855
 	Child:	1856
 	Child:	1857
@@ -12506,31 +12515,32 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1859
 	Child:	1860
 	Child:	1861
+	Child:	1862
 	Label:	"DC Water Design"
 )
 
-(Choice.1854
+(Choice.1855
 	Tag:	"Setup"
 	Label:	"Setup"
 	Click:	"DCWatDes.Dialog.Setup.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1855
+(Choice.1856
 	Tag:	"Epanet Tables"
 	Label:	"Epanet Tables"
 	Click:	"DCWatDes.Dialog.EpanetTables.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1856
+(Choice.1857
 	Tag:	"Result Tables"
 	Label:	"Result Tables"
 	Click:	"DCWatDes.Dialog.ResultTables.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1857
+(Choice.1858
 	Help:	"Split the currently selected model based on the Zone field."
 	Tag:	"Split Model"
 	Label:	"Split Model"
@@ -12538,7 +12548,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1858
+(Choice.1859
 	Help:	"Merge the currently selected model based on the zone field value"
 	Tag:	"Merge Model"
 	Label:	"Merge Model"
@@ -12546,7 +12556,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1859
+(Choice.1860
 	Help:	"Extract a model based on the bytecode value."
 	Tag:	"Extract Model"
 	Label:	"Extract Model"
@@ -12554,7 +12564,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1860
+(Choice.1861
 	Help:	"Open the DC Water Design Extension Help"
 	Tag:	"Help"
 	Label:	"Help"
@@ -12562,26 +12572,28 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1861
+(Choice.1862
 	Tag:	"About"
 	Label:	"About"
 	Click:	"DCWatDes.about"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1862
+(PMenu.1863
 	InternalName:	"Window"
-	Child:	1863
 	Child:	1864
 	Child:	1865
 	Child:	1866
 	Child:	1867
 	Child:	1868
-	Child:	1870
+	Child:	1869
+	Child:	1871
+	Child:	1872
+	Child:	1873
 	Label:	"&Window"
 )
 
-(Choice.1863
+(Choice.1864
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -12589,7 +12601,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1864
+(Choice.1865
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -12597,7 +12609,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1865
+(Choice.1866
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -12605,10 +12617,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1866
+(Space.1867
 )
 
-(Choice.1867
+(Choice.1868
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -12616,32 +12628,46 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.1868
-	ObjectTag:	1869
+(Space.1869
+	ObjectTag:	1870
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.1869
-	S:	"dcwatdes2.apr"
+(AVStr.1870
+	S:	"dcwatdes2.apr DCWatDes.View.digitizePipe DCWatDes.View.Popup.Pipes.setEconomicDiameter"
 )
 
-(Choice.1870
+(Choice.1871
 	Help:	"Activates dcwatdes2.apr"
 	Label:	"&1 dcwatdes2.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1871
+(Choice.1872
+	Help:	"Activates DCWatDes.View.digitizePipe"
+	Label:	"&2 DCWatDes.View.digitizePipe"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(Choice.1873
+	Help:	"Activates DCWatDes.View.Popup.Pipes.setEconomicDiameter"
+	Label:	"&3 DCWatDes.View.Popup.Pipes.setEconomicDiameter"
+	Click:	"WindowActivate"
+	Shortcut:	"Keys.None"
+)
+
+(PMenu.1874
 	InternalName:	"Help"
-	Child:	1872
-	Child:	1873
-	Child:	1874
 	Child:	1875
+	Child:	1876
+	Child:	1877
+	Child:	1878
 	Label:	"&Help"
 )
 
-(Choice.1872
+(Choice.1875
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12649,7 +12675,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1873
+(Choice.1876
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12657,10 +12683,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1874
+(Space.1877
 )
 
-(Choice.1875
+(Choice.1878
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12668,69 +12694,69 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1876
+(ButnBar.1879
 	Update:	"Project.UpdateButtons"
-	Child:	1877
-	Child:	1879
 	Child:	1880
 	Child:	1882
+	Child:	1883
+	Child:	1885
 )
 
-(Butn.1877
+(Butn.1880
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1878
+	Icon:	1881
 	Click:	"Project.Save"
 )
 
-(AVIcon.1878
+(AVIcon.1881
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1879
+(Space.1882
 )
 
-(Butn.1880
+(Butn.1883
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1881
+	Icon:	1884
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1881
+(AVIcon.1884
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.1882
+(Butn.1885
 	Icon:	1135
 	Click:	"DCWatDesExtension.make"
 )
 
-(PopupSet.1883
+(PopupSet.1886
 )
 
-(ToolBar.1884
+(ToolBar.1887
 )
 
-(AVIcon.1885
+(AVIcon.1888
 	Name:	"Icon"
 	Res:	"Project.Icon"
 
 )
 
-(DocGUI.1904
+(DocGUI.1907
 	Name:	"Overview"
 	DocBaseName:	"Overview for "
 	Type:	"View"
 	Modified:	1
-	MenuBar:	1905
-	ButnBar:	1915
-	Popups:	1921
-	ToolBar:	1940
+	MenuBar:	1908
+	ButnBar:	1918
+	Popups:	1924
+	ToolBar:	1943
 	NewScript:	"View.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Doc.Action"
@@ -12738,23 +12764,23 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Doc.ActionUpdate"
 	Title:	"Overviews"
-	Icon:	1943
+	Icon:	1946
 )
 
-(MenuBar.1905
-	Child:	1906
-	Child:	1910
-)
-
-(PMenu.1906
-	InternalName:	"Edit"
-	Child:	1907
-	Child:	1908
+(MenuBar.1908
 	Child:	1909
+	Child:	1913
+)
+
+(PMenu.1909
+	InternalName:	"Edit"
+	Child:	1910
+	Child:	1911
+	Child:	1912
 	Label:	"&Edit"
 )
 
-(Choice.1907
+(Choice.1910
 	Help:	"Displays the TOC so you can delete or changed themes."
 	Update:	"OverView.DisplayTOCUpdate"
 	Label:	"Display TOC"
@@ -12762,7 +12788,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1908
+(Choice.1911
 	Disabled:	1
 	Help:	"Removes the active themes from the view"
 	HelpTopic:	"Delete_Themes"
@@ -12772,19 +12798,19 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1909
+(Space.1912
 )
 
-(PMenu.1910
+(PMenu.1913
 	InternalName:	"Help"
-	Child:	1911
-	Child:	1912
-	Child:	1913
 	Child:	1914
+	Child:	1915
+	Child:	1916
+	Child:	1917
 	Label:	"&Help"
 )
 
-(Choice.1911
+(Choice.1914
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12792,7 +12818,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1912
+(Choice.1915
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12800,10 +12826,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1913
+(Space.1916
 )
 
-(Choice.1914
+(Choice.1917
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12811,49 +12837,46 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1915
-	Child:	1916
-	Child:	1918
+(ButnBar.1918
 	Child:	1919
+	Child:	1921
+	Child:	1922
 )
 
-(Butn.1916
+(Butn.1919
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1917
+	Icon:	1920
 	Click:	"Project.Save"
 )
 
-(AVIcon.1917
+(AVIcon.1920
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1918
+(Space.1921
 )
 
-(Butn.1919
+(Butn.1922
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1920
+	Icon:	1923
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1920
+(AVIcon.1923
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(PopupSet.1921
-	Child:	1922
+(PopupSet.1924
+	Child:	1925
 )
 
-(Popup.1922
-	Child:	1923
-	Child:	1924
-	Child:	1925
+(Popup.1925
 	Child:	1926
 	Child:	1927
 	Child:	1928
@@ -12868,10 +12891,13 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1937
 	Child:	1938
 	Child:	1939
+	Child:	1940
+	Child:	1941
+	Child:	1942
 	Label:	"Menu"
 )
 
-(Choice.1923
+(Choice.1926
 	Disabled:	1
 	Invisible:	1
 	Help:	"Deletes the last entered point on the line or polygon being drawn"
@@ -12881,7 +12907,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1924
+(Choice.1927
 	Help:	"Undo the last edit to graphics on a view"
 	HelpTopic:	"Undo_Graphic_Edit_on_a_view"
 	Update:	"View.UndoEditUpdate"
@@ -12890,7 +12916,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1925
+(Choice.1928
 	Disabled:	1
 	Invisible:	1
 	Help:	"Redo the last edit operation on a theme that was undone"
@@ -12900,10 +12926,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1926
+(Space.1929
 )
 
-(Choice.1927
+(Choice.1930
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns general snapping on"
@@ -12913,7 +12939,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1928
+(Choice.1931
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns interactive snapping on"
@@ -12923,10 +12949,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1929
+(Space.1932
 )
 
-(Choice.1930
+(Choice.1933
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest vertex within the user tolerance"
@@ -12936,7 +12962,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1931
+(Choice.1934
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest line segment"
@@ -12946,7 +12972,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1932
+(Choice.1935
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest node common to two or more features"
@@ -12956,7 +12982,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1933
+(Choice.1936
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest endpoint of an existing line"
@@ -12966,10 +12992,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1934
+(Space.1937
 )
 
-(Choice.1935
+(Choice.1938
 	Help:	"Unselects the selected features in all active themes"
 	Update:	"View.AttributeThemesUpdate"
 	Label:	"Clear Selection"
@@ -12977,7 +13003,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1936
+(Choice.1939
 	Help:	"Zooms in at point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom In"
@@ -12985,7 +13011,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1937
+(Choice.1940
 	Help:	"Zooms out from point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom Out"
@@ -12993,7 +13019,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1938
+(Choice.1941
 	Help:	"Zooms to the extent of the selected features"
 	Update:	"View.SelectableThemesUpdate"
 	Label:	"Zoom to Selected"
@@ -13001,7 +13027,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1939
+(Choice.1942
 	Help:	"Centers display on point where you click to bring up popup"
 	Update:	"View.HasDataUpdate"
 	Label:	"Pan"
@@ -13009,74 +13035,74 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ToolBar.1940
-	Child:	1941
+(ToolBar.1943
+	Child:	1944
 )
 
-(Tool.1941
+(Tool.1944
 	Help:	"Pointer//Selects, moves, and resizes graphics"
 	HelpTopic:	"Pointer_tool"
 	Update:	"View.HasDataUpdate"
-	Icon:	1942
+	Icon:	1945
 	Cursor:	"Cursors.Select"
 	Apply:	"Overview.ResizeBox"
 	Click:	"View.SelectTool"
 )
 
-(AVIcon.1942
+(AVIcon.1945
 	Name:	"Select"
 	Res:	"Icons.Select"
 
 )
 
-(AVIcon.1943
+(AVIcon.1946
 	Name:	"O"
 	Res:	"Icons.O"
 
 )
 
-(FN.2063
+(FN.2064
 	Path:	"$HOME"
 )
 
-(TClr.2064
+(TClr.2065
 	Red:	0xffff
 	Green:	0xffff
 )
 
-(AVStr.2065
+(AVStr.2066
 	S:	"View"
 )
 
-(AVStr.2066
+(AVStr.2067
 	S:	"Table"
 )
 
-(AVStr.2067
+(AVStr.2068
 	S:	"Chart"
 )
 
-(AVStr.2068
+(AVStr.2069
 	S:	"Layout"
 )
 
-(AVStr.2069
+(AVStr.2070
 	S:	"Script"
 )
 
-(AVStr.2070
+(AVStr.2071
 	S:	"Project"
 )
 
-(AVStr.2071
+(AVStr.2072
 	S:	"Appl"
 )
 
-(AVStr.2072
+(AVStr.2073
 	S:	"Overview"
 )
 
-(AVStr.2073
+(AVStr.2074
 	S:	"DialogEditor"
 )
 
