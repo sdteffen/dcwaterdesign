@@ -1,3 +1,9 @@
+2007-03-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* script/pe_fitting_boq.sql:
+	* script/create_pe_dcboq_ddl.sql: Scripts for PE-only installations
+	(up to DN500). Thanks to Walid
+	
 2006-07-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* build.xml:
