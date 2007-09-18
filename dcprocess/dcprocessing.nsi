@@ -3,7 +3,7 @@
 ; (c) 2004 - 2006 DORSCH Consult
 
 !define MUI_PRODUCT "DC Processing Extension"
-!define MUI_VERSION "1.2.9"
+!define MUI_VERSION "1.3.0"
 !define MUI_PACKAGING "1"
 
 !include "MUI.nsh"

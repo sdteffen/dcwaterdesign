@@ -2,6 +2,7 @@
 	
 	* DCProcess.segmentizePllTheme:consider selection
 	on processing.closing feature request #1793905.
+	* dcprocessing.nsi: update version number 1.3.0
 	
 2007-03-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
