@@ -1,3 +1,8 @@
+2007-09-18  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+	
+	* dcwatdes.view.digitizepipe:add smaller diameters
+	as andereas requested.
+
 2007-02-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: Added DN 110
