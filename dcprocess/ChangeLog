@@ -1,3 +1,8 @@
+2007-09-18  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+	
+	* DCProcess.segmentizePllTheme:consider selection
+	on processing.closing feature request #1793905.
+	
 2007-03-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
 
 	* script/pe_fitting_boq.sql:
