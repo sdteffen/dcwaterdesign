@@ -10,11 +10,15 @@
       <year>2001-2006</year>
       <holder>DORSCH Consult</holder>
     </copyright>
+    <copyright>
+      <year>2007</year>
+      <holder>Steffen Macke</holder>
+    </copyright> 
     <author>
       <firstname>Steffen</firstname>
       <surname>Macke</surname>
       <affiliation>
-        <address><email>Steffen_Macke@dorsch.com.jo</email></address>
+        <address><email>sdteffen@sdteffen.de</email></address>
       </affiliation>
     </author>
     <legalnotice>
@@ -1178,13 +1182,6 @@
 	  attribute. You will be prompted to select a field for 
 	  the attribute comparison. Removes unnecessary nodes.</para>
       </sect3>
-      <sect3 id="about">
-        <title>About DC Water Design Extension</title>
-        <indexterm><primary>license</primary></indexterm>
-	<para>Displays information about the DC Water Design 
-	  Extension License. See section[sec:dcwatdes-license] for the license 
-	  details.</para>
-      </sect3>
     </sect2>
     <sect2 id="view_tools">
       <title>View Tools</title>
@@ -1572,6 +1569,7 @@
     <title>Frequently Asked Questions</title>
     <indexterm><primary>Troubleshooting</primary></indexterm>
     <indexterm><primary>frequently asked questions</primary></indexterm>
+        
     <sect2 id="faq_bitcode">
       <title>Why is there no graphical user interface to the 
         DCWatDes.Bitcode.* functions?</title>
