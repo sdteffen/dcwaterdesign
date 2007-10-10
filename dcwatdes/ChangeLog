@@ -1,3 +1,8 @@
+2007-10-10  Steffen Macke <sdteffen@sdteffen.de>
+
+	* doc/en/dcwaterdesign.xml: Added more information/example regarding
+	the economic diameter selection.
+
 2007-10-09  Steffen Macke <sdteffen@sdteffen.de>
 
 	* doc/en/dcwaterdesign.xml: Updated email address, removed duplicated

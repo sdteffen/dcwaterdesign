@@ -1408,10 +1408,27 @@
       </sect3>
       <sect3 id="set_economic_diameter">
         <title>Set Economic Diameter</title>
-	<indexterm><primary>economic</primary></indexterm>
-	<indexterm><primary>diameter</primary></indexterm>
-	<para>Select the pipe diameter from a list. The economic diameter
-	  will be selected by default based on the velocity result.</para>
+		<indexterm><primary>economic</primary></indexterm>
+		<indexterm><primary>diameter</primary></indexterm>
+		<indexterm><primary>example</primary></indexterm>
+		<indexterm><primary>units</primary></indexterm>
+		<indexterm><primary>flow rate</primary></indexterm>
+		<indexterm><primary>velocity</primary></indexterm>
+		<para>Select the pipe diameter from a list. The economic diameter
+	  	  will be selected by default based on the flow rate result.</para>
+		<example>
+		  <title>Economic Diameter Selection</title>
+		  <para>The field <database class="field">result_flow</database> of
+		  the <database class="table">pipe</database> table contains
+		    a value of 15 l/s. In this case a DN 150 pipe will be suggested.
+		    The resulting velocity will be 0.85 m/s.</para>
+		</example>  
+		<important>
+			<para>This function only works when &quot;LPS&quot; units
+			are used (Field <database class="field">Units</database> of the EPANET
+			options table). 
+		  	</para>
+		 </important>
       </sect3>
       <sect3 id="show_node_table_entry">
 	<title>Show Node Table Entry</title>
