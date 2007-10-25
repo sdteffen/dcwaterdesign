@@ -855,8 +855,17 @@
         <para>Exports the hydraulic model to an EPANET input file.</para>
     
 	<para>The model has to be complete, running "Make EPANET Model" 
-	and "Check EPANET Model" is advisable especially for the 
-	novice user before exporting the EPANET input file.</para>
+	  and "Check EPANET Model" is advisable especially for the 
+	  novice user before exporting the EPANET input file.</para>
+	
+	<para>The typical process that follows "Write EPANET File" is outlined in
+	  <xref linkend="fig_write_inp_file" />. Note how this differs from
+	  the process in <xref linkend="fig_run_epanet_calculation" />.</para>
+	
+	<figure id="fig_write_inp_file">
+	  <title>Write EPANET File</title>
+	  <graphic fileref="figure/write_inp_file.png" />
+	</figure>
 	
 	<para id="backdrop-map">Optionally, a Backdrop Map is exported together with 
 	  the EPANET model. This requires additional themes in 
@@ -883,7 +892,16 @@
         <title>Run EPANET Calculation</title> 
         <indexterm><primary>run calculation</primary></indexterm>
 	<para>Exports the hydraulic model to an EPANET input file, 
-	runs the analysis and loads the results into ArcView.</para>
+	  runs the analysis and loads the results into ArcView.</para>
+	
+    <para>The typical "Run EPANET Calculation process" is outlined in
+	  <xref linkend="fig_run_epanet_calculation" />. Note how this differs from
+	  the process in <xref linkend="fig_write_inp_file" />.</para>
+	
+	<figure id="fig_run_epanet_calculation">
+	  <title>Run EPANET Calculation</title>
+	  <graphic fileref="figure/run_epanet_calculation.png" />
+	</figure>
 	
 	<para>The model has to be complete, running "Make EPANET Model" 
 	and "Check EPANET Model" is advisable especially for the 

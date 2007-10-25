@@ -1,3 +1,12 @@
+2007-10-25  Steffen Macke <sdteffen@sdteffen.de>
+
+	* doc/en/figure/write_inp_file.dia:
+	* doc/en/figure/run_epanet_calculation.dia:
+	* doc/en/figure/write_inp_file.png:
+	* doc/en/figure/run_epanet_calculation.png:
+	* doc/en/dcwaterdesign.xml: Added diagrams to illustrate
+	the difference between "Write EPANET File" and "Run EPANET Calculation"
+
 2007-10-10  Steffen Macke <sdteffen@sdteffen.de>
 
 	* doc/en/dcwaterdesign.xml: Added more information/example regarding
