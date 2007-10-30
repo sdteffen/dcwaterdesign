@@ -102,7 +102,7 @@ end
 
 ftbPipes = lstFTabs.get("Pipes")
 strSnappingRadius = dicPreferences.get("strSnappingRadius")
-strQuery = "[Shape].returnLength <"++strSnappingRadius
+strQuery = "([Shape].returnLength <"++strSnappingRadius ++ ") or ([Shape].returnLength=0)"
 bmpSelection = ftbPipes.getSelection
 if(bmpSelection = nil)then
   MsgBox.error("Empty Selection", "DC Water Design")
@@ -129,6 +129,52 @@ if(bmpSelection.count > 0)then
   ftbPipes.updateSelection
   exit
 end
+
+' check for pipes with roughness 0
+
+strQuery = "([roughness] = 0)or([roughness].isnull)"
+bmpSelection = ftbPipes.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbPipes.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"pipes with roughness 0."+NL+"Records in question are selected now.","DC Water Design")
+  ftbPipes.updateSelection
+  exit
+end
+
+' check for valves with diameter 0
+ftbValves = lstFTabs.get("Valves")
+strQuery = "([diameter] = 0)or([diameter].isnull)"
+bmpSelection = ftbValves.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbValves.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"valves with diameter 0."+NL+"Records in question are selected now.","DC Water Design")
+  ftbValves.updateSelection
+  exit
+end
+
+' check for valves with type null
+ftbValves = lstFTabs.get("Valves")
+strQuery = "([type] = """")or([type].isnull)"
+bmpSelection = ftbValves.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbValves.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"valves with type is null."+NL+"Records in question are selected now.","DC Water Design")
+  ftbValves.updateSelection
+  exit
+end
+
 
 ' check for orphan nodes
 

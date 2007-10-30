@@ -1,3 +1,8 @@
+2007-10-30  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: Add more checks as requested in Bug#
+	1571449
+	
 2007-10-25  Steffen Macke <sdteffen@sdteffen.de>
 
 	* doc/en/figure/write_inp_file.dia:
