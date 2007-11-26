@@ -1,3 +1,8 @@
+2007-11-26  Steffen Macke <sdteffen@sdteffen.de>
+
+	* doc/en/dcwaterdesign.xml: Added the "EPANET Tables" dialog to the "Curve"
+	index entry; explaining pump curves a little bit.
+	
 2007-10-30  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
 
 	* dcwatdes.model.epanet.check: Add more checks as requested in Bug#

@@ -735,6 +735,7 @@
 	  <title>EPANET Tables</title>
           <indexterm><primary>tables</primary>
 	    <secondary>EPANET</secondary></indexterm>
+	    <indexterm><primary>Curve</primary></indexterm>
 	  <para>Displays the EPANET Tables Dialog.</para> 
 	  
 	  <para>The Tables in the dialog are used to to store 
@@ -2436,9 +2437,10 @@
       <para>Inherits from Identity</para>
       <itemizedlist>  
 	  <listitem><para>dc_x: float X value.</para></listitem>
-	      
 	  <listitem><para>dc_y: float Y value.</para></listitem>
       </itemizedlist>
+      <para>If the curve is a pump curve, dc_x is the flow rate and dc_y is the
+        head.</para>
     </sect2>
   </sect1>
 </chapter>
