@@ -2,6 +2,8 @@
 
 	* dcwatdesextension.make.ave:
 	* dcwatdes2.apr:Adjust the version number 2.12.4,adjust the save path.
+	* installer/dc_water_design_extension.nsi: Update version, and copyright
+	information.
 	
 2007-11-26  Steffen Macke <sdteffen@sdteffen.de>
 

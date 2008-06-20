@@ -2,9 +2,10 @@
 ; Installer Source Code for NSIS 2.0
 
 ; (c) 2000 - 2006 DORSCH Consult
+; (c) 2008 DC Water and Environment
 
 !define DC_PRODUCT "DC Water Design Extension"
-!define DC_VERSION "2.12.3"
+!define DC_VERSION "2.12.4"
 !define DC_PACKAGING "1"
 
 !include "MUI.nsh"
