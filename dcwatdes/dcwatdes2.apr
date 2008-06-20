@@ -144,7 +144,7 @@
 	Doc:	857
 	Doc:	869
 	Doc:	873
-	ActiveDoc:	820
+	ActiveDoc:	869
 	Buttons:	877
 	Buttons:	878
 	Buttons:	879
@@ -258,9 +258,9 @@ Script)	\n      blnUpdate = true\n    end  	\n    strScriptSource = txfScript.re
 	Win:	15
 	CSMgr:	16
 	DocExts:	17
-	Source:	"' DCWatDes.about\n\n' (c) 2000,2001 DORSCH Consult\n' displays a report dialog with the license information\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warranty of\n' MERCHANTABILITY
- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\nlnfAbout = Linefile.make(\"$AVEXT\\dcwatdes\\license-dcwaterdesignextension.txt\".asFilename, #FILE_PERM_READ)\nstrAbout = \"\"\nwhile(lnfAbout.isAtEnd.not)\n  strAbout = strAbout+lnfAbout.readElt+NL\nend\n\n
-MsgBox.report(strAbout, \"About DC Water Design Extension\")"
+	Source:	"' DCWatDes.about\n\n' (c) 2000,2001 DORSCH Consult\n' (c) 2008 DC Water and Environment\n\n' displays a report dialog with the license information\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the 
+implied warranty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\nlnfAbout = Linefile.make(\"$AVEXT\\dcwatdes\\license-dcwaterdesignextension.txt\".asFilename, #FILE_PERM_READ)\nstrAbout = \"\"\nwhile(lnfAbout.isAtEnd.not)\n  strAbout
+ = strAbout+lnfAbout.readElt+NL\nend\n\nMsgBox.report(strAbout, \"About DC Water Design Extension\")"
 	FontSize:	1
 )
 
@@ -6483,15 +6483,15 @@ ToolBar.add(self.get(14), 999)\n\n' 15 Epanet Tables Button\ntheViewButtonBar.ad
 	Win:	821
 	CSMgr:	822
 	DocExts:	823
-	Source:	"' DCWatDesExtension.make\n\n' (c) 2000 - 2004 DORSCH Consult\n' make the Water Design Extension\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warranty of\n' MERCHANTABILITY or FITNESS 
-FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\nmyExt = Extension.Make(\"$AVEXT\\dcwatdes2.avx\".AsFileName,\n              \"DC Water Design\",\n              av.GetProject.FindScript(\"DCWatDesExtension.install\"),\n              av.GetProject.FindScript(\"DCWatDes
-Extension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename, \"$AVEXT/XmlParser1_00.avx\".asFileName})\n\n'add the dialog to the extension\n'dlg_Files = av.findDialog(\"DCWatDes.ThemesDialog\")\n'dlg_Files.setServer(nil)\nmyExt.add( \"dlg_Files\" )\n\n'1\nmyExt.Add( av.GetProject.FindGUI(\"View\").GetMenuBar.findByLabel(\"DC Water Design\"))\n'2\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Buttons.FilesDialog.click\"))\n'3\nmyExt.Add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"D
-CWatDes.View.Popup.Pipes\") )\n'4\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.Nodes\"))\n'5\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"BOQ.make\"))\n'6\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.classifyHouseConnections\"))\n\n'7\ndlgSetup = av.findDialog(\"DCWatDes.Dialog.Setup\")\ndlgSetup.setServer(nil)\nmyExt.add(dlgSetup)\n\n'8\nmyExt.add(av.getProject.findGUI(\"Project\").getMenuBar.findByLabel(\"DC Water Design\"))\n\n
-'9\ndlgEpanetTables = av.findDialog(\"DCWatDes.Dialog.EpanetTables\")\ndlgEpanetTables.setServer(nil)\nmyExt.add(dlgEpanetTables)\n\n'10\ndlgEpanetThemes = av.findDialog(\"DCWatDes.Dialog.EpanetThemes\")\ndlgEpanetThemes.setServer(nil)\nmyExt.add(dlgEpanetThemes)\n\n'11\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetThemes.open\"))\n\n' 12 Flip Tool\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.flipPolyline\"))\n\n' 13 \ndlgResultTables = av.findDialog(
-\"DCWatDes.Dialog.ResultTables\")\ndlgResultTables.setServer(nil)\nmyExt.add(dlgResultTables)\n\n' 14 Node Digitizing\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.digitizeNode\"))\n\n' 15 Epanet Tables Button\nmyExt.add(av.getProject.findGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetTables.open\"))\n\n' 16 Bitcode Calculator Button\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.calculateBitcode\"))\n\n' 17 PipesAndNodes View Popup\nmyExt.a
-dd( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.12.4\"+NL+\"(c) 1998 - 2007 DORSCH Consult.\"+NL+\"(c) 
-2008 DC Water and Environment.\"+NL+\n\"This extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(2123)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM_WRITE)\nWFile.setScratch(TRUE)\nwhile 
-(RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n  if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
+	Source:	"' DCWatDesExtension.make\n\n' (c) 2000 - 2004 DORSCH Consult\n' (C) 2008 DC Water and Environment\n\n' make the Water Design Extension\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warr
+anty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\nmyExt = Extension.Make(\"$AVEXT\\dcwatdes2.avx\".AsFileName,\n              \"DC Water Design\",\n              av.GetProject.FindScript(\"DCWatDesExtension.install\"),\n           
+   av.GetProject.FindScript(\"DCWatDesExtension.uninstall\"),\n              {\"$AVBIN/avdlog.dll\".asFilename, \"$AVEXT/XmlParser1_00.avx\".asFileName})\n\n'add the dialog to the extension\n'dlg_Files = av.findDialog(\"DCWatDes.ThemesDialog\")\n'dlg_Files.setServer(nil)\nmyExt.add( \"dlg_Files\" )\n\n'1\nmyExt.Add( av.GetProject.FindGUI(\"View\").GetMenuBar.findByLabel(\"DC Water Design\"))\n'2\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Buttons.FilesDialog.click\"))\n'3\nmyExt.Add( av.GetProject.Fin
+dGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.Pipes\") )\n'4\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.Nodes\"))\n'5\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"BOQ.make\"))\n'6\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.classifyHouseConnections\"))\n\n'7\ndlgSetup = av.findDialog(\"DCWatDes.Dialog.Setup\")\ndlgSetup.setServer(nil)\nmyExt.add(dlgSetup)\n\n'8\nmyExt.add(av.getProject.findGUI(\"Project\").getMenu
+Bar.findByLabel(\"DC Water Design\"))\n\n'9\ndlgEpanetTables = av.findDialog(\"DCWatDes.Dialog.EpanetTables\")\ndlgEpanetTables.setServer(nil)\nmyExt.add(dlgEpanetTables)\n\n'10\ndlgEpanetThemes = av.findDialog(\"DCWatDes.Dialog.EpanetThemes\")\ndlgEpanetThemes.setServer(nil)\nmyExt.add(dlgEpanetThemes)\n\n'11\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetThemes.open\"))\n\n' 12 Flip Tool\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.flipPolyline\"))\n\n'
+ 13 \ndlgResultTables = av.findDialog(\"DCWatDes.Dialog.ResultTables\")\ndlgResultTables.setServer(nil)\nmyExt.add(dlgResultTables)\n\n' 14 Node Digitizing\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.digitizeNode\"))\n\n' 15 Epanet Tables Button\nmyExt.add(av.getProject.findGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetTables.open\"))\n\n' 16 Bitcode Calculator Button\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.calculateBitcode\"))\n\n
+' 17 PipesAndNodes View Popup\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.12.4\"+NL+\"(c) 
+1998 - 2007 DORSCH Consult.\"+NL+\"(c) 2008 DC Water and Environment.\"+NL+\n\"This extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(2123)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM
+_WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n  if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
 	SearchStr:	"06"
 	FontSize:	2
 )
@@ -6884,11 +6884,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	HelpTopic:	"New_button"
 	Update:	"Doc.NewUpdate"
 	Label:	"&New"
-	Click:	"View.New"
+	Click:	"Script.New"
 )
 
 (LButn.878
-	Disabled:	1
 	HelpTopic:	"Open_button"
 	Update:	"Doc.OpenUpdate"
 	Label:	"&Open"
@@ -6896,11 +6895,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (LButn.879
-	Disabled:	1
-	HelpTopic:	"Print_button"
-	Update:	"Doc.ActionUpdate"
-	Label:	"P&rint"
-	Click:	"Doc.Action"
+	HelpTopic:	"Run_button"
+	Update:	"Script.ActionUpdate"
+	Label:	"&Run"
+	Click:	"Script.Action"
 )
 
 (FN.880
@@ -6920,27 +6918,27 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 
 (NameDict.884
 	Obj:	885
-	Obj:	886
+	Obj:	888
 	Obj:	889
 	Obj:	892
 )
 
 (AVDict.885
-	InternalName:	"Table of Contents Defaults Dialog"
-)
-
-(AVDict.886
 	InternalName:	"Dialog Designer"
-	Key:	887
-	Value:	888
+	Key:	886
+	Value:	887
 )
 
-(AVStr.887
+(AVStr.886
 	S:	"IsVisible"
 )
 
-(Bool.888
+(Bool.887
 	Truth:	1
+)
+
+(AVDict.888
+	InternalName:	"Table of Contents Defaults Dialog"
 )
 
 (AVDict.889
@@ -11531,6 +11529,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1707
+	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -12406,21 +12405,19 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1822
-	Disabled:	1
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
-	Label:	"&Rename..."
+	Label:	"&Rename 'DCWatDesExtension.make'..."
 	Click:	"Project.Rename"
 	Shortcut:	"Keys.Ctrl+R"
 )
 
 (Choice.1823
-	Disabled:	1
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
-	Label:	"&Delete..."
+	Label:	"&Delete 'DCWatDesExtension.make'..."
 	Click:	"Project.Delete"
 	Shortcut:	"Keys.Del"
 )
