@@ -1,3 +1,8 @@
+ATTENTION: More recent versions of inp2shp may be found in the inptools
+package of the ghydraulic project:
+
+http://inptools.epanet.de
+
 To build inp2shp.exe, you
 need the EPANET toolkit and
 shapelib.
