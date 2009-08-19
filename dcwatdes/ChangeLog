@@ -1,3 +1,10 @@
+2009-08-19  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+
+	* installer/dcwaterdes/iconv.dll
+	* installer/dcwaterdes/intl.dll:
+	* installer/dc_water_design_extension:added needed files
+	* doc/en/dcwaterdesign.xml:Update documentation.
+	
 2008-08-13  Steffen Macke <sdteffen@sdteffen.de>
 
 	* inp2shp/README: Mention inptools.epanet.de

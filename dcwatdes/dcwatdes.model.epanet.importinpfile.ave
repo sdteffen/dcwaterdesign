@@ -35,8 +35,7 @@ end
 strCommand = ""
 dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
 lstThemes = List.make
-for each strFeature in {"Junctions", "Pipes", "Pumps", "Reservoirs",  
-                        "Tanks", "Valves"}                   
+for each strFeature in {"Junctions", "Pipes", "Pumps", "Reservoirs","Tanks", "Valves"}                   
   if(dicThemes.get("str"+strFeature) = nil)then
     flnTheme = FileDialog.put(strFeature.asFilename, "*.shp", "DC Water Design")
     if(flnTheme = nil)then

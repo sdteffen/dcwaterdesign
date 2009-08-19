@@ -5,7 +5,11 @@
 >
 <book lang="en">
   <bookinfo>
-    <title>DC Water Design Extension Manual</title> 
+    <title>DC Water Design Extension Manual</title>
+        <copyright>
+      <year>2006-2009</year>
+      <holder>DC Water and Environment</holder>
+    </copyright> 
     <copyright>
       <year>2001-2006</year>
       <holder>DORSCH Consult</holder>
@@ -19,6 +23,13 @@
       <surname>Macke</surname>
       <affiliation>
         <address><email>sdteffen@sdteffen.de</email></address>
+      </affiliation>
+    </author>
+        <author>
+      <firstname>Maher</firstname>
+      <surname>Abdel Karim</surname>
+      <affiliation>
+        <address><email>Maher_Karim@dorsch.com.jo</email></address>
       </affiliation>
     </author>
     <legalnotice>
@@ -62,6 +73,13 @@
     <sect2 id="news">
       <title>What's New?</title>
         <indexterm><primary>news</primary></indexterm>
+        <sect3 id="news_2_12_5">
+          <title>Version 2.12.5</title>
+         <itemizedlist>
+           <listitem><para>Include updated epanet related executables.</para></listitem>
+           
+          </itemizedlist>
+        </sect3>  
         <sect3 id="news_2_12_4">
           <title>Version 2.12.4</title>
          <itemizedlist>

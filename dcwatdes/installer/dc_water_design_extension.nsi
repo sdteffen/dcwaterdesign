@@ -5,7 +5,7 @@
 ; (c) 2008 DC Water and Environment
 
 !define DC_PRODUCT "DC Water Design Extension"
-!define DC_VERSION "2.12.4"
+!define DC_VERSION "2.12.5"
 !define DC_PACKAGING "1"
 
 !include "MUI.nsh"
@@ -63,6 +63,9 @@ File dcwatdes\xml2net.xsl
 File dcwatdes\systemcall.dll
 File ..\inp2shp\inp2shp.exe
 File dcwatdes\epanet2.dll
+File dcwatdes\epanet2i.dll
+File dcwatdes\iconv.dll
+File dcwatdes\intl.dll
 
 SetOutPath "$INSTDIR\help"
 File "..\doc\en\dcwaterdesign.pdf"

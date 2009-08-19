@@ -144,7 +144,7 @@
 	Doc:	857
 	Doc:	869
 	Doc:	873
-	ActiveDoc:	869
+	ActiveDoc:	820
 	Buttons:	877
 	Buttons:	878
 	Buttons:	879
@@ -156,15 +156,17 @@
 	GUI:	897
 	GUI:	1286
 	GUI:	1688
-	GUI:	1804
-	GUI:	1912
-	WorkDir:	2069
+	GUI:	1803
+	GUI:	1910
+	WorkDir:	2067
 	WinX:	-4
 	WinY:	-3
-	WinW:	1452
-	WinH:	911
+	WinW:	1448
+	WinH:	873
 	SerialNumber:	"752171190022"
-	SelColor:	2070
+	SelColor:	2068
+	GUINames:	2069
+	GUINames:	2070
 	GUINames:	2071
 	GUINames:	2072
 	GUINames:	2073
@@ -172,8 +174,6 @@
 	GUINames:	2075
 	GUINames:	2076
 	GUINames:	2077
-	GUINames:	2078
-	GUINames:	2079
 	TocWidthScale:	1.00000000000000
 )
 
@@ -4102,10 +4102,10 @@ i.asString\n    fldNode = ftbPipes.findField(strFieldName)\n    if(fldNode = nil
 
 (DocWin.517
 	Owner:	516
-	Open:	1
-	X:	723
-	W:	723
-	H:	395
+	X:	-4
+	Y:	-4
+	W:	1454
+	H:	799
 )
 
 (CSMgr.518
@@ -4280,17 +4280,19 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser Gene
 	DocExts:	543
 	Source:	"' DCWatDes.Model.Epanet.importInpFile\n\n' (c) 2001, 2002, 2005 DORSCH Consult\n' imports an Epanet Input file (*.inp)\n\n' This library is free software; you can redistribute it and/or\n' modify it under the terms of the GNU Lesser General Public\n' License as published by the Free Software Foundation; either\n' version 2.1 of the License, or (at your option) any later version.\n\n' This library is distributed in the hope that it will be useful,\n' but WITHOUT ANY WARRANTY; without even the implied warranty of\n' MERC
 HANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License for more details.\n\n' You should have received a copy of the GNU Lesser General Public\n' License along with this library; if not, write to the Free Software\n' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\n' no arguments\n' returns nothing\n\nextDCWatDes = Extension.find(\"DC Water Design\")\nif(extDCWatDes <> nil)then\n  dicPreferences = extDCWatDes.getPreferences\nelse\n  MsgBox.info(\"Warning: E
-xtension not found.\",\"DC Water Design Extension\")\nend\n\n'if(MsgBox.yesNo(\"Loading the INP file will overwrite the current model. Continue?\", \n'   \"DC Water Design\", false).not)then\n'  exit\n'end\n\nstrCommand = \"\"\ndicThemes = av.run(\"DCWatDes.Model.Epanet.returnThemeDictionary\", nil)\nlstThemes = List.make\nfor each strFeature in {\"Junctions\", \"Pipes\", \"Pumps\", \"Reservoirs\",  \n                        \"Tanks\", \"Valves\"}                   \n  if(dicThemes.get(\"str\"+strFeature) = nil)then\n    flnTheme = FileDialog.pu
-t(strFeature.asFilename, \"*.shp\", \"DC Water Design\")\n    if(flnTheme = nil)then\n      exit\n    end\n    strCommand = strCommand ++ (flnTheme.asString+\".shp\").quote\n    lstThemes.add(flnTheme.clone)\n  end\nend\n\nflnInp = FileDialog.show(\"*.inp\",\"EPANET INP Model (*.inp)\",\"Load EPANET INP file\")\nif(flnInp = nil) then\n  ' User selected cancel\n  exit\nend\n\nstrReport = flnInp.asString.left(flnInp.asString.count-3)+\"rpt\"\nstrCommand = flnInp.asString.quote ++ strReport ++ strCommand\nstrTmpDir = Filename.getTmpDir.getF
-ullName\nflnReport = Filename.make(strTmpDir+\"\\inp2shpreport.txt\")\nflnError = Filename.make(strTmpDir+\"\\inp2shprerror.txt\")\nFile.delete(flnReport)\nFile.delete(flnError)\nstrCommand = \"$AVEXT\".asFileName.getFullName+\"\\dcwatdes\\inp2shp.exe\"++strCommand++\">\"++flnReport.getFullName.quote++\"2>\"++flnError.getFullName.quote\nav.run(\"DCWatDes.System.call\", strCommand)\n\ntwinReport = TextWin.make(flnReport, \"inp2shp Output\")\n\nif(File.exists(flnError))then\n  txfError = TextFile.make(flnError, #FILE_PERM_READ)\n  if(txfErr
-or.getSize > 0)then\n    twinError = TextWin.make(flnError, \"inp2shp Errors\")\n  end\n  txfError.close\nend\n\n' Add shape files to active view\nfor each flnTheme in lstThemes\n  srnTheme = SrcName.make(flnTheme.asString+\".shp\")\n  if(srnTheme <> nil)then\n    ftbTheme = FTab.make(srnTheme)\n    thmFeature = FTheme.make(ftbTheme)\n    av.getActiveDoc.addTheme(thmFeature)\n  end\nend"
+xtension not found.\",\"DC Water Design Extension\")\nend\n\n'if(MsgBox.yesNo(\"Loading the INP file will overwrite the current model. Continue?\", \n'   \"DC Water Design\", false).not)then\n'  exit\n'end\n\nstrCommand = \"\"\ndicThemes = av.run(\"DCWatDes.Model.Epanet.returnThemeDictionary\", nil)\nlstThemes = List.make\nfor each strFeature in {\"Junctions\", \"Pipes\", \"Pumps\", \"Reservoirs\",\"Tanks\", \"Valves\"}                   \n  if(dicThemes.get(\"str\"+strFeature) = nil)then\n    flnTheme = FileDialog.put(strFeature.asFilename, \"*
+.shp\", \"DC Water Design\")\n    if(flnTheme = nil)then\n      exit\n    end\n    strCommand = strCommand ++ (flnTheme.asString+\".shp\").quote\n    lstThemes.add(flnTheme.clone)\n  end\nend\n\nflnInp = FileDialog.show(\"*.inp\",\"EPANET INP Model (*.inp)\",\"Load EPANET INP file\")\nif(flnInp = nil) then\n  ' User selected cancel\n  exit\nend\n\nstrReport = flnInp.asString.left(flnInp.asString.count-3)+\"rpt\"\nstrCommand = flnInp.asString.quote ++ strReport ++ strCommand\nstrTmpDir = Filename.getTmpDir.getFullName\nflnReport = Filenam
+e.make(strTmpDir+\"\\inp2shpreport.txt\")\nflnError = Filename.make(strTmpDir+\"\\inp2shprerror.txt\")\nFile.delete(flnReport)\nFile.delete(flnError)\nstrCommand = \"$AVEXT\".asFileName.getFullName+\"\\dcwatdes\\inp2shp.exe\"++strCommand++\">\"++flnReport.getFullName.quote++\"2>\"++flnError.getFullName.quote\nav.run(\"DCWatDes.System.call\", strCommand)\n\ntwinReport = TextWin.make(flnReport, \"inp2shp Output\")\n\nif(File.exists(flnError))then\n  txfError = TextFile.make(flnError, #FILE_PERM_READ)\n  if(txfError.getSize > 0)then\n    twi
+nError = TextWin.make(flnError, \"inp2shp Errors\")\n  end\n  txfError.close\nend\n\n' Add shape files to active view\nfor each flnTheme in lstThemes\n  srnTheme = SrcName.make(flnTheme.asString+\".shp\")\n  if(srnTheme <> nil)then\n    ftbTheme = FTab.make(srnTheme)\n    thmFeature = FTheme.make(ftbTheme)\n    av.getActiveDoc.addTheme(thmFeature)\n  end\nend"
 	SearchStr:	"2.06"
 )
 
 (DocWin.541
 	Owner:	540
-	W:	1282
-	H:	1002
+	X:	-4
+	Y:	-4
+	W:	1450
+	H:	761
 )
 
 (CSMgr.542
@@ -6489,10 +6491,10 @@ anty of\n' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' 
 dGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.Pipes\") )\n'4\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.Nodes\"))\n'5\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"BOQ.make\"))\n'6\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.classifyHouseConnections\"))\n\n'7\ndlgSetup = av.findDialog(\"DCWatDes.Dialog.Setup\")\ndlgSetup.setServer(nil)\nmyExt.add(dlgSetup)\n\n'8\nmyExt.add(av.getProject.findGUI(\"Project\").getMenu
 Bar.findByLabel(\"DC Water Design\"))\n\n'9\ndlgEpanetTables = av.findDialog(\"DCWatDes.Dialog.EpanetTables\")\ndlgEpanetTables.setServer(nil)\nmyExt.add(dlgEpanetTables)\n\n'10\ndlgEpanetThemes = av.findDialog(\"DCWatDes.Dialog.EpanetThemes\")\ndlgEpanetThemes.setServer(nil)\nmyExt.add(dlgEpanetThemes)\n\n'11\nmyExt.Add( av.GetProject.FindGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetThemes.open\"))\n\n' 12 Flip Tool\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.flipPolyline\"))\n\n'
  13 \ndlgResultTables = av.findDialog(\"DCWatDes.Dialog.ResultTables\")\ndlgResultTables.setServer(nil)\nmyExt.add(dlgResultTables)\n\n' 14 Node Digitizing\nmyExt.add(av.getProject.findGUI(\"View\").getToolBar.findByScript(\"DCWatDes.View.digitizeNode\"))\n\n' 15 Epanet Tables Button\nmyExt.add(av.getProject.findGUI(\"View\").getButtonBar.findByScript(\"DCWatDes.Dialog.EpanetTables.open\"))\n\n' 16 Bitcode Calculator Button\nmyExt.Add( av.GetProject.FindGUI(\"Table\").getButtonBar.findByScript(\"DCWatDes.Table.calculateBitcode\"))\n\n
-' 17 PipesAndNodes View Popup\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.12.4\"+NL+\"(c) 
+' 17 PipesAndNodes View Popup\nmyExt.add( av.GetProject.FindGUI(\"View\").GetPopups.findByLabel(\"DCWatDes.View.Popup.PipesAndNodes\"))\n \n\n' Add to the extension the scripts that are attached to the menu items\n' The following line shows how this would work for one such scripts.\n' You may need several such lines.\nfor each d in av.getProject.getDocs\n  if (d.is(SEd) and (d.getName.left(\"DCWatDes\".count+1)=\"DCWatDes.\"))then\n    myExt.add(d.getScript)\n  end\nend\n\nmyExt.SetAbout(\"Water Design Extension 2.12.5\"+NL+\"(c) 
 1998 - 2007 DORSCH Consult.\"+NL+\"(c) 2008 DC Water and Environment.\"+NL+\n\"This extension integrates EPANET with ArcView\"+NL+Date.now.asString)\nmyExt.SetExtVersion(2123)\nmyExt.setUnloadScript(av.findScript(\"DCWatDesExtension.unload\"))\nmyExt.setCanUnloadScript(av.findScript(\"DCWatDesExtension.canUnload\"))\nmyExt.Commit\n\nRFileName = FileName.make(\"$AVEXT/dcwatdes2.avx\")\nWFileName = FileName.make(\"$AVEXT/dcwatdes2.tmp\")\nRFile = LineFile.make(RFileName, #FILE_PERM_READ)\nWFile = LineFile.make(WFileName, #FILE_PERM
 _WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadElt\n  if (buf.contains(\"ObjectTag:\").not) then\n    WFile.writeElt(buf)\n  end\nend\nRFile.close\nWFile.flush\nFile.copy(WFilename, RFilename)\nWFile.close"
-	SearchStr:	"06"
+	SearchStr:	".12"
 	FontSize:	2
 )
 
@@ -6500,7 +6502,7 @@ _WRITE)\nWFile.setScratch(TRUE)\nwhile (RFile.isAtEnd.not)\n  buf = RFile.ReadEl
 	Owner:	820
 	Open:	1
 	W:	723
-	H:	395
+	H:	791
 )
 
 (CSMgr.822
@@ -6840,7 +6842,7 @@ cript.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  el
 (DocWin.870
 	Owner:	869
 	Open:	1
-	Y:	395
+	X:	723
 	W:	723
 	H:	395
 )
@@ -6884,7 +6886,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	HelpTopic:	"New_button"
 	Update:	"Doc.NewUpdate"
 	Label:	"&New"
-	Click:	"Script.New"
+	Click:	"View.New"
 )
 
 (LButn.878
@@ -6896,9 +6898,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 
 (LButn.879
 	HelpTopic:	"Run_button"
-	Update:	"Script.ActionUpdate"
+	Update:	"Doc.ActionUpdate"
 	Label:	"&Run"
-	Click:	"Script.Action"
+	Click:	"Doc.Action"
 )
 
 (FN.880
@@ -6918,27 +6920,27 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 
 (NameDict.884
 	Obj:	885
-	Obj:	888
+	Obj:	886
 	Obj:	889
 	Obj:	892
 )
 
 (AVDict.885
-	InternalName:	"Dialog Designer"
-	Key:	886
-	Value:	887
+	InternalName:	"Table of Contents Defaults Dialog"
 )
 
-(AVStr.886
+(AVDict.886
+	InternalName:	"Dialog Designer"
+	Key:	887
+	Value:	888
+)
+
+(AVStr.887
 	S:	"IsVisible"
 )
 
-(Bool.887
+(Bool.888
 	Truth:	1
-)
-
-(AVDict.888
-	InternalName:	"Table of Contents Defaults Dialog"
 )
 
 (AVDict.889
@@ -11374,9 +11376,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Modified:	1
 	Visible:	1
 	MenuBar:	1689
-	ButnBar:	1755
-	Popups:	1801
-	ToolBar:	1802
+	ButnBar:	1754
+	Popups:	1800
+	ToolBar:	1801
 	NewScript:	"Script.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Script.Action"
@@ -11384,7 +11386,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Script.ActionUpdate"
 	Title:	"Scripts"
-	Icon:	1803
+	Icon:	1802
 )
 
 (MenuBar.1689
@@ -11392,7 +11394,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1703
 	Child:	1719
 	Child:	1738
-	Child:	1750
+	Child:	1749
 )
 
 (PMenu.1690
@@ -11529,7 +11531,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1707
-	Disabled:	1
 	Help:	"Finds the next occurrence of the string"
 	HelpTopic:	"Script_FindNext"
 	Update:	"Script.FindNextUpdate"
@@ -11782,7 +11783,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1746
 	Child:	1747
 	Child:	1748
-	Child:	1749
 	Label:	"&Window"
 )
 
@@ -11827,7 +11827,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (AVStr.1745
-	S:	"dcwatdes2.apr DCWatDes.Model.Epanet.check DCWatDesExtension.make Script.saveAllScripts"
+	S:	"dcwatdes2.apr DCWatDesExtension.make Script.saveAllScripts"
 )
 
 (Choice.1746
@@ -11838,36 +11838,29 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 )
 
 (Choice.1747
-	Help:	"Activates DCWatDes.Model.Epanet.check"
-	Label:	"&2 DCWatDes.Model.Epanet.check"
+	Help:	"Activates DCWatDesExtension.make"
+	Label:	"&2 DCWatDesExtension.make"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
 (Choice.1748
-	Help:	"Activates DCWatDesExtension.make"
-	Label:	"&3 DCWatDesExtension.make"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1749
 	Help:	"Activates Script.saveAllScripts"
-	Label:	"&4 Script.saveAllScripts"
+	Label:	"&3 Script.saveAllScripts"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1750
+(PMenu.1749
 	InternalName:	"Help"
+	Child:	1750
 	Child:	1751
 	Child:	1752
 	Child:	1753
-	Child:	1754
 	Label:	"&Help"
 )
 
-(Choice.1751
+(Choice.1750
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -11875,7 +11868,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1752
+(Choice.1751
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help"
@@ -11883,10 +11876,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1753
+(Space.1752
 )
 
-(Choice.1754
+(Choice.1753
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -11894,358 +11887,358 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1755
-	Child:	1756
-	Child:	1758
-	Child:	1760
-	Child:	1762
+(ButnBar.1754
+	Child:	1755
+	Child:	1757
+	Child:	1759
+	Child:	1761
+	Child:	1763
 	Child:	1764
-	Child:	1765
+	Child:	1766
 	Child:	1767
-	Child:	1768
-	Child:	1770
+	Child:	1769
+	Child:	1771
 	Child:	1772
-	Child:	1773
-	Child:	1775
-	Child:	1777
-	Child:	1779
-	Child:	1781
+	Child:	1774
+	Child:	1776
+	Child:	1778
+	Child:	1780
+	Child:	1782
 	Child:	1783
-	Child:	1784
-	Child:	1786
-	Child:	1788
+	Child:	1785
+	Child:	1787
+	Child:	1789
 	Child:	1790
-	Child:	1791
-	Child:	1793
-	Child:	1795
+	Child:	1792
+	Child:	1794
+	Child:	1796
 	Child:	1797
 	Child:	1798
-	Child:	1799
 )
 
-(Butn.1756
+(Butn.1755
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1757
+	Icon:	1756
 	Click:	"Project.Save"
 )
 
-(AVIcon.1757
+(AVIcon.1756
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Butn.1758
+(Butn.1757
 	Disabled:	1
 	Help:	"Cut//Cuts the selection and puts it into the clipboard"
 	HelpTopic:	"Cut"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1759
+	Icon:	1758
 	Click:	"Script.Cut"
 )
 
-(AVIcon.1759
+(AVIcon.1758
 	Name:	"Cut"
 	Res:	"Icons.Cut"
 
 )
 
-(Butn.1760
+(Butn.1759
 	Disabled:	1
 	Help:	"Copy//Copies the selection and puts it into the clipboard"
 	HelpTopic:	"Copy"
 	Update:	"Script.HasSelUpdate"
-	Icon:	1761
+	Icon:	1760
 	Click:	"Script.Copy"
 )
 
-(AVIcon.1761
+(AVIcon.1760
 	Name:	"Copy"
 	Res:	"Icons.Copy"
 
 )
 
-(Butn.1762
+(Butn.1761
 	Help:	"Paste//Inserts the contents of the clipboard"
 	HelpTopic:	"Paste"
-	Icon:	1763
+	Icon:	1762
 	Click:	"Script.Paste"
 )
 
-(AVIcon.1763
+(AVIcon.1762
 	Name:	"Paste"
 	Res:	"Icons.Paste"
 
 )
 
-(Space.1764
+(Space.1763
 )
 
-(Butn.1765
+(Butn.1764
 	Help:	"Undo//Undoes the last modification to the script editor text"
 	HelpTopic:	"Undo__Script_"
-	Icon:	1766
+	Icon:	1765
 	Click:	"Script.Undo"
 )
 
-(AVIcon.1766
+(AVIcon.1765
 	Name:	"Undo"
 	Res:	"Icons.Undo"
 
 )
 
-(Space.1767
+(Space.1766
 )
 
-(Butn.1768
+(Butn.1767
 	Help:	"Shift Lines Left//Shifts selected lines or current line two spaces to the left"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1769
+	Icon:	1768
 	Click:	"Script.ShiftLeft"
 )
 
-(AVIcon.1769
+(AVIcon.1768
 	Name:	"ShiftLeft"
 	Res:	"Icons.ShiftLeft"
 
 )
 
-(Butn.1770
+(Butn.1769
 	Help:	"Shift Lines Right//Shifts selected lines or current line two spaces to the right"
 	HelpTopic:	"Shift_lines_left_or_right"
-	Icon:	1771
+	Icon:	1770
 	Click:	"Script.ShiftRight"
 )
 
-(AVIcon.1771
+(AVIcon.1770
 	Name:	"ShiftRight"
 	Res:	"Icons.ShiftRight"
 
 )
 
-(Space.1772
+(Space.1771
 )
 
-(Butn.1773
+(Butn.1772
 	Disabled:	1
 	Help:	"Compile//Compiles the script"
 	HelpTopic:	"Compile"
 	Update:	"Script.CompileUpdate"
-	Icon:	1774
+	Icon:	1773
 	Click:	"Script.Compile"
 )
 
-(AVIcon.1774
+(AVIcon.1773
 	Name:	"Check"
 	Res:	"Icons.Check"
 
 )
 
-(Butn.1775
+(Butn.1774
 	Help:	"Run//Runs the compiled script"
 	HelpTopic:	"Run"
 	Update:	"Script.RunUpdate"
-	Icon:	1776
+	Icon:	1775
 	Click:	"Script.Run"
 )
 
-(AVIcon.1776
+(AVIcon.1775
 	Name:	"Run"
 	Res:	"Icons.Run"
 
 )
 
-(Butn.1777
+(Butn.1776
 	Help:	"Step//Executes one request or object reference in the compiled script"
 	HelpTopic:	"Step"
 	Update:	"Script.RunUpdate"
-	Icon:	1778
+	Icon:	1777
 	Click:	"Script.Step"
 )
 
-(AVIcon.1778
+(AVIcon.1777
 	Name:	"Footprints"
 	Res:	"Icons.Footprints"
 
 )
 
-(Butn.1779
+(Butn.1778
 	Help:	"Toggle Breakpoint//Toggles a breakpoint on or off at the current cursor position"
 	HelpTopic:	"Toggle_Breakpoint"
 	Update:	"Script.RunUpdate"
-	Icon:	1780
+	Icon:	1779
 	Click:	"Script.ToggleBreak"
 )
 
-(AVIcon.1780
+(AVIcon.1779
 	Name:	"Hand"
 	Res:	"Icons.Hand"
 
 )
 
-(Butn.1781
+(Butn.1780
 	Help:	"Examine Variables//Displays the current value of local and global variables"
 	HelpTopic:	"Examine_Variables"
 	Update:	"Script.RunUpdate"
-	Icon:	1782
+	Icon:	1781
 	Click:	"Script.ShowVariables"
 )
 
-(AVIcon.1782
+(AVIcon.1781
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1783
+(Space.1782
 )
 
-(Butn.1784
+(Butn.1783
 	Help:	"Load System Script//Inserts the source code of a system script"
 	HelpTopic:	"Load_System_Script"
-	Icon:	1785
+	Icon:	1784
 	Click:	"Script.SystemLoad"
 )
 
-(AVIcon.1785
+(AVIcon.1784
 	Name:	"LoadScript"
 	Res:	"Icons.LoadScript"
 
 )
 
-(Butn.1786
+(Butn.1785
 	Help:	"Load Text File//Inserts the contents of a text file"
 	HelpTopic:	"Load_Text_File"
-	Icon:	1787
+	Icon:	1786
 	Click:	"Script.FileLoad"
 )
 
-(AVIcon.1787
+(AVIcon.1786
 	Name:	"Open"
 	Res:	"Icons.Open"
 
 )
 
-(Butn.1788
+(Butn.1787
 	Help:	"Write Text File//Writes the entire script or the selected text to a text file"
 	HelpTopic:	"Write_Text_File"
-	Icon:	1789
+	Icon:	1788
 	Click:	"Script.FileWrite"
 )
 
-(AVIcon.1789
+(AVIcon.1788
 	Name:	"Write"
 	Res:	"Icons.Write"
 
 )
 
-(Space.1790
+(Space.1789
 )
 
-(Butn.1791
+(Butn.1790
 	Help:	"Script Help//Searches for help using the current selection"
 	HelpTopic:	"Getting_help_about_script_components"
-	Icon:	1792
+	Icon:	1791
 	Click:	"Script.Help"
 )
 
-(AVIcon.1792
+(AVIcon.1791
 	Name:	"Help"
 	Res:	"Icons.Help"
 
 )
 
-(Butn.1793
+(Butn.1792
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1794
+	Icon:	1793
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1794
+(AVIcon.1793
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.1795
-	Icon:	1796
+(Butn.1794
+	Icon:	1795
 	Click:	"Programming.findInAllScripts"
 )
 
-(AVIcon.1796
+(AVIcon.1795
 	Name:	"Examine"
 	Res:	"Icons.Examine"
 
 )
 
-(Space.1797
+(Space.1796
 )
 
-(Butn.1798
+(Butn.1797
 	Icon:	1138
 	Click:	"DCWatDesExtension.make"
 )
 
-(Butn.1799
-	Icon:	1800
+(Butn.1798
+	Icon:	1799
 	Click:	"Script.setNameFromFirstComment"
 )
 
-(AVIcon.1800
+(AVIcon.1799
 	Name:	"Yen"
 	Res:	"Icons.Yen"
 
 )
 
-(PopupSet.1801
+(PopupSet.1800
 )
 
-(ToolBar.1802
+(ToolBar.1801
 )
 
-(AVIcon.1803
+(AVIcon.1802
 	Name:	"Icon"
 	Res:	"SEd.Icon"
 
 )
 
-(DocGUI.1804
+(DocGUI.1803
 	Name:	"Project"
 	Type:	"Project"
 	Modified:	1
-	MenuBar:	1805
-	ButnBar:	1884
-	Popups:	1891
-	ToolBar:	1892
-	Icon:	1893
+	MenuBar:	1804
+	ButnBar:	1882
+	Popups:	1889
+	ToolBar:	1890
+	Icon:	1891
 )
 
-(MenuBar.1805
-	Child:	1806
-	Child:	1818
-	Child:	1858
-	Child:	1867
-	Child:	1879
+(MenuBar.1804
+	Child:	1805
+	Child:	1817
+	Child:	1857
+	Child:	1866
+	Child:	1877
 )
 
-(PMenu.1806
+(PMenu.1805
 	InternalName:	"File"
+	Child:	1806
 	Child:	1807
 	Child:	1808
 	Child:	1809
 	Child:	1810
 	Child:	1811
-	Child:	1812
+	Child:	1813
 	Child:	1814
 	Child:	1815
 	Child:	1816
-	Child:	1817
 	Label:	"&File"
 )
 
-(Choice.1807
+(Choice.1806
 	Help:	"Creates a new project"
 	HelpTopic:	"New_Project"
 	Label:	"&New Project"
@@ -12253,7 +12246,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+N"
 )
 
-(Choice.1808
+(Choice.1807
 	Help:	"Opens an existing project"
 	HelpTopic:	"Open_Project"
 	Label:	"&Open Project..."
@@ -12261,7 +12254,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1809
+(Choice.1808
 	Help:	"Closes the project window"
 	HelpTopic:	"Close_Project"
 	Label:	"&Close Project"
@@ -12269,10 +12262,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1810
+(Space.1809
 )
 
-(Choice.1811
+(Choice.1810
 	Help:	"Saves the current project"
 	HelpTopic:	"Save_Project"
 	Label:	"&Save Project"
@@ -12280,7 +12273,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+S"
 )
 
-(Choice.1812
+(Choice.1811
 	Help:	"Saves the current project with a new name"
 	HelpTopic:	"Save_Project_As"
 	Label:	"Save Project &As..."
@@ -12288,10 +12281,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1814
+(Space.1813
 )
 
-(Choice.1815
+(Choice.1814
 	Help:	"Displays the Extensions dialog"
 	HelpTopic:	"Extensions"
 	Label:	"&Extensions..."
@@ -12299,10 +12292,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1816
+(Space.1815
 )
 
-(Choice.1817
+(Choice.1816
 	Help:	"Exits ArcView"
 	HelpTopic:	"Exit"
 	Label:	"E&xit"
@@ -12310,8 +12303,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1818
+(PMenu.1817
 	InternalName:	"Project"
+	Child:	1818
 	Child:	1819
 	Child:	1820
 	Child:	1821
@@ -12350,9 +12344,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1854
 	Child:	1855
 	Child:	1856
-	Child:	1857
-	Child:	1828
-	Child:	1857
+	Child:	1827
 	Child:	1856
 	Child:	1855
 	Child:	1854
@@ -12381,10 +12373,11 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1831
 	Child:	1830
 	Child:	1829
+	Child:	1828
 	Label:	"&Project"
 )
 
-(Choice.1819
+(Choice.1818
 	Help:	"Displays the dialog box to edit properties of the project"
 	HelpTopic:	"Project_Properties"
 	Label:	"&Properties..."
@@ -12392,7 +12385,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1820
+(Choice.1819
 	Help:	"Customizes the active project"
 	HelpTopic:	"Customize"
 	Update:	"Project.CustomizeUpdate"
@@ -12401,31 +12394,31 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1821
+(Space.1820
 )
 
-(Choice.1822
+(Choice.1821
 	Help:	"Renames the selected project component"
 	HelpTopic:	"Rename"
 	Update:	"Project.RenameUpdate"
-	Label:	"&Rename 'DCWatDesExtension.make'..."
+	Label:	"&Rename 'DCWatDes.Model.Epanet.importInpFile'..."
 	Click:	"Project.Rename"
 	Shortcut:	"Keys.Ctrl+R"
 )
 
-(Choice.1823
+(Choice.1822
 	Help:	"Deletes the selected component from the project"
 	HelpTopic:	"Delete_Component"
 	Update:	"Project.DeleteUpdate"
-	Label:	"&Delete 'DCWatDesExtension.make'..."
+	Label:	"&Delete 'DCWatDes.Model.Epanet.importInpFile'..."
 	Click:	"Project.Delete"
 	Shortcut:	"Keys.Del"
 )
 
-(Space.1824
+(Space.1823
 )
 
-(Choice.1825
+(Choice.1824
 	Help:	"Adds a table to the project"
 	HelpTopic:	"Add_Table"
 	Update:	"Project.AddTableUpdate"
@@ -12434,7 +12427,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1826
+(Choice.1825
 	Help:	"Creates a new project component from an external source"
 	HelpTopic:	"Import"
 	Update:	"Project.ImportUpdate"
@@ -12443,13 +12436,16 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1827
+(Choice.1826
 	Help:	"Opens the SQL Connection manager"
 	HelpTopic:	"SQL_Connect"
 	Update:	"Project.HasSQL"
 	Label:	"&SQL Connect..."
 	Click:	"Project.SQLConnect"
 	Shortcut:	"Keys.None"
+)
+
+(Space.1827
 )
 
 (Space.1828
@@ -12539,10 +12535,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 (Space.1856
 )
 
-(Space.1857
-)
-
-(PMenu.1858
+(PMenu.1857
+	Child:	1858
 	Child:	1859
 	Child:	1860
 	Child:	1861
@@ -12550,32 +12544,31 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1863
 	Child:	1864
 	Child:	1865
-	Child:	1866
 	Label:	"DC Water Design"
 )
 
-(Choice.1859
+(Choice.1858
 	Tag:	"Setup"
 	Label:	"Setup"
 	Click:	"DCWatDes.Dialog.Setup.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1860
+(Choice.1859
 	Tag:	"Epanet Tables"
 	Label:	"Epanet Tables"
 	Click:	"DCWatDes.Dialog.EpanetTables.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1861
+(Choice.1860
 	Tag:	"Result Tables"
 	Label:	"Result Tables"
 	Click:	"DCWatDes.Dialog.ResultTables.open"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1862
+(Choice.1861
 	Help:	"Split the currently selected model based on the Zone field."
 	Tag:	"Split Model"
 	Label:	"Split Model"
@@ -12583,7 +12576,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1863
+(Choice.1862
 	Help:	"Merge the currently selected model based on the zone field value"
 	Tag:	"Merge Model"
 	Label:	"Merge Model"
@@ -12591,7 +12584,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1864
+(Choice.1863
 	Help:	"Extract a model based on the bytecode value."
 	Tag:	"Extract Model"
 	Label:	"Extract Model"
@@ -12599,7 +12592,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1865
+(Choice.1864
 	Help:	"Open the DC Water Design Extension Help"
 	Tag:	"Help"
 	Label:	"Help"
@@ -12607,29 +12600,28 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1866
+(Choice.1865
 	Tag:	"About"
 	Label:	"About"
 	Click:	"DCWatDes.about"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1867
+(PMenu.1866
 	InternalName:	"Window"
+	Child:	1867
 	Child:	1868
 	Child:	1869
 	Child:	1870
 	Child:	1871
 	Child:	1872
-	Child:	1873
+	Child:	1874
 	Child:	1875
 	Child:	1876
-	Child:	1877
-	Child:	1878
 	Label:	"&Window"
 )
 
-(Choice.1868
+(Choice.1867
 	Help:	"Arranges windows as non-overlapping tiles"
 	HelpTopic:	"Tile"
 	Label:	"&Tile"
@@ -12637,7 +12629,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1869
+(Choice.1868
 	Help:	"Arranges windows"
 	HelpTopic:	"Cascade"
 	Label:	"&Cascade"
@@ -12645,7 +12637,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1870
+(Choice.1869
 	Help:	"Arranges iconified windows"
 	HelpTopic:	"Arrange_Icons"
 	Label:	"&Arrange Icons"
@@ -12653,10 +12645,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1871
+(Space.1870
 )
 
-(Choice.1872
+(Choice.1871
 	Help:	"Shows the symbol window"
 	HelpTopic:	"Show_Symbol_Window"
 	Label:	"Show Symbol Window..."
@@ -12664,53 +12656,46 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.Ctrl+P"
 )
 
-(Space.1873
-	ObjectTag:	1874
+(Space.1872
+	ObjectTag:	1873
 	Update:	"WindowMenuUpdate"
 )
 
-(AVStr.1874
-	S:	"dcwatdes2.apr DCWatDes.Model.Epanet.check DCWatDesExtension.make Script.saveAllScripts"
+(AVStr.1873
+	S:	"dcwatdes2.apr DCWatDesExtension.make Script.saveAllScripts"
 )
 
-(Choice.1875
+(Choice.1874
 	Help:	"Activates dcwatdes2.apr"
 	Label:	"&1 dcwatdes2.apr"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1876
-	Help:	"Activates DCWatDes.Model.Epanet.check"
-	Label:	"&2 DCWatDes.Model.Epanet.check"
-	Click:	"WindowActivate"
-	Shortcut:	"Keys.None"
-)
-
-(Choice.1877
+(Choice.1875
 	Help:	"Activates DCWatDesExtension.make"
-	Label:	"&3 DCWatDesExtension.make"
+	Label:	"&2 DCWatDesExtension.make"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1878
+(Choice.1876
 	Help:	"Activates Script.saveAllScripts"
-	Label:	"&4 Script.saveAllScripts"
+	Label:	"&3 Script.saveAllScripts"
 	Click:	"WindowActivate"
 	Shortcut:	"Keys.None"
 )
 
-(PMenu.1879
+(PMenu.1877
 	InternalName:	"Help"
+	Child:	1878
+	Child:	1879
 	Child:	1880
 	Child:	1881
-	Child:	1882
-	Child:	1883
 	Label:	"&Help"
 )
 
-(Choice.1880
+(Choice.1878
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12718,7 +12703,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1881
+(Choice.1879
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12726,10 +12711,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1882
+(Space.1880
 )
 
-(Choice.1883
+(Choice.1881
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12737,69 +12722,69 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1884
+(ButnBar.1882
 	Update:	"Project.UpdateButtons"
+	Child:	1883
 	Child:	1885
-	Child:	1887
+	Child:	1886
 	Child:	1888
-	Child:	1890
 )
 
-(Butn.1885
+(Butn.1883
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1886
+	Icon:	1884
 	Click:	"Project.Save"
 )
 
-(AVIcon.1886
+(AVIcon.1884
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1887
+(Space.1885
 )
 
-(Butn.1888
+(Butn.1886
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1889
+	Icon:	1887
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1889
+(AVIcon.1887
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(Butn.1890
+(Butn.1888
 	Icon:	1138
 	Click:	"DCWatDesExtension.make"
 )
 
-(PopupSet.1891
+(PopupSet.1889
 )
 
-(ToolBar.1892
+(ToolBar.1890
 )
 
-(AVIcon.1893
+(AVIcon.1891
 	Name:	"Icon"
 	Res:	"Project.Icon"
 
 )
 
-(DocGUI.1912
+(DocGUI.1910
 	Name:	"Overview"
 	DocBaseName:	"Overview for "
 	Type:	"View"
 	Modified:	1
-	MenuBar:	1913
-	ButnBar:	1923
-	Popups:	1929
-	ToolBar:	1948
+	MenuBar:	1911
+	ButnBar:	1921
+	Popups:	1927
+	ToolBar:	1946
 	NewScript:	"View.New"
 	OpenScript:	"Doc.Open"
 	ActionScript:	"Doc.Action"
@@ -12807,23 +12792,23 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	OpenUpdateScript:	"Doc.OpenUpdate"
 	ActionUpdateScript:	"Doc.ActionUpdate"
 	Title:	"Overviews"
-	Icon:	1951
+	Icon:	1949
 )
 
-(MenuBar.1913
-	Child:	1914
-	Child:	1918
-)
-
-(PMenu.1914
-	InternalName:	"Edit"
-	Child:	1915
+(MenuBar.1911
+	Child:	1912
 	Child:	1916
-	Child:	1917
+)
+
+(PMenu.1912
+	InternalName:	"Edit"
+	Child:	1913
+	Child:	1914
+	Child:	1915
 	Label:	"&Edit"
 )
 
-(Choice.1915
+(Choice.1913
 	Help:	"Displays the TOC so you can delete or changed themes."
 	Update:	"OverView.DisplayTOCUpdate"
 	Label:	"Display TOC"
@@ -12831,7 +12816,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1916
+(Choice.1914
 	Disabled:	1
 	Help:	"Removes the active themes from the view"
 	HelpTopic:	"Delete_Themes"
@@ -12841,19 +12826,19 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1917
+(Space.1915
 )
 
-(PMenu.1918
+(PMenu.1916
 	InternalName:	"Help"
+	Child:	1917
+	Child:	1918
 	Child:	1919
 	Child:	1920
-	Child:	1921
-	Child:	1922
 	Label:	"&Help"
 )
 
-(Choice.1919
+(Choice.1917
 	Help:	"Displays the dialog for browsing and searching ArcView's help system"
 	HelpTopic:	"Help_on_Help_Topics"
 	Label:	"Help &Topics..."
@@ -12861,7 +12846,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1920
+(Choice.1918
 	Help:	"Provides instructions for how to obtain help from ArcView"
 	HelpTopic:	"Help_on_How_to_Get_Help"
 	Label:	"&How to Get Help..."
@@ -12869,10 +12854,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1921
+(Space.1919
 )
 
-(Choice.1922
+(Choice.1920
 	Help:	"Provides information about ArcView"
 	HelpTopic:	"About"
 	Label:	"&About ArcView..."
@@ -12880,46 +12865,48 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ButnBar.1923
+(ButnBar.1921
+	Child:	1922
 	Child:	1924
-	Child:	1926
-	Child:	1927
+	Child:	1925
 )
 
-(Butn.1924
+(Butn.1922
 	Help:	"Save Project//Saves the current project"
 	HelpTopic:	"Save_Project"
-	Icon:	1925
+	Icon:	1923
 	Click:	"Project.Save"
 )
 
-(AVIcon.1925
+(AVIcon.1923
 	Name:	"Save"
 	Res:	"Icons.Save"
 
 )
 
-(Space.1926
+(Space.1924
 )
 
-(Butn.1927
+(Butn.1925
 	Help:	"Help//Gets help about the next button, tool, or menu choice you click"
 	HelpTopic:	"Help_button"
-	Icon:	1928
+	Icon:	1926
 	Click:	"Help.Tool"
 )
 
-(AVIcon.1928
+(AVIcon.1926
 	Name:	"HelpTool"
 	Res:	"Icons.HelpTool"
 
 )
 
-(PopupSet.1929
-	Child:	1930
+(PopupSet.1927
+	Child:	1928
 )
 
-(Popup.1930
+(Popup.1928
+	Child:	1929
+	Child:	1930
 	Child:	1931
 	Child:	1932
 	Child:	1933
@@ -12935,12 +12922,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Child:	1943
 	Child:	1944
 	Child:	1945
-	Child:	1946
-	Child:	1947
 	Label:	"Menu"
 )
 
-(Choice.1931
+(Choice.1929
 	Disabled:	1
 	Invisible:	1
 	Help:	"Deletes the last entered point on the line or polygon being drawn"
@@ -12950,7 +12935,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1932
+(Choice.1930
 	Help:	"Undo the last edit to graphics on a view"
 	HelpTopic:	"Undo_Graphic_Edit_on_a_view"
 	Update:	"View.UndoEditUpdate"
@@ -12959,7 +12944,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1933
+(Choice.1931
 	Disabled:	1
 	Invisible:	1
 	Help:	"Redo the last edit operation on a theme that was undone"
@@ -12969,10 +12954,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1934
+(Space.1932
 )
 
-(Choice.1935
+(Choice.1933
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns general snapping on"
@@ -12982,7 +12967,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1936
+(Choice.1934
 	Disabled:	1
 	Invisible:	1
 	Help:	"Turns interactive snapping on"
@@ -12992,10 +12977,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1937
+(Space.1935
 )
 
-(Choice.1938
+(Choice.1936
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest vertex within the user tolerance"
@@ -13005,7 +12990,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1939
+(Choice.1937
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest line segment"
@@ -13015,7 +13000,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1940
+(Choice.1938
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest node common to two or more features"
@@ -13025,7 +13010,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1941
+(Choice.1939
 	Disabled:	1
 	Invisible:	1
 	Help:	"Snaps the next entered point to the nearest endpoint of an existing line"
@@ -13035,10 +13020,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Space.1942
+(Space.1940
 )
 
-(Choice.1943
+(Choice.1941
 	Help:	"Unselects the selected features in all active themes"
 	Update:	"View.AttributeThemesUpdate"
 	Label:	"Clear Selection"
@@ -13046,7 +13031,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1944
+(Choice.1942
 	Help:	"Zooms in at point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom In"
@@ -13054,7 +13039,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1945
+(Choice.1943
 	Help:	"Zooms out from point where you click to bring up popup menu"
 	Update:	"View.HasDataUpdate"
 	Label:	"Zoom Out"
@@ -13062,7 +13047,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1946
+(Choice.1944
 	Help:	"Zooms to the extent of the selected features"
 	Update:	"View.SelectableThemesUpdate"
 	Label:	"Zoom to Selected"
@@ -13070,7 +13055,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(Choice.1947
+(Choice.1945
 	Help:	"Centers display on point where you click to bring up popup"
 	Update:	"View.HasDataUpdate"
 	Label:	"Pan"
@@ -13078,74 +13063,74 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n' Lesser General Public License 
 	Shortcut:	"Keys.None"
 )
 
-(ToolBar.1948
-	Child:	1949
+(ToolBar.1946
+	Child:	1947
 )
 
-(Tool.1949
+(Tool.1947
 	Help:	"Pointer//Selects, moves, and resizes graphics"
 	HelpTopic:	"Pointer_tool"
 	Update:	"View.HasDataUpdate"
-	Icon:	1950
+	Icon:	1948
 	Cursor:	"Cursors.Select"
 	Apply:	"Overview.ResizeBox"
 	Click:	"View.SelectTool"
 )
 
-(AVIcon.1950
+(AVIcon.1948
 	Name:	"Select"
 	Res:	"Icons.Select"
 
 )
 
-(AVIcon.1951
+(AVIcon.1949
 	Name:	"O"
 	Res:	"Icons.O"
 
 )
 
-(FN.2069
+(FN.2067
 	Path:	"$HOME"
 )
 
-(TClr.2070
+(TClr.2068
 	Red:	0xffff
 	Green:	0xffff
 )
 
-(AVStr.2071
+(AVStr.2069
 	S:	"View"
 )
 
-(AVStr.2072
+(AVStr.2070
 	S:	"Table"
 )
 
-(AVStr.2073
+(AVStr.2071
 	S:	"Chart"
 )
 
-(AVStr.2074
+(AVStr.2072
 	S:	"Layout"
 )
 
-(AVStr.2075
+(AVStr.2073
 	S:	"Script"
 )
 
-(AVStr.2076
+(AVStr.2074
 	S:	"Project"
 )
 
-(AVStr.2077
+(AVStr.2075
 	S:	"Appl"
 )
 
-(AVStr.2078
+(AVStr.2076
 	S:	"Overview"
 )
 
-(AVStr.2079
+(AVStr.2077
 	S:	"DialogEditor"
 )
 
