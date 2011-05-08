@@ -86,6 +86,7 @@
 	Doc:	579
 	Doc:	583
 	Doc:	128
+	ActiveDoc:	423
 	Buttons:	587
 	Buttons:	588
 	Buttons:	589
@@ -141,8 +142,9 @@
 (DocWin.7
 	Owner:	6
 	Open:	1
+	X:	1276
 	W:	638
-	H:	1051
+	H:	525
 )
 
 (CSMgr.8
@@ -1479,8 +1481,8 @@
 )
 
 (PointD.139
-	x:	-181744.74150538017000
-	y:	227587.30378220865000
+	x:	-181754.57058751225000
+	y:	227591.84028165424000
 )
 
 (Numb.140
@@ -2146,7 +2148,8 @@
 (DocWin.201
 	Owner:	200
 	Open:	1
-	X:	1276
+	X:	638
+	Y:	525
 	W:	638
 	H:	525
 )
@@ -3878,10 +3881,8 @@ les.count < 3)then\n    for each numI in (lstlifecycles.count)..2\n      fldDn =
 (DocWin.424
 	Owner:	423
 	Open:	1
-	X:	638
-	Y:	525
 	W:	638
-	H:	525
+	H:	1051
 )
 
 (CSMgr.425
@@ -6182,6 +6183,7 @@ Script.getSource.count)\n    txfScript.close\n    numWritten = numWritten+1\n  e
 )
 
 (Choice.719
+	Disabled:	1
 	Update:	"DCProcess.Network.classifyConnections.update"
 	Label:	"Classify Node Connections"
 	Click:	"DCProcess.Network.classifyConnections"
