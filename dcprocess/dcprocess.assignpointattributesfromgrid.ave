@@ -1,0 +1,80 @@
+' DCProcess.assignPointAttributesFromGrid
+
+' (c) 2000,2004 DORSCH Consult
+
+  viewActive = av.GetActiveDoc 
+  
+  themeList = viewActive.GetThemes
+  blnViewHasGridTheme = false
+  blnViewHasPointTheme = false
+  lstGridThemes = List.make
+  lstPointThemes = List.make
+  for each  thmCheck in themeList
+    if(thmCheck.getClass.getClassName = "GTheme")then
+      lstGridThemes.add(thmCheck)
+      blnViewHasGridTheme = true
+    end
+    if(thmCheck.getClass.getClassName = "FTheme")then
+      if(thmCheck.getFTab.getShapeClass.getClassName = "Point")then
+        lstPointThemes.add(thmCheck)
+        blnViewHasPointTheme = true
+      end
+    end
+  end
+  if(blnViewHasGridTheme.not)then
+    MsgBox.error("Found no Grids in View. You need the Spatial Analyst Extension in order to work with Grids.", "DC Conversion Extension")
+    exit
+  end
+
+  if(blnViewHasPointTheme.not)then
+    MsgBox.error("Found no PointThemes in View.", "DC Conversion Extension")
+    exit
+  end
+
+  GridTheme = Msgbox.Choice (lstGridThemes, "Select a Grid Theme to extract the Values from.", "Select a Theme") 
+  
+  PointTheme = MsgBox.Choice(lstPointThemes, "Select the Point Theme to assign data to", "Select a Theme")
+  
+  if((PointTheme = nil)or(GridTheme=nil))then
+    exit
+  end
+  
+  Proj = viewActive.GetProjection 
+  
+  ftbPoint = PointTheme.getFtab
+  fldPointShape = ftbPoint.findField("Shape")
+  
+  lstFields = ftbPoint.getFields
+  
+  
+  grd = GridTheme.getGrid
+  
+  fldAttribute = MsgBox.choice(lstFields, "Select the field to store the attributes in.","Select a Field")
+  if(fldAttribute=nil)then
+    exit
+  end
+  if(fldAttribute.isTypeNumber.not)then
+    MsgBox.error("Field must be of type Number.","DC Conversion Extension")
+    exit
+  end
+  
+  numCounter = 0 
+  numTotal = ftbPoint.GetNumRecords 
+  av.showStopButton  
+  
+ ftbPoint.setEditable(true)
+ for each rec in ftbPoint
+   pntWork = ftbPoint.returnValue(fldPointShape, rec)
+   numAttribute = grd.PointValue(pntWork, Proj)
+   ftbPoint.setValue(fldAttribute, rec, numAttribute)
+   numCounter = numCounter + 1
+    if(av.setStatus((numCounter/numTotal)*100).not)then
+      exit
+    end
+ end
+
+
+
+  'cleaning up
+  ftbPoint.setEditable(FALSE)
+  av.clearStatus

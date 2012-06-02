@@ -1,0 +1,39 @@
+'DCSewerDesignExtension.install
+'Make sure there is a project
+if (av.GetProject = nil) then
+  return nil
+end
+
+' The self object for this script is the extension
+
+'Add the menu after the view's Theme menu 
+theMenuBar = av.GetProject.FindGUI("View").GetMenuBar
+m = theMenuBar.FindByLabel("Theme")
+if (m <> nil) then
+  'DC Sewer Design menu
+  theMenuBar.Add(self.Get(0), theMenuBar.getControls.find(m))    
+else
+'DC Sewer Design menu
+  theMenuBar.Add(self.get(0), 999)
+end
+
+' add the buttons at the end of the button bar
+theViewButtonBar = av.GetProject.FindGUI("View").getButtonBar
+
+' profile creation button
+theViewButtonBar.add(self.get(1), 999)
+
+mbTable = av.getProject.findGUI("Table").getMenuBar
+
+menuTable = mbTable.findByLabel("Table")
+if(menuTable <> nil)then
+  mbTable.add(self.get(2), mbTable.getControls.find(menuTable))
+else
+  mbTable.add(self.get(2), 999)
+end
+
+' Add the constant gradient calculation button
+theViewButtonBar.add(self.get(3), 999)
+
+av.getProject.findGUI("View").setModified(true)
+av.getProject.findGUI("Table").setModified(true)

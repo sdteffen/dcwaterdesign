@@ -1,0 +1,251 @@
+' DCSewerDesign.createDbfSewerCalculation
+
+' Create an Dbf table containing the Sewerage Calculation
+
+' (c) 2000, 2005 DORSCH Consult
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+blnDebug = false
+
+' Try to find configuration file in preferences
+
+extSewer = Extension.find("DC Sewer Design")
+
+dicPreferences = extSewer.getPreferences
+ 
+strDbfCalculationConfig = dicPreferences.get("strDbfCalculationConfig")
+flnConfiguration = nil
+if(strDbfCalculationConfig = nil)then 
+  ' Information about the configuration file
+  MsgBox.info("One mapping per line, '=' as separator"+NL+
+    "PipeID=???    Diameter=??? PerPerson=???"+NL+
+    "Gradient=???    Roughness=???"+NL+
+    "AccumulatedPopulation=???   PeakFactor=???"
+    ,"Field Configuration File")
+    
+  'get the configuration file
+    lstConfFiles = FileDialog.returnFiles({"*.txt"},{"Text Files (*.txt)"},"Select Configuration File",0)
+   if(lstConfFiles.count = 0 )then
+     exit
+   end
+   flnConfiguration = lstConfFiles.get(0)
+   dicPreferences.set("strDbfCalculationConfig", flnConfiguration.getFullName)
+else
+  flnConfiguration = FileName.make(strDbfCalculationConfig)
+end
+
+' Get the table
+  viewActive = av.getActiveDoc 
+  
+strLineTheme = dicPreferences.get("strDbfCalculationTheme")
+if(strLineTheme = nil)then
+  themeList = viewActive.getThemes 
+  lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
+  LineTheme = Msgbox.Choice (lstLineThemes, "Select a Polyline Theme.", "Select a Theme")   
+  if (LineTheme.asString = "nil") then
+    exit
+  end
+  strLineTheme = LineTheme.asString
+  dicPreferences.set("strDbfCalculationTheme", strLineTheme)
+end
+  thmLine = viewActive.findTheme(strLineTheme)   
+  ftbLine = thmLine.getFTab 
+
+ 'open the configuration file
+ lnfConfiguration = LineFile.make(flnConfiguration, #FILE_PERM_READ)
+
+ fldPipeID=nil
+ fldDiameter=nil
+ fldGradient=nil
+ fldRoughness=nil
+ fldPopulation=nil
+ strPeakFactorFormula="1"
+ strLitersPerDayAndPerson=nil
+ strLine=lnfConfiguration.readElt
+ 'process the configuration file 
+ while (not (strLine=nil ))
+    lstConfTokens = strLine.asTokens("=")
+    if(lstConfTokens.count=2)then
+      strScriptFieldName = lstConfTokens.get(0).trim.lcase
+      strTableFieldName = lstConfTokens.get(1).trim.lcase
+      if(strScriptFieldName = "pipeid")then
+        fldPipeID=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "diameter")then
+        fldDiameter=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "gradient")then
+        fldGradient=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "roughness")then
+        fldRoughness=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "accumulatedpopulation")then
+        fldPopulation=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "peakfactor")then
+        if(strTableFieldName.isNumber)then
+          strPeakFactorFormula=strTableFieldName
+        else
+          if(strTableFieldName.ucase ="BAUMANN")then
+            strPeakFactorFormula = "BAUMANN" 
+          elseif(strTableFieldName.ucase = "BABITT")then
+            strPeakFactorFormula = "BABITT" 
+          else
+            Msgbox.info("Unknown Peak Factor Formula."+NL+
+            "Baumann and Babitt are valid."+NL+
+            "Using constant peak factor 1.","DC Sewer Design")
+          end
+        end
+      end
+      if(strScriptFieldName = "perperson")then
+        strLitersPerDayAndPerson = strTableFieldName
+      end
+    end
+    strLine = lnfConfiguration.readElt
+ end
+ 
+ 'close the configuration file
+ lnfConfiguration.close
+ 
+ 'get information
+ 'strLitersPerDayAndPerson = MsgBox.input("Sewage flow per person and day","DC Sewer Design","120")
+ 'if(strLitersPerDayAndPerson = nil)then
+ '  exit
+ 'end
+ 
+ 'check if configuration was successful
+  if((fldPipeID=nil)or(fldDiameter=nil)or(fldGradient=nil)or(fldRoughness=nil)
+  or(fldPopulation=nil)or(strLitersPerDayAndPerson=nil))then
+    MsgBox.error("Field matching not successful. Check your table and configuration file.","DC Sewer Design")
+    dicPreferences.remove("strDbfCalculationConfig")
+    exit
+  end
+
+' Request approval
+
+blnApproval = MsgBox.LongYesNo("Create a calculation for "+strLineTheme.quote+
+  " using the configuration from "+flnConfiguration.getFullName.quote+
+  ". Selecting no will allow you to select the configuration again.", "DC Sewer Design", true)
+if(blnApproval.not)then
+  dicPreferences.remove("strDbfCalculationConfig")
+  dicPreferences.remove("strDbfCalculationTheme")
+end
+ ' create DBF-File
+  flnDbfFile = FileDialog.put("".asFilename.makeTmp("sewer_calculation","dbf"), "*.dbf", "Save Calculation file")
+  if(flnDbfFile = nil )then
+   exit
+  end
+  vtbCalc = vtab.makeNew(flnDbfFile, dBase) 
+  vtbCalc.setEditable(true)
+  
+  
+  'create fields
+  
+  List lstFields = List.make
+  
+  lstFields.add(Field.make("Pipe_ID", fldPipeID.getType, fldPipeID.getWidth, fldPipeID.getPrecision))
+  lstFields.add(Field.make("DN", #FIELD_SHORT, 4, 0))
+  lstFields.add(Field.make("I", #FIELD_DECIMAL, 16, 10))
+  lstFields.add(Field.make("roughness", #FIELD_DECIMAL, 16, 8))
+  lstFields.add(Field.make("Popul", #FIELD_DECIMAL, 16, 8))
+  lstFields.add(Field.make("f_peak", #FIELD_DECIMAL, 16, 8))
+  lstFields.add(Field.make("flow", #FIELD_DECIMAL, 16, 8))
+  lstFields.add(Field.make("max_flow", #FIELD_DECIMAL, 16, 8))
+  lstFields.add(Field.make("v_full", #FIELD_DECIMAL, 16, 8))
+  lstFields.add(Field.make("v_free", #FIELD_DECIMAL, 16, 8))
+  lstFields.add(Field.make("used", #FIELD_DECIMAL, 16, 8))
+
+  vtbCalc.addFields(lstFields)
+  
+'data for status display
+  numCounter = 0 
+  numTotal = ftbLine.GetNumRecords 
+  
+'calculation data
+ 
+ 'give the user a chance to kill script
+ av.showStopButton 
+  
+  numLitersPerDayAndPerson = strLitersPerDayAndPerson.asNumber
+  
+'run over all records in the table
+  for each recLine in ftbLine
+    strRowNumber = (numCounter+3).asString.Trim
+    strRow="R"+strRowNumber
+  
+    recCalc = vtbCalc.addRecord
+    
+    vtbCalc.setValue(lstFields.get(0), recCalc, ftbLine.returnValue(fldPipeID,recLine))     
+    numDiameter = ftbLine.returnValue(fldDiameter,recLine)
+    vtbCalc.setValue(lstFields.get(1), recCalc, numDiameter)    ' B
+    numGradient = ftbLine.returnValue(fldGradient,recLine)
+    vtbCalc.setValue(lstFields.get(2), recCalc, numGradient)    ' C
+    numRoughness = ftbLine.returnValue(fldRoughness,recLine)
+    vtbCalc.setValue(lstFields.get(3), recCalc, numRoughness)   ' D
+    numPopulation = ftbLine.returnValue(fldPopulation,recLine)
+    vtbCalc.setValue(lstFields.get(4), recCalc, numPopulation)  ' E
+    
+    ' peak factor calculation
+    strPeakFactor= strPeakFactorFormula
+    if(strPeakFactorFormula = "BABITT")then
+      numPeakFactor = 4.5.min(5/((numPopulation/1000)^(1/6)))
+    else 
+      if(strPeakFactorFormula = "BAUMANN")then
+        numPeakFactor = 2.5.min(1+(14/(4+((numPopulation/1000).sqrt))))
+      else
+        numPeakFactor = strPeakFactorFormula.asNumber
+      end
+    end
+    vtbCalc.setValue(lstFields.get(5), recCalc, numPeakFactor)                        ' F
+    
+'    sheet.poke(strRow+"C7", ftbLine.returnValue(fldFlow,recLine))       ' G
+'    sheet.poke(strRow+"C7", "=E"+strRowNumber+"*F"+strRowNumber+"*"+strLitersPerDayAndPerson+"/3600/24")
+    numFlow = numPopulation*numPeakFactor*numLitersPerDayAndPerson/3600/24
+    vtbCalc.setValue(lstFields.get(6), recCalc, numFlow)
+'    sheet.poke(strRow+"C9", "=-2*LOG10(2.51*1.31/(1000000*numDiameter/1000)* ((2*9.80665*(B"+strRowNumber+"/1000)*C"+strRowNumber+").sqrt))+D"+strRowNumber+"/(1000*3.71*(B"+strRowNumber+"/1000)))*SQRT(2*9.80665*(B"+strRowNumber+"/1000)*C"+strRowNumber+")")    
+    numSquareRoot2 = (2*9.81*numDiameter/1000*numGradient).sqrt
+    numVelocityFullboard = -2*(((2.51*1.31/(1000000*numDiameter/1000)*((2*9.80665*(numDiameter/1000)*numGradient)).sqrt)+(numRoughness/(1000*3.71*(numDiameter/1000)))).log(10))*numSquareRoot2
+    vtbCalc.setValue(lstFields.get(8), recCalc, numVelocityFullboard)
+'    sheet.poke(strRow+"C8", "=I"+strRowNumber+"*PI()*B"+strRowNumber+"^2/4000")    
+    numFlowCapacity = numVelocityFullboard * Number.getPi * (numDiameter*numDiameter)/4000
+    vtbCalc.setValue(lstFields.get(7), recCalc, numFlowCapacity)
+
+    numPercentUsed = numFlow/numFlowCapacity*100
+    vtbCalc.setValue(lstFields.get(10), recCalc, numPercentUsed)
+
+    'sheet.poke(strRow+"C10", "=((K"+strRowNumber+"/35)^0.305-0.0024*K"+strRowNumber+")*I"+strRowNumber)    
+    numVelocityFreeSurface = (((numPercentUsed/35)^0.305)-(0.0024*numPercentUsed))*numVelocityFullboard
+    vtbCalc.setValue(lstFields.get(9), recCalc, numVelocityFreeSurface)
+
+    'sheet.poke(strRow+"C11", "=G"+strRowNumber+"/H"+strRowNumber+"*100")    
+    
+    'update status display
+    if(av.setStatus((numCounter/numTotal)*100).not)then
+      'user hit the stop button
+      exit
+    end
+    numCounter = numCounter+1
+  end
+  
+  vtbCalc.setEditable(false) 
+
+ ' join Results to table
+ ftbLine.unjoinAll
+ ftbLine.join(fldPipeID, vtbCalc, lstFields.get(0))
+ 
+ 'clean up
+ av.clearStatus

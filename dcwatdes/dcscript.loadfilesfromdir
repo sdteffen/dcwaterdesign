@@ -1,0 +1,74 @@
+' Script.saveAllScripts
+
+' If the scripts are to be saved elsewhere, change the following line... 
+
+strSaveDir = "f:\sandbox\dcwatdes\src"
+
+if (File.exists(strSaveDir.asFilename).Not) then
+  MsgBox.Error("Working directory:"++strSaveDir++"does not exist", "")
+  exit 
+end
+
+lstScripts = List.make
+
+' find all scripts
+
+for each docObj in av.getProject.getDocs
+  if (docObj.is(SEd)) then
+    lstScripts.Add(docObj)
+  end
+end
+
+' Loop over all scripts, write to files
+
+blnOverwrite = nil
+
+for each sedScript in lstScripts
+
+  strSaveDir2 = strSaveDir.clone
+  strScriptName = sedScript.asString ' .substitute(".",",")
+   
+  flnScript = FileName.merge(strSaveDir2, strScriptName)
+  flnScript.setName(strScriptName+".ave")
+  if (flnScript.isFile) then
+    if(blnOverwrite = nil)then
+      blnOverwrite = MsgBox.YesNo("Overwrite files?", "Saving Scripts", false)
+      if(blnOverwrite.not)then
+        continue 
+      end
+    ' check if file has been changed
+    lnfScript = LineFile.make(flnScript, #FILE_PERM_READ).setEolType(#FILE_UNIX_EOL)
+    strFileLine = lnfScript.readElt
+    blnChanged = false
+    while(strFileLine <> nil)
+'TODO
+      if(strFileLine <> strScriptLine)then
+        blnChanged=true
+        break
+      end
+      strFileLine = lnfScript.readElt
+    end
+    lnfScript.close
+    if(blnChanged)then
+      File.delete(flnScript)
+    else
+     continue
+    end
+  end 
+  
+  lnfScript = LineFile.make(flnScript, #FILE_PERM_WRITE).setEolType(#FILE_UNIX_EOL)
+  if (lnfScript <> nil) then
+    lnfScript.writeElt(sedScript.getSource)
+    lnfScript.close
+  else
+    MsgBox.warning("Unable to open file for writing:"++outFile.GetFullName,"Saving Scripts")
+  end
+end
+
+
+
+
+
+
+
+

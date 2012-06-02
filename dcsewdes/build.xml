@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "doc/project.dtd" []>
+<!-- build the DC Sewer Design source distribution -->
+<project name="DC Sewer Design" basedir="." default="DCSewDesDistribution">
+  <!-- configuration -->
+  
+  <property name="md5sum" value="c:\wc\cvs.gnome.org\bin\md5sum.exe" />
+  
+  <!-- Custom DC Sewer Design stylesheets -->
+  <property name="dcsewerdesign_version" value="2.0.10" />
+  
+  <target name="DCSewDesDistribution" id="DC_Sewer_DesignDistribution">
+    <tar destfile="dcsewerdesign-src-${dcsewerdesign_version}.tar">
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "**/*.ave,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "INSTALL,NEWS" />
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "doc/*.xsl,doc/project.dtd" />
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "doc/version.xml,**/dcsewerdesign.xml,**/figure/*.png" />
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "sample/manhole.shp,sample/manhole.shx,sample/manhole.dbf" />
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "sample/line.shp,sample/line.shx,sample/line.dbf" />
+      <tarfileset dir="." prefix="dcsewerdesign-${dcsewerdesign_version}" includes=
+        "sample/profileconfiguration.txt,sample/profilemanhole.avl" />	
+    </tar>
+    <bzip2 zipfile="dcsewerdesign-src-${dcsewerdesign_version}.tar.bz2" 
+      src="dcsewerdesign-src-${dcsewerdesign_version}.tar"/>
+    <delete file="dcsewerdesign-src-${dcsewerdesign_version}.tar" />  
+    <exec dir="." executable="${md5sum}" output="md5sum.txt">
+      <arg line="dcsewerdesign-src-${dcsewerdesign_version}.tar.bz2"/>
+    </exec>
+    <exec dir="." executable="${md5sum}" output="md5sum.txt" append="true">
+      <arg line="dcsewerdesign-setup-${dcsewerdesign_version}-1.exe"/>
+    </exec>
+  </target>
+  
+  <target name="clean">
+    <delete defaultexcludes="no" dir="." includes=
+      "**/*~,**/htmlhelp.chm,tmp/*.png,tmp/*.pdf,**/.#*,**/*.hhc,**/*.html,**/*.hhk,**/*.fo,**/*.hhp" 
+      excludes="**/index.html"/>
+  </target>
+</project>

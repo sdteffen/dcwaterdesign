@@ -1,0 +1,146 @@
+' DCWatDes.Model.Epanet.makeHouseConnections
+
+' (c) 2000, 2001 DORSCH Consult
+' Create no-vertex-lines between Tanks Theme and Junctions Theme
+' Every Tank feature needs the dc_id of the the junction to connect to 
+' as an attribute
+' This will add Pipes to the Pipes Theme
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
+dicThemes = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
+ftbPipes = nil
+ftbJunctions = nil
+ftbTanks = nil
+
+ftbPipes = dicThemes.get("Pipes")
+blnHasPipesTheme = true
+if(ftbPipes <> nil)then
+  if(ftbPipes.getShapeClass.getClassname <> "PolyLine")then
+    blnHasPipesTheme = false
+  end
+else
+  blnHasPipesTheme = false
+end
+if(blnHasPipesTheme.not)then
+  MsgBox.error("This function requires the Pipes Theme. Please specify it in the Themes Dialog.", "DC Water Design Extension")
+  exit
+end
+
+ftbJunctions = dicThemes.get("Junctions")
+blnHasJunctionsTheme = true
+if(ftbJunctions <> nil)then
+  if(ftbJunctions.getShapeClass.getClassname <> "Point")then
+    blnHasJunctionsTheme = false
+  end
+else
+  blnHasJunctionsTheme = false
+end
+if(blnHasJunctionsTheme.not)then
+  MsgBox.error("This function requires the Junctions Theme. Please specify it in the Themes Dialog.", "DC Water Design Extension")
+  exit
+end
+
+ftbTanks = dicThemes.get("Tanks")
+blnHasTanksTheme = true
+if(ftbTanks <> nil)then
+  if(ftbTanks.getShapeClass.getClassname <> "Point")then
+    'blnHasTanksTheme = false
+  end
+else
+  blnHasTanksTheme = false
+end
+if(blnHasTanksTheme.not)then
+  MsgBox.error("This function requires the Tanks Theme. Please specify it in the Themes Dialog.", "DC Water Design Extension")
+  exit
+end
+
+' fields
+
+fldTankShape = ftbTanks.findField("Shape")
+fldPipeShape = ftbPipes.findField("Shape")
+fldJunctionShape = ftbJunctions.findField("Shape")
+
+fldJunctionID = ftbJunctions.findField("dc_id")
+fldPipeID = ftbPipes.findField("dc_id")
+
+lstAliases = List.make
+for each fldAlias in ftbTanks.getFields
+  lstAliases.add(fldAlias.getAlias)
+end
+
+strTankJunctionID = MsgBox.choiceAsString(lstAliases, "Select the Field in the Tanks Table that contains the Junction ID.","DC Water Design")
+if(strTankJunctionID = nil)then
+  exit
+end
+
+fldTankJunctionID = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbTanks, strTankJunctionID})
+
+ftbPipes.setEditable(true)
+numToGo = ftbTanks.getNumRecords
+numComplete = 0
+av.showStopButton
+
+bmpFailedConnections = ftbTanks.getSelection.clone
+bmpFailedConnections.clearAll
+
+'todo: report if id is not unique
+
+for each recTank in ftbTanks
+  pntTank = ftbTanks.returnValue(fldTankShape, recTank)
+  strJunctionID = ftbTanks.returnValue(fldTankJunctionID, recTank)
+  if(fldTankJunctionID.isTypeString)then
+    strJunctionID = strJunctionID.quote
+  else
+    strJunctionID = strJunctionID.asString
+  end
+  strJunctionQuery = "[dc_id]="+strJunctionID
+  bmpJunctions = ftbJunctions.getSelection.clone
+  if(ftbJunctions.query(strJunctionQuery, bmpJunctions, #VTAB_SELTYPE_NEW))then
+    recJunction = bmpJunctions.getNextSet(-1)
+    if(recJunction <> -1)then
+      strHouseConnectionID = "hc"+numComplete.asString
+      pntJunction = ftbJunctions.returnValue(fldJunctionShape, recJunction)
+      pllHouseConnection = Line.make(pntJunction,pntTank).asPolyline
+      recHouseConnection = ftbPipes.addRecord
+      ftbPipes.setValue(fldPipeShape, recHouseConnection, pllHouseConnection)
+      ftbPipes.setValue(fldPipeID, recHouseConnection, strHouseConnectionID)
+    else
+      bmpFailedConnections.set(recTank)
+    end
+  else
+    bmpFailedConnections.set(recTank)
+  end
+  numComplete = numComplete + 1
+  if(av.setStatus(numComplete/numToGo*100).not)then
+    av.clearStatus
+    ftbPipes.setEditable(false)
+    av.getActiveDoc.getDisplay.invalidate
+    exit
+  end
+end
+av.clearStatus
+ftbPipes.setEditable(false)
+if(bmpFailedConnections.count = 0)then
+  av.showMsg("Successfully added "+numToGo.asString+" House Connections.")
+else
+  ftbTanks.setSelection(bmpFailedConnections)
+  ftbTanks.updateSelection
+  MsgBox.warning("Could not connect all the Tanks. "+bmpFailedConnections.count.asString+" disconnected Tanks are selected now.", "DC Water Design Extension")
+end
+
+av.getActiveDoc.getDisplay.invalidate(true)
+

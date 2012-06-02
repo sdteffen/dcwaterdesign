@@ -1,0 +1,67 @@
+/* Cascading stylesheet for http://dcwaterdesign.sourceforge.net */
+
+body, p, li, h1, h2, h3 {
+  font-family: Arial, Helvectica, sans-serif;
+}
+
+.important {
+  font-weight: bold;
+  color: red;
+}
+
+.altcopy {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:12px;
+	color:#ffb200;
+	font-style:normal;
+	line-height:17px;
+	font-weight:normal;
+	background-color: #6f7060; 
+}
+
+.headline {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:18px;
+	font-weight:bold;
+	color:#ffb200;
+}
+.copy {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:12px;
+	color:#d1d1c9;
+	font-style:normal;
+	line-height:17px;
+	font-weight:normal;
+}
+.subnavihead {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:12px;
+	font-weight:bold;
+}
+.subnavicopy {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:12px;
+	color:#d1d1c9;
+	font-weight:bold;
+}
+.copylink,a:link.copylink,a:visited.copylink {
+	font-family:Arial,sans-serif;
+	font-size:12px;
+	color:#ffb200;
+	text-decoration:underline;
+}
+.jobhead {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	font-weight:bold;
+	color:#666657;
+}
+/* Links */
+a:link {font-family:Arial,Helvetica;text-decoration:none;color:#d1d1c9;}
+a:visited {font-family:Arial,Helvetica;text-decoration:none;color:#d1d1c9;}
+a:hover {font-family:Arial,Helvetica;text-decoration:none;color:#ffb200;}
+a:active {font-family:Arial,Helvetica;text-decoration:none;color:#d1d1c9;} 
+.b:link {font-family:Arial,Helvetica;color:#d1d1c9;}
+.b:visited {font-family:Arial,Helvetica;color:#d1d1c9;}
+.b:hover {font-family:Arial,Helvetica;color:#ffb200;}
+.b:active {font-family:Arial,Helvetica;color:#d1d1c9;} 

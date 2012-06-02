@@ -1,0 +1,46 @@
+' DCProcess.createPlgnThemeFromTinTheme
+
+' (c) 2004 DORSCH Consult
+
+viewActive = av.GetActiveDoc
+
+themeList = viewActive.GetThemes 
+thmTin = Msgbox.Choice (themeList, "Select a Tin Theme.", "Select a Theme") 
+if(thmTin = nil)then
+  exit
+end
+  
+tinTin = thmTin.getSurface
+  
+clsPolygon = Polygon
+def = av.GetProject.MakeFileName("theme", "shp") 
+def = FileDialog.Put(def, "*.shp", "New Polygon Theme") 
+
+if (def = nil) then 
+ exit
+end
+ftbPolygon = FTab.MakeNew(def, clsPolygon) 
+  
+fldPolygonShape = ftbPolygon.findField("Shape")
+
+fldID = Field.make("ID", #FIELD_DECIMAL, 16,8)
+
+ftbPolygon.setEditable(true)
+ftbPolygon.addFields({fldID})
+
+numTotal = tinTin.GetNumTriangles
+av.showStopButton  
+
+for each numCounter in (0..numTotal)
+  if(tinTin.isTriangleMasked(numCounter).not)then
+    plgnShape = tinTin.returnTriangle(numCounter).asPolygon
+    recTin = ftbPolygon.addRecord
+    ftbPolygon.setValue(fldPolygonShape, recTin, plgnShape)    
+    if(av.setStatus((numCounter/numTotal)*100).not)then
+      exit
+    end
+  end
+end
+
+ftbPolygon.setEditable(false)
+av.clearStatus

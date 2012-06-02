@@ -1,0 +1,339 @@
+' DCProcess.Network.classifyConnections
+
+' (c) 1998, 2004, 2006 DORSCH Consult
+
+' Classify the connection at a network node.
+
+' Called from Menu
+' No arguments
+' Returns nothing
+
+' Set this to true for debugging purposes
+blnDebug = false
+
+' Set up Themes
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+ftb_Pipes = lstThemes.get(0).getFTab
+ftb_Nodes = lstThemes.get(1).getFTab
+ftbValve = lstThemes.get(2).getFTab
+for each thmTheme in lstThemes
+  if(thmTheme.getFTab.getShapeClass.getClassName = "Polyline")then
+    ftb_Pipes = thmTheme.getFTab
+  else
+    if(thmTheme.getFTab.isEditable)then
+      ftb_Nodes = thmTheme.getFTab
+    else
+      ftbValve = thmTheme.getFTab
+    end
+  end
+end
+
+' Select field to interpolate
+
+lstFields = av.run("DCProcess.Fields.returnNumberFields", ftb_Nodes.getFields)
+fna_Class = Msgbox.choice(lstFields, "Select the classification field to calculate.","Classify Node Connections")
+if(fna_Class.asString = "nil")then
+  exit
+end
+
+' Find the required fields.
+
+fna_Diameter = ftb_Pipes.findField("diameter")
+if(fna_Diameter = nil)then
+  MsgBox.error("Could not find diameter field in pipe shapefile.", "DC Processing Extension")
+  exit
+end
+fna_Polyline = ftb_Pipes.findField("Shape")
+fna_NodeShape = ftb_Nodes.findField("Shape")
+
+' DN1 > DN2 > DN3
+fldDn1 = ftb_Nodes.findField("DN1")
+fldDn2 = ftb_Nodes.findField("DN2")
+fldDn3 = ftb_Nodes.findField("DN3")
+if((fldDn1 = nil)or(fldDn2 = nil)or(fldDn3 = nil)or
+  (fldDn1.isTypeNumber.not)or(fldDn2.isTypeNumber.not)or(fldDn3.isTypeNumber.not))then
+  MsgBox.error("Please make sure that your node theme contains the following numeric fields: DN1, DN2, DN3","DC Processing Extension")
+  exit
+end
+
+lstDnFields = {fldDn1, fldDn2, fldDn3}
+
+if(MsgBox.yesNo("Do you want to calculate the fields DN1, DN2 and DN3?", "DC Processing Extension", true).not)then
+  exit
+end
+
+' Set all connections to NULL initially
+
+ftb_Nodes.calculate("Number.makeNull", fna_Class)
+
+num_ZeroConnections = 0
+
+num_ProcessedNodes = 0
+
+
+av.showStopButton
+
+bmpSelection = ftb_Nodes.getSelection.clone
+numSelected = bmpSelection.count
+if(numSelected = 0)then
+  bmpSelection.setAll
+  numSelected = bmpSelection.count
+end
+if((numSelected <> ftb_Nodes.getNumRecords))then
+  MsgBox.warning("According to the selection, only "+numSelected.asString+" nodes will be classified.", "Classify Node Connections")
+end
+
+num_NodesToProcess = numSelected
+
+'*** identify all selected connections
+for each rec_Node in bmpSelection
+  if(blnDebug)then
+    System.echo("dc_id: "+ftb_Nodes.returnValue(ftb_Nodes.findField("dc_id"), rec_Node))
+  end
+  
+  if ( av.setStatus(num_ProcessedNodes/num_NodesToProcess*100).not) then
+    'user wants to terminate Classification
+     exit
+  end
+
+  num_ProcessedNodes = num_ProcessedNodes + 1
+
+  numClass = Number.makeNull
+  pnt_Node = ftb_Nodes.returnValue(fna_NodeShape, rec_Node)
+  
+  lst_PipeFeatures = av.run("DCProcess.Node.findConnectedLines", {ftb_Pipes, pnt_Node})
+  lstPolylines = List.make
+  for each recPipe in lst_PipeFeatures
+    pllLine = ftb_Pipes.returnValue(fna_Polyline, recPipe)
+    if(pllLine.along(0).distance(pnt_Node) > pllLine.along(100).distance(pnt_Node))then
+      pllLine = pllLine.flip
+    end
+    lstPolylines.add(pllLine.clone)
+  end
+  if(lst_PipeFeatures.count = 0)then
+    System.echo("DCProcess.Network.classifyConnections(): Unconnected Node:"++rec_Node.asString)
+  end
+  
+  lstDiameters = List.make
+  if(blnDebug)then
+    System.echo(lst_PipeFeatures.count.asString+" pipes connected")
+  end
+              
+  ' **************** 1 PIPE CONNECTED ***********************
+  
+  if (lst_PipeFeatures.count = 1)then
+    'endcap
+    numClass = 71
+    lstDiameters.add(ftb_Pipes.returnValue(fna_Diameter, lst_PipeFeatures.get(0)))
+  else
+  
+    ' **************** 2 PIPES CONNECTED ***********************
+    
+    if ( lst_PipeFeatures.count = 2 ) then
+      numDiameter1 = ftb_Pipes.returnValue(fna_Diameter, lst_PipeFeatures.get(0))
+      numDiameter2 = ftb_Pipes.returnValue(fna_Diameter, lst_PipeFeatures.get(1))
+      'equal diameter
+      if(numDiameter1 = numDiameter2) then
+        '******* not required
+         numClass = 0
+         lstDiameters.add(numDiameter1)
+      else
+    
+      'different diameters
+      '****************** type 19
+       numClass = 11
+       lstDiameters.add(numDiameter1.clone)
+       lstDiameters.add(numDiameter2.clone)
+      end
+    else
+    
+      ' **************** 3 PIPES CONNECTED ***********************
+                  
+      if (lst_PipeFeatures.count = 3) then
+        num_Diameter1 = ftb_Pipes.returnValue(fna_Diameter, lst_PipeFeatures.get(0))
+        num_Diameter2 = ftb_Pipes.returnValue(fna_Diameter, lst_PipeFeatures.get(1))
+        num_Diameter3 = ftb_Pipes.returnValue(fna_Diameter, lst_PipeFeatures.get(2))
+        lstDiameters.add(num_Diameter1.clone)
+        lstDiameters.add(num_Diameter2.clone)
+        lstDiameters.add(num_Diameter3.clone)
+        if((num_Diameter1 = num_Diameter2) and (num_Diameter1 = num_Diameter3)) then
+          ' 3 pipes of the same diameter
+          '**** type 33 or 32
+            numClass = 60 + av.run("DCProcess.Network.Connection.returnDetail6", {pnt_Node, ftbValve, lstPolylines})
+        else
+          pllLine0 = ftb_Pipes.returnValue(fna_Polyline, lst_PipeFeatures.get(0))
+          if(pllLine0.along(0).distance(pnt_Node) > pllLine0.along(100).distance(pnt_Node))then
+            pllLine0 = pllLine0.flip
+          end
+          pllLine1 = ftb_Pipes.returnValue(fna_Polyline, lst_PipeFeatures.get(1))
+          if(pllLine1.along(0).distance(pnt_Node) > pllLine1.along(100).distance(pnt_Node))then
+            pllLine1 = pllLine1.flip
+          end
+          pllLine2 = ftb_Pipes.returnValue(fna_Polyline, lst_PipeFeatures.get(2))
+          if(pllLine2.along(0).distance(pnt_Node) > pllLine2.along(100).distance(pnt_Node))then
+            pllLine2 = pllLine2.flip
+          end
+          num_Direction1 = av.run("DCProcess.Point.returnPolyLineAngle",{pnt_Node, pllLine0})
+          num_Direction2 = av.run("DCProcess.Point.returnPolyLineAngle",{pnt_Node, pllLine1})
+          num_Direction3 = av.run("DCProcess.Point.returnPolyLineAngle", {pnt_Node, pllLine2})
+          num_Angle1 = num_Direction1.max(num_Direction2) - num_Direction1.min(num_Direction2)
+          num_Angle2 = num_Direction2.max(num_Direction3) - num_Direction2.min(num_Direction3)
+          num_Angle3 = num_Direction3.max(num_Direction1) - num_Direction3.min(num_Direction1)
+
+          if(num_Angle1 >= 90 ) then
+           num_Angle1 = num_Angle1-180
+          end
+          if(num_Angle2 >= 90 ) then
+           num_Angle2 = num_Angle2-180
+          end
+          if(num_Angle3 >= 90 ) then
+           num_Angle3 = num_Angle3-180
+          end
+          
+          'the arms of the T have the same direction, the bone is orthogonal to them
+          lst_RecArms = List.make                      
+          
+          num_Angle1 = num_Angle1.abs
+          num_Angle2 = num_Angle2.abs              
+          num_Angle3 = num_Angle3.abs
+             
+          if(blnDebug)then
+            System.echo("Direction1 = "+num_Direction1.asString)
+            System.echo("Direction2 = "+num_Direction2.asString)
+            System.echo("Direction3 = "+num_Direction3.asString)
+            System.echo("Angle1 = "+num_Angle1.asString)
+            System.echo("Angle2 = "+num_Angle2.asString)
+            System.echo("Angle3 = "+num_Angle3.asString)
+          end
+                        
+         if ( num_Angle1 < num_Angle2 ) then
+            if(num_Angle1 < num_Angle3) then
+              rec_Bone = lst_PipeFeatures.get(2)
+              lst_RecArms.add(lst_PipeFeatures.get(0))
+              lst_RecArms.add(lst_PipeFeatures.get(1))
+            else
+              rec_Bone = lst_PipeFeatures.get(1)
+              lst_RecArms.add(lst_PipeFeatures.get(0))
+              lst_RecArms.add(lst_PipeFeatures.get(2))                    
+            end            
+          else
+            if(num_Angle2 < num_Angle3) then
+              rec_Bone = lst_PipeFeatures.get(0)
+              lst_RecArms.add(lst_PipeFeatures.get(2))
+              lst_RecArms.add(lst_PipeFeatures.get(1))                    
+            else
+              rec_Bone = lst_PipeFeatures.get(1)
+              lst_RecArms.add(lst_PipeFeatures.get(0))
+              lst_RecArms.add(lst_PipeFeatures.get(2))                    
+            end
+          end
+
+          '*** 2 pipes of the same diameter, one different
+          if((num_Diameter1 = num_Diameter2) or (num_Diameter1 = num_Diameter3) or (num_Diameter2 = num_Diameter3)) then
+            '** arms have the same diameter
+            if(ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) = ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1))) then
+              if(ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) > ftb_Pipes.returnValue(fna_Diameter, rec_Bone)) then
+              '** type 21
+              ' small branch
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail2")
+                end
+                numClass = 20 + av.run("DCProcess.Network.Connection.returnDetail2", {pnt_Node, ftbValve, lstPolylines})
+              else
+              '** type 20
+              ' branch is bigger then the rest
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail5")
+                end
+                numClass = 50 + av.run("DCProcess.Network.Connection.returnDetail5", {pnt_Node, ftbValve, lstPolylines})
+              end
+            else                
+            ' Arms have different diameter: type 21
+              if((ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0)) < ftb_Pipes.returnValue(fna_Diameter, rec_Bone)) or (ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1)) < ftb_Pipes.returnValue(fna_Diameter, rec_Bone))) then
+                '*** type 21b
+                ' Big branch
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail4")
+                end
+                numClass = 40 + av.run("DCProcess.Network.Connection.returnDetail4", {pnt_Node, ftbValve, lstPolylines})
+              else
+               '*** type 21a
+               ' Small branch
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail3")
+                end
+                numClass = 30 + av.run("DCProcess.Network.Connection.returnDetail3", {pnt_Node, ftbValve, lstPolylines})
+              end                                    
+            end
+          
+          '3 different diameters
+          'type 22
+          else
+            num_DN_branch1 = ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(0))
+            num_DN_branch2 = ftb_Pipes.returnValue(fna_Diameter, lst_RecArms.get(1))
+            num_DN_bone = ftb_Pipes.returnValue(fna_Diameter, rec_Bone)
+
+             '*** type 22c
+             'branch is the biggest diameter 
+            if((num_DN_branch1 < num_DN_bone) and (num_DN_branch2 < num_DN_bone)) then
+                numClass = 120 + av.run("DCProcess.Network.Connection.returnDetail12", {pnt_Node, ftbValve, lstPolylines})
+            
+            else
+            
+              '*** type 22b
+              'branch is the smallest diameter
+              if((num_DN_branch1 > num_DN_bone) and (num_DN_branch2 > num_DN_bone)) then
+                if(blnDebug)then
+                  System.echo("Calling DCProcess.Network.Connection.returnDetail11")
+                end
+                numClass = 110 + av.run("DCProcess.Network.Connection.returnDetail11", {pnt_Node, ftbValve, lstPolylines})
+
+              '*** type 22a
+              'branch1 > main > branch2
+              else
+                numClass = 100 + av.run("DCProcess.Network.Connection.returnDetail10", {pnt_Node, ftbValve, lstPolylines})
+    
+              end
+            end  
+          end            
+        end
+      else
+        ' more than 3 pipes connected
+        numClass = 99
+        ' System.echo("More than 3 pipes connected:"+rec_Node.asString)
+      end        
+    'count <> 2
+    end
+  'count <> 1
+  end
+  if(blnDebug)then
+    System.echo("Connection Detail = "+numClass.asString)
+    fldConnProof = ftb_Nodes.findField("ConnProof")
+    if(fldConnProof <> nil)then
+      System.echo("Connection Detail Proof = "+ftb_Nodes.returnValue(fldConnProof, rec_Node).asString)
+    end
+  end
+  ftb_Nodes.setValue(fna_Class, rec_Node, numClass)
+  numI = 0
+  lstDiameters.removeDuplicates
+  lstDiameters.sort(false)
+  for each numDiameter in lstDiameters
+    fldDn = lstDnFields.get(numI)
+    ftb_Nodes.setValue(fldDn, rec_Node, numDiameter)
+    numI = numI + 1
+  end
+  if(lstDiameters.count < 3)then
+    for each numI in (lstDiameters.count)..2
+      fldDn = lstDnFields.get(numI)
+      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)
+    end
+  elseif(lstDiameters.count > 3)then
+    for each fldDn in lstDnFields
+      ftb_Nodes.setValue(fldDn, rec_Node, Number.makeNull)
+    end
+  end
+'for each node
+end
+
+av.clearStatus

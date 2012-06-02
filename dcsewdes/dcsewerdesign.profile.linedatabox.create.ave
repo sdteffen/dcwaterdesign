@@ -1,0 +1,161 @@
+' DCSewerDesign.Profile.LineDataBox.create
+
+' arguments: Profile FTab, Line FTab, active View, X-Coordinate, 
+'            Y-Coordinate, Data Fieldname, Label String, Line Record List,
+'            Int Precision, Int Height, Int Angle
+
+' returns the new Y-Coordinate
+
+' (c) 2000 DORSCH Consult
+' Copyright (c) 2006 DC Water and Environment
+
+' Parameter
+if(self.count <> 12)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: ERROR: Expected 12 arguments, got "+self.count.asString)
+  exit
+end
+ftbProfile = self.get(0)
+if(ftbProfile.is(FTab).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 0 is not an FTab")
+  exit
+end
+ftbLine = self.get(1)
+if(ftbLine.is(FTab).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 1 is not an FTab")
+  exit
+end
+viewActive = self.get(2)
+if(viewActive.is(View).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 2 is not a View")
+  exit
+end
+numX = self.get(3)
+if(numX.is(Number).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 3 is not a Number")
+  exit
+end
+numY = self.get(4)
+if(numY.is(Number).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 4 is not a Number")
+  exit
+end
+fldData = self.get(5)
+if(fldData.is(Field).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 5 is not a Field")
+  exit
+end
+strLabel = self.get(6)
+if(strLabel.is(String).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 6 is not a String")
+  exit
+end
+lstLineRecords = self.get(7)
+if(lstLineRecords.is(List).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 7 is not a Number")
+  exit
+end
+numPrecision = self.get(8)
+if(numPrecision.is(Number).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 8 is not a Number")
+  exit
+end
+numHeight = self.get(9)
+if(numHeight.is(Number).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 9 is not a Number")
+end
+numJustification = self.get(10)
+if(numJustification.is(EnumerationElt).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 10 is not a EnumerationElt but a "+numJustification.getClass.getClassName)
+end
+numAngle = self.get(11)
+if(numAngle.is(Number).not)then
+  System.echo("DCSewerDesign.Profile.LineDataBox.create: Argument 11 is not a Number")
+end
+
+strFormat = "dd"
+if(numPrecision > 0)then
+  strFormat = "d."
+  for each i in 1..numPrecision
+     strFormat = strFormat+"d"
+  end
+end
+
+fldProfileShape = ftbProfile.findField("Shape")
+fldLineShape = ftbLine.findField("Shape")
+fldProfileStyle = ftbProfile.findField("style")
+
+' label the box
+
+gtxLabel = GraphicText.make(strLabel,Point.make(0,0))
+viewActive.getGraphics.add(gtxLabel)
+'numHeight = gtxLabel.getExtent.getY+1
+tpsLabel = TextPositioner.make(Point)
+tpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)
+tpsLabel.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
+pntLabelLocation = Point.make(numX-58, numY-(numHeight/2)+1)
+tpsLabel.calculate(pntLabelLocation, gtxLabel.GetExtent, 1, nil)
+gtxLabel.SetOrigin(tpsLabel.GetOrigin)
+for each symText in gtxLabel.returnSymbols
+  viewActive.getDisplay.hookupSymbol(symText)
+end
+
+recProfile = ftbProfile.addRecord
+pntVerticalLineStart = Point.make(numX, numY)
+pntVerticalLineEnd = Point.make(numX, numY-numHeight)
+pllVerticalLine = Polyline.make({{pntVerticalLineStart, pntVerticalLineEnd}})
+ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)
+ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+
+' draw data texts
+numWidth = 0
+for each i in 0..(lstLineRecords.count-1)
+  recLine = lstLineRecords.get(i)
+  numLength = ftbLine.returnValue(fldLineShape, recLine).returnLength
+  if(fldData.isTypeShape)then
+    strText = ftbLine.returnValue(fldData, recLine).returnLength.setFormat(strFormat).asString
+  else
+    strText = ftbLine.returnValue(fldData, recLine)
+    if(strText.is(Number))then
+      strText = strText.setFormat(strFormat).asString
+    end
+  end
+  pntTextLocation = Point.make(numX+numWidth+(numLength/2), numY-(numHeight/2)+1)
+  if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+    pntTextLocation = Point.make(numX+numWidth, numY-(numHeight/2)+1)
+  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+    pntTextLocation = Point.make(numX+numWidth+(numLength), numY-(numHeight/2)+1)
+  end
+  gtxText = GraphicText.make(strText, pntTextLocation)
+  gtxText.setAngle(numAngle)
+  viewActive.getGraphics.add(gtxText)
+  tpsText = TextPositioner.make(Point)
+  if(numJustification = #TEXTCOMPOSER_JUST_CENTER)then
+    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+  elseif(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)
+  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+    tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_LEFT)
+  end
+  tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_ON)
+  gtxText.setAlignment(numJustification)
+  tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)
+  gtxText.setOrigin(tpsText.getOrigin)
+  for each symText in gtxText.returnSymbols
+    viewActive.getDisplay.hookupSymbol(symText)
+  end
+  recProfile = ftbProfile.addRecord
+  pllVerticalLine.move(numLength, 0)
+  ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+  numWidth = numWidth + numLength
+end
+
+'draw the box
+pntBoxOrigin = Point.make(numX-60, numY-numHeight)
+pntBoxSize = Point.make(numWidth+60+20, numHeight)
+pllFrame = Rect.make(pntBoxOrigin, pntBoxSize).asPolygon.asPolyline
+recProfile = ftbProfile.addRecord
+ftbProfile.setValue(fldProfileShape, recProfile, pllFrame)
+ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+
+return numY-numHeight

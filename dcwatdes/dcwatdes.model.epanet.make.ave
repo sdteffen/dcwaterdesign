@@ -1,0 +1,230 @@
+' DCWatDes.Model.Epanet.make
+
+' (c) 2000 - 2002 DORSCH Consult
+' establish the necessary structure for an Epant hydraulic model
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if(numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+
+av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
+
+activeView = av.getActiveDoc
+if(activeView.is(View).not)then
+  exit
+end
+
+' check the dc_id fields for uniqueness
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+for each strTheme in dicFTabs.returnKeys 
+  ftbToCheck = dicFTabs.get(strTheme)
+  fldID = ftbToCheck.findField("dc_id")
+  
+  ' todo: finish
+  
+end
+
+' ask the user if the model should be build
+
+strQuestion = "This will try to establish a valid Epanet Hydraulic Model for your Themes."+NL
+strQuestion = strQuestion+"The Fields Node1 and Node2 in the Pipe Theme will be updated."+NL
+strQuestion = strQuestion+"The Model will contain "
+for each strFeature in dicFTabs.returnKeys
+  strQuestion = strQuestion+strFeature+","
+end
+strQuestion = strQuestion.left(strQuestion.count-1)+NL
+strQuestion = strQuestion+"Continue with building the Model?"
+blnContinue = MsgBox.longYesNo(strQuestion, "DC Water Design Extension",true)
+             
+if(blnContinue.not)then
+  'user selected No
+  exit
+end
+
+ftbPipes = dicFTabs.get("Pipes")
+fldPipeShape = ftbPipes.findField("Shape")
+lstPipeNodeFields = List.make
+lstPipeNodeFields.add(ftbPipes.findField("node1"))
+lstPipeNodeFields.add(ftbPipes.findField("node2"))
+
+lstNodeFTabs = List.make
+lstNodeIDFields = List.make
+
+for each strNetworkFeature in dicFTabs.returnKeys
+  if(strNetworkFeature <> "Pipes")then
+    ftbNetworkFeature = dicFTabs.get(strNetworkFeature)
+    lstNodeFTabs.add(ftbNetworkFeature)
+    av.run("DCWatDes.FTab.ensureSpatialIndex", ftbNetworkFeature)
+    fldNodeID = ftbNetworkFeature.findField("dc_id")
+    lstNodeIDFields.add(fldNodeID)
+  end
+end
+
+bmpMischiefPipes = ftbPipes.getSelection.clone
+bmpMischiefPipes.clearAll
+
+ftbPipes.setEditable(true)
+numToGo = ftbPipes.getNumRecords
+numDone = 0
+av.showStopButton
+for each recPipe in ftbPipes
+  pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
+  lstPipeNodes = pllPipe.connect.asList.get(0)
+  lstNodesPoints = List.make
+  lstNodesPoints.add(lstPipeNodes.get(0))
+  lstNodesPoints.add(lstPipeNodes.get(lstPipeNodes.count-1))
+  for each i in 0..1
+    for each j in 0..(lstNodeFTabs.count-1)
+      ftbNodes = lstNodeFTabs.get(j)
+      recConnectedNode = (-1)
+      if(ftbNodes.getNumRecords > 1)then
+        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
+        bmpNodes = ftbNodes.getSelection
+        recConnectedNode = bmpNodes.getNextSet(-1)
+      else
+       if(ftbNodes.getNumRecords = 1)then
+         for each recNode in ftbNodes
+           pntNode = ftbNodes.returnValue(ftbNodes.findField("Shape"),recNode)
+           if(pntNode.distance(lstNodesPoints.get(i)) < numSnappingRadius)then
+             recConnectedNode = recNode
+           end
+         end
+       end
+      end
+      if(recConnectedNode <> -1)then
+        fldNodeID = lstNodeIDFields.get(j)
+        strNodeID = ftbNodes.returnValue(fldNodeID, recConnectedNode).asString
+        if((i = 0) and ((ftbNodes.getName="Valves")or(ftbNodes.getName="Pumps")))then
+          ftbPipes.setValue(lstPipeNodeFields.get(i), recPipe, strNodeID+"dn")
+        else
+          ftbPipes.setValue(lstPipeNodeFields.get(i), recPipe, strNodeID)
+        end  
+        break
+      end      
+    end
+    if(recConnectedNode = -1)then
+    ' msgbox.info("Pipe Mischief","DC Water Design Extension")
+     bmpMischiefPipes.set(recPipe)
+    end     
+  end
+  numDone = numDone+1
+  if(av.setStatus(numDone/numToGo * 100).not)then
+    av.clearStatus
+    ftbPipes.setEditable(false)
+    exit
+  end
+end
+
+ftbPipes.setEditable(false)
+
+strReport = "DC Epanet Model Builder"+NL+NL
+blnSuccess = true
+
+' check for consistent flow direction on Valves and Pumps
+
+for each strOrientedFlowDevice in {"Valves", "Pumps"}
+  strSingularDevice = strOrientedFlowDevice.substitute("s","")
+  ftbDevices = dicFTabs.get(strOrientedFlowDevice)
+  if(ftbDevices <> nil)then
+    bmpMischiefDevices = ftbDevices.getSelection.clone
+    bmpMischiefDevices.clearAll
+    fldDeviceShape = ftbDevices.findField("Shape")
+    for each recDevice in ftbDevices
+      pntDevice = ftbDevices.returnValue(fldDeviceShape, recDevice)
+      lstPipes = av.run("DCWatDes.PolylineFTab.findPllsByEndPoint",{ftbPipes, pntDevice, numSnappingRadius})
+      if(lstPipes.count <> 2)then
+        bmpMischiefDevices.set(recDevice)
+        strReport = strReport+"Error:"+lstPipes.count.asString+" Pipe(s) connected to "+strSingularDevice+"."+NL
+      else
+        blnIsEnd = false
+        blnIsStart = false
+        for each recPipe in lstPipes
+          pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
+          lstPipeNodes = pllPipe.connect.asList.get(0)
+          pntStart = lstPipeNodes.get(0)
+          if(pntStart.distance(pntDevice) < numSnappingRadius)then
+            blnIsStart = true
+          else
+            pntEnd = lstPipeNodes.get(lstPipeNodes.count-1)
+            if(pntEnd.distance(pntDevice) < numSnappingRadius)then
+              blnIsEnd = true
+            end
+          end
+        end
+        if(((blnIsEnd)and(blnIsEnd)).not)then
+          bmpMischiefDevices.set(recDevice)
+        end
+      end
+    end
+    if(bmpMischiefDevices.getNextSet(-1) <> -1)then
+      blnSuccess = false
+      strReport = strReport+NL+"Problem(s) with the "+strOrientedFlowDevice+"."+NL
+      strReport = strReport+"Devices in question are selected now."+NL
+      strReport = strReport+"Possible reasons are:"+NL
+      strReport = strReport+"* Not exactly 2 Pipes connected."+NL
+      strReport = strReport+"  (Dis)connect the appropriate Pipes."+NL
+      strReport = strReport+"* Non-consistent Flow Direction of the Pipes."+NL
+      strReport = strReport+"  Use the flip tool to fix this."+NL+NL
+    end
+    ftbDevices.setSelection(bmpMischiefDevices)
+    ftbDevices.updateSelection
+  end
+end
+        
+'Todo: add report with double nodes, etc        
+
+if(bmpMischiefPipes.getNextSet(-1) <> -1)then
+  blnSuccess = false 
+  strReport = strReport+"Network not fully connected."+NL+"The Invalid Pipes are selected."+NL
+  ftbPipes.setSelection(bmpMischiefPipes)
+  ftbPipes.updateSelection
+end
+
+if(blnSuccess)then
+  strReport = strReport+"Epanet Model consists of:"+NL
+  for each strFeature in dicFTabs.returnKeys
+    strReport = strReport+"* "+dicFTabs.get(strFeature).getNumRecords.asString++strFeature+NL
+  end
+  ' clear all selections in order to avoid confusion
+  for each ftbToClear in dicFTabs
+    ftbToClear.getSelection.clearAll
+    ftbToClear.updateSelection
+  end
+  strReport = strReport+NL+"Epanet Model sucessfully build."+NL+"You may now write an Epanet Input file or run a Epanet Calculation."
+else
+  strReport=strReport+"Building the Epanet Model failed."
+end
+MsgBox.report(strReport, "DC Water Design Extension")
+
+             

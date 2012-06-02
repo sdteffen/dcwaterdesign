@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "doc/project.dtd" []>
+<!-- build the DC Water Design source distribution -->
+<project name="DC Water Design" basedir="." default="DCWatDesDistribution">
+  
+  <!-- configuration -->  
+  <property name="dcwaterdesign_version" value="2.12.3" />
+  <property name="md5sum" value="c:\wc\cvs.gnome.org\bin\md5sum.exe" />
+  <property name="nsis" value="c:\program files\nsis\makensis.exe" />
+  <target name="DCWatDesDistribution" id="DCWaterDesignDistribution">
+    <echo message="Checking if dcwatdes2.avx is up to date" />
+    <exec dir="c:\esri\av_gis30\arcview\ext32" executable=
+      "c:\windows\system32\find.exe" failonerror="true">
+      <arg value="&quot;${dcwaterdesign_version}&quot;" />
+      <arg value="dcwatdes2.avx" />
+    </exec>
+    <replaceregexp
+      match="This Manual describes the DC Water Design Extension Version [^&lt;]*&lt;"
+      replace="This Manual describes the DC Water Design Extension Version ${dcwaterdesign_version}.&lt;" flags="g">
+      <fileset dir="./doc/en/">
+        <include name="dcwaterdesign.xml"/>
+      </fileset>
+     </replaceregexp> 
+     <ant antfile="build.xml" dir="doc"/>
+     <replaceregexp
+      match="!define DC_VERSION &quot;[^&quot;]*&quot;"
+      replace="!define DC_VERSION &quot;${dcwaterdesign_version}&quot;" flags="g">
+      <fileset dir="./installer">
+        <include name="dc_water_design_extension.nsi"/>
+      </fileset>
+     </replaceregexp>
+    <exec dir="./installer" executable="${nsis}">
+      <arg line="dc_water_design_extension.nsi"/>
+    </exec> 
+    <tar destfile="dcwaterdesign-src-${dcwaterdesign_version}.tar">
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "dcwatdes2.apr,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "INSTALL,NEWS,**/README,**/.url" />
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "doc/*.xsl,doc/project.dtd,installer/dcbitmap*.bmp,installer/dcwatdes/xml2net.xsl,inp2shp/inp2shp.c,inp2shp/Makefile,installer/dcwatdes/license-dcwaterdesignextension.txt" />
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "doc/version.xml,**/dcwaterdesign.xml,**/figure/*.png,doc/av_epanet_data_model.dia,dc.ico,installer/dc_water_design_extension.nsi" />
+      <tarfileset dir="." prefix="dcwaterdesign-src-${dcwaterdesign_version}" includes=
+        "inp2shp/doc/doxygen/doxygen.cfg, inp2shp/inp2shp.h" />
+    </tar>
+    <bzip2 zipfile="dcwaterdesign-src-${dcwaterdesign_version}.tar.bz2" 
+      src="dcwaterdesign-src-${dcwaterdesign_version}.tar"/>
+    <exec dir="." executable="${md5sum}" output="md5sum.txt">
+      <arg line="dcwaterdesign-src-${dcwaterdesign_version}.tar.bz2"/>
+    </exec>
+    <exec dir="." executable="${md5sum}" output="md5sum.txt" append="true">
+      <arg line="installer/dcwaterdesign-setup-${dcwaterdesign_version}-1.exe"/>
+    </exec>  
+  </target>
+  
+  <target name="clean">
+    <delete defaultexcludes="no" dir="." includes=
+      "**/*~,**/htmlhelp.chm,tmp/*.png,tmp/*.pdf,**/.#*,**/*.hhc,**/*.html,**/*.hhk,**/*.fo,**/*.hhp" 
+      excludes="**/index.html"/>
+  </target>
+</project>

@@ -1,0 +1,20 @@
+' DCSewerDesign.Profile.linkToLayout.update
+
+' (c) 2004 DORSCH Consult
+
+' Enable the "Link Profile to Layout" menu when two Polyline themes are
+' activated and one of them (the Profile theme) is editable
+
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+blnEnabled = false
+if(lstThemes.count = 2)then
+  self.setEnabled(false)
+  if(((lstThemes.get(0).getFTab.getShapeClass.getClassName = "Polyline")and
+     (lstThemes.get(1).getFTab.getShapeClass.getClassName = "Polyline"))and
+     ((lstThemes.get(1).getFTab.isEditable)or(lstThemes.get(0).getFTab.isEditable)))then
+    blnEnabled = true
+  end
+end
+
+self.setEnabled(blnEnabled)

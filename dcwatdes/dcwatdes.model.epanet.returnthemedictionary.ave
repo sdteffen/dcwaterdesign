@@ -1,0 +1,47 @@
+' DCWatDes.Model.Epanet.returnThemeDictionary
+
+' (c) 2000 - 2002 DORSCH Consult
+' returns a Dictionary of the Themes used in the Epanet hydraulic model
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+dicThemes = Dictionary.make(8)
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else 
+  exit
+end
+
+activeView = av.getActiveDoc
+if(activeView.getClass.getClassname <> "View")then
+  exit
+end
+
+lstThemesInView = activeView.getThemes
+
+for each strTheme in {"Junctions","Valves", "Tanks","Pipes", "Pumps","Reservoirs"}
+ strThemeName = dicPreferences.get("str"+strTheme) 
+ if(strThemeName <> nil)then
+   for each thmInView in activeView.getThemes
+     if((thmInView.is(FTheme))and(thmInView.getName.lcase = strThemeName.lcase))then
+       dicThemes.add(strTheme, thmInView)
+     end
+   end
+ end
+end  
+
+return dicThemes

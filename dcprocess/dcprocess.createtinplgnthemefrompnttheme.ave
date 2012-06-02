@@ -1,0 +1,10 @@
+'DCProcess.createTinPlgnThemeFromTinTheme
+
+' (c) 2004 DORSCH Consult
+
+theView = av.GetActiveDoc
+thePrj = theView.GetProjection
+pointTheme = nil
+
+
+

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE book 
+  PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
+  []
+>
+<book lang="en">
+  <bookinfo>
+    <title>Gshpvoronoi Manual</title> 
+    <copyright>
+      <year>2006</year>
+      <holder>DC Water and Environment</holder>
+    </copyright>
+    <author>
+      <firstname>Steffen</firstname>
+      <surname>Macke</surname>
+      <affiliation>
+        <address><email>Steffen_Macke@dorsch.com.jo</email></address>
+      </affiliation>
+    </author>
+    <legalnotice>
+      <para>Permission is granted to copy, distribute and/or modify this 
+        document under the terms of the GNU Free Documentation License, 
+	Version 1.2 or any later version published by the Free Software 
+	Foundation; with no Invariant Sections, no Front-Cover Texts, and no 
+	Back-Cover Texts. A copy of the license is available from the
+	Free Software Foundation (<ulink url="http://www.gnu.org" />).
+	</para></legalnotice>
+  </bookinfo>
+  <chapter id="general">
+    <title>Gshpvoronoi reference</title>
+    <indexterm><primary>feference</primary></indexterm>
+  <sect1 id="introduction">
+    <title>Introduction</title>
+    <indexterm><primary>Introduction</primary></indexterm>
+    <para>This Manual describes gshpvoronoi version 0.1.0.</para>
+    <para>This Document uses Terminology from ArcView. 
+      Refer to the respective documentation for in-depth explanations.</para>
+    <important><para>Be sure to check the <citetitle>DC Water Design 
+      Extension</citetitle>, <citetitle>DC Processing 
+      Extension</citetitle>
+      and the <citetitle>DC Sewer Design Extension</citetitle> which
+      are also freely available. These extensions provide additional
+      functionality that is very helpful.</para></important>	  
+      
+    <sect2 id="what_is_gshpvoronoi">
+      <title>What is gshpvoronoi?</title>
+      <para>Gshpvoronoi allows to create Voronoi polygon shapefiles from point 
+      shapefiles.</para>
+    </sect2>
+ 
+    <sect2 id="news">
+      <title>What's New?</title>
+        <indexterm><primary>news</primary></indexterm>
+        <sect3 id="news_0_1_0">
+          <title>Version 0.1.0</title>
+         <itemizedlist>
+           <listitem><para>Initial release.</para></listitem>  
+          </itemizedlist>
+        </sect3>  
+      </sect2>
+  </sect1>  
+  <sect1 id="concepts">
+    <title>Concepts</title>
+    <indexterm><primary>concepts</primary></indexterm>
+    <para>This section introduces some concepts which are 
+      fundamental in order to understand how the software works.</para>
+    
+    <sect2 id="voronoi">
+      <title>Voronoi Polygons</title>
+      <indexterm><primary>Voronoi</primary></indexterm>
+      <indexterm><primary>Thiessen</primary></indexterm>
+      <indexterm><primary>Wikipedia</primary></indexterm>
+      <para>See <ulink url="http://en.wikipedia.org"
+        >http://en.wikipedia.org</ulink> for details regarding Voronoi
+        diagrams.</para>
+      <para>Voronoi diagrams are also called Thiessen polygons.</para>  
+    </sect2> 
+  </sect1>  
+  <sect1 id="installation">
+    <title>Installation</title>
+    <indexterm><primary>installation</primary></indexterm>
+    <para>Description of the gshpvoronoi installation.</para>
+    <sect2 id="how_to_obtain">
+      <title>How to Obtain Gshpvoronoi</title>
+      <indexterm><primary>website</primary></indexterm>
+      <para>Gshpvoronoi can be 
+	obtained from the website 
+	<ulink url="http://dcwaterdesign.sourceforge.net"
+	>http://dcwaterdesign.sourceforge.net</ulink>.</para>
+	
+      <para>The sourceforge site offers a multitude of services 
+        related to gshpvoronoi, including:
+        <itemizedlist>    
+	  <listitem><para>Downloads</para></listitem>
+		
+	  <listitem><para>Documentation</para></listitem>
+		
+	  <listitem><para>Sources</para></listitem>
+		
+	  <listitem><para>Bug Tracker</para></listitem>
+		
+	  <listitem><para>Mailing List</para></listitem>
+		
+	  <listitem><para>Sample Data</para></listitem>
+	</itemizedlist>
+      </para>
+    </sect2>
+    <sect2>
+      <title>Requirements</title>
+      <indexterm><primary>requirements</primary></indexterm>
+      <para>The GTK+ runtime environment is required to run gshpvoronoi.</para>
+    </sect2>
+    <sect2>
+      <title>Setup</title>
+      <indexterm><primary>setup</primary></indexterm>
+      <para>To install gshpvoronoi, you've got to 
+      run the installer executable. After accepting the 
+      license, you'll be 
+      prompted to select the 
+      installation path.</para> 
+    </sect2>
+  </sect1>
+  
+  <sect1 id="quick_start_guide">
+    <title>Quick Start Guide</title>
+    <indexterm><primary>quick start</primary></indexterm>
+    <para>
+      <orderedlist>
+        <listitem><para>Start the program.</para></listitem>
+        <listitem><para>Select an input (point) shapefile.</para></listitem>
+        <listitem><para>Select an output shapefile name (If you select
+          an existing file, it will be overwritten).</para></listitem>
+        <listitem><para>Click <guibutton>OK</guibutton>.</para></listitem>  
+      </orderedlist>
+    </para>
+  </sect1>
+  </chapter>
+<chapter id="tutorials">
+  <title>Gshpvoronoi tutorials</title>
+  <indexterm><primary>tutorial</primary></indexterm>
+  <para>Tutorial related to gshpvoronoi.</para>
+  <sect1 id="thiessen_tutorial">
+    <title>Demand Calculation using Thiessen Polygons</title>
+    <indexterm><primary>Thiessen</primary></indexterm>
+    <indexterm><primary>Voronoi</primary></indexterm>
+    <indexterm><primary>demand</primary></indexterm>
+    <para>This tutorial shows how to calculate node demands using
+      Thiessen polygons.</para>
+    <para>Thiessen polygons are also called Voronoi diagrams.</para>
+    <note><para>The following instructions assume that you are using
+      ArcView 3.3 and its Geoprocessing Extension. 
+      However, you can also use other GIS software.</para></note>
+    <para>You will need a sufficiently developed network model ot apply the
+      steps below. Especially the contents of the field <structfield
+      >dc_id</structfield> in the <classname>Junction</classname> theme
+      have to be unique. The example below will also require a supply zone
+      marked in a polygon theme. If your data does not fulfil these 
+      requirements (yet),
+      you can use the DC Water Design Extension sample data. See
+      <xref linkend="how_to_obtain" /> for details where to obtain
+      the sample data.</para>
+    <para>Assumptions and design parameters:</para>
+    <simplelist>
+      <member>The map unit is meter.</member>
+      <member>The population density is 200 p/ha.</member>
+      <member>The average demand is 100 lcd.</member>
+      <member>The flow (demand) unit is l/s.</member>
+    </simplelist>  
+    <tip><para>It is also possible to use a buffer around the points instead of
+      a polygon theme of the supply zone. However this is not covered
+      in the example below.</para></tip>
+    <example id="thiessen_example">
+      <title>Demand Calculation</title>
+    <para>Start <command>gshpvoronoi</command> from the Start Menu.</para>
+    <para>Select an input shapefile (Your Junction shapefile).</para>
+    <para>Select an output shapefile name and location (If you select
+          an existing file, it will be overwritten). For example 
+          <filename>thiessen.shp</filename>.</para>
+    <para>Click <guibutton>OK</guibutton>.</para>
+    <para>Add the <classname>Junction</classname> and supply zone themes 
+      along with the generated Voronoi shapefile to
+      the current View in ArcView (Unless they have been added to it already).</para>
+    <para>Load the Geoprocessing Extension.</para>  
+    <para>Select <menuchoice><guimenu>View</guimenu><guimenuitem>Geoprocessing 
+      Wizard...</guimenuitem></menuchoice> from the menu.</para>
+    <para>Select &quot;Intersect two themes&quot;.</para>
+    <para>Click <guibutton>Next &gt;&gt;.</guibutton></para>
+    <para>Select <filename>thiessen.shp</filename> as the input theme to
+      clip.</para>
+    <para>Select the supply zone theme as the overlay theme.</para>
+    <para>Click <guibutton>Finish</guibutton>.</para>  
+    <para>Activate the intersected theme.</para>
+    <para>Move the intersected polygon theme below the junction theme, but above
+      other polygon themes such as the supply zone. Note that the intersected 
+      polygon theme covers the same area as the supply zone theme. There is
+      one Thiessen polygon for every <classname>Junction</classname>.</para>
+    <para>Activate the intersected polygon theme.</para>
+    <para>Open the intersected polygon theme table: Select <menuchoice>
+      <guimenu>Theme</guimenu><guimenuitem>Table...</guimenuitem></menuchoice>
+      in the menu.</para>
+    <para>Select <menuchoice><guimenu>Table</guimenu><guimenuitem>Start 
+      Editing</guimenuitem></menuchoice>.</para>
+    <para>Add a new field called area: Select <menuchoice><guimenu>Edit</guimenu>
+      <guimenuitem>Add Field...</guimenuitem></menuchoice>.</para>
+    <para>Change the field name to &quot;Area&quot;.</para>
+    <para>Click <guibutton>OK</guibutton>.</para>
+    <para>Select <menuchoice><guimenu>Field</guimenu>
+      <guimenuitem>Calculate...</guimenuitem></menuchoice> from the menu.</para>
+    <para>Use the following formula:</para>
+    <programlisting>[Shape].returnArea</programlisting>
+    <para>Click <guibutton>OK</guibutton>.</para>
+    <para>Select the <structfield>dc_id</structfield> field.</para>
+    <para>Select <menuchoice><guimenu>Field</guimenu>
+      <guimenuitem>Summarize...</guimenuitem></menuchoice> from the menu.</para>
+    <para>In the <guilabel>Summary Table Definition</guilabel> dialog, select
+      <guilabel>Area</guilabel> in the field list.</para>
+    <para>In the &quot;Summarize by&quot; list, select <guilabel>Sum</guilabel>.
+      </para>
+    <para>Click on the <guibutton>Add</guibutton> button.</para>
+    <para>Click on the <guibutton>OK</guibutton> button.</para>
+    <para>A new summary table is created (<filename>sumX.dbf</filename> where
+      X is a number).</para>
+    <para>Select the <structfield>dc_id</structfield> field in the summary table.
+      </para>
+    <para>Go back to the view, e.g. by selecting <menuchoice>
+      <guimenu>Window</guimenu><guimenuitem>View1</guimenuitem></menuchoice>
+      from the menu.</para>
+    <para>Activate the <classname>Junction</classname> theme.</para>
+    <para>Open the <classname>Junction</classname> theme table:
+      Select <menuchoice><guimenu>Theme</guimenu>
+      <guimenuitem>Table...</guimenuitem></menuchoice> from the menu.</para>
+    <para>Select the <structfield>dc_id</structfield> field.</para>
+    <para>Join the summary table: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Join</guimenuitem></menuchoice> from the menu.</para>
+    <para>Start editing the table: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Start Editing</guimenuitem></menuchoice> from the menu.</para>
+    <para>Select the <structfield>demand</structfield> field.</para>
+    <para>Open the field calculator: Select <menuchoice><guimenu>Field</guimenu>
+      <guimenuitem>Calculate...</guimenuitem></menuchoice> from the menu.</para>
+    <para>In the <guilabel>[demand]</guilabel> field enter the formula to
+     calculate the demand:</para>
+     <programlisting>[Sum_Area]*100*200/10000/24/60/60</programlisting>
+    <para>Click <guibutton>OK</guibutton>.</para>
+    <para>The nodal demand is now calculated.</para>
+    <para>Remove all joins: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Remove All Joins</guimenuitem></menuchoice> from the menu.
+      </para>
+    <para>Stop editing: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Stop editing</guimenuitem></menuchoice>.</para>
+    <para>Save the edits: Click <guibutton>Yes</guibutton>.</para>  
+    </example>
+    <indexterm><primary>shpvoronoi</primary></indexterm>
+  </sect1>
+</chapter>
+<index>
+  <title>Index</title>
+</index>
+</book>

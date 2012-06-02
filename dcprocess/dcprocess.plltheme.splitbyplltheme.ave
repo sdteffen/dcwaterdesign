@@ -1,0 +1,70 @@
+' DCProcess.splitPllThemeByPllTheme
+
+' split a Polyline theme with another polyline theme
+
+' (c) 2002,2004 DORSCH Consult
+
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+ftbSplit = lstThemes.get(0).getFTab
+ftbLine = lstThemes.get(1).getFTab
+if(lstThemes.get(0).getFTab.isEditable)then
+  ftbSplit = lstThemes.get(1).getFTab
+  ftbLine = lstThemes.get(0).getFTab
+end
+
+
+
+fldSplitShape = ftbSplit.findField("Shape")
+fldLineShape = ftbLine.findField("Shape")
+
+numToGo = ftbLine.getNumRecords
+numComplete = 0
+av.showStopButton
+
+bmpSelection = ftbLine.getSelection.clone
+bmpSelection.setAll
+
+for each recLine in bmpSelection
+  pllLine = ftbLine.returnValue(fldLineShape, recLine)
+  if((pllLine <> nil)and(pllLine.isNull.not)and(pllLine.isEmpty.not))then
+    ' increases the speed, because it uses ArcView's spatial index
+    ftbSplit.selectByPolyline(pllLine, #VTAB_SELTYPE_NEW) 
+    ftbSplit.updateSelection
+    bmpSplit = ftbSplit.getSelection
+    if(bmpSplit.count > 0)then
+      pllSplit = Polyline.makeNull
+      for each recSplit in bmpSplit
+        if(pllSplit.isNull)then
+          pllSplit = ftbSplit.returnValue(fldSplitShape, recSplit)
+        else
+          pllSplit = pllSplit.returnUnion(ftbSplit.returnValue(fldSplitShape, recSplit))
+        end
+      end
+      lstSplit = pllLine.split(pllSplit)
+      if(lstSplit.count > 1)then
+        ftbLine.setValue(fldLineShape, recLine, lstSplit.get(0))
+        for each i in 1..(lstSplit.count-1)
+          pllSplit = lstSplit.get(i)
+          if((pllSplit <> nil)and(pllSplit.isNull.not)and(pllSplit.isEmpty.not))then
+            recNewLine = ftbLine.addRecord
+            ftbLine.setValue(fldLineShape, recNewLine, pllSplit)
+            for each fldLineAttribute in ftbLine.getFields
+              if(fldLineAttribute.isTypeShape.not)then
+                objAttribute = ftbLine.returnValue(fldLineAttribute, recLine)
+                ftbLine.setValue(fldLineAttribute, recNewLine, objAttribute)
+              end   
+            end
+          end    
+        end
+      end
+    end
+  end
+  
+  numComplete = numComplete + 1
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    exit
+  end
+end
+
+av.clearStatus

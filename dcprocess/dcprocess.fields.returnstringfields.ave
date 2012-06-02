@@ -1,0 +1,17 @@
+' DCProcess.Fields.returnStringFields
+
+' expects a list of fields as the argument,
+' returns a list with all the string fields contained
+' in that list
+
+' (c) 2000,2004 DORSCH Consult
+
+lstFields = self
+lstNumberFields = List.make
+for each fldCheck in lstFields
+  if(fldCheck.isTypeString)then
+    lstNumberFields.add(fldCheck)
+  end
+end   
+
+return lstNumberFields.clone

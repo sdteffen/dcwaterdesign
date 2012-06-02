@@ -1,0 +1,310 @@
+2007-09-24  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+
+	* doc/en/dcprocessing.xml: Updated documentation:update version number,
+	in news section, updated copyrights.
+	
+2007-09-23  Steffen Macke <sdteffen@sdteffen.de>
+
+	* AUTHORS: Added Maher, updated email address
+	* doc/en/dcprocessing.xml: Updated documentation: 1.3.0 release notes,
+	"Segmentize Polylines" documentation
+	
+2007-09-18  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+	
+	* DCProcess.segmentizePllTheme:consider selection
+	on processing.closing feature request #1793905.
+	* dcprocessing.nsi: update version number 1.3.0
+	
+2007-03-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* script/pe_fitting_boq.sql:
+	* script/create_pe_dcboq_ddl.sql: Scripts for PE-only installations
+	(up to DN500). Thanks to Walid
+	
+2006-07-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml:
+	* dcprocessing.xml:
+	* dcprocessextension.make.ave: The version number is 1.2.9 now
+	* doc/en/dcprocessing.xml:
+	* dcprocess.createpntthemefromgrid.ave: Fixed critical bug #1526864
+	
+2006-05-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.extendpolylines.ave: Only work on selected lines
+
+2006-05-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.extendpolylines.ave:
+	* dcprocess.extendpolylines.update.ave:
+	* dcprocess.network.classifyconnections.update.ave: improved robustness
+	of update scripts, cancel handling; fixed bug #1481601
+	* dcprocessextension.make.ave: version number is 1.2.8+cvs now
+
+2006-05-01  Steffen Macke <sdteffen@gmail.com>
+
+	* dcprocessextension.make.ave:
+	* build.xml:
+	* dcprocessing.nsi: Updated for 1.2.8 release
+	* doc/en/dcprocessing.xml: Updated for 1.2.8 release; Added index;
+	switch from DocBook article to book
+	* dcprocess.extendpolylines.ave:
+	* dcprocess.extendpolylines.update.ave: New function to scale polylines
+	
+2006-04-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.classifyconnections.ave:
+	* dcprocess.network.returndetail3.ave:
+	* dcprocess.network.returndetail11.ave: Added new connection types
+	35,115
+	
+2006-04-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.classifyconnections.ave:
+	* dcprocess.network.returndetail5.ave:
+	* dcprocess.network.returndetail6.ave: Added new connection types
+	53,54,66
+	* dcprocess.network.classifyconnections.ave: Connection detail for
+	4 or more pipes connected is 99 now
+
+2005-04-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.flipendlines.ave:
+	* dcprocess.network.flipendlines.update.ave:
+	* doc/en/dcprocessing.xml: new function "Flip End Lines" for preparation
+	of network drawings.
+	* doc/docbook.xsl:
+	* doc/build.xml: removed WINDOWS-1256 encoding
+	* doc/docbook_pdf.xsl: Using SVG icons in PDF
+	* dcprocessing.nsi:
+	* build.xml: version number is 1.2.7+cvs
+	
+2005-03-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.classifyconnections.ave: Connection detail for
+	two connected pipes with the same diameter is 0 now
+	* dcproess.network.connection.returndetail11.ave:
+	* dcprocess.network.connection.returndetail2.ave:
+	* dcprocess.network.connection.returndetail3.ave:
+	* dcprocess.network.connection.returndetail5.ave:
+	* dcprocess.network.connection.returndetail6.ave: Work around ArcView
+	PolyLine.returnBuffered() robustness problem (endless loop) by 
+	converting the Polyline to a MultiPoint of the end points.
+	* dcprocessextension.make.ave: Updated for 1.2.7 release
+	
+2005-02-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* script/fitting_boq.sql: Fixed two spelling mistakes and the BOQ
+	generation for connection detail 61
+
+2005-01-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* sample/fitting.shp:
+	* sample/pressurizedmain.shp:
+	* sample/systemvalve.shp: added test case for connection classification
+	* dcprocess.network.classifyconnections.ave: Fixes for connection
+	classification (bug #1108891); All test cases show correct results
+	* AUTHORS: Added Ratiba Makansi
+	* doc/en/dcprocessing.xml: Added information where sample dataset is
+	available
+	* build.xml: Including sample dataset in source distribution
+
+2005-01-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.connection.returndetail*.ave: fixed connection
+	classification problem (bug #1108891)
+
+2005-01-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcprocessing.xml:
+	* dcprocess.project.makeportable.ave: Added script from
+	Juergen Evert to create portable projects with relative paths
+
+2005-01-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* script/fitting_boq.sql: Synchronized with drawing (several small 
+	changes)
+
+2005-01-15  Steffen Macke <Steffen_Macke@gmail.com>
+
+	* AUTHORS: added Juergen Evert (Export project and data to folder 
+	script)
+	
+2004-11-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml:
+	* dcprocessingextension.make.ave:
+	* dcprocessing.nsi:
+	* doc/en/dcprocessing.xml: updated for 1.2.6 release
+	* dcprocess.network.classifyconnections.ave:
+	* dcprocess.network.connection.returndetail10.ave:
+	* dcprocess.network.connection.returndetail11.ave:
+	* dcprocess.network.connection.returndetail12.ave:
+	* dcprocess.network.connection.returndetail2.ave:
+	* dcprocess.network.connection.returndetail3.ave:
+	* dcprocess.network.connection.returndetail4.ave:
+	* dcprocess.network.connection.returndetail5.ave:
+	* dcprocess.network.connection.returndetail6.ave:
+	* dcprocess.point.returnpolylineangle: robustness improvements
+	
+2004-11-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml:
+	* dcprocessextension.make.ave:
+	* dcprocess.network.connection.returndetail10.ave:
+	* dcprocess.network.connection.returndetail11.ave:
+	* doc/en/dcprocessing.xml: updated for 1.2.5 release
+	
+2004-11-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* script/create_dcboq_ddl.sql: added view MixedFitting2
+	* script/fitting_boq.sql: Added all fitting related details
+	* build.xml: added SQL scripts to distribution
+
+2004-11-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* script/create_dcboq_ddl.sql: updated to use new data model;
+	added views
+	* script/fitting_boq.sql: Added BoQ generation for first sheet of 
+	connections
+
+2004-11-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.classifyconnections.ave:
+	* dcprocess.network.classifyconnections.update.ave:
+	* dcprocess.network.connection.returndetail12.ave:
+	* dcprocess.network.connection.returndetail2.ave:
+	* dcprocess.network.connection.returndetail3.ave:
+	* dcprocess.network.connection.returndetail4.ave:
+	* dcprocess.network.connection.returndetail5.ave:
+	* dcprocess.network.connection.returndetail6.ave: more progress on
+	connection detail classification
+	* doc/en/dcprocessing.xml: 
+	* dcprocess.network.tree.calculatenames.ave:
+	* dcprocess.network.tree.calculatenames.update.ave: new function to
+	calculate line names in a network tree.
+	
+2004-11-17  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.plltheme.splitbyplltheme.ave:
+	* dcprocess.plltheme.splitbyplltheme.ave:
+	* doc/en/dcprocessing.xml: Added function to split a polyline theme
+	by another polyline theme.
+
+2004-11-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.segmentizeplltheme.ave:
+	* dcprocess.pointlist.returnsegmentlist.ave: made function more robust
+
+2004-10-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcprocessing.xml: Updated Segmentize PolyLines section
+	* dcprocess.pointlist.returnsegmentlist.ave:
+	* dcprocess.segmentizeplltheme.ave: The function now allows to specify
+	a minimum segment distance to overcome the problem of short segments
+	created when a line is just a little bit longer than the segment length
+	* dcprocessextension.make.ave: version is now 1.2.4+cvs
+
+2004-10-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcprocessing.xml:
+	* dcprocess.fields.returnstringfields.ave:
+	* dcprocess.node.findconnectedlines.ave:
+	* dcprocess.network.classifyconnections.ave:
+	* dcprocess.network.classifyconnections.update.ave:
+	* script/create_dcboq_ddl.sql: started the reimplementation of the BOQ
+	generation (RFE #1041421)
+	
+2004-10-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.calculatenodeangles.ave:
+	* dcprocess.node.finddownstreamlines.ave:
+	* dcprocess.node.findupstreamlines.ave:
+	* dcprocess.node.returnlineangle.ave:
+	* dcprocess.point.returnpolylineangle.ave: Allowing to specify an offset
+	angle for the angle calculation. Fixed Angle calculation (bug #1053647)
+
+2004-10-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcprocessing.xml: Converted existing documentation from Lotus
+	Notes; updated documentation.
+	* doc/build.xml:
+	* build.xml:
+	dcprocessing.nsi: Started with build system
+	* dcprocess.createuniqueid.ave:
+	* dcprocess.table.uniqueid.ave: Integrated "Create Unique ID" in
+	the table GUI
+	* dcprocess.help.openchm.ave: integrated help system
+	* COPYING: Added license file.
+	* images/dc.ico:
+	* images/header-image.bmp: Graphics for installer.
+	* dcprocessextension.make.ave: Upgraded version number to 1.2.4
+	
+2004-10-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.splitplgnthemebyplltheme.ave:
+	* dcprocess.tin.gettinpolygons.ave:
+	* dcproessextension.make.ave: finished transition from DC Conversion
+	Extension; upgraded version number to 1.24
+	
+2004-10-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.network.calculatenodeangles.ave:
+	* dcprocess.node.returnlineangle.ave: Added funtion to calculate node
+	angles in a network (RFE #1041420)
+	* dcprocessextension.make.ave: upgrade version number to 1.23
+	* dcprocess.fields.returnnumberfields.ave:
+	* dcprocess.line.findnodes.ave:
+	* dcprocess.network.interpolatepointvalues.ave:
+	* dcprocess.node.finddownstreamlines.ave:
+	* dcprocess.node.findupstreamlines.ave: added linear interpolation
+	function for node values in a network (RFE #1041417)
+	* dcprocess.list.quicksort.ave:
+	* dcprocess.record.compare.ave:
+	* dcprocess.tagduplicaterecords.ave: Code from Mark Cederholm
+	<piersen@primenet.com> that allows to tag duplicate records in a table
+
+2004-10-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocessextension.make.ave: upgraded version number to 1.21
+	* dcprocess.segmentizeplltheme.ave: function works reliable
+	
+2004-10-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcprocess.*.ave: started with renaming to DC Processing Extension
+	
+07-09-2002 sdteffen		Version 1.15
+				* fixed "Points from Polylines" function
+05-09-2002 sdteffen		Version 1.14
+				* added function to convert lines to arrows
+26-02-2002 sdteffen		Version 1.13
+				* added function to split polygons by polylines
+17-02-2002 sdteffen		Version 1.12
+				* added function to batch-convert Coverages to shapefiles
+01-12-2002 sdteffen		Version 1.11
+				* added function to 
+01-07-2001 sdteffen		Version 1.10
+				* updated Split Polylines by Points (now using crossshaped polylines to split)
+				* added Create Cross Polylines from Points
+31-06-2001 sdteffen		Version 1.09
+				* create Square Polygons from Points
+26-11-2000 sdteffen		Version 1.07
+				* added Create Point Theme from Multipoints
+23-11-2000 sdteffen		Version 1.06
+				* added Assign Attributes from Grid to Points
+28-03-2000 sdteffen/TOE	Version 1.05
+				* added "Create Unique ID"
+08-03-2000 sdteffen		Version 1.04
+				* added "Create Polyline Theme from Polygon Theme"
+				* cosmetic Changes to some functions ( Status display,etc.)
+07-03-2000 sdteffen		Version 1.03
+				* added "Create Center Point Theme from Polygon Theme"
+				* Extension filename now reflects the Extension Version
+				* updated the documentation
+05-03-2000 sdteffen		Version 1.02
+				* added Recursive Copy of ArcInfo 8 / ArcView 3.2 Projection Files
+24-02-2000 sdteffen		Version 1.00
+				* PolylineZ to Polyline
+				* Polyline From Points and Dbf
+				* Split Polyline by points
+				* Points from Polylines

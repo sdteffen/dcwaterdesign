@@ -1,0 +1,5 @@
+' DCCadCleanExtension.canUnload
+
+' (c) 2001 DORSCH Consult
+
+return(true)

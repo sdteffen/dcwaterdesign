@@ -1,0 +1,21 @@
+ATTENTION: More recent versions of inp2shp may be found in the inptools
+package of the ghydraulic project:
+
+http://inptools.epanet.de
+
+To build inp2shp.exe, you
+need the EPANET toolkit and
+shapelib.
+
+shapelib is available from:
+http://gdal.velocet.ca/projects/shapelib/index.html
+
+The EPANET toolkit is available from:
+http://www.epa.gov/ORD/NRMRL/wswrd/epanet.html
+
+In addition, you have to apply the patches in the patch
+folder against the EPANET sources. For details,
+see http://sdteffen.de/hydraulik/epanet.html
+
+Tanks that don't have a ground surface defined will be converted
+into reservoirs. This is the standard EPANET behaviour.

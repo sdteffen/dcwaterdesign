@@ -1,0 +1,49 @@
+' DCWatDes.PolylineFTab.findPllsByEndPoint
+
+' (c) 2000, 2001 DORSCH Consult
+' returns all the Pipes that are starting or ending at the given point
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' expects the polyline ftab as the first argument
+' expects the point as the second argument
+' expects the snapping radius as the third argument
+' returns a list of the connected pipes (empty if no pipes connected)
+
+ftbPll = self.get(0)
+pntNode = self.get(1)
+numSnappingRadius = self.get(2)
+
+fldPllShape = ftbPll.findField("Shape")
+
+'increases the speed, because it uses ArcView's spatial index
+ftbPll.selectByPoint(pntNode, numSnappingRadius, #VTAB_SELTYPE_NEW) 
+
+lst_Pipes = List.make
+bmp_Pipes = ftbPll.getSelection
+
+'second run is necessary because selectByPoint returns also Pipes that
+'cross the point rather than start at it
+for each rec_Pipe in bmp_Pipes
+  pll_Pipe = ftbPll.returnValue(fldPllShape, rec_Pipe)
+  lst_PipeNodes = pll_Pipe.asList.get(0)
+  pnt_Start = lst_PipeNodes.get(0)
+  pnt_End = lst_PipeNodes.get(lst_PipeNodes.count -1 )
+  if((pnt_Start.distance(pntNode) < numSnappingRadius) or (pnt_End.distance(pntNode) < numSnappingRadius)) then
+    lst_Pipes.add(rec_Pipe.clone)
+  end
+end
+
+return lst_Pipes.deepclone

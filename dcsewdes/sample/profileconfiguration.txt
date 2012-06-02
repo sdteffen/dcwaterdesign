@@ -1,0 +1,17 @@
+Manhole.ID=dc_id
+Manhole.Diameter=diameter
+Manhole.InvertLevel=invert
+Manhole.Elevation=elevation
+Line.ID=dc_id
+Line.Diameter=diameter
+Line.UpstreamInvert=upstream
+Line.DownstreamInvert=downstream
+CumulativeLineData=diameter@0@Diameter Nominal in mm@30@Right@90
+LineData=dc_id@0@Line ID@30@Center@0
+LineData=Upstream@2@Upstream Invert@30@Right@90
+LineData=Downstream@2@Downstream Invert+NL+in maSL@60@Left@90
+ManholeData=dc_id@0@Manhole ID@30@Right@90
+Manhole.Legend=profilemanhole.avl
+Manhole.Theme=Manhole.shp
+Line.Theme=Line.shp
+

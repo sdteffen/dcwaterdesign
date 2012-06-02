@@ -1,0 +1,214 @@
+' DCSewerDesign.Profile.ConstantGradient.calculate
+
+' Calculate a constant gradient for a sequence of line segments
+
+' (c) 2000 - 2006 DORSCH Consult
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+extSewer = Extension.find("DC Sewer Design")
+
+blnDebug = false
+
+' Obtain the gradient
+
+strGradient = MsgBox.input("Please enter the gradient. Select cancel to interpolate between two points.", "DC Sewer Design", "")
+numGradient = nil
+blnFromUpstream = true
+if((strGradient <> nil)and(strGradient.isNumber))then
+   numGradient = strGradient.asNumber
+   blnFromUpstream = MsgBox.yesNoCancel("Start interpolation upstream? 'No' will start downstream.", "DC Sewer Design", true)
+   if(blnFromUpstream = nil)then
+     exit
+   end
+end
+
+' get the line table
+
+viewActive = av.getActiveDoc
+thmLine = viewActive.getEditableTheme
+ftbLine = thmLine.getFTab 
+fldLineDcId = ftbLine.findField("dc_id")
+fldLineShape = ftbLine.findField("Shape")
+if(fldLineDcId.asString = "nil")then
+  MsgBox.error("Error: Field Line.DC_ID was not found.","DC Sewer Design")
+  exit
+end
+
+lstFields = ftbLine.getFields.deepclone
+
+' Search preferences for upstream/downstream fields
+
+dicPreferences = extSewer.getPreferences
+
+fldUpstream = nil
+strUpstream = dicPreferences.get("strUpstreamField")
+if(strUpstream <> nil)then
+  fldUpstream = ftbLine.findField(strUpstream)
+end
+fldDownstream = nil
+strDownstream = dicPreferences.get("strDownstreamField")
+if(strDownstream <> nil)then
+  fldDownstream = ftbLine.findField(strDownstream)
+end
+
+fldGradient = nil
+strGradient = dicPreferences.get("strGradientField")
+if(strGradient <> nil)then
+  fldGradient = ftbLine.findField(strGradient)
+end  
+
+' Let the user choose the fields if necessary
+
+if((fldUpstream = nil) or (fldDownstream = nil) or (fldGradient = nil))then
+  lstNumberFields = av.run("DCSewerDesign.Fields.returnNumberFields",lstFields)
+  fldUpstream = MsgBox.choice(lstNumberFields, "Select upstream field."+NL+
+                              "This field will be overwritten for some records.","DC Sewer Design")
+  if(fldUpstream = nil)then
+    exit
+  end
+  fldDownstream = MsgBox.choice(lstNumberFields, "Select downstream field."+NL+
+                              "This field will be overwritten for some records.","DC Sewer Design")
+  if(fldDownstream = nil)then
+    exit
+  end
+  fldGradient = MsgBox.choice(lstNumberFields, "Select gradient field."+NL+
+    "This field will be overwritten.", "DC Sewer Design")
+  if(fldGradient = nil)then
+    exit
+  end  
+  strUpstream = fldUpstream.getName
+  dicPreferences.set("strUpstreamField", strUpstream)
+  strDownstream = fldDownstream.getName
+  dicPreferences.set("strDownstreamField", strDownstream)
+  strGradient = fldGradient.getName
+  dicPreferences.set("strGradientField", strGradient)
+end
+
+if(blnDebug)then
+  System.echo(fldUpstream.getName)
+  System.echo(fldDownstream.getName)
+end
+
+fldUpstream = ftbLine.findField(fldUpstream.getName)
+fldDownstream = ftbLine.findField(fldDownstream.getName)
+fldGradient = ftbLine.findField(fldGradient.getName)
+
+lstProfileLines = av.run("DCSewerDesign.Profile.buildLineList", {ftbLine, fldLineDcId})
+
+if(blnDebug)then
+  for each recLine in lstProfileLines
+    System.echo(ftbLine.returnValue(fldLineDcId, recLine)+ftbLine.returnValue(fldUpstream, recLine).asString)
+  end
+end
+
+' Get first upstream value
+
+numFirstUpstream = ftbLine.returnValue(fldUpstream, lstProfileLines.get(0))
+
+' Get last downstream value
+
+numLastDownstream = ftbLine.returnValue(fldDownstream, lstProfileLines.get(lstProfileLines.count-1))
+
+' Calculate segment, total length
+
+lstSegmentLength = List.make
+numTotalLength = 0
+for each recLine in lstProfileLines
+  pllShape = ftbLine.returnValue(fldLineShape, recLine)
+  numSegmentLength = pllShape.returnLength
+  numTotalLength = numTotalLength + numSegmentLength
+  lstSegmentLength.add(numSegmentLength)
+end
+
+' Calculate Gradient
+if(blnDebug)then
+  System.echo("FirstUpstream: "+numFirstUpstream.asString)
+  System.echo("Last Downstream: "+numLastDownstream.asString)
+  System.echo("Total Length: "+numTotalLength.asString)
+end
+  
+if(numGradient = nil)then  
+  numGradient = (numFirstUpstream - numLastDownstream)/numTotalLength
+end
+
+
+' Request approval
+
+blnApproval = MsgBox.yesNoCancel("Interpolate "+strUpstream.quote+","+strDownstream.quote+" fields for "+
+  lstProfileLines.count.asString+" segments? Gradient "+
+  numGradient.asString+" will be written to " + strGradient.quote+
+  ". Selecting ""No"" will allow to reselect the fields","DC Sewer Design", true)
+
+if(blnApproval = nil)then
+  exit
+end
+
+if(blnApproval.not)then
+  dicPreferences.remove("strUpstreamField")
+  dicPreferences.remove("strDownstreamField")
+  dicPreferences.remove("strGradientField")
+  exit
+end
+
+' Interpolate
+if(numGradient.isNull)then
+  MsgBox.error("Gradient is Null", "DC Sewer Design")
+  exit
+end
+
+numI = 0
+
+if(blnFromUpstream)then
+  numElevation = numFirstUpstream
+  for each recLine in lstProfileLines
+    ftbLine.setValue(fldUpstream, recLine, numElevation)
+    ftbLine.setValue(fldGradient, recLine, numGradient)
+    numSegmentLength = lstSegmentLength.get(numI)
+    numElevation = numElevation - (numSegmentLength*numGradient)
+    if(blnDebug)then
+      System.echo(numElevation.asString)
+    end  
+    ftbLine.setValue(fldDownstream, recLine, numElevation)
+    numI = numI + 1
+  end
+  
+  ' Control Result
+
+  if((numElevation-numLastDownstream).abs > (numLastDownstream/1000))then
+    System.echo("DCSewerDesign.Profile.ConstantGradient.calculate(): More than 1/1000 difference in control.")
+  end
+else
+  numElevation = numLastDownstream
+  lstProfileLines = av.run("DCSewerDesign.List.flip", lstProfileLines)
+  lstSegmentLength = av.run("DCSewerDesign.List.flip", lstSegmentLength)
+  for each recLine in lstProfileLines
+    ftbLine.setValue(fldDownstream, recLine, numElevation)
+    ftbLine.setValue(fldGradient, recLine, numGradient)
+    numSegmentLength = lstSegmentLength.get(numI)
+    numElevation = numElevation + (numSegmentLength*numGradient)
+    if(blnDebug)then
+      System.echo(numElevation.asString)
+    end  
+    ftbLine.setValue(fldUpstream, recLine, numElevation)
+    numI = numI + 1
+  end
+  
+  ' Control Result
+
+  if((numElevation-numFirstUpstream).abs > (numFirstUpstream/1000))then
+    System.echo("DCSewerDesign.Profile.ConstantGradient.calculate(): More than 1/1000 difference in control.")
+  end
+end

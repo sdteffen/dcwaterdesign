@@ -1,0 +1,880 @@
+2009-08-19  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+
+	* installer/dcwaterdes/iconv.dll
+	* installer/dcwaterdes/intl.dll:
+	* installer/dc_water_design_extension:added needed files
+	* doc/en/dcwaterdesign.xml:Update documentation.
+	
+2008-08-13  Steffen Macke <sdteffen@sdteffen.de>
+
+	* inp2shp/README: Mention inptools.epanet.de
+
+2008-06-20  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+
+	* dcwatdesextension.make.ave:
+	* dcwatdes2.apr:Adjust the version number 2.12.4,adjust the save path.
+	* installer/dc_water_design_extension.nsi: Update version, and copyright
+	information.
+	* dcwatdes.about.ave:adjust copyright
+	
+2007-11-26  Steffen Macke <sdteffen@sdteffen.de>
+
+	* doc/en/dcwaterdesign.xml: Added the "EPANET Tables" dialog to the "Curve"
+	index entry; explaining pump curves a little bit.
+	
+2007-10-30  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: Add more checks as requested in Bug#
+	1571449
+	
+2007-10-25  Steffen Macke <sdteffen@sdteffen.de>
+
+	* doc/en/figure/write_inp_file.dia:
+	* doc/en/figure/run_epanet_calculation.dia:
+	* doc/en/figure/write_inp_file.png:
+	* doc/en/figure/run_epanet_calculation.png:
+	* doc/en/dcwaterdesign.xml: Added diagrams to illustrate
+	the difference between "Write EPANET File" and "Run EPANET Calculation"
+
+2007-10-10  Steffen Macke <sdteffen@sdteffen.de>
+
+	* doc/en/dcwaterdesign.xml: Added more information/example regarding
+	the economic diameter selection.
+
+2007-10-09  Steffen Macke <sdteffen@sdteffen.de>
+
+	* doc/en/dcwaterdesign.xml: Updated email address, removed duplicated
+	About section
+	* AUTHORS: Added authors information
+	
+2007-09-18  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+	
+	* dcwatdes.view.digitizepipe:add smaller diameters
+	as andereas requested.
+
+2007-02-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: Added DN 110
+
+2007-02-26  Maher Abdel Karim <Maher_karim@dorsch.com.jo>
+
+	* dcwatdes.view.digitizepipe.ave: Added Martin's remarks, closing RFE
+	#1648625
+	
+2007-02-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: Fixed yesterday's addition
+	
+2007-02-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: Added some more diameters
+	< DN 1000, upon Martin's request. However, the flow rates are just made up.
+	
+2006-11-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/docbook.xsl: Enabled saxon extensions, callout graphics
+	* doc/en/dcwaterdesign.xml: Improved inp2shp documentation, added more
+	XML ids to the document (not finished)
+
+2006-11-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp.c: Version number is now 0.2.2; more robust and complete import
+	* inp2shp/README: Added instructions regarding the EPANET toolkit patches
+	* inp2shp/inp2shp.c: adding more error checks; use patched epanet2.dll
+	* inp2shp_private.h:
+	* inp2shp_private.rc: minor changes
+	* inp2shp/patch/epanet_pump.diff:
+	* inp2shp/patch/epanet_toolkit_pump.diff: Patches against EPANET 2.0.10.0
+	to access pump and curve data through the toolkit
+	
+2006-11-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp/inp2shp.c: Improved attribute import of valves and pumps
+	(Improvements for bug #1469111); Usage change presumably fixes 
+	bug #1598930 - awaiting testing
+	* inp2shp/inp2shp.dev:
+	* inp2shp/inp2shp_private.h:
+	* inp2shp/inp2shp_private.rc:
+	* inp2shp/msvc/inp2shp.dsp:
+	* inp2shp/msvc/inp2shp.dsw: Added some IDE files
+
+2006-09-16  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Switched from article to chapter;
+	added dc_id tutorial; added quality control tutorial
+
+2006-08-28  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.model.epanet.writeinpfile.ave: Set value of pipe.status to
+	"closed" when it contains "closed". Implements RFE #1547032
+	
+2006-05-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: More comprehensive INP file import
+	description
+	
+2006-05-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: 
+	* dcwatdes.view.digitizepipe.ave: Added DN80
+	* dcwatdesextension.make.ave: Version is 2.12.3+svn now
+
+2006-05-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Added elevation calculation tutorial.
+
+2006-05-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* installer/dc.ico: Updated icon
+
+2006-05-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml:
+	* doc/en/dcwaterdesign.xml:
+	* installer/dc_water_design_extension.nsi: Version number is 2.12.3 now
+
+2006-05-15  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile.ave: Added experimental writing
+	of OptiDesigner files
+	* doc/en/dcwaterdesign.xml: Mentioning experimental OptiDesigner
+	files, set economic diameter function
+
+2006-05-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Added Thiessen polygon tutorial; Switched
+	from DocBook article to book; added index
+
+2006-04-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep.ave: Remove index on timestep
+	to avoid rare loading problems
+
+2006-04-02  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.setlifecyclestatus.ave:
+	* dcwatdes.view.popup.togglestatus.ave: Added two new context menus
+	
+2006-03-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popup.pipes.seteconomicdiameter.ave: Added context menu
+	function to select the economic diameter
+	
+2006-03-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.digitizepipe.ave: Added 250 to the list of
+	diameters
+	* dcwatdes.model.epanet.loadresultsforstep.ave: Unjoining and unlinking
+	at the end of the script
+
+2006-03-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep.ave: 
+	* dcwatdes.model.epanet.run.ave: Unjoining and unlinking result tables
+	to avoid error messages
+	* dcwatdes.view.digitizepipe.ave: Offer default list of diameters when
+	digitizing pipes
+	
+2005-12-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Added information that it might be necessary
+	to increase the snapping radius when running "Make EPANET Model"
+
+2005-10-02  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep.ave: Added possibility to
+	pass timestep as script parameter
+	* dcwatdes.model.epanet.results.loadarcview.ave: Pass nil instead of
+	table list
+
+2005-09-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Added new analysis section with information 
+	how to import the results to R
+	
+2005-09-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.project.mergemodel.ave: Delete shapes from existing model
+	model shapefiles if no records are found for this zone any more. 
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.project.extractmodel.ave: Allowed to specify the folder name 
+	to which the models will be extracted
+
+2005-09-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.project.splitmodel.ave: Delete shapes from
+	existing zone shapefiles if no records are found for this zone any more;
+	fixes bug #1296212
+
+2005-09-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.project.splitmodel.ave: Fixed the splitting function
+
+2005-09-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: Updated with latest information.
+	* dcwatdes.project.mergemodel.ave:
+	* dcwatdes.project.splitmodel.ave: clearing the selection first
+	* dcwatdes.project.extractmodel.ave: Allow to select models to extract
+	* dcwatdes.table.calculatebitcode.ave: Bytecode numbering starts at 1
+	instead of 0 now.
+	
+2005-09-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdesextension.make.ave: Version number is 2.12.2+cvs now
+	* dcwates.project.splitmodel.ave: Added option to create views
+
+2005-09-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.model.epanet.loadresultsforstep.ave:
+	* dcwatdes.project.extractmodel.ave:
+	* dcwatdes.project.splitmodel.ave: Now calling .updateDefBitmap after
+	each setDefinition() call. Fixes a critical bug (shapefile changes).
+	* build.xml:
+	* dcwatdesextension.make.ave: Version number 2.12.2 now.
+
+2005-09-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.table.calculatebitcode.ave: Added more calculation options
+	* dcwatdes.model.epanet.writeinpfile.ave: Collapsing valve.setting
+	values that contain "closed" to "closed"
+	* dcwatdes.dialog.epanetthemes.initialize.ave: better initial theme
+	selection
+	
+2005-08-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.bitcode.or.ave:
+	* dcwatdes.bitcode.xor.ave: Don't drop "1"'s if one of the input
+	strings is shorter.
+	* dcwatdes.table.calculatebitcode.ave: Allow to select Bitcode.xor
+	to build up the pattern.
+	
+2005-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.dialog.setup.btnok.click.ave:
+	* dialog/dcwatdes.dialog.setup.ded:
+	* dcwatdes.i18n.createdictionaries.ave:
+	* dcwatdes.model.epanet.ensurealiases.ave:
+	* dcwatdes.model.epanet.pipe.updatenodefields.ave:
+	* doc/en/dcwaterdesign.xml: New setup option "Enforce Data Model",
+	implements RFE #1263010
+	* build.xml: Fixed version number replacement in documentation, 
+	building documentation, checking that extension has correct version 
+	number
+	* doc/build.xml:
+	* doc/docbook_pdf.xsl: Using SVG icons
+
+2005-08-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml: Fixed Version number replacement in NSIS file;
+	included installer build
+	* dcwaterdesignextension.make.ave: Version number is now 2.12.1+cvs
+	* dcwatdes.bitcode.or.ave:
+	* dcwatdes.bitcode.xor.ave: Fixed bug that prevented execution of
+	the commands
+	
+2005-08-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml: Fixed md5sum creation
+	* doc/en/dcwaterdesign.xml:
+	* installer/dc_water_design_extension.nsi:
+	* dcwatdesextension.make.ave: Version number is now 2.12.1
+	
+2005-08-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml: Write md5sum.txt
+	
+2005-08-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.project.extractmodel.ave: 
+	* doc/en/dcwaterdesign.xml: Added function to extract models based on
+	the bytecode
+	* dcwatdes.project.splitmodel.ave: Stop with error message if empty
+	string or NULL is encountered in zone field.
+	* build.xml: Version number is now transferred to manual and nsis file
+	* installer/dc_water_design_extension.nsi: Fixed several problems with
+	Start Menu shortcuts
+	* dcwatdesextension.make.ave: Version number is 2.12 now
+
+2005-08-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.i18n.createdictionaries.xml: Documentation and 
+	internationalization for model merge
+	* dcwatdes.project.splitmodel.ave: Finished model splitting code
+	* dcwatdes.project.mergemodel.ave: Basic model merging code; not
+	very fault tolerant yet. Implements RFE #1233961
+	
+2005-07-14  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.project.splitmodel.ave:
+	* dcwatdes.system.makedir.ave:
+	* dcwatdes.i18n.createdictionaries.ave: Started with implementation of
+	functionality to split the models (RFE #1233961)
+	
+2005-07-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.bitcode.or.ave:
+	* dcwatdes.bitcode.xor.ave:
+	* dcwatdes.bitcode.and.ave:
+	* dcwatdes.bitcode.issetasnumber.ave:
+	* dcwatdes.table.calculatebitcodeupdate.ave:
+	* dcwatdes.table.calculatebitcode.ave: Bitcodes are strings now
+	and work up to 255 zones (RFE #1233959)
+	
+2005-07-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsfortimestep.ave: Don't try to link
+	results to tables with 0 records
+
+2005-07-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/docbook.css: Improved layout of Author names and their email
+	addresses.
+
+2005-07-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.popup.pipes.selectconnectedpipes.ave:
+	* doc/en/dcwaterdesign.xml:
+	* dcwatdes.view.popup.pipes.selectconnectedpipesinteractive.ave: Looking
+	for "closed" substring rather than complete match now
+	* dcwatdesextension.make.ave: Version number is 2.11+cvs now
+	* doc/dcwatdes_manual.lyx: Removed old manual format
+                                                                          
+2005-01-22  Steffen Macke <Steffen_Macke@gmail.com>
+
+	* doc/docbook.xsl: improved documentation layout
+	* doc/en/dcwaterdesign.xml: 
+	* build.xml:
+	* installer/dc_water_design_extension.nsi: updated for 2.11 release 
+	* dcwatdes.model.importinpfile: updated for inp2shp 0.2.0; showing
+	inp2shp errors and statistics
+	* build.xml:
+	* inp2shp/inp2shp.c:
+	* inp2shp/inp2shp.h:
+	* inp2shp/doc/doxygen/doxygen.cfg:
+	* inp2shp/Makefile: inp2shp version 0.2.0; improved robustness;
+	statistics output; more correct handling of virtual lines; added
+	doxygen API documentation; added possibility to generate DEBUG output;
+	added TODOs
+
+2005-01-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep:
+	* dcwatdes.model.epanet.results.importbinary:
+	* dcwatdes.model.epanet.run: fixed bug that prevented the use of
+	these functions for projects that contained grids (bug #1104509)
+	
+2004-10-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* installer/installer-header.bmp:
+	* installer/dc_water_design_extension.nsi: Moved installer to Modern
+	User Interface (MUI)
+	* dcwatdes.model.epanet.junctions.createmissing: fixed robustness 
+	problem (bug #1057313)
+	that prevented the function from working correctly for short pipes
+	* dcwatdesextension.make: version number is 2.10+cvs-2 now
+
+2004-09-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/version.xml:
+	* doc/en/dcwaterdesign.xml: using version.xml; added two FAQ items; 
+	fixed figure inclusion
+	
+2004-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.returnfieldlists: correctly returning
+	fields for patterns (fixes bug #1010840)
+	* dcwatdesextension.make: version number is 2.10+cvs
+	
+2004-07-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml: added build file for source zip
+	* doc/build.xml: Fixed default target; formatting
+	* dcwatdes.help.openchm: added new function to open Help file
+	* dcwatdesextension.make: updated for 2.10 release
+	
+2004-07-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/figure/virtual-line-validity.png:
+	* doc/en/figure/virtual-line-creation.png:
+	* doc/en/bitcoding-zones.png:
+	* doc/build.xml:
+	* doc/docbook.css:
+	* doc/docbook_html.xsl:
+	* doc/docbook_htmlhelp.xsl:
+	* doc/docbook_pdf.xsl:
+	* doc/en/dcwaterdesign.xml: more work on DocBook documentation; updated
+	for 2.10 release
+
+2004-07-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcwaterdesign.xml: started shifting documentation to DocBook
+	
+2004-07-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile:
+	* doc/av_epanet_data_model.dia: dropping support for power_kw field
+	of pumps as this is dangerous (fixes bug #986213)
+
+2004-06-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile:
+	* dcwatdes.dialog.epanettables.btnok.click:
+	* dcwatdes.dialog.epanettables.initialize
+	* dialogs/dcwatdes.dialog.tables.ded:
+	* installer/dcwatdes/xml2net.xsl: using dc_x and dc_y instead of
+	x and y; harmonized setting storage, inp output and table dialog
+	for patterns (fixes pattern export bug #947865)
+	* dcwatdesextension.make: version number is 2.09+cvs now
+	
+2004-04-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep: The result import only
+	worked only partially as only some records were selected during
+	the process; fixes bug #541859
+	* dcwatdes.view.digitizepipe: using "l" instead of "p" to prepend
+	in front of pipes to avoid namespace problems with pumps (partial
+	fix for bug #888235
+	* dcwatdes.model.epanet.writeinpfile: allowing more fields in pattern
+	and curve tables; fix for bug #884265
+	* dcwatdes.model.epanet.check: Checking for diameter 0, 
+	duplicate themes, 3D shapes, bad snapping radius according to
+	RFE #907304
+	* dcwatdesextension.make:
+	* installer/dc_water_design_extension.nsi:
+	* doc/dcwatdes_manual.lyx: updated for 2.09 release
+
+2004-01-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.returnfieldlists: fixed typo ("Curve" instead
+	of "Curves")
+
+2004-01-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: fixed error message for pattern
+	table
+	* dcwatdes.model.epanet.returnfieldlists:
+	* dcwatdes.model.epanet.ensurealiases:
+	* dcwatdes.model.epanet.fields.createmissing: create missing fields
+	for patterns, curves
+
+2003-07-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/av_epanet_data_model.dia: updated for 2.08 release
+
+2003-07-13  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.returnfieldlists: added emittercoefficient to
+	junction
+	* dcwatdes.model.epanet.createmissingfields: emittercoefficient field
+	is created when missing
+	* dcwatdes.model.epanet.writeinpfile: writing emitters to the inp file
+	* dcwatdesextension.make: updated for 2.08 release
+	* doc/dcwatdes_manual.lyx: updated for 2.08, additional questions and
+	answers
+	* installer/dc_water_design_extension.nsi: updated for 2.08 release
+	
+2003-07-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/av_epanet_data_model.dia: added EmitterCoefficient to Junction
+
+2003-06-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.junctions.createmissing: fix for special case 
+	of bug #633812: junctions were created if the shapefiles contained only
+	one record
+
+2003-06-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* installer/dcwatdes/xml2net.xsl: fixed typos that prevented
+	emitter exponents and demandmultipliers from working correctly (bug
+	#746245)
+
+2003-01-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.i18n.createdictionaries: added arabic translations
+	from Maher Karim <Maher_Karim@dorsch.com.jo>
+	
+2003-01-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* dcwatdes.i18n.createdictionaries: added russian translations
+	(Thanks to Tom Chidley)
+	
+2002-11-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.skeletonize: skeletonization works now
+	
+2002-11-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.skeletonize:
+	* dcwatdes.i18n.createdictionaries: added function to
+	remove superfluous vertices from a model
+	
+2002-11-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.junctions.createmissing: fix for
+	bug #633812, extra junctions were created on top of other
+	nodes
+	
+2002-09-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* inp2shp/inp2shp.c: writing attributes for pipes, nodes
+	
+2002-09-28  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp/inp2shp.c: commandline parameter checking, usage
+	reporting; fix for junction file
+	* dcwatdes.model.epanet.importinpfile: loading via inp2shp
+	now
+	* dcwatdes.file.waitfor: checking for standard xp location
+	of kernel32.dll; allowing the user to select the kernel32.dll
+	location
+	* dc_water_design_extension.nsi: now installing start menu entries
+	for all users; updated for 2.07 release
+	* doc/dcwatdes_manual.lyx: updated for 2.07 release
+	
+2002-09-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* inp2shp/Makefile: updated for gcc 3.2 (MinGW 2.0), optimizing
+	* inp2shp/inp2shp.h:
+	* inp2shp/inp2shp.c: worked on compiler error messages, commented out
+	printfs, checkvalves and vertices are working
+	
+2002-09-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp/inp2shp.c: preliminary support for pumps and valves
+
+2002-09-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* inp2shp/inp2shp.c: pipe vertices are imported now
+	
+2002-09-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* inp2shp/inp2shp.c:
+	* inp2shp/README: 
+	* inp2shp/Makefile: working on new INP import based
+	on the EPANET toolkit and shapelib
+	* dcwatdes/license-dcwaterdesignextension.txt: updated copyright
+	
+2002-09-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.splitpipe: fixed splitting in some cases with a
+	approximate split
+	* dcwatdesextension.make: marked as version 2.07rc3
+
+2002-08-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* dcwatdes.model.epanet.junctions.createmissing: fixed snapping
+	lookup in preferences
+	* dcwatdesextension.make: marking as version 2.07rc2
+	
+2002-07-17  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.file.waitfor: initializing variable now (this fix was lost
+	somewhere)
+	* dcwatdes.model.epanet.run: re-added quotation marks to epanet call 
+	* dcwatdesextension.install: menus are translated on project startup
+	now
+	* dcwatdesextension.make: marking as version 2.07rc1
+	
+2002-06-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.i18n.createdictionaries: added french localization
+	* dcwatdes.system.call: the system.call fallback was lost
+	
+2002-06-24  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.make: Fixed model creation for node themes
+	containing only one record. Fixes bug #570335
+
+2002-06-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.view.popupupdate:
+	* dcwatdesextension.install: fixed some problems with the popup handling
+
+2002-04-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.file.waitfor: initializing variable sleep now
+	* dcwatdes.system.call: using System.call() as a backfall if the dll
+	call fails (this seems to be the case for Win9* systems)
+	
+2002-04-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* installer/dc_water_design_extension.nsi:
+	* doc/dcwatdes_manual.lyx:
+	* dcwatdesextension.make: updated for 2.06 release
+	
+	* dcwatdes.model.epanet.inportinpfile: fixed bug #476258, improved
+	performance
+	
+	* dcwatdes.model.epanet.ensurealiases:
+	* dcwatdes.model.epanet.fields.createmissing:
+	* dcwatdes.model.epanet.returnftabdictionary:
+	* dcwatdes.model.epanet.returnthemedictionary:
+	* dcwatdes.model.epanet.writeinpfile:
+	* dcwatdes.tables.loadepanettables:
+	* dcwatdes.view.changenodeclass:
+	* dcwatdes.view.digitizenode:
+	* dcwatdes.view.digitizepipe:
+	* dcwatdes.view.movenode:
+	* dcwatdes.view.splitpipe: fixed error when view contained raster
+	themes
+		
+2002-03-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdesextension.make:
+	* script.saveallscripts: interim 2.05 release for Thomas
+	* installer/dc_water_design_extension.nsi: updated for NSIS version
+	1.92
+	
+2002-02-17  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.tables.loadepanettables: added some checks for nil values
+	
+2001-11-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.file.waitfor: fixed kernel32.dll problem for non-nt win32
+	
+2001-10-27  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.importinpfile: importing pipes and junctions
+	now
+	* dcwatdes.model.delete: ability to delete a complete model (empty
+	all the tables)
+	* dcwatdes.expandedaliasvtab.setvaluestring: new function to write
+	string values to string/number fields in tables
+	* doc/dcwatdes_manual.lyx: 
+	* dcwatdesextension.make:
+	* installer/dc_water_design_extension.nsi: prepared for 2.04 release
+	
+2001-10-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.results.importbinary: new option to
+	import binary epanet results created with the epanet commandline
+	* dcwatdes.file.waitfor: should be fixed for non-NT/2000 systems
+	* dcwatdes.model.epanet.run:
+	* dcwatdes.model.epanet.writeinpfile: switched to systemcall wrapper
+	dll, file.waitfor cleanup
+	* dcwatdes.i18n.createdictionaries:
+	* dcwatdes.model.epanet.importinpfile: started with import of
+	EPANET inp files
+	
+2001-10-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: fixed orphan node deletion
+	
+2001-10-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.run: 
+	* dcwatdes.system.call: moving epanet run to use the systemcall
+	wrapper dll
+	
+2001-10-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	* installer/dc_water_design_extension.nsi: added systemcall.dll,
+	a wrapper that allows to wait for EPANET returning
+	* dcwatdes.model.epanet.check: detecting orphan nodes
+	now (can still be enhanced)
+	* dcwatdes.model.epanet.junctions.createmissing: removing duplicate
+	nodes now, not creating several junctions on top of each other any
+	more (Thanks to Philipp Magiera)
+	
+2001-10-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: checking for pipes shorter than
+	the snapping radius now.
+	
+2001-10-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dialogs/dcwatdes.dialog.setup.ded:
+	* dcwatdes.i18n.createdictionaries: 
+	* doc/dcwatdes_manual.lyx:
+	* dcwatdes.dialog.setup.initialize:
+	* dcwatdes.dialog.setup.btnok.click:
+	* dcwatdes.model.epanet.writeinpfile:
+	* dcwatdes.model.epanet.run: made the command timeout
+	customizable
+	
+2001-09-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.ensurealiases: fixed call to script that
+	creates the missing fields
+	
+2001-09-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes2.apr: removed extension dependencies
+	
+2001-09-12  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.loadresultsforstep:
+	* dcwatdes.model.epanet.results.loadarcview: fix for field name
+	aliases; adding indexes now to increase performance; the result
+	table definition query gets reset now after joining
+	
+2001-09-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* installer/dc_water_design_extension.nsi: 
+	* installer/report a bug.url: added link to bug
+	tracking system; fixed xml2net.xsl inclusion
+	* dcwatdes.model.epanet.check: more work on performance increase
+	* doc/dcwatdes_manual.lyx: updated documentation
+	* dcwatdes.model.epanet.loadresultsforstep: fixed result import,
+	increased performance
+	* dcwatdes.model.epanet.returnfieldlists: status field of the pipes
+	theme was missing; valve and pump results are like pipe results now,
+	abandoned the node results
+	* dcwatdes.model.epanet.run: make sure that the aliases are in place
+	* dcwatdes.model.epanet.ensurealiases: offer to run createmissing 
+	fields
+	
+2001-09-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: yesterdays addition was not complete;
+	checking for null shapes now; tremendous performance increase for
+	duplicate id checking: using temporary table now.
+	* installer/dc_water_design_extension.nsi: fixed start menu entry for
+	data model; removed cygwin sed and sh
+	
+2001-09-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: added check to complain if the
+	ids are longer than 14 characters
+	* dcwatdes.model.epanet.writeinpfile: added two checks for nil values
+	
+2001-09-06  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.check: fixed check for duplicate IDs if
+	one of the IDs is not a string. Bug reported by Philipp Magiera
+	* installer/dc_water_design_extension.nsi: Added link to homepage
+	in the start menu
+	* dcwatdes.file.waitfor: fixed error message if waiting times out
+	* dcwatdes.model.epanet.loadresultsforstep: 
+	* dcwatdes.model.epanet.results.loadarcview: more work on arcview
+	backend
+	
+2001-08-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.file.waitfor:
+	* dcwatdes.model.epanet.results.loadarcview:
+	* dcwatdes.model.epanet.results.loadmysql:
+	* dcwatdes.model.epanet.loadresultsforstep:
+	* dcwatdes.model.epanet.run: more work on arcview backend for
+	epanet; this breaks the mysql loader; arcview loader used as
+	fallback backend
+	
+2001-08-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/dcwatdes.manual.lyx: updated documentation
+	* script.saveallscripts: fixed bug (path corruption)
+	* installer/dc_water_design_extension.nsi: added epanet2mysql
+	* dcwatdes.model.epanet.run: more work on arcview backend for epanet
+	result loading: switched to epanet2mysql.exe
+	
+2001-08-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.i18n.createdictionaries:
+	* dialogs/dcwatdes.dialog.resulttables.ded:
+	* dcwatdes.model.epanet.results.loadmysql:
+	* dcwatdes.dialog.resulttables.initialize:
+	* dcwatdes.dialog.resulttables.btnok.click:
+	* dcwatdes.model.epanet.run:
+	* dcwatdes.model.epanet.results.loadarcview: started new arcview
+	backend for epanet result loading.
+	
+2001-08-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: checking for & and < in the
+	controls table
+	
+2001-08-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* xml2net.xsl:
+	* dcwatdes.dialog.epanettables.btnok.click:
+	* dcwatdes.dialog.epanettables.initilize:
+	* dcwatdes.i18n.createdictionaries:
+	* dcwatdes.model.epanet.writeinpfile: Added support for patterns.
+
+2001-08-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: fix for bug #436003: field power_kw
+	is now exported properly; backdrop map resolution is now customizable in
+	the setup dialog
+	* dcwatdes.dialog.setup.initialize:
+	* dcwatdes.i18n.createdictionaries:
+	* dcwatdes.dialog.setup.btnok.click: epanet backdrop map resolution is now 
+	customizable in the setup dialog
+
+2001-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.dialog.setup.btnok.click : Added check for spaces in pathes
+	* dcwatdes.model.epanet.writeinpfile: Fixed bug #440432, writing an
+	epanet input file and answering 'no' in the write backdrop dialog; added check
+	for spaces in the path of the epanet file
+	* script.saveallscripts: commented out System.echo
+
+2001-08-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.fields.createmissing: added function to create 
+	fields that are required by the data model
+	
+2001-06-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* dcwatdes.extension.uninstall: fixed startup script restauration when unloading
+	* dcwatdes.dialog.epanettables.initialize:
+	* dcwatdes.dialog.epanetthemes.initialize: fixed table/theme activation after
+	project save/load
+	* dcwatdesextension.make: updated for Version 2.02
+	* dcwates.model.epanet.writeinpfile: fixed backdrop map writing
+	
+2001-06-21  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: removed yesterdays fix as it was broken
+	* dcwatdes.dialog.epanetthemes.initialize: made sure that the right shape types
+	are offered in the theme selection
+	* dcwatdes.model.epanet.check:
+	* dcwatdes.model.epanet.make:
+	* dcwatdes.model.epanet.writeinpfile: no selection should be returned if
+	everything goes well
+
+2001-06-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcwatdes.model.epanet.writeinpfile: fixed xslt processing for paths
+	containing spaces
+	
+2001-06-19  Steffen Macke <sdteffen@yahoo.com>
+
+	* dcwatdes.dialog.setup.initialize: 
+	* dcwatdes.dialog.setup.btnok.click:
+	* dcwatdes.model.epanet.pipe.updatenodefields:
+	* dcwatdes.model.epanet.createzonesfromcontrols:
+	* dcwatdes.model.epanet.junctions.calculatepipelength:
+	* dcwatdes.model.epanet.make:
+	* dcwatdes.model.epanet.writeinpfile:
+	* dcwatdes.popup.pipes.selectconnectedpipes:
+	* dcwatdes.view.changenodeclass:
+	* dcwatdes.view.movenode:
+	* dcwatdes.model.epanet.junctions.createmissing: made snapping radius
+	configurable
+	* dcwatdesextension.unload: fixed extension unloading if dialogs 
+	are open
+	
+2001-05-31  Steffen Macke <sdteffen@yahoo.com>
+
+	* dcscript.compileallscripts:
+	* dcscript.loadscriptsfromdir:
+	* dcwatdes.model.createzonesfromcontrols:
+	* dcwatdes.model.epanet.junctions.createmissing: added for 2.01 release
+	* dcwatdes.model.epanet.writeinpfile: support for backdrop maps (thanks
+	  to Roland Salgado), fixed bug for coordinate systems using decimal
+	  feet (bug reported by Arnold Strasser)
+	* script.saveallscripts: added support for cvs
+	
+2001-05-19  Steffen Macke <sdteffen@yahoo.com>
+
+	* doc/dcwatdes_manual.lyx
+	* doc/*.eps: updated documentation for 2.01 release

@@ -1,0 +1,431 @@
+2006-12-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: Corrected cross reference (Thanks to Martin
+	and Chichi)
+	
+2006-12-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: changed articles to chapters in order to
+	have a unique numbering at the top level; added 3 section ids
+	* .project: Added Eclipse project file
+	
+2006-07-22  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave:
+	* sample/profileconfiguration.txt:
+	* doc/en/dcsewerdesign.xml: Allowing linebreaks using "+NL+" for the
+	data box title blocks; implements RFE #1526517
+	* dcsewerdesignextension.make.ave: 
+	* dcsewerdesign.nsi: Version number is 2.0.10+svn
+
+2006-07-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave:
+	* dcsewerdesign.profile.cumulativelinedatabox.create.ave:
+	* dcsewerdesign.profile.linedatabox.create.ave:
+	* dcsewerdesign.profile.manholedatabox.create.ave: Implemented RFE 
+	#1156974 (rotated text).
+	* doc/en/dcsewerdesign.xml: Updated for new functionality/release
+	* dcsewerdesign.nsi:
+	* build.xml:
+	* dcsewerdesignextension.make.ave: Version number is 2.0.10 now
+	* sample/profileconfiguration.txt: Updated for new release
+
+2006-05-24  Steffen Macke <sdteffen@gmail.com>
+
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.profile.constantgradient.calculate.ave: Implemented
+	RFE #1492504 (Direct gradient input)
+
+2006-05-23  Steffen Macke <sdteffen@gmail.com>
+
+	* dcsewerdesign.profile.constantgradient.calculate.ave: Started with
+	implementation of RFE #1492504 (Direct gradient input) 
+	
+2006-05-19  Steffen Macke <sdteffen@gmail.com>
+
+	* dcsewerdesign.createdbfsewercalculation.ave: Forget configuration file
+	if the configuration is wrong
+
+2006-05-16  Steffen Macke <sdteffen@gmail.com>
+
+	* dcsewerdesignextension.make.ave: version number is 2.0.9+svn now
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.accumulatepopulation.ave: Added possibility to
+	specify optional fields for maximum accumulated population and 
+	difference
+	
+2006-05-13  Steffen Macke <sdteffen@gmail.com>
+
+	* dcsewerdesign.profile.buildnodelist.ave: Allow a single line 
+	selection; fixes bug #1483330
+	* dcsewerdesign.complexprofile.create.ave: Better support for profiles
+	with non-uniform line directions; fixes bug #1487774
+	* dcsewerdesignextension.make.ave: Version number is 2.0.9 now
+	* doc/en/dcsewerdesign.xml: Switched from DocBook article to book;
+	added index
+
+2006-05-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.profile.buildlinelist.ave: Allow a single line 
+	selection; related to bug #1483330
+
+2006-02-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: Restructured FAQ
+	* doc/build.xml: Corrected default target
+
+2006-02-01  Dennis Vilovic <Dennis_Vilovic@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: Added 
+
+2005-08-11  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml: Write md5sum.txt
+	
+2005-08-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml:
+	* build.xml:
+	* dcsewerdesign.nsi:
+	* dcsewerdesignextension.make.ave: Updated for 2.0.8 release
+	
+2005-08-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/docbook.xsl: Don't include page numbers in cross references;
+	Don't use CP1256
+	* doc/docbook.css: Improved author layout
+	* dcsewerdesign.profile.constantgradient.calculate.ave: Calculation
+	was done in the wrong direction
+	* sample/line.dbf: Added gradient field
+
+2005-08-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.createdbfsewercalculation.ave: added new
+	configuration file parameter: "PerPerson" - Configuration file name and
+	theme are stored in the preferences now
+	* dcsewerdesignextension.make.ave: Version is 2.0.7+cvs now
+	* dcsewerdesign.profile.buildnodelist.ave: Actually return the node list
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.profile.constantgradient.update.ave:
+	* dcsewerdesign.profile.constantgradient.calculate.ave:
+	* dcsewerdesign.profile.buildlinelist.ave:
+	* dcsewerdesignextension.install.ave:
+	* dcsewerdesignextension.make.ave:
+	* dcsewerdesignextension.uninstall.ave: Fully implemented RFE #1240904;
+	"Create Profile" function is currently broken.
+	
+2005-08-04  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave:
+	* dcsewerdesign.profile.buildnodelist.ave:
+	* dcsewerdesign.profile.buildlinelist.ave: refactored
+	* dcsewerdesign.profile.constantgradient.calculate.ave: Started with
+	RFE #1240904 implementation
+	* scripts.saveallscripts.ave: adjusted for new workstation
+	* dcsewerdesignextension.make.ave: Adjusted for 2.0.8 release
+
+2005-08-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.apr: Added project as binary file.
+	
+2005-04-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.nsi:
+	* build.xml:
+	* dcsewerdesignextension.make.ave:
+	* doc/en/version.xml: version is 2.0.7 now
+	* doc/en/dcsewerdesign.xml: updated What's new section
+	
+2005-04-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.profile.buildlinelist.ave:
+	* dcsewerdesign.profile.create.ave: deleted (old code, not used
+	any more)
+	* dcsewerdesign.complexprofile.create.ave: fixed bug #1182188 (buggy
+	profile creation for water networks)
+	
+2005-03-10  Steffen Macke <sdteffen@gmail.com>
+
+	* dcsewerdesign.complexprofile.create.ave:
+	* dcsewerdesign.profile.cumulativelinedatebox.create.ave:
+	* dcsewerdesign.profile.linedatabox.ave:
+	* dcsewerdesign.profile.manholedatabox.ave:
+	* doc/en/dcsewerdesign.xml: Text alignment for data box contents can
+	be specified now (RFE #1158375)
+	* doc/version.xml:
+	* dcsewerdesign.nsi: 
+	* dcsewerdesignextension.make.ave: version is 2.0.6+cvs now
+	
+2005-03-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave: Profiles can be created for
+	single lines now (RFE #1111927)
+	* dcsewerdesignextension.make.ave: Version number is 2.0.6+cvs now
+
+2005-02-03  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: Added tip to create function 
+	(upstream/downstream values for manholes)
+	
+2005-01-31  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.nsi:
+	* doc/en/version.xml:
+	* dcsewerdesignextension.make.ave:
+	* build.xml:
+	* doc/en/dcsewerdesign.xml: updated for 2.0.6 release
+	* dcsewerdesignextension.uninstall.ave: fixed unloading of table menu
+	* dcsewerdesign.networkcalculator.calculate.ave: Completed first version
+	of the network calculator
+	
+2005-01-28  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesignextension.install.ave:
+	* dcsewerdesignextension.make.ave:
+	* dcsewerdesignextension.uninstall.ave:
+	* dcsewerdesign.networkcalculator.calculate.ave:
+	* dcsewerdesign.networkcalculator.update.ave: Started with
+	NetworkCalculator implementation (RFE 1110647)
+	* build.xml: switched to tarball; including sample files
+	* dcsewerdesign.complexprofile.create.ave:
+	* dcsewerdesign.complexprofile.addmanholelegend.ave: Added new 
+	Manhole.Legend configuration option (RFE 1083834)
+	* doc/en/dcsewerdesign.xml: Revised profile creation section; revised
+	installation/loading sections; updated news
+	* sample/line.*:
+	* sample/manhole.*:
+	* sample/profileconfiguration.txt:
+	* sample/profilemanhole.avl: Added a small example for testing the 
+	profile creation
+	
+2005-01-25  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* AUTHORS:
+	* doc/en/dcsewerdesign.xml: Corrected Calculate Maximum Manhole
+	Elevations documentation (Thanks to Martin Schaber for pointing out
+	the problems); added new configuration option for displaying manholes
+	with different symbols in profile (e.g. valves)
+
+2005-01-24  Steffen Macke <sdteffen@gmail.com>
+
+	* dcsewerdesignextension.make.ave:
+	* doc/en/version.xml: version number is 2.0.5+cvs now
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.calculatemaximummanholeelevations.ave: made function
+	independent of Spatial Analyst
+	
+2004-11-20  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/version.xml:
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.nsi:
+	* build.xml:
+	* dcsewerdesignextension.make.ave: updated for 2.0.5 release
+
+2004-11-17  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: Added "Link Profile to Layout" documentation
+	and excavation calculation example.
+	* dcsewerdesign.complexprofile.create.ave: Completed DatumInterval 
+	implementation (RFE #1057203)
+	* dcsewerdesign.profile.linktolayout.ave:
+	* dcsewerdesign.profile.linktolayout.update.ave: Added function to
+	link a designed profile back to the view (RFE #1057200).
+	
+2004-11-10  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: 
+	* dcsewerdesign.complexprofile.create.ave: started with DatumInterval
+	implementation
+	
+2004-11-08  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcsewerdesign.xml: Added information on water network profiles
+	as applied by Stephan
+
+2004-10-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.lines.enforcemaximumlinelength.ave: removed - use
+	"Segmentize Pipes" of the DC Processing Extension instead.
+
+2004-09-09  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave: Involve random in looking for
+	upsteam/downstream end; fixed bug #1024872
+	* dcsewerdesign.lines.enforcemaximumlength.ave: the function is now
+	transferring the attributes to the splitted lines. (Kevin's idea)
+	* dcsewerdesignextension.make.ave: version number is now 2.0.4+cvs-2
+	
+2004-09-07  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/dcserwerdesign.xml: added missing Line.ID line
+	* dcsewerdesign.complexprofile.create.ave:
+	* dcsewerdesign.profile.cumulativelinedatabox.create.ave:
+	* dcsewerdesign.profile.linedatabox.create.ave: allowing to specify
+	data box height for CumulativeLineData and LineData
+	* dcsewerdesignextension.make.ave: version number is 2.04+cvs now
+	
+2004-09-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* doc/en/version.xml:
+	* build.xml: version is 2.0.4+cvs now
+
+2004-09-05  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.takeovermanholedata.ave:
+	* dcsewerdesign.lines.takeovermanholedata.ave: fix the takeover 
+	functions for lines containing more than two vertices; make the 
+	functions more robust
+	* doc/en/version.xml:
+	* doc/en/dcsewerdesign.xml: added documentation on Manhole Data to Lin
+	and Line Data to Manhole functions
+	* dcsewerdesignextension.make.ave: updated for 2.0.4 release 
+	
+2004-08-19  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.accumulatepopulation.ave: Use 0 instead of NULL if
+	a NULL value is encountered in the population field (fixes 
+	 bug #982798)
+	* dcsewerdesign.fields.returnnumberfields.ave: using field aliases
+	instead of names now (RFE #1011957)
+	* dcsewerdesignextension.make.ave: version number is 2.0.3+cvs now
+	
+2004-07-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* build.xml:
+	* dcsewerdesign.nsi:
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesignextension.make.ave: updated for 2.0.3 release
+
+2004-06-30  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.complexprofile.create.ave: improved configuration
+	file checks
+	* doc/en/dcsewerdesign.xml: added section on "Enforce Drainage"; 
+	enhanced profile creation documentation
+	* dcsewerdesign.enforcedrainage.ave: added optional diameter
+	parameter
+	* dcsewerdesignextension.make.ave: version number is now 2.0.2+cvs
+	
+2004-06-29  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.enforcedrainage.ave:
+	* dcsewerdesign.line.findupstreamlines.ave: added new function to
+	complete design process
+	* doc/en/dcsewerdesign.xml: updated "Accumulate Population" section;
+	formatting
+	* dcsewerdesign.calculatemaximummanholeelevations.ave: added DEM
+	factor; fixed bug that prevented correct calculation of maxium
+	manhole elevations
+	* dcsewerdesign.calculateminimumelevationdifferences.ave: added 
+	possibility to specify gradient field
+
+2004-06-28  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* dcsewerdesign.accumulatepopulation.ave: added check for precision of
+	accumulated population field
+
+2004-03-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+	
+	* COPYING: corrected license
+	* AUTHORS: added Amani
+	* build.xml:
+	* doc/build.xml:
+	* doc/docbook.css:
+	* doc/docbook.xsl:
+	* doc/docbook_html.xsl:
+	* doc/docbook_pdf.xsl:
+	* doc/project.dtd:
+	* doc/en/dcsewerdesign.xml:
+	* dcsewerdesign.help.openchm.ave:
+	* dcsewerdesignextension.make.ave:
+	* script.saveallscripts.ave: prepared 2.0.2 release, added documentation
+	* ChangeLog: preparing initial SourceForge release
+	
+31-10-2002 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.18
+	
+	* fixed the "Accumulate Population" function (field selection)
+	* changed the snapping radius to 0.1 m
+	* added the "Accumulate Branch Length" function
+
+28-08-2002 Steffen Macke <Steffen_Macke@dorsch.com.jo>       Version 1.17
+
+	* added "Enforce Maximum Line Length" function                                               
+
+13-11-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>        Version 1.16
+
+	* corrections to the Profile creation
+
+09-06-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.15
+
+	* added preliminary Create Profile (L-Section) function
+	* added Manhole data -> Line data function
+	* added Line data -> Manhole function
+	* added 'intelligent' theme and field selection code
+	* added Create DbfSewerCalculation ( results are joined to the original 
+	table )
+	* important bugfix for the peak factor formulas: division by 1000 was 
+	missing
+
+27-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.14
+
+	* bugfix for the constant peak factor
+
+23-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.13
+
+	* Major Reorganization that addresses the inconsistencies in the
+	Extension:
+	* changed CalculateFlows to AccumulatePopulation, the 
+	AccumulatedPopulation is checked
+	  against the sum of the Population
+	* introduced Babitt and Baumann Peak Factor Formulas
+	* dropped PercentConnected
+	* added menu item "Validate Lines"
+			
+15-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.12
+
+	* added simple Export function to Barthauer
+
+04-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.11
+
+	* bugfix for Drop Manholes in flipLinesToFlowDirection
+	* flipLinesToFlowDirection is checking for proper snapping now more 
+	carefully
+	* changed the code for calculateFlows: it uses the flipped lines now  to 
+	determine the flow direction
+	
+02-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.10
+
+	* bugfixes for "Calculate Maximum Manhole Elevations"
+	
+02-03-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.09
+	
+	* added av.clearStatus at the end of DCSewerDesign.calculateFlows
+	* DCSewerLines.flipLinesToFlowDirection now reports the number of 
+	flipped lines and selects them
+	* added menu item for calculateMaximumManholeElevations
+	
+29-02-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.08
+	
+	* fixed the bug that prevented extension unloading
+	* added an Messagebox to calculateMinimumElevationDifferences
+			
+27-02-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.07s
+
+	* bugfix in Line.returnConnectedLines: the line itself is not returned 
+	anymore
+	* added DCSewerDesign.flipLinesToFlowDirection
+	* added DCSewerDesign.calculateMaximumManholeElevations (depending on
+	  Spatial Analyst) NOT TESTED
+	  
+27-02-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.06
+
+	* bugfix, update and performance fix in DCSewerDesign.calculateFlows
+	
+26-02-2000 Steffen Macke <Steffen_Macke@dorsch.com.jo>	Version 1.05
+	
+	* code cleanup: deadlock 3d analyst, spatial analyst removed
+	* added "calculate Minimum Elevation Differences"
+	* bugfix for Line.findConnectedLines: Now the Trace is running from 
+	start and end point

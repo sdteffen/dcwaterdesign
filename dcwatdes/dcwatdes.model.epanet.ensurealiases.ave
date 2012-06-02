@@ -1,0 +1,116 @@
+' DCWatDes.Model.Epanet.ensureAliases
+
+' (c) 2000 - 2002 DORSCH Consult
+
+' ensures that all the necessary aliases
+' for the Epanet Model are set up
+' allows to set the aliases as well as to add new fields
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' no arguments
+' nothing is returned
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else 
+  return nil
+end
+
+blnEnforceDataModel = dicPreferences.get("blnEnforceDataModel")
+if(blnEnforceDataModel.not)then
+  return nil
+end
+
+
+activeView = av.getActiveDoc
+if(activeView.getClass.getClassname <> "View")then
+  exit
+end
+
+lstThemesInView = activeView.getThemes
+
+lstAllFields = av.run("DCWatDes.Model.Epanet.returnFieldLists", nil)
+
+blnCreateMissingFieldsInfo = false
+
+for each lstTheme in lstAllFields
+
+ strTheme = lstTheme.get(0)
+ strThemeName = dicPreferences.get("str"+strTheme)
+ 
+ if(strThemeName <> nil)then
+   thmAliased = nil
+   for each thmInView in lstThemesInView
+     if((thmInView.is(FTheme))and(thmInView.getName = strThemeName))then
+       thmAliased = thmInView
+       break
+     end
+   end
+   if(thmAliased = nil)then 
+     lstTables = av.getProject.getDocsWithGUI(av.findGUI("Table"))
+     for each tabTable in lstTables
+       if(tabTable.getName = strThemeName)then
+         thmAliased = tabTable
+       end
+     end
+   end
+   if(thmAliased = nil)then
+     MsgBox.error("Can't find Theme "+strThemeName+" in View. Please Select the Epanet Themes.", "DC Water Design Extension")
+     exit
+   end
+
+   lstRequiredAliases = lstTheme.get(1)
+   if(thmAliased.is(FTheme))then
+     ftbAliased = thmAliased.getFTab
+   else
+     ftbAliased = thmAliased.getVTab
+   end
+   lstFields = ftbAliased.getFields
+   for each strRequiredAlias in lstRequiredAliases
+     fldAliased = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbAliased, strRequiredAlias})
+     if(fldAliased = nil)then
+       lstAvailableFields = lstFields.clone
+       'remove shape field
+       lstAvailableFields.remove(0)
+       'remove fields that are already used
+       for each strOtherAlias in lstRequiredAliases
+         if(strOtherAlias <> strRequiredAlias)then
+           for each fld in lstAvailableFields
+             if(fld.getAlias.left(10).lcase = strOtherAlias.left(10).lcase)then
+               lstAvailableFields.removeObj(fld)
+               break
+             end
+           end
+         end
+       end
+       if(blnCreateMissingFieldsInfo.not)then
+         blnCreateMissingFieldsInfo = true
+         blnCreateMissing = MsgBox.yesNo("Your data is missing some fields. Do you want to automatically add all missing fields? Selecting No will allow you to manually match your fields.", "DC Water Design", true)
+         if(blnCreateMissing)then
+           av.run("DCWatDes.Model.Epanet.Fields.createMissing",nil)
+           return nil
+         end
+       end
+       fldAliased = MsgBox.choice(lstAvailableFields,"Select the "+strRequiredAlias+" Field of the "+strTheme+" Table.","DC Water Design Extension")
+       if(fldAliased = nil)then
+         exit
+       end
+       fldAliased.setAlias(strRequiredAlias)
+     end
+   end
+ end  
+end

@@ -1,0 +1,159 @@
+' DCProcessing.segmentizePllTheme
+
+' (c) 2004 DORSCH Consult
+
+' Segmentize a Polyline Theme - create segments of a certain length
+' Will ask the user for the original Polyline Theme, a new Polyline Theme
+' Will also ask for the segment length
+
+viewActive = av.getActiveDoc
+
+' Select Polyline Theme
+lstPolylineThemes = av.run("DCProcess.View.getThemesByShapeClass", "Polyline")
+thmLine = Msgbox.choice (lstPolylineThemes, "Select a Polyline Theme for Segmentation.", "Segmentize PolyLines") 
+
+if(thmLine = nil)then
+  exit
+end  
+  
+ftbLine = thmLine.getFTab 
+
+fldLineShape = ftbLine.findField("Shape")
+
+' Enter Maximum Segment Length
+strSegmentLength = MsgBox.input("Enter the maximum segment length:", "DC Processing Extension", "10.0")
+if((strSegmentLength=nil)or(strSegmentLength.isNumber.not))then
+  exit
+end
+
+numSegmentLength = strSegmentLength.asNumber
+
+' Enter Minimum Segment Length
+strSegmentLength = MsgBox.input("Enter the minimum segment length:", "DC Processing Extension", "1.0")
+if((strSegmentLength=nil)or(strSegmentLength.isNumber.not))then
+  exit
+end
+
+numMinimumSegmentLength = strSegmentLength.asNumber
+
+if(numMinimumSegmentLength >= numSegmentLength)then
+  MsgBox.error("Minimum segment length must be greater than maximum segment length.", "DC Processing Extension")
+  exit
+end
+
+' Select Segment Theme
+
+clsPolyline = Polyline
+def = av.GetProject.MakeFileName("segment", "shp") 
+def = FileDialog.Put(def, "*.shp", "New Segmented Polyline Theme") 
+
+if (def = nil) then 
+ exit
+end
+ftbSegment = FTab.MakeNew(def, clsPolyline) 
+fldSegmentShape = ftbSegment.findField("Shape")
+
+ftbSegment.setEditable(true)
+
+av.run("DCProcess.FTab.copyFields", {ftbLine, ftbSegment})
+
+numToGo = ftbLine.getNumRecords
+numComplete = 0
+av.showStopButton
+
+ftbLineSelection=ftbLine.getselection
+if (ftbLineSelection.count=0) then
+
+  for each recLine in ftbLine
+
+
+  pllShape = ftbLine.returnValue(fldLineShape, recLine)
+  if((pllShape <> nil)and(pllShape.isNull.not)and(pllShape.isEmpty.not))then
+    lstLines = pllShape.explode
+    for each pllLine in lstLines
+      lstLinePoints = pllLine.asList
+      if(lstLinePoints.count = 1)then
+        lstSegments = av.run("DCProcess.PointList.returnSegmentList", {lstLinePoints.get(0), numSegmentLength})
+        ' Check mimimum segment length.for last segment.
+        numSegments = lstSegments.count
+        pllLastSegment = lstSegments.get(numSegments-1)
+        if((pllLastSegment.returnLength < numMinimumSegmentLength)and(pllLine.returnLength > numMinimumSegmentLength))then
+          ' Join last two segments
+          numSegments = lstSegments.count
+          lstSegmentPoints = lstSegments.get(numSegments-2).asList.get(0)
+          lstSegmentPoints = lstSegmentPoints + pllLastSegment.asList.get(0)
+          pllTwoSegments = Polyline.make({lstSegmentPoints})
+          numAdjustedSegmentLength = pllTwoSegments.returnLength - numMinimumSegmentLength
+          lstAdjustedSegments = av.run("DCProcess.PointList.returnSegmentList", {lstSegmentPoints, numAdjustedSegmentLength})
+          lstSegments.set(numSegments-2, lstAdjustedSegments.get(0))
+          lstSegments.set(numSegments-1, lstAdjustedSegments.get(1))
+        end
+        
+        ' Write segments to FTab.
+        for each pllSegment in lstSegments
+            recSegment = ftbSegment.addRecord
+            ftbSegment.setValue(fldSegmentShape, recSegment, pllSegment)
+            av.run("DCProcess.FTab.copyRecordValues",{ftbLine, ftbSegment, recLine, recSegment})
+        end
+      end
+    end
+  end
+
+  numComplete = numComplete + 1
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    ftbSegment.setEditable(false)
+    exit
+  end
+end
+else
+  for each recLine in ftbLine.getselection
+
+
+  pllShape = ftbLine.returnValue(fldLineShape, recLine)
+  if((pllShape <> nil)and(pllShape.isNull.not)and(pllShape.isEmpty.not))then
+    lstLines = pllShape.explode
+    for each pllLine in lstLines
+      lstLinePoints = pllLine.asList
+      if(lstLinePoints.count = 1)then
+        lstSegments = av.run("DCProcess.PointList.returnSegmentList", {lstLinePoints.get(0), numSegmentLength})
+        ' Check mimimum segment length.for last segment.
+        numSegments = lstSegments.count
+        pllLastSegment = lstSegments.get(numSegments-1)
+        if((pllLastSegment.returnLength < numMinimumSegmentLength)and(pllLine.returnLength > numMinimumSegmentLength))then
+          ' Join last two segments
+          numSegments = lstSegments.count
+          lstSegmentPoints = lstSegments.get(numSegments-2).asList.get(0)
+          lstSegmentPoints = lstSegmentPoints + pllLastSegment.asList.get(0)
+          pllTwoSegments = Polyline.make({lstSegmentPoints})
+          numAdjustedSegmentLength = pllTwoSegments.returnLength - numMinimumSegmentLength
+          lstAdjustedSegments = av.run("DCProcess.PointList.returnSegmentList", {lstSegmentPoints, numAdjustedSegmentLength})
+          lstSegments.set(numSegments-2, lstAdjustedSegments.get(0))
+          lstSegments.set(numSegments-1, lstAdjustedSegments.get(1))
+        end
+        
+        ' Write segments to FTab.
+        for each pllSegment in lstSegments
+            recSegment = ftbSegment.addRecord
+            ftbSegment.setValue(fldSegmentShape, recSegment, pllSegment)
+            av.run("DCProcess.FTab.copyRecordValues",{ftbLine, ftbSegment, recLine, recSegment})
+        end
+      end
+    end
+  end
+
+  numComplete = numComplete + 1
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    ftbSegment.setEditable(false)
+    exit
+  end
+end
+msgbox.info (ftbline.getselection.count.asstring,"")
+
+end
+
+ftbSegment.setEditable(false)
+ftbSegment.createIndex(fldSegmentShape)
+
+av.run("DCProcess.View.addFTab", {viewActive, ftbSegment})
+
+av.clearStatus

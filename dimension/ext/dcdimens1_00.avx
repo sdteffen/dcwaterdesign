@@ -1,0 +1,554 @@
+/3.2
+(Extension.1
+	Name:	"DC Dimensioning"
+	FirstRootClassName:	"ToolMenu"
+	Roots:	2
+	Roots:	23
+	Roots:	24
+	Roots:	25
+	Roots:	26
+	Roots:	27
+	Roots:	28
+	Roots:	29
+	Roots:	30
+	Roots:	31
+	Roots:	32
+	Roots:	33
+	Roots:	34
+	Roots:	35
+	Roots:	36
+	Version:	32
+	About:	"Dimensioning Extension 1.02\n(c) 2001 DORSCH Consult.\nThis extension provides dimensioning tools.\nTue Sep 04 13:53:58 2001"
+	CanUnloadScript:	37
+	InstallScript:	38
+	UninstallScript:	39
+	ExtVersion:	1
+)
+
+(ToolMenu.2
+	Help:	"Œÿ «·ﬁÌ«” // —”„ Œÿ «·ﬁÌ«”"
+	Tag:	"Dimension Line//Draw a dimension line"
+	Update:	"DCDimens.View.createDimensionShapeUpdate"
+	Icon:	9
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"DCDimens.View.createDimensionShape"
+	Click:	"DCDimens.View.createDimensionShapeTool"
+	Child:	10
+	Child:	11
+	Child:	21
+)
+
+(AVDLog.3
+	Y:	20
+	W:	300
+	H:	40
+	Server:	4
+	ControlPanel:	5
+	Title:	"Dimension Line"
+	EscapeEnabled:	1
+	AlwaysOnTop:	1
+	HasTitleBar:	1
+	Closeable:	1
+	DefaultButton:	8
+)
+
+(Nil.4
+)
+
+(CPanel.5
+	Child:	6
+	ResBox:	7
+	Listening:	1
+)
+
+(TextLabel.6
+	InternalName:	"tlblInformation"
+	Constraints:	0x55
+	Label:	"Ersten Punkt auswaehlen"
+	Listening:	1
+)
+
+(RectD.7
+	Top:	50.00000000000000
+	Right:	300.00000000000000
+	Bottom:	20.00000000000000
+)
+
+(Nil.8
+)
+
+(AVIcon.9
+	Name:	"dimension.gif"
+	Data:	4e442049 6d616765 00010011 00110000 
+	Data:	01210509 09090909 09090909 09090909 
+	Data:	09090500 09090909 09090909 09090909 
+	Data:	09090900 00090909 09090909 09090909 
+	Data:	09090909 00000909 09090909 09090909 
+	Data:	09090909 09000009 09090909 09090909 
+	Data:	09090909 09090000 09090909 09090909 
+	Data:	09090909 09090900 00090903 00010909 
+	Data:	09090901 00030909 00000800 00080909 
+	Data:	09090909 09080000 08000000 00000000 
+	Data:	00000000 00000000 00000000 08000008 
+	Data:	09090909 09090908 00000800 00090903 
+	Data:	00010909 09090901 00030909 00000909 
+	Data:	09090909 09090909 09090909 09000009 
+	Data:	09090909 09090909 09090909 09090000 
+	Data:	09090909 09090909 09090909 09090900 
+	Data:	00090909 09090909 09090909 09090909 
+	Data:	00000909 09090909 09090909 09090909 
+	Data:	09000509 09090909 09090909 09090909 
+	Data:	09090500 00040000 00000000 08080800 
+	Data:	33333300 50505000 66666600 80808000 
+	Data:	99999900 cccccc00 d0d0d002 ffffff00 
+	Data:	99666600 66333300 cc999900 99333300 
+	Data:	cc666600 cc333300 33000000 66000000 
+	Data:	99000000 cc000000 90909000 ff333300 
+	Data:	ff666600 ff999900 ffcccc00 ff330000 
+	Data:	cc330000 ff663300 cc663300 99330000 
+	Data:	ff996600 ff660000 99663300 cc996600 
+	Data:	66330000 cc660000 ff993300 ffcc9900 
+	Data:	ff990000 cc993300 99660000 ffcc6600 
+	Data:	cc990000 ffcc3300 ffcc0000 99996600 
+	Data:	66663300 cccc9900 99993300 cccc6600 
+	Data:	cccc3300 33330000 66660000 99990000 
+	Data:	cccc0000 ffff0000 ffff3300 ffff6600 
+	Data:	ffff9900 ffffcc00 ccff0000 99cc0000 
+	Data:	ccff3300 99cc3300 66990000 ccff6600 
+	Data:	99ff0000 66993300 99cc6600 33660000 
+	Data:	66cc0000 99ff3300 ccff9900 66ff0000 
+	Data:	66cc3300 33990000 99ff6600 33cc0000 
+	Data:	66ff3300 33ff0000 66996600 33663300 
+	Data:	99cc9900 33993300 66cc6600 33cc3300 
+	Data:	00330000 00660000 00990000 00cc0000 
+	Data:	00ff0000 33ff3300 66ff6600 99ff9900 
+	Data:	ccffcc00 00ff3300 00cc3300 33ff6600 
+	Data:	33cc6600 00993300 66ff9900 00ff6600 
+	Data:	33996600 66cc9900 00663300 00cc6600 
+	Data:	33ff9900 99ffcc00 00ff9900 33cc9900 
+	Data:	00996600 66ffcc00 00cc9900 33ffcc00 
+	Data:	00ffcc00 66999900 33666600 99cccc00 
+	Data:	33999900 66cccc00 33cccc00 00333300 
+	Data:	00666600 00999900 00cccc00 00ffff00 
+	Data:	33ffff00 66ffff00 99ffff00 ccffff00 
+	Data:	00ccff00 0099cc00 33ccff00 3399cc00 
+	Data:	00669900 66ccff00 0099ff00 33669900 
+	Data:	6699cc00 00336600 0066cc00 3399ff00 
+	Data:	99ccff00 0066ff00 3366cc00 00339900 
+	Data:	6699ff00 0033cc00 3366ff00 0033ff00 
+	Data:	66669900 33336600 9999cc00 33339900 
+	Data:	6666cc00 3333cc00 00003300 00006600 
+	Data:	00009900 0000cc00 0000ff00 3333ff00 
+	Data:	6666ff00 9999ff00 ccccff00 3300ff00 
+	Data:	3300cc00 6633ff00 6633cc00 33009900 
+	Data:	9966ff00 6600ff00 66339900 9966cc00 
+	Data:	33006600 6600cc00 9933ff00 cc99ff00 
+	Data:	9900ff00 9933cc00 66009900 cc66ff00 
+	Data:	9900cc00 cc33ff00 cc00ff00 99669900 
+	Data:	66336600 cc99cc00 99339900 cc66cc00 
+	Data:	cc33cc00 33003300 66006600 99009900 
+	Data:	cc00cc00 ff00ff00 ff33ff00 ff66ff00 
+	Data:	ff99ff00 ffccff00 ff00cc00 cc009900 
+	Data:	ff33cc00 cc339900 99006600 ff66cc00 
+	Data:	ff009900 99336600 cc669900 66003300 
+	Data:	cc006600 ff339900 ff99cc00 ff006600 
+	Data:	cc336600 99003300 ff669900 cc003300 
+	Data:	ff336600 ff003300 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 02000800 0a002000 
+	Data:	00000000 00000000 000000
+)
+
+(Tool.10
+	Help:	"Œÿ «·ﬁÌ«” // —”„ Œÿ «·ﬁÌ«”"
+	Tag:	"Dimension Line//Draw a dimension line"
+	Update:	"DCDimens.View.createDimensionShapeUpdate"
+	Icon:	9
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"DCDimens.View.createDimensionShape"
+	Click:	"DCDimens.View.createDimensionShapeTool"
+)
+
+(Tool.11
+	Help:	"«‰‘«¡ ‰ﬁÿ… // «‰‘«¡ ‰ﬁÿ…"
+	Tag:	"Construct Point//Construct a point"
+	Update:	"DCDimens.View.createDimensionGraphicUpdate"
+	Icon:	20
+	Cursor:	"Cursors.CrossHair"
+	Apply:	"DCDimens.View.createDimensionGraphic"
+	Click:	"DCDimens.View.createDimensionGraphicTool"
+)
+
+(AVDLog.12
+	Name:	"NMMS.Guide"
+	X:	62
+	Y:	123
+	W:	300
+	H:	40
+	Server:	13
+	ControlPanel:	14
+	Title:	"NMMS Guide"
+	EscapeEnabled:	1
+	AlwaysOnTop:	1
+	HasTitleBar:	1
+	Closeable:	1
+	DefaultButton:	19
+)
+
+(Nil.13
+)
+
+(CPanel.14
+	Child:	15
+	ResBox:	18
+	Listening:	1
+)
+
+(CPanel.15
+	InternalName:	"cpnlCurrentTool"
+	Child:	16
+	Constraints:	0x55
+	ResBox:	17
+	Label:	"Masslinie loeschen"
+	VisibleBorder:	1
+	Listening:	1
+)
+
+(TextLabel.16
+	InternalName:	"tlblInformation"
+	Constraints:	0x55
+	Label:	"Zu loeschende Masslinie auswaehlen"
+	Listening:	1
+)
+
+(RectD.17
+	Left:	10.00000000000000
+	Top:	40.00000000000000
+	Right:	290.00000000000000
+	Bottom:	20.00000000000000
+)
+
+(RectD.18
+	Top:	40.00000000000000
+	Right:	300.00000000000000
+)
+
+(Nil.19
+)
+
+(AVIcon.20
+	Name:	"construct_point.gif"
+	Data:	4e442049 6d616765 00010011 00100000 
+	Data:	01100000 00000511 17176269 6b171717 
+	Data:	17171717 1717170f 01006661 61616b17 
+	Data:	17171717 17171717 17176161 005e6572 
+	Data:	02060b17 17171717 17171760 6400006a 
+	Data:	67630f08 00001717 17170c00 5d616161 
+	Data:	5f641717 17171717 17170016 17176b61 
+	Data:	61611300 17171717 17170011 17171717 
+	Data:	17171717 0d141717 17170017 17171717 
+	Data:	17171717 17170014 17170010 17171717 
+	Data:	17171717 17171715 00171713 17171717 
+	Data:	17171717 17171717 170a1717 17171717 
+	Data:	17171717 17171717 1717170c 17171717 
+	Data:	17171717 17171717 17171717 00171717 
+	Data:	17171717 17171717 17171717 17011417 
+	Data:	17171717 17171717 17171717 1717090b 
+	Data:	17171717 17171717 17171717 17171711 
+	Data:	03171717 17171717 17171717 17171717 
+	Data:	14020000 04000000 00000018 18180020 
+	Data:	20200030 30300033 33330040 40400050 
+	Data:	50500066 66660068 68680070 70700078 
+	Data:	78780080 80800088 88880090 90900099 
+	Data:	999900a8 a8a800b0 b0b000c8 c8c800cc 
+	Data:	cccc00d0 d0d000d8 d8d800e0 e0e000f0 
+	Data:	f0f002ff ffff0099 66660066 333300cc 
+	Data:	99990099 333300cc 666600cc 33330033 
+	Data:	00000066 00000099 000000cc 000000ff 
+	Data:	333300ff 333300ff 666600ff 999900ff 
+	Data:	cccc00ff 330000cc 330000ff 663300cc 
+	Data:	66330099 330000ff 996600ff 66000099 
+	Data:	663300cc 99660066 330000cc 660000ff 
+	Data:	993300ff cc9900ff 990000cc 99330099 
+	Data:	660000ff cc6600cc 990000ff cc3300ff 
+	Data:	cc000099 99660066 663300cc cc990099 
+	Data:	993300cc cc6600cc cc330033 33000066 
+	Data:	66000099 990000cc cc0000ff ff0000ff 
+	Data:	ff3300ff ff6600ff ff9900ff ffcc00cc 
+	Data:	ff000099 cc0000cc ff330099 cc330066 
+	Data:	990000cc ff660099 ff000066 99330099 
+	Data:	cc660033 66000066 cc000099 ff3300cc 
+	Data:	ff990066 ff000066 cc330033 99000099 
+	Data:	ff660033 cc000066 ff330060 d0400020 
+	Data:	a0000028 c8000030 e8000033 ff000078 
+	Data:	ff580090 d8800008 30000010 58000020 
+	Data:	b8000028 e0000030 ff000040 ff180010 
+	Data:	680000d0 ffc80066 99660033 66330099 
+	Data:	cc990033 99330066 cc660033 cc330000 
+	Data:	18000000 33000000 66000000 99000000 
+	Data:	cc000000 ff000033 ff330066 ff660099 
+	Data:	ff9900cc ffcc0000 ff330000 cc330033 
+	Data:	ff660033 cc660000 99330066 ff990000 
+	Data:	ff660033 99660066 cc990000 66330000 
+	Data:	cc660033 ff990099 ffcc0000 ff990033 
+	Data:	cc990000 99660066 ffcc0000 cc990033 
+	Data:	ffcc0000 ffcc0066 99990033 66660099 
+	Data:	cccc0033 99990066 cccc0033 cccc0000 
+	Data:	33330000 66660000 99990000 cccc0000 
+	Data:	ffff0033 ffff0066 ffff0099 ffff00cc 
+	Data:	ffff0000 ccff0000 99cc0033 ccff0033 
+	Data:	99cc0000 66990066 ccff0000 99ff0033 
+	Data:	66990066 99cc0000 33660000 66cc0033 
+	Data:	99ff0099 ccff0000 66ff0033 66cc0000 
+	Data:	33990066 99ff0000 33cc0033 66ff0000 
+	Data:	33ff0066 66990033 33660099 99cc0033 
+	Data:	33990066 66cc0033 33cc0000 00330000 
+	Data:	00660000 00990000 00cc0000 00ff0033 
+	Data:	33ff0066 66ff0099 99ff00cc ccff0033 
+	Data:	00ff0033 00cc0066 33ff0066 33cc0033 
+	Data:	00990099 66ff0066 00ff0066 33990099 
+	Data:	66cc0033 00660066 00cc0099 33ff00cc 
+	Data:	99ff0099 00ff0099 33cc0066 009900cc 
+	Data:	66ff0099 00cc00cc 33ff00cc 00ff0099 
+	Data:	66990066 336600cc 99cc0099 339900cc 
+	Data:	66cc00cc 33cc0033 00330066 00660099 
+	Data:	009900cc 00cc00ff 00ff00ff 33ff00ff 
+	Data:	66ff00ff 99ff00ff ccff00ff 00cc00cc 
+	Data:	009900ff 33cc00cc 33990099 006600ff 
+	Data:	66cc00ff 00990099 336600cc 66990066 
+	Data:	003300cc 006600ff 339900ff 99cc00ff 
+	Data:	006600cc 33660099 003300ff 669900cc 
+	Data:	003300ff 336600ff 00330000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000002 0008000a 00200000 
+	Data:	00000000 00000000 0000
+)
+
+(Tool.21
+	Help:	"«“«·… Œÿ «·ﬁÌ«” // «“«·… Œÿ «·ﬁÌ«”"
+	Tag:	"Remove Dimension Line//Remove a dimension line"
+	Update:	"DCDimens.View.removeDimensionUpdate"
+	Icon:	22
+	Cursor:	"Cursors.Verboten"
+	Apply:	"DCDimens.View.removeDimension"
+	Click:	"DCDimens.View.removeDimensionTool"
+)
+
+(AVIcon.22
+	Name:	"erase_dimension.gif"
+	Data:	4e442049 6d616765 00010011 00110000 
+	Data:	01210a0a 0a0a0a0a 0a0a0a0a 0a0a0a00 
+	Data:	0a0a070a 0a0a0a0a 0a0a0a0a 0a0a0a00 
+	Data:	0a0a000a 0a0a0a0a 0a0a0a0a 0a0a0a00 
+	Data:	0a0a000a 0a0a0a0a 0a0a0a0a 0a0a0a00 
+	Data:	0a0a000a 0a0a0a0a 0a0a0a0a 0a0a0a00 
+	Data:	000a000a 0a000a0a 0a0a0a0a 0a0a0a00 
+	Data:	0a0a000a 0a000a0a 0a0a0a0a 0a0a0a00 
+	Data:	06000a0a 00000a0a 0a0a0a0a 0a0a0a00 
+	Data:	06060600 0a000a0a 0a0a0a0a 0a0a0a0a 
+	Data:	00060606 06000a0a 0a0a0a0a 0a0a0a0a 
+	Data:	0a000606 06000a0a 0a0a0a0a 000a0a0a 
+	Data:	0a0a0700 00000a0a 0a0a0a0a 0a000a0a 
+	Data:	0300010a 0a0a0a0a 0100030a 0a000009 
+	Data:	0000090a 0a0a0a0a 0a0a0900 00090000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00090000 090a0a0a 0a0a0a0a 09000009 
+	Data:	00000a0a 0300010a 0a0a0a0a 0100030a 
+	Data:	0a00000a 0a0a0a0a 0a0a0a0a 0a0a0a0a 
+	Data:	0a0a0000 00040000 00000000 08080800 
+	Data:	33333300 50505000 66666600 99999900 
+	Data:	a8a8a800 c0c0c000 cccccc00 d0d0d002 
+	Data:	ffffff00 99666600 66333300 cc999900 
+	Data:	99333300 cc666600 cc333300 33000000 
+	Data:	66000000 99000000 cc000000 e0e0e000 
+	Data:	ff333300 ff666600 ff999900 ffcccc00 
+	Data:	ff330000 cc330000 ff663300 cc663300 
+	Data:	99330000 ff996600 ff660000 99663300 
+	Data:	cc996600 66330000 cc660000 ff993300 
+	Data:	ffcc9900 ff990000 cc993300 99660000 
+	Data:	ffcc6600 cc990000 ffcc3300 ffcc0000 
+	Data:	99996600 66663300 cccc9900 99993300 
+	Data:	cccc6600 cccc3300 33330000 66660000 
+	Data:	99990000 cccc0000 ffff0000 ffff3300 
+	Data:	ffff6600 ffff9900 ffffcc00 ccff0000 
+	Data:	99cc0000 ccff3300 99cc3300 66990000 
+	Data:	ccff6600 99ff0000 66993300 99cc6600 
+	Data:	33660000 66cc0000 99ff3300 ccff9900 
+	Data:	66ff0000 66cc3300 33990000 99ff6600 
+	Data:	33cc0000 66ff3300 33ff0000 66996600 
+	Data:	33663300 99cc9900 33993300 66cc6600 
+	Data:	33cc3300 00330000 00660000 00990000 
+	Data:	00cc0000 00ff0000 33ff3300 66ff6600 
+	Data:	99ff9900 ccffcc00 00ff3300 00cc3300 
+	Data:	33ff6600 33cc6600 00993300 66ff9900 
+	Data:	00ff6600 33996600 66cc9900 00663300 
+	Data:	00cc6600 33ff9900 99ffcc00 00ff9900 
+	Data:	33cc9900 00996600 66ffcc00 00cc9900 
+	Data:	33ffcc00 00ffcc00 66999900 33666600 
+	Data:	99cccc00 33999900 66cccc00 33cccc00 
+	Data:	00333300 00666600 00999900 00cccc00 
+	Data:	00ffff00 33ffff00 66ffff00 99ffff00 
+	Data:	ccffff00 00ccff00 0099cc00 33ccff00 
+	Data:	3399cc00 00669900 66ccff00 0099ff00 
+	Data:	33669900 6699cc00 00336600 0066cc00 
+	Data:	3399ff00 99ccff00 0066ff00 3366cc00 
+	Data:	00339900 6699ff00 0033cc00 3366ff00 
+	Data:	0033ff00 66669900 33336600 9999cc00 
+	Data:	33339900 6666cc00 3333cc00 00003300 
+	Data:	00006600 00009900 0000cc00 0000ff00 
+	Data:	3333ff00 6666ff00 9999ff00 ccccff00 
+	Data:	3300ff00 3300cc00 6633ff00 6633cc00 
+	Data:	33009900 9966ff00 6600ff00 66339900 
+	Data:	9966cc00 33006600 6600cc00 9933ff00 
+	Data:	cc99ff00 9900ff00 9933cc00 66009900 
+	Data:	cc66ff00 9900cc00 cc33ff00 cc00ff00 
+	Data:	99669900 66336600 cc99cc00 99339900 
+	Data:	cc66cc00 cc33cc00 33003300 66006600 
+	Data:	99009900 cc00cc00 ff00ff00 ff33ff00 
+	Data:	ff66ff00 ff99ff00 ffccff00 ff00cc00 
+	Data:	cc009900 ff33cc00 cc339900 99006600 
+	Data:	ff66cc00 ff009900 99336600 cc669900 
+	Data:	66003300 cc006600 ff339900 ff99cc00 
+	Data:	ff006600 cc336600 99003300 ff669900 
+	Data:	cc003300 ff336600 ff003300 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 00000000 00000000 
+	Data:	00000000 00000000 02000800 0a002000 
+	Data:	00000000 00000000 000000
+)
+
+(Script.23
+	Name:	"DCDimens.DimensionTheme.addDimension"
+	SourceCode:	"' DCDimens.DimensionTheme.addDimension\n\n' (c) 2001 DORSCH Consult\n\n' saves a dimension line in the dimension theme\n\n' first argument is the Polyline of the Dimension\n' second argument is the measurement as a number\n\n' returns nothing\n\npllDimension = self.get(0)\nnumDimension = self.get(1)\n\nviewActive = av.getActiveDoc\n\nlstThemes = viewActive.getThemes\nthmDimensions = nil\nfor each thmTest in lstThemes\n  if(thmTest.getSrcName.getFilename.getFullName.right(\"dimens.shp\".count).lcase = \"dimens.shp\")then\n    thmDi
+mensions = thmTest\n    break\n  end\nend\n\nif(thmDimensions = nil)then\n  System.echo(\"ERROR: Dimension Theme not found.\")\n  return nil\nend\nftbDimensions = thmDimensions.getFTab\nfldDimension = ftbDimensions.findField(\"Dimension\")\nif(fldDimension = nil)then\n  System.echo(\"ERROR: Dimension field not found.\")\nend\n\nprjtnView = viewActive.getProjection\nif (prjtnView.isNull.not) then\n  pllDimension = pllDimension.returnUnprojected(prjtnView)\nend\n\nftbDimensions.setEditable(true)\nfldShape = ftbDimensions.findField(\"Sha
+pe\")\nrecDimension = ftbDimensions.addRecord\nftbDimensions.setValue(fldShape, recDimension, pllDimension)\nftbDimensions.setValue(fldDimension, recDimension, numDimension)\nftbDimensions.setEditable(false)\nthmDimensions.clearSelection\nrectInvalidExtent = pllDimension.returnExtent\nlabelerDimension = Labeler.make(thmDimensions.returnExtent)\nlabelerDimension.setFeatureWeight(#LABEL_WEIGHT_NO)\nlabelerDimension.setLabelWeight(#LABEL_WEIGHT_HIGH)\nlabelerDimension.removeDuplicates(false)\ntxtsymDimension = TextSymbol.
+Make\ntxtsymDimension.setFont(Font.make(\"Times\",\"Bold\"))\ntxtsymDimension.setSize(8)\nthmDimensions.setLabelTextSym(txtsymDimension)\nlabelerDimension.load(thmDimensions)\nviewActive.getAutoLabels(labelerDimension, false)\nviewActive.getDisplay.invalidateRect(rectInvalidExtent)\nav.GetProject.SetModified(true)\n"
+)
+
+(Script.24
+	Name:	"DCDimens.ensureNMMSGuideDialog"
+	SourceCode:	"' DCDimens.ensureNMMSGuideDialog\n\n' (c) 2001 DORSCH Consult\n\n' make sure that the Dialog \"NMMS.Guide\" exists and\n' contains a Current Tool Control Panel with a Text Label\n\n' no arguments\n' returns nothing\n\ndlgGuide = av.findDialog(\"NMMS.Guide\")\n'if(dlgGuide <> nil)then\n'  av.getProject.removeDialog(\"NMMS.Guide\")\n'  dlgGuide = nil\n'end\nif(dlgGuide = nil)then\n  dlgGuide = Dialog.makeSized(false, true, true, true, Rect.make(0@20, 300@40))\n  dlgGuide.setName(\"NMMS.Guide\")\n  strI18n = av.run(\"DCDimens.i18n.retur
+nTranslation\",\"NMMS Guide\")\n  dlgGuide.setTitle(strI18n)\n  av.getProject.addDialog(dlgGuide)\nend\ncpnlCurrentTool = dlgGuide.findByName(\"cpnlCurrentTool\")\nif(cpnlCurrentTool = nil)then\n  cpnlCurrentTool = ControlPanel.make\n  strI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Construct point\")\n  cpnlCurrentTool.setLabel(strI18n)\n  cpnlCurrentTool.setName(\"cpnlCurrentTool\")\n  cpnlCurrentTool.setVisibleBorder(true)\n  dlgGuide.getControlPanel.add(cpnlCurrentTool, Rect.make(0@0, 300@40))\nend\ntlblInformation = cp
+nlCurrentTool.findByName(\"tlblInformation\")\nif(tlblInformation = nil)then\n  tlblInformation = TextLabel.make\n  strInformationI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Select first point\")\n  tlblInformation.setLabel(strInformationI18n)\n  tlblInformation.setName(\"tlblInformation\")\n  cpnlCurrentTool.add(tlblInformation, Rect.make(10@20, 280@20))\nend\nif(dlgGuide.isOpen.not)then\n  dlgGuide.open\nend\n\n' make sure that the dimension theme is activated\n\nviewActive = av.getActiveDoc\nlstThemes = viewActive.getT
+hemes\nthmDimensions = nil\nfor each thmTest in lstThemes\n  if(thmTest.getSrcName.getFilename.getFullName.right(\"dimens.shp\".count).lcase = \"dimens.shp\")then\n    thmDimensions = thmTest\n    break\n  end\nend\n\nif(thmDimensions = nil)then\n  System.echo(\"ERROR: Dimension Theme not found.\")\n  return nil\nend\n\nthmDimensions.setVisible(true)\n"
+)
+
+(Script.25
+	Name:	"DCDimens.i18n.returnTranslation"
+	SourceCode:	"' DCDimens.i18n.returnTranslation\n\n' (c) 2001 DORSCH Consult\n\n' handels all the translations for the extension\n\n' argument is the string to be translated\n\nstrOriginal = self\n\ndicDictionaries = Dictionary.make(10)\n\ndicGerman = Dictionary.make(20)\ndicGerman.add(\"Dimension line\", \"Masslinie\")\ndicGerman.add(\"Select first point\", \"Ersten Punkt auswaehlen\")\ndicGerman.add(\"Select second point\", \"Zweiten Punkt auswaehlen\")\ndicGerman.add(\"Select intersection point\", \"Schnittpunkt auswaehlen\")\ndicGerman.add(\"Construc
+t point\",\"Punkt konstruieren\")\ndicGerman.add(\"Remove dimension line\",\"Masslinie loeschen\")\ndicGerman.add(\"Select dimension line to delete\",\"Zu loeschende Masslinie auswaehlen\")\ndicGerman.add(\"Delete the %s selected dimension lines?\", \"Sollen %s Masslinien geloescht werden?\")\ndicGerman.add(\"NMMS Guide\",\"NMMS helif\")\ndicGerman.add(\"Draw the dimension line\", \"Masslinie zeichnen\")\ndicGerman.add(\"Enter measurement in m\",\"Mass in m eingeben\")\ndicGerman.add(\"NMMS\",\"NMMS\")\ndicGerman.add(\"Dimension line is shorter t
+han 1 m.\"+NL+\"Keep the line?\",\"Masslinie ist kuerzer als 1 m.\"+\"Masslinie beibehalten?\")\ndicGerman.add(\"Add dimension line\",\"Masslinie hinzufuegen\")\ndicGerman.add(\"Circles do not intersect. Can't construct point.\", \"Kreise schneiden sich nicht. Kann keinen Punkt konstruieren.\")\ndicGerman.add(\"Save dimension lines?\", \"Masslinien speichern?\")\ndicGerman.add(\"Dimension Line//Draw a dimension line\",\"Masslinie//Masslinie zeichnen\")\ndicGerman.add(\"Construct Point//Construct a point\",\"Punkt konstruieren//Einen Punk
+t konstruieren\")\ndicGerman.add(\"Remove Dimension Line//Remove a dimension line\",\"Masslinie entfernen//Eine Masslinie entfernen\")\ndicDictionaries.add(\"de\", dicGerman)\n\ndicArabic = Dictionary.make(20)\ndicArabic.add(\"Dimension line\", \"Œÿ «·ﬁÌ«”\")\ndicArabic.add(\"Select first point\", \"«Œ — «·‰ﬁÿ… «·«Ê·Ï\")\ndicArabic.add(\"Select second point\", \"«Œ — «·‰ﬁÿ… «·À«‰Ì…\")\ndicArabic.add(\"Select intersection point\", \"«Œ — ‰ﬁÿ… «· ﬁ«ÿ⁄\")\ndicArabic.add(\"Construct point\",\"«‰‘«¡ ‰ﬁÿ…\")\ndicArabic.add(\"Remove dimension line\",\"«
+“«·… Œÿ «·ﬁÌ«”\")\ndicArabic.add(\"Select dimension line to delete\",\"«Œ — Œÿ «·ﬁÌ«” «·–Ì  —€» »«“«· Â\")\ndicArabic.add(\"Delete the selected %s dimension lines?\", \"Â·  —€» »«“«·… %s ŒÿÊÿ «·ﬁÌ«”?\")\ndicArabic.add(\"NMMS Guide\",\"«·«—‘«œ« \")\ndicArabic.add(\"Draw the dimension line\",\"—”„ Œÿ «·ﬁÌ«”\")\ndicArabic.add(\"Enter measurement in m\",\"  »«·«„ «— «œŒ· «·ﬁÌ«”\")\ndicArabic.add(\"NMMS\",\"NMMS\")\ndicArabic.add(\"Dimension line is shorter than 1 m.\"+NL+\"Keep the line?\",\"«‰ Œÿ «·ﬁÌ«” «ﬁ· „‰ 1 „ \" +\"Â·  —€» »«·«Õ ›«Ÿ »Â?\")\ndicA
+rabic.add(\"Add dimension line\",\"«÷«›… Œÿ «·ﬁÌ«”\")\ndicArabic.add(\"Circles do not intersect. Can't construct point.\", \"«‰ «·œÊ«∆— ·«   ﬁ«ÿ⁄ ° ·« Ì„ﬂ‰ «‰‘«¡ «·‰ﬁÿ… \")\ndicArabic.add(\"Save dimension lines?\", \"Â·  —€» »Õ›Ÿ Œÿ «·ﬁÌ«”?\")\ndicArabic.add(\"Dimension Line//Draw a dimension line\",\"Œÿ «·ﬁÌ«” // —”„ Œÿ «·ﬁÌ«”\")\ndicArabic.add(\"Construct Point//Construct a point\",\"«‰‘«¡ ‰ﬁÿ… // «‰‘«¡ ‰ﬁÿ…\")\ndicArabic.add(\"Remove Dimension Line//Remove a dimension line\",\"«“«·… Œÿ «·ﬁÌ«” // «“«·… Œÿ «·ﬁÌ«”\")\n\ndicDictionaries.a
+dd(\"ar\", dicArabic)\n\n'return the Arabic translation\nstrTranslation = dicArabic.get(strOriginal)\nif(strTranslation = nil)then\n  System.echo(\"DC Dimension Extension: No translation for '\"+strOriginal+\"'.\")\n  strTranslation = strOriginal\nend\n\nreturn strTranslation"
+)
+
+(Script.26
+	Name:	"DCDimens.View.createDimensionGraphic"
+	SourceCode:	"' DCDimens.View.createDimensionGraphic\n\n' (c) 2001 DORSCH Consult\n\nviewActive = av.GetActiveDoc\npntUser = viewActive.getDisplay.returnUserPoint\n\nif (pntUser.isNull) then\n  return nil\nend\n\ncpnlCurrentTool = av.findDialog(\"NMMS.Guide\").findByName(\"cpnlCurrentTool\")\nif(cpnlCurrentTool = nil)then\n  System.echo(\"ERROR: Couldn't find ControlPanel for Current Tool\")\n  return nil\nend\n\nstrInputI18n = av.run(\"DCDimens.i18n.returnTranslation\", \"Enter measurement in m\")\n\ntlblInformation = cpnlCurrentTool.findByName(\"tl
+blInformation\")\nstrInformationFirstPoint = av.run(\"DCDimens.i18n.returnTranslation\", \"Select first point\")\nstrInformationSecondPoint = av.run(\"DCDimens.i18n.returnTranslation\", \"Select second point\")\nstrInformationIntersection = av.run(\"DCDimens.i18n.returnTranslation\", \"Select intersection point\")\n\nsymGreen = Symbol.make(#SYMBOL_PEN)\nsymGreen.setColor(Color.getGreen)\n\nif(tlblInformation.getLabel = strInformationFirstPoint)then\n\n  numMeasurement = nil\n  while(numMeasurement = nil)\n    strInput = MsgBox.inpu
+t(strInputI18n, \"\",\"1.0\")\n    if(strInput = nil)then\n      av.run(\"DCDimens.View.createDimensionGraphic.removeCircles\",nil)\n      tlblInformation.setLabel(strInformationFirstPoint)\n      return nil\n    end\n    if(strInput.isNumber)then\n      numMeasurement = strInput.asNumber\n    end\n  end\n\n  tlblInformation.setLabel(strInformationSecondPoint)    \n  shpCircle = Circle.make(pntUser, numMeasurement)\n  gshpCircle = GraphicShape.Make(shpCircle)\n  gshpCircle.setSymbol(symGreen)\n  viewActive.getGraphics.unselectA
+ll\n  gshpCircle.setSelected(false)\n  gshpCircle.setName(\"DCDimens.createDimensionGraphic.FirstCircle\")\n  viewActive.getGraphics.add(gshpCircle)\n\nelseif(tlblInformation.getLabel = strInformationSecondPoint)then\n\n  numMeasurement = nil\n  while(numMeasurement = nil)\n    strInput = MsgBox.input(strInputI18n, \"\",\"1.0\")\n    if(strInput = nil)then\n      av.run(\"DCDimens.View.createDimensionGraphic.removeCircles\",nil)\n      tlblInformation.setLabel(strInformationFirstPoint)\n      return nil\n    end\n    if(strInput.
+isNumber)then\n      numMeasurement = strInput.asNumber\n    end\n  end\n  \n  shpSecondCircle = Circle.make(pntUser, numMeasurement)\n\n  ' check if circles intersect\n  shpFirstCircle = nil\n  for each gshpTest in viewActive.getGraphics\n    if(gshpTest.getName = \"DCDimens.createDimensionGraphic.FirstCircle\")then\n      shpFirstCircle = gshpTest.getShape\n      break\n    end\n  end\n  numCenterDistance = pntUser.distance(shpFirstCircle.returnCenter)\n  numFirstRadius = shpFirstCircle.getRadius\n  if((numCenterDistance > 
+(numFirstRadius+numMeasurement))or(numCenterDistance+numFirstRadius.min(numMeasurement)<numFirstRadius.max(numMeasurement)))then  \n    strErrorI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Circles do not intersect. Can't construct point.\")\n    MsgBox.error(strErrorI18n, \"\")\n      av.run(\"DCDimens.View.createDimensionGraphic.removeCircles\",nil)\n      tlblInformation.setLabel(strInformationFirstPoint)\n    return nil\n  end\n\n  gshpCircle = GraphicShape.Make(shpSecondCircle)\n  viewActive.getGraphics.unselectA
+ll\n  gshpCircle.setSelected(false)\n  gshpCircle.setSymbol(symGreen)\n  gshpCircle.setName(\"DCDimens.createDimensionGraphic.SecondCircle\")\n  viewActive.getGraphics.add(gshpCircle)\n  tlblInformation.setLabel(strInformationIntersection)\nelse\n\n  ' find Intersection Points\n  shpFirstCircle = nil\n  shpSecondCircle = nil\n  for each gshpTest in viewActive.getGraphics\n    if(gshpTest.getName = \"DCDimens.createDimensionGraphic.FirstCircle\")then\n      shpFirstCircle = gshpTest.getShape\n    elseif(gshpTest.getName = \"DC
+Dimens.createDimensionGraphic.SecondCircle\")then\n      shpSecondCircle = gshpTest.getShape\n    end\n  end\n\n  pntFirstCenter = shpFirstCircle.returnCenter\n  pntSecondCenter = shpSecondCircle.returnCenter\n  lineCenterCenter = Line.make(pntFirstCenter, pntSecondCenter)\n\n' the following uses the cosine rule\n  numDistance = pntFirstCenter.distance(pntSecondCenter)\n  numFirstRadius = shpFirstCircle.getRadius\n  numSecondRadius = shpSecondCircle.getRadius\n  numFirstRadiusSquare = numFirstRadius * numFirstRadius\n  nu
+mSecondRadiusSquare = numSecondRadius * numSecondRadius\n  numDistanceSquare = numDistance * numDistance\n  numAngleRadians = ((numFirstRadiusSquare-numSecondRadiusSquare+numDistanceSquare)/(2*numFirstRadius*numDistance)).acos\n  numAngleDegrees = (numAngleRadians/number.getPi)*180\n  lstDimensionLines = List.make\n  for each numDirection in {1, (-1)}\n    transIntersection = Transform2D.make\n    transIntersection.move((0-pntFirstCenter.getX)@(0-pntFirstCenter.getY))\n    numScale = numFirstRadius/numDistance\n    
+transIntersection.scale(numScale@numScale)\n    transIntersection.rotate(numDirection*numAngleDegrees)\n    transIntersection.move(pntFirstCenter)\n    tlblInformation.setLabel(strInformationFirstPoint)\n    lstDimensionLines.add(lineCenterCenter.clone.transform(transIntersection))\n  end\n  if(pntUser.distance(lstDimensionLines.get(0).returnEnd)>pntUser.distance(lstDimensionLines.get(1).returnEnd))then\n    lineDimension = lstDimensionLines.get(1)\n  else\n    lineDimension = lstDimensionLines.get(0)\n  end\n  pllDim
+ension = lineDimension.asPolyline\n  lineSecondDimension = Line.make(lineDimension.returnEnd, shpSecondCircle.returnCenter)\n  pllDimension = pllDimension.returnMerged(lineSecondDimension.asPolyline)\n  gshpDimensionLine = GraphicShape.Make(pllDimension)\n  viewActive.getGraphics.unselectAll\n  gshpDimensionLine.setSelected(false)\n  gshpDimensionLine.setName(\"DCDimens.createDimensionGraphic.DimensionLine\")\n  gshpDimensionLine.setSymbol(symGreen)\n  viewActive.getGraphics.add(gshpDimensionLine)\n  av.run(\"DCDimens.
+View.createDimensionGraphic.removeCircles\",nil)\n  prjtnView = viewActive.getProjection\n  if (prjtnView.isNull.not) then\n    lineDimension = lineDimension.returnUnprojected(prjtnView)\n  end\n  pllDimension = lineDimension.asPolyline\n  av.GetProject.SetModified(true)\n  av.processAllInvals\n  strQuestionI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Save dimension lines?\")\n  if(MsgBox.yesNo(strQuestionI18n, \"\", true))then\n    'remove dimension graphic\n    viewActive.getGraphics.removeGraphic(gshpDimensionLine)
+ \n    av.run(\"DCDimens.DimensionTheme.addDimension\",{lineDimension.asPolyline, numFirstRadius})     \n    av.run(\"DCDimens.DimensionTheme.addDimension\",{lineSecondDimension.asPolyline, numSecondRadius})\n  end\nend\n\n"
+)
+
+(Script.27
+	Name:	"DCDimens.View.createDimensionGraphic.removeCircles"
+	SourceCode:	"' DCDimens.View.createDimensionGraphic.removeCircles\n\n' (c) 2001 DORSCH Consult\n\n' removes temporary graphics from view\n\n' no argument\n' returns nothing\n\nviewActive = av.GetActiveDoc\n\nlstRemove = List.make\nfor each gshpTest in viewActive.getGraphics\n  if((gshpTest.getName = \"DCDimens.createDimensionGraphic.FirstCircle\")or\n     (gshpTest.getName = \"DCDimens.createDimensionGraphic.SecondCircle\"))then\n    lstRemove.add(gshpTest)  \n  end\nend\nfor each gshpRemove in lstRemove\n  viewActive.getGraphics.removeGraphi
+c(gshpRemove)\nend\n"
+)
+
+(Script.28
+	Name:	"DCDimens.View.createDimensionGraphicTool"
+	SourceCode:	"' DCDimens.View.createDimensionGraphicTool\n\n' (c) 2001 DORSCH Consult\n\nviewActive = av.getActiveDoc\nviewActive.setSelectMode(#GRAPHICS_SELECT_NORMAL)\n\nav.run(\"DCDimens.ensureNMMSGuideDialog\",nil)\n\nav.run(\"DCDimens.View.createDimensionGraphic.removeCircles\", nil)\n\ncpnlCurrentTool = av.findDialog(\"NMMS.Guide\").getControlPanel.findByName(\"cpnlCurrentTool\")\nstrRemoveDimensionI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Construct point\")\ncpnlCurrentTool.setLabel(strRemoveDimensionI18n)\nstrSelectI18n = av.run
+(\"DCDimens.i18n.returnTranslation\",\"Select first point\")\ntlblInformation = cpnlCurrentTool.findByName(\"tlblInformation\")\ntlblInformation.setLabel(strSelectI18n)"
+)
+
+(Script.29
+	Name:	"DCDimens.View.createDimensionGraphicUpdate"
+	SourceCode:	"' DCDimens.View.createDimensionGraphicUpdate\n\n' (c) 2001 DORSCH Consult\n\nactiveView = av.GetActiveDoc\nthmEditable = activeView.getEditableTheme\n\nextDCWatDes = Extension.find(\"DC Water Design\")\nif(extDCWatDes <> nil)then\n  dicPreferences = extDCWatDes.getPreferences\nelse \n  exit\nend\n\nstrThemeName = dicPreferences.get(\"strPipes\")\n\nif ((thmEditable <> nil)or(strThemeName = nil)) then\n  self.setEnabled(false)\nelse\n  self.setEnabled(true)\nend\n"
+)
+
+(Script.30
+	Name:	"DCDimens.View.createDimensionShape"
+	SourceCode:	"' DCDimens.View.createDimensionShape\n\n' (c) 2001 DORSCH Consult\n\nviewActive = av.GetActiveDoc\nlineDimension = viewActive.getDisplay.returnUserLine\nif((lineDimension.isNull)or(lineDimension.isEmpty))then\n  return nil\nend\nif(lineDimension.returnLength < 1)then\n  strQuestionI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Dimension line is shorter than 1 m.\"+NL+\"Keep the line?\")\n  if(MsgBox.yesNo(strQuestionI18n,\"\",false).not)then\n    return nil\n  end\nend\n\nlstThemes = viewActive.getThemes\nthmDimensions = nil\nf
+or each thmTest in lstThemes\n  if(thmTest.getSrcName.getFilename.getFullName.right(\"dimens.shp\".count).lcase = \"dimens.shp\")then\n    thmDimensions = thmTest\n    break\n  end\nend\n\nif(thmDimensions = nil)then\n  System.echo(\"ERROR: Dimension Theme not found.\")\n  return nil\nend\nthmDimensions.setVisible(true)\nthmDimensions.setActive(true)\nftbDimensions = thmDimensions.getFTab\nfldDimension = ftbDimensions.findField(\"Dimension\")\nif(fldDimension = nil)then\n  System.echo(\"ERROR: Dimension field not found.\")\nend\n\nif (
+lineDimension.isNull) then\n  return nil\nend\n\nstrInputI18n = av.run(\"DCDimens.i18n.returnTranslation\", \"Enter measurement in m\")\nstrAddDimensionI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Add dimension line\")\nnumMeasurement = nil\nwhile(numMeasurement = nil)\n  strInput = MsgBox.input(strInputI18n, strAddDimensionI18n, \"1.0\")\n  if(strInput = nil)then\n    return nil\n  end\n  if(strInput.isNumber)then\n    numMeasurement = strInput.asNumber\n  end\nend\n\n\ntlblInformation = av.findDialog(\"NMMS.Guide\").findByName(
+\"cpnlCurrentTool\").findByName(\"tlblInformation\")\n\nprjtnView = viewActive.getProjection\nif (prjtnView.isNull.not) then\n  lineDimension = lineDimension.returnUnprojected(prjtnView)\nend\npllDimension = lineDimension.asPolyline\n\n' TODO: use DCDimens.DimensionTheme.addDimension\n\nftbDimensions.setEditable(true)\nfldShape = ftbDimensions.findField(\"Shape\")\nrecDimension = ftbDimensions.addRecord\nftbDimensions.setValue(fldShape, recDimension, pllDimension)\nftbDimensions.setValue(fldDimension, recDimension, numMeasurem
+ent)\nftbDimensions.setEditable(false)\nthmDimensions.clearSelection\nrectInvalidExtent = pllDimension.returnExtent\nlabelerDimension = Labeler.make(thmDimensions.returnExtent)\nlabelerDimension.setFeatureWeight(#LABEL_WEIGHT_NO)\nlabelerDimension.setLabelWeight(#LABEL_WEIGHT_HIGH)\nlabelerDimension.removeDuplicates(false)\ntxtsymDimension = TextSymbol.Make\ntxtsymDimension.setFont(Font.make(\"Times\",\"Bold\"))\ntxtsymDimension.setSize(8)\nthmDimensions.setLabelTextSym(txtsymDimension)\nlabelerDimension.load(thmDimensions
+)\nviewActive.getAutoLabels(labelerDimension, false)\nviewActive.getDisplay.invalidateRect(rectInvalidExtent)\nav.GetProject.SetModified(true)\n"
+)
+
+(Script.31
+	Name:	"DCDimens.View.createDimensionShapeTool"
+	SourceCode:	"' DCDimens.View.createDimensionShapeTool\n\n' (c) 2001 DORSCH Consult\n\nviewActive = av.GetActiveDoc\nviewActive.SetSelectMode(#GRAPHICS_SELECT_NORMAL)\n\nav.run(\"DCDimens.ensureNMMSGuideDialog\",nil)\n\ncpnlCurrentTool = av.findDialog(\"NMMS.Guide\").getControlPanel.findByName(\"cpnlCurrentTool\")\nstrAddDimensionI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Add dimension line\")\ncpnlCurrentTool.setLabel(strAddDimensionI18n)\nstrSelectI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Draw the dimension line\")\ntlblInform
+ation = cpnlCurrentTool.findByName(\"tlblInformation\")\ntlblInformation.setLabel(strSelectI18n)"
+)
+
+(Script.32
+	Name:	"DCDimens.View.createDimensionShapeUpdate"
+	SourceCode:	"' DCDimens.View.createDimensionShapeUpdate\n\n' (c) 2001 DORSCH Consult"
+)
+
+(Script.33
+	Name:	"DCDimens.View.deleteDimensions"
+	SourceCode:	"' DCDimens.View.deleteDimensions\n\n' (c) 2001 DORSCH Consult"
+)
+
+(Script.34
+	Name:	"DCDimens.View.removeDimension"
+	SourceCode:	"' DCDimens.View.removeDimension\n\n' (c) 2001 DORSCH Consult\n\nviewActive = av.getActiveDoc\n\npntUser = viewActive.getDisplay.returnUserPoint\n\nglstGraphics = viewActive.getGraphics\n\nlstThemes = viewActive.getThemes\nthmDimensions = nil\nfor each thmTest in lstThemes\n  if(thmTest.getSrcName.getFilename.getFullName.right(\"dimens.shp\".count).lcase = \"dimens.shp\")then\n    thmDimensions = thmTest\n    break\n  end\nend\n\nif(thmDimensions = nil)then\n  System.echo(\"ERROR: Dimension Theme not found.\")\n  return nil\nend\nftbDim
+ensions = thmDimensions.getFTab\nthmDimensions.setVisible(true)\nthmDimensions.setActive(true)\n\nlstPurgeShapes = thmDimensions.findByPoint(pntUser)\n\nlstPurgeGraphics = List.make\nglstSelected = glstGraphics.findAllByLocation(pntUser)\nif(glstSelected <> nil)then\n  for each graphicTest in glstSelected\n    if(graphicTest.getName.left(8) = \"DCDimens\")then\n      lstPurgeGraphics.add(graphicTest) \n    end\n  end\nend\n\nnumDimensionCount = lstPurgeGraphics.count+lstPurgeShapes.count\nif(numDimensionCount > 0)then\n  strCo
+nfirmI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Delete the selected %s dimension lines?\")\n  strConfirmI18n = strConfirmI18n.substitute(\"%s\",numDimensionCount.asString)\n  strNMMSI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"NMMS\")\n  if(MsgBox.yesNo(strConfirmI18n, strNMMSI18n, true).not)then\n    return nil\n  end\n  for each graphicRemove in lstPurgeGraphics\n    viewActive.getGraphics.removeGraphic(graphicRemove)\n  end\n  bmpPurgeShapes = Bitmap.make(ftbDimensions.getNumRecords)\n  bmpPurgeShapes.clearA
+ll\n  for each recPurge in lstPurgeShapes\n    bmpPurgeShapes.set(recPurge)\n  end\n  ftbDimensions.setEditable(true)\n  ftbDimensions.removeRecords(bmpPurgeShapes)\n  ftbDimensions.setEditable(false)\n  av.GetProject.setModified(true)\nend\nif(lstPurgeShapes.count > 0)then\n  \n  thmDimensions.getGraphics.selectLabels\n  thmDimensions.getGraphics.invalidate\n  viewActive.getGraphics.clearSelected\n  labelerDimension = Labeler.make(thmDimensions.returnExtent)\n  labelerDimension.setFeatureWeight(#LABEL_WEIGHT_NO)\n  labele
+rDimension.setLabelWeight(#LABEL_WEIGHT_HIGH)\n  labelerDimension.removeDuplicates(false)\n  txtsymDimension = TextSymbol.Make\n  txtsymDimension.setFont(Font.make(\"Arial\",\"Bold\"))\n  txtsymDimension.setSize(8)\n  thmDimensions.setLabelTextSym(txtsymDimension)\n  labelerDimension.load(thmDimensions)\n  viewActive.getAutoLabels(labelerDimension, false)\n  viewActive.getDisplay.invalidate(true)\nend    \n    \n    \n"
+)
+
+(Script.35
+	Name:	"DCDimens.View.removeDimensionTool"
+	SourceCode:	"' DCDimens.View.removeDimensionTool\n\n' (c) 2001 DORSCH Consult\n\nviewActive = av.GetActiveDoc\nviewActive.SetSelectMode(#GRAPHICS_SELECT_NORMAL)\n\nav.run(\"DCDimens.ensureNMMSGuideDialog\", nil)\n\ncpnlCurrentTool = av.findDialog(\"NMMS.Guide\").getControlPanel.findByName(\"cpnlCurrentTool\")\nstrRemoveDimensionI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Remove dimension line\")\ncpnlCurrentTool.setLabel(strRemoveDimensionI18n)\nstrSelectI18n = av.run(\"DCDimens.i18n.returnTranslation\",\"Select dimension line to delete
+\")\ntlblInformation = cpnlCurrentTool.findByName(\"tlblInformation\")\ntlblInformation.setLabel(strSelectI18n)"
+)
+
+(Script.36
+	Name:	"DCDimens.View.removeDimensionUpdate"
+	SourceCode:	"' DCDimens.View.removeDimensionUpdate\n\n' (c) 2001 DORSCH Consult"
+)
+
+(Script.37
+	Name:	"DCDimensExtension.canUnload"
+	SourceCode:	"return(true)"
+)
+
+(Script.38
+	Name:	"DCDimensExtension.install"
+	SourceCode:	"' DCDimensExtension.install\n\n' (c) 2001 DORSCH Consult\n\n'Make sure there is a project\nif (av.GetProject = nil) then\n  return nil\nend\n\ntoolbarView = av.getProject.findGUI(\"View\").getToolbar\n\ntoolbarView.add(self.get(0), 999)\n"
+)
+
+(Script.39
+	Name:	"DCDimensExtension.uninstall"
+	SourceCode:	"' Make sure there is a project\nif (av.GetProject = nil) then\n  return nil\nend\n\n'Uninstall only if the project is not closing\nif (av.GetProject.IsClosing) then\n  return nil\nend\n\ntoolbarView = av.getProject.findGUI(\"View\").getToolbar\n\ntoolbarView.remove(self.get(0))\n\n"
+)
+

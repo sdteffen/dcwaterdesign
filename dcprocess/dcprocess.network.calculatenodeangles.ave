@@ -1,0 +1,75 @@
+' DCProcess.Network.calculateNodeAngles
+
+' Calculate angles for those nodes in a network that have one or two pipes
+' connected
+
+' (c) 2004 DORSCH Consult
+
+' Select Polyline Theme
+
+lstPolylineThemes = av.run("DCProcess.View.getThemesByShapeClass", "Polyline")
+thmLine = Msgbox.choice (lstPolylineThemes, "Select a polyline theme.", "Calculate Node Angles") 
+if(thmLine = nil)then
+  exit
+end  
+ftbLine = thmLine.getFTab 
+fldLineShape = ftbLine.findField("Shape")
+
+' Select Point Theme
+lstPointThemes = av.run("DCProcess.View.getThemesByShapeClass", "Point")
+thmPoint = Msgbox.choice (lstPointThemes, "Select a point theme for angle calculation.", "Calculate Node Angles") 
+if(thmPoint = nil)then
+  exit
+end  
+ftbPoint = thmPoint.getFTab 
+fldPointShape = ftbLine.findField("Shape")
+
+' Select field to interpolate
+
+lstFields = av.run("DCPRocess.Fields.returnNumberFields", ftbPoint.getFields)
+fldAngle = Msgbox.choice(lstFields, "Select the angle field to calculate.","Calculate Node Angles")
+if(fldAngle.asString = "nil")then
+  exit
+end
+
+' Prompt for angle offset.
+
+strAngleOffset = MsgBox.input("Enter the angle offset:", "DC Processing Extension", "0.0")
+if((strAngleOffset = nil)or(strAngleOffset.isNumber.not))then
+  exit
+end
+numAngleOffset = strAngleOffset.asNumber
+
+numToGo = ftbPoint.getNumRecords
+numComplete = 0
+av.showStopButton
+ftbPoint.setEditable(true)
+
+for each recNode in ftbPoint
+  pntNode = ftbPoint.returnValue(fldPointShape, recNode)
+  lstUpstreamLines = av.run("DCProcess.Node.findUpstreamLines", {ftbLine, pntNode})
+  lstDownstreamLines = av.run("DCProcess.Node.findDownstreamLines", {ftbLine, pntNode})
+  lstLines = lstUpstreamLines.deepclone + lstDownstreamLines.deepclone
+  numAngle = 0.0
+  if(lstLines.count = 1)then
+    numAngle = av.run("DCProcess.Node.returnLineAngle", {ftbPoint, ftbLine, recNode, lstLines.get(0)})
+  elseif(lstLines.count = 2)then
+    numUpstreamAngle = av.run("DCProcess.Node.returnLineAngle", {ftbPoint, ftbLine, recNode, lstLines.get(0)})
+    numDownstreamAngle = av.run("DCProcess.Node.returnLineAngle", {ftbPoint, ftbLine, recNode, lstLines.get(1)})
+    numAngle = (numUpstreamAngle+numDownstreamAngle)/2.0
+  end
+  numAngle = numAngle+numAngleOffset
+  if(numAngle > 360.0)then
+    numAngle = numAngle - 360.0
+  end
+  ftbPoint.setValue(fldAngle, recNode, numAngle)
+  numComplete = numComplete + 1
+  if(av.setStatus((numComplete/numToGo)*100).not)then
+    ftbPoint.setEditable(false)
+    exit
+  end
+end
+
+ftbPoint.setEditable(false)
+
+av.clearStatus

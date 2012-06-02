@@ -1,0 +1,143 @@
+' DCSewerDesign.Profile.ManholeDataBox.create
+
+' arguments: Profile FTab, Line FTab, Manhole FTab, active View, X-Coordinate, 
+'            Y-Coordinate, Data Fieldname, Label String, Manhole
+'             Record List, Line Record List,
+'            int Precision, boolean verticalText, number Height, number Angle
+' returns the new Y-Coordinate
+
+' (c) 2000 - 2004 DORSCH Consult
+' Copyright (c) 2006 DC Water and Environment
+
+' Parameter
+if(self.count <> 15)then
+  System.echo("DCSewerDesign.Profile.ManholeDataBox.create: ERROR: Expected 15 arguments")
+  exit
+end
+ftbProfile = self.get(0)
+ftbLine = self.get(1)
+ftbManhole = self.get(2)
+viewActive = self.get(3)
+numX = self.get(4)
+numY = self.get(5)
+fldData = self.get(6)
+strLabel = self.get(7)
+lstManholeRecords = self.get(8)
+lstLineRecords = self.get(9)
+numPrecision = self.get(10)
+blnVerticalText = self.get(11)
+numHeight = self.get(12)
+numJustification = self.get(13)
+numAngle = self.get(14)
+
+fldProfileShape = ftbProfile.findField("Shape")
+fldLineShape = ftbLine.findField("Shape")
+fldProfileStyle = ftbProfile.findField("style")
+
+' label the box
+
+gtxLabel = GraphicText.make(strLabel,Point.make(0,0))
+viewActive.getGraphics.add(gtxLabel)
+if(numHeight = nil)then
+  numHeight = (gtxLabel.getExtent.getY*(numPrecision))
+end
+tpsLabel = TextPositioner.make(Point)
+tpsLabel.SetHAlign(#TEXTPOSITIONER_HALIGN_RIGHT)
+tpsLabel.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
+pntLabelLocation = Point.make(numX-58, numY-(numHeight/2)+1)
+tpsLabel.calculate(pntLabelLocation, gtxLabel.GetExtent, 1, nil)
+gtxLabel.SetOrigin(tpsLabel.GetOrigin)
+for each symText in gtxLabel.returnSymbols
+  viewActive.getDisplay.hookupSymbol(symText)
+end
+
+recProfile = ftbProfile.addRecord
+pntVerticalLineStart = Point.make(numX, numY)
+pntVerticalLineEnd = Point.make(numX, numY-numHeight)
+pllVerticalLine = Polyline.make({{pntVerticalLineStart, pntVerticalLineEnd}})
+'ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)
+ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+
+strFormat = "dd"
+if(numPrecision > 0)then
+  strFormat = "d."
+  for each i in 1..numPrecision
+     strFormat = strFormat+"d"
+  end
+end
+
+' draw data texts
+numWidth = 0
+for each i in 0..(lstManholeRecords.count-1)
+  recManhole = lstManholeRecords.get(i)
+  if(i < lstLineRecords.count) then
+    recLine = lstLineRecords.get(i)
+  end
+  numLength = ftbLine.returnValue(fldLineShape, recLine).returnLength
+  strText = ftbManhole.returnValue(fldData, recManhole)
+  if(strText.is(Number))then
+    strText = strText.setFormat(strFormat).asString
+  end
+  if(blnVerticalText)then
+    pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2))
+    if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+      pntTextLocation = Point.make(numX+numWidth, numY-numHeight)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+      pntTextLocation = Point.make(numX+numWidth, numY)
+    end
+  else
+    pntTextLocation = Point.make(numX+numWidth,numY-(numHeight/2)+1)
+    
+  end  
+  gtxText = GraphicText.make(strText, pntTextLocation)
+  if(blnVerticalText)then
+    gtxText.setAngle(numAngle)
+  end
+  viewActive.getGraphics.add(gtxText)
+  tpsText = TextPositioner.make(Point)
+  if(blnVerticalText)then
+    tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
+    if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+      tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_TOP)
+    elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+      tpsText.setHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+      tpsText.setVAlign(#TEXTPOSITIONER_VALIGN_BOTTOM)
+    end
+  else
+    tpsText.SetHAlign(#TEXTPOSITIONER_HALIGN_CENTER)
+    tpsText.SetVAlign(#TEXTPOSITIONER_VALIGN_ON)
+  end
+  tpsText.calculate(pntTextLocation, gtxText.getExtent, 1, nil)
+  gtxText.setOrigin(tpsText.getOrigin)
+  if(numJustification = #TEXTCOMPOSER_JUST_LEFT)then
+    gtxText.setAlignment(#TEXTCOMPOSER_JUST_RIGHT)
+  elseif(numJustification = #TEXTCOMPOSER_JUST_RIGHT)then
+    gtxText.setAlignment(#TEXTCOMPOSER_JUST_LEFT)
+  else
+    gtxText.setAlignment(#TEXTCOMPOSER_JUST_CENTER)
+  end
+  for each symText in gtxText.returnSymbols
+    viewActive.getDisplay.hookupSymbol(symText)
+  end
+  recProfile = ftbProfile.addRecord
+  pllVerticalLine.move(numLength, 0)
+  'ftbProfile.setValue(fldProfileShape, recProfile, pllVerticalLine)
+  ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+  if(i< lstLineRecords.count)then
+    numWidth = numWidth + numLength
+  end
+end
+
+'draw the dividing line
+pntLineOrigin = Point.make(numX-60, numY)
+pntLineEnd = pntLineOrigin.clone.move(numWidth+60+20, 0)
+pllFrame = Line.make(pntLineOrigin, pntLineEnd).asPolyline
+
+recProfile = ftbProfile.addRecord
+ftbProfile.setValue(fldProfileShape, recProfile, pllFrame)
+ftbProfile.setValue(fldProfileStyle, recProfile, "normal")
+
+
+return numY-numHeight

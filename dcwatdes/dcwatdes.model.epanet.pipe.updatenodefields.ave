@@ -1,0 +1,100 @@
+' DCWatDes.Model.Epanet.Pipe.updateNodeFields
+
+' (c) 2000, 2001, 2005 DORSCH Consult
+' updates the fields node1, node2 for a given pipe
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' expects the record number of the pipe to be updated as the argument
+' pipe Ftab has to be editable
+
+recPipe = self
+
+extWatDes = Extension.find("DC Water Design")
+dicPreferences = extWatDes.getPreferences
+
+if(dicPreferences.get("blnEnforceDataModel").not)then
+  return nil
+end
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if( numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+ftbPipes = dicFTabs.get("Pipes")
+fldPipeShape = ftbPipes.findField("Shape")
+
+lstNodeFTabs = List.make
+lstNodeIDFields = List.make
+
+for each strNetworkFeature in dicFTabs.returnKeys
+  if(strNetworkFeature <> "Pipes")then
+    ftbNetworkFeature = dicFTabs.get(strNetworkFeature)
+    lstNodeFTabs.add(ftbNetworkFeature)
+    av.run("DCWatDes.FTab.ensureSpatialIndex", ftbNetworkFeature)
+    fldNodeID = ftbNetworkFeature.findField("dc_id")
+    if(fldNodeID=nil)then
+      MsgBox.warning(strNetworkFeature++" table is missing the 'dc_id' field.", "DC Water Design Extension")
+    end
+    lstNodeIDFields.add(fldNodeID)
+  end
+end
+
+lstPipeNodeFields = List.make
+lstPipeNodeFields.add(ftbPipes.findField("node1"))
+if(lstPipeNodeFields.get(0) = nil)then
+ MsgBox.warning("Pipes table is missing the 'node1' field.", "DC Water Design")
+end
+lstPipeNodeFields.add(ftbPipes.findField("node2"))
+if(lstPipeNodeFields.get(1) = nil)then
+ MsgBox.warning("Pipes table is missing the 'node2' field.", "DC Water Design")
+end
+
+pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
+lstPipeNodes = pllPipe.connect.asList.get(0)
+lstNodesPoints = List.make
+lstNodesPoints.add(lstPipeNodes.get(0))
+lstNodesPoints.add(lstPipeNodes.get(lstPipeNodes.count-1))
+
+for each i in 0..1
+  for each j in 0..(lstNodeFTabs.count-1)
+    ftbNodes = lstNodeFTabs.get(j)
+    ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius, #VTAB_SELTYPE_NEW) 
+    bmpNodes = ftbNodes.getSelection
+    recConnectedNode = bmpNodes.getNextSet(-1)
+    if(recConnectedNode <> -1)then
+      fldNodeID = lstNodeIDFields.get(j)
+      if((fldNodeID <> nil))then
+        strNodeID = ftbNodes.returnValue(fldNodeID, recConnectedNode).asString
+        if(lstPipeNodeFields.get(i) <> nil)then
+          if((i = 0) and ((ftbNodes.getName="Valves")or(ftbNodes.getName="Pumps")))then
+            ftbPipes.setValue(lstPipeNodeFields.get(i), recPipe, strNodeID+"dn")
+          else
+            ftbPipes.setValue(lstPipeNodeFields.get(i), recPipe, strNodeID)
+          end
+        end
+      end    
+      break
+    end      
+  end
+  if(recConnectedNode = -1)then
+   msgbox.info("Pipe Mischief","DC Water Design Extension")
+  end     
+end
+
+

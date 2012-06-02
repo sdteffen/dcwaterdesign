@@ -1,0 +1,118 @@
+' DCWatDesExtension.make
+
+' (c) 2000 - 2004 DORSCH Consult
+' (C) 2008 DC Water and Environment
+
+' make the Water Design Extension
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+myExt = Extension.Make("$AVEXT\dcwatdes2.avx".AsFileName,
+              "DC Water Design",
+              av.GetProject.FindScript("DCWatDesExtension.install"),
+              av.GetProject.FindScript("DCWatDesExtension.uninstall"),
+              {"$AVBIN/avdlog.dll".asFilename, "$AVEXT/XmlParser1_00.avx".asFileName})
+
+'add the dialog to the extension
+'dlg_Files = av.findDialog("DCWatDes.ThemesDialog")
+'dlg_Files.setServer(nil)
+myExt.add( "dlg_Files" )
+
+'1
+myExt.Add( av.GetProject.FindGUI("View").GetMenuBar.findByLabel("DC Water Design"))
+'2
+myExt.Add( av.GetProject.FindGUI("View").getButtonBar.findByScript("DCWatDes.Buttons.FilesDialog.click"))
+'3
+myExt.Add( av.GetProject.FindGUI("View").GetPopups.findByLabel("DCWatDes.View.Popup.Pipes") )
+'4
+myExt.add( av.GetProject.FindGUI("View").GetPopups.findByLabel("DCWatDes.View.Popup.Nodes"))
+'5
+myExt.Add( av.GetProject.FindGUI("View").getButtonBar.findByScript("BOQ.make"))
+'6
+myExt.Add( av.GetProject.FindGUI("Table").getButtonBar.findByScript("DCWatDes.Table.classifyHouseConnections"))
+
+'7
+dlgSetup = av.findDialog("DCWatDes.Dialog.Setup")
+dlgSetup.setServer(nil)
+myExt.add(dlgSetup)
+
+'8
+myExt.add(av.getProject.findGUI("Project").getMenuBar.findByLabel("DC Water Design"))
+
+'9
+dlgEpanetTables = av.findDialog("DCWatDes.Dialog.EpanetTables")
+dlgEpanetTables.setServer(nil)
+myExt.add(dlgEpanetTables)
+
+'10
+dlgEpanetThemes = av.findDialog("DCWatDes.Dialog.EpanetThemes")
+dlgEpanetThemes.setServer(nil)
+myExt.add(dlgEpanetThemes)
+
+'11
+myExt.Add( av.GetProject.FindGUI("View").getButtonBar.findByScript("DCWatDes.Dialog.EpanetThemes.open"))
+
+' 12 Flip Tool
+myExt.add(av.getProject.findGUI("View").getToolBar.findByScript("DCWatDes.View.flipPolyline"))
+
+' 13 
+dlgResultTables = av.findDialog("DCWatDes.Dialog.ResultTables")
+dlgResultTables.setServer(nil)
+myExt.add(dlgResultTables)
+
+' 14 Node Digitizing
+myExt.add(av.getProject.findGUI("View").getToolBar.findByScript("DCWatDes.View.digitizeNode"))
+
+' 15 Epanet Tables Button
+myExt.add(av.getProject.findGUI("View").getButtonBar.findByScript("DCWatDes.Dialog.EpanetTables.open"))
+
+' 16 Bitcode Calculator Button
+myExt.Add( av.GetProject.FindGUI("Table").getButtonBar.findByScript("DCWatDes.Table.calculateBitcode"))
+
+' 17 PipesAndNodes View Popup
+myExt.add( av.GetProject.FindGUI("View").GetPopups.findByLabel("DCWatDes.View.Popup.PipesAndNodes"))
+ 
+
+' Add to the extension the scripts that are attached to the menu items
+' The following line shows how this would work for one such scripts.
+' You may need several such lines.
+for each d in av.getProject.getDocs
+  if (d.is(SEd) and (d.getName.left("DCWatDes".count+1)="DCWatDes."))then
+    myExt.add(d.getScript)
+  end
+end
+
+myExt.SetAbout("Water Design Extension 2.12.5"+NL+"(c) 1998 - 2007 DORSCH Consult."+NL+"(c) 2008 DC Water and Environment."+NL+
+"This extension integrates EPANET with ArcView"+NL+Date.now.asString)
+myExt.SetExtVersion(2123)
+myExt.setUnloadScript(av.findScript("DCWatDesExtension.unload"))
+myExt.setCanUnloadScript(av.findScript("DCWatDesExtension.canUnload"))
+myExt.Commit
+
+RFileName = FileName.make("$AVEXT/dcwatdes2.avx")
+WFileName = FileName.make("$AVEXT/dcwatdes2.tmp")
+RFile = LineFile.make(RFileName, #FILE_PERM_READ)
+WFile = LineFile.make(WFileName, #FILE_PERM_WRITE)
+WFile.setScratch(TRUE)
+while (RFile.isAtEnd.not)
+  buf = RFile.ReadElt
+  if (buf.contains("ObjectTag:").not) then
+    WFile.writeElt(buf)
+  end
+end
+RFile.close
+WFile.flush
+File.copy(WFilename, RFilename)
+WFile.close

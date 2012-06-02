@@ -1,0 +1,128 @@
+' DCWatDes.Project.mergeModel
+
+' Merge a model that was previously split by the Split Model function
+
+' (c) 2005 DORSCH Consult
+' 
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+lstThemeNames = {"Pipes", "Junctions", "Pumps", "Reservoirs", "Tanks", "Valves"}
+lstViews = av.getProject.getDocsWithGUI(av.findGUI("View"))
+lstThemes = List.make
+for each viewView in lstViews
+  lstThemes = lstThemes + viewView.getThemes
+end
+dicThemes = Dictionary.make(100)
+for each strTheme in {"Pipes", "Junctions", "Pumps", "Reservoirs", "Tanks", "Valves"}
+  if(extDCWatDes <> nil)then
+    strThemeName = dicPreferences.get("str"+strTheme)
+  end
+  if(strThemeName <> nil)then
+    for each thmSearch in lstThemes
+      if((thmSearch.is(FTheme))and(thmSearch.getName.lcase = strThemeName.lcase))then
+        dicThemes.add(strTheme, thmSearch)
+      end
+    end
+  end
+end
+
+' Summarize by Zone
+
+thmPipes = dicThemes.get("Pipes")
+ftbPipes = thmPipes.getFTab
+' TODO: Make field selectable
+fldZone = ftbPipes.findField("Zone")
+strOldDefinition = ftbPipes.getDefinition.clone
+flnTmpDbf = FileName.getTmpDir.makeTmp("zonesummary","dbf")
+ftbPipes.setDefinition("")
+ftbPipes.updateDefBitmap
+ftbZoneSummary = ftbPipes.summarize(flnTmpDbf, dBASE, fldZone, {}, {})
+ftbPipes.setDefinition(strOldDefinition)
+ftbPipes.updateDefBitmap
+fldZone = ftbZoneSummary.findField("Zone")
+lstZones = List.make
+
+flnBaseDirectory = ftbPipes.getSrcName.getFileName.returnDir
+
+lstDirectories = List.make
+dicZones = Dictionary.make(100)
+
+for each recZone in ftbZoneSummary
+  strZone = ftbZoneSummary.returnValue(fldZone, recZone)
+  if(strZone.isNull.not and (strZone <> ""))then
+    lstZones.add(strZone)
+    flnZoneDirectory = FileName.merge(flnBaseDirectory.getFullName, strZone)
+    lstDirectories.add(flnZoneDirectory)
+    dicZones.add(flnZoneDirectory, strZone)
+  end
+end
+
+
+for each thmTheme in dicThemes
+  ftbTheme = thmTheme.getFTab
+  strOldDefinition = ftbTheme.getDefinition.clone
+  ftbTheme.setDefinition("")
+  ftbTheme.updateDefBitmap
+  ftbTheme.setEditable(true)
+  bmpSelection = ftbTheme.getSelection
+  bmpSelection.setAll
+  ftbTheme.removeRecords(bmpSelection)
+  ftbTheme.setEditable(false)
+  ftbTheme.setEditable(true)
+  lstThemeFields = ftbTheme.getFields
+  numFieldCount = lstThemeFields.count - 1
+  for each flnZone in lstDirectories
+    flnTheme = Filename.merge(flnZone.getFullName, ftbTheme.getSrcName.getFileName.getBaseName)
+    ftbZone = FTab.make(SrcName.make(flnTheme.getFullName))
+    lstZoneFields = ftbZone.getFields
+    if(lstThemeFields.count <> lstZoneFields.count)then
+      MsgBox.error("Field names do not match for "+flnTheme.getFullName, "DC Water Design Extension")
+      ftbTheme.setEditable(false)
+      exit
+    end
+    fldZone = ftbZone.findField("Zone")
+    strZone = dicZones.get(flnZone)
+    for each recZone in ftbZone
+      recTheme = ftbTheme.addRecord
+      for each i in 0..numFieldCount
+        fldCurrent = lstZoneFields.get(i)
+        objValue = ftbZone.returnValue(lstZoneFields.get(i), recZone)
+        if((fldCurrent.getName = "Zone")and((objValue.isNull)or(objValue = "")))then
+          System.echo("Filling in missing zone value: "+strZone)
+          ftbTheme.setValue(lstThemeFields.get(i), recTheme, strZone)
+        else  
+          ftbTheme.setValue(lstThemeFields.get(i), recTheme, objValue)
+        end  
+      end
+    end
+  end
+  ftbTheme.setDefinition(strOldDefinition)
+  ftbTheme.updateDefBitmap
+end

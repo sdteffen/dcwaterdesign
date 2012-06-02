@@ -1,0 +1,18 @@
+' DCSewerDesign.ThemeList.returnLineThemes
+
+' expects a List of Themes as the Argument. Returns the Themes which contain Lines in a list
+
+' (c) 2000 DORSCH Consult
+
+lstThemes = self
+
+lstLineThemes = List.make
+
+for each thmCheck in lstThemes
+  strSubName = thmCheck.getSrcName.getSubName
+  if((strSubName = "Arc")or(strSubName = "ArcZ")or(strSubName="line")) then
+    lstLineThemes.add(thmCheck)
+  end
+end
+
+return lstLineThemes.deepclone

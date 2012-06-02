@@ -1,0 +1,37 @@
+' DCProcess.Network.classifyConnections.update
+
+' (c) 2004 DORSCH Consult
+
+' Enable the Classify Connection menu when one Polyline and two
+' Point themes are activated, the Polyline theme contains the
+' diameter field and one point theme is editable
+
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+blnLine = false
+blnNode = false
+blnValve = false
+if(lstThemes.count = 3)then
+  for each thmTheme in lstThemes
+    if(thmTheme.is(FTheme))then
+      if(thmTheme.getFTab.getShapeClass.getClassName = "Polyline")then
+        blnLine = true
+      else 
+        if(thmTheme.getFTab.getShapeClass.getClassName = "Point")then
+          if(thmTheme.getFTab.isEditable)then
+            blnNode = true
+          else
+            blnValve = true
+          end
+        end
+      end
+    end
+  end
+end
+  
+if(blnLine and blnNode and blnValve)then
+  self.setEnabled(true)
+else
+  self.setEnabled(false)
+end
+

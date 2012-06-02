@@ -1,0 +1,23 @@
+' DCProcess.FTab.copyRecordValues
+
+' (c) 2004 Dorsch Consult
+
+' Copy all tabular values from a source FTab to a destination FTab.
+' Expects the FTabs to have exactly the same structure.
+
+' The source FTab is the first argument
+' The destination FTab is the second argument
+' The source record is the third argument
+' The destination record is the fourth argument
+' Returns nothing
+
+ftbSource = self.get(0)
+ftbDestination = self.get(1)
+recSource = self.get(2)
+recDestination = self.get(3)
+
+for each i in 1 .. (ftbSource.getFields.count-1)
+  fldSource = ftbSource.getFields.get(i)
+  fldDestination = ftbDestination.getFields.get(i)
+  ftbDestination.setValue(fldDestination, recDestination, ftbSource.returnValue(fldSource, recSource))
+end

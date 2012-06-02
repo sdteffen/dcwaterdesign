@@ -1,0 +1,18 @@
+' DCCadCleanExtension.uninstall
+
+' (c) 2001 DORSCH Consult
+
+' Make sure there is a project
+if (av.GetProject = nil) then
+  return nil
+end
+
+' Uninstall only if the project is not closing
+if (av.GetProject.isClosing) then
+  return nil
+end
+
+buttonbarView = av.getProject.findGUI("View").getButtonbar
+
+buttonbarView.remove(self.get(0))
+

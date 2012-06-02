@@ -1,0 +1,59 @@
+' DCSewerDesignExtension.make
+
+strVersion = msgbox.input("Enter version","Make DC Sewer Design Extension","2.0.10+svn")
+if (strVersion=nil)then
+  exit
+end
+numVersion=strVersion.asTokens(".").get(1).asNumber
+strFileNameVersion = strVersion.asTokens(".").get(0)+"_"+strVersion.asTokens(".").get(1)
+
+myExt = Extension.Make(("$AVEXT\dcsewdes.avx").AsFileName,
+              "DC Sewer Design",
+              av.GetProject.FindScript("DCSewerDesignExtension.install"),
+              av.GetProject.FindScript("DCSewerDesignExtension.uninstall"),
+              {})
+
+
+'0
+myExt.Add( av.GetProject.FindGUI("View").GetMenuBar.findByLabel("DC Sewer"))
+
+'1
+myExt.Add( av.GetProject.FindGUI("View").GetButtonBar.findByScript("DCSewerDesign.ComplexProfile.create"))
+
+'2
+myExt.add(av.getProject.findGUI("Table").getMenuBar.findByLabel("DC Sewer"))
+
+'3
+myExt.add(av.getProject.findGUI("View").getButtonBar.findByScript("DCSewerDesign.Profile.ConstantGradient.calculate"))
+
+' Add to the extension the scripts that are attached to the menu items
+' The following line shows how this would work for one such scripts.
+' You may need several such lines.
+for each d in av.getProject.getDocs
+  if (d.is(SEd) and (d.getName.left("DCSewerDesign".count+1)="DCSewerDesign."))then
+    myExt.add(d.getScript)
+  end
+end
+
+myExt.SetAbout("Sewer Design Extension "+strVersion+NL+"(c) 2000-2005 DORSCH Consult."+NL+
+"This extension is helpful to design sewer networks")
+myExt.SetExtVersion(numVersion)
+myExt.setUnloadScript(av.findScript("DCSewerDesignExtension.unload"))
+myExt.setCanUnloadScript(av.findScript("DCSewerDesignExtension.canUnload"))
+myExt.Commit
+
+RFileName = FileName.make("$AVEXT/dcsewdes.avx")
+WFileName = FileName.make("$AVEXT/dcsewdes.tmp")
+RFile = LineFile.make(RFileName, #FILE_PERM_READ)
+WFile = LineFile.make(WFileName, #FILE_PERM_WRITE)
+WFile.setScratch(TRUE)
+while (RFile.isAtEnd.not)
+  buf = RFile.ReadElt
+  if ( buf.contains("ObjectTag:").not) then
+    WFile.writeElt(buf)
+  end
+end
+RFile.close
+WFile.flush
+File.copy(WFilename, RFilename)
+WFile.close

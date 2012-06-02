@@ -1,0 +1,29 @@
+' DCSewerDesign.calculateMaximumManholeElevations.update
+
+' (c) 2005 DORSCH Consult
+
+' Enable the Calculate Maximum Manhole Elevations menu when one Polyline and one
+' Point themes are activated and the Polyline theme is editable
+
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+blnLine = false
+blnElevation = false
+if(lstThemes.count = 2)then
+  for each thmTheme in lstThemes
+    if((thmTheme.getFTab.getShapeClass.getClassName = "Polyline")and
+      (thmTheme.getFTab.isEditable))then
+      blnLine = true
+    else 
+      if(thmTheme.getFTab.getShapeClass.getClassName = "Point")then
+        blnElevation = true
+      end
+    end
+  end
+end
+  
+if(blnLine and blnElevation)then
+  self.setEnabled(true)
+else
+  self.setEnabled(false)
+end

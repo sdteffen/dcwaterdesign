@@ -1,0 +1,55 @@
+' DCWatDes.View.Popup.Pipes.editTableEntry
+
+' (c) 2000 DORSCH Consult
+' edit pipe attributes
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary",nil)
+thmPipes = dicThemes.get("Pipes")
+if(thmPipes = nil)then
+  return nil
+end
+
+ftbPipes = thmPipes.getFTab
+ftbPipes.startEditingWithRecovery
+
+pntMouse = self.getControlSet.getObjectTag
+
+if(pntMouse.is(Point))then
+  lstPipes = thmPipes.findByPoint(pntMouse)
+  if (lstPipes.count = 0 ) then
+    MsgBox.info("No Pipe selected", "DC Water Design")
+    exit
+  end
+  
+  thmPipes.editTable
+  
+  bmpSelection = Bitmap.make(ftbPipes.getNumRecords)
+  for each recPipe in lstPipes
+    bmpSelection.set(recPipe)
+  end
+  ftbPipes.setSelection(bmpSelection)
+  ftbPipes.updateSelection
+  theTable = av.getActiveDoc
+  theTable.PromoteSelection 
+  toolbarTable = av.GetProject.FindGUI("Table").getToolBar
+  if(toolbarTable <> nil)then
+    toolEdit = toolbarTable.findByScript("Table.Edit")
+    if(toolEdit <> nil)then
+      toolEdit.select
+    end
+  end
+end

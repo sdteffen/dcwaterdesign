@@ -1,0 +1,64 @@
+' DCProcess.createPntThemFromPllTheme
+
+' create a Point Theme containing the Centers of a given
+' Polygon Theme
+
+' (c) 2000,2004 DORSCH Consult
+
+viewActive = av.GetActiveDoc
+
+themeList = viewActive.GetThemes 
+thmPolygon = Msgbox.Choice (themeList, "Select a Polygon Theme.", "Select a Theme") 
+if(thmPolygon=nil)then
+  exit
+end  
+
+'  Proj = v.GetProjection 
+  
+ftbPolygon = thmPolygon.GetFTab 
+  
+  clsPoint = Point
+  def = av.GetProject.MakeFileName("theme", "shp") 
+  def = FileDialog.Put(def, "*.shp", "New Point Theme") 
+  
+  if (def = nil) then 
+   exit
+  end
+  ftbPoint = FTab.MakeNew(def, clsPoint) 
+
+  
+fldPolygonShape = ftbPolygon.findField("Shape")
+fldPointShape = ftbPoint.findField("Shape")
+
+lstFields = ftbPolygon.getFields.deepclone
+lstFields.remove(0)
+
+ftbPoint.setEditable(true)
+ftbPoint.addFields(lstFields)
+fldPointShape = ftbPoint.findField("Shape")
+
+numCounter = 0 
+numTotal = ftbPolygon.GetNumRecords 
+av.showStopButton  
+
+for each recPolygon in ftbPolygon
+  recPoint = ftbPoint.addRecord
+  plgnShape = ftbPolygon.returnValue(fldPolygonShape,recPolygon).returnCenter
+  if(plgnShape <> nil)then
+  ftbPoint.setValue(fldPointShape, recPoint, plgnShape)
+  
+    for each i in 1 .. (lstFields.count)
+      fldPoint = ftbPoint.getFields.get(i)
+      fldPolygon = ftbPolygon.getFields.get(i)
+      ftbPoint.setValue(fldPoint, recPoint, ftbPolygon.returnValue(fldPolygon, recPolygon))
+    end
+  end
+  
+  numCounter = numCounter + 1
+  if(av.setStatus((numCounter/numTotal)*100).not)then
+    exit
+  end
+end
+
+ftbPoint.setEditable(false)
+av.clearStatus

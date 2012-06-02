@@ -1,0 +1,117 @@
+' DCSewerDesign.calculateMinimumElevationDifferences
+' (c) 2000 DORSCH Consult
+
+' Calculate the minimum Elevation differences in a sewer network.
+' This runs a network trace from the lowest point of the network
+' to the upper ends of all branches. There must be no network meshes
+' The downstream elevation should be 0 for all the records except for the
+' ones where the trace should start
+
+
+'inform what this is doing
+Msgbox.info("The downstream Elevation should be 0 for all the records except for lowest ones. This will calculate new upstream and downstream elevations based on a constant gradient","DC Sewer Design")
+
+' get the table
+ viewActive = av.GetActiveDoc
+ themeList = viewActive.GetThemes
+ lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
+ LineTheme = Msgbox.Choice (lstLineThemes, "Select a Polyline Theme.", "Select a Theme") 
+ if (LineTheme.asString = "nil") then
+    exit
+ end
+ thmLine = viewActive.FindTheme(LineTheme.AsString)
+ ftbLine = thmLine.GetFTab
+ 
+ ' get the elevation fields
+ lstFields = thmLine.getFTab.getFields
+ fldDownstreamElevation = Msgbox.choice(lstFields, "Select the Downstream Elevation Field.","Select a Field")
+ if(fldDownstreamElevation.asString = "nil")then
+  exit
+ end
+ fldUpstreamElevation = Msgbox.choice(lstFields, "Select the Upstream Elevation Field.","Select a Field")
+ if(fldUpstreamElevation.asString = "nil")then
+  exit
+ end
+
+ fldShape = ftbLine.findField("Shape")
+ 
+ 
+' ask the user to specify a gradient
+numGradient = 0.02
+fldGradient = MsgBox.choice(lstFields, "Select Gradient Field", "DC Sewer Design")
+if(fldGradient.asString = "nil")then
+  strGradient = msgbox.input("Enter the minimum gradient","DC Sewer Design","0.02")
+  if (strGradient=nil)then
+    exit
+  end
+  numGradient=strGradient.asNumber
+  if(numGradient.isNull)then
+    exit
+  end
+end
+ 
+ ' data for status display
+ numCounter = 0 
+ numTotal = ftbLine.GetNumRecords
+
+' give the user a chance to kill script
+ av.showStopButton 
+ ftbLine.setEditable(true)
+ 
+ ' The queue of lines for which the connections will be searched
+ stkQueue = Stack.make
+    
+ 'run over all records in the table, find the startline(s)
+  for each recLine in ftbLine
+    'check if line has already been calculated
+    numDownstreamElevation = ftbLine.returnValue(fldDownstreamElevation, recLine)
+     if( numDownstreamElevation <> 0.0)then
+        stkQueue.push(recLine.clone)
+        numLength = ftbLine.returnValue(fldShape,recLine).returnLength
+        numUpstreamElevation = numDownstreamElevation + (numGradient * numLength)
+        ftbLine.setValue(fldUpstreamElevation, recLine, numUpstreamElevation)
+        numCounter = numCounter+1
+     end
+  end
+  
+if(stkQueue.isEmpty)then
+  MsgBox.info("Did you set the downstream elevation at the lowest point?","DC Sewer Design")
+  exit
+end
+
+' loop until all lines are calculated  
+while(numCounter < numTotal)
+  if(stkQueue.isEmpty)then
+    ftbLine.setEditable(false)
+    av.clearStatus
+    Msgbox.info("Could not calculate all Elevations. System might not be fully connected.","DC Sewer Design")
+    exit
+  end
+  recStart = stkQueue.pop
+  lstConnectedLines = av.run("DCSewerDesign.Line.findConnectedLines",{ftbLine, recStart})
+  numDownstreamElevation = ftbLine.returnValue(fldUpstreamElevation,recStart)
+
+  for each recLine in lstConnectedLines
+     if(fldGradient.asString <> "nil")then
+       numGradient = ftbLine.returnValue(fldGradient, recLine)
+     end
+     if(ftbLine.returnValue(fldDownstreamElevation,recLine) = 0.0)then
+       ' calculate the upstream elevation
+       numLength = ftbLine.returnValue(fldShape,recLine).returnLength
+       numUpstreamElevation = numDownstreamElevation + (numGradient * numLength)
+      ftbLine.setValue(fldDownstreamElevation, recLine, numDownstreamElevation)
+       ftbLine.setValue(fldUpstreamElevation, recLine, numUpstreamElevation)
+       numCounter = NumCounter+1
+       stkQueue.push(recLine.clone)
+             
+       ' update status display
+       if(av.setStatus((numCounter/numTotal)*100).not)then
+        ' user hit the stop button
+         exit
+       end
+     end
+  end 
+end
+
+ftbLine.setEditable(false)
+av.clearStatus

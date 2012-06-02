@@ -1,0 +1,83 @@
+' DCProcess.createSquarePolygonsFromPoints
+
+' (c) 2000, 2004 DORSCH Consult
+
+' create a Polygon Theme containing Square Polygons from 
+' a point Them containing the Centers of the Polygons.
+' The user is prompted to enter the square length.
+' All the attributes are copied.
+
+
+viewActive = av.GetActiveDoc
+
+themeList = viewActive.GetThemes 
+lstPointThemes = List.make
+for each thmPoint in themeList
+  if(thmPoint.is(FTheme))then
+    if(thmPoint.getFTab.getShapeClass.getClassName = "Point")then
+      lstPointThemes.add(thmPoint)
+    end
+  end
+end
+thmPoint = Msgbox.Choice (lstPointThemes, "Select a Point Theme.", "Select a Theme") 
+if(thmPoint=nil)then
+  exit
+end  
+  
+ftbPoint = thmPoint.GetFTab 
+
+'prompt for square length
+
+strSquareLength = MsgBox.input("Enter the square length:", "DC Conversion Extension", "10.0")
+if((strSquareLength=nil)or(strSquareLength.isNumber.not))then
+  exit
+end
+
+numSquareLength = strSquareLength.asNumber
+
+'prompt for file location
+  
+clsPolygon = Polygon
+def = av.GetProject.MakeFileName("square", "shp") 
+def = FileDialog.Put(def, "*.shp", "New Square Polygon Theme") 
+if (def = nil) then 
+ exit
+end
+
+ftbPolygon = FTab.MakeNew(def, clsPolygon) 
+
+fldPolygonShape = ftbPolygon.findField("Shape")
+fldPointShape = ftbPoint.findField("Shape")
+
+lstFields = ftbPoint.getFields.deepclone
+lstFields.remove(0)
+
+ftbPolygon.setEditable(true)
+ftbPolygon.addFields(lstFields)
+
+numCounter = 0 
+numTotal = ftbPoint.GetNumRecords 
+av.showStopButton  
+
+for each recPoint in ftbPoint
+  recPolygon = ftbPolygon.addRecord
+  pntShape = ftbPoint.returnValue(fldPointShape,recPoint)
+  if(pntShape <> nil)then
+    plgnSquare = Rect.make(pntShape-(numSquareLength@numSquareLength), numSquareLength@numSquareLength).asPolygon
+    ftbPolygon.setValue(fldPolygonShape, recPoint, plgnSquare)
+  
+    for each i in 1 .. (lstFields.count)
+      fldPoint = ftbPoint.getFields.get(i)
+      fldPolygon = ftbPolygon.getFields.get(i)
+      ftbPolygon.setValue(fldPolygon, recPolygon, ftbPoint.returnValue(fldPoint, recPoint))
+    end
+  end
+  
+  numCounter = numCounter + 1
+  if(av.setStatus((numCounter/numTotal)*100).not)then
+    exit
+  end
+end
+
+ftbPolygon.setEditable(false)
+av.clearStatus

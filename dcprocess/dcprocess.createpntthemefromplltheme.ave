@@ -1,0 +1,91 @@
+' DCProcess.createPntThemeFromPllTheme
+
+' convert a Polyline Theme into a Point Theme
+' (c) 2000 - 2004 DORSCH Consult
+
+  viewActive = av.GetActiveDoc 
+  
+  themeList = viewActive.GetThemes 
+  LineTheme = Msgbox.Choice (themeList, "Select a Polyline Theme to extract the Points from.", "Select a Theme") 
+  
+  thmLine = viewActive.FindTheme(LineTheme.AsString) 
+  
+  ftbLine = thmLine.GetFTab 
+
+  fldLineShape = ftbLine.FindField("Shape") 
+  
+  fldElevation = ftbLine.FindField("Elev")
+  
+  numCounter = 0 
+  numTotal = ftbLine.GetNumRecords 
+  av.showStopButton  
+  
+  numZ=0
+ 
+  'make a new theme 
+  
+  clsShape = Point
+  def = av.GetProject.MakeFileName("theme", "shp") 
+  def = FileDialog.Put(def, "*.shp", "New Section Theme") 
+  
+  if (def <> nil) then 
+    fld = nil
+    ftbSection = FTab.MakeNew(def, clsShape) 
+    if(fldElevation <> nil)then
+      fld = fldElevation.clone
+    end
+
+
+    fldShape = ftbSection.findField("Shape")
+  
+    thmSection = FTheme.Make(ftbSection) 
+    viewActive.AddTheme(thmSection) 
+    thmSection.getFTab.setEditable(TRUE)
+    thmSection.SetActive(TRUE) 
+    thmSection.SetVisible(FALSE) 
+    viewActive.SetEditableTheme(thmSection) 
+    av.GetProject.SetModified(true) 
+  end 
+  
+  lstFields = ftbLine.getFields.deepclone
+  lstFields.remove(0)
+  ftbSection.addFields(lstFields)
+  if(fld <> nil)then
+      ftbSection.AddFields({fld}) 
+  end
+  
+ for each recLine in ftbLine
+    numZ=0
+    if(fldElevation <> nil)then
+      numZ = ftbLine.returnValue(fldElevation, recLine)
+    end
+    pllLine = ftbLine.returnValue(fldLineShape, recLine)
+    for each lstList in pllLine.asList
+      for each pntPoint in lstList
+        recNew = ftbSection.addRecord  
+        ftbSection.setValue(fldShape, recNew, pntPoint.clone)
+        if(fld <> nil)then
+          ftbSection.setValue(fld, recNew, numZ)
+        end
+        for each i in 1 .. (lstFields.count)
+         fldPoint = ftbSection.getFields.get(i)
+         fldLine = ftbLine.getFields.get(i)
+         ftbSection.setValue(fldPoint, recNew, ftbLine.returnValue(fldLine, recLine))
+        end
+      end
+    end
+    
+    if(av.setStatus((numCounter/numTotal)*100).not)then
+      exit
+    end
+ end
+
+
+
+  'cleaning up
+  thmSection.getFTab.setEditable(FALSE)
+  thmSection.setVisible(TRUE)
+  av.clearStatus
+  
+'  counter = 0 
+ ' ln = PointList.Count 

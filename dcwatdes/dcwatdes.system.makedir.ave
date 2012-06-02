@@ -1,0 +1,47 @@
+' DCWatDes.System.makeDir
+
+' (c) 2005 DORSCH Consult
+' Create a directory
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' Expects one argument, the path of the directory to be created (string)
+' Able to create directories recursively
+' Returns true if the directory was successfully created or false in case an error occurs
+
+strDir = Self
+
+flnDll = FileName.findInSystemSearchPath("kernel32.dll")
+if(flnDll = NIL)then
+  MsgBox.error("Could not find 'kernel32.dll'", "DC Water Design")
+  return false
+end
+dllKernel = Dll.Make(flnDll)
+MkDir = DLLProc.Make(dllKernel, "CreateDirectoryA", #DLLPROC_TYPE_INT32, {#DLLPROC_TYPE_STR, #DLLPROC_TYPE_VOID})
+lstDir = strDir.asTokens("\")
+strPart = lstDir.get(0)
+for each i in 1..(lstDir.count - 1)
+  strPart = strPart+"\"+lstDir.get(i)
+  if(strPart.asFileName.isDir.not)then
+    numResult = MkDir.call({strPart, ""})
+  else
+    numResult = 1
+  end
+end
+if(numResult = 1)then
+  return true
+else
+  return false
+end

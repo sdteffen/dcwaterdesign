@@ -1,0 +1,15 @@
+' DCSewerDesign.List.flip
+
+' returns the List given as argument in reverse order
+
+' (c) 2000 DORSCH Consult
+
+lstNormal = self
+
+lstFlip = List.make
+
+for each i in (lstNormal.count-1)..0
+  lstFlip.add(lstNormal.get(i).clone)
+end
+
+return lstFlip.deepclone

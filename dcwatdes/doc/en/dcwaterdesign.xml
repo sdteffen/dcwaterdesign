@@ -1,0 +1,2797 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE book 
+  PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "../../../../dtd/docbookx.dtd"
+  []
+>
+<book lang="en">
+  <bookinfo>
+    <title>DC Water Design Extension Manual</title>
+        <copyright>
+      <year>2006-2009</year>
+      <holder>DC Water and Environment</holder>
+    </copyright> 
+    <copyright>
+      <year>2001-2006</year>
+      <holder>DORSCH Consult</holder>
+    </copyright>
+    <copyright>
+      <year>2007</year>
+      <holder>Steffen Macke</holder>
+    </copyright> 
+    <author>
+      <firstname>Steffen</firstname>
+      <surname>Macke</surname>
+      <affiliation>
+        <address><email>sdteffen@sdteffen.de</email></address>
+      </affiliation>
+    </author>
+        <author>
+      <firstname>Maher</firstname>
+      <surname>Abdel Karim</surname>
+      <affiliation>
+        <address><email>Maher_Karim@dorsch.com.jo</email></address>
+      </affiliation>
+    </author>
+    <legalnotice>
+      <para>Permission is granted to copy, distribute and/or modify this 
+        document under the terms of the GNU Free Documentation License, 
+	Version 1.2 or any later version published by the Free Software 
+	Foundation; with no Invariant Sections, no Front-Cover Texts, and no 
+	Back-Cover Texts. A copy of the license is available from the
+	Free Software Foundation (<ulink url="http://www.gnu.org" />).
+	</para></legalnotice>
+  </bookinfo>
+  <chapter id="general">
+    <title>DC Water Design Extension - General Information</title>
+    <indexterm><primary>General</primary></indexterm>
+  <sect1 id="introduction">
+    <title>Introduction</title>
+    <indexterm><primary>Introduction</primary></indexterm>
+    <para>This Manual describes the DC Water Design Extension Version 2.12.3.</para>
+    <para>This Document uses Terminology from ArcView and EPANET. 
+      Refer to the respective documentation for in-depth explanations.</para>
+    <important><para>Be sure to check the <citetitle>DC Processing 
+      Extension</citetitle>
+      and the <citetitle>DC Sewer Design Extension</citetitle> which
+      are also freely available. These extensions provide additional
+      functionality that is very helpful. E.g. the <citetitle>DC Sewer Design
+      Extension</citetitle> can be used to draw water network profiles.
+      </para></important>	  
+      
+    <sect2 id="what_is_dcwaterdesign">
+      <title>What is the DC Water Design Extension?</title>
+      <para>The DC Water Design Extension is an Extension to ESRI's 
+	ArcView GIS software. Starting with Versions 2.00 the 
+	DC Water Design Extension integrates the EPANET 2.00 
+	hydraulic modeling software with ArcView. It allows to 
+	store, edit and retrieve EPANET hydraulic models 
+	including all options in ArcView. Also it's possible to 
+	run the EPANET hydraulic analysis from ArcView and load 
+	the results into the GIS.</para>
+    </sect2>
+ 
+    <sect2 id="news">
+      <title>What's New?</title>
+        <indexterm><primary>news</primary></indexterm>
+        <sect3 id="news_2_12_5">
+          <title>Version 2.12.5</title>
+         <itemizedlist>
+           <listitem><para>Include updated epanet related executables.</para></listitem>
+           
+          </itemizedlist>
+        </sect3>  
+        <sect3 id="news_2_12_4">
+          <title>Version 2.12.4</title>
+         <itemizedlist>
+           <listitem><para>An Elevation calculation tutorial
+             has been added to the extension (<xref 
+             linkend="elevation_tutorial" />).</para></listitem>
+           <listitem><para>When writing EPANET INP files, the <structfield
+             >Status</structfield> field of a <classname>Pipe</classname> that
+             contains &quot;closed&quot; will be set to &quot;closed&quot;.
+             </para></listitem>  
+          </itemizedlist>
+        </sect3>  
+        <sect3 id="news_2_12_3">
+	  <title>Version 2.12.3</title>
+	  <itemizedlist>
+	    <listitem><para>Bytecode Calculator byte numbering starts with 1 now
+	      instead of 0.</para></listitem>
+	    <listitem><para>&quot;Extract Model&quot; allows to select models
+	      that should be extracted as well as the folder to which the
+	      models should be extracted.</para></listitem>
+	    <listitem><para>Robustness improvements for &quot;Extract 
+	      Model&quot;, &quot;Split Model&quot; and &quot;Merge Model&quot;.
+	      </para></listitem>
+	    <listitem><para>Fixed bug in &quot;Split Model&quot; and 
+	    &quot;Extract Model&quot; that could
+	      lead to feature duplication when elements are moved
+	      from zone to zone in split models.</para></listitem>
+	    <listitem><para>A Thiessen Polygon tutorial (<xref 
+	      linkend="thiessen_tutorial" />)
+	      has been added to the documentation.</para></listitem>  
+	    <listitem><para>Experimental writing of OptiDesigner files (<xref 
+	      linkend="write_epanet_file" />).</para></listitem>
+	    <listitem><para>New function to select economic diameters based
+	      on the velocity result (<xref linkend="set_economic_diameter" 
+	      />).</para></listitem>
+	  </itemizedlist>
+	</sect3>
+        <sect3 id="news_2_12_2">
+	  <title>Version 2.12.2</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>Critical bug fixes for &quot;Load Results for Step 
+	        ...&quot;, &quot;Extract Model&quot;, &quot;Merge
+		Model&quot; and &quot;Split Model&quot;. The bug could result
+		in involuntary changes to the original data.</para></listitem>
+	      <listitem><para>Bug fixes for <function
+	        >DCWatDes.Bitcode.or()</function> and <function
+	        >DCWatDes.Bitcode.xor()</function> functions.</para></listitem>
+	      <listitem><para>Improved &quot;Bytecode Calculator&quot; 
+	        functionality (<xref linkend="bytecode_calculator" />).
+		</para></listitem>
+	      <listitem><para>&quot;Write Epanet File&quot; collapses 
+	        setting entries of valves to &quot;closed&quot; if they
+		contain &quot;closed&quot;.</para></listitem>
+	      <listitem><para>&quot;Extract Model&quot; allows now to create
+	        one view per model (<xref linkend="extract_model" />) and will
+		extract demand junctions to a separate file if a field 
+		<structfield>HasDemand</structfield> is found in the
+		junction table..</para></listitem>
+	      <listitem><para>New &quot;Enforce Data Model&quot; option
+	        that allows to relax data model checks when editing networks
+		(E.g. sewer or street networks). See <xref linkend=
+		"setup_dialog" />.</para></listitem>
+	    </itemizedlist>
+	  </para>  
+	</sect3>    
+        <sect3 id="news_2_12_1">
+	  <title>Version 2.12.1</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>Fixed some packaging and documentation problems.</para>
+	      </listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+        <sect3 id="news_2_12">
+	  <title>Version 2.12</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>&quot;Select Connected Pipes&quot; looks for
+	        &quot;closed&quot; as a substring rather than a closed
+		string (If &quot;Closed Valve&quot; is selected).</para>
+		</listitem>
+	      <listitem><para>Bitcodes became byte codes (strings) and can distinguish
+	        up to 255 zones.</para></listitem>
+	      <listitem><para>New &quot;Split Model&quot;, &quot;Merge
+	        Model&quot; and &quot;Extract Model&quot; functions in
+		the Project GUI (<xref linkend="split_model" />,
+		<xref linkend="merge_model" />, <xref linkend="extract_model" 
+		/>).</para></listitem>	
+	    </itemizedlist>
+	  </para>  
+	</sect3>
+        <sect3 id="news_2_11">
+	  <title>Version 2.11</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>INP file import is handling virtual lines now.
+	        Function robustness has been improved and error messages
+		are displayed in ArcView.</para></listitem>
+	      <listitem><para>More robust &quot;Create Missing Junctions&quot;
+	        function.</para></listitem>
+	      <listitem><para>Updated documentation</para></listitem>
+	      <listitem><para>New installer interface.</para></listitem>
+	      <listitem><para>Bug fixes for patterns, help file integration,
+	        result import.</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+        <sect3 id="news_2_10">
+	  <title>Version 2.10</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>Switched Documentation to DocBook. Documentation
+	        is accessible from DC Water Design Extension Menu now.</para>
+	        </listitem>
+	      <listitem><para>Fixed pattern export</para></listitem>
+	      <listitem><para>The extension doesn't use the power_kw field of 
+	        the pump table any more.</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+	<sect3 id="news_2_09">
+	  <title>Version 2.09</title>
+          <para>
+	    <itemizedlist>
+	      <listitem><para>Bug fix for result import.</para></listitem> 
+	      <listitem><para>Better handling of curves and patterns.
+	        </para></listitem>
+	      <listitem><para>Improved "Check Epanet model" functionality.</para>
+	      </listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+      
+	<sect3 id="news_2_08">
+	  <title>Version 2.08</title>
+          <para>
+	    <itemizedlist>
+	      <listitem><para>Basic skeletonization function.</para></listitem>
+		    
+	      <listitem><para>Bug fixes for the "Create Missing Junctions" 
+	        function.</para></listitem>
+		    
+	      <listitem><para>Russian localizations (Thanks to Tom Chidley).
+	        </para></listitem>
+		    
+	      <listitem><para>More Arabic localizations (Thanks to Maher Karim).
+	        </para></listitem>
+		    
+	      <listitem><para>Bug fixes for emitterexponent and demandmultiplier 
+		      export to EPANET INP files.</para></listitem>
+		    
+	      <listitem><para>Added emitter coefficient as to the junction 
+	        class.</para></listitem>
+		    
+	      <listitem><para>Updated documentation.</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+      
+	<sect3 id="news_2_07">
+	  <title>Version 2.07</title>
+          <para>
+	    <itemizedlist>
+	      <listitem><para>Completely new and much faster EPANET INP import 
+		      based on the EPANET toolkit and shapelib. Import 
+		      function still incomplete: Attributes are omitted.
+		      </para></listitem>
+      
+      	      <listitem><para>French and Arabic localizations.</para></listitem>
+      
+	      <listitem><para>Bug fixes for one-node themes, snapping radius, pipe 
+		      splitting, popup menus and exporting.</para></listitem>
+            </itemizedlist>
+	  </para>
+	</sect3>
+	
+	<sect3 id="news_2_06">
+	  <title>Version 2.06</title>
+          <para>
+	    <itemizedlist>
+	      <listitem><para>Fixed several problems when the view contained 
+		raster themes.</para></listitem>
+	
+	      <listitem><para>EPANET INP import: Fixed junction import, improved 
+		performance. Import function still incomplete.</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+	
+	<sect3 id="news_2_05">
+	  <title>Version 2.05</title>
+	  <para>
+	    <itemizedlist>
+	      <listitem><para>Fixed problems for non-NT versions of 
+	      Windows.</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+      
+	<sect3 id="news_2_04">
+	  <title>Version 2.04</title>
+          <para>
+	    <itemizedlist>
+	      <listitem><para>Customizable timeout and other improvements for 
+	        external command calls (Thanks to Melissa Henderson 
+	        of Lockwood, Andrews &amp; Newnam, Inc.).</para></listitem>
+	    
+              <listitem><para>Check EPANET model checks now for pipes that are 
+	        shorter than the snapping radius.</para></listitem>
+	    
+              <listitem><para>Import of EPANET binary result files.
+	        </para></listitem>
+	    
+              <listitem><para>Preliminary support for importing EPANET INP 
+	        files: Importing pipes and junctions.</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+      
+	<sect3 id="news_2_03">
+	  <title>Version 2.03</title>
+	  <para>
+            <itemizedlist>
+	      <listitem><para>Added function to automatically add the theme 
+	        fields required by the data model.</para></listitem>
+		    
+	      <listitem><para>EPANET result import works now without MySQL.
+	        </para></listitem>
+		    
+	      <listitem><para>Check EPANET Model provides more checks now and is 
+		      much faster.</para></listitem>
+		    
+	      <listitem><para>"Create Missing Junctions": Add additional 
+	        junctions to make sure that the network topology is sane.
+		</para></listitem>
+		    
+	      <listitem><para>Updated Documentation.</para></listitem>
+		    
+	      <listitem><para>Checking for spaces in path names which are not 
+	        allowed.</para></listitem>
+		    
+	      <listitem><para>Customizable backdrop map resolution.
+	        </para></listitem>
+		    
+	      <listitem><para>Support for patterns.</para></listitem>
+		    
+	      <listitem><para>More checks while writing EPANET files.
+	        </para></listitem>
+		    
+	      <listitem><para>Various bugfixes (see 
+	        <filename>ChangeLog</filename> for the 
+	        details).</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+      
+	<sect3 id="news_2_02">
+	  <title>Version 2.02</title>
+          <para>
+	    <itemizedlist>
+	      <listitem><para>Updated Documentation</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+      
+	<sect3 id="news_2_01">
+	  <title>Version 2.01</title>
+	  <para>
+	    <itemizedlist>
+      
+	      <listitem><para>Updated Documentation.</para></listitem>
+		    
+	      <listitem><para>Support for Backdrop Maps (Thanks to Roland 
+	        Salgado, <xref linkend="backdrop-map" />).</para></listitem>
+		    
+	      <listitem><para>Create Zones From SOV Controls (<xref linkend=
+		      "create_zones_from_controls" />).</para></listitem>
+		    
+	      <listitem><para>Bugfix for coordinate systems using decimal feet 
+		(Bug reported by Arnold Strasser).</para></listitem>
+	    </itemizedlist>
+	  </para>
+	</sect3>
+      </sect2>
+  </sect1>  
+  <sect1 id="concepts">
+    <title>Concepts</title>
+    <indexterm><primary>concepts</primary></indexterm>
+    <para>This section introduces some concepts which are 
+      fundamental in order to understand how the extension works.</para>
+    
+    <sect2 id="traces">
+      <title>Network Traces</title>
+      <indexterm><primary>trace</primary></indexterm>
+      <indexterm><primary>network</primary>
+        <secondary>trace</secondary></indexterm>
+      <para>Network Traces can be useful to solve problems related 
+	to the network geometry. For example, it's possible to 
+	check the connectivity of the network features in a 
+	model. Through specifying network features at which the 
+	trace should stop, it's possible to isolate supply 
+	zones.</para>
+      <para>See <xref linkend="select_connected_pipes" />.</para>	
+    </sect2> 
+    <sect2 id="virtual_lines">
+      <title>Virtual Lines</title>
+      <indexterm><primary>virtual line</primary></indexterm>
+      <indexterm><primary>pipe/node duality</primary></indexterm>
+      <indexterm><primary>validity</primary></indexterm>
+      <para>In the EPANET hydraulic model, pumps and valves are 
+	represented as lines. From the hydraulic modeling point 
+	of view this makes sense, as the orientation of the 
+	valves and pumps is important information. In GIS data, 
+	pumps and valves are typically represented as points, 
+	as they are also symbolized with point symbols. Point 
+	data is lacking the orientation information. Because of 
+	the pipe-node duality pipes and valves will be referred 
+	to as virtual lines in this section.</para>
+	
+	<para>The pipe-node duality complicates the creation of 
+	  hydraulic models from the GIS data. It is possible to 
+	  overcome the problem with one of the following solutions:
+	  <itemizedlist>
+	    <listitem><para>Storage of orientation information for each virtual 
+	      line in the GIS</para></listitem>
+	    <listitem><para>Take over the orientation of connected pipes</para>
+	      </listitem>
+	  </itemizedlist>
+	</para>
+	
+	<para>The second possibility has some advantages, as it does 
+	  not require additional data storage - it was applied in 
+	  the described application. However, it imposes some 
+	  restraints on the data. The concept to model virtual 
+	  lines as points in the GIS can be summarized as follows:
+	  
+	  <itemizedlist>
+	    <listitem><para>Each virtual line needs to have exactly two pipes 
+	      connected</para></listitem>
+	  
+	    <listitem><para>Both connected pipes must be oriented in the same 
+	      way: One pipe has to start at the virtual line and 
+	      the other pipe has to end at the virtual line</para></listitem>
+	  </itemizedlist>
+	</para>
+    
+      <para>
+	<figure id="fig_virtual_line_validity">
+	  <title>Virtual Line Validity</title>
+	  <graphic fileref="figure/virtual-line-validity.png" />
+	</figure>
+      
+      <xref linkend="fig_virtual_line_validity" /> shows examples of different 
+      pipe orientations 
+      at a virtual line. The case a shows a pump with two 
+      pipes connected that are oriented in the same way. This 
+      allows the creation of the hydraulic model and is 
+      therefore considered valid. Case b shows pumps with 
+      pipes connected that are not oriented in the same way. 
+      This is invalid as is does not allow the creation of 
+      the hydraulic model. Case c is invalid because the pump 
+      has more than 3 pipes connected to it. Note that the 
+      orientation information of the pump symbol is not 
+      necessarily contained in the GIS data.</para>
+      
+      <para>
+	<figure id="fig_virtual_line_creation">
+	  <title>Virtual Line Creation</title>
+	  <graphic fileref="figure/virtual-line-creation.png" />
+	</figure>
+      
+      <xref linkend="fig_virtual_line_creation" /> 
+      depicts the conversion process of virtual 
+      lines: 
+      
+      <orderedlist>
+        <listitem><para>Number and orientation of the pipes connected to the 
+	  virtual line are checked for validity</para></listitem>
+      
+        <listitem><para>The virtual node is replaced with a junction (PJ1).
+	  </para></listitem>
+      
+        <listitem><para>An additional junction is added (PJ2).</para></listitem>
+      
+        <listitem><para>The pipe from the virtual line to the next node 
+	  starts at the additional junction. (PJ2 -&gt; J2).</para></listitem>
+      
+        <listitem><para>The pump or valve is created. It connects the two 
+	  new Junctions (PJ1 -&gt; PJ2).</para></listitem>
+      </orderedlist>
+      
+      The DC Water Design Extension follows this conversion 
+      process when it is creating EPANET models. Additional 
+      considerations used in the process are:
+      
+      <itemizedlist>
+        <listitem><para>The length of the virtual line is one metre. 
+	  <xref linkend="fig_virtual_line_creation" /></para></listitem>
+      
+        <listitem><para>If the pipe starting at the virtual line is shorter 
+	  than one metre, the virtual line length is set to 
+	  half of the pipe length.</para></listitem>
+      </itemizedlist>
+    </para> 
+      
+      <para>Virtual Lines provide a concept to convert GIS point 
+      data (pumps or valves) into the lines used by the 
+      hydraulic analysis software. The conversion is done 
+      automatically when the GIS data is exported to the 
+      hydraulic model. Virtual Lines require exactly two 
+      pipes connected to each pump or valve. In Addition, the 
+      two pipes have to have the same digitizing direction 
+      (which will be the flow direction in the hydraulic model).</para>
+    </sect2>  
+    <sect2 id="byte_codes">
+      <title>Byte Codes</title>
+      <indexterm><primary>byte code</primary></indexterm>
+      <para>Byte codes make it possible to store fields of yes-no 
+        information in 'normal' text. Every byte in the 
+        number having the value &quot;1&quot; is considered set, every byte 
+        of value &quot;0&quot; is not set. Thus making it possible to 
+        code several independent pieces of information in 
+        one ArcView string.</para> 
+      
+      <para>As ArcView shapefiles allow to store strings of up to 255 characters
+        length, it is possible to store up to 255 pieces of 
+        information.</para>
+      
+      <para>The following example shows how this concept allows 
+        storing the network information in one seamless data 
+        set and utilizing the same network features in 
+        different hydraulic models:</para>
+      
+      <para>
+	<figure id="fig_bitcoding_zones">
+	  <title>Byte-coding Supply Zones</title>
+	  <graphic fileref="figure/bitcoding-zones.png" />
+	</figure>
+      </para>
+      
+      <para>In <xref linkend="fig_bitcoding_zones" /> the nodes of three 
+	hydraulic models are 
+	byte-coded for storage in the GIS. Each zone has its own 
+	byte in the byte code, indicating if the node is used in 
+	the model or not.</para> 
+      
+      <para>Byte codes are stored as strings in GIS data. 
+        They provide a powerful method to store hydraulic 
+        models in GIS data. The underlying principle is very simple:
+        <itemizedlist>  
+	  <listitem><para>The models are numbered</para></listitem>
+		
+	  <listitem><para>Each byte represents one supply zone</para></listitem>
+		
+	  <listitem><para>If the byte is set (&quot;1&quot;) than the network 
+	    feature is used in the respective model. Otherwise (&quot;0&quot;), 
+	    the feature is not used in the model.</para></listitem>		
+	  <listitem><para>The different values are assembled by the following
+	    functions:
+	    <simplelist>
+	      <member>DCWatDes.Bitcode.and</member>
+	      <member>DCWatDes.Bitcode.or</member>
+	      <member>DCWatDes.Bitcode.xor</member>
+	    </simplelist>
+	    See <xref linkend="api" /> for details regarding these functions.
+	    </para></listitem>
+        </itemizedlist>
+      </para>
+      <note><para>Note that the byte numbering starts at 1. You should use 
+        a temporary field in order to perform the addition of 
+        two byte codes correctly.</para></note>
+      <note><para>Note that you should use a different concept if you want
+        to split up your model for editing purposes.</para>
+	<para>The byte code concept models a one to many relationship, but for
+	editing purposes, a one to one relationship should be used. This makes
+	the automatic assembly of the model after editing easier.</para></note>	
+    </sect2>
+    
+    <sect2 id="snapping">
+      <title>Snapping</title>
+      <indexterm><primary>snapping</primary></indexterm>
+      <indexterm><primary>digitzing</primary>
+        <secondary>snapping</secondary></indexterm>
+      <para>The editing tools of the DC Water Design Extension use 
+        a snapping tolerance equal to 3 screen pixels.</para>
+    </sect2>
+  </sect1>  
+  <sect1 id="installation">
+    <title>Installation</title>
+    <indexterm><primary>installation</primary></indexterm>
+    <indexterm><primary>sample</primary></indexterm>
+    <indexterm><primary>example</primary></indexterm>
+    <indexterm><primary>data</primary>
+      <secondary>sample</secondary></indexterm>
+    <para>Description of the DC Water Design Extension Installation.</para>
+    <sect2 id="how_to_obtain">
+      <title>How to Obtain the DC Water Design Extension</title>
+      <indexterm><primary>website</primary></indexterm>
+      <para>The DC Water Design Extension can be 
+	obtained from the website 
+	<ulink url="http://dcwaterdesign.sourceforge.net"
+	>http://dcwaterdesign.sourceforge.net</ulink>.</para>
+	
+      <para>The sourceforge site offers a multitude of services 
+        related to the DC Water Design Extension, including:
+        <itemizedlist>    
+	  <listitem><para>Downloads</para></listitem>
+		
+	  <listitem><para>Documentation</para></listitem>
+		
+	  <listitem><para>Sources</para></listitem>
+		
+	  <listitem><para>Bug Tracker</para></listitem>
+		
+	  <listitem><para>Mailing List</para></listitem>
+		
+	  <listitem><para>Sample Data</para></listitem>
+	</itemizedlist>
+      </para>
+    </sect2>
+    <sect2 id="requirements">
+      <title>Requirements</title>
+      <indexterm><primary>requirements</primary></indexterm>
+      <para>The following software packages are required in order to use the
+        DC Water Design extension:
+	<itemizedlist>
+	  <listitem><para>ArcView 3.1 or higher (3.2, 3.3), but not ArcView 
+	    8.x or 9.x</para></listitem>
+	  <listitem><para>Windows 95, 98, ME, NT, 2000 or XP in order to export 
+		EPANET files </para></listitem>
+	  <listitem><para>EPANET 2.0 or higher is needed in order to run a 
+		hydraulic analysis</para></listitem>
+	  <listitem><para>An (ANSI SQL compliant) ODBC connection can improve 
+		the performance when importing hydraulic analysis results
+		</para></listitem>
+	</itemizedlist>
+      </para>
+      <note><para>Note that the commandline tools described in <xref linkend=
+        "commandline" /> do not rely on ArcView or the Windows operating
+	system. They are platform independent, however you may have to
+	compile them for your platform.</para></note>
+    </sect2>
+    <sect2 id="setup">
+      <title>Setup</title>
+      <indexterm><primary>setup</primary></indexterm>
+      <para>To install the DC Water Design Extension, you've got to 
+      run the installer executable. After accepting the 
+      license (s. <xref linkend="copyright_dcwaterdesign" />), you'll be 
+      prompted to select the 
+      installation path. The installation path should be the 
+      path to ArcView's EXT32 folder. Usually this should be 
+      the default path (<filename>c:\ESRI\av_gis30\arcview\EXT32</filename>). It 
+      might differ for custom ArcView installations. The only 
+      thing left to do now is to select which components of 
+      the extension should be installed. In general, you 
+      should install all the components of the extension.</para> 
+      
+      <note><para>If you want to use e.g. a newer version of the XSLT 
+	parser and you've installed that version already,    
+	 you might decide not to install the XSLT parser that 
+	comes with the extension. Don't do this unless you know 
+	what you're doing!</para></note>
+    </sect2>
+  </sect1>
+  
+  <sect1 id="quick_start_guide">
+    <title>Quick Start Guide</title>
+    <indexterm><primary>quick start</primary></indexterm>
+    <para>
+      <orderedlist>
+        <listitem><para>Load the Extension.</para></listitem>
+        <listitem><para>Open a View.</para></listitem>
+        <listitem><para>Add Themes to the View. The Themes should describe 
+	  your water supply network. Junctions, pipes and 
+	  reservoirs would comprise a simple network. The 
+	  attributes of the themes must adhere to the 
+	  ArcView/EPANET Data Model (see <xref linkend="av_epanet_data_model" />). 
+	  You can use ArcView field aliases to map the fields correctly.
+	  </para></listitem>
+        <listitem><para>Click on the EPANET Themes button. Select the 
+          appropriate Themes.</para></listitem>
+        <listitem><para>If your fieldnames don't match the ones of the data 
+	  model, choose "Create Missing Fields" from the DC Water 
+	  Design menu.</para></listitem>
+	  <listitem><para>If required, use the ArcView table calculator to 
+	    populate the fields. Leaving fields empty is fine in 
+	    most cases.</para></listitem>
+	<listitem><para>Choose "Make EPANET Model" from the DC Water Design 
+	  menu.</para></listitem>
+	<listitem><para>If the last step didn't yield any errors, you can 
+	  create an EPANET input file now. Choose "Write EPANET File"
+	   from the DC Water Design menu. Choose filename and 
+	  location. In case of errors, running "Check EPANET Model"
+	   might help you to track down the most common error.</para></listitem> 
+	<listitem><para>Fire up EPANET and open the created file (*.inp).
+	  </para></listitem>
+      </orderedlist>
+    </para>
+  </sect1>
+  </chapter>
+  <chapter id="reference">
+    <title>DC Water Design Extension Reference</title>
+    <indexterm><primary>reference</primary></indexterm>
+  <sect1 id="usage">
+    <title>Usage</title>
+    <indexterm><primary>usage</primary></indexterm>
+    <para>How to use the DC Water Design Extension.</para>
+    <sect2 id="general_usage">
+      <title>General Usage</title> 
+      <para>
+        <orderedlist>
+	  <listitem><para>Start ArcView</para></listitem>
+	  <listitem><para>Open the Extensions Dialog 
+	    (<menuchoice><guimenu>File</guimenu><guimenuitem>Extensions 
+	    ...</guimenuitem></menuchoice>)</para></listitem>
+	  <listitem><para>Select the DC Water Design Extension (Put a 
+	    checkmark in the box on the left side).</para></listitem>
+	  <listitem><para>After the Extension is loaded, the Setup Dialog 
+	    informs you about several settings. You shouldn't 
+	    change them without knowing what you're doing.</para></listitem>
+	    </orderedlist></para> 
+    </sect2>
+    
+    <sect2 id="project_menus">
+      <title>Project Menus</title>
+      <indexterm><primary>menu</primary>
+        <secondary>Project GUI</secondary></indexterm>
+      <para>The DC Water Design Extension extends the Project GUI 
+        by adding a new Menu, called DC Water Design Extension. 
+        The Menu contains the following choices:</para>
+      
+      <sect3 id="setup_dialog">
+        <title>Setup</title> 
+	<indexterm><primary>setup dialog</primary></indexterm>
+	<para>Shows the Setup Dialog.</para>
+	
+	<para>The Setup Dialog includes an option to choose the 
+	  language of the Extension. Currently supported are the 
+	  following localizations:
+	  <itemizedlist>
+	    <listitem><para>Arabic</para></listitem>
+	    <listitem><para>English</para></listitem>
+	    <listitem><para>German</para></listitem>
+	    <listitem><para>Russian</para></listitem>
+	  </itemizedlist>
+	</para>
+	<note><para>Note that the Localization is not completed yet. It is 
+	therefore recommended that you set the language to English.</para></note>      
+	
+	<para>The snapping radius used for network traces and model 
+	  building is also customizable in this dialog. Usually 
+	  the default setting should be kept.</para>
+	
+	<para>The backdrop resolution specifies the resolution of the 
+	  backdrop map if you write your EPANET files with 
+	  backdrop maps. Set to a higher resolution if required.</para>
+	
+	<para>The command timeout specifies the time in seconds for 
+	  which the extension will wait when creating epanet 
+	  files or running epanet calculations. If the EPANET run 
+	  doesn't finish in time, there'll be an error message.</para>
+	  
+	<para>Deselecting the <guilabel>Enforce Data Model</guilabel> checkbox 
+	  allows to relax checks on fields required for EPANET.</para> 
+	<tip><para>Deselect the <guilabel>Enforce Data Model</guilabel> checkbox
+	  when editing street or sewer networks.</para></tip>  
+      </sect3>
+	<sect3 id="epanet_tables">
+	  <title>EPANET Tables</title>
+          <indexterm><primary>tables</primary>
+	    <secondary>EPANET</secondary></indexterm>
+	    <indexterm><primary>Curve</primary></indexterm>
+	  <para>Displays the EPANET Tables Dialog.</para> 
+	  
+	  <para>The Tables in the dialog are used to to store 
+	  non-spatial EPANET data with ArcView. Typical examples 
+	  of such data are pump curves or hydraulic analysis 
+	  options. Before you can choose a table to use with the 
+	  DC Water Design Extension, it has to be loaded into 
+	  ArcView. Refer to the ArcView documentation for 
+	  information on how to load tables into ArcView.</para>
+	</sect3>
+      
+	<sect3 id="result_tables">
+	  <title>Result Tables</title> 
+          <indexterm><primary>tables</primary>
+	    <secondary>result</secondary></indexterm>
+	  <para>Opens the Result Tables Dialog.</para> 
+	  
+	  <para>The Result Tables are used to store the results of a 
+	  hydraulic analysis. There are two tables, one for node 
+	  results and one for link results. For performance 
+	  reasons it is recommended that you use a RDBMS such as 
+	  mySQL for storing the data.</para>
+	  
+	  <para>To allow result file loading without having an RDBMS 
+	  installed, the dialog provides the opportunity to 
+	  switch to an result loader that relies on ArcView only.</para>
+        </sect3>
+	<sect3 id="split_model">
+	  <title>Split Model</title>
+	  <indexterm><primary>split</primary>
+	    <secondary>model</secondary></indexterm>
+	  <para>Allows to split a model into different ones.</para>
+	  <para>The values of the <structfield>Zone</structfield> field will
+	    be used to determine to which model a network element belongs</para>
+	  <para>The sub-models will be stored in subfolders named like the
+	    zones.</para>
+	  <para><xref linkend="merge_model" /> can be used to re-assemble the
+	    model automatically.</para>
+	  <caution><para>The <structfield>Zone</structfield> field has to be
+	    filled for all records.</para></caution>
+	</sect3>
+	<sect3 id="merge_model">
+	  <title>Merge Model</title>
+	  <indexterm><primary>merge</primary>
+	    <secondary>model</secondary></indexterm>
+	  <para>Merge a model that was split by <xref linkend="split_model" />.
+	    </para>
+	  <para>Because &quot;Merge Model&quot; is using the zone names from the
+	    main pipes theme, it is not possible to add new zones by simply
+	    adding a new folder. New zones have to be introduced in the
+	    main file first.</para>
+	  <caution><para>The <structfield>Zone</structfield> field should be
+	    filled for all records. Empty fields will be filled with
+	    the zone name from the folder.</para></caution>  
+	</sect3>
+	<sect3 id="extract_model">
+	  <title>Extract Model</title>
+	  <indexterm><primary>extract model</primary></indexterm>
+	  <para>Extract separate models from the current one based on
+	    the <structfield>ByteCode</structfield> content.</para>
+	  <para>Splits the currently registered themes into several parts.
+	    The parts are stored in the <filename>model</filename> folder
+	    and numbered according to byte code that is set. For example,
+	    all network elements with the first byte set (E.g. &quot;1000&quot;)
+	    are stored in the folder <filename>model/1</filename>.</para>
+	  <para>The user is asked whether a new view should be created for
+	    each model. The views will be named &quot;Model 1&quot;, &quot;Model
+	    2&quot;...</para>
+	  <para>If the junction theme has a <structfield>HasDemand</structfield>
+	    field and its filename contains &quot;junction&quot;, additional
+	    <filename>demandjunction.shp</filename> files will be written
+	    to the folder. They contain all the records for the particular model
+	    where <structfield>HasDemand</structfield> is &quot;1&quot;.</para>
+	  <para>The definition query for all themes of the model will be
+	    removed by this operation.</para>  
+	  <para>See <xref linkend="byte_codes" /> for detailed information
+	    about byte codes.</para>
+	  <para>Unlike <xref linkend="split_model" /> and <xref linkend=
+	    "merge_model" /> this function support one-to-many relationships
+	    (One pipe can be part if different models).</para>  
+	</sect3>
+	<sect3 id="about">
+	  <title>About</title>
+	  <indexterm><primary>license</primary></indexterm>
+	  <para>Displays information about the DC Water Design 
+	    Extension License. See section <xref linkend=
+	    "copyright_dcwaterdesign" /> 
+	    for the license details.</para>
+	</sect3>  
+      </sect2>
+      
+    <sect2 id="view_menus">
+      <title>View Menus</title>
+      <indexterm><primary>menu</primary>
+        <secondary>View GUI</secondary></indexterm>
+      <para>The DC Water Design Extension extends the ArcView View 
+	GUI with the following elements:</para>
+      <para>
+	<itemizedlist>
+	  <listitem><para>A new Menu called "DC Water Design"</para></listitem>
+	  <listitem><para>Buttons</para></listitem>
+	  <listitem><para>Tools</para></listitem>    
+	  <listitem><para>Three pop-up menus</para></listitem>
+	</itemizedlist>
+      </para>
+      
+      <para>The pop-up menus are available through clicking the 
+      right mouse button over a network feature.</para>
+      
+      <para>The additional functionality is explained below.</para>
+      
+      <sect3 id="write_epanet_file">
+        <title>Write EPANET File</title> 
+        <indexterm><primary>INP file</primary></indexterm>
+        <indexterm><primary>status</primary></indexterm>
+        <indexterm><primary>setting</primary></indexterm>
+        <indexterm><primary>closed</primary></indexterm>
+        <para>Exports the hydraulic model to an EPANET input file.</para>
+    
+	<para>The model has to be complete, running "Make EPANET Model" 
+	  and "Check EPANET Model" is advisable especially for the 
+	  novice user before exporting the EPANET input file.</para>
+	
+	<para>The typical process that follows "Write EPANET File" is outlined in
+	  <xref linkend="fig_write_inp_file" />. Note how this differs from
+	  the process in <xref linkend="fig_run_epanet_calculation" />.</para>
+	
+	<figure id="fig_write_inp_file">
+	  <title>Write EPANET File</title>
+	  <graphic fileref="figure/write_inp_file.png" />
+	</figure>
+	
+	<para id="backdrop-map">Optionally, a Backdrop Map is exported together with 
+	  the EPANET model. This requires additional themes in 
+	  the View e.g. pressure zones or a street layer. The 
+	  resolution of the backdrop map can be specified in the 
+	  setup dialog (see <xref linkend="project_menus" />). A backdrop will only 
+	  be written, if the view contains visible themes in 
+	  addition to the EPANET themes.</para>
+	<para>If the <structfield>Status</structfield> field of a <classname
+	  >Pipe</classname> or the <structfield>Setting</structfield> field of
+	  a <classname>Valve</classname> contains &quot;closed&quot;, it will be
+	  set to &quot;closed&quot;.</para>
+	  <note><para>The resulting EPANET input file has the extension 
+	    *.inp. The *.xml-file is just an intermediate format 
+	    (temporary file).</para></note>
+	  <note><para>The function is writing experimental OptiDesigner files 
+	    (<filename>*.od</filename>) along with the INP files.
+	    OptiDesigner is a tool to optimize the design of
+	    water networks: <ulink url="http://www.optiwater.com"
+	    >www.optiwater.com</ulink></para></note>  
+      </sect3>
+
+      <sect3 id="run_epanet_calculation">
+        <title>Run EPANET Calculation</title> 
+        <indexterm><primary>run calculation</primary></indexterm>
+	<para>Exports the hydraulic model to an EPANET input file, 
+	  runs the analysis and loads the results into ArcView.</para>
+	
+    <para>The typical "Run EPANET Calculation process" is outlined in
+	  <xref linkend="fig_run_epanet_calculation" />. Note how this differs from
+	  the process in <xref linkend="fig_write_inp_file" />.</para>
+	
+	<figure id="fig_run_epanet_calculation">
+	  <title>Run EPANET Calculation</title>
+	  <graphic fileref="figure/run_epanet_calculation.png" />
+	</figure>
+	
+	<para>The model has to be complete, running "Make EPANET Model" 
+	and "Check EPANET Model" is advisable especially for the 
+	novice user before exporting the EPANET input file.</para>
+	
+	<para>After the analysis has been completed, the report 
+	created by EPANET is displayed in a window and the user 
+	is prompted to select a time step for which the results 
+	will be loaded.</para> 
+      </sect3>
+      
+      <sect3 id="import_binary_result_file">
+	<title>Import Binary Result File</title>
+        <indexterm><primary>import</primary>
+	  <secondary>results</secondary></indexterm>
+	<indexterm><primary>files</primary>
+	  <secondary>BIN files</secondary></indexterm>
+	<para>Loads binary results of an EPANET calculation into ArcView.</para>
+	
+	<para>The binary results need to result of from an analysis 
+	of the EPANET model currently loaded into ArcView.</para>
+	
+	<para>The user will be prompted to select a time step for 
+	which the results will be loaded.</para>
+      </sect3>
+      
+      <sect3 id="import_epanet_inp_file">
+	<title>Import EPANET Inp File</title>
+	<indexterm><primary>import</primary>
+	  <secondary>INP file</secondary></indexterm>
+	<para>Imports an EPANET model from an EPANET INP file.</para>
+	<para>The EPANET INP format is an ASCII format (it can be 
+	  easily edited by any text editor) that is documented in 
+	  the EPANET toolkit. The windows version of EPANET can 
+	  export models to this format. To export an INP file from EPANET, 
+	  choose <menuchoice><guimenu>File</guimenu> 
+	  <guimenuitem>Export</guimenuitem> 
+	  <guimenuitem>Network ...</guimenuitem></menuchoice>) from the menu.</para>
+	<para>After selecting <menuchoice><guimenu>DC Water Design</guimenu>
+	  <guimenuitem>Import EPANET Inp File</guimenuitem></menuchoice> from
+	  the menu, you have to do the following:</para>
+	<simplelist>
+	  <member>Select the location for the new 
+	    <classname>Junction</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Pipe</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Pump</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Reservoir</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Tank</classname> shapefile to be created.</member>
+	  <member>Select the location for the new 
+	    <classname>Valve</classname> shapefile to be created.</member>
+	  <member>Select the EPANET INP file to be imported.</member>
+	</simplelist>
+	<para>If there are errors, they will be reported in a separate 
+	  window.</para>
+	<caution><para>Currently the function will not import the full EPANET
+	  model. Be sure to check whether the imported results fit your needs.
+	  </para></caution>
+	<para>The function uses the <command>inp2shp</command> command. (<xref 
+	  linkend="inp2shp" />).</para>  
+      </sect3>
+      
+      <sect3 id="check_epanet_model">
+        <title>Check EPANET Model</title>
+        <indexterm><primary>check</primary></indexterm>
+	<para>Performs a number of checks on the hydraulic model.</para>
+	
+	<para>The checks include the following:
+	  <itemizedlist>
+	    <listitem><para>Check for NULL shapes</para></listitem>
+		
+	    <listitem><para>Check for pipes shorter than the snapping radius
+	      </para></listitem>
+		
+	    <listitem><para>Check for duplicate IDs</para></listitem>
+		
+	    <listitem><para>Check for IDs that are too long</para></listitem>
+	  </itemizedlist></para>
+      </sect3>
+      <sect3 id="load_results_for_step">
+        <title>Load Results for Step ...</title> 
+        <indexterm><primary>time step</primary></indexterm>
+	<indexterm><primary>load</primary>
+	  <secondary>results</secondary></indexterm>
+	<para>Loads the results of an EPANET hydraulic analysis to ArcView.</para>
+	
+	<para>The hydraulic analysis has to be run from ArcView in 
+	order to to enable this feature. The user is prompted 
+	to select the time step for which the results should be loaded.</para>
+      </sect3>
+      <sect3 id="make_epanet_model">
+        <title>Make EPANET Model</title> 
+	<indexterm><primary>make model</primary></indexterm>
+	<indexterm><primary>create model</primary></indexterm>
+	<indexterm><primary>model</primary></indexterm>
+	<para>Creates the line-node structure required by EPANET.</para>
+	
+	<para>This function fills the fields node1 and node2 in the 
+	  links table with the dc_ids of the connected nodes. The 
+	  fields will be overwritten by this function, therefore 
+	  the user has to confirm the action before the script 
+	  run.</para>
+	
+	<para>After completion, a report gives a overview of the 
+	created model. Model creation errors are also reported. 
+	If there were errors, the features in question are 
+	selected after the run.</para>
+	
+	<para>In case there are reports about inconsistent flow 
+	  direction at pumps or valves, you can use the &quot;Flip 
+	  Polylines&quot; tool to correct the errors (<xref linkend=
+	  "flip_polylines" />).</para>
+	
+	<tip><para>Increase the snapping radius if necesary (<xref linkend=
+	  "setup_dialog" />.</para></tip>  
+      </sect3>
+      <sect3 id="epanet_themes_dialog">
+        <title>EPANET Themes</title> 
+        <indexterm><primary>EPANET Themes</primary></indexterm>
+	<para>Opens the EPANET Themes Dialog.</para>
+	
+	<para>Use the Dialog to select the themes you want to use in 
+	your hydraulic model. The line and node theme are 
+	required, other themes are optional and can be switched 
+	off with the check boxes on the right side.</para>
+	
+	<important><para>Most of the extension functions require that the EPANET 
+	Themes are properly set up in this dialog.</para></important>
+	
+	 <para>Setting up the themes should be the first step when 
+	using the extension. The settings are also used to 
+	determine which themes should be edited.</para>
+      </sect3>
+      <sect3 id="epanet_tables_dialog">
+        <title>EPANET Tables</title> 
+        <indexterm><primary>tables</primary>
+	  <secondary>EPANET</secondary></indexterm>
+	<para>Displays the EPANET Tables Dialog.</para> 
+	
+	<para>The Tables in the dialog are used to to store 
+	non-spatial EPANET data with ArcView. Typical examples 
+	of such data are pump curves or hydraulic analysis 
+	options. Before you can choose a table to use with the 
+	DC Water Design Extension, it has to be loaded into 
+	ArcView. Refer to the ArcView documentation for 
+	information on how to load tables into ArcView.</para>
+      </sect3>
+      <sect3 id="valve_controls">
+        <title>Valve Control</title>
+	<indexterm><primary>valve</primary></indexterm>
+	<indexterm><primary>control</primary></indexterm>
+	<para>Allows to set valve states according to EPANET Controls.</para>
+	
+	<para>If a controls table is registered with the Extension 
+	  (see <xref linkend="epanet_tables_dialog" />), the user is offered to 
+	  select the controls he would like to apply. All chosen 
+	  controls are applied. This is very useful in 
+	  combination with Network Traces as the extension allows 
+	  to stop traces at closed valves.</para>
+      </sect3>
+      <sect3 id="make_house_connections">
+	<title>Make House Connections</title> 
+        <indexterm><primary>house connection</primary></indexterm>
+	<para>Creates a straight pipe between tanks and junctions 
+	which share an id.</para>
+	
+	<para>This function requires some preparatory work: Each tank 
+	  of the tanks theme needs to know to which junction he 
+	  should be connected. This is expressed with a field in 
+	  the tanks attribute table that contains the dc_id of 
+	  the junction the tank should connect to. Such fields 
+	  can be established e.g. by using the spatial join 
+	  function of the Geoprocessing Wizard.</para>
+	
+	<note><para>Note that this functionality has been included mainly 
+	  for the purpose of modeling intermittent supply with 
+	  household storage tanks.</para></note>
+	
+	<para>It might be taken out or completely rewritten in 
+	  future versions of the DC Water Design Extension.</para>
+      </sect3>	  
+      <sect3 id="create_supply_strings">
+        <title>Create Supply Strings</title> 
+	<indexterm><primary>supply string</primary></indexterm>
+	<para>Calculates a coded text that shows when a node is 
+	supplied with water.</para>
+	
+	<para>This might only be used after successfully running an 
+	  EPANET hydraulic analysis from ArcView. The function 
+	  will query the the nodes results table for pressures 
+	  above zero. Each pressure above zero will yield a "1" in 
+	  the supply string, a pressure below or equal zero will 
+	  yield a "0" in the supply string. For each node, the 
+	  supply strings are written to a user-selectable text 
+	  field. The field has to been long enough to contain as 
+	  many characters as there are time steps in the EPANET results.</para>
+	
+	<note><para>Note that this functionality has been included mainly 
+	  for the purpose of modeling intermittent supply with 
+	  household storage tanks.</para></note>
+	
+	<para>It might be taken out or completely rewritten in 
+	  future versions of the DC Water Design Extension.</para>
+      </sect3>
+      <sect3 id="calculate_pipe_length_for_junctions">
+        <title>Calculate Pipe Length For Junctions</title> 
+        <indexterm><primary>junction</primary></indexterm>
+	<indexterm><primary>pipe length</primary></indexterm>
+	<para>This function calculates the length of the pipes 
+	connected to a junction.</para>
+	
+	<para>A user selectable number field in the junctions 
+	  attribute table is filled with the length of the pipes 
+	  connected to each junction. In order not to double the 
+	  overall pipe length, each pipe length is divided by 
+	  two. Thus every part of a pipe is assigned to the 
+	  nearest node.</para>
+      </sect3>
+      <sect3 id="clip_themes_by_bitcode">
+        <title>Clip Themes by Bitcode</title> 
+        <indexterm><primary>bytecode</primary></indexterm>
+	<indexterm><primary>clip</primary></indexterm>
+	<para>Creates new themes with features which have the same 
+	bit set in a bit code.</para>
+	
+	<para>The function works with all active themes in the view. 
+	  First, the user is prompted to select the bit which has 
+	  to be set for the clipped themes. Then the field 
+	  containing the bit code has to be chosen. (The script 
+	  assumes that the bit code field names are the same 
+	  throughout all the active themes.) The user can select 
+	  the filename and location for each clipped theme. He 
+	  can also choose whether the new themes should be added 
+	  to the view.</para>
+      </sect3>
+    
+      <sect3 id="create_zones_from_controls">
+        <title>Create Zones from Controls</title>
+        <indexterm><primary>zone</primary></indexterm>
+	<indexterm><primary>controls</primary></indexterm>
+	<para>Creates a sequence (string) of 0 and 1 for describing 
+	  if the pipe is connected to a reservoir at over a 
+	  sequence of hours.</para> 
+	
+	<para>A user selectable text field in the pipe attribute 
+	  table is filled with a string containing 0's and 1's. 
+	  The n-th character is a 0 if the pipe is not connected 
+	  to a reservoir in the n-th hour or 1 if the pipe is 
+	  connected.</para> 
+	
+	<para>A string "00111" means that the pipe was supplied from 
+	  the second to the fifth hour.</para>
+	
+	<para>Such information can be used to automatically determine 
+	  zones for networks with intermittent supply. Zones are 
+	  disconnected by the shut off valves. The shut off 
+	  valves are controlled by the controls table. The 
+	  supported control syntax is:
+	  <programlisting>
+	  LINK link_id status AT TIME hours_since_simulation_start
+	  </programlisting>
+	
+	The number of traces - which is equal to the number of 
+	hours from simulation start - can be chosen by the 
+	user. The function requires the Epanet model to be set 
+	up correctly (Including valves and controls).</para> 
+	
+	<para>Currently the function only supports networks that 
+	contain only shut off valves.</para>
+      </sect3>
+      <sect3 id="create_missing_fields">
+        <title>Create Missing Fields</title>
+        <indexterm><primary>fields</primary></indexterm>
+	<para>Creates fields required by the data model if they are 
+	  missing in the EPANET themes. </para>
+	
+	<para>This allows to quickly create data sets that conform 
+	  with the EPANET data model.</para>
+      </sect3>
+    
+      <sect3 id="create_missing_junctions">
+        <title>Create Missing Junctions</title>
+        <indexterm><primary>missing junctions</primary></indexterm>
+	<indexterm><primary>junction</primary></indexterm>
+	<para>Creates all the Junctions that are necessary to have an 
+	  EPANET Model with the correct topology (a node at every 
+	  end of a pipe).</para>
+      </sect3>
+      <sect3 id="skeletonize_model">
+        <title>Skeletonize Model</title>
+	<indexterm><primary>skeleton</primary></indexterm>
+	<para>Merges all pipeline sections that share a common 
+	  attribute. You will be prompted to select a field for 
+	  the attribute comparison. Removes unnecessary nodes.</para>
+      </sect3>
+    </sect2>
+    <sect2 id="view_tools">
+      <title>View Tools</title>
+      <indexterm><primary>tools</primary>
+        <secondary>View GUI</secondary></indexterm>
+      <para>Tools that are added to the View GUI.</para>
+      <sect3 id="flip_polylines">
+        <title>Flip Polylines</title> 
+	<indexterm><primary>flip</primary></indexterm>
+	<para>This tool allows to flip the digitizing direction of lines.</para>
+	
+	<para>The theme containing the lines to be flipped has to be 
+	  set up as the pipe theme in the EPANET themes dialog. 
+	  Simple clicking on the line will switch the digitizing direction.</para>
+	
+	<tip><para>ArcView's symbology can be used to display the 
+	  digitizing direction with arrowheads.</para></tip>
+      </sect3>
+      <sect3 id="move_nodes">
+        <title>Move Nodes</title> 
+        <indexterm><primary>move</primary></indexterm>
+	<para>A tool to move network nodes including rubber-banding.</para>
+	
+	<para>With this tool it's possible to move network nodes 
+	  (junctions, tanks, reservoirs, pumps, valves) along 
+	  with the connected pipes. The network stays intact and 
+	  fully connected (rubber-banding).</para> 
+	
+	<para>The respective themes have to be registered with the 
+	  extension in the EPANET themes dialog.</para>
+      </sect3>
+      <sect3 id="split_pipe">
+        <title>Split Pipe (Add Junction)</title> 
+        <indexterm><primary>split</primary>
+	  <secondary>pipe</secondary></indexterm>
+	<para>Tool that allows to split a pipe into two pipes. Adds a 
+	  new junction at the split point.</para>
+	  
+	<para>The two new pipes inherit the attributes from the 
+	  original pipe. However, the length gets recalculated 
+	  based on the shapes.</para>
+	
+	<para>Pipe and junction themes have to be chosen in the 
+	  EPANET themes dialog.</para>
+      </sect3>	  
+      <sect3 id="edit_pipe_vertices">
+        <title>Edit Pipe Vertices</title> 
+        <indexterm><primary>vertex</primary></indexterm>
+	<indexterm><primary>edit</primary>
+	  <secondary>vertex</secondary></indexterm>
+	<para>Allows to re-shape pipes.</para>
+	
+	<para>Vertices determine the route of a pipe. The tool makes 
+	  it possible to move all the vertices of a pipe. 
+	  Additional, it's possible to add vertices to the pipe. 
+	  Unlike the ArcView tool "Vertex Edit", "Edit Pipe Vertices" 
+	  ensures network connectivity - it is impossible to 
+	  disconnect a pipe from a node with this tool.</para>
+	
+	<para>The pipe theme has to be set up in the EPANET themes 
+	dialog in order to use this tool.</para>
+	
+	<important><para>Note that the pipe length is not recalculated.
+	  </para></important>
+	
+	 <para>Recalculate the pipe length manually in the pipe theme 
+	attribute table. See the Questions and Answers section 
+	of this manual if you have problems calculating the 
+	pipe length.</para>
+      </sect3>
+      <sect3 id="change_node_class">
+        <title>Change Node Class</title>
+        <indexterm><primary>change node class</primary></indexterm>
+	<para>Tool to convert nodes from one class to another.</para>
+	
+	<para>The Change Node Class tool allows to convert e.g. a 
+	  junction into pump. Attributes shared between the two 
+	  classes are copied. After selecting an existing node, 
+	  the user is prompted to select the class to which the 
+	  node should be moved. The old node is deleted.</para>
+	
+	<para>Obviously, the respective themes have to be registered 
+	  with the extension in the EPANET themes dialog.</para>
+      </sect3>
+      <sect3 id="delete_feature">	
+        <title>Delete Feature</title>
+        <indexterm><primary>delete</primary></indexterm>
+	<para>A tool to delete network features.</para>
+	
+	<para>Allows one-click deletion of network features. The user 
+	is prompted to confirm the deletion. Remember that 
+	there's no undo support with the DC Water Design Extension.</para>
+	
+	<para>The themes containing features that should be deleted 
+	have to be selected in the EPANET Themes dialog.</para>
+      </sect3>
+      <sect3 id="digitize_junction">
+        <title>Digitize Junction</title> 
+        <indexterm><primary>digitize</primary>
+	  <secondary>junction</secondary></indexterm>
+	<indexterm><primary>junction</primary></indexterm>  
+	<para>The Digitize Junction tool is used to digitize 
+	junctions.</para> 
+	
+	<para>The junctions are added to the junction theme selected 
+	in the EPANET themes dialog.</para>
+      </sect3>
+      <sect3 id="digitize_pipe">
+        <title>Digitize Pipe</title> 
+	<indexterm><primary>digitize</primary>
+	  <secondary>pipe</secondary></indexterm>
+	<indexterm><primary>pipe</primary></indexterm>  
+	<para>The Digitize Pipe tool is used to digitize pipes.</para> 
+	
+	<para>The pipes are added to the pipe theme selected in the 
+	EPANET themes dialog. In order to maintain the network 
+	integrity, the tool automatically adds junctions at the 
+	pipe end if the pipe end doesn't snap onto an existing node.</para>
+      </sect3>
+      <sect3 id="digitize_tank">
+        <title>Digitize Tank</title> 
+        <indexterm><primary>tank</primary></indexterm>
+	<indexterm><primary>digitize</primary>
+	  <secondary>tank</secondary></indexterm>
+	<para>The Digitize Tank tool is used to digitize tanks.</para> 
+	
+	<para>The tanks are added to the tank theme selected in the 
+	  EPANET themes dialog.</para>
+      </sect3>
+      <sect3 id="digitize_valve">
+        <title>Digitize Valve</title> 
+        <indexterm><primary>digitize</primary>
+	  <secondary>valve</secondary></indexterm>
+	<para>The Digitize Valve tool is used to digitize valves.</para> 
+	
+	<para>The valves are added to the valve theme selected in the 
+	  EPANET themes dialog. The tool is disabled if the valve 
+	  theme is not enabled in the EPANET themes dialog.</para>
+      </sect3>
+      <sect3 id="digitize_reservoir">
+        <title>Digitize Reservoir</title> 
+	<indexterm><primary>digitize</primary>
+	  <secondary>reservoir</secondary></indexterm>
+	<indexterm><primary>reservoir</primary></indexterm>  
+	<para>The Digitize Reservoir tool is used to digitize 
+	  reservoirs.</para> 
+	
+	<para>The reservoirs are added to the reservoir theme 
+	  selected in the EPANET themes dialog. The tool is 
+	  disabled if the reservoir theme is not enabled in the 
+	  EPANET themes dialog.</para>
+      </sect3>
+      <sect3 id="digitize_pump">
+	<title>Digitize Pump</title>
+        <indexterm><primary>pump</primary></indexterm>
+	<indexterm><primary>digitize</primary>
+	  <secondary>pump</secondary></indexterm>
+        <para>The Digitize Pump tool is used to digitize pumps.</para> 
+    
+	<para>The pumps are added to the pump theme selected in the 
+	  EPANET themes dialog. The tool is disabled if the pump 
+	  theme is not enabled in the EPANET themes dialog.</para>
+      </sect3>
+    </sect2>
+    <sect2 id="view_context_menus">
+      <title>View Context Menus</title>
+      <indexterm><primary>menu</primary>
+        <secondary>View GUI Context</secondary></indexterm>
+      <para>The context menu items described in this section are available if 
+        the right mouse button is pressed over a theme that has been registered 
+	with the DC Water Design Extension (See <xref linkend=
+	"epanet_themes_dialog" />).</para>
+      <sect3 id="show_pipe_table_entry">
+        <title>Show Pipe Table Entry</title>
+    
+	<para>Pop-up menu item that allows to show the attributes of 
+	  a pipe.</para>
+	  
+	<para>Right-clicking on a pipe and selecting this menu item 
+	  opens the pipe attribute table, selects and promotes 
+	  the pipe.</para>
+	
+	<para>The appropriate pipe theme has to be selected in the 
+	  EPANET themes dialog.</para>
+      </sect3>
+      <sect3 id="edit_pipe_table_entry">	  
+	<title>Edit Pipe Table Entry</title>
+        <indexterm><primary>edit</primary></indexterm>
+	<para>Pop-up menu item allowing to edit the attributes of a pipe.</para>
+	
+	<para>Right-clicking on a pipe and selecting this menu item 
+	  opens the pipe attribute table, makes it editable, 
+	  selects and promotes the pipe record. After that, the 
+	  attributes of the pipe can be edited. Keep in mind that 
+	  there's no undo.</para>
+      </sect3>
+      <sect3 id="select_connected_pipes">
+        <title>Select Connected Pipes</title>
+	<indexterm><primary>connected pipes</primary></indexterm>
+	<indexterm><primary>pipe</primary></indexterm>
+	<para>Pop-up menu item that allows to trace the pipes 
+	  connected to the selected pipe.</para>
+	<para>Right-clicking on a pipe and selecting this menu item 
+	  opens a dialog that offers node types at which the 
+	  trace should stop. Multiple types can be selected. 
+	  During the trace, the status bar 
+	  informs what percentage of the network has 
+	  been covered by the trace so far. Note that the 
+	  progress bar won't make it to 100% unless the network 
+	  is fully connected and no stopper has been selected. 
+	  The connected pipes up to all stop points are returned 
+	  as the selection.</para>
+	<tip><para>The option &quot;Closed Valves&quot; will stop if
+	  a feature in the valve theme contains the text &quot;closed&quot; in
+	  the field <structfield>status</structfield>.</para></tip>  
+      </sect3>
+      <sect3 id="select_connected_pipes_interactively">
+        <title>Select Connected Pipes Interactively</title>
+	<indexterm><primary>interactive</primary></indexterm>
+	<para>Interactively traces connected pipes.</para>
+	<para>See <xref linkend="select_connected_pipes" /> for more 
+	  information on network traces.
+	  </para>
+      </sect3>
+      <sect3 id="set_economic_diameter">
+        <title>Set Economic Diameter</title>
+		<indexterm><primary>economic</primary></indexterm>
+		<indexterm><primary>diameter</primary></indexterm>
+		<indexterm><primary>example</primary></indexterm>
+		<indexterm><primary>units</primary></indexterm>
+		<indexterm><primary>flow rate</primary></indexterm>
+		<indexterm><primary>velocity</primary></indexterm>
+		<para>Select the pipe diameter from a list. The economic diameter
+	  	  will be selected by default based on the flow rate result.</para>
+		<example>
+		  <title>Economic Diameter Selection</title>
+		  <para>The field <database class="field">result_flow</database> of
+		  the <database class="table">pipe</database> table contains
+		    a value of 15 l/s. In this case a DN 150 pipe will be suggested.
+		    The resulting velocity will be 0.85 m/s.</para>
+		</example>  
+		<important>
+			<para>This function only works when &quot;LPS&quot; units
+			are used (Field <database class="field">Units</database> of the EPANET
+			options table). 
+		  	</para>
+		 </important>
+      </sect3>
+      <sect3 id="show_node_table_entry">
+	<title>Show Node Table Entry</title>
+        <indexterm><primary>node</primary></indexterm>
+	<para>Pop-up menu item that shows the attributes of a node.</para>
+	
+	<para>Right-clicking on a node and selecting this menu item 
+	opens the node attribute table, selects and promotes 
+	the pipe.</para>
+	
+	<para>The appropriate node theme has to be selected in the 
+	EPANET themes dialog.</para>
+      </sect3>
+      <sect3 id="edit_node_table_entry">
+        <title>Edit Node Table Entry</title>
+    
+	<para>Pop-up menu item that allows to edit the attributes of 
+	a node.</para>
+	
+	<para>Right-clicking on a node and selecting this menu item 
+	  opens the node attribute table, makes it editable, 
+	  selects and promotes the node record. After that the 
+	  attributes of the node can be edited. Keep in mind that 
+	  there's no undo.</para>
+      </sect3>
+      <sect3 id="select_node">
+        <title>Select Node</title>
+        <para>Selects the current node.</para>
+	<para>Adds the current node to the selection in the node theme.</para>
+	<para>The appropriate node themes has to be selected in the 
+	  EPANET themes dialog.</para>
+      </sect3>
+    </sect2>
+    <sect2 id="table_buttons">
+      <title>Table Buttons</title>
+      <indexterm><primary>button</primary>
+        <secondary>Table GUI</secondary></indexterm>
+      <para>Table buttons that are added by the extension.</para>
+      <sect3 id="bytecode_calculator">
+        <title>Bytecode Calculator</title>
+	<indexterm><primary>calculator</primary></indexterm>
+	<indexterm><primary>bytecode</primary></indexterm>
+	<para>The Bytecode Calculator is accessible from the button 
+	  bar of the table GUI. It is disabled unless the table 
+	  is editable and a numerical field is selected.</para>
+	  <itemizedlist>
+	    <listitem><para>Upon clicking on the Bytecode Calculator button, the 
+	      user is prompted to select the bits he wants to set.
+	      </para></listitem> 
+	  
+	    <listitem><para>After choosing OK, the bit code will be calculated 
+	      and written to all the selected records.</para></listitem> 
+	    
+	    <listitem><para>If no records are selected the bit code is written to 
+	      all the records in the table.</para></listitem> 
+	    
+	    <listitem><para>The field used to store the byte codes should have no 
+	      decimal places.</para></listitem>
+	   </itemizedlist>
+	   <para>See <xref linkend="byte_codes" /> for details regarding byte 
+	     codes.</para>
+      </sect3>
+    </sect2>
+    <sect2 id="commandline">
+      <title>Commandline Tools</title>
+      <indexterm><primary>commandline</primary></indexterm>
+      <para>Several commandline tools that are available together
+        with the DC Water Design Extension.</para>
+      <para>If you do not know what a commandline tool is, you may want to skip
+        this section as the DC Water Design Extension provides </para>
+      <para>Note that these tools don't rely on ArcView and may be used
+        independent of the DC Water Design Extension.</para>
+      <sect3 id="inp2shp">
+        <title>inp2shp</title>
+	<indexterm><primary>inp2shp</primary></indexterm>
+	<para>Converts EPANET INP files to a group of shapefiles that conform
+	  to the EPANET/ArcView data model.</para>
+	<para>Used by the EPANET INP import function (<xref linkend=
+	  "import_epanet_inp_file" />).</para>
+	<para>The command is used as follows:</para>
+	<programlisting>inp2shp<co id="co_inp2shp" /> model.inp<co 
+	id="co_model.inp" /> model.txt<co id="co_model.txt" /> j.shp<co 
+	id="co_j.shp" /> p.shp<co id="co_p.shp" /> pu.shp<co id="co_pu.shp" 
+	/> r.shp<co id="co_r.shp" /> t.shp<co id="co_t.shp" /></programlisting>   
+	<calloutlist>
+          <callout arearefs="co_inp2shp">
+	    <para>The <command>inp2shp</command> program.</para>
+	  </callout>
+	  <callout arearefs="co_model.inp">
+	    <para>The INP file to be imported. Replace with the path to your
+	      INP file.</para>   
+	  </callout>
+	  <callout arearefs="co_model.txt">
+	    <para>A report file to be generated by the EPANET
+	      engine. The file might
+	      contain additional error message that can help to track down
+	      problems. Existing file will be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_j.shp">
+	    <para>The junction shapefile to be generated or overwritten. Replace
+	      with the path to save the junction shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_p.shp">
+	    <para>The pipe shapefile to be generated or overwritten. Replace
+	      with the path to save the pipe shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_pu.shp">
+	    <para>The pump shapefile to be generated or overwritten. Replace
+	      with the path to save the pump shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_r.shp">
+	    <para>The reservoir shapefile to be generated or overwritten. Replace
+	      with the path to save the reservoir shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	  <callout arearefs="co_t.shp">
+	    <para>The tank shapefile to be generated or overwritten. Replace
+	      with the path to save the tank shapefile. Existing files will
+	      be overwritten!</para>
+	  </callout>
+	</calloutlist>
+	<para>Shapefiles will only be generated for those network elements that
+	  are included in the INP file.</para>
+	<para>Virtual lines are processed as required (See 
+	  <xref linkend="virtual_lines" />).</para>  
+	<important><para>Make sure that <command>inp2shp.exe</command> and
+	  the patched <filename>epanet2.dll</filename> are in the PATH in
+	  order to execute the command.</para></important>     
+      </sect3>
+      <sect3 id="epanet2mysql">
+        <title>epanet2mysql</title>
+	<indexterm><primary>epanet2mysql</primary></indexterm>
+	<para>Convert binary EPANET result files to comma separated ASCII 
+	  files.</para>
+	<para>Used by several functions (<xref linkend="run_epanet_calculation" 
+	  />, <xref linkend="import_binary_result_file" />, <xref linkend=
+	  "load_results_for_step" />)</para>  
+      </sect3>
+    </sect2>
+  </sect1>
+  
+  <sect1 id="analysis">
+    <title>Analysis</title>
+    <indexterm><primary>analysis</primary></indexterm>
+    <para>How the results can be analyzed.</para>
+    <para>How to import the results to R:</para>
+    <programlisting
+      >node &lt;- read.csv(&quot;c:\\temp\\node.txt&quot;,header=TRUE)</programlisting>
+  </sect1>
+  
+  <sect1 id="faq">
+    <title>Frequently Asked Questions</title>
+    <indexterm><primary>Troubleshooting</primary></indexterm>
+    <indexterm><primary>frequently asked questions</primary></indexterm>
+        
+    <sect2 id="faq_bitcode">
+      <title>Why is there no graphical user interface to the 
+        DCWatDes.Bitcode.* functions?</title>
+      
+      <para>The provided AVENUE functions are more flexible this 
+	way. Bit codes can be useful for quite a number of 
+	operations. Try using the functions with the field 
+	calculator and the query. Examples are given in <xref linkend=
+	"api" />.</para>
+    </sect2>
+    <sect2 id="faq_setup">
+      <title>What is the Setup Dialog for?</title>
+  
+      <para>The Extension depends on several software packages. The 
+	Setup Dialog allows you to use other versions of these 
+	software packages than the ones supplied with the 
+	Extension itself.</para> 
+    </sect2>
+    <sect2 id="faq_pipe_length">
+      <title>How do I recalculate the pipe length for all the pipes?</title>
+      <indexterm><primary>automated pipe length calculation</primary></indexterm>
+      <indexterm><primary>pipe length</primary></indexterm>
+      <para>
+        <itemizedlist>
+	  <listitem><para>Open the attribute table of the pipe theme.</para></listitem>
+	  
+	  <listitem><para>Make sure that the pipe theme is editable.</para></listitem>
+	  
+	  <listitem><para>Make sure that no records are selected.</para></listitem>
+	  
+	  <listitem><para>Click on the heading for the length field.</para></listitem>
+	  
+	  <listitem><para>Click on the field calculator button.</para></listitem>
+	
+	  <listitem><para>Enter the following line into the value field:
+	    <programlisting>[Shape].returnLength</programlisting></para></listitem>
+	  
+	  <listitem><para>Click OK.</para></listitem>
+	</itemizedlist>
+      </para>
+    </sect2>
+    <sect2 id="faq_strange_errors">
+      <title>I get strange errors when I try to create the EPANET 
+        model. What can I do?</title>
+      <indexterm><primary>error</primary></indexterm>
+      <para>Try the following:
+	<itemizedlist>
+	  <listitem><para>Try "Check EPANET model". This should help you to 
+		resolve duplicate IDs.</para></listitem>
+	      
+	  <listitem><para>Have a close look at the erroneous features: Often 
+		accidentally duplicates features cause trouble. Tools like JUMP
+		can help to identify duplicate features</para></listitem>
+	</itemizedlist>
+      </para>
+    </sect2>
+    <sect2 id="faq_no_undo">
+      <title>I made a mistake. Why is undo not working?</title>
+      <indexterm><primary>undo</primary></indexterm>
+      <important><para>Undo support had to be taken out for the sake of 
+	editing multiple themes at the same time. Make frequent backups.
+	</para></important>
+    
+      <para>You've been warned.</para>
+    </sect2>
+    
+    <sect2 id="faq_rule_based_controls">
+      <title>How do I add rule-based controls?</title>
+      <indexterm><primary>rule-based controls</primary></indexterm>
+      <indexterm><primary>controls</primary>
+        <secondary>rule-based</secondary></indexterm>
+      <para>If you have a text file for simple controls, add lines 
+      like the following to it:
+      
+      <programlisting>[RULES]
+      
+      RULE 1 IF TANK LEVEL 1 ABOVE 19.1
+      
+      THEN PUMP 355 STATUS IS CLOSED</programlisting></para>
+    </sect2>
+    
+    <sect2 id="faq_pump_status">
+      <title>How do I add the initial status of a pump?</title>
+      <indexterm><primary>pump</primary>
+        <secondary>initial status</secondary></indexterm>
+      <para>Just add it to the properties field of the pump like in 
+	the following example:
+	<programlisting>
+	HEAD Curve1 SPEED 1.2</programlisting>
+      </para>
+    </sect2>
+    <sect2 id="bug_report">
+      <title>I found a bug in the Extension. What should I do?</title>
+      <indexterm><primary>bug</primary></indexterm>
+      <para>Please send your bug reports to 
+        <email>dcwaterdesign-info@lists.sourceforge.net</email> or
+	use the bug tracker on the website.</para>
+    </sect2>
+    <sect2 id="maximum_field_length">
+      <title>How Can I Select All Rows where DC_ID is Longer than
+        13 Characters?</title>
+      <indexterm><primary>field</primary>
+        <secondary>length</secondary></indexterm>
+      <para>
+        <itemizedlist>
+          <listitem><para>Click on the <guibutton>Query</guibutton> button.
+	    </para></listitem>
+	  <listitem><para>Enter the following query text:
+	    <programlisting>[dc_id].count > 13</programlisting></para></listitem>
+	  <listitem><para>Click the <guibutton>New Set</guibutton> button.
+	    </para></listitem>
+	</itemizedlist>
+      </para>
+    </sect2>
+    <sect2 id="find_spaces">
+      <title>How Can I Select All Rows where DC_ID Contains Spaces?</title>
+      <indexterm><primary>space</primary></indexterm>
+      <itemizedlist>
+          <listitem><para>Click on the <guibutton>Query</guibutton> button.
+	    </para></listitem>
+	  <listitem><para>Enter the following query text:
+	    <programlisting>[dc_id].contains(" ") ></programlisting></para>
+	    </listitem>
+	  <listitem><para>Click the <guibutton>New Set</guibutton> button.
+	    </para></listitem>
+	</itemizedlist>
+    </sect2>
+    <sect2 id="make_fails">
+      <title>Running &quot;Make EPANET Model&quot; Fails. What can I do?</title>
+      <indexterm><primary>error</primary></indexterm>
+      <para>Closely analyse the selected records.</para>
+      <para>Try to increase the snapping radius (<xref linkend="setup_dialog" 
+        />).</para>
+    </sect2>
+  </sect1>
+  <sect1 id="development">
+    <title>Development</title>
+    <indexterm><primary>development</primary></indexterm>
+    <para>This section contains information that is relevant to developers.
+      Most probably you only want to read this if you are a programmer.</para>
+    <sect2 id="api">
+      <title>API Documentation</title>
+      <indexterm><primary>API</primary></indexterm>
+      <para>This section documents extension scripts that could be 
+      used from the field calculator or in queries. In 
+      Addition, the script responsible for the extension 
+      dictionaries is documented. In general, the API 
+      documentation should only be of concern for programmers.</para>
+      
+      <sect3 id="dcwatdes.bitcode.or">
+	<title>DCWatDes.Bitcode.or</title> 
+        <indexterm><primary>bitcode</primary></indexterm>
+	<indexterm><primary>DCWatDes.Bitcode.or</primary></indexterm>
+	<para>DCWatDes.Bitcode.or performs a bytewise or operation on string 
+	  numbers.
+	<programlisting>
+	string DCWatDes.Bitcode.or(string a, string b)</programlisting></para>
+	
+	  <para>a byte-coded string</para>
+	
+	  <para>b byte-coded string</para>
+	
+	  <para>Returns: the result of the bytewise a or b as a string</para>
+	
+	<para>The following AVENUE code can be used in the field 
+	calculator to perform of a bytewise or-operation on the 
+	fields a and b: 
+	<programlisting>
+	av.run("DCWatDes.Bitcode.or", {[a], [b]})
+	</programlisting></para>
+      </sect3>
+      <sect3 id="dcwatdes.bitcode.xor">
+	<title>DCWatDes.Bitcode.xor</title> 
+        <indexterm><primary>DCWatDes.Bitcode.xor</primary></indexterm>
+	<para>DCWatDes.Bitcode.xor performs a bytewise xor operation on string 
+	  numbers.
+	<programlisting>
+	string DCWatDes.Bitcode.xor(string a, string b)</programlisting></para>
+	
+	  <para>a byte-coded string</para>
+	
+	  <para>b byte-coded string</para>
+	
+	  <para>Returns: the result of the bytewise a xor b as a string</para>
+	
+	<para>The following AVENUE code can be used in the field 
+	calculator to perform of a bytewise or-operation on the 
+	fields a and b: 
+	<programlisting>
+	av.run("DCWatDes.Bitcode.xor", {&quot;111&quot;, &quot;101&quot;})
+	</programlisting></para>
+	<para>The result of the example above will be &quot;111&quot;.</para>
+      </sect3>
+      <sect3 id="dcwatdes.bitcode.and">
+	<title>DCWatDes.Bitcode.and</title>
+	<indexterm><primary>DCWatDes.Bitcode.and</primary></indexterm>
+	<para>DCWatDes.Bitcode.and
+	  performs a bytewise and operation on string numbers
+	<programlisting>
+	  string DCWatDes.Bitcode.and(string a, string b)</programlisting></para>
+	
+	  <para>a bit-coded string</para>
+	
+	  <para>b bit-coded string</para>
+	
+	  <para>Returns: the result of the bytewise a and b as a string</para>
+	
+	<para>The following AVENUE code can be used in the field 
+	calculator to perform of a bytewise and-operation on the 
+	fields a and b: 
+	<programlisting>
+	av.run("DCWatDes.Bitcode.and", {[a], [b]})
+	</programlisting></para>
+      </sect3>
+      <sect3 id="dcwatdes.bitcode.issetasnumber">
+	<title>DCWatDes.Bitcode.isSetAsNumber</title>
+        <indexterm><primary>DCWatDes.Bitcode.isSetAsNumber</primary></indexterm>
+	<para>DCWatDes.Bitcode.isSetAsNumber returns whether the n-th byte of a 
+	  string is set or not
+	<programlisting>
+	integer DCWatDes.Bitcode.isSetAsNumber(string a, integer n)</programlisting>
+	</para>
+	  <para>a byte-coded string</para>
+	
+	  <para>n number of the byte to check</para>
+	
+	  <para>Returns: an integer of value 1 in case the n-th byte 
+	  is set, 0 otherwise</para>
+	
+	<para>The following AVENUE query can be used to select all 
+	  the records which have set the 4th bit in the example 
+	  field (usable with the query tools of view and table GUI):
+	  <programlisting>
+	  av.run("DCWatDes.Bitcode.isSetAsNumber",{&quot;0001&quot;, 3}) 
+	  = 1</programlisting></para>
+	<para>The expression will return true</para>
+	<para>Note that the bit numbering starts at 0. &quot;= 1&quot; is used to 
+	  convert the numbers 0 and 1 to the boolean values to 
+	  true or false, respective.</para>
+	<tip><para>Note that you can also use the <function>middle()</function>
+	  function to find out whether a byte is set:
+	  <programlisting>&quot;0001&quot;.middle(3,1) = &quot;1&quot;</programlisting>
+	  </para></tip>  
+      </sect3>
+      <sect3>
+	<title>DCWatDes.i18n.createDictionaries</title>
+        <indexterm><primary>DCWatDes.i18n.createDictionaries</primary></indexterm>
+	<indexterm><primary>internationalization</primary></indexterm>
+	<para>Creates the Localization dictionaries of the Extension</para>
+	
+	<para>In order to add another Dictionary, you'll first have 
+	to create one:
+	<programlisting>
+	dicNew = Dictionary.make(100)</programlisting>
+	</para><para>
+	Then you can start adding dictionary entries:
+	<programlisting>
+	dicNew.add("English Term", "New translated term")</programlisting></para>
+	<para>
+	Look at the German dictionary for the terms that have 
+	to be translated. After you've added all the terms to 
+	the new Dictionary, you have to add the Dictionary to 
+	the Dictionary of Dictionaries:
+	<programlisting>
+	_dcwDicDictionaries.add("de", dicNew)</programlisting>
+	</para>
+	<para>
+	  Where "de" is describes the locale (In this case "de" for Germany).</para>
+      </sect3>
+      <sect3>
+	<title>DCWatDes.Model.Epanet.Valves.controlByTime</title>
+        <indexterm><primary>DCWatDes.Model.Epanet.Valves.controlByTime</primary>
+	</indexterm>
+	<para>Updates the valves status field, reflecting the status 
+	at a given time.</para>
+	
+	<para>All valves are closed before applying the controls.</para>
+	
+	<para>Expects the timestep as a number as the argument (Hours 
+	since simulation start).</para>
+	
+	<para>Returns nothing.</para>
+	
+	<para>Requires valves theme and controls table registered 
+	with the extension.</para>
+	
+	<para>Works only for SOV valves. The supported controls 
+	  syntax is:
+	  <programlisting>LINK link_id status AT TIME hours_since_simulation_start</programlisting></para>
+      </sect3>
+    </sect2>
+    <sect2 id="procedures">
+      <title>Procedures</title>
+      <indexterm><primary>procedures</primary></indexterm>
+      <para>Procedures in the development process.</para>
+      <sect3 id="release_process">
+        <title>Release Process</title>
+	<indexterm><primary>release process</primary></indexterm>
+	<para>Steps that should be followed in the release process.</para>
+	<para><itemizedlist>
+	  <listitem><para>Update the version number in 
+	    <filename>dcwatdes2.apr</filename>, <filename>build.xml</filename>,
+	    <filename>doc/en/dcwaterdesign.xml</filename>, 
+	    <filename>installer/dc_water_design_extension.nsi</filename>.
+	    </para></listitem>
+	  <listitem><para>Build the documentation using <command>ant</command> 
+	    and <filename>doc/build.xml</filename>.</para></listitem>
+	  <listitem><para>Build the installer using <command>NSIS</command> and
+	    <filename>installer/dc_water_design_extension.nsi</filename>.
+	    </para></listitem>
+	  <listitem><para>Test the installer.</para></listitem>
+	  <listitem><para>Build the source zip file using <command>ant</command>
+	    and <filename>build.xml</filename>.</para></listitem>
+	  <listitem><para>Upload the files to 
+	    ftp://upload.sourceforge.net/incoming/</para></listitem>
+	  <listitem><para>Create the release on Sourceforge.</para></listitem>
+	  <listitem><para>Create a Sourceforge news item</para></listitem>
+	  <listitem><para>Announce the release on the EPANET, DC Water Design
+	    mailing lists.</para></listitem>
+	  </itemizedlist></para>
+      </sect3>
+    </sect2>
+  </sect1>
+  <sect1 id="copyright">
+    <title>Copyright</title>
+    <indexterm><primary>copyright</primary></indexterm>
+    <indexterm><primary>license</primary></indexterm>
+    <para>Copyright information for the various components of the
+      DC Water Design Extension.</para>
+    <sect2 id="copyright_dcwaterdesign">
+      <title>DC Water Design Extension</title>
+      <para>DC Water Design Extension. This ArcView Extension 
+	integrates EPANET with ArcView.</para>   
+      <para>Copyright (C) 1998-2005 DORSCH Consult</para>
+      <para>This library is free software; you can redistribute it 
+        and/or modify it under the terms of the GNU Lesser 
+        General Public License as published by the Free 
+        Software Foundation; either version 2.1 of the License, 
+        or (at your option) any later version.</para>
+      <para>This library is distributed in the hope that it will be 
+        useful, but WITHOUT ANY WARRANTY; without even the 
+        implied warranty of MERCHANTABILITY or FITNESS FOR A 
+        PARTICULAR PURPOSE. See the GNU Lesser General Public 
+        License for more details.</para>
+      <para>You should have received a copy of the GNU Lesser 
+        General Public License along with this library; if not, 
+        write to the Free Software Foundation, Inc., 59 Temple 
+        Place, Suite 330, Boston, MA 02111-1307 USA</para>
+    </sect2>
+    
+    <sect2 id="copyright_apache">
+      <title>Apache Software</title>
+      <indexterm><primary>Apache</primary></indexterm>
+      <para>testXSLT (Xalan C++) Copyright (C) 2000 Apache Software 
+        Foundation. All rights reserved.</para>
+      <para>Visit http://xml.apache.org for the details and/or sources.</para>
+    </sect2>
+    
+    <sect2 id="copyright_dcwaterdesign_manual">
+      <title>DC Water Design Extension Manual</title>
+      <para>Permission is granted to copy, distribute and/or modify this 
+        document under the terms of the GNU Free Documentation License, 
+	Version 1.2 or any later version published by the Free Software 
+	Foundation; with no Invariant Sections, no Front-Cover Texts, and no 
+	Back-Cover Texts. A copy of the license is available from the
+	Free Software Foundation (<ulink url="http://www.gnu.org" />).</para>
+    </sect2>
+  </sect1>
+    
+  <sect1 id="av_epanet_data_model">
+    <title>ArcView/EPANET Data Model</title>
+    <indexterm><primary>data model</primary></indexterm>
+    <para>This section describes the 
+    ArcView/EPANET Data Model. Note that the units will 
+    change if EPANET is not set to use liters per second 
+    (LPS) as units. Refer to the EPANET documentation 
+    (especially the toolkit help) for further information.</para>
+    
+    <sect2>
+      <title>Identity</title>
+      <indexterm><primary>Identity</primary></indexterm>
+      <para>Inherited by Feature</para>
+      <para>Inherited by Pattern</para>
+      <para>Inherited by Curve</para>
+      <itemizedlist>
+        <listitem><para>dc_ID:string Unique ID throughout the whole database. 
+	  Should not contain spaces.</para></listitem>
+      </itemizedlist>
+    </sect2>
+  <sect2>
+    <title>Node</title>
+      <indexterm><primary>Node</primary></indexterm>
+      <para>Inherits from Feature</para>
+      <para>Inherited by Junction</para>
+      <para>Inherited by Tank</para>
+      <para>Inherited by Reservoir</para>
+      <para>Inherited by VirtualLine</para>
+      <itemizedlist>
+	<listitem><para>Shape: Point Spatial data.</para></listitem>
+	    
+	<listitem><para>Elevation: float Elevation above Sea Level in m.</para></listitem>
+	    
+	<listitem><para>result_demand: float EPANET analysis result: Demand 
+	      in liters per second.</para></listitem>
+	    
+	<listitem><para>result_head: float EPANET analysis result: Total Head 
+	      in m.</para></listitem>
+	    
+	<listitem><para>result_pressure: float EPANET analysis result: 
+	      Pressure in m.</para></listitem>
+	    
+	<listitem><para>ElevationSource: CodedValue Integer field containing
+	      a coded value that describes the origin of the 
+	      elevation information for this node. </para></listitem>
+      </itemizedlist>
+    </sect2>
+      
+    <sect2><title>Junction</title>
+    <indexterm><primary>Junction</primary></indexterm>	
+    <para>Inherits from Node</para>
+    <itemizedlist>    
+      <listitem><para>Demand: float Base demand flow in liters per second.</para></listitem>
+	  
+      <listitem><para>Pattern: string Demand Pattern ID. If no demand 
+	    pattern is supplied then the junction follows the 
+	    Default Demand Pattern provided in the Options Table, 
+	    or Pattern 1 if no Default Pattern is specified. If 
+	    none of the patterns exist, the demand will remain constant.</para></listitem>
+	  
+      <listitem><para>EmitterCoefficient: float Flow Coefficient. Flow 
+	    units at 1 m pressure drop. E.g. 1l/s at 1m pressure drop.</para></listitem></itemizedlist>
+    </sect2>
+    <sect2><title>Tank</title>
+      <indexterm><primary>Tank</primary></indexterm>	  
+      <para>Inherits from Node</para>
+      <itemizedlist>
+	<listitem><para>Initiallevel: float Initial water level above the 
+	      tank bottom level (the elevation field) in m.</para></listitem>
+	    
+	<listitem><para>Minimumlevel: float Minimum water level above the 
+	      tank bottom level in m.</para></listitem>
+	    
+	<listitem><para>Maximumlevel: float Maximum water level above the 
+	      tank bottom level in m.</para></listitem>
+	    
+	<listitem><para>Diameter: float Nominal Diameter of the tank in m. If 
+	      a volume curve is supplied this can be any non-zero number.</para></listitem>
+	    
+	<listitem><para>Minimumvolume: float The minimum volume of the tank 
+	      in cubic meters. Can be zero.</para></listitem>
+	    
+	<listitem><para>Volumecurve: string The id of the volumecurve - for 
+	    non-cylindrical tanks.</para></listitem></itemizedlist>
+    </sect2>
+    
+    <sect2><title>Pump</title>
+      <indexterm><primary>Pump</primary></indexterm>
+      <para>Inherits from VirtualLine</para>
+      <itemizedlist>   
+	<listitem><para>Properties: string EPANET properties of the pump. 
+	  Keyword(s) followed by value(s). Keywords consist of:
+	  <itemizedlist>    
+	    <listitem><para>POWER pump power in kW</para></listitem>
+		
+	    <listitem><para>HEAD id of the head curve describing this pump</para></listitem>
+		
+	    <listitem><para>SPEED relative speed of the pump: 1.0 is normal, 0 
+		    means that the pump is off.</para></listitem>
+		
+	    <listitem><para>PATTERN id of the time pattern describing pump operation.</para></listitem>
+	  </itemizedlist></para>
+	</listitem>
+      </itemizedlist>
+    </sect2>
+    <sect2>
+      <title>Valve</title>
+      <indexterm><primary>Valve</primary></indexterm>	  
+      <para>Inherits from VirtualLine</para>
+      <itemizedlist>    
+	<listitem><para>Diameter: integer Diameter of the valve in mm.</para></listitem>
+	    
+	<listitem><para>Type: string Type of the valve. The following EPANET 
+	  valve types are valid:
+	  <itemizedlist>
+	    <listitem><para>PRV pressure reducing valve</para></listitem>
+		
+	    <listitem><para>PSV pressure sustaining valve</para></listitem>
+		
+	    <listitem><para>PBV pressure breaker valve</para></listitem>
+		
+	    <listitem><para>FCV flow control valve</para></listitem>
+		
+	    <listitem><para>TCV throttle control valve</para></listitem>
+		
+	    <listitem><para>GPV general purpose valve</para></listitem>
+	  </itemizedlist>
+	  Additional valve types supported by the DC Water 
+	  Design Extension:
+	  <itemizedlist>
+	    
+	    <listitem><para>CV check valve</para></listitem>
+		
+	    <listitem><para>SOV shutoff valve</para></listitem>
+	  </itemizedlist>
+	  EPANET models check valves and shuoff valves as 
+	  pipes. The extension will create the necessary pipes 
+	  on the fly (Virtual Lines, see <xref linkend="virtual_lines" />).
+	  </para>
+	</listitem>
+	    
+	<listitem><para>Setting: string Valve type dependent setting. The 
+	  setting field takes the following values for the 
+	  different valve types:
+	  <itemizedlist>
+	    <listitem><para>PRV the pressure in m</para></listitem>
+		
+	    <listitem><para>PSV the pressure in m</para></listitem>
+		
+	    <listitem><para>PBV the pressure in m</para></listitem>
+		
+	    <listitem><para>FCV the flow in liters per second</para></listitem>
+		
+	    <listitem><para>TCV the loss coefficient</para></listitem>
+		
+	    <listitem><para>GPV the id of the head loss curve</para></listitem>
+		
+	    <listitem><para>CV the setting value will be mapped to the status 
+		    field of the pipe</para></listitem>
+		
+	    <listitem><para>SOV the setting value will be mapped to the status 
+		    field of the pipe</para></listitem>
+          </itemizedlist></para>
+	</listitem>
+	    
+	<listitem><para>Minorloss: float Minor loss coefficient of the 
+	  valve.</para></listitem>
+      </itemizedlist>
+    </sect2>
+    <sect2><title>Pipe</title>
+    <indexterm><primary>Pipe</primary></indexterm>
+    <para>Inherits from Feature</para>
+    <itemizedlist>	
+      <listitem><para>Shape: Polyline Spatial data.</para></listitem>
+	  
+      <listitem><para>node1: string Start node dc_id.</para></listitem>
+	  
+      <listitem><para>node2: string End node dc_id.</para></listitem>
+	  
+      <listitem><para>length: float The length of the pipe in m.</para></listitem>
+	  
+      <listitem><para>diameter: integer Nominal pipe diameter in mm.</para></listitem>
+	  
+      <listitem><para>roughness: float Pipe roughness coefficient in mm.</para></listitem>
+	  
+      <listitem><para>minorloss: float Minor loss coefficient.</para></listitem>
+	  
+      <listitem><para>status: string Status of the pipe. The following 
+	    values are valid:
+        <itemizedlist>
+	  <listitem><para>OPEN</para></listitem>
+	      
+	  <listitem><para>CLOSED</para></listitem>
+	      
+	  <listitem><para>CV (check valve)</para></listitem>
+	</itemizedlist>  
+	</para></listitem>
+      <listitem><para>Material: CodedValue Integer field containing a coded 
+	    value describing the material of the pipe.</para></listitem>
+	  
+      <listitem><para>result_flow: float EPANET analysis result: The flow 
+	    in liters per second.</para></listitem>
+	  
+      <listitem><para>result_velocity: float EPANET analysis result: Flow 
+	    velocity in meters per second.</para></listitem>
+	  
+      <listitem><para>result_headloss: float Headloss over the pipe in m.</para></listitem>
+    </itemizedlist>
+  </sect2>
+  <sect2>
+    <title>Reservoir</title>
+    <indexterm><primary>Reservoir</primary></indexterm>
+    <para>Inherits from Node</para>
+	
+    <itemizedlist>
+      <listitem><para>Head: float The hydraulic head of the reservoir. 
+	  Elevation + pressure head.</para></listitem>
+	
+      <listitem><para>Pattern: string Optional head pattern id.</para></listitem>
+    </itemizedlist>
+  </sect2>  
+  <sect2><title>Feature</title>
+    <indexterm><primary>Feature</primary></indexterm>  
+    <para>Inherited by Node</para>
+	
+    <para>Inherited by Pipe</para>
+	
+    <para>Inherits from Identity</para>
+    <itemizedlist>    
+      <listitem><para>Installation_date: date The date of installation. If
+	    this is a date in the future, the feature is planned. </para></listitem>
+	  
+      <listitem><para>Abandon_date: date The date when the feature was abandoned.</para></listitem>
+	  
+      <listitem><para>dcSubtype: CodedValue Integer field containing coded 
+	    values describing the feature. Different Domains are 
+	    applied to the Feature classes.</para></listitem>
+	  
+      <listitem><para>BitcodeZone: integer Integer containing a bit-coded 
+	    that describes the zones in which the Feature is 
+	    used.</para></listitem>
+    </itemizedlist>
+  </sect2>  
+  <sect2><title>Pattern</title>
+    <indexterm><primary>Pattern</primary></indexterm>
+    <para>Inherits from Identity</para>
+    <itemizedlist>    
+    <listitem><para>multiplier: float The multiplier that describes how 
+	  to adjust the base quantity.</para></listitem></itemizedlist>
+  </sect2>
+  <sect2>
+    <title>Options</title>
+    <itemizedlist>
+      <listitem><para>Units: string LPS (liters per second) should be used. 
+	    See the EPANET documentation for other flow units. 
+	    Using other flow units will render the units 
+	    specified in this document invalid.</para></listitem>
+	  
+      <listitem><para>Headloss: string Headloss equation. D-W 
+	    (Darcy-Weissbach) should be used.</para></listitem>
+	  
+      <listitem><para>Hydraulics: string Allows to specify a filename for 
+	    the hydraulic solution. Leave empty.</para></listitem>
+	  
+      <listitem><para>Viscosity: float The kinematic viscosity of the fluid 
+	    being modeled relative to that of water at 20�C. The 
+	    default value is 1.0.</para></listitem>
+	  
+      <listitem><para>Diffusity: float The molecular diffusity of the 
+	    chemical being analyzed relative to that of chlorine 
+	    in water. The default value is 1.0.</para></listitem>
+	  
+      <listitem><para>Specificgravity: float The ratio of the density of 
+	    the fluid being modeled to that of water at 4&deg;C.</para></listitem>
+	  
+      <listitem><para>Trials: integer The maximum number of trials used to 
+	    solve the network hydraulics for each time step. The 
+	    default is 40.</para></listitem>
+	  
+      <listitem><para>Accuracy: float Convergence criterion that describes 
+	    when a hydraulic solution is found. The default is 0.001.</para></listitem>
+	  
+      <listitem><para>Unbalanced: string Determines what happens if no 
+	    hydraulic solution can be found within the prescribed 
+	    number of time steps. The following values are valid:
+        <itemizedlist>
+	  <listitem><para>STOP</para></listitem>
+	      
+	  <listitem><para>CONTINUE</para></listitem>
+	      
+	  <listitem><para>CONTINUE n</para></listitem>
+	</itemizedlist>  
+        The default is STOP</para></listitem>
+	  
+      <listitem><para>pattern: string The default demand pattern id that is 
+	    applied to all junctions that don't have a pattern 
+	    specified. If this is empty, the default "1" is used.</para></listitem>
+	  
+      <listitem><para>Demandmultiplier: float Global Demand multiplier. 
+	    Applied to all base demands of junctions. The default 
+	    value is 1.0.</para></listitem>
+	  
+      <listitem><para>emitterexponent: float Specifies the power to which 
+	    the pressure at a junction is raised when computing 
+	    the flow issuing from an emitter. The default is 0.5.</para></listitem>
+	  
+      <listitem><para>tolerance: float The difference in water quality 
+	    level below which parcels of water are considered of 
+	    equal value. The default is 0.01.Itemizemap: string 
+	The name of a file containing junction coordinates.</para></listitem>
+    </itemizedlist>
+    </sect2>
+    <sect2>
+      <title>Report</title>
+      <indexterm><primary>Report</primary></indexterm>
+      <itemizedlist>      
+	<listitem><para>Pagesize: integer The number of lines on one page of 
+	      the output report. The default is 0 meaning that no 
+	      limit of lines per page is in effect.</para></listitem>
+	    
+	<listitem><para>File: string The name of the report file. Leave empty 
+	      if you use the DC Water Design Extension.</para></listitem>
+	    
+	<listitem><para>Status: string Determines whether hydraulic status 
+	      messages should be written to the report file. The 
+	      following values are valid:
+	<itemizedlist>
+	  <listitem><para>YES</para></listitem>
+	      
+	  <listitem><para>NO</para></listitem>
+	      
+	  <listitem><para>FULL</para></listitem>
+	</itemizedlist>
+	      The default is NO.</para></listitem>
+	    
+	<listitem><para>Summary: string Determines whether a Summary is 
+	      generated. The following values are valid:
+	  <itemizedlist>
+	    <listitem><para>YES</para></listitem>
+		
+	    <listitem><para>NO</para></listitem>
+	  </itemizedlist>
+	      Default is YES.</para></listitem>
+	    
+	<listitem><para>Messages: string Determines whether warning and error 
+	      messages are written to the report. The following 
+	      values are valid:
+	  <itemizedlist>
+	    <listitem><para>YES</para></listitem>
+		
+	    <listitem><para>NO</para></listitem>
+	  </itemizedlist>  
+	      The default is YES.</para></listitem>
+	    
+	<listitem><para>Energy: string Determines whether energy and energy 
+	      cost reports for pumps should be written to the 
+	      report file. The following values are valid:
+	  <itemizedlist>  
+	    <listitem><para>YES</para></listitem>
+		
+	    <listitem><para>NO</para></listitem>
+	  </itemizedlist>
+	      The default is NO.</para></listitem>
+	    
+	<listitem><para>Nodes: string Determines which nodes will be reported 
+	      on. The following values are valid:
+	  <itemizedlist>    
+	    <listitem><para>NONE</para></listitem>
+		
+	    <listitem><para>ALL</para></listitem>
+		
+	    <listitem><para>dc_id1 dc_id2 dc_id3 ...</para></listitem>
+	  </itemizedlist>
+	      The default is NONE.</para></listitem>
+	    
+	<listitem><para>Links: string Determines which links will be reported 
+	      on. The following values are valid:
+	    <itemizedlist>
+	      <listitem><para>NONE</para></listitem>
+		  
+	      <listitem><para>ALL</para></listitem>
+		  
+	      <listitem><para>dc_id1 dc_id2 dc_id3 ...</para></listitem>
+	    </itemizedlist>
+	      The default is NONE.</para></listitem>
+      </itemizedlist>
+    </sect2>    
+    <sect2>
+      <title>Times</title>
+      <indexterm><primary>Times</primary></indexterm>
+      <para>Times can be specified in SECONDS(SEC), MINUTES (MIN), 
+	HOURS or DAYS. Just enter the unit name after the 
+	value. The default time unit is hours.</para>
+      <itemizedlist>
+	<listitem><para>Duration: string The duration of the simulation.</para></listitem>
+	    
+	<listitem><para>Hydraulictimestep: string Determines how often a new 
+	      hydraulic solution is computed. The default is 1 hours.</para></listitem>
+	    
+	<listitem><para>Qualitytimestep: string Determines how often the 
+	      water quality is computed. The default is 1/10 of the 
+	      hydraulic time step.</para></listitem>
+	    
+	<listitem><para>Ruletimestep: string Used with rule-based controls. 
+	      Defaults to 1/10 of the hydraulic time step.</para></listitem>
+	    
+	<listitem><para>Patterntimestep: string The interval between time 
+	      periods in all time patterns. The default is 1 hour.</para></listitem>
+	    
+	<listitem><para>Patternstart: string Describes when the pattern cycle 
+	      will be started. Defaults to 0.</para></listitem>
+	    
+	<listitem><para>Reporttimestep: string The interval in which results 
+	      will be reported. The default is 1 hour.</para></listitem>
+	    
+	<listitem><para>Reportstart: string Determines the time when 
+	      reporting starts. The default is 0.</para></listitem>
+	    
+	<listitem><para>Startclocktime: string The time of the day at which 
+	      the simulation starts. The default is 12 AM (midnight).</para></listitem>
+	    
+	<listitem><para>Statistic: string Determines the type of statistical 
+	      post-processing. The following values are valid:
+	  <itemizedlist>
+	    <listitem><para>NONE</para></listitem>
+		
+	    <listitem><para>AVERAGED</para></listitem>
+		
+	    <listitem><para>MINIMUM</para></listitem>
+		
+	    <listitem><para>MAXIMUM</para></listitem>
+		
+	    <listitem><para>RANGE</para></listitem>
+	  </itemizedlist></para>
+	</listitem>
+      </itemizedlist>
+    </sect2>
+	    
+    
+    <sect2>
+      <title>VirtualLine</title>
+      <indexterm><primary>VirtualLine</primary></indexterm>	
+      <para>Inherited by Pump</para>
+	  
+      <para>Inherited by Valve</para>
+	  
+      <para>Inherits from Node</para>
+      <itemizedlist>	  
+	<listitem><para>result_flow: float EPANET analysis result: The flow 
+	      in liters per second.</para></listitem>
+	    
+	<listitem><para>result_velocity: float EPANET analysis result: Flow 
+	      velocity in meters per second. result_headloss:float 
+	      Headloss over the pipe in m.</para></listitem>
+      </itemizedlist>
+    </sect2>
+	  
+    <sect2><title>Curve</title>
+      <indexterm><primary>Curve</primary></indexterm>	  
+      <para>Inherits from Identity</para>
+      <itemizedlist>  
+	  <listitem><para>dc_x: float X value.</para></listitem>
+	  <listitem><para>dc_y: float Y value.</para></listitem>
+      </itemizedlist>
+      <para>If the curve is a pump curve, dc_x is the flow rate and dc_y is the
+        head.</para>
+    </sect2>
+  </sect1>
+</chapter>
+<chapter id="tutorials">
+  <title>DC Water Design Extension Tutorials</title>
+  <indexterm><primary>tutorial</primary></indexterm>
+  <para>Tutorial related to hydraulic analysis with th DC Water Design
+    Extension.</para>
+  <sect1 id="thiessen_tutorial">
+    <title>Demand Calculation using Thiessen Polygons</title>
+    <indexterm><primary>Thiessen</primary></indexterm>
+    <indexterm><primary>Voronoi</primary></indexterm>
+    <indexterm><primary>demand</primary></indexterm>
+    <para>This tutorial shows how to calculate node demands using
+      Thiessen polygons.</para>
+    <para>Thiessen polygons are also called Voronoi diagrams.</para>
+    <note><para>The following requires the 
+      &quot;Create Thiessen Polygons&quot; extension which is available 
+      from <ulink url="http://arcscripts.esri.com" 
+      >http://arcscripts.esri.com</ulink>.</para></note>
+    <para>You will need a sufficiently developed network model ot apply the
+      steps below. Especially the contents of the field <structfield
+      >dc_id</structfield> in the <classname>Junction</classname> theme
+      have to be unique. The example below will also require a supply zone
+      marked in a polygon theme. If your data does not fulfil these 
+      requirements (yet),
+      you can use the DC Water Design Extension sample data. See
+      <xref linkend="how_to_obtain" /> for details where to obtain
+      the sample data.</para>
+    <para>Assumptions and design parameters:</para>
+    <simplelist>
+      <member>The map unit is meter.</member>
+      <member>The population density is 200 p/ha.</member>
+      <member>The average demand is 100 lcd.</member>
+      <member>The flow (demand) unit is l/s.</member>
+    </simplelist>  
+    <tip><para>It is also possible to use a buffer around the points instead of
+      a polygon theme of the supply zone. However this is not covered
+      in the example below.</para></tip>
+    <example id="thiessen_example">
+      <title>Demand Calculation</title>
+    <para>Load the &quot;Create Thiessen Polygons&quot; extension.</para>
+    <para>Add the <classname>Junction</classname> and supply zone themes to 
+      the current view (Unless they have been added to it already).</para>
+    <para>Activate the <classname>Junction</classname> theme.</para>
+    <para>Click on the <guibutton>Thiessen Polygons</guibutton> button.</para>
+    <para>Select point field for polygon ID link: In the <guilabel>Build Thiessen 
+      Polygons</guilabel> dialog, select <structfield>dc_id</structfield> in 
+      the list. Click <guibutton>OK</guibutton>.</para>
+    <para>Select polygon theme for boundary: In the <guilabel>Build
+      Thiessen Polygons</guilabel> dialog, select your supply zone theme.
+      Click <guibutton>OK</guibutton>.</para>
+    <para>In the <guilabel>Output Theme File</guilabel> dialog, select location
+      and filename of the Thiessen polygon shapefile. Click 
+      <guibutton>OK</guibutton>.</para>  
+    <para>The new Thiessen polygon theme will be added to the current view.
+      </para>
+    <para>Move the Thiessen polygon theme below the junction theme, but above
+      other polygon themes such as the supply zone. Note that the Thiessen 
+      polygon theme covers the same area as the supply zone theme. There is
+      one Thiessen polygon for every <classname>Junction</classname>.</para>
+    <para>Activate the Thiessen polygon theme.</para>
+    <para>Open the Thiessen polygon theme table: Select <menuchoice>
+      <guimenu>Theme</guimenu><guimenuitem>Table...</guimenuitem></menuchoice>
+      in the menu.</para>
+    <para>Select the <structfield>dc_id</structfield> field.</para>
+    <para>Select <menuchoice><guimenu>Field</guimenu>
+      <guimenuitem>Summarize...</guimenuitem></menuchoice> from the menu.</para>
+    <para>In the <guilabel>Summary Table Definition</guilabel> dialog, select
+      <guilabel>Area</guilabel> in the field list.</para>
+    <para>In the &quot;Summarize by&quot; list, select <guilabel>Sum</guilabel>.
+      </para>
+    <para>Click on the <guibutton>Add</guibutton> button.</para>
+    <para>Click on the <guibutton>OK</guibutton> button.</para>
+    <para>A new summary table is created (<filename>sumX.dbf</filename> where
+      X is a number).</para>
+    <para>Select the <structfield>dc_id</structfield> field in the summary table.
+      </para>
+    <para>Go back to the view, e.g. by selecting <menuchoice>
+      <guimenu>Window</guimenu><guimenuitem>View1</guimenuitem></menuchoice>
+      from the menu.</para>
+    <para>Activate the <classname>Junction</classname> theme.</para>
+    <para>Open the <classname>Junction</classname> theme table:
+      Select <menuchoice><guimenu>Theme</guimenu>
+      <guimenuitem>Table...</guimenuitem></menuchoice> from the menu.</para>
+    <para>Select the <structfield>dc_id</structfield> field.</para>
+    <para>Join the summary table: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Join</guimenuitem></menuchoice> from the menu.</para>
+    <para>Start editing the table: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Start Editing</guimenuitem></menuchoice> from the menu.</para>
+    <para>Select the <structfield>demand</structfield> field.</para>
+    <para>Open the field calculator: Select <menuchoice><guimenu>Field</guimenu>
+      <guimenuitem>Calculate...</guimenuitem></menuchoice> from the menu.</para>
+    <para>In the <guilabel>[demand]</guilabel> field enter the formula to
+     calculate the demand:</para>
+     <programlisting>[Sum_Area]*100*200/10000/24/60/60</programlisting>
+    <para>Click <guibutton>OK</guibutton>.</para>
+    <para>The nodal demand is now calculated.</para>
+    <para>Remove all joins: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Remove All Joins</guimenuitem></menuchoice> from the menu.
+      </para>
+    <para>Stop editing: Select <menuchoice><guimenu>Table</guimenu>
+      <guimenuitem>Stop editing</guimenuitem></menuchoice>.</para>
+    <para>Save the edits: Click <guibutton>Yes</guibutton>.</para>  
+    </example>
+    <indexterm><primary>shpvoronoi</primary></indexterm>
+    <tip><para>If you have a very large number of Thiessen polygons
+      to create, the <command>shpvoronoi</command> commandline tool
+      will provide better performance than the &quot;Create
+      Thiessen Polygons&quot; extension.</para></tip>
+  </sect1>
+  <sect1 id="elevation_tutorial">
+    <title>Elevation Assignment from Spot Heights</title>
+    <indexterm><primary>spot height</primary></indexterm>
+    <indexterm><primary>elevation</primary></indexterm>
+    <para>This tutorial shows how to assign junction elevations from the
+      nearest spot height.</para>
+    <para>This approach is suitable as long as the spot heights are dense 
+      enough. In case the spot heights are very sparse, an approach that
+      involves interpolation should be choosen.</para>
+    <note><para>The following requires the &quot;Geoprocessing 
+     Extension&quot;  which is part of ArcView.</para></note>
+    <para>Assumptions:</para>  
+    <simplelist>
+      <member>The elevations are stored in the <structfield>Elevation</structfield>
+        field of the <classname>Spotheight</classname> theme.</member>
+      <member>The elevations should be calculated for the <structfield
+        >Elevation</structfield>  field of the <classname>Junction</classname>
+        theme.</member>
+    </simplelist>
+    <example id="elevation_example">
+      <title>Elevation Assignment</title>
+      <para>Load the &quot;Geoprocessing Extension&quot;.</para>
+      <para>Add the <classname>Junction</classname> and <classname
+        >Spotheight</classname> themes to the current view (Unless they
+        have been added already).</para>
+      <para>Select <menuchoice><guimenu>View</guimenu>
+        <guimenuitem>GeoProcessing Wizard...</guimenuitem></menuchoice>
+        from the menu.</para>  
+      <para>In the GeoProcessing Wizard, select &quot;<guilabel
+        >Assign data by location (Spatial Join)</guilabel>&quot; and click
+        <guibutton>Next &gt;&gt;</guibutton>.</para>  
+      <para></para>
+      <para>Select <filename>Junction.shp</filename> as the theme to
+        assign data to.</para>
+      <para>Select <filename>Spotheight.shp</filename> as the theme
+        to assign data from.</para>
+      <para>Verify that the data will be assigned whether it is 
+        nearest.</para>
+      <para>Click on the <guibutton>Finish</guibutton> button.</para>
+      <para>Activate the <classname>Junction</classname> theme.</para>
+      <para>Open the <classname>Junction</classname> table:
+        Select <menuchoice><guimenu>Theme</guimenu><guimenuitem
+        >Table...</guimenuitem></menuchoice> from the menu.</para>
+      <para>Open the table properties: Select <menuchoice><guimenu
+        >Table</guimenu><guimenuitem>Properties...</guimenuitem></menuchoice>
+        from the menu.</para>  
+      <para>In the field list, scroll down to the last <structfield
+        >Elevation</structfield> field.</para>
+      <para>Enter &quot;E&quot; (without quotes) as an alias for the
+        <structfield>Elevation</structfield> field.</para>
+      <para>Click the <guibutton>OK</guibutton> button.</para>
+      <para>Start editing the table: Select <menuchoice><guimenu
+        >Table</guimenu><guimenuitem>Start Editing</guimenuitem></menuchoice>
+        from the menu.</para>
+      <para>Select the <structfield>Elevation</structfield> field.</para>
+      <para>Open the field calculator: Select <menuchoice>
+        <guimenu>Field</guimenu><guimenuitem>Calculate...</guimenuitem>
+        </menuchoice> from the menu.</para>
+      <para>Doubleclick on the &quot;E&quot; field or directly enter the
+        following formula:</para>
+      <programlisting>[e]</programlisting>
+      <para>Click on the <guibutton>OK</guibutton> button.</para>
+      <para>Stop editing: Select <menuchoice><guimenu>Table</guimenu>
+        <guimenuitem>Stop editing</guimenuitem></menuchoice>.</para>
+      <para>Save the edits: Click <guibutton>Yes</guibutton>.</para>  
+    </example>  
+  </sect1>
+    <sect1 id="calculate_dc_id_tutorial">
+      <title>Automated DC_ID Calculation</title>
+      <indexterm><primary>dc_id</primary></indexterm>
+      <indexterm><primary>DC Processing Extension</primary></indexterm>
+      <para>Use the &quot;Create Unique ID&quot; function of the DC
+        Processing Extension to fill the dc_id field.</para>
+      <para>In addition, you should use the ArcView field calculator to prepend the
+        numeric IDs with a prefix:</para>
+      <example>
+        <title>Prefixing numeric Junction IDs with &quot;JU&quot;</title>
+        <orderedlist>
+          <listitem><para>Open the Junction table if it is not yet open.
+            </para></listitem>
+          <listitem><para>Select <menuchoice><guimenu>Table</guimenu>
+            <guimenuitem>Start Editing</guimenuitem></menuchoice> from the menu 
+            (if necessary).</para></listitem>
+          <listitem><para>Select the <structfield>dc_id</structfield> 
+            field.</para></listitem>
+          <listitem><para>Select <menuchoice><guimenu>Field</guimenu>
+            <guimenuitem>Calculate...</guimenuitem></menuchoice> from the menu.
+            </para></listitem>
+          <listitem><para>Enter the following formula:</para>
+            <programlisting>&quot;JU&quot;+[dc_id]</programlisting></listitem>
+          <listitem><para>Select <menuchoice><guimenu>Table</guimenu>
+            <guimenuitem>Stop Editing</guimenuitem></menuchoice> from the
+            menu.</para></listitem>
+        </orderedlist> 
+      </example>
+    </sect1>
+    <sect1 id="quality_control_tutorial">
+      <title>Quality Control</title>
+      <indexterm><primary>quality</primary></indexterm>
+      <para>Basic quality control steps. These should applied e.g. when
+        ArcView reports problems like &quot;Segmentation violation&quot;.</para>
+      <sect2 id="find_duplicate_shapes">
+        <title>Find Duplicate Shapes</title>
+        <indexterm><primary>Find Duplicate Shapes</primary></indexterm>
+        <para>Duplicate shapes often cause problems because they disturb the
+          line-node topology. The &quot;Find Duplicate Shapes&quot;
+          Extension can be used to identify and eliminate duplicate shapes.</para>
+        <para>The &quot;Find Duplicate Shapes&quot; Extension is available from
+          <ulink url="http://www.jennessent.com">http://www.jennessent.com</ulink>.
+          </para>
+        <example>
+          <title>Find duplicate pipes</title>
+          <orderedlist>
+            <listitem><para>Load the &quot;Find Duplicate Shapes&quot; 
+              Extension</para></listitem>
+            <listitem><para>Open a view</para></listitem>
+            <listitem><para>Add the pipes theme to the view.</para></listitem>
+            <listitem><para>Click the <guibutton>Identify Duplicate 
+              Features</guibutton> button.</para></listitem>
+            <listitem><para>Select the pipes theme from the list.</para></listitem>
+            <listitem><para>Select <structfield>dc_id</structfield> as the ID field.
+              </para></listitem>
+            <listitem><para>Click the <guibutton>OK</guibutton> button.</para></listitem>
+            <listitem><para>Select &quot;Shapes are identical&quot;</para></listitem>
+            <listitem><para>Click the <guibutton>OK</guibutton> button.</para></listitem>
+            <listitem><para>The extension can add a new field 
+              (<structfield>Set_ID</structfield>) identifying sets
+              of duplicate shapes. This can be used to delete duplicates. When
+              asked if such a field should be added, click 
+              <guibutton>Yes</guibutton>.</para></listitem>
+            <listitem><para>Review the generated report. If there are duplicates, 
+              activate the pipes 
+              theme.</para></listitem>
+            <listitem><para>Select <menuchoice><guimenu>Theme</guimenu>
+              <guimenuitem>Table...</guimenuitem></menuchoice> from the 
+              table.</para></listitem>
+             <listitem><para>Select <menuchoice><guimenu>Table</guimenu>
+              <guimenuitem>Start Editing</guimenuitem></menuchoice> from
+              the menu.</para></listitem>  
+            <listitem><para>Select the <structfield>Set_ID</structfield> 
+              field.</para></listitem>  
+            <listitem><para>Select <menuchoice><guimenu>Field</guimenu>
+              <guimenuitem>Sort Descending</guimenuitem></menuchoice> from
+              the menu.</para></listitem>
+            <listitem><para>Review the duplicate records. Delete duplicates
+              in such a way that each Set_ID only appears once.</para></listitem>
+            <listitem><para>Select <menuchoice><guimenu>Table</guimenu>
+              <guimenuitem>Stop Editing</guimenuitem></menuchoice> from the menu.
+              </para></listitem>  
+          </orderedlist>    
+        </example>  
+      </sect2>
+      <sect2 id="null_values">
+        <title>NULL Values</title>
+        <indexterm><primary>NULL</primary></indexterm>
+        <para>NULL values often cause problems and should be avoided wherever
+          possible.</para>
+        <para>Shape fields as well as other fields in the table can contain
+          NULL values. The following example shows how to delete NULL shapes,
+          however, identifying NULL values in other fields follows the same
+          pattern.</para>    
+        <example>
+          <title>Delete NULL shapes</title>
+          <orderedlist>
+            <listitem><para>Open the table of the shapefile to check.
+              </para></listitem>
+            <listitem><para>Select the <menuchoice><guimenu>Table</guimenu>
+              <guimenuitem>Query...</guimenuitem></menuchoice> from the menu.
+              </para></listitem>
+            <listitem><para>Enter the following formula:</para>
+              <programlisting>[Shape].isNull</programlisting></listitem>
+            <listitem><para>Click the <guibutton>New Set</guibutton> button.
+              </para></listitem>
+            <listitem><para>Close the query dialog</para></listitem>
+            <listitem><para>If records have been selected, promote them by
+              selecting <menuchoice><guimenu>Table</guimenu>
+              <guimenuitem>Promote</guimenuitem></menuchoice> from the menu.
+              </para></listitem>
+            <listitem><para>Review diameter and length to see if important
+              pipes have been lost. Delete those records with NULL shapes.
+              </para></listitem>   
+          </orderedlist>
+        </example>  
+      </sect2>
+      <sect2 id="corrupted_shapefiles">
+        <title>Corrupted Shapefiles</title>
+        <indexterm><primary>shapefile</primary>
+          <secondary>corruption</secondary></indexterm>
+        <indexterm><primary>Segmentation Violation</primary></indexterm>
+        <para>Corrupted shapefiles will cause errors upon opening or editing
+          in ArcView. The <command>Shapechk</command> command can be used to
+          fix those shapefiles.</para>
+        <para>Shapechk is available on the internet:
+          <ulink url="http://www.geocities.com/SiliconValley/Haven/2295/shapechk.zip"
+          >http://www.geocities.com/SiliconValley/Haven/2295/shapechk.zip</ulink>.</para>
+        <example>
+          <title>Fix pipes.shp corruption</title>
+          <orderedlist>
+            <listitem><para>Start <command>Shapechk</command>.</para></listitem>
+            <listitem><para>Click on the <guibutton>Shapefile</guibutton> 
+              button.</para></listitem>
+            <listitem><para>Select the shapefile you want to check.</para></listitem>
+            <listitem><para>Click the <guibutton>Read header</guibutton> 
+              button.</para></listitem>
+            <listitem><para>Click the <guibutton>Build shx</guibutton> 
+              button.</para></listitem>
+            <listitem><para>If asked to delete the existing index files,
+              answer <guibutton>Yes</guibutton>. Remember to rebuild
+              the spatial index files using ArcView afterwards.</para></listitem>
+            <listitem><para>Click the <guibutton>Check DBF</guibutton> 
+              button. Read the generated report and follow the instructions.
+              </para><para>The following message indicates that there
+              are no problems:</para>
+              <para><computeroutput>DBF tallied exactly with .dbf header and 
+                shapefile</computeroutput></para>
+              </listitem>
+          </orderedlist>
+        </example>  
+      </sect2>  
+    </sect1>
+  </chapter>
+  <index>
+    <title>Index</title>
+  </index>
+</book>

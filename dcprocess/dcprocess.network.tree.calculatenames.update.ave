@@ -1,0 +1,25 @@
+' DCProcess.Network.Tree.calculateNames.update
+
+' (c) 2004 DORSCH Consult
+
+' Enable the "Calculate Tree Names" function if possible
+
+' Update script for menu
+' No arguments
+' Returns nothing
+
+tableActive = av.getActiveDoc
+blnEnabled = false
+if(tableActive.getVTab.isEditable)then
+  if(tableActive.getActiveField <> nil)then
+    if(tableActive.getActiveField.isTypeString)then
+      if(tableActive.getVTab.findField("Shape")<>nil)then
+        if(tableActive.getVTab.findField("Shape").getType = #FIELD_SHAPELINE)then
+          blnEnabled = true
+        end
+      end
+    end
+  end
+end
+self.setEnabled(blnEnabled)
+

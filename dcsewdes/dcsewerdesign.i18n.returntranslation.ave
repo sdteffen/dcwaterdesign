@@ -1,0 +1,10 @@
+' DCSewerDesign.i18n.returnTranslation
+
+' argument 1: strToBeTranslated ( in English ) 
+' the Translation will be done through the dictionaries
+
+' (c) 2000 DORSCH Consult
+
+' NOTE: right now this is a dummy functions that returns argument 1
+
+return self

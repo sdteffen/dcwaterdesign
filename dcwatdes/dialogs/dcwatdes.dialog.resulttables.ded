@@ -1,0 +1,678 @@
+/3.2
+(ODB.1
+	Dependencies:	"$AVEXT/dialog.avx\n"
+	FirstRootClassName:	"DEd"
+	Roots:	2
+	Version:	32
+)
+
+(DEd.2
+	Name:	"DCWatDes.Dialog.EpanetTables"
+	CreationDate:	"Montag, 20. November 2000 10:09:36"
+	GUIName:	"DialogEditor"
+	Win:	3
+	CSMgr:	4
+	DocExts:	6
+	DocExts:	7
+	Graphics:	8
+	Dpy:	49
+	Dialog:	52
+	DialogExtent:	86
+	Compiled:	1
+)
+
+(DocWin.3
+	Owner:	2
+	Open:	1
+	X:	-4
+	Y:	-4
+	W:	1410
+	H:	910
+)
+
+(CSMgr.4
+	Client:	5
+)
+
+(CSClient.5
+	Client:	6
+	ReqName:	"ClientNfy"
+)
+
+(PanMgr.6
+	Doc:	2
+)
+
+(DocAct.7
+	Doc:	2
+)
+
+(GList.8
+	Child:	9
+	Child:	13
+	Child:	16
+	Child:	19
+	Child:	22
+	Child:	25
+	Child:	28
+	Child:	32
+	Child:	35
+	Child:	38
+	Child:	42
+	Child:	46
+	Dpy:	49
+	FormatNumb:	51
+)
+
+(GCtrl.9
+	Name:	"cbxOptions"
+	Bounds:	10
+	ControlConstraints:	0x55
+	Control:	11
+	Editable:	1
+)
+
+(RectD.10
+	Left:	1.61666666666667
+	Top:	6.60833333333333
+	Right:	4.70000000000000
+	Bottom:	5.98333333333333
+)
+
+(AVCBBox.11
+	InternalName:	"cbxOptions"
+	UseGraphicNfy:	1
+	Tag:	"Options"
+	NextControl:	12
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Options"
+)
+
+(Nil.12
+)
+
+(GCtrl.13
+	Name:	"cbxTimes"
+	Bounds:	14
+	ControlConstraints:	0x55
+	Control:	15
+	Editable:	1
+)
+
+(RectD.14
+	Left:	1.63333333333333
+	Top:	6.33333333333333
+	Right:	4.71666666666667
+	Bottom:	5.42500000000000
+)
+
+(AVCBBox.15
+	InternalName:	"cbxTimes"
+	UseGraphicNfy:	1
+	Tag:	"Times"
+	NextControl:	12
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Times"
+)
+
+(GCtrl.16
+	Name:	"cbxReport"
+	Bounds:	17
+	ControlConstraints:	0x55
+	Control:	18
+	Editable:	1
+)
+
+(RectD.17
+	Left:	1.65000000000000
+	Top:	6.04166666666667
+	Right:	4.72500000000000
+	Bottom:	5.30833333333333
+)
+
+(AVCBBox.18
+	InternalName:	"cbxReport"
+	UseGraphicNfy:	1
+	Tag:	"Report"
+	NextControl:	12
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Report"
+)
+
+(GCtrl.19
+	Name:	"btnOK"
+	Bounds:	20
+	ControlConstraints:	0x55
+	Control:	21
+	Editable:	1
+)
+
+(RectD.20
+	Left:	1.74166666666667
+	Top:	4.87500000000000
+	Right:	2.65833333333333
+	Bottom:	4.70000000000000
+)
+
+(LButn.21
+	InternalName:	"btnOK"
+	UseGraphicNfy:	1
+	Tag:	"OK"
+	Label:	"OK"
+	Click:	"DCWatDes.Dialog.EpanetTables.btnOK.click"
+)
+
+(GCtrl.22
+	Name:	"btnCancel"
+	Bounds:	23
+	ControlConstraints:	0x55
+	Control:	24
+	Editable:	1
+)
+
+(RectD.23
+	Left:	2.84166666666667
+	Top:	4.88333333333333
+	Right:	3.75833333333333
+	Bottom:	4.70000000000000
+)
+
+(LButn.24
+	InternalName:	"btnCancel"
+	UseGraphicNfy:	1
+	Tag:	"Cancel"
+	Label:	"Cancel"
+	Click:	"DCWatDes.Dialog.EpanetTables.btnCancel.click"
+)
+
+(GCtrl.25
+	Name:	"btnHelp"
+	Bounds:	26
+	ControlConstraints:	0x55
+	Control:	27
+	Editable:	1
+)
+
+(RectD.26
+	Left:	3.90000000000000
+	Top:	4.87500000000000
+	Right:	4.81666666666667
+	Bottom:	4.70000000000000
+)
+
+(LButn.27
+	InternalName:	"btnHelp"
+	UseGraphicNfy:	1
+	Tag:	"Help"
+	Label:	"Help"
+	Click:	"DCWatDes.Model.Epanet.help"
+)
+
+(GCtrl.28
+	Name:	"cbxControls"
+	Bounds:	29
+	ControlConstraints:	0x55
+	Control:	30
+	Editable:	1
+)
+
+(RectD.29
+	Left:	1.62500000000000
+	Top:	5.75000000000000
+	Right:	4.70833333333333
+	Bottom:	5.01666666666667
+)
+
+(AVCBBox.30
+	InternalName:	"cbxControls"
+	UseGraphicNfy:	1
+	Disabled:	1
+	Tag:	"Controls"
+	NextControl:	31
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Controls"
+)
+
+(Nil.31
+)
+
+(GCtrl.32
+	Name:	"chbControls"
+	Bounds:	33
+	ControlConstraints:	0x55
+	Control:	34
+	Editable:	1
+)
+
+(RectD.33
+	Left:	4.73333333333333
+	Top:	5.82500000000000
+	Right:	5.73333333333333
+	Bottom:	5.51666666666667
+)
+
+(AVCBox.34
+	InternalName:	"chbControls"
+	UseGraphicNfy:	1
+	Listening:	1
+	Label:	" "
+	Click:	"DCWatDes.Dialog.EpanetTables.CheckBox.click"
+	Constraints:	0x55
+)
+
+(GCtrl.35
+	Name:	"chbCurves"
+	Bounds:	36
+	ControlConstraints:	0x55
+	Control:	37
+	Editable:	1
+)
+
+(RectD.36
+	Left:	4.73333333333333
+	Top:	5.57500000000000
+	Right:	5.73333333333333
+	Bottom:	5.26666666666667
+)
+
+(AVCBox.37
+	InternalName:	"chbCurves"
+	UseGraphicNfy:	1
+	Listening:	1
+	Label:	" "
+	Click:	"DCWatDes.Dialog.EpanetTables.CheckBox.click"
+	Constraints:	0x55
+)
+
+(GCtrl.38
+	Name:	"cbxCurves"
+	Bounds:	39
+	ControlConstraints:	0x55
+	Control:	40
+	Editable:	1
+)
+
+(RectD.39
+	Left:	1.61666666666667
+	Top:	5.50000000000000
+	Right:	4.70000000000000
+	Bottom:	4.76666666666667
+)
+
+(AVCBBox.40
+	InternalName:	"cbxCurves"
+	UseGraphicNfy:	1
+	Disabled:	1
+	Tag:	"Curves"
+	NextControl:	41
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Curves"
+)
+
+(Nil.41
+)
+
+(GCtrl.42
+	Name:	"cbxPattern"
+	Bounds:	43
+	ControlConstraints:	0x55
+	Control:	44
+	Editable:	1
+)
+
+(RectD.43
+	Left:	1.61666666666667
+	Top:	5.22500000000000
+	Right:	4.70000000000000
+	Bottom:	4.50000000000000
+)
+
+(AVCBBox.44
+	InternalName:	"cbxPattern"
+	UseGraphicNfy:	1
+	Disabled:	1
+	Tag:	"Pattern"
+	NextControl:	45
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Pattern"
+)
+
+(Nil.45
+)
+
+(GCtrl.46
+	Name:	"chbPattern"
+	Bounds:	47
+	ControlConstraints:	0x55
+	Control:	48
+	Editable:	1
+)
+
+(RectD.47
+	Left:	4.73333333333333
+	Top:	5.30000000000000
+	Right:	5.73333333333333
+	Bottom:	5.00000000000000
+)
+
+(AVCBox.48
+	InternalName:	"chbPattern"
+	UseGraphicNfy:	1
+	Listening:	1
+	Label:	" "
+	Click:	"DCWatDes.Dialog.EpanetTables.CheckBox.click"
+	Constraints:	0x55
+)
+
+(PageDpy.49
+	Top:	7.33333333333333
+	Right:	11.69166666666667
+	ReportUnits:	1
+	Units:	1
+	Scale:	50
+	ZoomRight:	11.69166666666667
+	ZoomTop:	7.33333333333333
+	GridSpacingX:	0.10000000000000
+	GridSpacingY:	0.10000000000000
+)
+
+(Numb.50
+	N:	120.00000000000000
+)
+
+(Numb.51
+)
+
+(AVDLog.52
+	Name:	"DCWatDes.Dialog.EpanetTables"
+	X:	178
+	Y:	104
+	W:	415
+	H:	252
+	ConstrainedControlNames:	53
+	ConstrainedControlNames:	54
+	ConstrainedControlNames:	55
+	Constraints:	56
+	Constraints:	57
+	Constraints:	58
+	Server:	59
+	ControlPanel:	60
+	Title:	"Epanet Tables"
+	EscapeEnabled:	1
+	Resizable:	1
+	AlwaysOnTop:	1
+	HasTitleBar:	1
+	Closeable:	1
+	Open:	"DCWatDes.Dialog.EpanetTables.initialize"
+	DefaultButton:	85
+)
+
+(AVStr.53
+	S:	"btnOK"
+)
+
+(AVStr.54
+	S:	"btnCancel"
+)
+
+(AVStr.55
+	S:	"btnHelp"
+)
+
+(Numb.56
+	N:	85.00000000000000
+)
+
+(Numb.57
+	N:	85.00000000000000
+)
+
+(Numb.58
+	N:	85.00000000000000
+)
+
+(Nil.59
+)
+
+(CPanel.60
+	Child:	61
+	Child:	62
+	Child:	63
+	Child:	64
+	Child:	65
+	Child:	66
+	Child:	67
+	Child:	68
+	Child:	69
+	Child:	70
+	Child:	71
+	Child:	72
+	ResBox:	73
+	ResBox:	74
+	ResBox:	75
+	ResBox:	76
+	ResBox:	77
+	ResBox:	78
+	ResBox:	79
+	ResBox:	80
+	ResBox:	81
+	ResBox:	82
+	ResBox:	83
+	ResBox:	84
+	Listening:	1
+)
+
+(AVCBBox.61
+	InternalName:	"cbxOptions"
+	Tag:	"Options"
+	NextControl:	59
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Options"
+)
+
+(AVCBBox.62
+	InternalName:	"cbxTimes"
+	Tag:	"Times"
+	NextControl:	59
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Times"
+)
+
+(AVCBBox.63
+	InternalName:	"cbxReport"
+	Tag:	"Report"
+	NextControl:	59
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Report"
+)
+
+(LButn.64
+	InternalName:	"btnOK"
+	Tag:	"OK"
+	Label:	"OK"
+	Click:	"DCWatDes.Dialog.EpanetTables.btnOK.click"
+)
+
+(LButn.65
+	InternalName:	"btnCancel"
+	Tag:	"Cancel"
+	Label:	"Cancel"
+	Click:	"DCWatDes.Dialog.EpanetTables.btnCancel.click"
+)
+
+(LButn.66
+	InternalName:	"btnHelp"
+	Tag:	"Help"
+	Label:	"Help"
+	Click:	"DCWatDes.Model.Epanet.help"
+)
+
+(AVCBBox.67
+	InternalName:	"cbxControls"
+	Disabled:	1
+	Tag:	"Controls"
+	NextControl:	59
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Controls"
+)
+
+(AVCBox.68
+	InternalName:	"chbControls"
+	Listening:	1
+	Label:	" "
+	Click:	"DCWatDes.Dialog.EpanetTables.CheckBox.click"
+	Constraints:	0x55
+)
+
+(AVCBox.69
+	InternalName:	"chbCurves"
+	Listening:	1
+	Label:	" "
+	Click:	"DCWatDes.Dialog.EpanetTables.CheckBox.click"
+	Constraints:	0x55
+)
+
+(AVCBBox.70
+	InternalName:	"cbxCurves"
+	Disabled:	1
+	Tag:	"Curves"
+	NextControl:	59
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Curves"
+)
+
+(AVCBBox.71
+	InternalName:	"cbxPattern"
+	Disabled:	1
+	Tag:	"Pattern"
+	NextControl:	59
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Pattern"
+)
+
+(AVCBox.72
+	InternalName:	"chbPattern"
+	Listening:	1
+	Label:	" "
+	Click:	"DCWatDes.Dialog.EpanetTables.CheckBox.click"
+	Constraints:	0x55
+)
+
+(RectD.73
+	Left:	19.00000000000000
+	Top:	85.00000000000000
+	Right:	389.00000000000000
+	Bottom:	10.00000000000000
+)
+
+(RectD.74
+	Left:	21.00000000000000
+	Top:	152.00000000000000
+	Right:	391.00000000000000
+	Bottom:	43.00000000000000
+)
+
+(RectD.75
+	Left:	23.00000000000000
+	Top:	166.00000000000000
+	Right:	392.00000000000000
+	Bottom:	78.00000000000000
+)
+
+(RectD.76
+	Left:	34.00000000000000
+	Top:	239.00000000000000
+	Right:	144.00000000000000
+	Bottom:	218.00000000000000
+)
+
+(RectD.77
+	Left:	166.00000000000000
+	Top:	239.00000000000000
+	Right:	276.00000000000000
+	Bottom:	217.00000000000000
+)
+
+(RectD.78
+	Left:	293.00000000000000
+	Top:	239.00000000000000
+	Right:	403.00000000000000
+	Bottom:	218.00000000000000
+)
+
+(RectD.79
+	Left:	20.00000000000000
+	Top:	201.00000000000000
+	Right:	390.00000000000000
+	Bottom:	113.00000000000000
+)
+
+(RectD.80
+	Left:	393.00000000000000
+	Top:	141.00000000000000
+	Right:	513.00000000000000
+	Bottom:	104.00000000000000
+)
+
+(RectD.81
+	Left:	393.00000000000000
+	Top:	171.00000000000000
+	Right:	513.00000000000000
+	Bottom:	134.00000000000000
+)
+
+(RectD.82
+	Left:	19.00000000000000
+	Top:	231.00000000000000
+	Right:	389.00000000000000
+	Bottom:	143.00000000000000
+)
+
+(RectD.83
+	Left:	19.00000000000000
+	Top:	263.00000000000000
+	Right:	389.00000000000000
+	Bottom:	176.00000000000000
+)
+
+(RectD.84
+	Left:	393.00000000000000
+	Top:	203.00000000000000
+	Right:	513.00000000000000
+	Bottom:	167.00000000000000
+)
+
+(Nil.85
+)
+
+(RectD.86
+	Left:	1.45833333333333
+	Top:	6.69166666666667
+	Right:	4.91666666666667
+	Bottom:	4.59166666666667
+)
+

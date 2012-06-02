@@ -1,0 +1,185 @@
+'DCSewerDesign.createXlsSewerCalculation
+'Create an Excel table containing the Sewerage Calculation
+'(c) 2000 DORSCH Consult
+ 
+'information about the configuration file
+  MsgBox.info("One mapping per line, '=' as separator"+NL+
+  "PipeID=???    Diameter=???"+NL+
+  "Gradient=???    Roughness=???"+NL+
+  "AccumulatedPopulation=???   PeakFactor=???"
+  ,"Field Configuration File")
+  
+'get the configuration file
+  lstConfFiles = FileDialog.returnFiles({"*.txt"},{"Text Files (*.txt)"},"Select Configuration File",0)
+ if(lstConfFiles.count = 0 )then
+   exit
+ end
+
+'get the table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  LineTheme = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme")   
+  if (LineTheme.asString = "nil") then
+    exit
+  end
+  thmLine = viewActive.FindTheme(LineTheme.AsString)   
+  ftbLine = thmLine.GetFTab 
+
+ 'open the configuration file
+ lnfConfiguration = LineFile.make(lstConfFiles.get(0), #FILE_PERM_READ)
+
+ fldPipeID=nil
+ fldDiameter=nil
+ fldGradient=nil
+ fldRoughness=nil
+ fldPopulation=nil
+ strPeakFactorFormula="1"
+ strLine=lnfConfiguration.readElt
+ 'process the configuration file 
+ while (not (strLine=nil ))
+    lstConfTokens = strLine.asTokens("=")
+    if(lstConfTokens.count=2)then
+      strScriptFieldName = lstConfTokens.get(0).trim.lcase
+      strTableFieldName = lstConfTokens.get(1).trim.lcase
+      if(strScriptFieldName = "pipeid")then
+        fldPipeID=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "diameter")then
+        fldDiameter=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "gradient")then
+        fldGradient=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "roughness")then
+        fldRoughness=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "accumulatedpopulation")then
+        fldPopulation=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "peakfactor")then
+        if(strTableFieldName.isNumber)then
+          strPeakFactorFormula=strTableFieldName
+        else
+          if(strTableFieldName.ucase ="BAUMANN")then
+            strPeakFactorFormula = "min(2.5; 1+14/(4+SQRT((E/1000))))"
+          elseif(strTableFieldName.ucase = "BABITT")then
+            strPeakFactorFormula = "min(4.5; 5/(E/1000)^(1/6))"
+          else
+            Msgbox.info("Unknown Peak Factor Formula."+NL+
+            "Baumann and Babitt are valid."+NL+
+            "Using constant peak factor 1.","DC Sewer Design")
+          end
+        end
+      end
+    end
+    strLine = lnfConfiguration.readElt
+ end
+ 
+ 'close the configuration file
+ lnfConfiguration.close
+ 
+ 'get information
+ strLitersPerDayAndPerson = MsgBox.input("Sewage flow per person and day","DC Sewer Design","120")
+ if(strLitersPerDayAndPerson = nil)then
+   exit
+ end
+ 
+ 'check if configuration was successful
+  if((fldPipeID=nil)or(fldDiameter=nil)or(fldGradient=nil)or(fldRoughness=nil)
+  or(fldPopulation=nil))then
+    MsgBox.error("Field matching not successful. Check your table and configuration file.","DC Sewer Design")
+    exit
+  end
+
+ 'start Excel, establish a DDE connection
+  system.execute("c:\program files\msoffice\office\excel.exe") 
+  sysClient = DDEClient.Make( "Excel","System") 
+  if (sysClient.HasError) then 
+    MsgBox.error( sysClient.GetErrorMsg, "") 
+    exit 
+  end 
+
+  fulltopic = sysClient.Request("selection") 'returns [BookN]SheetN!RnCn:RnCn 
+
+  sysClient.Close 
+  topiclist=fulltopic.AsTokens("!:") 
+  
+  sheetname = topiclist.get(0)  
+  
+ 'connect again
+ sheet = DDEClient.Make( "Excel", sheetname ) 
+  
+'msgbox.info(sheet.request("NAME"),"info")
+
+'write the table header
+ sheet.poke("R1C1", "Pipe ID")
+ sheet.poke("R2C1", "String")
+ sheet.poke("R1C2", "Diameter DN")
+ sheet.poke("R2C2", "mm")
+ sheet.poke("R1C3", "Gradient I")
+ sheet.poke("R2C3", " - ")
+ sheet.poke("R1C4", "Roughness kb")
+ sheet.poke("R2C4", "mm")
+ sheet.poke("R1C5", "Population")
+ sheet.poke("R2C5", "person")
+ sheet.poke("R1C6", "Peak Factor")
+ sheet.poke("R2C6", " - ")
+ sheet.poke("R1C7", "Actual Flow")
+ sheet.poke("R2C7", "l/s")
+ sheet.poke("R1C8", "Flow Capacity")
+ sheet.poke("R2C8", "l/s")
+ sheet.poke("R1C9", "Fullboard Velocity")
+ sheet.poke("R2C9", "m/s")
+ sheet.poke("R1C10", "Free Surface Velocity")
+ sheet.poke("R2C10", "m/s")
+ sheet.poke("R1C11", "Percent used")
+ sheet.poke("R2C11", " % ")
+
+
+'data for status display
+  numCounter = 0 
+  numTotal = ftbLine.GetNumRecords 
+  
+'calculation data
+ 
+ 'give the user a chance to kill script
+ av.showStopButton 
+  
+'run over all records in the table
+  for each recLine in ftbLine
+    strRowNumber = (numCounter+3).asString.Trim
+    strRow="R"+strRowNumber
+    
+    sheet.poke(strRow+"C1", ftbLine.returnValue(fldPipeID,recLine))      ' A
+    sheet.poke(strRow+"C2", ftbLine.returnValue(fldDiameter,recLine))    ' B
+    sheet.poke(strRow+"C3", ftbLine.returnValue(fldGradient,recLine))    ' C
+    sheet.poke(strRow+"C4", ftbLine.returnValue(fldRoughness,recLine))   ' D
+    sheet.poke(strRow+"C5", ftbLine.returnValue(fldPopulation,recLine))  ' E
+    
+    ' peak factor calculation
+    strPeakFactor= strPeakFactorFormula
+    if(strPeakFactor.isNumber.not)then
+      strPeakFactor = strPeakFactor.asTokens("E").get(0) +"E"+ strRowNumber+strPeakFactor.asTokens("E").get(1)
+    end
+    sheet.poke(strRow+"C6", "="+strPeakFactor)                               ' F
+    
+'    sheet.poke(strRow+"C7", ftbLine.returnValue(fldFlow,recLine))       ' G
+    sheet.poke(strRow+"C7", "=E"+strRowNumber+"*F"+strRowNumber+"*"+strLitersPerDayAndPerson+"/3600/24") 'G
+    sheet.poke(strRow+"C8", "=I"+strRowNumber+"*PI()*B"+strRowNumber+"^2/4000")    'H
+    sheet.poke(strRow+"C9", "=-2*LOG10(2.51*1.31/(1000000* (B"+strRowNumber+"/1000) *SQRT(2*9.80665* (B"+strRowNumber+"/1000) *C"+strRowNumber+"))+D"+strRowNumber+"/(1000*3.71*(B"+strRowNumber+"/1000)))*SQRT(2*9.80665*(B"+strRowNumber+"/1000)*C"+strRowNumber+")")    'I
+    sheet.poke(strRow+"C10", "=((K"+strRowNumber+"/35)^0.305-0.0024*K"+strRowNumber+")*I"+strRowNumber)    'J
+    sheet.poke(strRow+"C11", "=G"+strRowNumber+"/H"+strRowNumber+"*100")    'K
+    
+    'update status display
+    if(av.setStatus((numCounter/numTotal)*100).not)then
+      'user hit the stop button
+      exit
+    end
+    numCounter = numCounter+1
+  end
+ 
+ 'close the DDE connection
+ sheet.close    
+ 
+ 'clean up
+ av.clearStatus

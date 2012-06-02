@@ -1,0 +1,255 @@
+'DCSewerDesign.NetworkCalculator.calculate
+
+' Calculate a table column using upstream and downstream values
+
+' (c) 2005 DORSCH Consult
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+blnDebug = false
+
+strFormula = MsgBox.input("Please insert your network calculator formula:", "DC Network Calculator", "")
+if(strFormula.is(String).not)then
+  exit
+end
+
+' TODO: Speed up if "Downstream." and "Upstream." are not used => use standard calculator
+
+' Lowercase copy of the formula to make syntax case-independent
+strLCaseFormula = strFormula.clone
+strLCaseFormula = strLCaseFormula.lcase
+
+' Calculation can be upstream or downstream
+blnUpstream = MsgBox.yesNoCancel("Perform upstream calculation? (Selecting No will perform calculations in downstream direction)", "DC Network Calculator", true)
+if(blnUpstream = nil)then
+  ' User selected cancel
+  exit
+end
+
+tableNetwork = av.getActiveDoc
+ftbNetwork = tableNetwork.getVTab
+if(ftbNetwork.is(FTab).not)then
+  MsgBox.error("Fatal Error: Function getVTab() did not return an FTab.","DCSewerDesign.NetworkCalculator.calculate()")
+  exit
+end
+fldNetwork = tableNetwork.getActiveField
+
+' Remember the original selection
+
+bmSelection = ftbNetwork.getSelection.clone
+bmWork = bmSelection.clone
+
+' Handle case where no records are selected
+if(bmWork.count = 0)then
+  bmWork.setAll
+end
+
+bmOne = bmWork.clone
+bmOne.clearAll
+
+' Ordererd list
+lstOrdered = List.make
+
+' Unordered list as copied from Bitmap
+lstUnordered = List.make
+
+fldNetworkShape = ftbNetwork.findField("shape")
+
+' Prevent endless loops
+numDeadlock = bmWork.count*bmWork.count
+
+' Loop over all selected records
+for each recWork in bmWork
+  lstUnordered.add(recWork.clone)
+end
+
+numToGo = bmWork.count * 2
+numDone = 0
+
+' Try to order the list
+numI = 0
+while(lstUnordered.count > 0)
+  recWork = lstUnordered.get(0)
+  pntDownstream = ftbNetwork.returnValue(fldNetworkShape, recWork).along(100)
+  recDownstream = av.run("DCSewerDesign.Manhole.findDownstreamLine", {ftbNetwork, pntDownstream})
+  if(recDownstream = nil)then
+    lstOrdered.insert(recWork.clone)
+    lstUnordered.remove(0)
+    numDone = numDone + 1
+  elseif(lstUnordered.findByValue(recDownstream) = -1)then
+    recWorkClone = recWork.clone
+    lstOrdered.insert(recWorkClone)
+    intPosition = lstOrdered.findByValue(recDownstream)
+    numDone = numDone + 1 
+    if(intPosition <> -1)then
+      lstOrdered.shuffle(recWorkClone, intPosition+1)
+    end
+    lstUnordered.remove(0)
+  else
+    lstUnordered.shuffle(recWork, lstUnordered.count)
+  end
+  numI = numI+1
+  if(numI = numDeadlock)then
+    MsgBox.error("FATAL ERROR: System leads to endless loop. Aborting", "DC Sewer Design")
+    exit
+  end
+end
+
+numCount = lstOrdered.count
+if(blnUpstream)then
+  numStart = 0
+  numEnd = numCount-1
+  numStep = 1
+else
+  numStart = numCount-1
+  numEnd = 0
+  numStep = -1
+end
+' TODO: Speed up by caching downstream IDs
+for each numI in numStart..numEnd by numStep
+  recWork = lstOrdered.get(numI)
+  ' Rewrite Formula
+  strLCaseFormulaEat = strLCaseFormula.clone
+  strFormulaEat = strFormula.clone
+  strFormulaRewrite = ""
+  blnNil = false
+  ' TODO: Refactor
+  ' Replace Downstream values
+  while(strFormulaEat.count > 0)
+    numPos = strLCaseFormulaEat.indexOf("downstream.[")
+    if(numPos <> -1)then
+      strFormulaRewrite = strFormulaRewrite+strFormulaEat.left(numPos)
+      numEat = strLCaseFormulaEat.count - numPos - 12
+      strLCaseFormulaEat = strLCaseFormulaEat.right(numEat)
+      strFormulaEat = strFormulaEat.right(numEat)
+      numPos = strLCaseFormulaEat.indexOf("]")
+      if(numPos < 1)then
+        MsgBox.error("Syntax Error: Could not find "+"[".quote,"DC Network Calculator")
+        exit
+      end
+      strField = strFormulaEat.left(numPos)
+      numEat = strLCaseFormulaEat.count - numPos - 1
+      strLCaseFormulaEat = strLCaseFormulaEat.right(numEat)
+      strFormulaEat = strFormulaEat.right(numEat)
+      ' Evaluate downstream part of formula
+      pntDownstream = ftbNetwork.returnValue(fldNetworkShape, recWork).along(100)
+      recDownstream = av.run("DCSewerDesign.Manhole.findDownstreamLine", {ftbNetwork, pntDownstream})
+      if(recDownstream = nil)then
+        blnNil = true
+      else
+        fldField = ftbNetwork.findField(strField)
+        if(fldField = nil)then
+          MsgBox.error("FATAL ERROR: Could not find field "+strField.quote, "DC Network Calculator")
+          exit
+        end
+        strValue = ftbNetwork.returnValue(fldField, recDownstream).asString
+        strFormulaRewrite = strFormulaRewrite + strValue
+      end
+    else
+      strFormulaRewrite = strFormulaRewrite + strFormulaEat
+      strFormulaEat = ""
+      strLCaseFormulaEat = ""
+    end
+  end
+  if(blnDebug)then
+    System.echo(strFormulaRewrite)
+  end
+  strLCaseFormulaEat = strLCaseFormula.clone
+  strLCaseFormulaEat = strLCaseFormulaEat.lcase
+  strFormulaEat = strFormulaRewrite.clone
+  strFormulaRewrite = ""
+  ' TODO: Refactor
+  ' Replace upstream values
+  while(strFormulaEat.count > 0)
+    numPos = strLCaseFormulaEat.indexOf("upstream.[")
+    if(numPos <> -1)then
+      strFormulaRewrite = strFormulaRewrite+strFormulaEat.left(numPos)
+      numEat = strLCaseFormulaEat.count - numPos - 10
+      strLCaseFormulaEat = strLCaseFormulaEat.right(numEat)
+      strFormulaEat = strFormulaEat.right(numEat)
+      numPos = strLCaseFormulaEat.indexOf("]")
+      if(numPos < 1)then
+        MsgBox.error("Syntax Error: Could not find "+"[".quote,"DC Network Calculator")
+        exit
+      end
+      strField = strFormulaEat.left(numPos)
+      numEat = strLCaseFormulaEat.count - numPos - 1
+      strLCaseFormulaEat = strLCaseFormulaEat.right(numEat)
+      strFormulaEat = strFormulaEat.right(numEat)
+      ' Evaluate Upstream part of formula
+      pntUpstream = ftbNetwork.returnValue(fldNetworkShape, recWork).along(0)
+      lstUpstream = av.run("DCSewerDesign.Manhole.findUpstreamLines", {ftbNetwork, pntUpstream})
+      if(lstUpstream.count < 0)then
+        blnNil = true
+      else
+        ' TODO: Allow to use maximum/minimum upstream values
+        recUpstream = lstUpstream.get(0)
+        if(blnDebug)then
+            System.echo("Upstream ID: "+ftbNetwork.returnValue(ftbNetwork.findField("dc_id"), recUpstream))
+        end
+        fldField = ftbNetwork.findField(strField)
+        if(fldField = nil)then
+          MsgBox.error("FATAL ERROR: Could not find field "+strField.quote, "DC Network Calculator")
+          exit
+        end
+        strValue = ftbNetwork.returnValue(fldField, recUpstream).asString
+        strFormulaRewrite = strFormulaRewrite + strValue
+      end
+    else
+      strFormulaRewrite = strFormulaRewrite + strFormulaEat
+      strFormulaEat = ""
+      strLCaseFormulaEat = ""
+    end
+  end
+
+  ' Write or calculate values  
+  if(blnNil)then
+    ftbNetwork.setValue(fldNetwork, recWork, nil)
+    if(blnDebug)then
+      System.echo("Writing nil value.")
+    end
+  else
+    if(blnDebug)then
+      System.echo(strFormulaRewrite)
+    end
+    bmOne.clearAll
+    bmOne.set(recWork)
+    ftbNetwork.setSelection(bmOne)
+    ftbNetwork.updateSelection
+    if(ftbNetwork.calculate(strFormulaRewrite, fldNetwork).not)then
+      MsgBox.error("Calculation of formula "+strFormulaRewrite.quote+" failed.", "DC Network Calculator")
+      exit
+    end
+  end
+  if(blnDebug)then
+    System.echo(ftbNetwork.returnValue(ftbNetwork.findField("dc_id"), recWork))
+  end
+  ' Update status display
+  if(av.setStatus((numDone/numToGo)*100).not)then
+    ' User hit the stop button
+    exit
+  end
+
+  numDone = numDone + 1
+  ' Update status display
+  if(av.setStatus((numDone/numToGo)*100).not)then
+    ' User hit the stop button
+    exit
+  end  
+end
+
+' Restore the original selection
+ftbNetwork.setSelection(bmSelection)
+ftbNetwork.updateSelection

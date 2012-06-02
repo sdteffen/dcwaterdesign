@@ -1,0 +1,64 @@
+2006-09-18  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* doc/en/gshpvoronoi.xml:
+	* doc/docbook_html.xsl:
+	* doc/docbook_htmlhelp.xsl:
+	* doc/docbook_pdf.xsl:
+	* doc/docbook.css:
+	* installer/win32/locale/english.nsh:
+	* installer/win32/dc.ico:
+	* installer/win32/dc-header.bmp:
+	* installer/win32/dc-intro.bmp:
+	* installer/win32/gshpvoronoi.nsi:
+	* installer/win32/langmacros.nsh:
+	* .project:
+	* ghspvoronoi.glade:
+	* NEWS:
+	* src/callbacks.c:
+	* src/callbacks.h:
+	* src/interface.c:
+	* src/interface.h:
+	* src/main.c:
+	* src/Makefile.am:
+	* src/support.c:
+	* src/support.h:
+	* msvc/config.h:
+	* msvc/gshpvoronoi.dsp:
+	* msvc/gshpvoronoi.dsw:
+	* devcpp/config.h:
+	* devcpp/Makefile.win: Added gshpvoronoi 0.1.0
+
+2006-02-01  Steffen Macke <sdteffen@gmail.com>
+
+	* shpdelaunay.c:
+	* shpvoronoi.c: Improved checking for maximum node count
+	* shptriangle.c: added new commandline option to specify elevation 
+	field; added slope calculation
+
+2006-01-31  Steffen Macke <sdteffen@gmail.com>
+
+	* README: Updated, additional information
+	* makefile.msc:
+	* shptriangle.c: Added new triangle frontend
+	* Makefile: New MinGW makefile
+	* AUTHORS: Added standard file
+
+2006-01-26  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* shapedelaunay.c: Updated version number to 0.1.0; added support for
+	3D Shapefiles
+	* shpvoronoi.h: Set MAXNUMNODES to 5,000,0000 
+
+2005-09-22  Steffen Macke <sdteffen@gmail.com>
+
+	* makefile.msc:
+	* shpdelaunay.c: Added new Delaunay triangulation frontend
+	
+2005-09-07  Steffen Macke <sdteffen@gmail.com>
+
+	* COPYING:
+	* makefile.msc:
+	* README:
+	* shpvoronoi.c:
+	* shpvoronoi.h: Started the development; program is working but
+	needs code clean up

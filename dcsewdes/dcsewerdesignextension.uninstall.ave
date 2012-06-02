@@ -1,0 +1,28 @@
+'DCSewerDesignExtension.uninstall
+
+'Make sure there is a project
+if (av.GetProject = nil) then
+  return nil
+end
+
+'Uninstall only if the project is not closing
+if (av.GetProject.IsClosing) then
+  return nil
+end
+
+'The self object for this script is the extension
+'The first root is the menu
+'The second root is the view
+'
+'Remove the menu 
+theMenubar = av.GetProject.FindGUI("View").GetMenuBar
+theMenuBar.remove(self.Get(0))
+
+theViewButtonBar = av.GetProject.FindGUI("View").getButtonBar
+theViewButtonBar.remove(self.get(1))
+
+mbTable = av.getProject.findGUI("Table").getMenuBar
+mbTable.remove(self.get(2))
+
+theViewButtonBar.remove(self.get(3))
+

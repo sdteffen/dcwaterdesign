@@ -1,0 +1,83 @@
+' DCWatDes.Model.Epanet.importInpFile
+
+' (c) 2001, 2002, 2005 DORSCH Consult
+' imports an Epanet Input file (*.inp)
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' no arguments
+' returns nothing
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+
+'if(MsgBox.yesNo("Loading the INP file will overwrite the current model. Continue?", 
+'   "DC Water Design", false).not)then
+'  exit
+'end
+
+strCommand = ""
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+lstThemes = List.make
+for each strFeature in {"Junctions", "Pipes", "Pumps", "Reservoirs","Tanks", "Valves"}                   
+  if(dicThemes.get("str"+strFeature) = nil)then
+    flnTheme = FileDialog.put(strFeature.asFilename, "*.shp", "DC Water Design")
+    if(flnTheme = nil)then
+      exit
+    end
+    strCommand = strCommand ++ (flnTheme.asString+".shp").quote
+    lstThemes.add(flnTheme.clone)
+  end
+end
+
+flnInp = FileDialog.show("*.inp","EPANET INP Model (*.inp)","Load EPANET INP file")
+if(flnInp = nil) then
+  ' User selected cancel
+  exit
+end
+
+strReport = flnInp.asString.left(flnInp.asString.count-3)+"rpt"
+strCommand = flnInp.asString.quote ++ strReport ++ strCommand
+strTmpDir = Filename.getTmpDir.getFullName
+flnReport = Filename.make(strTmpDir+"\inp2shpreport.txt")
+flnError = Filename.make(strTmpDir+"\inp2shprerror.txt")
+File.delete(flnReport)
+File.delete(flnError)
+strCommand = "$AVEXT".asFileName.getFullName+"\dcwatdes\inp2shp.exe"++strCommand++">"++flnReport.getFullName.quote++"2>"++flnError.getFullName.quote
+av.run("DCWatDes.System.call", strCommand)
+
+twinReport = TextWin.make(flnReport, "inp2shp Output")
+
+if(File.exists(flnError))then
+  txfError = TextFile.make(flnError, #FILE_PERM_READ)
+  if(txfError.getSize > 0)then
+    twinError = TextWin.make(flnError, "inp2shp Errors")
+  end
+  txfError.close
+end
+
+' Add shape files to active view
+for each flnTheme in lstThemes
+  srnTheme = SrcName.make(flnTheme.asString+".shp")
+  if(srnTheme <> nil)then
+    ftbTheme = FTab.make(srnTheme)
+    thmFeature = FTheme.make(ftbTheme)
+    av.getActiveDoc.addTheme(thmFeature)
+  end
+end

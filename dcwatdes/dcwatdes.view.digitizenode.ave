@@ -1,0 +1,96 @@
+' DCWatDes.View.digitizeNode
+
+' (c) 2000 - 2002 DORSCH Consult
+' digitize a Network Node
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' no arguments
+' returns nothing
+
+extWatDes = Extension.find("DC Water Design")
+dicPreferences = extWatDes.getPreferences
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if( numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+
+theView = av.GetActiveDoc
+pntUser = theView.getDisplay.returnUserPoint
+
+strNodeClass = self.getTag
+strNodeSingular = strNodeClass.substitute("s","").substitute("ee","ese")
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+ftbNodes = dicFTabs.get(strNodeClass)
+
+pntUnsnapped = nil
+
+if (pntUser.IsNull) then
+  return nil
+else
+  ftbPipes = dicFTabs.get("Pipes")
+  thmPipes = nil
+  for each thmInView in theView.getThemes
+    if((thmInView.is(FTheme))and(thmInView.getFTab = ftbPipes))then
+      thmPipes = thmInView
+      break 
+    end
+  end
+  if(thmPipes = nil)then
+    MsgBox.error("Unable to find Pipes Theme in this View","DC Water Design Extension")
+    return nil
+  end
+
+  ' snapping
+  lstPipes = thmPipes.findByPoint(pntUser)
+  if(lstPipes.count>0)then
+    recPipe = lstPipes.get(0)
+    pllPipe = ftbPipes.returnValue(ftbPipes.findField("Shape"), recPipe)
+    mpntPipe = pllPipe.asLine.asMultipoint
+    pntUnsnapped = pntUser.clone
+    pntUser.snap(mpntPipe, pntUser.distance(mpntPipe)*1.1)
+  else
+    blnKeep = MsgBox.yesNo(strNodeSingular++"did not snap. Keep unsnapped"++strNodeSingular+"?","DC Water Design", true)
+    if(blnKeep.not)then
+      return nil
+    end
+  end
+  
+  if ((ftbNodes <> nil) and(thmPipes <> nil)) then
+    
+    ftbNodes.setEditable(true)
+    thePrj = theView.GetProjection
+    if (thePrj.IsNull.Not) then
+      pnt = pntUser.ReturnUnprojected(thePrj)
+    end
+    fldShape = ftbNodes.FindField("Shape")
+    recNode = ftbNodes.addRecord
+    ftbNodes.setValue(fldShape, recNode, pntUser)
+    ftbNodes.getSelection.clearAll
+    ftbNodes.getSelection.set(recNode)
+    ftbNodes.updateSelection
+    av.GetProject.SetModified(true)
+    fldID = ftbNodes.findField("dc_id")
+    if(fldID <> nil)then
+      ftbNodes.setValue(fldID, recNode, strNodeSingular.left(1).lcase+ftbNodes.getNumRecords.asString) 
+    end
+    ftbNodes.setEditable(false)
+  end
+  if(pntUnsnapped <> nil)then
+    av.showMsg("Snapping moved "+strNodeSingular+" "+pntUser.distance(pntUnsnapped).asString+" units.")
+  end
+end

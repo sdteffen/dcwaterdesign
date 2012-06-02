@@ -1,0 +1,54 @@
+' DCWatDes.Bitcode.or
+
+' (c) 2001, 2005 DORSCH Consult
+' support for bitcoded strings
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' expects a bitcoded strings as the first two arguments
+' returns and of the two bitcoded strings
+
+if((self.is(List).not)or(self.count<>2)or(self.get(0).is(String).not)or(self.get(1).is(String).not))then
+  MsgBox.error("DCWatDes.Bitcode.and expects two strings as argument", "DC Water Design")
+  System.echo("DCWatDes.Bitcode.and expects two strings as argument")
+  exit
+end
+
+strBitcode1 = self.get(0)
+strBitcode2 = self.get(1)
+
+strResult = ""
+
+numWidth1 = strBitcode1.count
+numWidth2 = strBitcode2.count
+
+numWidth = numWidth1.max(numWidth2)
+
+for each i in 0..(numWidth-1)
+  numSetCount = 0
+  if((i < numWidth1)and(strBitcode1.middle(i, 1) = "1"))then
+    numSetCount = 1
+  end
+  if((i < numWidth2)and (strBitcode2.middle(i, 1) = "1"))then
+    numSetCount = numSetCount + 1
+  end
+  if(numSetCount = 1)then
+    strResult = strResult + "1"
+  else
+    strResult = strResult + "0"
+  end
+end
+
+return strResult

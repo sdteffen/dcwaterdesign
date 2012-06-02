@@ -1,0 +1,49 @@
+' DCCadCleanExtension.make
+
+' (c) 2001 DORSCH Consult
+
+strVersion = msgbox.input("Enter version","Make DC CAD Cleaner Extension","1.00")
+if (strVersion=nil)then
+  exit
+end
+numVersion=strVersion.asTokens(".").get(0).asNumber
+strFileNameVersion = strVersion.asTokens(".").get(0)+"_"+strVersion.asTokens(".").get(1)
+
+extDCCadClean = Extension.Make(("$AVEXT\dccadclean"+strFileNameVersion+".avx").AsFileName,
+              "DC CAD Cleaner",
+              av.GetProject.FindScript("DCCadCleanExtension.install"),
+              av.GetProject.FindScript("DCCadCleanExtension.uninstall"),
+              {})
+
+'0
+buttonExtension = av.getProject.findGUI("View").getButtonbar.findByScript("DCCadClean.View.Selection.CharacteristicGeometry.handle")
+extDCCadClean.add(buttonExtension)
+
+for each d in av.getProject.getDocs
+  if (d.is(SEd) and (d.getName.left("DCCadClean".count+1)="DCCadClean."))then
+    extDCCadClean.add(d.getScript)
+  end
+end
+
+extDCCadClean.SetAbout("DC CAD Cleaner Extension "+strVersion+NL+"(c) 2001 DORSCH Consult."+NL+
+"This extension provides tools to remove CAD artifacts."+NL+Date.now.asString)
+extDCCadClean.SetExtVersion(numVersion)
+extDCCadClean.setUnloadScript(av.findScript("DCCadCleanExtension.unload"))
+extDCCadClean.setCanUnloadScript(av.findScript("DCCadCleanExtension.canUnload"))
+extDCCadClean.Commit
+
+RFileName = FileName.make("$AVEXT/dccadclean"+strFileNameVersion+".avx")
+WFileName = FileName.make("$AVEXT/dccadclean.tmp")
+RFile = LineFile.make(RFileName, #FILE_PERM_READ)
+WFile = LineFile.make(WFileName, #FILE_PERM_WRITE)
+WFile.setScratch(TRUE)
+while (RFile.isAtEnd.not)
+  buf = RFile.ReadElt
+  if ( buf.contains("ObjectTag:").not) then
+    WFile.writeElt(buf)
+  end
+end
+RFile.close
+WFile.flush
+File.copy(WFilename, RFilename)
+WFile.close

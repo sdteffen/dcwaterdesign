@@ -1,0 +1,24 @@
+' DCProcess.Record.compare
+' Record comparison routine for QSort
+
+a = SELF.Get(0)
+b = SELF.Get(1)
+
+for each f in _flist
+   theField = _theVTab.FindField(f)
+   v1 = _theVTab.ReturnValue(theField,a)
+   v2 = _theVTab.ReturnValue(theField,b)
+   if ((v1.IsNull) and (v2.IsNull)) then
+      continue
+   elseif ((v1.IsNull) or (v2.IsNull)) then
+      return -1
+   end
+   if (v1 = v2) then
+      continue
+   else
+      return -1
+   end
+end
+return 0
+
+

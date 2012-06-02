@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "doc/project.dtd" []>
+<!-- build the DC CAD Cleaner Source distribution -->
+<project name="DC CAD Cleaner" basedir="." default="DCCadCleanerDistribution">
+  <!-- configuration -->
+  
+  <property name="md5sum" value="c:\wc\cvs.gnome.org\bin\md5sum.exe" />
+  
+  <!-- Custom DC Sewer Design stylesheets -->
+  <property name="dccadcleaner_version" value="1.0.0" />
+  
+  <target name="DCCadCleanerDistribution" id="DC_CAD_Cleaner_Distribution">
+    <tar destfile="dccadcleaner-src-${dccadcleaner_version}.tar">
+      <tarfileset dir="." prefix="dccadcleaner-${dccadcleaner_version}" includes=
+        "**/*.ave,COPYING,AUTHORS,**/*.css,*.nsi,**/build.xml,ChangeLog" />
+      <tarfileset dir="." prefix="dccadcleaner-${dccadcleaner_version}" includes=
+        "INSTALL,NEWS,src/dccadclean.apr" />
+      <tarfileset dir="." prefix="dccadcleaner-${dccadcleaner_version}" includes=
+        "doc/*.xsl,doc/project.dtd" />
+      <tarfileset dir="." prefix="dccadcleaner-${dccadcleaner_version}" includes=
+        "doc/version.xml,**/dccadcleaner.xml,**/figure/*.png" />
+    </tar>
+    <bzip2 zipfile="dccadcleaner-src-${dccadcleaner_version}.tar.bz2" 
+      src="dccadcleaner-src-${dccadcleaner_version}.tar"/>
+    <delete file="dccadcleaner-src-${dccadcleaner_version}.tar" />  
+    <exec dir="." executable="${md5sum}" output="md5sum.txt">
+      <arg line="dccadcleaner-src-${dccadcleaner_version}.tar.bz2"/>
+    </exec>
+    <exec dir="." executable="${md5sum}" output="md5sum.txt" append="true">
+      <arg line="dccadcleaner-setup-${dccadcleaner_version}-1.exe"/>
+    </exec>
+  </target>
+  
+  <target name="clean">
+    <delete defaultexcludes="no" dir="." includes=
+      "**/*~,**/htmlhelp.chm,tmp/*.png,tmp/*.pdf,**/.#*,**/*.hhc,**/*.html,**/*.hhk,**/*.fo,**/*.hhp" 
+      excludes="**/index.html"/>
+  </target>
+</project>

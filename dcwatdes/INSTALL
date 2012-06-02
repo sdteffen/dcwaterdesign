@@ -1,0 +1,19 @@
+In order to be able to create the installer executable with
+the NullSoft Super Installation System (available from 
+http://www.nullsoft.com), add the following binaries to 
+the tree:
+
+installer/dcwatdes/xslt:
+			DOMSupport.dll
+			PlatformSupport.dll
+			TestXSLT.exe
+			XalanDOM.dll
+			xerces-c_1_3.dll
+			XercesParserLiasion.dll
+			XMLSupport.dll
+			XPath.dll
+			XSLT.dll
+			
+The xalan binaries are available from:
+
+http://xml.apache.org/xalan-c/index.html

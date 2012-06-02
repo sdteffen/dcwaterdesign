@@ -1,0 +1,98 @@
+' DCWatDes.Model.Epanet.Results.importBinary
+
+' (c) 2001 DORSCH Consult
+
+' expects no arguments (called from menu)
+' returns nothing (reports with message boxes)
+
+' checks for unique dc_ids throughout the model
+' checks if node1, node2 fields in the pipes table are of type string
+' if pumps or valves are used in the model
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+lstFileNames = FileDialog.returnFiles({"*.bin"},{"EPANET Binary Result files (*.bin)"},"Load EPANET binary result file", 0)
+if((lstFileNames = nil)or(lstFileNames.count < 1)) then
+  ' User selected cancel
+  exit
+end
+flnBin = lstFileNames.get(0)
+if(flnBin.getFullName.contains(" "))then
+  MsgBox.error("The path"+NL+"'"+flnBin.getFullName+"'"+NL+"contains spaces. This is not allowed.","DC Water Design")
+  exit
+end
+
+strBin = flnBin.getFullName
+strBasePath=strBin.left(strBin.count-3)
+
+strResultFiles = "" 
+flnLinkResults = (strBasePath+"-link-results.txt").asFilename
+dicPreferences.set("strLinkResults", flnLinkResults.getFullName)
+flnNodeResults = (strBasePath+"-node-results.txt").asFilename
+dicPreferences.set("strNodeResults", flnNodeResults.getFullName)
+
+for each flnResult in {flnNodeResults, flnLinkResults}
+  strResultFiles = strResultFiles++flnResult.getFullName
+  strResultFileName = flnResult.getFullName
+  lstTables = av.getProject.getDocsWithGUI(av.findGUI("Table"))
+  for each tableRemove in lstTables
+    vtbRemove = tableRemove.getVTab
+    if((vtbRemove <> nil)and(vtbRemove.getBaseTableFilename <> nil))then
+      if(vtbRemove.getBaseTableFilename.getFullName = strResultFileName)then
+        vtbRemove.deActivate
+        av.getProject.removeDoc(tableRemove)
+        break
+      end
+    end
+  end
+  av.processAllInvals
+  av.purgeObjects
+  File.delete(flnResult)
+end
+
+strCmd = ("$AVEXT\dcwatdes\epanet2mysql.exe".asFilename.getFullname)++
+         flnBin.getFullName+strResultFiles
+av.run("DCWatDes.System.call", strCmd)
+
+
+' choose processing backend
+
+strLoader = dicPreferences.get("strResultLoader")
+if(strLoader = nil)then
+  strLoader = "ArcView"
+end
+if(strLoader="MySql")then
+  av.run("DCWatDes.Model.Epanet.Results.loadMySql", {flnLinkResults, flnNodeResults})
+else if(strLoader="ArcView")then
+  av.run("DCWatDes.Model.Epanet.Results.loadArcView", {flnLinkResults, flnNodeResults})
+  else
+    MsgBox.error("Couldn't find Result Loader"++strLoader.asString.quote+".","DC Water Design")
+  end
+end

@@ -1,0 +1,18 @@
+' DCSewerDesign.ThemeList.returnPointThemes
+
+' expects a List of Themes as the Argument. Returns the Themes which contain Points in a list
+
+' (c) 2000 DORSCH Consult
+
+lstThemes = self
+
+lstPointThemes = List.make
+
+for each thmCheck in lstThemes
+  strSubName = thmCheck.getSrcName.getSubName
+  if((strSubName = "Node")or(strSubName="Point")) then
+    lstPointThemes.add(thmCheck)
+  end
+end
+
+return lstPointThemes.deepclone

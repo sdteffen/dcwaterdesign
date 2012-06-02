@@ -1,0 +1,5 @@
+In order to build the installer successully,
+you need the DC Water Design Extension, the Cygwin
+tools (sed, sh) and epanet2mysql.exe (compile from
+epanet2mysql.c - available from the DC Water Design
+CVS Repository)

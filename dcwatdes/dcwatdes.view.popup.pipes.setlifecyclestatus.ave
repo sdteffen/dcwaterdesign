@@ -1,0 +1,70 @@
+' DCWatDes.View.Popup.Pipes.setLifecycleStatus
+
+' (c) 2006 DORSCH Consult
+' Select the LifecycleStatus of a pipe
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary",nil)
+thmPipes = dicThemes.get("Pipes")
+if(thmPipes = nil)then
+  return nil
+end
+
+ftbPipes = thmPipes.getFTab
+dicStatus = Dictionary.make(20)
+dicStatus.add("Active", 1)
+dicStatus.add("Abandoned", 2)
+dicStatus.add("Removed", 3)
+dicStatus.add("Planned", 4)
+dicStatus.add("Damaged", 5)
+dicStatus.add("HNA Planned/Reinforcement", 6)
+dicStatus.add("HNA Proposed Replacement", 7)
+dicStatus.add("HNA Abandoned", 8)
+dicStatus.add("Under Construction", 9)
+lstKeys = dicStatus.returnKeys
+
+fldLifecycleStatus = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbPipes, "Lifecycles"})
+
+pntMouse = self.getControlSet.getObjectTag
+
+if(pntMouse.is(Point))then
+  lstPipes = thmPipes.findByPoint(pntMouse)
+  if (lstPipes.count = 0 ) then
+    MsgBox.info("No Pipe selected", "DC Water Design")
+    exit
+  end
+  for each recPipe in lstPipes
+    numLifecycleStatus = ftbPipes.returnValue(fldLifecycleStatus, recPipe)
+    strCurrentStatus = ""
+    for each strKey in lstKeys
+      if(dicStatus.get(strKey) = numLifecycleStatus)then
+        strCurrentStatus = strKey
+        break
+      end
+    end
+    if(strCurrentStatus = "")then
+      MsgBox.info("Unknown LifecycleStatus.", "DC Water Design")
+      exit
+    end
+    lstKeys.shuffle(lstKeys.get(lstKeys.findByValue(strCurrentStatus)),0)
+    objStatus = MsgBox.ListAsString(lstKeys, "Please select the LifecycleStatus:", "DC Water Design")
+    if(objStatus <> nil)then
+      ftbPipes.setEditable(true)
+      ftbPipes.setValue(fldLifecycleStatus, recPipe, dicStatus.get(objStatus))
+      ftbPipes.setEditable(false)
+    end
+  end
+end

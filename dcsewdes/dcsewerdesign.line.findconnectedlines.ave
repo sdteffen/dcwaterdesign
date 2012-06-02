@@ -1,0 +1,46 @@
+' DCSewerDesign.Line.findConnectedLines
+' Arguments: The Line FTab and a record in it
+' Returns the records of all Lines that are connected to the Line
+' 0.1 m snapping interval
+' (c) 2000 DORSCH Consult
+
+ftb_Lines = self.get(0)
+rec_Line = self.get(1)
+
+fna_LineShape = ftb_Lines.findField("Shape")
+
+  pll_Line = ftb_Lines.returnValue(fna_LineShape, rec_Line)
+
+  'increases the speed, because it uses ArcView's spatial index
+  ftb_Lines.selectByPolyline(pll_Line, #VTAB_SELTYPE_NEW) 
+
+  lst_LineNodes = pll_Line.asList.get(0)
+  pnt_Start = lst_LineNodes.get(0)
+  pnt_End = lst_LineNodes.get(lst_LineNodes.count -1 )
+
+lst_Lines = List.make
+bmp_Lines = ftb_Lines.getSelection
+bmp_Lines.clear(rec_Line)
+
+
+'second run is necessary because selectByPolyline returns also Lines that
+'cross the Line rather than start at it
+lstUpstream = List.make
+lstDownstream = List.make
+for each rec_ConnectedLine in bmp_Lines
+  pll_Line = ftb_Lines.returnValue(fna_LineShape, rec_ConnectedLine)
+  lst_LineNodes = pll_Line.asList.get(0)
+  
+'  pnt_StartLine = lst_LineNodes.get(0)
+'  pnt_EndLine = lst_LineNodes.get(lst_LineNodes.count -1 )
+ ' num_LastNode = lst_LineNodes.count-1
+  for each i in {0, 100}
+    if(pnt_Start.distance(pll_Line.along(i)) < 0.1) then
+      lstUpstream.add(rec_ConnectedLine.clone)
+    elseif(pnt_End.distance(pll_Line.along(i)) < 0.1) then
+      lstUpstream.add(rec_ConnectedLine.clone)
+    end
+  end
+end
+lst_Lines = lstUpstream+lstDownstream
+return lst_Lines.deepclone

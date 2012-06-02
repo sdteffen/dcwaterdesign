@@ -1,0 +1,70 @@
+' DCProcess.createPntThemeFromMultiPointTheme
+
+' creates a Point Theme fromt the Centers of a Multipoint Theme
+' attributes are copied
+
+' (c) 2000, 2004 DORSCH Consult
+
+viewActive = av.GetActiveDoc
+
+themeList = viewActive.GetThemes 
+thmMultipoint = Msgbox.Choice (themeList, "Select a Multipoint Theme.", "Select a Theme") 
+
+if(thmMultipoint = nil)then
+  exit
+end
+
+if(thmMultipoint.getFTab.getShapeClass.getClassName <> "Multipoint")then
+  MsgBox.error("Please select a Multipoint Theme.","DC Conversion Extension")
+end
+
+'  Proj = v.GetProjection 
+  
+ftbMultipoint = thmMultipoint.GetFTab 
+  
+  clsPoint = Point
+  def = av.GetProject.MakeFileName("theme", "shp") 
+  def = FileDialog.Put(def, "*.shp", "New Point Theme") 
+  
+  if (def = nil) then 
+   exit
+  end
+  ftbPoint = FTab.MakeNew(def, clsPoint) 
+
+  
+fldMultipointShape = ftbMultipoint.findField("Shape")
+fldPointShape = ftbPoint.findField("Shape")
+
+lstFields = ftbMultipoint.getFields.deepclone
+lstFields.remove(0)
+
+ftbPoint.setEditable(true)
+ftbPoint.addFields(lstFields)
+fldPointShape = ftbPoint.findField("Shape")
+
+numCounter = 0 
+numTotal = ftbMultipoint.GetNumRecords 
+av.showStopButton  
+
+for each recMultipoint in ftbMultipoint
+  recPoint = ftbPoint.addRecord
+  pntShape = ftbMultipoint.returnValue(fldMultipointShape, recMultipoint).returnCenter
+  if(pntShape <> nil)then
+  ftbPoint.setValue(fldPointShape, recPoint, pntShape)
+  
+    for each i in 1 .. (lstFields.count)
+      fldPoint = ftbPoint.getFields.get(i)
+      fldMultipoint = ftbMultipoint.getFields.get(i)
+      ftbPoint.setValue(fldPoint, recPoint, ftbMultipoint.returnValue(fldMultipoint, recMultipoint))
+    end
+  end
+      
+  numCounter = numCounter + 1
+  if(av.setStatus((numCounter/numTotal)*100).not)then
+    exit
+  end
+
+end
+
+ftbPoint.setEditable(false)
+av.clearStatus

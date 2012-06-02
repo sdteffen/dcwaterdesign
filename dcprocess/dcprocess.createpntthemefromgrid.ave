@@ -1,0 +1,82 @@
+' DCProcess.createPntThemeFromGrid
+
+' convert a Grid Theme into a Point Theme (Center Points)
+' (c) 2004 DORSCH Consult
+' (c) 2006 DC Water and Environment
+
+  viewActive = av.GetActiveDoc 
+  
+  themeList = viewActive.GetThemes 
+  GridTheme = Msgbox.Choice (themeList, "Select a Grid Theme to extract the Points from.", "Select a Theme") 
+  
+  thmGrid = viewActive.FindTheme(GridTheme.AsString) 
+  
+  grdGrid = thmGrid.GetGrid
+  
+  lstXY = grdGrid.getNumRowsAndCols
+  
+  numX = lstXY.get(1)
+  numY = lstXY.get(0)
+  
+  numCellX = grdGrid.getCellSize
+  
+  rectExtent = grdGrid.getExtent
+  minX = rectExtent.getLeft+(numCellX/2)
+  minY = rectExtent.getBottom+(numCellX/2)
+  
+  prjProjection = viewActive.GetProjection 
+
+  
+  numCounter = 0 
+  numTotal = numX*numY
+  av.showStopButton  
+ 
+  'make a new theme 
+  
+  clsShape = Point
+  def = av.GetProject.MakeFileName("theme", "shp") 
+  def = FileDialog.Put(def, "*.shp", "New Point Theme") 
+  
+  if (def <> nil) then 
+    fld = nil
+    ftbPoint = FTab.MakeNew(def, clsShape) 
+    fldValue = Field.make("Value", #FIELD_DECIMAL, 16,8)
+    if(fldValue <> nil)then
+      fld = fldValue.clone
+    end
+
+
+    fldShape = ftbPoint.findField("Shape")
+  
+    
+    ftbPoint.setEditable(TRUE)
+  
+  end 
+  
+  if(fld <> nil)then
+      ftbPoint.AddFields({fld}) 
+  end
+  
+  for each i in (0..(numX-1))
+    for each j in (0..(numY-1))
+      x = minX + (i*numCellX)
+      y = minY + (j*numCellX)
+      pntCenter = Point.make(x,y)
+      recPoint = ftbPoint.addRecord
+      ftbPoint.setValue(fldShape, recPoint, pntCenter)
+      ftbPoint.setValue(fld, recPoint, grdGrid.pointValue(pntCenter, prjProjection))
+      numCounter = numCounter+1      
+    end
+    if(av.setStatus((numCounter/numTotal)*100).not)then
+      exit
+    end
+
+  end
+  
+'cleaning up
+thmPoint = FTheme.Make(ftbPoint) 
+viewActive.AddTheme(thmPoint) 
+av.GetProject.SetModified(true) 
+ftbPoint.setEditable(FALSE)
+thmPoint.setVisible(TRUE)
+av.clearStatus

@@ -1,0 +1,88 @@
+' DCSewerDesign.Lines.takeoverMinimumValuesFromBuffer
+
+' (c) 2004 DORSCH Consult
+
+' create a buffer around the line and find the minimum
+' elevation from a point theme
+' requires pipe thene (polyline)
+' require spot elevation theme (point)
+
+'get the line table
+viewActive = av.GetActiveDoc 
+themeList = viewActive.GetThemes 
+lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
+thmLine = Msgbox.Choice (lstLineThemes, "Select the Line Theme.", "DC Sewer Design")   
+if (thmLine.asString = "nil") then
+  exit
+end
+ftbLine = thmLine.GetFTab 
+
+'get the  table
+viewActive = av.GetActiveDoc 
+themeList = viewActive.GetThemes 
+lstPointThemes = av.run("DCSewerDesign.ThemeList.returnPointThemes", themeList)
+thmPoint = Msgbox.Choice (lstpointThemes, "Select the Point Theme.", "DC Sewer Design")   
+if(thmPoint.asString = "nil") then
+  exit
+end
+ftbPoint = thmPoint.GetFTab 
+
+' get the point data field
+lstPointFields = ftbpoint.getFields.clone
+lstPointFields.remove(0)
+fldPointData = Msgbox.choice(lstpointFields, "Select the Point Data Field.","Select a Field")
+if(fldPointData.asString = "nil")then
+  exit
+end
+
+' get the line data field
+lstLineFields = ftbLine.getFields.clone
+lstLineFields.remove(0)
+fldLineData = Msgbox.choice(lstLineFields, "Select the Line Data Field.","Select a Field")
+if(fldLineData.asString = "nil")then
+  exit
+end
+
+if(fldLineData.getType <> fldpointData.getType)then
+ Msgbox.info("Upstream Data Type doesn't match point Data Type", "DC Sewer Design")
+ exit
+end
+
+strBufferDistance = MsgBox.input("Specify the Buffer Distance:","DC Sewer Design","5.0")
+if((strBufferDistance.asString = "nil")or(strBufferDistance.isNumber.not))then
+  exit
+end
+numBufferDistance = strBufferDistance.asNumber
+
+fldLineShape = ftbLine.findField("Shape") 
+fldPointShape = ftbpoint.findField("Shape")
+ftbLine.setEditable(true)
+numTotal = ftbLine.getNumRecords
+numComplete = 0
+av.showStopButton
+
+for each recLine in ftbLine
+ pllLine = ftbLine.returnValue(fldLineShape, recLine)
+ plgnBuffer = pllLine.returnBuffered(numBufferDistance)
+ ftbPoint.selectByPolygon(plgnBuffer, #VTAB_SELTYPE_NEW)
+ numMinimumValue = Number.makeNull
+ for each recPoint in ftbPoint.getSelection
+   numValue = ftbPoint.returnValue(fldPointData, recPoint)
+   if((numMinimumValue.isNull) or (numValue < numMinimumValue))then
+     numMinimumValue = numValue
+   end
+ end
+ ftbLine.setValue(fldLineData, recLine, numMinimumValue)
+ 
+ ' update status display   
+ numComplete = numComplete + 1
+ if(av.setStatus((numComplete/numTotal)*100).not)then
+   'user hit the stop button
+   exit
+ end
+end   
+ 
+ftbpoint.setEditable(false)
+av.clearStatus
+
+

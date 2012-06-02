@@ -1,0 +1,50 @@
+' DCWatDes.Dialog.Setup.btnOK.click
+
+' (c) 2000, 2001 DORSCH Consult
+' closes the Setup dialog and saves the settings
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+dlgSetup = av.findDialog("DCWatDes.Dialog.Setup")
+
+extWatDes = Extension.find("DC Water Design")
+dicPreferences = extWatDes.getPreferences
+
+for each strProperty in {"Language"}
+  cbxProperty = dlgSetup.findByName("cbx"+strProperty)
+  strPropertyValue = cbxProperty.getCurrentValue.asString.clone
+  
+  dicPreferences.set("str"+strProperty,strPropertyValue)
+end  
+
+for each strProperty in {"Epanet", "Sabcmd", "Xslt", "SnappingRadius", "BackdropResolution", "CommandTimeout"}
+  txlProperty = dlgSetup.findByName("txl"+strProperty)
+  strPropertyValue = txlProperty.getText
+  dicPreferences.set("str"+strProperty,strPropertyValue)
+  if((strProperty <> "SnappingRadius")and(strProperty<>"Epanet")and(strPropertyValue.contains(" ")))then
+    MsgBox.warning("The path for '"+txlProperty.getLabel+"' contains spaces, this will cause problems.","DC Water Design")
+  end
+end
+
+cbxEnforceDataModel = dlgSetup.findByName("cbxEnforceDataModel")
+if(cbxEnforceDataModel.isSelected)then
+  dicPreferences.set("blnEnforceDataModel", true)
+else
+  dicPreferences.set("blnEnforceDataModel", false)
+end
+av.run("DCWatDes.i18n.translateExtensionMenus", nil)
+
+dlgSetup.close

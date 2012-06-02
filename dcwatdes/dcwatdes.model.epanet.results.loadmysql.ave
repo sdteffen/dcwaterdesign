@@ -1,0 +1,71 @@
+' DCWatDes.Model.Epanet.Results.loadMySql
+
+' (c) 2000, 2001 DORSCH Consult
+' load the Results of a EPANET analysis via mySQL
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' no arguments
+' no return value
+
+MsgBox.info("The MySQL result loader is not supported in this Version of the Extension","DC Water Design")
+exit
+
+for each flnResult in {self.get(0), self.get(1)}
+
+  'todo
+  strResult = ""
+  
+  extDCWatDes = Extension.find("DC Water Design")
+  if(extDCWatDes <> nil)then
+    dicPreferences = extDCWatDes.getPreferences
+  else
+    exit
+  end
+  
+  
+  ' find the SQL Connection
+  strSqlConnection = dicPreferences.get("strSqlConnection")
+  if(strSqlConnection = nil)then
+    MsgBox.warning("You've got to setup a SQL Connection in order to load Results.", "DCWater Design")
+    return nil
+  end
+  
+  sqlConnection = SqlCon.find(strSqlConnection)
+  
+  if(sqlConnection.isLogin.not)then
+    av.run("DCWatDes.SqlConnection.login",sqlConnection)
+  end
+  
+  sqlConnection.executeSql("delete from dc_"+strResult+";")
+  sqlConnection.executeSql("load data infile '"+flnResult.getFullName.substitute("\","\\")+"'"+NL+" into table dc_"+strResult+NL+" fields terminated by ' ' lines terminated by '\r\n';")
+   
+end
+  
+  'twinReport.open
+  vtbSteps = VTab.makeSql(sqlConnection, "select distinct time from dc_nodes")
+  fldTime = vtbSteps.getFields.get(0)
+  lstSteps = List.make
+  for each rec in vtbSteps
+    strStep = vtbSteps.returnValue(fldTime, rec)
+    strStep.setName(strStep)
+    lstSteps.add(strStep)
+  end
+  
+  ' load results
+  
+  dicPreferences.set("lstSteps", lstSteps.deepclone)
+  
+  av.run("DCWatDes.Model.Epanet.loadResultsForStep", nil)

@@ -1,0 +1,20 @@
+' DCCadClean.PolylineFTab.Selection.straighten
+
+' straightens all lines that are in the selection
+' (removes all vertices)
+
+' expects a Polyline FTab as the argument
+' returns nothing
+
+ftbLine = self
+
+if(ftbLine.is(FTab).not)then
+  System.echo("ERROR: DCCadClean.PolylineFTab.Selection.straighten: Expecting Polyline FTab as argument.")
+  exit
+end
+
+ftbLine.setEditable(true)
+fldShape = ftbLine.findField("Shape")
+ftbLine.calculate("Polyline.make({{[Shape].along(0),[Shape].along(100)}})",fldShape)
+ftbLine.refresh
+ftbLine.setEditable(false)

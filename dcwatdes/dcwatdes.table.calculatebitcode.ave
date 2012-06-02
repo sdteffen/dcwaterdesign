@@ -1,0 +1,60 @@
+' DCWatDes.Table.calculateBitcode
+
+' (c) 2001, 2005 DORSCH Consult
+' sets multiple Bitcodes
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+theTable = av.getActiveDoc
+theVTab = theTable.getVTab
+theField = theTable.getActiveField
+
+theTable.stopEditing
+lstBitcodes = List.make
+
+numWidth = theField.getWidth
+
+for each i in 0 .. (numWidth-1)
+  i.setName(i.asString)
+  lstBitcodes.add(i)
+end
+
+lstFunctions = {"Set","DCWatDes.Bitcode.xor", "DCWatDes.Bitcode.and", "DCWatDes.Bitcode.or"}
+
+strFunction = MsgBox.listAsString(lstFunctions, "Select a function", "DC Water Design")
+if(strFunction = NIL)then
+  exit
+end
+
+lstSet = MsgBox.multiList(lstBitcodes, "Choose Bitcodes to set", "DC Water Design")
+
+if(lstSet <> NIL)then
+  strBitcode = String.makeBuffer(numWidth)
+  strBitcode = strBitcode.substitute(" ", "0")
+  for each numBit in lstSet
+    strBitcode = strBitcode.left(numBit) + "1" + strBitcode.right(numWidth-numBit-1)
+  end
+  theVTab.beginTransaction
+  strFormula = strBitcode.quote
+  if(strFunction <> "Set")then
+    strFormula = "av.run("+strFunction.quote+",{["+theField.getName+"],"+strFormula+"})"
+  end
+  'System.echo(strFormula)
+  if(not(theVTab.calculate(strFormula, theField))) then
+    MsgBox.Warning("Syntax Error", "DC Water Design")
+  end
+  theVTab.endTransaction
+  theTable.getWin.invalidate
+end

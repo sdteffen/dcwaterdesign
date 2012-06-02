@@ -1,0 +1,123 @@
+' DCWatDes.View.digitizePipe
+
+' (c) 2000 - 2002 DORSCH Consult
+' digitize a pipe
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+theView = av.GetActiveDoc
+pllUser = theView.getDisplay.returnUserPolyline
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+lstUnsnappedPoints = {nil,nil}
+
+if (pllUser.IsNull) then
+  return nil
+else
+  ftbPipes = dicFTabs.get("Pipes")
+  thmPipes = nil
+  lstNodeThemes = List.make
+  for each strNode in dicFTabs.returnKeys
+    if(strNode <> "Pipes")then
+      ftbNodes = dicFTabs.get(strNode)
+      for each thmInView in theView.getThemes
+        if((thmInView.is(FTheme))and(ftbNodes = thmInView.getFTab))then
+          lstNodeThemes.add(thmInView)
+        end
+      end
+    end
+  end
+
+  ' snapping
+  lstPllPoints = pllUser.asList
+  lstLstPllPoints = lstPllPoints.get(0)
+  numSnapped = 0
+  lstNewJunctions = List.make
+  for each numPosEnd in {0, lstLstPllPoints.count-1}
+    pntEnd = lstLstPllPoints.get(numPosEnd)
+    pntNode = nil
+    for each thmNode in lstNodeThemes
+      lstNodes = thmNode.findByPoint(pntEnd)
+      if(lstNodes.count>0)then
+        numSnapped = numSnapped+1
+        ftbNode = thmNode.getFTab
+        pntNode = ftbNode.returnValue(ftbNode.findField("Shape"), lstNodes.get(0))
+        break
+      end
+    end 
+    if(pntNode <> nil)then
+      lstLstPllPoints.set(numPosEnd, pntNode)
+    else
+      lstNewJunctions.add(pntEnd.clone)
+    end
+  end
+  
+  if(numSnapped <> 2)then
+    blnKeep = MsgBox.yesNo((2-numSnapped).asString +" Endnode(s) unsnapped. "+(2-numSnapped).asString+" Junction(s) will be automatically added. Keep pipe?","DC Water Design", true)
+    if(blnKeep.not)then
+      return nil
+    end
+  end
+  
+  ftbJunctions = dicFTabs.get("Junctions")
+  if((ftbPipes <> nil)and(ftbJunctions<>nil))then
+    'add dynamic junctions
+    ftbJunctions.setEditable(true)
+    fldSubtype = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbJunctions, "dcSubtype"})
+    fldJunctionID = ftbJunctions.findField("dc_id")
+    fldShape = ftbJunctions.findField("Shape")
+    for each pntJunction in lstNewJunctions
+      recJunction = ftbJunctions.addRecord
+      ftbJunctions.setValue(fldShape, recJunction, pntJunction)
+      if(fldSubtype <> nil)then
+        ftbJunctions.setValue(fldSubtype, recJunction, 101)
+      end
+      if(fldJunctionID <> nil)then
+        ftbJunctions.setValue(fldJunctionID, recJunction, "j"+ftbJunctions.getNumRecords.asString)
+      end
+    end
+    ftbJunctions.setEditable(false)
+    
+    ' create new pipe
+    ftbPipes.setEditable(true)
+    fldShape = ftbPipes.findField("Shape")
+    recPipe = ftbPipes.addRecord
+    ftbPipes.setValue(fldShape, recPipe, Polyline.make(lstPllPoints))
+    av.getProject.setModified(true)
+    ftbPipes.getSelection.clearAll
+    ftbPipes.getSelection.set(recPipe)
+    ftbPipes.updateSelection
+    fldPipeID = ftbPipes.findField("dc_id")
+    if(fldPipeID <> nil)then
+      ftbPipes.setValue(fldPipeID, recPipe, "l"+ftbPipes.getNumRecords.asString)
+    end
+    ' keep network alive
+     
+    av.run("DCWatDes.Model.Epanet.Pipe.updateNodeFields", recPipe)
+    
+    ' Enter diameter
+    lstDiameters = {15,20,25,32,40,50,60,65,80,90,100,110,125,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}
+    objDiameter = MsgBox.ListAsString(lstDiameters, "Please enter the pipe diameter:", "DC Water Design")
+    if(objDiameter <> nil)then
+      fldDiameter = av.run("DCWatDes.ExpandedAliasVTab.findField", {ftbPipes, "diameter"})
+      if(fldDiameter <> nil)then
+        ftbPipes.setValue(fldDiameter, recPipe, objDiameter)
+      end
+    end
+    
+    ftbPipes.setEditable(false)
+  end
+end  

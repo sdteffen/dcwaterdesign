@@ -1,0 +1,8 @@
+2001-10-23  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* epanet2mysql.c: write one more timestep (the initial one)
+	* README: added cygwin gcc compilation instruction
+	
+2001-09-01  Steffen Macke <Steffen_Macke@dorsch.com.jo>
+
+	* epanet2mysql.c: added header lines to make ArcView happy

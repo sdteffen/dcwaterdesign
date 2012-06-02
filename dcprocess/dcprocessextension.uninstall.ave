@@ -1,0 +1,23 @@
+' DCProcessExtension.uninstall
+
+' (c) 2000 - 2004 DORSCH Consult
+
+'Make sure there is a project
+if (av.GetProject = nil) then
+  return nil
+end
+
+'Uninstall only if the project is not closing
+if (av.GetProject.IsClosing) then
+  return nil
+end
+
+'Remove the menu from the View menu
+theMenubar = av.GetProject.FindGUI("View").GetMenuBar
+theMenuBar.remove(self.Get(0))
+
+' Remove the menu from the Project menu
+
+av.getProject.findGUI("Project").getMenubar.remove(self.get(1))
+
+av.getProject.findGUI("Table").getMenubar.remove(self.get(2))

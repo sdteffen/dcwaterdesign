@@ -1,0 +1,133 @@
+' DCSewerDesign.accumulateBranchLength
+
+' accumulates the Branch Length in a simple Sewer Network
+' This will overwrite the AccumulatedBranch field.
+' The maximum upstream branch length (Handover from upstream network)
+' will be accumulated in the AccumulatedBranch field.
+' Note: The lines have to be flipped to the correct direction!
+
+' (c) 2002 DORSCH Consult
+
+'information
+  MsgBox.info("The Lines have to be flipped to the Flow direction!","DC Sewer Design")
+
+'get the table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
+  LineTheme = Msgbox.Choice (lstLineThemes, "Select a Polyline Theme.", "Select a Theme")   
+  if (LineTheme.asString = "nil") then
+    exit
+  end
+  thmLine = viewActive.FindTheme(LineTheme.AsString)   
+  ftbLine = thmLine.GetFTab 
+
+  ' get the fields
+  
+  lstFields = ftbLine.getFields.deepclone
+  lstNumberFields = av.run("DCSewerDesign.Fields.returnNumberFields",lstFields)
+  fldAccumulatedBranchLength = MsgBox.choice(lstNumberFields, "Select the Accumulated Branch Length field."+NL+
+                              "This field will be overwritten.","DC Sewer Design")
+  if(fldAccumulatedBranchLength = nil)then
+    exit
+  end
+  fldAccumulatedBranchLength = ftbLine.findField(fldAccumulatedBranchLength.getName)
+  fldBranchLength = MsgBox.choice(lstNumberFields, "Select the BranchLength field.","DC Sewer Design")
+  if(fldBranchLength = nil)then
+    exit
+  end
+ 
+ fldShape = ftbLine.findField("Shape")
+   
+'data for status display
+  numCounter = 0 
+  numTotal = ftbLine.GetNumRecords 
+  
+ 'give the user a chance to kill script
+ av.showStopButton 
+  
+ ftbLine.setEditable(true)
+
+for each recLine in ftbLine
+  ftbLine.setValue(fldAccumulatedBranchLength,recLine, 0)
+end  
+
+  numCounter = 0 
+  numTotal = ftbLine.GetNumRecords 
+
+  
+bmpCalculate = Bitmap.make(ftbLine.getNumRecords)
+bmpCalculate.setAll
+bmpCompleted = Bitmap.make(ftbLine.getNumRecords)
+bmpCompleted.setAll
+  
+  
+' loop until all lines are calculated  
+while(bmpCalculate.count > 0)
+numPreventEndlessLoop = bmpCalculate.count
+  
+' run over all records in the table
+  for each recLine in bmpCalculate
+
+   ' get the Upstream Manhole
+    pllLine = ftbLine.returnValue(fldShape, recLine)
+    pntUpstreamManhole = pllLine.asList.get(0).get(0)
+    lstUpstreamLines = av.run("DCSewerDesign.Manhole.findUpstreamLines",{ftbLine, pntUpstreamManhole})
+      
+'    numAccumulatedBranchLength = ftbLine.returnValue(fldAccumulatedBranchLength, recLine)
+    numAccumulatedBranchLength = 0
+      
+    'check if all the upstream pipes have been calculated
+    blnReady = true
+    for each recConnectedLine in lstUpstreamLines
+'      if(bmpCalculate.get(recConnectedLine))then
+      if(ftbLine.returnValue(fldAccumulatedBranchLength,recConnectedLine) <= 0)then
+        blnReady = false
+       ' break
+      else
+       'add the Handover AccumulatedBranchLengths
+        numBranchLength = ftbLine.returnValue(fldAccumulatedBranchLength, recConnectedLine)
+        if(numBranchLength.isNull)then
+          numBranchLength = 0
+        end
+        numAccumulatedBranchLength = numAccumulatedBranchLength.max(numBranchLength)
+      end
+    end
+      
+    if(blnReady)then    
+      'calculate the AccumulatedBranchLength
+      numBranchLength = ftbLine.returnValue(fldBranchLength, recLine)
+      numAccumulatedBranchLength = numAccumulatedBranchLength + numBranchLength
+      numAccumulatedBranchLength = numAccumulatedBranchLength.max(0.001)
+      ftbLine.setValue(fldAccumulatedBranchLength, recLine, numAccumulatedBranchLength)             
+      bmpCompleted.clear(recLine)      
+      'update status display
+      if(av.setStatus((numCounter/numTotal)*100).not)then
+        'user hit the stop button
+        exit
+      end
+      numCounter = numCounter+1
+    end
+  end
+  
+  bmpCalculate.and(bmpCompleted)  
+  
+  if(numPreventEndlessLoop = bmpCalculate.count)then
+    MsgBox.info("System leads to endless loop. Aborting.","DC Sewer Design")
+    exit
+  end
+end
+
+' check if script run was successful
+ numSumBranchLength = 0
+ for each recLine in ftbLine
+   numSumBranchLength = numSumBranchLength + ftbLine.returnValue(fldBranchLength, recLine)
+ end  
+ 
+ if(numSumBranchLength <> numAccumulatedBranchLength)then
+   Msgbox.info("Accumulated BranchLength doesn't match the Sum of BranchLength."+NL+
+   "Script run might have failed. Check the System","DC Sewer Design")
+ end
+ 
+ ftbLine.setEditable(false)
+ av.clearStatus

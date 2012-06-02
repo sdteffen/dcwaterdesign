@@ -1,0 +1,319 @@
+' DCWatDes.Model.Epanet.check
+
+' (c) 2001 - 2004 DORSCH Consult
+
+' expects no arguments (called from menu)
+' returns nothing (reports with message boxes)
+
+' checks for unique dc_ids throughout the model
+' checks if node1, node2 fields in the pipes table are of type string
+' if pumps or valves are used in the model, checks for diameter 0
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' check for duplicate themes
+dictThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+lstThemes = dictThemes.asList
+lstThemeNames = List.make
+for each thmTheme in lstThemes
+  lstThemeNames.add(thmTheme.getSrcName.asString)
+end
+numThemeCount = lstThemeNames.count
+lstThemeNames.removeDuplicates
+if(lstThemeNames.count <> numThemeCount)then
+  MsgBox.error("You have duplicates themes in your setup. Please correct the theme selection.","DC Water Design")
+  av.run("DCWatDes.Dialog.EpanetThemes.open", nil)
+end
+
+av.run("DCWatDes.Model.Epanet.ensureAliases",nil)
+
+lstFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+extWatDes = Extension.find("DC Water Design")
+dicPreferences = extWatDes.getPreferences
+
+strSnappingRadius = dicPreferences.get("strSnappingRadius")
+if(strSnappingRadius = nil)then
+  MsgBox.error("The snapping radius is not defined. Please define it","DC Water Design")
+  av.run("DCWatDes.Dialog.Setup.open",nil)
+  exit
+end
+numSnappingRadius = strSnappingRadius.asNumber
+if((numSnappingRadius = nil)or(numSnappingRadius = 0))then
+  MsgBox.error("The snapping radius is not defined. Please define it","DC Water Design")
+  av.run("DCWatDes.Dialog.Setup.open",nil)
+  exit
+end
+
+numToGo = lstFTabs.count
+numCompleted = 0
+numDoubleIDs = 0
+'numIDsTooLong = 0
+
+blnErrorOccurred = false
+
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary", nil)
+
+' check for NULL shapes
+
+for each ftbFeature in lstFTabs
+  strQuery = "[Shape].isNull"
+  bmpSelection = ftbFeature.getSelection
+  if(bmpSelection = nil)then
+    MsgBox.error("Empty Selection","DC Water Design")
+    exit
+  end
+  ' check for 3D shapes
+  bmpSelection.setAll
+  recOne = bmpSelection.getNextSet(-1)
+  if(recOne > 0)then
+    shpOne = ftbFeature.returnValue(ftbFeature.findField("shape"), recOne)
+    if(shpOne.hasZ)then
+      ' check for 3D Analyst Extension
+      if(Extension.find("3D Analyst").not)then
+        MsgBox.warning("You will not be able to edit 3D shapes. 3D Analyst is required.", "DC Water Design")
+      end
+    end
+  end
+  ftbFeature.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+  if(bmpSelection.count > 0)then
+    blnDelete = MsgBox.yesNo("Found"++bmpSelection.count.asString++"records with NULL shapes. Should these records be deleted?","DC Water Design", true)
+    if(blnDelete)then
+      ftbFeature.setEditable(true)
+      ftbFeature.removeRecords(bmpSelection)
+      ftbFeature.setEditable(false)
+    end
+  end
+end
+
+' check for pipes shorter than the snapping radius
+
+ftbPipes = lstFTabs.get("Pipes")
+strSnappingRadius = dicPreferences.get("strSnappingRadius")
+strQuery = "([Shape].returnLength <"++strSnappingRadius ++ ") or ([Shape].returnLength=0)"
+bmpSelection = ftbPipes.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbPipes.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"pipes that are shorter than the snapping radius."+NL+"Records in question are selected now.","DC Water Design")
+  ftbPipes.updateSelection
+  exit
+end
+
+' check for pipes with diameter 0
+
+strQuery = "([diameter] = 0)or([diameter].isnull)"
+bmpSelection = ftbPipes.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbPipes.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"pipes with diameter 0."+NL+"Records in question are selected now.","DC Water Design")
+  ftbPipes.updateSelection
+  exit
+end
+
+' check for pipes with roughness 0
+
+strQuery = "([roughness] = 0)or([roughness].isnull)"
+bmpSelection = ftbPipes.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbPipes.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"pipes with roughness 0."+NL+"Records in question are selected now.","DC Water Design")
+  ftbPipes.updateSelection
+  exit
+end
+
+' check for valves with diameter 0
+ftbValves = lstFTabs.get("Valves")
+strQuery = "([diameter] = 0)or([diameter].isnull)"
+bmpSelection = ftbValves.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbValves.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"valves with diameter 0."+NL+"Records in question are selected now.","DC Water Design")
+  ftbValves.updateSelection
+  exit
+end
+
+' check for valves with type null
+ftbValves = lstFTabs.get("Valves")
+strQuery = "([type] = """")or([type].isnull)"
+bmpSelection = ftbValves.getSelection
+if(bmpSelection = nil)then
+  MsgBox.error("Empty Selection", "DC Water Design")
+  exit
+end
+ftbValves.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+if(bmpSelection.count > 0)then
+  MsgBox.warning("Found"++bmpSelection.count.asString++"valves with type is null."+NL+"Records in question are selected now.","DC Water Design")
+  ftbValves.updateSelection
+  exit
+end
+
+
+' check for orphan nodes
+
+' TODO: this should actually check for end nodes
+
+thmPipes = dicThemes.get("Pipes")
+
+for each strFeature in {"Junctions", "Valves", "Reservoirs", "Tanks", "Pumps"}
+  thmFeature = dicThemes.get(strFeature)
+  if(thmFeature <> nil)then
+    thmFeature.selectByTheme(thmPipes, #FTAB_RELTYPE_ISWITHINDISTANCEOF, numSnappingRadius, #VTAB_SELTYPE_NEW)
+    ftbFeature = thmFeature.getFTab
+    if(ftbFeature.getSelection.count <> ftbFeature.getNumRecords)then
+      numOrphanNodes = ftbFeature.getNumRecords - ftbFeature.getSelection.count
+      if(MsgBox.yesNo("The"++strFeature++"Theme contains"++numOrphanNodes.asString++"unconnected nodes."+NL+
+      "Delete them?","DC Water Design",true))then
+          ftbFeature.getSelection.not
+          ftbFeature.updateSelection
+          ftbFeature.setEditable(true)
+          ftbFeature.removeRecords(ftbFeature.getSelection)
+          ftbFeature.setEditable(false)
+      end
+    end  
+  end
+end
+  
+for each thmFeature in dicThemes
+  thmFeature.clearSelection  
+end 
+
+' merge into one table
+flnTemp = Filename.getTmpDir.makeTmp("dc_id_summary","dbf")
+vtbTemp = VTab.makeNew(flnTemp, dBase)
+fldTemp = Field.make("dc_id", #FIELD_CHAR, 16, 0)
+if(vtbTemp.isEditable.not)then
+  vtbTemp.setEditable(true)
+end
+vtbTemp.addFields({fldTemp})
+
+for each ftbFeature in lstFTabs
+  fldID = ftbFeature.findField("dc_id")
+  if(fldID = nil)then
+    MsgBox.error("Field 'dc_id' is missing","DC Water Design")
+    vtbTemp.setEditable(false)
+    exit
+  end
+  for each recFeature in ftbFeature
+    strID = ftbFeature.returnValue(fldID, recFeature).asString
+    recNew = vtbTemp.addRecord
+    vtbTemp.setValue(fldTemp, recNew, strID)
+  end
+end
+
+'summarize
+flnTemp2 = Filename.getTmpDir.makeTmp("dc_id_summary","dbf")
+vtbSummary = vtbTemp.summarize(flnTemp2, dBase, fldTemp, {},{})
+
+' check for duplicate IDs
+
+strProblematicQuery = "([dc_id].asString.count=(-1))"
+
+
+strQuery = "[count] > 1"
+bmpSelection = vtbSummary.getSelection
+vtbSummary.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+numDoubleIDs = bmpSelection.count
+fldSummaryID = vtbSummary.findField("dc_id")
+
+for each recProblematic in bmpSelection
+  strID = vtbSummary.returnValue(fldSummaryID, recProblematic)
+  strProblematicQuery = strProblematicQuery+"or([dc_id].asString.trim="+strID.quote+")"
+end
+
+
+' check for IDs that are too long
+strQuery = "[dc_id].count > 13"
+bmpSelection = vtbSummary.getSelection
+vtbSummary.query(strQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+numIDsTooLong = bmpSelection.count
+fldSummaryID = vtbSummary.findField("dc_id")
+
+for each recProblematic in bmpSelection
+  strID = vtbSummary.returnValue(fldSummaryID, recProblematic)
+  strProblematicQuery = strProblematicQuery+"or([dc_id].asString.trim="+strID.quote+")"
+end
+
+' select problematic records
+
+for each ftbFeature in lstFTabs
+  bmpSelection = ftbFeature.getSelection
+  ftbFeature.query(strProblematicQuery, bmpSelection, #VTAB_SELTYPE_NEW)
+  ftbFeature.setSelection(bmpSelection.clone)
+  ftbFeature.updateSelection
+end
+
+vtbSummary.setEditable(false)
+vtbSummary.deactivate
+vtbTemp.setEditable(false)
+vtbTemp.deactivate
+File.delete(flnTemp)
+File.delete(flnTemp2)
+
+if(numDoubleIDs>0)then
+  blnErrorOccurred = true
+  MsgBox.warning("The model has"++numDoubleIDs.asString++" duplicate ID(s)."+NL+"Check the Selection.", "DC Water Design")
+else
+  MsgBox.info("The model ID's are unique", "DC Water Design")
+end
+
+if(numIDsTooLong > 0)then
+  blnErrorOccurred = true
+  MsgBox.warning("Some ID's in the model are too long. They should not exceed 13 characters."+NL+"Check the Selection.","DC Water Design")
+end
+
+if(blnErrorOccurred.not)then
+  for each ftbTheme in lstFTabs
+    ftbTheme.getSelection.clearAll
+    ftbTheme.updateSelection
+  end
+end
+
+av.getActiveDoc.getDisplay.invalidate(true)
+
+ftbValves = lstFTabs.get("Valves")
+ftbPumps = lstFTabs.get("Pumps")
+ftbPipes = lstFTabs.get("Pipes")
+if(ftbPipes = nil)then
+  MsgBox.warning("No Pipes Theme selected.", "DC Water Design")
+end
+if((ftbValves <> nil)or(ftbPumps <> nil))then
+  for each i in 1..2
+    strFieldName = "node"+i.asString
+    fldNode = ftbPipes.findField(strFieldName)
+    if(fldNode = nil)then
+      MsgBox.warning("The Pipes theme is missing the field '"+strFieldName+"'.", "DC Water Design")
+    else
+      if(fldNode.isTypeString.not)then
+        MsgBox.warning("The type of field '"+strFieldName+"' in the Pipes theme should be string.","DC Water Design")
+      end
+    end
+  end
+end

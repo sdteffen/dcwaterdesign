@@ -1,0 +1,112 @@
+' DCScript.loadScriptsFromDir
+
+' (c) 2001 DORSCH Consult
+
+' requires UNIX EOLs
+' load all the scripts found in a directory into arcview
+' compile all scripts after loading
+
+' no argument, returns nothing
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+' select one script
+
+lstFiles = FileDialog.returnFiles({"*.ave"},{"AVENUE Source (*.ave)"}, "Select one script.", 0)
+
+if((lstFiles = nil)or(lstFiles.count = 0))then
+  ' user selected Cancel
+  exit
+end
+
+' find all scripts in the directory
+
+flnDirectory = lstFiles.get(0).returnDir
+lstScriptFiles = flnDirectory.readFiles("*.ave")
+
+' loop over all scripts
+
+numLoaded = 0
+blnOverwrite = nil
+				
+for each flnScript in lstScriptFiles
+  txfScript = Textfile.make(flnScript, #FILE_PERM_READ)
+  if(txfScript = nil)then
+    MsgBox.warning("Could not open file'"+flnScript.asString+"'.","Loading Scripts from Directory")
+  else
+  
+    ' search script in project
+    sedScript = nil
+    strScriptName = flnScript.getBaseName.left(flnScript.getBasename.count-4)			
+    for each docObj in av.getProject.getDocs
+      if (docObj.is(SEd)) then
+        if(docObj.getName.lcase = strScriptName.lcase)then
+          sedScript = docObj
+          break	
+        end	
+      end
+    end
+    
+    blnUpdate = false
+    
+    ' create new script if necessary
+    if(sedScript = nil)then
+      sedScript = Sed.make
+      av.getProject.addDoc(sedScript)	
+      blnUpdate = true
+    end  	
+    strScriptSource = txfScript.read(txfScript.getSize)
+    txfScript.close
+    		
+    ' try to set scriptname from first comment
+    if(strScriptSource.asTokens(" ").get(1).left(1)="'")then
+        
+      ' script starts with comment
+      strFirstComment=strScriptSource.asTokens(" '"+NL).get(0)
+      if(strFirstComment.lcase = sedScript.lcase)then
+        blnUpdate = true
+      end
+    end		
+    
+    if(blnUpdate)then
+      sedScript.setName(strFirstComment)      
+    end
+    
+    ' check if script has changed, loadScript
+    if(sedScript.getSource <> strScriptSource)then
+      blnChanged = true
+    else
+      blnChanged = false
+    end
+
+    ' ask for permission to overwrite
+    if(blnOverwrite = nil)then
+      blnOverwrite = MsgBox.yesNo("Overwrite Scripts in Project?", "Loading Scripts from Directory", false)
+    end
+     
+    'update script 
+     
+    if(blnOverwrite and blnChanged)then
+       sedScript.setSource(strScriptSource)
+       numLoaded = numLoaded+1  
+     end
+  end
+end
+
+' compile all scripts
+av.run("DCScript.compileAllScripts",nil)
+
+MsgBox.info("Loaded"++numLoaded.asString++"scripts.","DC Script")

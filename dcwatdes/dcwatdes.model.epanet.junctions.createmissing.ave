@@ -1,0 +1,212 @@
+' DCWatDes.Model.Epanet.Junctions.createMissing
+	
+' (c) 2001,2002 DORSCH Consult
+
+' create the junctions that are missing in the
+' alters the junctions theme
+' no arguments, no return value: called from menu
+' requires pipes and junctions themes 
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if(numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+
+av.showMsg("Creating missing Junctions with "+numSnappingRadius.asString+" snapping radius")
+av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
+
+activeView = av.getActiveDoc
+if(activeView.is(View).not)then
+  exit
+end
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+' check for missing junctions
+
+numMissingJunctions = 0
+lstMissingPoints = List.make	
+		
+ftbPipes = dicFTabs.get("Pipes")
+fldPipeShape = ftbPipes.findField("Shape")
+	
+lstNodeFTabs = List.make
+lstNodeIDFields = List.make
+
+for each strNetworkFeature in dicFTabs.returnKeys
+  if(strNetworkFeature <> "Pipes")then
+    ftbNetworkFeature = dicFTabs.get(strNetworkFeature)
+    lstNodeFTabs.add(ftbNetworkFeature)
+    av.run("DCWatDes.FTab.ensureSpatialIndex", ftbNetworkFeature)
+    fldNodeID = ftbNetworkFeature.findField("dc_id")
+    lstNodeIDFields.add(fldNodeID)
+  end
+end
+
+numToGo = ftbPipes.getNumRecords
+numDone = 0
+av.showStopButton
+
+lstPurgeBitmaps = List.make
+for each j in 0..(lstNodeFTabs.count-1)
+  ftbNodes = lstNodeFTabs.get(j)
+  bmpPurge = ftbNodes.getSelection.clone
+  bmpPurge.clearAll
+  lstPurgeBitmaps.add(bmpPurge)
+end
+
+for each recPipe in ftbPipes
+  pllPipe = ftbPipes.returnValue(fldPipeShape, recPipe)
+  pllPipe = pllPipe.clean
+  lstPipeNodes = pllPipe.asList.get(0)
+  lstNodesPoints = List.make
+  lstNodesPoints.add(lstPipeNodes.get(0))
+  lstNodesPoints.add(lstPipeNodes.get(lstPipeNodes.count-1))
+  for each i in 0..1
+    numNodes = 0
+    blnNodeMissing = true
+    
+    for each j in 0..(lstNodeFTabs.count-1)
+      ftbNodes = lstNodeFTabs.get(j)
+      if(ftbNodes.getNumRecords = 1)then
+        if(ftbNodes.returnValue(ftbNodes.findField("shape"),0).distance(lstNodesPoints.get(i)) < numSnappingRadius)then
+          blnNodeMissing = false
+        end
+      else
+        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius*10, #VTAB_SELTYPE_NEW) 
+        bmpNodes = ftbNodes.getSelection
+        recConnectedNode = bmpNodes.getNextSet(-1)
+        if(recConnectedNode <> -1)then
+          blnNodeMissing = false
+          if(numNodes = 0)then
+            bmpNodes.clear(recConnectedNode)
+          end
+          numNodes = numNodes + bmpNodes.count
+          bmpPurge = lstPurgeBitmaps.get(j)
+          bmpPurge.or(bmpNodes)          
+        end
+      end           
+    end
+    if(numNodes > 1)then
+      'System.echo("WARNING: Found"++numNodes.asString++"Nodes on top of each other. Removing"++(numNodes-1).asString)
+      for each j in 0..(lstNodeFTabs.count-1)
+        ftbNodes = lstNodeFTabs.get(j)
+        ftbNodes.selectByPoint(lstNodesPoints.get(i), numSnappingRadius*10, #VTAB_SELTYPE_NEW) 
+         bmpNodes = ftbNodes.getSelection
+      recConnectedNode = bmpNodes.getNextSet(-1)
+      if(recConnectedNode <> -1)then
+        numNodes = numNodes + bmpNodes.count
+      end      
+        
+      end
+    end
+    if(blnNodeMissing)then
+      ' check if junction has been added to the list before
+      pntMissingJunction = lstNodesPoints.get(i)
+      blnReallyMissing = true
+      for each pntJunction in lstMissingPoints
+        if(pntJunction.distance(pntMissingJunction) < numSnappingRadius)then      
+          blnReallyMissing = false
+          break
+        end
+      end
+      if(blnReallyMissing)then
+        lstMissingPoints.add(pntMissingJunction)
+        numMissingJunctions = numMissingJunctions + 1
+      end
+    end     
+  end
+  numDone = numDone+1
+  if(av.setStatus(numDone/numToGo * 100).not)then
+    av.clearStatus
+    exit
+  end
+end
+
+numDuplicates = 0
+for each j in 0..(lstNodeFTabs.count-1)
+  numDuplicates = numDuplicates + lstPurgeBitmaps.get(j).count
+end
+
+if(numDuplicates <> 0)then
+  strQuestion = "Do you want to remove the "++numDuplicates.asString++"duplicate Nodes?"+NL
+  strQuestion = strQuestion+"Running 'Make EPANET Model' is recommended after removing the Nodes."+NL
+  strQuestion = strQuestion+"You may loose attributes this way."+NL	
+  strQuestion = strQuestion+"Continue with removing the Nodes?"
+  blnContinue = MsgBox.longYesNo(strQuestion, "DC Water Design Extension",true)
+               
+  if(blnContinue.not)then
+    'user selected No
+    exit
+  end
+  
+  for each j in 0..(lstNodeFTabs.count-1)
+    ftbNodes = lstNodeFTabs.get(j)
+    bmpPurge = lstPurgeBitmaps.get(j)
+    ftbNodes.setEditable(true)
+    ftbNodes.removeRecords(bmpPurge)
+    ftbNodes.setEditable(false)
+  end
+  
+end
+
+if(numMissingJunctions = 0)then
+  MsgBox.info("The model is not missing any Junctions.","DC Water Design")
+  exit
+end
+
+	
+' ask the user if the nodes should be added
+
+strQuestion = "This will add"++numMissingJunctions.asString++"missing Junctions to your Epanet Hydraulic Model."+NL
+strQuestion = strQuestion+"Running 'Make EPANET Model' is recommended after the Junctions"+NL
+strQuestion = strQuestion+"have been added."+NL	
+strQuestion = strQuestion+"Continue with adding the Junctions?"
+blnContinue = MsgBox.longYesNo(strQuestion, "DC Water Design Extension",true)
+             
+if(blnContinue.not)then
+  'user selected No
+  exit
+end
+
+ftbJunctions = dicFTabs.get("Junctions")
+fldShape = ftbJunctions.findField("Shape")
+fldID = ftbJunctions.findField("dc_id")
+
+ftbJunctions.setEditable(true)
+for each pntJunction in lstMissingPoints
+  recJunction = ftbJunctions.addRecord
+  ftbJunctions.setValue(fldShape, recJunction, pntJunction)
+  strID = (ftbJunctions.getNumRecords+1).asString	
+  ftbJunctions.setValue(fldID, recJunction, strID) 			
+end		
+ftbJunctions.setEditable(false)					
+av.clearStatus

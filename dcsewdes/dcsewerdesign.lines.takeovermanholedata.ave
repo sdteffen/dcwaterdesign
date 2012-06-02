@@ -1,0 +1,101 @@
+' DCSewerDesign.Lines.takeoverManholeData
+
+' lets the Lines take over data for the upstream and downstream
+' manholes
+' REQUIRES that the lines are flipped to flow direction
+
+' (c) 2000,2004 DORSCH Consult
+
+  Msgbox.info("Make sure that the lines are flipped to flow direction.", "DC Sewer Design")
+
+'get the line table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  thmLine = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme")   
+  if (thmLine.asString = "nil") then
+    exit
+  end
+  ftbLine = thmLine.GetFTab 
+
+'get the manhole table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  thmManhole = Msgbox.Choice (themeList, "Select a Point Theme.", "Select a Theme")   
+  if (thmManhole.asString = "nil") then
+    exit
+  end
+  ftbManhole = thmManhole.GetFTab 
+
+ ' get the manhole data field
+ lstManholeFields = ftbManhole.getFields.clone
+ lstManholeFields.remove(0)
+ fldManholeData = Msgbox.choice(lstManholeFields, "Select the Manhole Data Field.","Select a Field")
+ if(fldManholeData.asString = "nil")then
+  exit
+ end
+
+ ' get the upstream and downstream data field
+ lstLineFields = ftbLine.getFields.clone
+ lstLineFields.remove(0)
+ fldUpstreamData = Msgbox.choice(lstLineFields, "Select the Upstream Data Field.","Select a Field")
+ if(fldUpstreamData.asString = "nil")then
+  exit
+ end
+
+ if(fldUpstreamData.getType <> fldManholeData.getType)then
+   Msgbox.info("Upstream Data Type doesn't match Manhole Data Type", "DC Sewer Design")
+   exit
+ end
+
+ fldDownstreamData = Msgbox.choice(lstLineFields, "Select the Downstream Data Field.","Select a Field")
+ if(fldDownstreamData.asString = "nil")then
+  exit
+ end
+
+ if(fldDownstreamData.getType <> fldManholeData.getType)then
+   Msgbox.info("Downstream Data Type doesn't match Manhole Data Type", "DC Sewer Design")
+   exit
+ end
+
+ fldLineShape = ftbLine.findField("Shape") 
+ ftbLine.setEditable(true)
+ numTotal = ftbLine.getNumRecords
+ numComplete = 0
+ av.showStopButton
+  
+ for each recLine in ftbLine
+   pllLine = ftbLine.returnValue(fldLineShape, recLine)
+   pntUpstream = pllLine.asList.get(0).get(0)
+   lstLine = pllLine.asList
+   if(lstLine.count > 1)then
+     System.echo("Error: Multipart polylines are not allowed.")
+   else
+     lstLine = lstLine.get(0)
+     pntDownstream = lstLine.get(lstLine.count-1)
+    
+     ftbManhole.selectByPoint(pntUpstream, 0.1, #VTAB_SELTYPE_NEW) 
+     bmpManholes = ftbManhole.getSelection
+     for each recManhole in bmpManholes
+       recUpstream = recManhole
+     end
+     objUpstream = ftbManhole.returnValue(fldManholeData, recUpstream)
+     ftbLine.setValue(fldUpstreamData, recLine, objUpstream)
+     
+     ftbManhole.selectByPoint(pntDownstream, 0.1, #VTAB_SELTYPE_NEW) 
+     bmpManholes = ftbManhole.getSelection
+     for each recManhole in bmpManholes
+       recDownstream = recManhole
+     end
+     objDownstream = ftbManhole.returnValue(fldManholeData, recDownstream)
+     ftbLine.setValue(fldDownstreamData, recLine, objDownstream)
+   end
+   ' update status display   
+   numComplete = numComplete + 1
+   if(av.setStatus((numComplete/numTotal)*100).not)then
+     'user hit the stop button
+     exit
+   end
+ end   
+ 
+ ftbLine.setEditable(false)
+ av.clearStatus

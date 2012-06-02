@@ -1,0 +1,37 @@
+' DCProcess.createUniqueID
+' create a unique ID
+
+' (c) 2000, 2004 DORSCH Consult
+
+tableActive = av.getActiveDoc
+fldUnique = tableActive.getActiveField
+   
+blnIsString = fldUnique.isTypeString
+
+av.showStopButton
+
+vtbUnique = tableActive.getVTab
+btmSelection = vtbUnique.getSelection
+numRecords = vtbUnique.getNumRecords
+objRecordsToProcess = vtbUnique
+if(btmSelection.count > 0)then
+  numRecords = btmSelection.count
+  objRecordsToProcess = btmSelection
+end
+
+numID = 1
+for each recUnique in objRecordsToProcess
+  if (blnIsString) then
+    stringID = numID.asString
+    vtbUnique.setValue (fldUnique, recUnique, stringID)
+  else
+    vtbUnique.setValue (fldUnique, recUnique, numID)
+  end
+  numID = numID + 1
+  if(av.setStatus((numID/numRecords)*100).not)then
+    exit
+  end
+end
+tableActive.promoteSelection
+av.getProject.setModified(true)
+av.clearStatus

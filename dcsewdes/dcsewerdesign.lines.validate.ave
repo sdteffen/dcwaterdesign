@@ -1,0 +1,50 @@
+' DCSewerDesign.Lines.validate
+
+' checks if the lines only have one vertex
+
+' (c) 2000 DORSCH Consult
+
+'get the table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  LineTheme = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme")   
+  if (LineTheme.asString = "nil") then
+    exit
+  end
+  thmLine = viewActive.FindTheme(LineTheme.AsString)   
+  ftbLine = thmLine.GetFTab 
+ 
+ fldShape = ftbLine.findField("Shape")
+ 
+ 'data for status display
+  numCounter = 0 
+  numTotal = ftbLine.GetNumRecords 
+  
+ 'give the user a chance to kill script
+ av.showStopButton 
+  
+bmpInvalid = Bitmap.make(ftbLine.getNumRecords)
+bmpInvalid.clearAll
+    
+' run over all records in the table
+  for each recLine in ftbLine
+
+   ' get the Upstream Manhole
+    pllLine = ftbLine.returnValue(fldShape, recLine)
+    if((pllLine.asList.count <> 1)or(pllLine.asList.get(0).count <> 2)or(pllLine.returnLength < 1))then
+      bmpInvalid.set(recLine)
+    end
+
+    'update status display
+    if(av.setStatus((numCounter/numTotal)*100).not)then
+      'user hit the stop button
+      exit
+    end
+    numCounter = numCounter+1
+  end
+
+  ftbLine.setSelection(bmpInvalid)
+  ftbLine.updateSelection
+  Msgbox.info("The Theme contains "+bmpInvalid.count.asString+" invalid features.", "DC Sewer Design")
+  
+ av.clearStatus

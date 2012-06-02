@@ -1,0 +1,832 @@
+/3.2
+(ODB.1
+	Dependencies:	"$AVEXT/dialog.avx\n"
+	FirstRootClassName:	"DEd"
+	Roots:	2
+	Version:	32
+)
+
+(DEd.2
+	Name:	"DCWatDes.Dialog.Setup"
+	CreationDate:	"Samstag, 18. November 2000 11:44:16"
+	GUIName:	"DialogEditor"
+	Win:	3
+	CSMgr:	4
+	DocExts:	6
+	DocExts:	7
+	Graphics:	8
+	Dpy:	60
+	Dialog:	63
+	DialogExtent:	113
+	Compiled:	1
+)
+
+(DocWin.3
+	Owner:	2
+	Open:	1
+	X:	-4
+	Y:	-4
+	W:	1410
+	H:	910
+)
+
+(CSMgr.4
+	Client:	5
+)
+
+(CSClient.5
+	Client:	6
+	ReqName:	"ClientNfy"
+)
+
+(PanMgr.6
+	Doc:	2
+)
+
+(DocAct.7
+	Doc:	2
+)
+
+(GList.8
+	Child:	9
+	Child:	13
+	Child:	17
+	Child:	20
+	Child:	23
+	Child:	26
+	Child:	30
+	Child:	33
+	Child:	36
+	Child:	39
+	Child:	42
+	Child:	47
+	Child:	52
+	Child:	57
+	Dpy:	60
+	FormatNumb:	62
+)
+
+(GCtrl.9
+	Name:	"cbxLanguage"
+	Bounds:	10
+	ControlConstraints:	0x55
+	Control:	11
+	Editable:	1
+)
+
+(RectD.10
+	Left:	0.27083333333333
+	Top:	6.94791666666667
+	Right:	2.03125000000000
+	Bottom:	6.13541666666667
+)
+
+(AVCBBox.11
+	InternalName:	"cbxLanguage"
+	UseGraphicNfy:	1
+	Tag:	"Language"
+	NextControl:	12
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Language"
+)
+
+(Nil.12
+)
+
+(GCtrl.13
+	Name:	"txlEpanet"
+	Bounds:	14
+	ControlConstraints:	0x55
+	Control:	15
+	Editable:	1
+)
+
+(RectD.14
+	Left:	0.27083333333333
+	Top:	6.68750000000000
+	Right:	3.72916666666667
+	Bottom:	6.47916666666667
+)
+
+(TextLine.15
+	InternalName:	"txlEpanet"
+	UseGraphicNfy:	1
+	Tag:	"Location of epanet2d.exe"
+	Label:	"Location of epanet2d.exe"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	16
+	NextControl:	12
+)
+
+(AVEnum.16
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(GCtrl.17
+	Name:	"btnBrowseEpanet"
+	Bounds:	18
+	ControlConstraints:	0x55
+	Control:	19
+	Editable:	1
+)
+
+(RectD.18
+	Left:	3.81250000000000
+	Top:	6.73958333333333
+	Right:	4.56250000000000
+	Bottom:	6.50000000000000
+)
+
+(LButn.19
+	InternalName:	"btnBrowseEpanet"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(GCtrl.20
+	Name:	"txlSabcmd"
+	Bounds:	21
+	ControlConstraints:	0x55
+	Control:	22
+	Editable:	1
+)
+
+(RectD.21
+	Left:	0.27083333333333
+	Top:	6.38541666666667
+	Right:	3.72916666666667
+	Bottom:	6.17708333333333
+)
+
+(TextLine.22
+	InternalName:	"txlSabcmd"
+	UseGraphicNfy:	1
+	Tag:	"Location of testXSLT.exe"
+	Label:	"Location of testXSLT.exe"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	16
+	NextControl:	12
+)
+
+(GCtrl.23
+	Name:	"btnBrowseSabcmd"
+	Bounds:	24
+	ControlConstraints:	0x55
+	Control:	25
+	Editable:	1
+)
+
+(RectD.24
+	Left:	3.81250000000000
+	Top:	6.42708333333333
+	Right:	4.56250000000000
+	Bottom:	6.17708333333333
+)
+
+(LButn.25
+	InternalName:	"btnBrowseSabcmd"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(GCtrl.26
+	Name:	"txlXslt"
+	Bounds:	27
+	ControlConstraints:	0x55
+	Control:	28
+	Editable:	1
+)
+
+(RectD.27
+	Left:	0.28125000000000
+	Top:	6.03125000000000
+	Right:	3.73958333333333
+	Bottom:	5.82291666666667
+)
+
+(TextLine.28
+	InternalName:	"txlXslt"
+	UseGraphicNfy:	1
+	Tag:	"Location of xml2net.xsl"
+	Label:	"Location of xml2net.xsl"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	29
+	NextControl:	12
+)
+
+(AVEnum.29
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(GCtrl.30
+	Name:	"btnBrowseXslt"
+	Bounds:	31
+	ControlConstraints:	0x55
+	Control:	32
+	Editable:	1
+)
+
+(RectD.31
+	Left:	3.81250000000000
+	Top:	6.08333333333333
+	Right:	4.54166666666667
+	Bottom:	5.85416666666667
+)
+
+(LButn.32
+	InternalName:	"btnBrowseXslt"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(GCtrl.33
+	Name:	"btnOK"
+	Bounds:	34
+	ControlConstraints:	0x55
+	Control:	35
+	Editable:	1
+)
+
+(RectD.34
+	Left:	0.47916666666667
+	Top:	5.16666666666667
+	Right:	1.51041666666667
+	Bottom:	4.93750000000000
+)
+
+(LButn.35
+	InternalName:	"btnOK"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"OK"
+	Click:	"DCWatDes.Dialog.Setup.btnOK.click"
+)
+
+(GCtrl.36
+	Name:	"btnCancel"
+	Bounds:	37
+	ControlConstraints:	0x55
+	Control:	38
+	Editable:	1
+)
+
+(RectD.37
+	Left:	1.89583333333333
+	Top:	5.14583333333333
+	Right:	2.93750000000000
+	Bottom:	4.93750000000000
+)
+
+(LButn.38
+	InternalName:	"btnCancel"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Cancel"
+	Click:	"DCWatDes.Dialog.Setup.btnCancel.click"
+)
+
+(GCtrl.39
+	Name:	"aLabelButton10"
+	Bounds:	40
+	ControlConstraints:	0x55
+	Control:	41
+	Editable:	1
+)
+
+(RectD.40
+	Left:	3.38541666666667
+	Top:	5.16666666666667
+	Right:	4.39583333333333
+	Bottom:	4.93750000000000
+)
+
+(LButn.41
+	InternalName:	"aLabelButton10"
+	UseGraphicNfy:	1
+	Tag:	"Browse"
+	Label:	"Help"
+	Click:	"DCWatDes.Dialog.Setup.help"
+)
+
+(GCtrl.42
+	Name:	"txlSnappingRadius"
+	Bounds:	43
+	ControlConstraints:	0x55
+	Control:	44
+	Editable:	1
+)
+
+(RectD.43
+	Left:	0.29166666666667
+	Top:	5.70833333333333
+	Right:	2.35416666666667
+	Bottom:	5.50000000000000
+)
+
+(TextLine.44
+	InternalName:	"txlSnappingRadius"
+	UseGraphicNfy:	1
+	Tag:	"Snapping Radius"
+	Label:	"Snapping Radius"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	45
+	NextControl:	46
+)
+
+(AVEnum.45
+	Name:	"TEXTLINE_TYPE_REAL"
+)
+
+(Nil.46
+)
+
+(GCtrl.47
+	Name:	"txlBackdropResolution"
+	Bounds:	48
+	ControlConstraints:	0x55
+	Control:	49
+	Editable:	1
+)
+
+(RectD.48
+	Left:	2.43750000000000
+	Top:	5.68750000000000
+	Right:	4.52083333333333
+	Bottom:	5.47916666666667
+)
+
+(TextLine.49
+	InternalName:	"txlBackdropResolution"
+	UseGraphicNfy:	1
+	Tag:	"Backdrop Resolution"
+	Text:	"96"
+	Label:	"Backdrop Resolution"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	50
+	NextControl:	51
+)
+
+(AVEnum.50
+	Name:	"TEXTLINE_TYPE_INTEGER"
+)
+
+(Nil.51
+)
+
+(GCtrl.52
+	Name:	"txlCommandTimeout"
+	Bounds:	53
+	ControlConstraints:	0x55
+	Control:	54
+	Editable:	1
+)
+
+(RectD.53
+	Left:	0.29166666666667
+	Top:	5.44791666666667
+	Right:	2.35416666666667
+	Bottom:	5.23958333333333
+)
+
+(TextLine.54
+	InternalName:	"txlCommandTimeout"
+	UseGraphicNfy:	1
+	Tag:	"Command Timeout"
+	Label:	"Command Timeout"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	55
+	NextControl:	56
+)
+
+(AVEnum.55
+	Name:	"TEXTLINE_TYPE_INTEGER"
+)
+
+(Nil.56
+)
+
+(GCtrl.57
+	Name:	"cbxEnforceDataModel"
+	Bounds:	58
+	ControlConstraints:	0x55
+	Control:	59
+	Editable:	1
+)
+
+(RectD.58
+	Left:	2.42708333333333
+	Top:	5.43750000000000
+	Right:	3.65625000000000
+	Bottom:	5.27083333333333
+)
+
+(AVCBox.59
+	InternalName:	"cbxEnforceDataModel"
+	UseGraphicNfy:	1
+	Tag:	"Enforce Data Model"
+	Listening:	1
+	Selected:	1
+	Label:	"Enforce Data Model"
+	Constraints:	0x55
+)
+
+(PageDpy.60
+	Top:	9.14583333333333
+	Right:	14.61458333333333
+	ReportUnits:	1
+	Units:	1
+	Scale:	61
+	ZoomRight:	14.61458333333333
+	ZoomTop:	9.14583333333333
+	GridSpacingX:	0.10000000000000
+	GridSpacingY:	0.10000000000000
+)
+
+(Numb.61
+	N:	96.00000000000000
+)
+
+(Numb.62
+)
+
+(AVDLog.63
+	Name:	"DCWatDes.Dialog.Setup"
+	X:	21
+	Y:	234
+	W:	424
+	H:	207
+	ConstrainedControlNames:	64
+	ConstrainedControlNames:	65
+	ConstrainedControlNames:	66
+	ConstrainedControlNames:	67
+	ConstrainedControlNames:	68
+	ConstrainedControlNames:	69
+	Constraints:	70
+	Constraints:	71
+	Constraints:	72
+	Constraints:	73
+	Constraints:	74
+	Constraints:	75
+	Server:	76
+	ControlPanel:	77
+	Title:	"Setup"
+	EscapeEnabled:	1
+	Resizable:	1
+	AlwaysOnTop:	1
+	HasTitleBar:	1
+	Closeable:	1
+	Open:	"DCWatDes.Dialog.Setup.initialize"
+	DefaultButton:	112
+)
+
+(AVStr.64
+	S:	"btnBrowseEpanet"
+)
+
+(AVStr.65
+	S:	"btnBrowseSabcmd"
+)
+
+(AVStr.66
+	S:	"btnBrowseXslt"
+)
+
+(AVStr.67
+	S:	"btnOK"
+)
+
+(AVStr.68
+	S:	"btnCancel"
+)
+
+(AVStr.69
+	S:	"aLabelButton10"
+)
+
+(Numb.70
+	N:	85.00000000000000
+)
+
+(Numb.71
+	N:	85.00000000000000
+)
+
+(Numb.72
+	N:	85.00000000000000
+)
+
+(Numb.73
+	N:	85.00000000000000
+)
+
+(Numb.74
+	N:	85.00000000000000
+)
+
+(Numb.75
+	N:	85.00000000000000
+)
+
+(Nil.76
+)
+
+(CPanel.77
+	Child:	78
+	Child:	79
+	Child:	81
+	Child:	82
+	Child:	84
+	Child:	85
+	Child:	87
+	Child:	88
+	Child:	89
+	Child:	90
+	Child:	91
+	Child:	93
+	Child:	95
+	Child:	97
+	ResBox:	98
+	ResBox:	99
+	ResBox:	100
+	ResBox:	101
+	ResBox:	102
+	ResBox:	103
+	ResBox:	104
+	ResBox:	105
+	ResBox:	106
+	ResBox:	107
+	ResBox:	108
+	ResBox:	109
+	ResBox:	110
+	ResBox:	111
+	Listening:	1
+)
+
+(AVCBBox.78
+	InternalName:	"cbxLanguage"
+	Tag:	"Language"
+	NextControl:	76
+	ContentKind:	4
+	Constraints:	0x55
+	Listening:	1
+	Label:	"Language"
+)
+
+(TextLine.79
+	InternalName:	"txlEpanet"
+	Tag:	"Location of epanet2d.exe"
+	Label:	"Location of epanet2d.exe"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	80
+	NextControl:	76
+)
+
+(AVEnum.80
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(LButn.81
+	InternalName:	"btnBrowseEpanet"
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(TextLine.82
+	InternalName:	"txlSabcmd"
+	Tag:	"Location of testXSLT.exe"
+	Label:	"Location of testXSLT.exe"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	83
+	NextControl:	76
+)
+
+(AVEnum.83
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(LButn.84
+	InternalName:	"btnBrowseSabcmd"
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(TextLine.85
+	InternalName:	"txlXslt"
+	Tag:	"Location of xml2net.xsl"
+	Label:	"Location of xml2net.xsl"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	86
+	NextControl:	76
+)
+
+(AVEnum.86
+	Name:	"TEXTLINE_TYPE_ALL"
+)
+
+(LButn.87
+	InternalName:	"btnBrowseXslt"
+	Tag:	"Browse"
+	Label:	"Browse"
+	Click:	"DCWatDes.Dialog.Setup.btnBrowse.click"
+)
+
+(LButn.88
+	InternalName:	"btnOK"
+	Tag:	"Browse"
+	Label:	"OK"
+	Click:	"DCWatDes.Dialog.Setup.btnOK.click"
+)
+
+(LButn.89
+	InternalName:	"btnCancel"
+	Tag:	"Browse"
+	Label:	"Cancel"
+	Click:	"DCWatDes.Dialog.Setup.btnCancel.click"
+)
+
+(LButn.90
+	InternalName:	"aLabelButton10"
+	Tag:	"Browse"
+	Label:	"Help"
+	Click:	"DCWatDes.Dialog.Setup.help"
+)
+
+(TextLine.91
+	InternalName:	"txlSnappingRadius"
+	Tag:	"Snapping Radius"
+	Label:	"Snapping Radius"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	92
+	NextControl:	76
+)
+
+(AVEnum.92
+	Name:	"TEXTLINE_TYPE_REAL"
+)
+
+(TextLine.93
+	InternalName:	"txlBackdropResolution"
+	Tag:	"Backdrop Resolution"
+	Text:	"96"
+	Label:	"Backdrop Resolution"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	94
+	NextControl:	76
+)
+
+(AVEnum.94
+	Name:	"TEXTLINE_TYPE_INTEGER"
+)
+
+(TextLine.95
+	InternalName:	"txlCommandTimeout"
+	Tag:	"Command Timeout"
+	Label:	"Command Timeout"
+	Constraints:	0x55
+	Listening:	1
+	TextType:	96
+	NextControl:	76
+)
+
+(AVEnum.96
+	Name:	"TEXTLINE_TYPE_INTEGER"
+)
+
+(AVCBox.97
+	InternalName:	"cbxEnforceDataModel"
+	Tag:	"Enforce Data Model"
+	Listening:	1
+	Selected:	1
+	Label:	"Enforce Data Model"
+	Constraints:	0x55
+)
+
+(RectD.98
+	Left:	8.00000000000000
+	Top:	84.00000000000000
+	Right:	177.00000000000000
+	Bottom:	6.00000000000000
+)
+
+(RectD.99
+	Left:	8.00000000000000
+	Top:	51.00000000000000
+	Right:	340.00000000000000
+	Bottom:	31.00000000000000
+)
+
+(RectD.100
+	Left:	348.00000000000000
+	Top:	49.00000000000000
+	Right:	420.00000000000000
+	Bottom:	26.00000000000000
+)
+
+(RectD.101
+	Left:	8.00000000000000
+	Top:	80.00000000000000
+	Right:	340.00000000000000
+	Bottom:	60.00000000000000
+)
+
+(RectD.102
+	Left:	348.00000000000000
+	Top:	80.00000000000000
+	Right:	420.00000000000000
+	Bottom:	56.00000000000000
+)
+
+(RectD.103
+	Left:	9.00000000000000
+	Top:	114.00000000000000
+	Right:	341.00000000000000
+	Bottom:	94.00000000000000
+)
+
+(RectD.104
+	Left:	348.00000000000000
+	Top:	111.00000000000000
+	Right:	418.00000000000000
+	Bottom:	89.00000000000000
+)
+
+(RectD.105
+	Left:	28.00000000000000
+	Top:	199.00000000000000
+	Right:	127.00000000000000
+	Bottom:	177.00000000000000
+)
+
+(RectD.106
+	Left:	164.00000000000000
+	Top:	199.00000000000000
+	Right:	264.00000000000000
+	Bottom:	179.00000000000000
+)
+
+(RectD.107
+	Left:	307.00000000000000
+	Top:	199.00000000000000
+	Right:	404.00000000000000
+	Bottom:	177.00000000000000
+)
+
+(RectD.108
+	Left:	10.00000000000000
+	Top:	145.00000000000000
+	Right:	208.00000000000000
+	Bottom:	125.00000000000000
+)
+
+(RectD.109
+	Left:	216.00000000000000
+	Top:	147.00000000000000
+	Right:	416.00000000000000
+	Bottom:	127.00000000000000
+)
+
+(RectD.110
+	Left:	10.00000000000000
+	Top:	170.00000000000000
+	Right:	208.00000000000000
+	Bottom:	150.00000000000000
+)
+
+(RectD.111
+	Left:	215.00000000000000
+	Top:	167.00000000000000
+	Right:	333.00000000000000
+	Bottom:	151.00000000000000
+)
+
+(Nil.112
+)
+
+(RectD.113
+	Left:	0.18750000000000
+	Top:	7.01041666666667
+	Right:	4.60416666666667
+	Bottom:	4.85416666666667
+)
+

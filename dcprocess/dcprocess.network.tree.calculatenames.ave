@@ -1,0 +1,114 @@
+' DCProcess.Network.Tree.calculateNames
+
+' (c) 2004 DORSCH Consult
+
+' Called from menu.
+' No arguments.
+' Returns nothing.
+
+tableActive = av.getActiveDoc
+fldName = tableActive.getActiveField
+vtbName = tableActive.getVTab
+fldShape = vtbName.findField("shape")
+   
+av.showStopButton
+
+strName = fldName.getAlias
+if(strName = nil)then
+  strName = fldName.getName
+end
+
+' select seed values
+btmSelection = vtbName.getSelection
+if(vtbName.query("["+strName+"].count > 0", btmSelection, #VTAB_SELTYPE_NEW).not)then
+  MsgBox.error("Query failed.", "DC Processing Extension")
+  exit
+end
+numDone = btmSelection.count
+stkWork = Stack.make
+for each recSelected in btmSelection
+  stkWork.push(recSelected.clone)
+end
+
+numRecords = vtbName.getNumRecords
+dicSequence = Dictionary.make(1000)
+while(stkWork.isEmpty.not)
+  recCurrent = stkWork.pop
+  pllCurrent = vtbName.returnValue(fldShape, recCurrent)
+  strName = vtbName.returnValue(fldName, recCurrent)
+  lstTokens = strName.asTokens(".")
+  if(lstTokens.get(lstTokens.count-1).isNumber.not)then
+    MsgBox.error("Name is not a number.", "DC Processing Extension")
+    exit
+  else
+  end
+  lstTokens.set(lstTokens.count-1,(lstTokens.get(lstTokens.count-1).asNumber+1).asString)
+  strBaseName = lstTokens.get(0)
+  if(lstTokens.count > 2)then
+    for each numI in 1..(lstTokens.count-2)
+      strBaseName = strBaseName+"."+lstTokens.get(numI)
+    end
+  end
+  if(strName.contains(".").not)then
+    strBaseName = ""
+  end
+  numTokenSequence = lstTokens.get(lstTokens.count-1).asNumber
+  numSequence = dicSequence.get(strBaseName)
+  if((numSequence = nil) or (numTokenSequence > numSequence))then
+    dicSequence.set(strBaseName, numTokenSequence-1)
+  end
+  lstNodes = List.make
+  lstNodes.add(pllCurrent.along(0.0))
+  lstNodes.add(pllCurrent.along(100.0))
+  for each pntNode in lstNodes
+    lstLines = av.run("DCProcess.Node.findConnectedLines", {vtbName, pntNode})
+    numCount = lstLines.count.clone
+    lstLines.remove(lstLines.findByValue(recCurrent))
+    if(lstLines.count = numCount)then
+      MsgBox.error("Could not remove current line from list.","DC Processing Extension")
+      exit
+    end
+    if(lstLines.count > 0)then
+      if(vtbName.returnValue(fldName, lstLines.get(0)).count = 0)then
+        stkWork.push(lstLines.get(0))
+        numDone = numDone + 1
+        numSequence = dicSequence.get(strBaseName)
+        if(numSequence = nil)then
+          numSequence = 0
+        end
+        numSequence = numSequence + 1
+        
+        dicSequence.set(strBaseName, numSequence)
+        strNewName = numSequence.asString
+        if(strName.contains("."))then
+          strNewName = strBaseName+"."+numSequence.asString
+        end
+        vtbName.setValue(fldName, lstLines.get(0), strNewName)
+      end
+      if(lstLines.count > 1)then
+        for each numI in 1..(lstLines.count-1)
+          if(vtbName.returnValue(fldName,lstLines.get(numI)).count = 0)then
+            numOffset = dicSequence.get(strName)
+            if(numOffset = nil)then
+              numOffset = 0
+            end
+            strBranchName = strName+"."+(numI+numOffset).asString
+            dicSequence.set(strName, numI+numOffset-1)
+            stkWork.push(lstLines.get(numI))
+            numDone = numDone + 1
+            vtbName.setValue(fldName, lstLines.get(numI), strBranchName)
+          end
+        end
+      end
+    end
+  end
+  if(av.setStatus((numDone/numRecords)*100).not)then
+    exit
+  end
+end
+tableActive.promoteSelection
+av.getProject.setModified(true)
+av.clearStatus
+
+
+

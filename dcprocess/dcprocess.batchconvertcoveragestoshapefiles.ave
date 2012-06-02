@@ -1,0 +1,43 @@
+' DCProcess.batchConvertCoveragesToShapefiles
+
+' (c) 2002,2004 DORSCH Consult
+
+' converts all coverages in a folder to shapefiles in another folder
+' user is asked for the folders and the coverage features to be exported
+
+' called from Project Menu
+
+
+strDirectory = av.run("DCBrowseDir.DirectoryDialog.run","Select directory with the coverages to be converted")
+if(strDirectory=nil)then
+  exit
+end
+flnDirectory = Filename.make(strDirectory)
+lstFiles = flnDirectory.read("*")
+
+lstFeatures = MsgBox.MultiListAsString({"polygon","arc","node","labelpoint"},"Select with parts of the coverages should be converted","DC Conversion")
+if((lstFeatures = nil)or(lstFeatures.count = 0))then
+  exit
+end
+
+strDestinationDirectory = av.run("DCBrowseDir.DirectoryDialog.run","Select directory to store the shapefiles")
+if(strDestinationDirectory=nil)then
+  exit
+end
+flnDestinationDirectory = Filename.make(strDestinationDirectory)
+
+for each flnCoverage in lstFiles
+  if(coverage.exists(flnCoverage.asString))then
+    for each strFeature in lstFeatures
+      srnCoverage = SrcName.make(flnCoverage.getFullName++strFeature)
+      if( srnCoverage <> nil ) then
+        thmCoverage = Theme.make(srnCoverage)
+        strCoverageBase = flnCoverage.getBaseName
+        flnShapefile = Filename.merge(flnDestinationDirectory.getFullName, strCoverageBase+"-"+strFeature+".shp")
+        ' System.echo(flnShapefile.getFullName)
+        ftbCoverage = thmCoverage.getFTab
+        ftbCoverage.export(flnShapefile, Shape, false)
+      end
+    end
+  end
+end

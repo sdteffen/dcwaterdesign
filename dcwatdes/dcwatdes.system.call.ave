@@ -1,0 +1,48 @@
+' DCWatDes.System.call
+
+' (c) 2001, 2002 DORSCH Consult
+
+' execute a command using the C system function
+' uses the systemcall wrapper dll
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' first argument is the filename (class filename)
+' second argument is the number of seconds to wait for the file
+' returns true if the file exists and is writeable and false if not
+
+' expects the commandline as a string
+' returns true if the command was successfull (returncode 0)
+' returns false if the run was not successfull 
+
+strCommand = self
+
+if((self=nil)or(self.is(String).not))then
+  System.echo("ERROR: DCWatDes.System.call expects a string as argument.")
+  exit
+end
+
+strDllName  = FileName.make("$AVEXT\dcwatdes\systemcall.dll")
+dllCallSystem = DLL.make(strDllName)
+procCallSystem = DLLProc.make(dllCallSystem, "dll_call_system",#DLLPROC_TYPE_STR,{#DLLPROC_TYPE_STR})
+
+strReturnValue = procCallSystem.call({strCommand})
+
+if(strReturnValue = "0")then
+  return true
+else
+  System.execute(strCommand)
+  return false
+end

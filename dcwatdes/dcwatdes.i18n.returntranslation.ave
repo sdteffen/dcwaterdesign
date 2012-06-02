@@ -1,0 +1,61 @@
+' DCWatDes.i18n.returnTranslation
+
+' (c) 2000 DORSCH Consult
+' returns a translation of a string from the localization dictionary
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' expects the string to be translated as the argument
+' returns the translation or the string if no translation
+' is available
+
+'typecheck arguments
+if( self.getClass.getClassName<>"String")then
+  MsgBox.error("DCWatDes.i18n.returnTranslation:"+NL+"Expecting one argument: strToBeTranslated","DC Water Design Extension")
+  exit
+end
+
+strToBeTranslated = self
+
+extdcw = Extension.find("DC Water Design")
+if(extdcw <>nil)then
+  dicPreferences = extdcw.getPreferences
+else
+  return strToBeTranslated
+'  MsgBox.error("DCWatDes.i18n.returnTranslation: Can't find the DC Water Design Extension", "DC Water Design")
+end
+
+strLanguage = dicPreferences.get("strLanguage")
+
+if(strLanguage="en")then
+  ' if the language is english, no translation is needed
+  return strToBeTranslated
+else
+  ' translation from dictionary
+    if(_dcwDicDictionaries <> nil)then
+      dicTranslations = _dcwDicDictionaries.get(strLanguage)
+      if(dicTranslations = nil)then
+        return strToBeTranslated
+      end 
+      strTranslation = dicTranslations.get(strToBeTranslated)
+      if(strTranslation = nil)then
+        strTranslation = strToBeTranslated
+        System.echo("Missing Translation:"++strToBeTranslated)
+      end
+      return strTranslation
+    else
+      return strToBeTranslated
+    end
+end

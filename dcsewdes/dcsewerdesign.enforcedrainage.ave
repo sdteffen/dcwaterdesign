@@ -1,0 +1,139 @@
+' DCSewerDesign.EnforceDrainage
+
+' (c) 2004 DORSCH Consult
+
+' trace downstream and make sure that flow can reach next section
+' If upstream invert of downstream section > downstream invert,
+' move downstream section down
+' connecting lines with different diameters will have different invert levels
+  
+viewActive = av.GetActiveDoc
+themeList = viewActive.GetThemes
+lstLineThemes = av.run("DCSewerDesign.ThemeList.returnLineThemes", themeList)
+LineTheme = Msgbox.Choice (lstLineThemes, "Select a Polyline Theme.", "Select a Theme") 
+if (LineTheme.asString = "nil") then
+  exit
+end
+thmLine = viewActive.FindTheme(LineTheme.AsString)
+ftbLine = thmLine.GetFTab 
+
+' information about the configuration file
+MsgBox.info("One mapping per line, '=' as separator"+NL+
+  "MaxUpstream=??? MaxDownstream=???"+NL+
+  "DesDownstream=???, DesUpstream=???, (optional) Diameter=???"+NL+
+  "DesDownstream and DesUpstream will be overwritten"
+  ,"Field Configuration File")
+
+
+lstConfFiles = FileDialog.returnFiles({"*.txt"},{"Text Files (*.txt)"},"Select Configuration File",0)
+if(lstConfFiles.count = 0 )then
+  exit
+end
+strConfigurationFile = lstConfFiles.get(0).asString
+
+fldMaxUpstream = nil
+fldMaxDownstream = nil
+fldDesUpstream = nil
+fldDesDownstream = nil
+fldDiameter = nil
+
+' Read configuration file
+lnfConfiguration = LineFile.make(strConfigurationFile.asFilename, #FILE_PERM_READ)
+strLine=lnfConfiguration.readElt
+while (not (strLine=nil ))
+  lstConfTokens = strLine.asTokens("=")
+  if(lstConfTokens.count=2)then
+    strScriptFieldName = lstConfTokens.get(0).trim.lcase
+    strTableFieldName = lstConfTokens.get(1).trim.lcase
+    if(strScriptFieldName = "MaxUpstream")then
+      fldMaxUpstream=ftbLine.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "MaxDownstream")then
+      fldMaxDownstream=ftbLine.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "DesUpstream")then
+      fldDesUpstream = ftbLine.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "DesDownstream")then
+      fldDesDownstream = ftbLine.findField(strTableFieldName)
+    end
+    if(strScriptFieldName = "Diameter")then
+      fldDiameter = ftbLine.findField(strTableFieldName)
+    end
+  end
+  strLine = lnfConfiguration.readElt
+end
+lnfConfiguration.close
+
+ftbLine.setEditable(true)
+
+' set design invert levels to 0
+
+for each recLine in ftbLine
+  ftbLine.setValue(fldDesDownstream, recLine, 0)
+  ftbLine.setValue(fldDesUpstream, recLine, 0)
+end
+
+' The queue of lines for which the connections will be searched
+stkQueue = Stack.make
+
+numCounter = 0
+
+numTotal = ftbLine.getNumRecords
+av.showStopButton
+  
+' run over all records in the table, find lines where all upstream information is defined
+while(numCounter < numTotal)
+  numOldCounter = numCounter
+  for each recLine in ftbLine
+    numDesDownstream = ftbLine.returnValue(fldDesDownstream, recLine)
+    if(numDesDownstream = 0)then
+      ' check if line has upstream lines
+      lstUpstream = av.run("DCSewerDesign.Line.findUpstreamLines", {ftbLine, recLine})
+      blnReady = true
+      numMinUpstream = 1000000
+      for each recUpstream in lstUpstream
+        numUpstream = ftbLine.returnValue(fldDesDownstream, recUpstream)
+        if(numUpstream = 0)then
+          blnReady = false
+          break
+        else
+          numDiameter = 0
+          if(fldDiameter <> nil)then
+            numDiameter = ftbLine.returnValue(fldDiameter, recUpstream)
+          end
+          numMinUpstream = numMinUpstream.min(numUpstream+(numDiameter/1000))
+        end
+      end
+      if(blnReady)then
+        numMaxUpstream = ftbLine.returnValue(fldMaxUpstream, recLine)
+        numMaxDownstream = ftbLine.returnValue(fldMaxDownstream, recLine)
+        if(numMinUpstream = 1000000)then
+          ftbLine.setValue(fldDesUpstream, recLine, numMaxUpstream)
+          ftbLine.setValue(fldDesDownstream, recLine, numMaxDownstream)
+        else
+          numDiameter = 0
+          if(fldDiameter <> nil)then
+            numDiameter = ftbLine.returnValue(fldDiameter, recLine)
+          end
+          numShift = numMaxUpstream - (numMaxUpstream.min(numMinUpstream - (numDiameter/1000))) 
+          ftbLine.setValue(fldDesDownstream, recLine, numMaxDownstream-numShift)
+          ftbLine.setValue(fldDesUpstream, recLine, numMaxUpstream-numShift)
+        end
+        numCounter = numCounter+1
+       end
+     end
+  end
+  ' update status display
+       if(av.setStatus((numCounter/numTotal)*100).not)then
+        ' user hit the stop button
+         exit
+       end
+  if(numCounter = numOldCounter)then
+    Msgbox.info("Loop run did not improve result. System might not be fully connected.", "DC Sewer Design")
+    exit
+  end
+end
+ 
+ftbLine.setEditable(false)
+av.clearStatus

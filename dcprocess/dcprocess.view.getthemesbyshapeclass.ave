@@ -1,0 +1,23 @@
+' DCProcess.View.getThemesByShapeClass
+
+' (c) 2002,2004 DORSCH Consult
+
+' returns all themes of a view that are of a specified shape class
+
+' argument is the name of the shape class
+
+' returns a list of themes
+
+strShapeClass = self
+
+lstThemes = av.getActiveDoc.getThemes 
+lstSelectedThemes = List.make
+for each thmTest in lstThemes
+  if(thmTest.is(FTheme))then
+    if(thmTest.getFTab.getShapeClass.getClassName = strShapeClass)then
+      lstSelectedThemes.add(thmTest)
+    end
+  end
+end
+
+return lstSelectedThemes

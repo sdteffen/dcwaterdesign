@@ -1,0 +1,82 @@
+' DCSewerDesign.Profile.linkToLayout
+
+' Establish a link from a designed profile back
+' to the layout via the dc_id field; use the minimum
+' error for the two x coordinates to establish the link
+
+' (c) 2004 DORSCH Consult
+
+' Called from menu.
+' No arguments.
+' Returns nothing.
+
+viewActive = av.getActiveDoc
+lstThemes = viewActive.getActiveThemes
+ftbProfile = lstThemes.get(0).getFTab
+ftbLine = lstThemes.get(1).getFTab
+if(lstThemes.get(0).getFTab.isEditable)then
+  ftbProfile = lstThemes.get(1).getFTab
+  ftbLine = lstThemes.get(0).getFTab
+end
+fldProfileDcId = ftbProfile.findField("dc_id")
+if(fldProfileDcId.asString = "nil")then
+  MsgBox.error("Could not find field 'dc_id' in ground profile theme.", "DC Sewer Design")
+  exit
+end
+
+fldLineDcId = ftbLine.findField("dc_id")
+if(fldLineDcId.asString = "nil")then
+  lstFields = {Field.make("dc_id", #FIELD_CHAR, 16, 0)}
+  ftbLine.addFields(lstFields)
+  fldLineDcId = ftbLine.findField("dc_id")
+end
+
+fldLineUpstream = ftbLine.findField("upstream")
+if(fldLineUpstream.asString = "nil")then
+  lstFields = {Field.make("upstream", #FIELD_FLOAT, 16,3)}
+  ftbLine.addFields(lstFields)
+  fldLineUpstream = ftbLine.findField("upstream")
+end
+
+fldLineDownstream = ftbLine.findField("downstream")
+if(fldLineDownstream.asString = "nil")then
+  lstFields = {Field.make("downstream", #FIELD_FLOAT, 16,3)}
+  ftbLine.addFields(lstFields)
+  fldLineDownstream = ftbLine.findField("downstream")
+end
+
+fldLineShape = ftbLine.findField("shape")
+fldProfileShape = ftbProfile.findField("shape")
+
+for each recLine in ftbLine
+  pllLine = ftbLine.returnValue(fldLineShape, recLine)
+  lstLinePoints = List.make
+  lstLinePoints.add(pllLine.along(0).clone)
+  lstLinePoints.add(pllLine.along(100).clone)
+  
+  ' ATTENTION: This implies a maximum trench depth of 20m
+  ftbProfile.selectByPoint(lstLinePoints.get(0), 200, #VTAB_SELTYPE_NEW)
+  
+  lstLineX = {lstLinePoints.get(0).getX, lstLinePoints.get(1).getX}
+  lstLineX.sort(true)
+  
+  bmpSelection = ftbProfile.getSelection
+  
+  ' Allow 10% error on each side
+  numMaxError = (lstLineX.get(1)-lstLineX.get(0))/2
+  numMinError = numMaxError
+  strDcId = nil
+  for each recProfile in bmpSelection
+    pllProfile = ftbProfile.returnValue(fldProfileShape, recProfile)
+    lstProfileX =  {pllProfile.along(0).getX, pllProfile.along(100).getX}
+    lstProfileX.sort(true)
+    numError = (lstProfileX.get(0)-lstLineX.get(0)).abs+(lstProfileX.get(1)-lstLineX.get(1)).abs
+    if(numError < numMinError)then
+      strDcId = ftbProfile.returnValue(fldProfileDcId, recProfile)
+      numMinError = numError
+    end
+  end
+  ftbLine.setValue(fldLineDcId, recLine, strDcId)
+  ftbLine.setValue(fldLineUpstream, recLine, (lstLinePoints.get(0).getY-1000)/10)
+  ftbLine.setValue(fldLineDownstream, recLine, (lstLinePoints.get(1).getY-1000)/10)
+end

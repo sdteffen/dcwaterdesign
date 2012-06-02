@@ -1,0 +1,164 @@
+' DCProcess.tagDuplicateRecords
+
+' Scans the current table document and tags duplicate records based on
+' one or more fields (see list of unsupported field types below).
+
+' Dependencies:    QSort       Quick sort routine
+'                  CmpRecD     Record comparison routine
+
+' Two options are available:
+
+' 1) Update the selection set to only include duplicates
+
+' 2) Add a single character field called "dup" (if it doesn't already
+'    exist) and set it to "T" for duplicate and "F" for nonduplicate
+
+' Notes:
+
+' If records are selected, the selection set alone is analyzed.
+
+' In order to optimize sorting efficiency, the order of the entries in
+' the record set is randomized.  Thus, given a set of identical records,
+' the one not chosen as a duplicate will not necessarily have the lowest
+' record number.
+
+theTable = av.GetActiveDoc
+locVTab = theTable.GetVTab
+
+'**** generate field list for analysis
+
+unsupported = {"UNSUPPORTED","BLOB"}
+f_list = list.Make
+for each f in locVTab.GetFields
+   fnm = f.GetName
+   ft = f.GetType.AsString.AsTokens("_").Get(1)
+   if ((fnm = "dup") or (unsupported.FindByValue(ft) > -1)) then
+      continue
+   end
+   f_list.Add(fnm)
+end
+
+'**** get fields to analyze
+
+theMsg = "Select field(s) to analyze"
+theTitle = "Duplicate Tag"
+result = MsgBox.MultiListAsString(f_list,theMsg,theTitle)
+if (result = nil) then
+   return nil
+end
+if (result.Count = 0) then
+   return nil
+end
+f_list = result
+
+'**** get option to update selection or calculate field
+
+c_list = {"Reselect duplicates","Calculate duplicate field"}
+result = MsgBox.ChoiceAsString(c_list,"Select option",theTitle)
+if (result = nil) then
+   return nil
+end
+option = c_list.FindByValue(result) + 1
+
+if (option = 2) then
+
+   '**** begin transaction
+
+   if (locVTab.StartEditingWithRecovery.Not) then
+      MsgBox.Error("Cannot edit table",theTitle)
+      return nil
+   end
+   locVTab.BeginTransaction
+
+   df = locVTab.FindField("dup")
+   if (df = nil) then
+
+      '**** add duplicate tag field
+
+      df = Field.Make("dup",#FIELD_CHAR,1,0)
+      locVTab.AddFields({df})
+   end
+end
+
+'**** get set of records to analyze
+
+theRecs = locVTab.GetSelection
+if (option = 1) then
+   theBitmap = BitMap.Make(theRecs.GetSize)
+end
+NumRec = theRecs.Count
+if (NumRec = 0) then
+   theRecs = locVTab
+   NumRec = locVTab.GetNumRecords
+end
+if (NumRec = 1) then
+   MsgBox.Error("Only one record selected.",theTitle)
+   return nil
+end
+rlist = List.Make
+for each r in theRecs
+   rlist.Add(r.Clone)
+end
+
+'**** sort records
+
+av.ClearMsg
+av.ClearStatus
+av.ShowMsg("Sorting records...")
+av.SetStatus(0)
+
+_theVTab = locVTab
+_flist = f_list
+sortlist = av.Run("DCProcess.List.quicksort",{rlist,"DCProcess.Record.compare"})
+rlist = nil
+
+'**** analyze records
+
+av.ClearMsg
+av.ClearStatus
+av.ShowMsg("Analyzing records...")
+Rec = 0
+if (option = 2) then
+   r1 = sortlist.Get(0)
+   locVTab.SetValue(df,r1,"F")
+end
+for each i in 1..(sortlist.Count - 1)
+   r1 = sortlist.Get(i - 1)
+   r2 = sortlist.Get(i)
+   result = av.Run("DCProcess.Record.compare",{r1,r2})
+   IsDup = (result = 0)
+
+   '**** tag record
+
+   if (option = 2) then
+      if (IsDup) then
+         locVTab.SetValue(df,r2,"T")
+      else
+         locVTab.SetValue(df,r2,"F")
+      end
+   else
+      if (IsDup) then
+         theBitmap.Set(r2)
+      end
+   end
+   Rec = Rec + 1
+   av.SetStatus(100*Rec/NumRec)
+end
+av.SetStatus(100)
+av.ClearStatus
+av.ClearMsg
+
+sortlist = nil
+_flist = nil
+_theVTab = nil
+av.PurgeObjects
+
+if (option = 2) then
+   locVTab.EndTransaction
+   locVTab.StopEditingWithRecovery(true)
+else
+   locVTab.SetSelection(theBitMap)
+   locVTab.UpdateSelection
+end
+
+return nil

@@ -1,0 +1,86 @@
+' DCWatDes.File.waitFor
+
+' (c) 2001 DORSCH Consult
+' Wait until a file exists and is writeable
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' first argument is the filename (class filename)
+' second argument is the number of seconds to wait for the file
+' returns true if the file exists and is writeable and false if not
+
+flnFile = self.get(0)
+numSecondsToWait = self.get(1)
+sleep = nil
+stKernel32 = nil
+for each strLocation in {"c:\winnt\system32\kernel32.dll",
+                         "c:\windows\system\kernel32.dll",
+                         "c:\windows\system32\kernel32.dll"}
+  if(File.exists(strLocation.asFileName))then
+    strKernel32 = strLocation
+  end
+end
+if(strKernel32 = nil)then
+  extDCWatDes = Extension.find("DC Water Design")
+  if(extDCWatDes <> nil)then
+    dicPreferences = extDCWatDes.getPreferences
+    strKernel32 = dicPreferences.get("strKernel32")
+    if(File.exists(strKernel32.asFilename).not)then
+      strKernel32 = nil
+    end
+  end
+end
+
+if(strKernel32 = nil)then
+ MsgBox.warning("The dynamic link library kernel32.dll was not found. Please select it", "DC Water Design")
+ flnKernel32 = FileDialog.show("*.dll","DLL","Locate kernel32.dll")
+ if(flnKernel32 <> nil)then
+   strKernel32 = flnKernel32.asString
+   dicPreferences.add("strKernel32",strKernel32)
+ end
+end
+kernel32 = DLL.Make(strKernel32.asFileName)
+if(kernel32 <> nil)then
+  sleep = DLLProc.Make(kernel32, "Sleep", #DLLPROC_TYPE_VOID, {#DLLPROC_TYPE_INT32})
+  if(sleep = nil)then
+    MsgBox.warning("The dynamic link library 'kernel32.dll' could not be found. This might cause problems.","DC Water Design")
+  end	
+end
+
+timeStart=Date.now
+while(File.exists(flnFile).not)
+  if((Date.now-timeStart).asSeconds>numSecondsToWait)then
+    MsgBox.info("Waited"++numSecondsToWait.asString++"seconds for file"++
+      flnFile.getFullName.quote+". File did not appear.","DC Water Design")
+    return false
+  end
+  if(sleep <>nil)then
+    sleep.call({1000})
+  end
+end
+
+timeStart=Date.now
+while(File.isWritable(flnFile).not)
+  if((Date.now-timeStart).asSeconds>numSecondsToWait)then
+      MsgBox.info("Waited"++numSecondsToWait.asString++"seconds for file"++
+      flnFile.getFullName.quote++"to become readable. Did not succeed.","DC Water Design")
+    return false
+  end
+  if(sleep <>nil)then
+    sleep.call({1000})
+  end
+end
+
+return true

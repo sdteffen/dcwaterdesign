@@ -1,0 +1,77 @@
+' DCProcess.Point.returnPolyLineAngle
+
+' Calculate the angle of a line that is connected to the point
+
+' (c) 1999, 2004 DORSCH Consult
+
+' First Argument is the Point
+pnt_Node = self.get(0)
+' Second Argument is the Polyline
+pll_Pipe = self.get(1)
+
+numSnappingRadius = 0.01
+
+pll_Pipe = pll_Pipe.clean
+
+linLine = pll_Pipe.asList.get(0)
+pllSegment = Polyline.make({linLine})
+if(pllSegment.returnLength = 0)then
+  System.echo("DCProcess.Point.returnPolyLineAngle() ERROR: PolyLine is not simple:")
+  System.echo(pll_Pipe.asString)
+  return Number.MakeNull
+end
+
+plgnNode = pnt_Node.returnBuffered(numSnappingRadius)
+
+if(pllSegment.intersects(plgnNode).not)then
+  System.echo("DCProcess.Point.returnPolyLineAngle() ERROR: Distance exceeds snapping radius "+numSnappingRadius.asString)
+  System.echo("pll_pipe.asString")
+  System.echo("pnt_Node.asString")
+  return Number.MakeNull
+end
+if(pllSegment.along(0.0).intersects(plgnNode))then
+  pnt_First = linLine.get(0)
+  pnt_Second = linLine.get(1)
+else
+  pnt_First = linLine.get(linLine.count-2)
+  pnt_Second = linLine.get(linLine.count-1)
+end
+
+pntDelta = pnt_Second - pnt_First
+
+dx = pntDelta.getX
+dy = pntDelta.getY
+
+angle = Number.makeNull
+
+' Calculate angle
+if(dx = 0.0)then
+  if(dy = 0.0)then
+    angle = Number.makeNull
+  elseif(dy > 0.0) then
+    angle = Number.getPi / 2.0
+  else
+    angle = Number.getPi * 3.0 / 2.0
+  end
+elseif(dy = 0.0)then
+    if(dx > 0.0)then
+      angle = 0.0
+    else
+      angle = Number.getPi
+    end
+else
+  if(dx < 0.0)then
+    angle = (dy/dx).atan + Number.getPi
+  elseif(dy < 0.0)then
+    angle = (dy/dx).atan + (2*Number.getPi)
+  else
+    angle = (dy/dx).atan
+  end
+end
+
+if(angle.isNull.not)then
+  ' Convert to degrees
+  angle = angle * 180 / Number.getPi
+end
+
+return angle

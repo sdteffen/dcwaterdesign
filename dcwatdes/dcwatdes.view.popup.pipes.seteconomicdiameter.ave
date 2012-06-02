@@ -1,0 +1,98 @@
+' DCWatDes.View.Popup.Pipes.setEconomicDiameter
+
+' (c) 2006 DORSCH Consult
+' Select an economic pipe diameter and roughness according to result_flow
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+dicThemes = av.run("DCWatDes.Model.Epanet.returnThemeDictionary",nil)
+thmPipes = dicThemes.get("Pipes")
+if(thmPipes = nil)then
+  return nil
+end
+
+ftbPipes = thmPipes.getFTab
+dicEconomic = Dictionary.make(20)
+'TODO: Verify flow rates for diameters < DN 100
+dicEconomic.add(0.5,40)
+dicEconomic.add(1,50)
+dicEconomic.add(2,63)
+dicEconomic.add(4.0,80)
+dicEconomic.add(5.0,90)
+dicEconomic.add(6.3,100)
+dicEconomic.add(8.0,110)
+dicEconomic.add(15.0,150)
+dicEconomic.add(28.3,200)
+dicEconomic.add(46.6,250)
+dicEconomic.add(70.7,300)
+dicEconomic.add(138,400)
+dicEconomic.add(236,500)
+dicEconomic.add(368,600)
+dicEconomic.add(539,700)
+dicEconomic.add(779,800)
+dicEconomic.add(1050,900)
+dicEconomic.add(1375,1000)
+dicEconomic.add(1806,1100)
+dicEconomic.add(2262,1200)
+dicEconomic.add(3079,1400)
+lstKeys = dicEconomic.returnKeys
+lstKeys.sort(true)
+
+fldDiameter = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbPipes, "Diameter"})
+fldResultFlow = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbPipes, "result_flow"})
+fldRoughness = av.run("DCWatDes.ExpandedAliasVTab.findField",{ftbPipes, "Roughness"})
+fldLifecycleStatus = ftbPipes.findField("lifecycles")
+
+pntMouse = self.getControlSet.getObjectTag
+
+if(pntMouse.is(Point))then
+  lstPipes = thmPipes.findByPoint(pntMouse)
+  if (lstPipes.count = 0 ) then
+    MsgBox.info("No Pipe selected", "DC Water Design")
+    exit
+  end
+  ftbPipes.setEditable(true)  
+  for each recPipe in lstPipes
+    numResultFlow = ftbPipes.returnValue(fldResultFlow, recPipe).abs
+    numCurrentDiameter = ftbPipes.returnValue(fldDiameter, recPipe)
+    numBiggerKey = 6.3
+    for each numKey in lstKeys
+      if(numKey > numResultFlow)then
+        numBiggerKey = numKey
+        break
+      end
+    end
+    numDiameter = dicEconomic.get(numBiggerKey)
+    lstDiameters = {40,50,63,80,90,100,110,150,200,250,300,400,500,600,700,800,900,1000,1200,1400}
+    lstDiameters.shuffle(lstDiameters.get(lstDiameters.findByValue(numDiameter)),0)
+    numDiameter = MsgBox.ListAsString(lstDiameters, "Please enter the pipe diameter (currently "+numCurrentDiameter.asString+"):", "DC Water Design")
+    if(numDiameter <> nil)then
+      ftbPipes.setValue(fldDiameter, recPipe, numDiameter)
+      numRoughness = 1.5
+      if(numDiameter >= 500)then
+        numRoughness = 0.2
+      end
+      ftbPipes.setValue(fldRoughness, recPipe, numRoughness)
+      ' Automatically mark reinforcement pipes
+      if(fldLifecycleStatus <> nil)then
+        numLifecycleStatus = ftbPipes.returnValue(fldLifecycleStatus, recPipe)
+        if(numLifecycleStatus < 6)then
+          ftbPipes.setValue(fldLifecycleStatus, recPipe, 7)
+        end
+      end
+    end
+  end
+  ftbPipes.setEditable(false)
+end

@@ -1,0 +1,23 @@
+' DCSewerDesign.ComplexProfile.selectConfigurationFile
+
+' (c) 2004 DORSCH Consult
+
+' select the configuration file and save it as a preference
+
+' information about the configuration file
+MsgBox.info("One mapping per line, '=' as separator"+NL+
+  "Manhole.ID=???    Manhole.Diameter=???"+NL+
+  "Manhole.InvertLevel = ??? Manhole.Elevation = ???"+NL+
+  "Line.Diameter=???, Line.Gradient=???, Line.MaximumFlow=???"
+  ,"Complex Field Configuration File")
+
+
+lstConfFiles = FileDialog.returnFiles({"*.txt"},{"Text Files (*.txt)"},"Select Configuration File",0)
+if(lstConfFiles.count = 0 )then
+  exit
+end
+strFile = lstConfFiles.get(0).asString
+extSewer = Extension.find("DC Sewer Design")
+dicPreferences = extSewer.getPreferences
+dicPreferences.set("strComplexProfileConfigurationFile", strFile)
+

@@ -1,0 +1,60 @@
+' DCProcess.createPlgnThemeFromPllTheme
+' create a Polygon Theme from a Polyline theme (closed Polylines)
+' (c) 2001, 2004 DORSCH Consult
+
+viewActive = av.GetActiveDoc
+
+themeList = viewActive.GetThemes 
+thmPolyline = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme") 
+if(thmPolyline = nil)then
+  exit
+end
+
+  
+ftbPolyline = thmPolyline.getFTab 
+  
+  clsPolygon = Polygon
+  def = av.GetProject.MakeFileName("theme", "shp") 
+  def = FileDialog.Put(def, "*.shp", "New Polygon Theme") 
+  
+  if (def = nil) then 
+   exit
+  end
+  ftbPolygon = FTab.MakeNew(def, clsPolygon) 
+
+  
+fldPolygonShape = ftbPolygon.findField("Shape")
+fldPolylineShape = ftbPolyline.findField("Shape")
+
+lstFields = ftbPolyline.getFields.deepclone
+lstFields.remove(0)
+
+ftbPolygon.setEditable(true)
+ftbPolygon.addFields(lstFields)
+
+numCounter = 0 
+numTotal = ftbPolyline.GetNumRecords 
+av.showStopButton  
+
+for each recPolyline in ftbPolyline
+  recPolygon = ftbPolygon.addRecord
+  plgnShape = Polygon.make(ftbPolyline.returnValue(fldPolylineShape,recPolyline).asList)
+  if(plgnShape <> nil)then
+  ftbPolygon.setValue(fldPolylineShape, recPolyline, plgnShape)
+  
+    for each i in 1 .. (lstFields.count)
+      fldPolyline = ftbPolyline.getFields.get(i)
+      fldPolygon = ftbPolygon.getFields.get(i)
+      ftbPolygon.setValue(fldPolygon, recPolygon, ftbPolyline.returnValue(fldPolyline, recPolyline))
+    end
+  end
+      
+  numCounter = numCounter + 1
+  if(av.setStatus((numCounter/numTotal)*100).not)then
+    exit
+  end
+
+end
+
+ftbPolygon.setEditable(false)
+av.clearStatus

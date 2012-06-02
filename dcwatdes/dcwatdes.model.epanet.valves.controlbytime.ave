@@ -1,0 +1,135 @@
+'DCWatDes.Model.Epanet.Valves.controlByTime
+
+' (c) 2001 DORSCH Consult
+' updates the valves status field, reflecting the status at a given time
+' all valves are closed before applying the controls
+
+' expects the timestep as a number as the argument
+' returns nothing, alters the valves attribute tables
+' requires valves theme and controls table
+' the supported control syntax is:
+' LINK link_id status AT TIME hours_since_simulation_start
+
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+numTime = self
+
+' check argument
+
+if((numTime.is(Number).not)or(numTime<0))then
+  MsgBox.warning("Expecting a positive number as argument.", "DCWatDes.Model.Epanet.Valves.controlByTime")
+  exit
+end
+
+numTime = numTime.truncate  
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  System.echo("DCWatDes.Model.Epanet.Valves.controlByTime Error: Can't find DC Water Design Extension")
+  exit
+end
+
+tableControls = nil
+strControlTableName = dicPreferences.get("strControls")
+for each docTable in av.getProject.getDocsWithGui(av.findGui("Table"))
+  if(docTable.getName = strControlTableName)then
+    tableControls = docTable
+  end
+end
+lstFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary",nil)
+ftbValves = lstFTabs.get("Valves")
+if(ftbValves = nil)then
+  MsgBox.warning("Please select a Valve Theme in the Epanet Themes Dialog. This will change values in the settings field of the Valves Theme.", "DC Water Design")
+  exit
+end
+if(tableControls <> nil)then
+
+' data structure:
+' lstSteps
+'   +lstControls
+'     +lstIDs
+'     +lstSettings
+'   +lstControls
+'   ...
+
+  lstSteps = List.make
+  for each i in 1..numTime
+    lstControls = List.make
+    lstControls.add(List.make)
+    lstControls.add(List.make)
+    lstSteps.add(lstControls)
+  end
+
+  ftbValves.setEditable(true)
+  vtbControls = tableControls.getVTab
+  fldFirst=vtbControls.getFields.get(0)
+  
+  
+  ' find Controls that need to get applied
+  for each recControl in vtbControls
+    strControl = vtbControls.returnValue(fldFirst, recControl).asString
+    lstTokens = strControl.asTokens(" ")
+    ' ignore other controls
+    if((lstTokens.count = 6)and(lstTokens.get(4).ucase="TIME"))then
+      strStatus = lstTokens.get(2)
+      strTime = lstTokens.get(5)
+      strID = lstTokens.get(1)
+      if(strTime.isNumber.not)then
+        System.echo("DCWatDes.ModelEpanet.Valves.controlByTime: Error, time '"+strTime+"' is not a number")
+      else
+        numControlTime = strTime.asNumber
+        if((numControlTime < numTime)and(numControlTime>=0))then
+          lstControls = lstSteps.get(numTime-1)
+          lstIDs = lstControls.get(0)
+          lstSettings = lstControls.get(1)
+          lstIDs.add(strID)
+          lstSettings.add(strStatus)
+        end
+      end
+    end
+  end
+  
+  fldValveID = ftbValves.findField("dc_id")
+  fldValveSetting = ftbValves.findField("setting")
+  
+  
+  ' close all valves
+  for each recValve in ftbValves
+    ftbValves.setValue(fldValveSetting, recValve, "closed")
+  end
+  
+  ' apply the controls
+  
+  for each lstControls in lstSteps
+    lstIDs = lstControls.get(0)
+    lstSettings = lstControls.get(1)
+    if(lstIDs.count>0)then
+      for each i in 0..(lstIDs.count-1)
+        for each recValve in ftbValves
+          if(ftbValves.returnValue(fldValveID, recValve).asString = lstIDs.get(i))then
+            ftbValves.setValue(fldValveSetting, recValve, lstSettings.get(i))
+          end
+        end
+      end
+    end
+  end
+  
+  ftbValves.setEditable(false)
+else
+  MsgBox.warning("Please choose a Controls Table in the Epanet Tables setup dialog.", "DC Water Design")
+end

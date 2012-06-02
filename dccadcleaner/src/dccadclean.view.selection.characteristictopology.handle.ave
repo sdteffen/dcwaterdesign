@@ -1,0 +1,116 @@
+' DCCadClean.View.Selection.CharacteristicTopology.handle
+
+' find features connected in a similar way
+
+' Active Document needs to be a View
+' needs an active Theme with a selection
+
+' no arguments
+' returns nothing
+
+numTolerance = 0.01
+numSnappingRadius = 0.5
+
+activeView = av.getActiveDoc
+
+lstActiveThemes = activeView.getActiveThemes
+
+for each thmActive in lstActiveThemes
+  ftbActive = thmActive.getFTab
+  fldShape = ftbActive.findField("Shape")
+  if(ftbActive.getSelection.count < 1)then
+    MsgBox.warning("Please select several connected features in "+thmActive.getName, "DC CAD Cleaner")
+    exit
+  end
+
+' merge records together
+
+  shpMerge = nil
+  
+  numRecords = ftbActive.getSelection.count
+  strQuery = ""
+  for each recSelected in ftbActive.getSelection
+    if(strQuery <> "")then
+      strQuery=strQuery+" or "
+      shpSelected = ftbActive.returnValue(fldShape, recSelected)
+      
+      if(shpSelected.is(Polyline))then
+        lstPolyline = shpSelected.asList
+        strQuery = strQuery+"([shape].asList.count ="
+              
+        strQuery = strQuery++lstPolyline.count.asString+")"
+        
+        numI=0
+        for each lstPart in lstPolyline
+                
+          numLength = Polyline.make({lstPart}).returnLength
+          numHigh = numLength*(1+numTolerance)
+          numLow = numLength*(1-numTolerance)
+          strQuery = strQuery + "and(Polyline.make({[Shape].asList.get("+numI.asString+
+            ")}).returnLength > "+numLow.asString+")"
+          strQuery = strQuery + "and(Polyline.make({[Shape].asList.get("+numI.asString+
+            ")}).returnLength < "+numHigh.asString+")"
+  
+          numI = numI+1
+        end
+      end
+    end
+    
+    if(shpMerge = nil)then
+      shpMerge = shpSelected
+    else
+      shpMerge = shpMerge.returnMerged(shpSelected)
+    end
+  end
+
+  bmpActive = ftbActive.getSelection.clone
+  ftbActive.query(strQuery, bmpActive,#VTAB_SELTYPE_NEW)
+  ftbActive.updateSelection
+  
+
+' look for similar topologies
+
+'  plgnBuffer = pllSelected.returnBuffered(numSnappingRadius)
+'  ftbLine.selectByPolygon(plgnBuffer, #VTAB_SELTYPE_NEW)
+'  for each recCrossing in ftbLine.getSelection
+'    pllCrossing = ftbLine.returnValue(fldLineShape, recCrossing)
+'    lstCrossing = pllCrossing.clean.asList
+'    if((lstCrossing.count>0)and(lstCrossing.get(0).count>0))then
+'      lstStartEnd = {{0,0},{lstCrossing.count-1,lstCrossing.get(lstCrossing.count-1).count-1}}
+'      blnConnected = false
+'      for each lstEnd in lstStartEnd
+'        numOuter = lstEnd.get(0)
+'        numInner = lstEnd.get(1)
+'        pntNode = lstCrossing.get(numOuter).get(numInner)
+'        if(pntNode.intersects(plgnBuffer))then
+'          lstCrossing.get(numOuter).set(numInner, pntCenter)
+'          blnConnected = true
+'        end
+'      end
+'      if(blnConnected)then
+'        pllCrossing = Polyline.make(lstCrossing)
+'        if(pllCrossing.isNull.not)then
+'          ftbLine.setValue(fldLineShape, recCrossing, pllCrossing)
+'        end
+'      end
+'    end
+'  end
+'
+'  ftbActive.setSelection(bmpActive)
+'  ftbActive.updateSelection
+'  lstActions = {"Straighten Lines", "Create Connected Nodes", "Remove Features"}
+'  strMessage = bmpActive.count.asString+" records selected in"++thmActive.getName+"."+NL+
+'    "What do you want to do?"
+'  strAction = MsgBox.ChoiceAsString(lstActions,strMessage, "DC CAD Cleaner")
+'  if(strAction = nil)then
+'    exit
+'  end
+'  if(strAction = "Straighten Lines")then
+'    av.run("DCCadClean.PolylineFTab.Selection.straighten", ftbActive)
+'  elseif(strAction = "Create Connected Nodes")then
+'    av.run("DCCadClean.PolylineFTab.Selection.createConnectedNodes", ftbActive)
+'  elseif(strAction = "Remove Features")then
+'    av.run("DCCadClean.PolylineFTab.Selection.removeFeatures", ftbActive)
+'  end
+end
+

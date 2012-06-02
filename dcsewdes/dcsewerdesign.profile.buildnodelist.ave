@@ -1,0 +1,67 @@
+' DCSewerDesign.Profile.buildNodeList
+
+' Build the list of nodes for a given sequence of line segments
+
+' (c) 2005, 2006 DORSCH Consult
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+ftbLine = self.get(0)
+ftbManhole = self.get(1)
+lstProfileLines = self.get(2)
+
+if(ftbLine.is(FTab).not)then
+  System.echo("DCSewerDesign.Profile.buildNodeList() ERROR: First argument is not an FTab")
+  exit  
+end
+
+if(ftbManhole.is(FTab).not)then
+  System.echo("DCSewerDesign.Profile.buildNodeList() ERROR: Second argument is not an FTab")
+  exit  
+end
+
+if(lstProfileLines.is(List).not)then
+  System.echo("DCSewerDesign.Profile.buildNodeList() ERROR: Third argument is not a List")
+  exit
+end
+
+lstProfileManholes = List.make
+
+lstPreviousManholes = av.run("DCSewerDesign.Line.findManholes",{ftbLine,ftbManhole,lstProfileLines.get(0)}).clone
+
+for each recLine in lstProfileLines
+  lstManholes = av.run("DCSewerDesign.Line.findManholes",{ftbLine,ftbManhole,recLine})
+  for each recManhole in lstManholes
+    if(lstProfileManholes.findByValue(recManhole) = -1)then
+      lstProfileManholes.add(recManhole)
+    end
+  end
+end
+
+' check if there are enough manholes
+if(lstProfileManholes.count <> (lstProfileLines.count + 1))then
+  MsgBox.info("Only found"++lstProfileManholes.count.asString++"manholes. Should find"++(lstProfileLines.count+1).asString++"."+NL+
+              "See the selection for details.","DC Sewer - Complex Profile")
+  bmpManholes = ftbManhole.getSelection
+  bmpManholes.clearAll
+  for each recManhole in lstProfileManholes
+    bmpManholes.set(recManhole.clone)
+  end
+  ftbManhole.setSelection(bmpManholes)
+  ftbManhole.updateSelection
+  exit
+end
+
+return lstProfileManholes

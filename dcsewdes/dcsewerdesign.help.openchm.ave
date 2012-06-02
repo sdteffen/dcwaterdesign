@@ -1,0 +1,6 @@
+' DCSewerDesign.Help.openCHM
+
+' (c) 2004 DORSCH Consult
+
+
+system.execute("hh.exe".quote++"$AVHOME\HELP\dcsewerdesign.chm".asFilename.getFullName.quote)

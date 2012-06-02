@@ -1,0 +1,102 @@
+'DCSewerDesign.ComplexProfile.addManholeLegend
+
+' Adds the manholes with a given legend to the profile
+
+' (c) 2005 DORSCH Consult
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+viewProfile = self.get(0)
+if(viewProfile.is(View).not)then
+  MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: First Argument is not a view.","DC Sewer Design")
+  exit
+end
+
+ftbManhole = self.get(1)
+if(ftbManhole.is(FTab).not)then
+  MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: Second Argument is not an FTab.","DC Sewer Design")
+  exit
+end
+
+strLegend = self.get(2)
+if(strLegend.is(String).not)then
+  MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: Third Argument is not a String.","DC Sewer Design")
+  exit
+end
+
+lstProfileManholes = self.get(3)
+if(lstProfileManholes.is(List).not)then
+  MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: Fourth Argument is not a list.", "DC Sewer Design")
+  exit
+end
+
+fldManholeInvertLevel = self.get(4)
+if(fldManholeInvertLevel.is(Field).not)then
+  MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: Fifth Argument is not a Field.", "DC Sewer Design")
+  exit
+end
+
+ftbLine = self.get(5)
+if(ftbLine.is(FTab).not)then
+  MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: Sixth argument is not an FTab.", "DC Sewer Design")
+  exit
+end
+
+lstProfileLines = self.get(6)
+if(lstProfileLines.is(List).not)then
+  MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: Seventh argument is not a List.", "DC Sewer Design")
+  exit
+end
+
+' Copy layout manholes including all attributes - this allows to apply legend
+
+flnProfileManhole = av.getProject.getWorkDir.makeTmp("manhole","shp")
+ftbProfileManhole = ftbManhole.export(flnProfileManhole, Shape, false)
+if(ftbProfileManhole.is(FTab).not)then
+  MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: Export of "+ftbManhole.asString.quote+" failed.", "DC Sewer Design")
+  exit
+end
+
+' Draw manholes (shift to correct location)
+ftbProfileManhole.setEditable(true)
+fldProfileManholeShape = ftbProfileManhole.findField("shape")
+fldLineShape = ftbLine.findField("shape")
+numX = 1000.0
+numY = 1000.0
+for each i in 0..(lstProfileManholes.count-1)
+  recManhole = lstProfileManholes.get(i)
+  numInvertLevel = ftbManhole.returnValue(fldManholeInvertLevel, recManhole)
+  pntProfileManhole = Point.make(numX, numY+(numInvertLevel*10))
+  ftbProfileManhole.setValue(fldProfileManholeShape, recManhole, pntProfileManhole)
+  if(i < lstProfileLines.count)then
+    numX = numX + ftbLine.returnValue(fldLineShape,lstProfileLines.get(i)).returnLength
+  end
+end
+ftbProfileManhole.setEditable(false)
+
+thmProfileManhole = FTheme.make(ftbProfileManhole)
+viewProfile.addTheme(thmProfileManhole)
+flnLegend = Filename.make(strLegend)
+if(flnLegend.is(Filename).not)then
+  MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: Could not open file "+strLegend.quote+".", "DC Sewer Design")
+  exit
+end
+lgdProfileManhole = thmProfileManhole.getLegend
+if(lgdProfileManhole.load(flnLegend, #LEGEND_LOADTYPE_ALL).not)then
+MsgBox.error("DCSewerDesign.ComplexProfile.addManholeLegend(): ERROR: Could not load legend "+strLegend.quote+".", "DC Sewer Design")
+  exit
+end
+thmProfileManhole.updateLegend
+thmProfileManhole.setVisible(true)

@@ -1,0 +1,71 @@
+' DCWatDes.Tables.loadEpanetTables
+
+' (c) 2000-2002 DORSCH Consult
+' loads the Epanet tables, if they're not
+' already loaded and available
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+dicTables = Dictionary.make(3)
+dicTables.add("Times", "$AVEXT\dcwatdes\epanet_times.dbf")
+dicTables.add("Report", "$AVEXT\dcwatdes\epanet_report.dbf")
+dicTables.add("Options","$AVEXT\dcwatdes\epanet_options.dbf")
+
+dicExpansion = Dictionary.make(20)
+
+dicExpansion.add("hydraulict","hydraulictimestep")
+dicExpansion.add("qualitytim", "qualitytimestep")
+dicExpansion.add("ruletimest","ruletimestep")
+dicExpansion.add("patterntim","patterntimestep")
+dicExpansion.add("patternsta","patternstart")
+dicExpansion.add("reporttime","reporttimestep")
+dicExpansion.add("reportstar","reportstart")
+dicExpansion.add("startclock","startclocktime")
+dicExpansion.add("specificgr","specificgravity")
+dicExpansion.add("demandmult","demandmultiplier")
+dicExpansion.add("emitterexp","emitterexponent")
+
+for each strTable in  dicTables.returnKeys
+  flnTable = dicTables.get(strTable).asFilename
+  strTableTranslated = av.run("DCWatDes.i18n.returnTranslation",strTable)
+
+' check if file is there
+  if(File.exists(flnTable))then
+ 
+' check if table is already loaded  
+  boolTableFound = false
+    for each avTable in av.getProject.getDocsWithGUI(av.findGUI("Table"))
+      if((avTable.getVTab.getBaseTableFilename<>nil)and(flnTable<>nil)and(avTable.getVTab.getBaseTableFilename.getFullName = flnTable.getFullname))then
+        boolTableFound=true
+        if(avTable.getName<>strTableTranslated)then
+          avTable.setName(strTableTranslated)
+        end
+        break
+      end
+    end
+    if(boolTableFound.not)then
+      vtbTable = VTab.make(flnTable, false, false)
+      ' expand short field names with proper alias
+      for each fld in vtbTable.getFields
+        strAlias = dicExpansion.get(fld.getName)
+        if(strAlias <> nil)then
+          fld.setAlias(strAlias)
+        end
+      end
+      newTable = Table.make(vtbTable)
+      newTable.setName(strTableTranslated)
+    end
+  end
+end

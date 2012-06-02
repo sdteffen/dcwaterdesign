@@ -1,0 +1,41 @@
+' DCWatDes.ExpandedAliasVTab.setValueString
+
+' (c) 2000, 2001 DORSCH Consult
+
+' finds a value in a table. Epanet aliases are automatically expanded
+' string values are converted to numbers automatically if necessary
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' expects the VTab/FTab as the first argument
+' expects the (expanded) Field name as the second argument
+' expects the record number as the third argument
+' expects the value as a string as the fourth argument
+' returns nothing
+
+vtbExpanded = self.get(0)
+strFieldname = self.get(1)
+numRecord = self.get(2)
+strValue = self.get(3)
+
+fldExpanded = av.run("DCWatDes.ExpandedAliasVTab.findField", {vtbExpanded, strFieldname})
+
+if(fldExpanded.isTypeNumber)then
+  objValue = strValue.asNumber
+else
+  objValue = strValue
+end
+
+vtbExpanded.setValue(fldExpanded, numRecord, objValue)

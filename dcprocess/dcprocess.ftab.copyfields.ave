@@ -1,0 +1,17 @@
+' DCProcess.FTab.copyFields
+
+' (c) 2004 DORSCH Consult
+
+' copy tabular fields from one FTab to another
+
+' expects the source FTab as the first argument
+' expects the destination FTab as the second argument (must be editable)
+
+ftbSource = self.get(0)
+ftbDestination = self.get(1)
+
+lstFields = ftbSource.getFields.deepclone
+lstFields.remove(0)
+
+ftbDestination.addFields(lstFields)
+

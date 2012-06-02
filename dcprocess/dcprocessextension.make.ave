@@ -1,0 +1,56 @@
+' DCProcessExtension.make
+
+' (c) 2000 - 2006 DORSCH Consult
+
+strVersion = msgbox.input("Enter version","Make DC Processing Extension","1.2.9")
+if (strVersion=nil)then
+  exit
+end
+numVersion=strVersion.asTokens(".").get(0).asNumber
+strFileNameVersion = strVersion.asTokens(".").get(0)+"_"+strVersion.asTokens(".").get(1)
+
+myExt = Extension.Make(("$AVEXT\dcprocessing.avx").AsFileName,
+              "DC Processing",
+              av.GetProject.FindScript("DCProcessExtension.install"),
+              av.GetProject.FindScript("DCProcessExtension.uninstall"),
+              {"$AVBIN/avdlog.dll".asFilename})
+
+'add GUI elements
+'0
+myExt.add( av.GetProject.FindGUI("View").GetMenuBar.findByLabel("DC Processing"))
+
+'1
+myExt.add(av.getProject.findGUI("Project").getMenuBar.findByLabel("DC Processing"))
+
+'2
+myExt.add(av.getProject.findGUI("Table").getMenuBar.findByLabel("DC Processing"))
+
+'add the scripts
+for each d in av.getProject.getDocs
+  if (d.is(SEd) and (d.getName.left("DCProcess".count+1)="DCProcess."))then
+    myExt.add(d.getScript)
+  end
+end
+
+myExt.SetAbout("Processing Extension "+strVersion+NL+"(c) 2000 - 2005 DORSCH Consult."+NL+
+"This extension helps to process and convert various formats of data."+NL+Date.now.asString)
+myExt.SetExtVersion(numVersion)
+myExt.setUnloadScript(av.findScript("DCProcessExtension.unload"))
+myExt.setCanUnloadScript(av.findScript("DCProcessExtension.canUnload"))
+myExt.Commit
+
+RFileName = FileName.make("$AVEXT/dcprocessing.avx")
+WFileName = FileName.make("$AVEXT/dcprocessing.tmp")
+RFile = LineFile.make(RFileName, #FILE_PERM_READ)
+WFile = LineFile.make(WFileName, #FILE_PERM_WRITE)
+WFile.setScratch(TRUE)
+while (RFile.isAtEnd.not)
+  buf = RFile.ReadElt
+  if ( buf.contains("ObjectTag:").not) then
+    WFile.writeElt(buf)
+  end
+end
+RFile.close
+WFile.flush
+File.copy(WFilename, RFilename)
+WFile.close

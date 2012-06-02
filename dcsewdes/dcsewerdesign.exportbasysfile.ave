@@ -1,0 +1,127 @@
+' DCSewerDesign.exportBaSysFile
+' (c) 2000 DORSCH Consult
+
+'information about the configuration file
+  MsgBox.info("One mapping per line, '=' as separator"+NL+
+  "LineID=???   Length=???  Diameter=??? FromX=???"+NL+
+  "FromY=???  ToX=???    ToY=???    Flow=????"+NL+
+  "UpstreamInvertLevel=???   DownstreamInvertLevel=???"
+  ,"Field Configuration File")
+  
+'get the configuration file
+  lstConfFiles = FileDialog.returnFiles({"*.txt"},{"Text Files (*.txt)"},"Select Configuration File",0)
+ if(lstConfFiles.count = 0 )then
+   exit
+ end
+
+'get the table
+  viewActive = av.GetActiveDoc 
+  themeList = viewActive.GetThemes 
+  LineTheme = Msgbox.Choice (themeList, "Select a Polyline Theme.", "Select a Theme")   
+  if (LineTheme.asString = "nil") then
+    exit
+  end
+  thmLine = viewActive.FindTheme(LineTheme.AsString)   
+  ftbLine = thmLine.GetFTab 
+
+ 'open the configuration file
+ lnfConfiguration = LineFile.make(lstConfFiles.get(0), #FILE_PERM_READ)
+
+ fldLength=nil
+ fldDiameter=nil
+ fldFromX=nil
+ fldFromY=nil
+ fldToX=nil
+ fldToY=nil
+ fldFlow=nil
+ fldUpstreamElevation=nil
+ fldDownstreamElevation=nil
+ fldLineID=nil
+ strLine=lnfConfiguration.readElt
+ 'process the configuration file 
+ while (not (strLine=nil ))
+    lstConfTokens = strLine.asTokens("=")
+    if(lstConfTokens.count=2)then
+      strScriptFieldName = lstConfTokens.get(0).trim.lcase
+      strTableFieldName = lstConfTokens.get(1).trim.lcase
+      if(strScriptFieldName = "length")then
+        fldLength=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "diameter")then
+        fldDiameter=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "fromx")then
+        fldFromX=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "fromy")then
+        fldFromY = ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "tox")then
+        fldToX=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "toy")then
+        fldToY=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "flow")then
+        fldFlow=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "upstreaminvertlevel")then
+        fldUpstreamElevation=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "downstreaminvertlevel")then
+        fldDownstreamElevation=ftbLine.findField(strTableFieldName)
+      end
+      if(strScriptFieldName = "lineid")then
+        fldLineID=ftbLine.findField(strTableFieldName)
+      end
+    end    
+    strLine = lnfConfiguration.readElt
+ end
+ 
+ 'close the configuration file
+ lnfConfiguration.close
+  
+ 'check if configuration was successful
+  if((fldLength=nil)or(fldDiameter=nil)or(fldFromX=nil)or(fldFromY=nil)or(fldLineID=nil)
+  or(fldToX=nil)or(fldToY=nil)or(fldFlow=nil)or(fldUpstreamElevation=0)or(fldDownstreamElevation=nil))then
+    MsgBox.error("Field matching not successful. Check your table and configuration file.","DC Sewer Design")
+    exit
+  end
+ 
+ flnOutputFile = FileDialog.put("basysfile.txt".asFilename,"*.txt", "Create BaSys File")
+ if(flnOutputFile = nil )then
+   exit
+ end
+
+  av.showStopButton
+  numCounter=0
+  numTotal = ftbLine.getNumRecords
+
+ lnfOutput = LineFile.make(flnOutputFile, #FILE_PERM_WRITE)
+
+' run over all records in the table
+  for each recLine in ftbLine
+  strLine = ftbLine.returnValue(fldLineID,recLine).asString+","
+  strLine = strLine + ftbLine.returnValue(fldLength,recLine).asString+","
+  strLine = strLine + ftbLine.returnValue(fldDiameter,recLine).asString+","
+  strLine = strLine + ftbLine.returnValue(fldFromX,recLine).asString+","
+  strLine = strLine + ftbLine.returnValue(fldFromY,recLine).asString+","
+  strLine = strLine + ftbLine.returnValue(fldToX,recLine).asString+","
+  strLine = strLine + ftbLine.returnValue(fldToY,recLine).asString+","
+  strLine = strLine + ftbLine.returnValue(fldFlow,recLine).asString+","
+  strLine = strLine + ftbLine.returnValue(fldUpstreamElevation,recLine).asString+","
+  strLine = strLine + ftbLine.returnValue(fldDownstreamElevation,recLine).asString
+  lnfOutput.writeElt(strLine)
+    
+    'update status display
+    if(av.setStatus((numCounter/numTotal)*100).not)then
+      'user hit the stop button
+      exit
+    end
+    numCounter = numCounter+1
+  end
+ 
+ 
+ 'clean up
+ lnfOutput.close
+ av.clearStatus

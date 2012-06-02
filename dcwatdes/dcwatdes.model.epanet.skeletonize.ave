@@ -1,0 +1,146 @@
+' DCWatDes.Model.Epanet.skeletonize
+
+' (c) 2002 DORSCH Consult
+' remove superfluous nodes from the network, thus 
+' simplifying it
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' no arguments, called from menu
+' nothing is returned
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+numSnappingRadius = dicPreferences.get("strSnappingRadius").asNumber
+if(numSnappingRadius = nil)then
+  numSnappingRadius = 0.1
+end
+av.showMsg("Skeletonizing model with "+numSnappingRadius.asString+" snapping radius")
+av.run("DCWatDes.Model.Epanet.ensureAliases", nil)
+
+activeView = av.getActiveDoc
+if(activeView.is(View).not)then
+  exit
+end
+
+dicFTabs = av.run("DCWatDes.Model.Epanet.returnFTabDictionary", nil)
+
+ftbJunctions = dicFTabs.get("Junctions")
+fldJunctionShape = ftbJunctions.findField("Shape")
+
+ftbPipes = dicFTabs.get("Pipes")
+fldPipeShape = ftbPipes.findField("Shape")
+
+' List of fields to check for equality
+lstPipeFields = ftbPipes.getFields
+lstEqualFields = MsgBox.MultiList(lstPipeFields, "Select the fields to check for equality", 
+  "DC Water Design")
+if(lstEqualFields = nil)then
+  exit
+end  
+
+' store junctions for deletion
+bmpPurgeJunctions = ftbJunctions.getSelection
+bmpPurgeJunctions.clearAll
+
+' store pipes for deletion
+bmpPurgePipes = ftbPipes.getSelection
+bmpPurgePipes.clearAll
+
+' store unioned pipes
+lstUnionedPipes = List.make
+
+numToGo = ftbJunctions.getNumRecords
+numDone = 0
+av.showStopButton
+
+
+ftbPipes.setEditable(true)
+for each recJunction in ftbJunctions
+  ' check for two connected pipes
+   pntJunction = ftbJunctions.returnValue(fldJunctionShape, recJunction)
+   lstConnectedPipes = av.run("DCWatDes.PolylineFTab.findPllsByEndPoint",{ftbPipes,
+   pntJunction, numSnappingRadius})
+   if(lstConnectedPipes.count = 2)then
+    ' check for field equality
+    blnSkeletonize = true
+    for each fldEqual in lstEqualFields
+      objValue = ftbPipes.returnValue(fldEqual, lstConnectedPipes.get(0))
+      if(objValue <> ftbPipes.returnValue(fldEqual, lstConnectedPipes.get(1)))then
+        blnSkeletonize = false
+        break
+      end
+    end
+    if(blnSkeletonize)then
+      ' remove junction
+      bmpPurgeJunctions.set(recJunction)
+      
+      ' union pipes
+      pllFirstPipe = ftbPipes.returnValue(fldPipeShape, lstConnectedPipes.get(0))
+      pllSecondPipe = ftbPipes.returnValue(fldPipeShape, lstConnectedPipes.get(1))
+      pllUnion = pllFirstPipe.returnUnion(pllSecondPipe).clean
+      
+      ftbPipes.setValue(fldPipeShape, lstConnectedPipes.get(0), pllUnion)
+      ftbPipes.setValue(fldPipeShape, lstConnectedPipes.get(1), Polyline.makeNull)
+      'lstUnionedPipes.add({lstConnectedPipes.get(0), pllUnion})
+ '     numToGo = numToGo + 1
+      ' remove pipe
+      bmpPurgePipes.set(lstConnectedPipes.get(1))
+    end
+   end
+   numDone = numDone+1
+   if(av.setStatus(numDone/numToGo * 100).not)then
+    av.clearStatus
+    av.showMsg("")
+    exit
+   end
+end
+
+' commit unioned pipes
+'for each lstRecPll in lstUnionedPipes
+ ' ftbPipes.setValue(fldPipeShape, lstRecPll.get(0), lstRecPll.get(1))
+  'numDone = numDone+1
+   'if(av.setStatus(numDone/numToGo * 100).not)then
+    'av.clearStatus
+    'av.showMsg("")
+    'exit
+   'end
+'end
+
+' delete pipes
+ftbPipes.removeRecords(bmpPurgePipes)
+
+ftbPipes.setEditable(false)
+
+' delete the junctions
+
+ftbJunctions.setEditable(true)
+ftbJunctions.removeRecords(bmpPurgeJunctions)
+ftbJunctions.setEditable(false)
+
+av.clearStatus
+av.showMsg("")

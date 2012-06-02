@@ -1,0 +1,51 @@
+' DCWatDes.Model.Epanet.delete
+
+' (c) 2001 DORSCH Consult
+' delete the complete model with all information
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' no arguments
+' returns nothing
+
+if(MsgBox.yesNo("Do you want to delete the complete EPANET model?","DC Water Design", false).not)then
+  exit
+end
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  MsgBox.info("Warning: Extension not found.","DC Water Design Extension")
+end
+if(dicPreferences <> nil)then
+  blnEpanetThemesSetup = dicPreferences.get("blnEpanetThemesSetup")
+  if(blnEpanetThemesSetup = nil)then
+    av.run("DCWatDes.Dialog.EpanetThemes.open",nil)
+    exit
+  end
+end
+
+dicFTabs = av.run("DCWatDes.Model.EPANET.returnFTabDictionary", nil)
+
+for each ftbFeature in dicFTabs
+  if(ftbFeature.getNumRecords > 0)then
+    ftbFeature.setEditable(true)
+    bmpPurge = ftbFeature.getSelection
+    ftbFeature.query("true", bmpPurge, #VTAB_SELTYPE_NEW)
+    ftbFeature.removeRecords(bmpPurge)
+    ftbFeature.setEditable(false)
+  end
+end

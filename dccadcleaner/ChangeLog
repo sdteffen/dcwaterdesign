@@ -1,0 +1,11 @@
+2006-11-06  Steffen Macke <steffen_macke@dorsch.com.jo>
+
+	* etc/image/dc_waterenvironment_c_big.png:
+	* etc/image/dialog.png:
+	* etc/dccadcleaner_flyer.sla: Added preliminary DC CAD Cleaner Flyer
+	* .project: Added Eclipse project file
+	* doc/project.dtd:
+	* build.xml: Added files to build tarball 
+	* Initial public release of the extension on 
+	dcwaterdesign.sourceforge.net
+	

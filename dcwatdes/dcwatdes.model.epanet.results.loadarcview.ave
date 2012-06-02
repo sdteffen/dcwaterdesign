@@ -1,0 +1,71 @@
+' DCWatDes.Model.Epanet.Results.loadArcView
+
+' (c) 2000, 2001 DORSCH Consult
+' load the Results of a EPANET analysis via ArcView
+
+' This library is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
+
+' This library is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
+
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+' first argument is the filename of the link results text file (class filename)
+' second argument is the filename of the node results text file (class filename)
+' no return value
+
+flnLinkResults = self.get(0)
+flnNodeResults = self.get(1)
+
+vtbLinkResults = VTab.make(flnLinkResults, false, false)
+tableLinkResults = Table.make(vtbLinkResults)
+tableLinkResults.setName(av.getActiveDoc.getName+" - Link Results")
+av.getProject.addDoc(tableLinkResults)
+
+extDCWatDes = Extension.find("DC Water Design")
+if(extDCWatDes <> nil)then
+  dicPreferences = extDCWatDes.getPreferences
+else
+  exit
+end
+
+lstSteps = List.make
+numMax = 0
+fldStep = vtbLinkResults.findField("timestep")
+for each recResult in vtbLinkResults
+  numStep = vtbLinkResults.returnValue(fldStep, recResult)
+  if(numStep > numMax)then
+    numMax = numStep
+    strStep = numStep.asString
+    strStep.setName(strStep)
+    lstSteps.add(strStep)
+  end
+end 
+
+vtbNodeResults = VTab.make(flnNodeResults, false, false)
+tableNodeResults = Table.make(vtbNodeResults)
+tableNodeResults.setName(av.getActiveDoc.getName+" - Node Results")
+av.getProject.addDoc(tableNodeResults)
+
+'create indexes
+
+for each vtbResult in {vtbNodeResults, vtbLinkResults}
+  for each strFieldName in {"dc_id", "timestep"}
+    fldField = vtbResult.findField(strFieldName)
+    vtbResult.createIndex(fldField)
+  end
+end
+  
+' load results
+  
+dicPreferences.set("lstSteps", lstSteps.deepclone)
+  
+av.run("DCWatDes.Model.Epanet.loadResultsForStep", {vtbLinkResults, vtbNodeResults})
+
